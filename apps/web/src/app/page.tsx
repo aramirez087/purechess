@@ -2,6 +2,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { Hero } from '@/components/home/hero';
 import { TrustStrip } from '@/components/home/trust-strip';
 import { Footer } from '@/components/home/footer';
+import { HomeViewedTracker } from '@/components/home/home-viewed-tracker';
 import { buildMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata = buildMetadata({
@@ -14,6 +15,7 @@ export const metadata = buildMetadata({
 export default function HomePage() {
   return (
     <AppShell variant="minimal">
+      <HomeViewedTracker />
       <Hero />
       <TrustStrip />
       <Footer />

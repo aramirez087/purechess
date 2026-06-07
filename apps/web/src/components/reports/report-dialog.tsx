@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { createReport } from '@/lib/api/reports';
+import { posthog } from '@/lib/posthog';
 
 const REASONS = [
   { value: 'cheating', label: 'Cheating / engine use' },
@@ -47,6 +48,7 @@ export function ReportDialog({
     onSuccess: (data) => {
       if (data.created) {
         toast.success('Report submitted');
+        posthog.capture('report_filed', { reason });
       } else {
         toast.info('You already reported this game');
       }

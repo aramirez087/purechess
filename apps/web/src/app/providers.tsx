@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { queryClient } from '@/lib/query-client';
 import { useSettingsStore } from '@/stores/settings-store';
+import { PostHogProvider } from '@/components/posthog-provider';
 
 function ThemeSync() {
   const { theme, setTheme } = useTheme();
@@ -37,9 +38,11 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
       <QueryClientProvider client={queryClient}>
-        <ThemeSync />
-        {children}
-        <Toaster />
+        <PostHogProvider>
+          <ThemeSync />
+          {children}
+          <Toaster />
+        </PostHogProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );
