@@ -5,6 +5,7 @@ import { ReviewMetadata } from '@/components/review/review-metadata';
 import { ReviewMoveList } from '@/components/review/review-move-list';
 import { ReviewControls } from '@/components/review/review-controls';
 import { PgnActions } from '@/components/review/pgn-actions';
+import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
 import type { GameReview } from '@/types/game-review';
 
@@ -12,9 +13,10 @@ const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 interface ReviewClientProps {
   game: GameReview;
+  reportTarget?: { opponentId: string; opponentUsername: string } | null;
 }
 
-export function ReviewClient({ game }: ReviewClientProps) {
+export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
   const { ply, fen, lastMove, isCorrupt, goTo, goNext, goPrev, goStart, goEnd } = useGameReview(game);
 
   if (isCorrupt) {
@@ -47,6 +49,13 @@ export function ReviewClient({ game }: ReviewClientProps) {
         <ReviewMoveList moves={game.moves} currentPly={ply} onSeek={goTo} />
         <ReviewControls onStart={goStart} onPrev={goPrev} onNext={goNext} onEnd={goEnd} />
         <PgnActions pgn={game.pgn} gameId={game.id} />
+        {reportTarget && (
+          <ReportButton
+            gameId={game.id}
+            opponentId={reportTarget.opponentId}
+            opponentUsername={reportTarget.opponentUsername}
+          />
+        )}
       </div>
     </div>
   );

@@ -60,6 +60,7 @@ export class AdminService {
       include: {
         ratings: true,
         oauthAccounts: { select: { provider: true, createdAt: true } },
+        fairPlaySignals: { orderBy: { createdAt: 'desc' } },
         _count: { select: { gamesAsWhite: true, gamesAsBlack: true, reportsReceived: true } },
       },
     });
