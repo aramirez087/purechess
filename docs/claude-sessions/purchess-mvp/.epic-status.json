@@ -1,6 +1,6 @@
 {
   "epic": "purchess-mvp",
-  "started_at": 1780804882.01124,
+  "started_at": 1780806239.8774168,
   "sessions": {
     "1": {
       "status": "skipped",
@@ -23,26 +23,24 @@
       "elapsed": 0.0
     },
     "3": {
-      "status": "done",
+      "status": "skipped",
       "slug": "design-system",
       "wave": 2,
       "title": "Design System",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 456.0,
-      "started_at": 1780804884.3382988
+      "elapsed": 0.0
     },
     "4": {
-      "status": "done",
+      "status": "skipped",
       "slug": "authentication",
       "wave": 3,
       "title": "Authentication",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 877.0,
-      "started_at": 1780805342.238815
+      "elapsed": 0.0
     },
     "5": {
       "status": "done",
@@ -52,8 +50,8 @@
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 583.0,
-      "started_at": 1780805342.330038
+      "elapsed": 1136.0,
+      "started_at": 1780806242.0406148
     },
     "12": {
       "status": "done",
@@ -63,8 +61,8 @@
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 664.0,
-      "started_at": 1780805342.426644
+      "elapsed": 644.0,
+      "started_at": 1780807382.203943
     },
     "16": {
       "status": "done",
@@ -74,8 +72,8 @@
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 280.0,
-      "started_at": 1780805342.556115
+      "elapsed": 392.0,
+      "started_at": 1780808028.6468952
     },
     "6": {
       "status": "pending",
