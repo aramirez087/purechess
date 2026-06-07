@@ -108,7 +108,7 @@ export default function AdminReportDetailPage() {
 
       <section>
         <h2 className="text-sm font-semibold mb-2">
-          {report.reported.username}'s last {report.reportedUserRecentGames.length} games
+          {report.reported.username}&apos;s last {report.reportedUserRecentGames.length} games
         </h2>
         <div className="rounded-md border">
           <table className="w-full text-sm">

@@ -72,6 +72,7 @@ export function ComputerGameClient({ gameId }: Props) {
 
   async function handleMove(intent: MoveIntent) {
     if (state.phase !== 'playing') return;
+    if (!intent.from || !intent.to) return;
     const uci = intent.from + intent.to + (intent.promotion ?? '');
     setState((s: PageState) => s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s);
     try {
