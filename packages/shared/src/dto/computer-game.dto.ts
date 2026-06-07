@@ -15,6 +15,7 @@ export interface ComputerGameStateDto {
   pgn: string;
   status: string;
   computerColor: 'white' | 'black';
+  computerLevel: number;
   lastComputerMove: string | null;
   result: string | null;
   resultReason: string | null;

@@ -39,6 +39,13 @@ function parseLastMove(uci: string | null): { from: Square; to: Square } | undef
   return { from: uci.slice(0, 2) as Square, to: uci.slice(2, 4) as Square };
 }
 
+/** Whether it's the computer's turn to move in the given state. */
+function isComputerTurn(game: ComputerGameStateDto): boolean {
+  if (game.status !== 'active') return false;
+  const sideToMove = game.fen.split(' ')[1];
+  return sideToMove === (game.computerColor === 'white' ? 'w' : 'b');
+}
+
 function parsePgnMoves(pgn: string): string[] {
   if (!pgn.trim()) return [];
   const clean = pgn
@@ -57,11 +64,48 @@ interface Props {
 export function ComputerGameClient({ gameId }: Props) {
   const [state, setState] = useState<PageState>({ phase: 'loading' });
   const moveListRef = useRef<HTMLDivElement>(null);
+  // Guards against React Strict-Mode double-invoking the bot driver, which
+  // would submit the same engine move twice.
+  const botLockRef = useRef(false);
+  const disposedRef = useRef(false);
+
+  // Computes the engine's reply locally (Web Worker) and submits it. Runs
+  // inside the async chain (not a state effect) so it fires exactly once per
+  // turn. Loops to cover resume-while-it's-the-bot's-turn.
+  async function driveBot(startGame: ComputerGameStateDto) {
+    if (botLockRef.current) return;
+    botLockRef.current = true;
+    try {
+      const { getBestMove } = await import('@/lib/engine/stockfish-client');
+      let current = startGame;
+      while (isComputerTurn(current) && !disposedRef.current) {
+        const uci = await getBestMove(current.fen, current.computerLevel);
+        current = await submitComputerMove(gameId, uci);
+        if (disposedRef.current) return;
+        setState({ phase: 'playing', game: current, submitting: false, moveError: null });
+      }
+    } catch (err) {
+      setState((s: PageState) =>
+        s.phase === 'playing' ? { ...s, submitting: false, moveError: (err as Error).message } : s,
+      );
+    } finally {
+      botLockRef.current = false;
+    }
+  }
 
   useEffect(() => {
+    disposedRef.current = false;
     getComputerGame(gameId)
-      .then((game) => setState({ phase: 'playing', game, submitting: false, moveError: null }))
+      .then((game) => {
+        if (disposedRef.current) return;
+        setState({ phase: 'playing', game, submitting: isComputerTurn(game), moveError: null });
+        if (isComputerTurn(game)) void driveBot(game);
+      })
       .catch((err: Error) => setState({ phase: 'error', message: err.message }));
+    return () => {
+      disposedRef.current = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId]);
 
   useEffect(() => {
@@ -76,8 +120,14 @@ export function ComputerGameClient({ gameId }: Props) {
     const uci = intent.from + intent.to + (intent.promotion ?? '');
     setState((s: PageState) => s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s);
     try {
-      const next = await submitComputerMove(gameId, uci);
-      setState({ phase: 'playing', game: next, submitting: false, moveError: null });
+      const afterUser = await submitComputerMove(gameId, uci);
+      setState({
+        phase: 'playing',
+        game: afterUser,
+        submitting: isComputerTurn(afterUser),
+        moveError: null,
+      });
+      if (isComputerTurn(afterUser)) await driveBot(afterUser);
     } catch (err) {
       setState((s: PageState) =>
         s.phase === 'playing' ? { ...s, submitting: false, moveError: (err as Error).message } : s,

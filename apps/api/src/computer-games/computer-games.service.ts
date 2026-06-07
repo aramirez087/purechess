@@ -18,8 +18,7 @@ import {
   SerializableEngineState,
 } from "@purechess/shared";
 import { PrismaService } from "../database/prisma.service";
-import { EngineService } from "../chess/engine.service";
-import { StockfishService } from "./stockfish.service";
+import { EngineService, InvalidMoveError } from "../chess/engine.service";
 import { PosthogService } from "../analytics/posthog.service";
 
 const STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -41,6 +40,7 @@ function toStateDto(
   pgn: string | null,
   status: string,
   computerColor: "white" | "black",
+  computerLevel: number,
   lastComputerMove: string | null,
   result: string | null,
   resultReason: string | null,
@@ -51,6 +51,7 @@ function toStateDto(
     pgn: pgn ?? "",
     status,
     computerColor,
+    computerLevel,
     lastComputerMove,
     result,
     resultReason,
@@ -62,7 +63,6 @@ export class ComputerGamesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly engine: EngineService,
-    private readonly stockfish: StockfishService,
     private readonly posthog: PosthogService,
   ) {}
 
@@ -98,6 +98,9 @@ export class ComputerGamesService {
       },
     });
 
+    // Start the engine state at the opening position. The computer's move (if it
+    // plays White) is computed client-side and submitted via submitMove — the
+    // server no longer runs an engine.
     let engineState = this.engine.createGame({
       gameId: game.id,
       whiteUserId,
@@ -106,54 +109,17 @@ export class ComputerGamesService {
       incrementMs,
       nowMs,
     });
-
-    // Activate engine state
     engineState = { ...engineState, status: "active" };
 
-    let lastComputerMove: string | null = null;
-
-    if (computerColor === "white") {
-      const bestMove = await this.stockfish.getBestMove(
-        STARTING_FEN,
-        dto.level,
-      );
-      engineState = this.engine.applyMove(
-        engineState,
-        { uci: bestMove },
-        nowMs,
-      );
-      lastComputerMove = bestMove;
-    }
-
     const serialized = this.engine.toSerializable(engineState);
-    const currentFen = engineState.position.fen();
 
     await this.prisma.game.update({
       where: { id: game.id },
       data: {
         engineState: serialized as object,
-        finalFen: currentFen,
-        lastComputerMove,
+        finalFen: STARTING_FEN,
       },
     });
-
-    if (lastComputerMove) {
-      const compMove = engineState.moves[engineState.moves.length - 1]!;
-      await this.prisma.move.create({
-        data: {
-          gameId: game.id,
-          moveNumber: Math.ceil(compMove.ply / 2),
-          ply: compMove.ply,
-          userId: null,
-          isComputer: true,
-          san: compMove.san,
-          uci: compMove.uci,
-          fenAfterMove: compMove.fenAfter,
-          clockAfterMoveMs: compMove.clockAfterMs,
-          moveTimeMs: compMove.moveTimeMs,
-        },
-      });
-    }
 
     if (userId) {
       this.posthog.captureEvent(userId, "computer_game_created", {
@@ -168,11 +134,12 @@ export class ComputerGamesService {
 
     return toStateDto(
       game.id,
-      currentFen,
+      STARTING_FEN,
       "",
       "active",
       computerColor,
-      lastComputerMove,
+      dto.level,
+      null,
       null,
       null,
     );
@@ -194,10 +161,12 @@ export class ComputerGamesService {
     }
 
     const gameComputerColor = game.computerColor as "white" | "black";
+    const computerLevel = game.computerLevel ?? 1;
+    const humanIsWhite = gameComputerColor === "black";
 
     if (dto.move === "resign") {
-      const userIsWhite = game.whiteUserId === userId;
-      const result = userIsWhite ? GameResult.BlackWins : GameResult.WhiteWins;
+      // The human resigns; the computer wins.
+      const result = humanIsWhite ? GameResult.BlackWins : GameResult.WhiteWins;
       const reason = GameTermination.Resignation;
       const nowMs = Date.now();
 
@@ -216,7 +185,7 @@ export class ComputerGamesService {
           game_id: gameId,
           result: "loss",
           result_reason: "resignation",
-          computer_level: game.computerLevel ?? 1,
+          computer_level: computerLevel,
           category: game.category,
         });
       }
@@ -227,6 +196,7 @@ export class ComputerGamesService {
         game.pgn,
         "completed",
         gameComputerColor,
+        computerLevel,
         game.lastComputerMove ?? null,
         result,
         reason,
@@ -240,42 +210,31 @@ export class ComputerGamesService {
       game.engineState as unknown as SerializableEngineState,
     );
 
-    const userIsWhite = game.whiteUserId === userId;
-    const isUserTurn =
-      engineState.position.turn() === (userIsWhite ? "w" : "b");
-    if (!isUserTurn) throw new BadRequestException("Not your turn");
+    // Whoever is to move is making this move. The endpoint applies exactly one
+    // legal move (human or computer) — engine.applyMove rejects illegal ones.
+    const computerColorChar = gameComputerColor === "white" ? "w" : "b";
+    const isComputerMove = engineState.position.turn() === computerColorChar;
 
     const nowMs = Date.now();
 
-    // Apply user move
-    let state = this.engine.applyMove(engineState, { uci: dto.move }, nowMs);
-    const userEngineMove = state.moves[state.moves.length - 1]!;
-
-    let lastComputerMove: string | null = null;
-    let computerEngineMove: (typeof state.moves)[number] | null = null;
-
-    // Check if game ended after user move
-    const afterUserResult = this.engine.detectResult(state, nowMs);
-
-    if (!afterUserResult) {
-      // Computer's turn
-      const currentFen = state.position.fen();
-      const computerUci = await this.stockfish.getBestMove(
-        currentFen,
-        game.computerLevel ?? 1,
-      );
-      state = this.engine.applyMove(state, { uci: computerUci }, nowMs);
-      lastComputerMove = computerUci;
-      computerEngineMove = state.moves[state.moves.length - 1]!;
+    let state;
+    try {
+      state = this.engine.applyMove(engineState, { uci: dto.move }, nowMs);
+    } catch (err) {
+      if (err instanceof InvalidMoveError) {
+        throw new BadRequestException(err.message);
+      }
+      throw err;
     }
+    const engineMove = state.moves[state.moves.length - 1]!;
 
     const finalResult = this.engine.detectResult(state, nowMs);
     const serialized = this.engine.toSerializable(state);
     const finalFen = state.position.fen();
 
     const pgn = this.engine.buildPgn(state.moves, {
-      white: userIsWhite ? "Player" : "Computer",
-      black: userIsWhite ? "Computer" : "Player",
+      white: gameComputerColor === "white" ? "Computer" : "Player",
+      black: gameComputerColor === "black" ? "Computer" : "Player",
       result: finalResult
         ? finalResult.result === GameResult.WhiteWins
           ? "1-0"
@@ -285,38 +244,25 @@ export class ComputerGamesService {
         : "*",
     });
 
+    const lastComputerMove = isComputerMove
+      ? dto.move
+      : (game.lastComputerMove ?? null);
+
     await this.prisma.$transaction(async (tx) => {
       await tx.move.create({
         data: {
           gameId,
-          moveNumber: Math.ceil(userEngineMove.ply / 2),
-          ply: userEngineMove.ply,
-          userId,
-          isComputer: false,
-          san: userEngineMove.san,
-          uci: userEngineMove.uci,
-          fenAfterMove: userEngineMove.fenAfter,
-          clockAfterMoveMs: userEngineMove.clockAfterMs,
-          moveTimeMs: userEngineMove.moveTimeMs,
+          moveNumber: Math.ceil(engineMove.ply / 2),
+          ply: engineMove.ply,
+          userId: isComputerMove ? null : userId,
+          isComputer: isComputerMove,
+          san: engineMove.san,
+          uci: engineMove.uci,
+          fenAfterMove: engineMove.fenAfter,
+          clockAfterMoveMs: engineMove.clockAfterMs,
+          moveTimeMs: engineMove.moveTimeMs,
         },
       });
-
-      if (computerEngineMove) {
-        await tx.move.create({
-          data: {
-            gameId,
-            moveNumber: Math.ceil(computerEngineMove.ply / 2),
-            ply: computerEngineMove.ply,
-            userId: null,
-            isComputer: true,
-            san: computerEngineMove.san,
-            uci: computerEngineMove.uci,
-            fenAfterMove: computerEngineMove.fenAfter,
-            clockAfterMoveMs: computerEngineMove.clockAfterMs,
-            moveTimeMs: computerEngineMove.moveTimeMs,
-          },
-        });
-      }
 
       await tx.game.update({
         where: { id: gameId },
@@ -338,13 +284,12 @@ export class ComputerGamesService {
     });
 
     if (finalResult && userId) {
-      const userIsWhite = game.whiteUserId === userId;
       let outcome: "win" | "loss" | "draw";
       if (finalResult.result === GameResult.Draw) {
         outcome = "draw";
       } else if (
-        (userIsWhite && finalResult.result === GameResult.WhiteWins) ||
-        (!userIsWhite && finalResult.result === GameResult.BlackWins)
+        (humanIsWhite && finalResult.result === GameResult.WhiteWins) ||
+        (!humanIsWhite && finalResult.result === GameResult.BlackWins)
       ) {
         outcome = "win";
       } else {
@@ -354,7 +299,7 @@ export class ComputerGamesService {
         game_id: gameId,
         result: outcome,
         result_reason: finalResult.reason as string,
-        computer_level: game.computerLevel ?? 1,
+        computer_level: computerLevel,
         category: game.category,
       });
     }
@@ -365,6 +310,7 @@ export class ComputerGamesService {
       pgn,
       finalResult ? "completed" : "active",
       gameComputerColor,
+      computerLevel,
       lastComputerMove,
       finalResult ? (finalResult.result as string) : null,
       finalResult ? (finalResult.reason as string) : null,
@@ -389,6 +335,7 @@ export class ComputerGamesService {
       game.pgn,
       game.status,
       game.computerColor as "white" | "black",
+      game.computerLevel ?? 1,
       game.lastComputerMove ?? null,
       game.result ?? null,
       game.resultReason ?? null,
