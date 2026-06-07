@@ -4,16 +4,16 @@ import {
   GoneException,
   ConflictException,
   ForbiddenException,
-} from '@nestjs/common';
-import { randomBytes } from 'crypto';
-import { PrismaService } from '../database/prisma.service';
-import { CreateInviteDto } from './dto/create-invite.dto';
-import { InviteGateway } from './invite-gateway';
-import { PosthogService } from '../analytics/posthog.service';
+} from "@nestjs/common";
+import { randomBytes } from "crypto";
+import { PrismaService } from "../database/prisma.service";
+import { CreateInviteDto } from "./dto/create-invite.dto";
+import { InviteGateway } from "./invite-gateway";
+import { PosthogService } from "../analytics/posthog.service";
 
 const INVITE_TTL_MS = 24 * 60 * 60 * 1000;
 
-export type InviteColor = 'white' | 'black' | 'random';
+export type InviteColor = "white" | "black" | "random";
 
 @Injectable()
 export class InvitesService {
@@ -29,8 +29,8 @@ export class InvitesService {
     color: InviteColor,
     appUrl: string,
   ) {
-    const token = randomBytes(16).toString('base64url');
-    const creatorIsBlack = color === 'black';
+    const token = randomBytes(16).toString("base64url");
+    const creatorIsBlack = color === "black";
 
     const game = await this.prisma.game.create({
       data: {
@@ -40,7 +40,7 @@ export class InvitesService {
         incrementSeconds: dto.incrementSeconds,
         category: dto.category,
         isRated: false,
-        status: 'invite_pending',
+        status: "invite_pending",
         inviteToken: token,
       },
     });
@@ -48,7 +48,7 @@ export class InvitesService {
     const inviteUrl = `${appUrl}/invite/${token}`;
     this.gateway.emitInviteCreated(userId, { gameId: game.id, inviteUrl });
 
-    this.posthog.captureEvent(userId, 'invite_created', {
+    this.posthog.captureEvent(userId, "invite_created", {
       game_id: game.id,
       time_control_seconds: dto.timeControlSeconds,
       increment_seconds: dto.incrementSeconds,
@@ -68,29 +68,33 @@ export class InvitesService {
       },
     });
 
-    if (!game) throw new NotFoundException('Invite not found');
+    if (!game) throw new NotFoundException("Invite not found");
 
-    if (game.status === 'aborted') throw new GoneException('Invite has been cancelled');
+    if (game.status === "aborted")
+      throw new GoneException("Invite has been cancelled");
 
-    if (game.status !== 'invite_pending') {
+    if (game.status !== "invite_pending") {
       return {
         gameId: game.id,
         timeControlSeconds: game.timeControlSeconds,
         incrementSeconds: game.incrementSeconds,
         category: game.category,
         creator: game.whitePlayer ?? game.blackPlayer,
-        creatorColor: game.whitePlayer ? 'white' : 'black',
+        creatorColor: game.whitePlayer ? "white" : "black",
         status: game.status,
       };
     }
 
     if (Date.now() - game.createdAt.getTime() > INVITE_TTL_MS) {
-      await this.prisma.game.update({ where: { id: game.id }, data: { status: 'aborted' } });
-      throw new GoneException('Invite has expired');
+      await this.prisma.game.update({
+        where: { id: game.id },
+        data: { status: "aborted" },
+      });
+      throw new GoneException("Invite has expired");
     }
 
     const creator = game.whitePlayer ?? game.blackPlayer;
-    const creatorColor = game.whitePlayer ? 'white' : 'black';
+    const creatorColor = game.whitePlayer ? "white" : "black";
 
     return {
       gameId: game.id,
@@ -108,25 +112,30 @@ export class InvitesService {
       where: { inviteToken: token },
     });
 
-    if (!game) throw new NotFoundException('Invite not found');
+    if (!game) throw new NotFoundException("Invite not found");
 
-    if (game.status === 'aborted') throw new GoneException('Invite has been cancelled');
+    if (game.status === "aborted")
+      throw new GoneException("Invite has been cancelled");
 
-    if (game.status !== 'invite_pending') {
-      throw new ConflictException('Invite is no longer pending');
+    if (game.status !== "invite_pending") {
+      throw new ConflictException("Invite is no longer pending");
     }
 
     if (Date.now() - game.createdAt.getTime() > INVITE_TTL_MS) {
-      await this.prisma.game.update({ where: { id: game.id }, data: { status: 'aborted' } });
-      throw new GoneException('Invite has expired');
+      await this.prisma.game.update({
+        where: { id: game.id },
+        data: { status: "aborted" },
+      });
+      throw new GoneException("Invite has expired");
     }
 
     const creatorId = game.whiteUserId ?? game.blackUserId;
     if (creatorId === acceptorId) {
-      throw new ForbiddenException('Cannot accept your own invite');
+      throw new ForbiddenException("Cannot accept your own invite");
     }
 
-    const creatorIsBlack = game.blackUserId === creatorId && game.whiteUserId === null;
+    const creatorIsBlack =
+      game.blackUserId === creatorId && game.whiteUserId === null;
 
     let newWhiteUserId: string;
     let newBlackUserId: string;
@@ -135,7 +144,8 @@ export class InvitesService {
       newWhiteUserId = acceptorId;
       newBlackUserId = creatorId!;
     } else {
-      const isRandom = game.whiteUserId === creatorId && game.blackUserId === null;
+      const isRandom =
+        game.whiteUserId === creatorId && game.blackUserId === null;
       if (isRandom && Math.random() < 0.5) {
         newWhiteUserId = acceptorId;
         newBlackUserId = creatorId!;
@@ -146,22 +156,24 @@ export class InvitesService {
     }
 
     const result = await this.prisma.game.updateMany({
-      where: { id: game.id, status: 'invite_pending' },
+      where: { id: game.id, status: "invite_pending" },
       data: {
         whiteUserId: newWhiteUserId,
         blackUserId: newBlackUserId,
-        status: 'active',
+        status: "active",
         startedAt: new Date(),
       },
     });
 
     if (result.count === 0) {
-      throw new ConflictException('Invite was already accepted');
+      throw new ConflictException("Invite was already accepted");
     }
 
-    this.gateway.emitInviteAccepted(creatorId!, acceptorId, { gameId: game.id });
+    this.gateway.emitInviteAccepted(creatorId!, acceptorId, {
+      gameId: game.id,
+    });
 
-    this.posthog.captureEvent(acceptorId, 'invite_accepted', {
+    this.posthog.captureEvent(acceptorId, "invite_accepted", {
       game_id: game.id,
       time_control_seconds: game.timeControlSeconds,
       increment_seconds: game.incrementSeconds,
@@ -176,20 +188,23 @@ export class InvitesService {
       where: { inviteToken: token },
     });
 
-    if (!game) throw new NotFoundException('Invite not found');
+    if (!game) throw new NotFoundException("Invite not found");
 
-    if (game.status !== 'invite_pending') {
-      throw new ConflictException('Invite is no longer pending');
+    if (game.status !== "invite_pending") {
+      throw new ConflictException("Invite is no longer pending");
     }
 
     const creatorId = game.whiteUserId ?? game.blackUserId;
     if (creatorId !== userId) {
-      throw new ForbiddenException('Only the creator can cancel this invite');
+      throw new ForbiddenException("Only the creator can cancel this invite");
     }
 
-    await this.prisma.game.update({ where: { id: game.id }, data: { status: 'aborted' } });
+    await this.prisma.game.update({
+      where: { id: game.id },
+      data: { status: "aborted" },
+    });
 
-    this.posthog.captureEvent(userId, 'invite_cancelled', {
+    this.posthog.captureEvent(userId, "invite_cancelled", {
       game_id: game.id,
       time_control_seconds: game.timeControlSeconds,
       increment_seconds: game.incrementSeconds,

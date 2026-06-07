@@ -1,7 +1,14 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { Sentry } from './sentry';
-import type { PosthogService } from '../analytics/posthog.service';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { Sentry } from "./sentry";
+import type { PosthogService } from "../analytics/posthog.service";
 
 interface RequestWithUser extends Request {
   user?: {
@@ -44,20 +51,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
       this.posthog?.captureException(exception, request.user?.id);
 
       this.logger.error(
-        { err: exception, requestId: (request as Request & { id?: string }).id },
-        'Unhandled exception',
+        {
+          err: exception,
+          requestId: (request as Request & { id?: string }).id,
+        },
+        "Unhandled exception",
       );
     }
 
     const message =
       exception instanceof HttpException
         ? exception.getResponse()
-        : 'Internal server error';
+        : "Internal server error";
 
-    response.status(status).json(
-      typeof message === 'object'
-        ? message
-        : { statusCode: status, message },
-    );
+    response
+      .status(status)
+      .json(
+        typeof message === "object" ? message : { statusCode: status, message },
+      );
   }
 }

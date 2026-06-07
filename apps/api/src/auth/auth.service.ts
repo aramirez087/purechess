@@ -4,19 +4,19 @@ import {
   Injectable,
   Logger,
   UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { createHash, randomBytes } from 'crypto';
-import type { Response } from 'express';
-import { TimeControlCategory } from '@prisma/client';
-import type { User } from '@prisma/client';
-import type { SafeUser } from '@purechess/shared';
-import { PrismaService } from '../database/prisma.service';
-import { PasswordService } from './password.service';
-import { SessionsService } from './sessions.service';
-import { PosthogService } from '../analytics/posthog.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { createHash, randomBytes } from "crypto";
+import type { Response } from "express";
+import { TimeControlCategory } from "@prisma/client";
+import type { User } from "@prisma/client";
+import type { SafeUser } from "@purechess/shared";
+import { PrismaService } from "../database/prisma.service";
+import { PasswordService } from "./password.service";
+import { SessionsService } from "./sessions.service";
+import { PosthogService } from "../analytics/posthog.service";
+import { RegisterDto } from "./dto/register.dto";
+import { LoginDto } from "./dto/login.dto";
 
 export interface AuthResult {
   user: SafeUser;
@@ -24,12 +24,26 @@ export interface AuthResult {
   sessionExpiresAt: Date;
 }
 
-const COOKIE_NAME = 'purechess_session';
+const COOKIE_NAME = "purechess_session";
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
 const RESERVED_USERNAMES = new Set([
-  'admin', 'purechess', 'system', 'root', 'support', 'help',
-  'api', 'www', 'mail', 'info', 'moderator', 'mod', 'staff', 'bot', 'null', 'undefined',
+  "admin",
+  "purechess",
+  "system",
+  "root",
+  "support",
+  "help",
+  "api",
+  "www",
+  "mail",
+  "info",
+  "moderator",
+  "mod",
+  "staff",
+  "bot",
+  "null",
+  "undefined",
 ]);
 
 @Injectable()
@@ -55,11 +69,11 @@ export class AuthService {
   }
 
   setCookie(res: Response, token: string, expiresAt: Date): void {
-    const isProduction = this.config.get<string>('NODE_ENV') === 'production';
+    const isProduction = this.config.get<string>("NODE_ENV") === "production";
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'lax',
+      sameSite: "lax",
       expires: expiresAt,
     });
   }
@@ -68,17 +82,25 @@ export class AuthService {
     res.clearCookie(COOKIE_NAME);
   }
 
-  async register(dto: RegisterDto, ipAddress?: string, userAgent?: string): Promise<AuthResult> {
-    const existingByEmail = await this.prisma.user.findUnique({ where: { email: dto.email } });
-    if (existingByEmail) throw new ConflictException('Email already registered');
+  async register(
+    dto: RegisterDto,
+    ipAddress?: string,
+    userAgent?: string,
+  ): Promise<AuthResult> {
+    const existingByEmail = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (existingByEmail)
+      throw new ConflictException("Email already registered");
 
     const existingByUsername = await this.prisma.user.findUnique({
       where: { username: dto.username },
     });
-    if (existingByUsername) throw new ConflictException('Username already taken');
+    if (existingByUsername)
+      throw new ConflictException("Username already taken");
 
     if (RESERVED_USERNAMES.has(dto.username.toLowerCase())) {
-      throw new BadRequestException('Username is reserved');
+      throw new BadRequestException("Username is reserved");
     }
 
     const passwordHash = await this.passwords.hashPassword(dto.password);
@@ -89,43 +111,73 @@ export class AuthService {
         username: dto.username,
         passwordHash,
         ratings: {
-          create: Object.values(TimeControlCategory).map((category) => ({ category })),
+          create: Object.values(TimeControlCategory).map((category) => ({
+            category,
+          })),
         },
       },
     });
 
-    const { token, expiresAt } = await this.sessions.createSession(user.id, ipAddress, userAgent);
+    const { token, expiresAt } = await this.sessions.createSession(
+      user.id,
+      ipAddress,
+      userAgent,
+    );
 
     this.posthog.identify(user.id, {
       username: user.username,
       $set_once: { first_seen_at: user.createdAt.toISOString() },
     });
-    this.posthog.captureEvent(user.id, 'user_registered', {
-      registration_method: 'email',
+    this.posthog.captureEvent(user.id, "user_registered", {
+      registration_method: "email",
     });
 
-    return { user: this.toSafeUser(user), sessionToken: token, sessionExpiresAt: expiresAt };
+    return {
+      user: this.toSafeUser(user),
+      sessionToken: token,
+      sessionExpiresAt: expiresAt,
+    };
   }
 
-  async login(dto: LoginDto, ipAddress?: string, userAgent?: string): Promise<AuthResult> {
-    const isEmail = dto.emailOrUsername.includes('@');
+  async login(
+    dto: LoginDto,
+    ipAddress?: string,
+    userAgent?: string,
+  ): Promise<AuthResult> {
+    const isEmail = dto.emailOrUsername.includes("@");
     const user = isEmail
-      ? await this.prisma.user.findUnique({ where: { email: dto.emailOrUsername } })
-      : await this.prisma.user.findUnique({ where: { username: dto.emailOrUsername } });
+      ? await this.prisma.user.findUnique({
+          where: { email: dto.emailOrUsername },
+        })
+      : await this.prisma.user.findUnique({
+          where: { username: dto.emailOrUsername },
+        });
 
-    if (!user || !user.passwordHash) throw new UnauthorizedException('Invalid credentials');
+    if (!user || !user.passwordHash)
+      throw new UnauthorizedException("Invalid credentials");
 
-    const valid = await this.passwords.verifyPassword(dto.password, user.passwordHash);
-    if (!valid) throw new UnauthorizedException('Invalid credentials');
+    const valid = await this.passwords.verifyPassword(
+      dto.password,
+      user.passwordHash,
+    );
+    if (!valid) throw new UnauthorizedException("Invalid credentials");
 
-    const { token, expiresAt } = await this.sessions.createSession(user.id, ipAddress, userAgent);
+    const { token, expiresAt } = await this.sessions.createSession(
+      user.id,
+      ipAddress,
+      userAgent,
+    );
 
     this.posthog.identify(user.id, { username: user.username });
-    this.posthog.captureEvent(user.id, 'user_logged_in', {
-      login_method: 'email',
+    this.posthog.captureEvent(user.id, "user_logged_in", {
+      login_method: "email",
     });
 
-    return { user: this.toSafeUser(user), sessionToken: token, sessionExpiresAt: expiresAt };
+    return {
+      user: this.toSafeUser(user),
+      sessionToken: token,
+      sessionExpiresAt: expiresAt,
+    };
   }
 
   async logout(token?: string): Promise<void> {
@@ -136,42 +188,55 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) return;
 
-    const rawToken = randomBytes(32).toString('hex');
-    const tokenHash = createHash('sha256').update(rawToken).digest('hex');
+    const rawToken = randomBytes(32).toString("hex");
+    const tokenHash = createHash("sha256").update(rawToken).digest("hex");
     const expiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
 
     await this.prisma.passwordResetToken.create({
       data: { userId: user.id, tokenHash, expiresAt },
     });
 
-    this.posthog.captureEvent(user.id, 'password_reset_requested');
+    this.posthog.captureEvent(user.id, "password_reset_requested");
 
-    const appUrl = this.config.get<string>('NEXT_PUBLIC_APP_URL') ?? 'http://localhost:3000';
-    this.logger.log(`[DEV] Password reset link: ${appUrl}/reset-password?token=${rawToken}`);
+    const appUrl =
+      this.config.get<string>("NEXT_PUBLIC_APP_URL") ?? "http://localhost:3000";
+    this.logger.log(
+      `[DEV] Password reset link: ${appUrl}/reset-password?token=${rawToken}`,
+    );
   }
 
-  async confirmPasswordReset(token: string, newPassword: string): Promise<void> {
-    const tokenHash = createHash('sha256').update(token).digest('hex');
+  async confirmPasswordReset(
+    token: string,
+    newPassword: string,
+  ): Promise<void> {
+    const tokenHash = createHash("sha256").update(token).digest("hex");
     const now = new Date();
 
     const resetToken = await this.prisma.passwordResetToken.findFirst({
       where: { tokenHash, usedAt: null, expiresAt: { gt: now } },
     });
 
-    if (!resetToken) throw new UnauthorizedException('Invalid or expired reset token');
+    if (!resetToken)
+      throw new UnauthorizedException("Invalid or expired reset token");
 
     const passwordHash = await this.passwords.hashPassword(newPassword);
 
     await this.prisma.$transaction([
-      this.prisma.user.update({ where: { id: resetToken.userId }, data: { passwordHash } }),
-      this.prisma.passwordResetToken.update({ where: { id: resetToken.id }, data: { usedAt: now } }),
+      this.prisma.user.update({
+        where: { id: resetToken.userId },
+        data: { passwordHash },
+      }),
+      this.prisma.passwordResetToken.update({
+        where: { id: resetToken.id },
+        data: { usedAt: now },
+      }),
     ]);
 
-    this.posthog.captureEvent(resetToken.userId, 'password_reset_completed');
+    this.posthog.captureEvent(resetToken.userId, "password_reset_completed");
   }
 
   async handleOAuth(
-    provider: 'google' | 'apple',
+    provider: "google" | "apple",
     providerUserId: string,
     email: string,
     ipAddress?: string,
@@ -187,9 +252,10 @@ export class AuthService {
     if (oauthAccount) {
       user = oauthAccount.user;
     } else {
-      const baseUsername = (email.split('@')[0] ?? 'user')
-        .replace(/[^a-zA-Z0-9_-]/g, '')
-        .slice(0, 16) || 'user';
+      const baseUsername =
+        (email.split("@")[0] ?? "user")
+          .replace(/[^a-zA-Z0-9_-]/g, "")
+          .slice(0, 16) || "user";
 
       let username = baseUsername;
       let suffix = 1;
@@ -202,7 +268,9 @@ export class AuthService {
           email,
           username,
           ratings: {
-            create: Object.values(TimeControlCategory).map((category) => ({ category })),
+            create: Object.values(TimeControlCategory).map((category) => ({
+              category,
+            })),
           },
           oauthAccounts: {
             create: { provider, providerUserId },
@@ -212,14 +280,22 @@ export class AuthService {
     }
 
     const isNewUser = !oauthAccount;
-    const { token, expiresAt } = await this.sessions.createSession(user.id, ipAddress, userAgent);
+    const { token, expiresAt } = await this.sessions.createSession(
+      user.id,
+      ipAddress,
+      userAgent,
+    );
 
     this.posthog.identify(user.id, { username: user.username });
-    this.posthog.captureEvent(user.id, 'oauth_authenticated', {
+    this.posthog.captureEvent(user.id, "oauth_authenticated", {
       provider,
       is_new_user: isNewUser,
     });
 
-    return { user: this.toSafeUser(user), sessionToken: token, sessionExpiresAt: expiresAt };
+    return {
+      user: this.toSafeUser(user),
+      sessionToken: token,
+      sessionExpiresAt: expiresAt,
+    };
   }
 }

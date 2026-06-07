@@ -3,24 +3,38 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { GameResult, GameStatus, TimeControlCategory } from '@prisma/client';
-import type { User } from '@prisma/client';
+} from "@nestjs/common";
+import { GameResult, GameStatus, TimeControlCategory } from "@prisma/client";
+import type { User } from "@prisma/client";
 import type {
   GameHistoryResponseDto,
   GameHistorySummaryDto,
   ProfileDto,
   RatingDto,
   StatsDto,
-} from '@purechess/shared';
-import { PrismaService } from '../database/prisma.service';
-import { PosthogService } from '../analytics/posthog.service';
-import { UpdateMeDto } from './dto/user-profile.dto';
-import { GameHistoryQueryDto } from './dto/game-history.dto';
+} from "@purechess/shared";
+import { PrismaService } from "../database/prisma.service";
+import { PosthogService } from "../analytics/posthog.service";
+import { UpdateMeDto } from "./dto/user-profile.dto";
+import { GameHistoryQueryDto } from "./dto/game-history.dto";
 
 const RESERVED_USERNAMES = new Set([
-  'admin', 'purechess', 'system', 'root', 'support', 'help',
-  'api', 'www', 'mail', 'info', 'moderator', 'mod', 'staff', 'bot', 'null', 'undefined',
+  "admin",
+  "purechess",
+  "system",
+  "root",
+  "support",
+  "help",
+  "api",
+  "www",
+  "mail",
+  "info",
+  "moderator",
+  "mod",
+  "staff",
+  "bot",
+  "null",
+  "undefined",
 ]);
 
 @Injectable()
@@ -30,27 +44,37 @@ export class UsersService {
     private readonly posthog: PosthogService,
   ) {}
 
-  async getProfile(username: string, viewerUserId?: string): Promise<ProfileDto> {
+  async getProfile(
+    username: string,
+    viewerUserId?: string,
+  ): Promise<ProfileDto> {
     const user = await this.prisma.user.findFirst({
-      where: { username: { equals: username, mode: 'insensitive' } },
+      where: { username: { equals: username, mode: "insensitive" } },
       include: { ratings: true },
     });
 
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException("User not found");
 
     if (user.isDisabled) {
       const viewer = viewerUserId
-        ? await this.prisma.user.findUnique({ where: { id: viewerUserId }, select: { isAdmin: true } })
+        ? await this.prisma.user.findUnique({
+            where: { id: viewerUserId },
+            select: { isAdmin: true },
+          })
         : null;
-      if (!viewer?.isAdmin) throw new NotFoundException('User not found');
+      if (!viewer?.isAdmin) throw new NotFoundException("User not found");
     }
 
     const ratings: RatingDto[] = (
-      [TimeControlCategory.bullet, TimeControlCategory.blitz, TimeControlCategory.rapid] as const
+      [
+        TimeControlCategory.bullet,
+        TimeControlCategory.blitz,
+        TimeControlCategory.rapid,
+      ] as const
     ).map((cat) => {
       const r = user.ratings.find((x) => x.category === cat);
       return {
-        category: cat as 'bullet' | 'blitz' | 'rapid',
+        category: cat as "bullet" | "blitz" | "rapid",
         rating: r?.rating ?? 1500,
         gamesPlayed: r?.gamesPlayed ?? 0,
       };
@@ -76,17 +100,20 @@ export class UsersService {
     viewerUserId?: string,
   ): Promise<GameHistoryResponseDto> {
     const user = await this.prisma.user.findFirst({
-      where: { username: { equals: username, mode: 'insensitive' } },
+      where: { username: { equals: username, mode: "insensitive" } },
       select: { id: true, username: true, isDisabled: true },
     });
 
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException("User not found");
 
     if (user.isDisabled) {
       const viewer = viewerUserId
-        ? await this.prisma.user.findUnique({ where: { id: viewerUserId }, select: { isAdmin: true } })
+        ? await this.prisma.user.findUnique({
+            where: { id: viewerUserId },
+            select: { isAdmin: true },
+          })
         : null;
-      if (!viewer?.isAdmin) throw new NotFoundException('User not found');
+      if (!viewer?.isAdmin) throw new NotFoundException("User not found");
     }
 
     return this.fetchGames(user.id, user.username, query);
@@ -95,15 +122,15 @@ export class UsersService {
   async updateMe(userId: string, dto: UpdateMeDto): Promise<User> {
     if (dto.username) {
       if (RESERVED_USERNAMES.has(dto.username.toLowerCase())) {
-        throw new BadRequestException('Username is reserved');
+        throw new BadRequestException("Username is reserved");
       }
       const existing = await this.prisma.user.findFirst({
         where: {
-          username: { equals: dto.username, mode: 'insensitive' },
+          username: { equals: dto.username, mode: "insensitive" },
           NOT: { id: userId },
         },
       });
-      if (existing) throw new ConflictException('Username already taken');
+      if (existing) throw new ConflictException("Username already taken");
     }
 
     const updated = await this.prisma.user.update({
@@ -114,7 +141,7 @@ export class UsersService {
       },
     });
 
-    this.posthog.captureEvent(userId, 'profile_updated', {
+    this.posthog.captureEvent(userId, "profile_updated", {
       changed_username: dto.username !== undefined,
       changed_avatar: dto.avatarUrl !== undefined,
     });
@@ -150,7 +177,8 @@ export class UsersService {
     }
 
     const totalGames = wins + losses + draws;
-    const winRate = totalGames > 0 ? Math.round((wins / totalGames) * 1000) / 10 : 0;
+    const winRate =
+      totalGames > 0 ? Math.round((wins / totalGames) * 1000) / 10 : 0;
 
     return { totalGames, wins, losses, draws, winRate };
   }
@@ -185,7 +213,7 @@ export class UsersService {
         whitePlayer: { select: { username: true } },
         blackPlayer: { select: { username: true } },
       },
-      orderBy: { endedAt: 'desc' },
+      orderBy: { endedAt: "desc" },
       take: limit + 1,
     });
 
@@ -194,34 +222,44 @@ export class UsersService {
 
     const summaries: GameHistorySummaryDto[] = slice.map((g) => {
       const playedAsWhite = g.whiteUserId === userId;
-      const opponentUsername = playedAsWhite ? g.blackPlayer?.username ?? '' : g.whitePlayer?.username ?? '';
+      const opponentUsername = playedAsWhite
+        ? (g.blackPlayer?.username ?? "")
+        : (g.whitePlayer?.username ?? "");
 
-      let result: 'win' | 'loss' | 'draw' | null = null;
+      let result: "win" | "loss" | "draw" | null = null;
       if (g.result === GameResult.draw) {
-        result = 'draw';
+        result = "draw";
       } else if (
         (playedAsWhite && g.result === GameResult.white_wins) ||
         (!playedAsWhite && g.result === GameResult.black_wins)
       ) {
-        result = 'win';
+        result = "win";
       } else if (g.result !== null) {
-        result = 'loss';
+        result = "loss";
       }
 
       let ratingDelta: number | null = null;
-      if (playedAsWhite && g.whiteRatingAfter !== null && g.whiteRatingBefore !== null) {
+      if (
+        playedAsWhite &&
+        g.whiteRatingAfter !== null &&
+        g.whiteRatingBefore !== null
+      ) {
         ratingDelta = g.whiteRatingAfter - g.whiteRatingBefore;
-      } else if (!playedAsWhite && g.blackRatingAfter !== null && g.blackRatingBefore !== null) {
+      } else if (
+        !playedAsWhite &&
+        g.blackRatingAfter !== null &&
+        g.blackRatingBefore !== null
+      ) {
         ratingDelta = g.blackRatingAfter - g.blackRatingBefore;
       }
 
       return {
         id: g.id,
         opponentUsername,
-        playedAs: playedAsWhite ? 'white' : 'black',
+        playedAs: playedAsWhite ? "white" : "black",
         result,
         ratingDelta,
-        category: g.category as 'bullet' | 'blitz' | 'rapid',
+        category: g.category as "bullet" | "blitz" | "rapid",
         timeControlSeconds: g.timeControlSeconds,
         incrementSeconds: g.incrementSeconds,
         isRated: g.isRated,
