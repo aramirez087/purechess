@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma, ReportStatus } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { AuditService } from '../admin/audit.service';
 import { CreateReportDto } from './dto/create-report.dto';
@@ -53,9 +54,9 @@ export class ReportsService {
     const pageSize = dto.pageSize ?? 20;
     const skip = (page - 1) * pageSize;
 
-    const where: { status?: string; reportedUserId?: string } = {};
-    if (dto.status) where['status'] = dto.status;
-    if (dto.reportedUserId) where['reportedUserId'] = dto.reportedUserId;
+    const where: Prisma.ReportWhereInput = {};
+    if (dto.status) where.status = dto.status as ReportStatus;
+    if (dto.reportedUserId) where.reportedUserId = dto.reportedUserId;
 
     const [reports, total] = await Promise.all([
       this.prisma.report.findMany({
@@ -134,8 +135,8 @@ export class ReportsService {
     const report = await this.prisma.report.findUnique({ where: { id } });
     if (!report) throw new NotFoundException('Report not found');
 
-    const data: { status: string; reviewedAt: Date; reviewedByUserId: string; notes?: string } = {
-      status: dto.status,
+    const data: { status: ReportStatus; reviewedAt: Date; reviewedByUserId: string; notes?: string } = {
+      status: dto.status as ReportStatus,
       reviewedAt: new Date(),
       reviewedByUserId: adminUserId,
     };

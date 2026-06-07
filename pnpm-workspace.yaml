@@ -10,4 +10,5 @@ allowBuilds:
   core-js: true
   esbuild: true
   prisma: true
+  stockfish: true
   unrs-resolver: true

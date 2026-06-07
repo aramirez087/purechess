@@ -183,7 +183,7 @@ export class UsersService {
 
     const summaries: GameHistorySummaryDto[] = slice.map((g) => {
       const playedAsWhite = g.whiteUserId === userId;
-      const opponentUsername = playedAsWhite ? g.blackPlayer.username : g.whitePlayer.username;
+      const opponentUsername = playedAsWhite ? (g.blackPlayer?.username ?? '') : (g.whitePlayer?.username ?? '');
 
       let result: 'win' | 'loss' | 'draw' | null = null;
       if (g.result === GameResult.draw) {

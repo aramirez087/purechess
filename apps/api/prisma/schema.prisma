@@ -184,6 +184,10 @@ model Game {
   reports       Report[]
   fairPlaySignals FairPlaySignal[]
 
+  isVsComputer  Boolean  @default(false)
+  computerLevel Int?
+  computerColor String?
+
   @@index([whiteUserId, createdAt])
   @@index([blackUserId, createdAt])
   @@index([status, createdAt])
