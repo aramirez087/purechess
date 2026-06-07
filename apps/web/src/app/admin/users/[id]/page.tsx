@@ -2,8 +2,10 @@
 
 import { useParams } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { DisableAccountDialog } from '@/components/admin/disable-account-dialog';
+import { FairplaySignals, type FairPlaySignalRow } from '@/components/admin/fairplay-signals';
 import { GamesTable } from '@/components/admin/games-table';
 import { fetchUser } from '@/lib/api/admin';
 import { formatRelativeTime } from '@/lib/utils';
@@ -58,6 +60,24 @@ export default function AdminUserDetailPage() {
               <Badge key={a.provider} variant="secondary">{a.provider}</Badge>
             ))}
           </div>
+        </div>
+      )}
+
+      {user.fairPlaySignals.length > 0 && (
+        <div>
+          {user.fairPlaySignals.some((s) => s.score > 0.7) && (
+            <div className="mb-3 rounded-md border border-amber-400 bg-amber-50 p-3 text-sm text-amber-800 flex items-center justify-between">
+              <span>Suspicious signals detected</span>
+              <Link
+                href={`/admin/reports?reportedUserId=${user.id}`}
+                className="underline font-medium"
+              >
+                Review reports
+              </Link>
+            </div>
+          )}
+          <h2 className="mb-2 text-sm font-medium">Fair-play signals</h2>
+          <FairplaySignals signals={user.fairPlaySignals} />
         </div>
       )}
 

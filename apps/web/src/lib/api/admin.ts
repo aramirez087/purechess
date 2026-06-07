@@ -24,8 +24,19 @@ export interface AdminUser {
   ratings: { category: string; rating: number }[];
 }
 
+export interface AdminFairPlaySignal {
+  id: string;
+  userId: string;
+  gameId: string | null;
+  signalType: string;
+  score: number;
+  payload: unknown;
+  createdAt: string;
+}
+
 export interface AdminUserDetail extends AdminUser {
   oauthAccounts: { provider: string; createdAt: string }[];
+  fairPlaySignals: AdminFairPlaySignal[];
   _count: { gamesAsWhite: number; gamesAsBlack: number; reportsReceived: number };
 }
 
