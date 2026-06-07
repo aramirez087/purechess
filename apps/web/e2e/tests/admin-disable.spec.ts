@@ -20,7 +20,7 @@ test.describe('Admin: disable user', () => {
     const adminPage = await adminCtx.newPage();
     await adminPage.goto('/');
     await adminPage.evaluate((t) => {
-      document.cookie = `purchess_session=${t}; path=/`;
+      document.cookie = `purechess_session=${t}; path=/`;
     }, admin.sessionToken);
 
     await adminPage.goto(`/admin/users/${target.id}`);

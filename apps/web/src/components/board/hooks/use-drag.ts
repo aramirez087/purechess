@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import type { Square } from '@purchess/shared';
+import type { Square } from '@purechess/shared';
 import type { DragState } from '@/lib/board/types';
 
 const DRAG_THRESHOLD = 4;

@@ -1,6 +1,6 @@
-# @purchess/api
+# @purechess/api
 
-NestJS 10 backend for Purchess.
+NestJS 10 backend for Purechess.
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Handles all game logic, matchmaking, ratings, authentication, WebSocket events, 
 pnpm dev:api
 
 # Or standalone
-pnpm --filter @purchess/api dev
+pnpm --filter @purechess/api dev
 ```
 
 Runs on **port 4000**.
@@ -46,10 +46,10 @@ src/
 
 ```bash
 # Unit tests
-pnpm --filter @purchess/api test
+pnpm --filter @purechess/api test
 
 # Integration tests (requires DB)
-pnpm --filter @purchess/api test:e2e
+pnpm --filter @purechess/api test:e2e
 ```
 
 ## Database
@@ -57,7 +57,7 @@ pnpm --filter @purchess/api test:e2e
 Prisma schema at `prisma/schema.prisma`. Run migrations:
 
 ```bash
-pnpm --filter @purchess/api db:migrate      # dev (creates migration)
+pnpm --filter @purechess/api db:migrate      # dev (creates migration)
 pnpm db:migrate:deploy                       # prod (applies existing)
 ```
 

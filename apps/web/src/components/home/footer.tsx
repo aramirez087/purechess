@@ -25,7 +25,7 @@ export function Footer() {
             </li>
           </ul>
         </nav>
-        <p>© {new Date().getFullYear()} Purchess</p>
+        <p>© {new Date().getFullYear()} Purechess</p>
       </div>
     </footer>
   );

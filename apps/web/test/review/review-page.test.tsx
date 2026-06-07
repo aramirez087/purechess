@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ReviewClient } from '@/app/games/[gameId]/review-client';
-import { GameResult, GameTermination, TimeCategory } from '@purchess/shared';
+import { GameResult, GameTermination, TimeCategory } from '@purechess/shared';
 import type { GameReview } from '@/types/game-review';
 
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));

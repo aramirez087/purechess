@@ -1,13 +1,13 @@
 {
-  "name": "purchess",
+  "name": "purechess",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/*' dev",
-    "dev:web": "pnpm --filter @purchess/web dev",
-    "dev:api": "pnpm --filter @purchess/api dev",
-    "build": "pnpm --filter @purchess/shared build && pnpm --parallel --filter './apps/*' build",
+    "dev:web": "pnpm --filter @purechess/web dev",
+    "dev:api": "pnpm --filter @purechess/api dev",
+    "build": "pnpm --filter @purechess/shared build && pnpm --parallel --filter './apps/*' build",
     "lint": "pnpm -r lint",
     "format": "prettier --write .",
     "typecheck": "pnpm -r typecheck",
@@ -15,9 +15,9 @@
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:reset": "docker compose down -v",
-    "db:migrate:deploy": "pnpm --filter @purchess/api exec prisma migrate deploy",
-    "e2e": "pnpm --filter @purchess/web e2e",
-    "e2e:setup": "pnpm --filter @purchess/web e2e:setup",
+    "db:migrate:deploy": "pnpm --filter @purechess/api exec prisma migrate deploy",
+    "e2e": "pnpm --filter @purechess/web e2e",
+    "e2e:setup": "pnpm --filter @purechess/web e2e:setup",
     "smoke": "bash scripts/smoke.sh"
   },
   "devDependencies": {

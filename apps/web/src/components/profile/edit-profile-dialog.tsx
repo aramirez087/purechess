@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { SafeUser } from '@purchess/shared';
+import type { SafeUser } from '@purechess/shared';
 
 type EditProfileDialogProps = {
   open: boolean;

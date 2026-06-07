@@ -25,7 +25,7 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
         <h2 className="text-xl font-semibold">Could not load this game</h2>
         <p className="text-muted-foreground max-w-sm">
           The game record appears to be corrupt. If this problem persists, please{' '}
-          <a href="mailto:support@purchess.com" className="underline">contact support</a>.
+          <a href="mailto:support@purechess.com" className="underline">contact support</a>.
         </p>
       </div>
     );

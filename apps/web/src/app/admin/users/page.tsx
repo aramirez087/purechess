@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { UsersTable } from '@/components/admin/users-table';
 
-export const metadata: Metadata = { title: 'Users — Admin — Purchess' };
+export const metadata: Metadata = { title: 'Users — Admin — Purechess' };
 
 export default function AdminUsersPage() {
   return (

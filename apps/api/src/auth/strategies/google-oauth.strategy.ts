@@ -13,9 +13,11 @@ export interface GoogleOAuthProfile {
 @Injectable()
 export class GoogleOAuthStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(config: ConfigService) {
+    const clientID = config.get<string>('OAUTH_GOOGLE_CLIENT_ID') || 'dev-placeholder';
+    const clientSecret = config.get<string>('OAUTH_GOOGLE_CLIENT_SECRET') || 'dev-placeholder';
     super({
-      clientID: config.get<string>('OAUTH_GOOGLE_CLIENT_ID') ?? '',
-      clientSecret: config.get<string>('OAUTH_GOOGLE_CLIENT_SECRET') ?? '',
+      clientID,
+      clientSecret,
       callbackURL: config.get<string>('OAUTH_GOOGLE_CALLBACK_URL'),
       scope: ['email', 'profile'],
     });

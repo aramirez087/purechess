@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { cn, formatTimeControl } from '@/lib/utils';
-import type { GameHistorySummaryDto } from '@purchess/shared';
+import type { GameHistorySummaryDto } from '@purechess/shared';
 
 type GameHistoryRowProps = {
   game: GameHistorySummaryDto;

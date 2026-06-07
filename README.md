@@ -1,8 +1,8 @@
-# Purchess
+# Purechess
 
 Pure chess, nothing else. No puzzles, no lessons, no streams — just the game.
 
-Purchess is a minimalist online chess platform: anonymous casual play, rated games with Glicko-2 rankings, friend invites, reconnect support, and game review with PGN export.
+Purechess is a minimalist online chess platform: anonymous casual play, rated games with Glicko-2 rankings, friend invites, reconnect support, and game review with PGN export.
 
 ## Quickstart
 
@@ -16,7 +16,7 @@ pnpm dev                              # web :3000 + api :4000
 
 ## Screenshot
 
-![Purchess board](docs/assets/board-placeholder.png)
+![Purechess board](docs/assets/board-placeholder.png)
 
 *(Placeholder — replaced pre-launch)*
 
@@ -51,7 +51,7 @@ Browser (Next.js 14)  ←──REST/WS──►  NestJS 10 API (:4000)
 - [Architecture & ADRs](docs/ARCHITECTURE.md)
 - [Contributing guide](docs/CONTRIBUTING.md)
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
-- [Product spec](docs/epics/purchess-mvp.md)
+- [Product spec](docs/epics/purechess-mvp.md)
 - [Ops runbook](infra/RUNBOOK.md)
 
 ## License

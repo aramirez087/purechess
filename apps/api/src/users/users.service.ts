@@ -12,13 +12,13 @@ import type {
   ProfileDto,
   RatingDto,
   StatsDto,
-} from '@purchess/shared';
+} from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
 import { UpdateMeDto } from './dto/user-profile.dto';
 import { GameHistoryQueryDto } from './dto/game-history.dto';
 
 const RESERVED_USERNAMES = new Set([
-  'admin', 'purchess', 'system', 'root', 'support', 'help',
+  'admin', 'purechess', 'system', 'root', 'support', 'help',
   'api', 'www', 'mail', 'info', 'moderator', 'mod', 'staff', 'bot', 'null', 'undefined',
 ]);
 
@@ -146,7 +146,7 @@ export class UsersService {
 
   private async fetchGames(
     userId: string,
-    username: string,
+    _username: string,
     query: GameHistoryQueryDto,
   ): Promise<GameHistoryResponseDto> {
     const limit = query.limit ?? 20;
@@ -183,7 +183,7 @@ export class UsersService {
 
     const summaries: GameHistorySummaryDto[] = slice.map((g) => {
       const playedAsWhite = g.whiteUserId === userId;
-      const opponentUsername = playedAsWhite ? g.blackPlayer.username : g.whitePlayer.username;
+      const opponentUsername = playedAsWhite ? g.blackPlayer?.username ?? '' : g.whitePlayer?.username ?? '';
 
       let result: 'win' | 'loss' | 'draw' | null = null;
       if (g.result === GameResult.draw) {

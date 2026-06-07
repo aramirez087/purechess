@@ -8,8 +8,8 @@ interface InvitePageProps {
 export async function generateMetadata({ params }: InvitePageProps): Promise<Metadata> {
   const { token } = await params;
   return {
-    title: 'Game Invite — Purchess',
-    description: `You have been invited to play chess on Purchess. Token: ${token}`,
+    title: 'Game Invite — Purechess',
+    description: `You have been invited to play chess on Purechess. Token: ${token}`,
   };
 }
 

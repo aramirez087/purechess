@@ -47,8 +47,8 @@ describe('settings store', () => {
     expect(useSettingsStore.getState().sound).toBe(true);
   });
 
-  it('persist round-trip: key is purchess-settings', () => {
+  it('persist round-trip: key is purechess-settings', () => {
     const persistKey = (useSettingsStore as unknown as { persist: { getOptions: () => { name: string } } }).persist.getOptions().name;
-    expect(persistKey).toBe('purchess-settings');
+    expect(persistKey).toBe('purechess-settings');
   });
 });

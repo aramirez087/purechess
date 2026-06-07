@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { User } from '@prisma/client';
-import type { GameHistoryResponseDto, ProfileDto, SafeUser } from '@purchess/shared';
+import type { GameHistoryResponseDto, ProfileDto, SafeUser } from '@purechess/shared';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { OptionalSessionAuthGuard } from '../auth/guards/optional-session-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';

@@ -6,7 +6,7 @@ import { HomeViewedTracker } from '@/components/home/home-viewed-tracker';
 import { buildMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata = buildMetadata({
-  title: 'Purchess — Pure chess. Nothing else.',
+  title: 'Purechess — Pure chess. Nothing else.',
   description:
     'The cleanest way to play chess online. No ads, no clutter, just a great board.',
   canonical: SITE_URL,

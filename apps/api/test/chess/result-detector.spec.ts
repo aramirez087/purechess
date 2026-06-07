@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { GameResult, GameTermination } from '@purchess/shared';
+import { GameResult, GameTermination } from '@purechess/shared';
 import { makeClock } from '../../src/chess/engine/clock';
 import { fenPosition } from '../../src/chess/engine/fen-utils';
 import { detectResult } from '../../src/chess/engine/result-detector';

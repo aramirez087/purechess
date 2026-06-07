@@ -22,7 +22,7 @@ export function PgnActions({ pgn, gameId }: PgnActionsProps) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `purchess-${gameId}.pgn`;
+    a.download = `purechess-${gameId}.pgn`;
     a.click();
     URL.revokeObjectURL(url);
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Color, EngineMove, GameResult, GameTermination, MoveIntent, SerializableEngineState } from '@purchess/shared';
+import { Color, EngineMove, GameResult, GameTermination, MoveIntent, SerializableEngineState } from '@purechess/shared';
 import {
   CreateGameOpts,
   EngineState,

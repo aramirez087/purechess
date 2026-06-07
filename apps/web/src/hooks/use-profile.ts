@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import type { ProfileDto } from '@purchess/shared';
+import type { ProfileDto } from '@purechess/shared';
 
 async function fetchProfile(username: string): Promise<ProfileDto> {
   const res = await fetch(`/api/users/${username}`);

@@ -10,7 +10,7 @@ import { createHash, randomBytes } from 'crypto';
 import type { Response } from 'express';
 import { TimeControlCategory } from '@prisma/client';
 import type { User } from '@prisma/client';
-import type { SafeUser } from '@purchess/shared';
+import type { SafeUser } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
 import { PasswordService } from './password.service';
 import { SessionsService } from './sessions.service';
@@ -23,11 +23,11 @@ export interface AuthResult {
   sessionExpiresAt: Date;
 }
 
-const COOKIE_NAME = 'purchess_session';
+const COOKIE_NAME = 'purechess_session';
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
 const RESERVED_USERNAMES = new Set([
-  'admin', 'purchess', 'system', 'root', 'support', 'help',
+  'admin', 'purechess', 'system', 'root', 'support', 'help',
   'api', 'www', 'mail', 'info', 'moderator', 'mod', 'staff', 'bot', 'null', 'undefined',
 ]);
 

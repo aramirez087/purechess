@@ -5,7 +5,7 @@ import { getReview } from '@/services/game-review.service';
 import { buildMetadata } from '@/lib/seo';
 import { ReviewClient } from './review-client';
 import { AppShell } from '@/components/layout/AppShell';
-import { GameResult } from '@purchess/shared';
+import { GameResult } from '@purechess/shared';
 
 interface Props {
   params: { gameId: string };
@@ -21,13 +21,13 @@ function formatResult(result: GameResult): string {
 
 async function getCurrentUser(): Promise<{ id: string; username: string } | null> {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get('purchess_session');
+  const sessionCookie = cookieStore.get('purechess_session');
   if (!sessionCookie) return null;
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
   try {
     const res = await fetch(`${apiUrl}/api/auth/me`, {
-      headers: { Cookie: `purchess_session=${sessionCookie.value}` },
+      headers: { Cookie: `purechess_session=${sessionCookie.value}` },
       cache: 'no-store',
     });
     if (!res.ok) return null;
@@ -39,10 +39,10 @@ async function getCurrentUser(): Promise<{ id: string; username: string } | null
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const review = await getReview(params.gameId);
-  if (!review) return { title: 'Game not found — Purchess' };
+  if (!review) return { title: 'Game not found — Purechess' };
   const resultLabel = formatResult(review.result);
   return buildMetadata({
-    title: `Purchess — ${review.white.username} vs ${review.black.username}`,
+    title: `Purechess — ${review.white.username} vs ${review.black.username}`,
     description: `Review this ${review.timeControl.label} ${review.rated ? 'rated' : 'casual'} game: ${resultLabel}.`,
     canonical: `/games/${review.id}`,
   });

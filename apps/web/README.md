@@ -1,6 +1,6 @@
-# @purchess/web
+# @purechess/web
 
-Next.js 14 App Router frontend for Purchess.
+Next.js 14 App Router frontend for Purechess.
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Renders the chess board, matchmaking UI, game review, profile pages, and admin p
 pnpm dev:web
 
 # Or standalone
-pnpm --filter @purchess/web dev
+pnpm --filter @purechess/web dev
 ```
 
 Runs on **port 3000**.
@@ -41,10 +41,10 @@ src/
 
 ```bash
 # Unit tests (Vitest)
-pnpm --filter @purchess/web test
+pnpm --filter @purechess/web test
 
 # Playwright E2E (requires running stack)
-pnpm --filter @purchess/web e2e
+pnpm --filter @purechess/web e2e
 ```
 
 ## Environment

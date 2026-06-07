@@ -1,4 +1,4 @@
-import { EngineMove } from '@purchess/shared';
+import { EngineMove } from '@purechess/shared';
 
 export interface PgnHeaders {
   event?: string;
@@ -17,7 +17,7 @@ export function buildPgn(moves: EngineMove[], headers: PgnHeaders): string {
   const lines: string[] = [];
 
   lines.push(`[Event "${headers.event ?? '?'}"]`);
-  lines.push(`[Site "${headers.site ?? 'Purchess'}"]`);
+  lines.push(`[Site "${headers.site ?? 'Purechess'}"]`);
   lines.push(`[Date "${headers.date ?? '????.??.??'}"]`);
   lines.push(`[White "${headers.white}"]`);
   lines.push(`[Black "${headers.black}"]`);

@@ -39,6 +39,6 @@ export async function injectSession(page: Page, token: string): Promise<void> {
   const baseURL = process.env['BASE_URL'] ?? 'http://localhost:3000';
   await page.goto(baseURL);
   await page.evaluate((t) => {
-    document.cookie = `purchess_session=${t}; path=/`;
+    document.cookie = `purechess_session=${t}; path=/`;
   }, token);
 }

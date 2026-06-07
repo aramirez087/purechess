@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import type { Square, MoveIntent } from '@purchess/shared';
+import type { Square, MoveIntent } from '@purechess/shared';
 
 type ClickState = { phase: 'idle' } | { phase: 'selected'; from: Square };
 

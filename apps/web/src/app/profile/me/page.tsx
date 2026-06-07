@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { serverFetch } from '@/lib/api';
-import type { SafeUser } from '@purchess/shared';
+import type { SafeUser } from '@purechess/shared';
 
 export const dynamic = 'force-dynamic';
 

@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build shared
-        run: pnpm --filter @purchess/shared build
+        run: pnpm --filter @purechess/shared build
 
       - name: Lint
         run: pnpm lint
@@ -61,7 +61,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build shared
-        run: pnpm --filter @purchess/shared build
+        run: pnpm --filter @purechess/shared build
 
       - name: Test
         run: pnpm test
@@ -82,7 +82,7 @@ jobs:
           context: .
           file: apps/api/Dockerfile
           push: false
-          tags: purchess-api:ci
+          tags: purechess-api:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -92,7 +92,7 @@ jobs:
           context: .
           file: apps/web/Dockerfile
           push: false
-          tags: purchess-web:ci
+          tags: purechess-web:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -102,7 +102,7 @@ jobs:
     needs: [build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     env:
-      DATABASE_URL: postgresql://purchess:purchess@localhost:5432/purchess
+      DATABASE_URL: postgresql://purechess:purechess@localhost:5432/purechess
       REDIS_URL: redis://localhost:6379
       SESSION_SECRET: ci-session-secret-min-32-chars-for-testing-only
       NEXT_PUBLIC_API_URL: http://localhost:4000
@@ -112,9 +112,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: purchess
-          POSTGRES_PASSWORD: purchess
-          POSTGRES_DB: purchess
+          POSTGRES_USER: purechess
+          POSTGRES_PASSWORD: purechess
+          POSTGRES_DB: purechess
         ports:
           - 5432:5432
         options: >-
@@ -147,13 +147,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build shared
-        run: pnpm --filter @purchess/shared build
+        run: pnpm --filter @purechess/shared build
 
       - name: Run migrations
-        run: pnpm --filter @purchess/api exec prisma migrate deploy
+        run: pnpm --filter @purechess/api exec prisma migrate deploy
 
       - name: Build API
-        run: pnpm --filter @purchess/api build
+        run: pnpm --filter @purechess/api build
 
       - name: Start API
         run: node apps/api/dist/main.js &

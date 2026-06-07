@@ -37,7 +37,7 @@ export const useSettingsStore = create<SettingsStore>()(
       reset: () => set((state) => ({ ...state, ...DEFAULTS })),
     }),
     {
-      name: 'purchess-settings',
+      name: 'purechess-settings',
       skipHydration: true,
     }
   )

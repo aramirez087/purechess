@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { EngineMove } from '@purchess/shared';
+import { EngineMove } from '@purechess/shared';
 import { buildPgn } from '../../src/chess/engine/pgn-builder';
 
 function makeMove(ply: number, san: string, by: 'w' | 'b'): EngineMove {
@@ -12,7 +12,7 @@ describe('pgn-builder', () => {
     black: 'Bob',
     result: '1-0',
     event: 'Test',
-    site: 'Purchess',
+    site: 'Purechess',
     date: '2026.06.06',
   };
 

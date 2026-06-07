@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import type { WireMove } from '@purchess/shared';
+import type { WireMove } from '@purechess/shared';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ReviewMoveListProps {

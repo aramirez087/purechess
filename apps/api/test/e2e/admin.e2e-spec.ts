@@ -23,7 +23,7 @@ describe('Admin (e2e)', () => {
 
     await request(app.getHttpServer())
       .get('/api/admin/users')
-      .set('Cookie', `purchess_session=${regular.sessionToken}`)
+      .set('Cookie', `purechess_session=${regular.sessionToken}`)
       .expect(403);
   });
 
@@ -36,7 +36,7 @@ describe('Admin (e2e)', () => {
 
     await request(app.getHttpServer())
       .get('/api/admin/users')
-      .set('Cookie', `purchess_session=${admin.sessionToken}`)
+      .set('Cookie', `purechess_session=${admin.sessionToken}`)
       .expect((res) => {
         expect([200, 201]).toContain(res.status);
       });
@@ -52,7 +52,7 @@ describe('Admin (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .patch(`/api/admin/users/${target.id}/disable`)
-      .set('Cookie', `purchess_session=${admin.sessionToken}`)
+      .set('Cookie', `purechess_session=${admin.sessionToken}`)
       .send({ reason: 'e2e test disable' })
       .expect((r) => {
         expect([200, 201, 204]).toContain(r.status);
@@ -60,7 +60,7 @@ describe('Admin (e2e)', () => {
 
     await request(app.getHttpServer())
       .get('/api/users/me')
-      .set('Cookie', `purchess_session=${target.sessionToken}`)
+      .set('Cookie', `purechess_session=${target.sessionToken}`)
       .expect(401);
 
     void res;
@@ -75,7 +75,7 @@ describe('Admin (e2e)', () => {
 
     await request(app.getHttpServer())
       .get('/api/admin/audit-log')
-      .set('Cookie', `purchess_session=${admin.sessionToken}`)
+      .set('Cookie', `purechess_session=${admin.sessionToken}`)
       .expect((res) => {
         expect([200, 201]).toContain(res.status);
       });

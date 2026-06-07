@@ -7,7 +7,7 @@ import { Footer } from '@/components/home/footer';
 describe('Hero', () => {
   it('renders wordmark as h1', () => {
     render(<Hero />);
-    expect(screen.getByRole('heading', { level: 1, name: /purchess/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /purechess/i })).toBeInTheDocument();
   });
 
   it('renders tagline', () => {
@@ -52,9 +52,9 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: /privacy/i })).toHaveAttribute('href', '/privacy');
   });
 
-  it('shows Purchess wordmark in footer', () => {
+  it('shows Purechess wordmark in footer', () => {
     render(<Footer />);
-    const matches = screen.getAllByText(/purchess/i);
+    const matches = screen.getAllByText(/purechess/i);
     expect(matches.length).toBeGreaterThanOrEqual(1);
   });
 });

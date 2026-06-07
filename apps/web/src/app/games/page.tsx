@@ -3,13 +3,13 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { serverFetch } from '@/lib/api';
-import type { SafeUser } from '@purchess/shared';
+import type { SafeUser } from '@purechess/shared';
 import { GamesClient } from './games-client';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Games — Purchess',
+  title: 'Games — Purechess',
   robots: 'noindex',
 };
 

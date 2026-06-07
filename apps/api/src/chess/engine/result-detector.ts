@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { Color, GameResult, GameTermination } from '@purchess/shared';
+import { Color, GameResult, GameTermination } from '@purechess/shared';
 import { ClockSnapshot, isTimeout } from './clock';
 import { halfmoveClock } from './fen-utils';
 

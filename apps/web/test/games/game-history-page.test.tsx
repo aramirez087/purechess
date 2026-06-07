@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import type { GameHistorySummaryDto } from '@purchess/shared';
+import type { GameHistorySummaryDto } from '@purechess/shared';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),

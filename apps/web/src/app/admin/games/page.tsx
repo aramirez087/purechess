@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { GamesTable } from '@/components/admin/games-table';
 
-export const metadata: Metadata = { title: 'Games — Admin — Purchess' };
+export const metadata: Metadata = { title: 'Games — Admin — Purechess' };
 
 export default function AdminGamesPage() {
   return (

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import type { GameHistorySummaryDto } from '@purchess/shared';
+import type { GameHistorySummaryDto } from '@purechess/shared';
 import { GameHistoryRow } from './game-history-row';
 
 type GameHistoryListProps = {

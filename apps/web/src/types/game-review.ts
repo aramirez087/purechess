@@ -1,6 +1,6 @@
-import type { GameResult, GameTermination } from '@purchess/shared';
-import type { TimeControl } from '@purchess/shared';
-import type { WireMove } from '@purchess/shared';
+import type { GameResult, GameTermination } from '@purechess/shared';
+import type { TimeControl } from '@purechess/shared';
+import type { WireMove } from '@purechess/shared';
 
 export interface ReviewPlayer {
   id: string;

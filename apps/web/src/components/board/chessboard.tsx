@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
-import type { Square as SquareType, Piece, Move, MoveIntent, PieceType, Color } from '@purchess/shared';
+import type { Square as SquareType, Piece, Move, MoveIntent, PieceType, Color } from '@purechess/shared';
 import type { ChessboardProps, Premove, PromotionState } from '@/lib/board/types';
 import { getLegalMovesForSquare, getLegalCapturesForSquare, getPieceAt, fenToColorToMove, isPromotion, getCheckSquare } from '@/lib/board/position';
 import { validatePremove } from '@/lib/board/premove';

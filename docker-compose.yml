@@ -2,15 +2,15 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: purchess
-      POSTGRES_PASSWORD: purchess
-      POSTGRES_DB: purchess
+      POSTGRES_USER: purechess
+      POSTGRES_PASSWORD: purechess
+      POSTGRES_DB: purechess
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U purchess"]
+      test: ["CMD-SHELL", "pg_isready -U purechess"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -36,7 +36,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: "4000"
-      DATABASE_URL: postgresql://purchess:purchess@postgres:5432/purchess
+      DATABASE_URL: postgresql://purechess:purechess@postgres:5432/purechess
       REDIS_URL: redis://redis:6379
       SESSION_SECRET: dev-session-secret-min-32-chars-replace-in-prod
       NEXT_PUBLIC_APP_URL: http://localhost:3000

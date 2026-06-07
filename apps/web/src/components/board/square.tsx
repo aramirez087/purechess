@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import type { Square as SquareType, Piece } from '@purchess/shared';
+import type { Square as SquareType, Piece } from '@purechess/shared';
 import { cn } from '@/lib/utils';
 import { Piece as PieceComponent } from './piece';
 

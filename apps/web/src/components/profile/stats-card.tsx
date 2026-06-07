@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { StatsDto } from '@purchess/shared';
+import type { StatsDto } from '@purechess/shared';
 
 type StatsCardProps = {
   stats: StatsDto;

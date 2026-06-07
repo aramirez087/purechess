@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import type { PieceType, Color } from '@purchess/shared';
+import type { PieceType, Color } from '@purechess/shared';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { cn } from '@/lib/utils';
 

@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import type { Square, PieceType } from '@purchess/shared';
+import type { Square, PieceType } from '@purechess/shared';
 
 export interface Premove {
   from: Square;

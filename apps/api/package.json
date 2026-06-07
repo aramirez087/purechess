@@ -1,5 +1,5 @@
 {
-  "name": "@purchess/api",
+  "name": "@purechess/api",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -31,7 +31,7 @@
     "@nestjs/throttler": "^5.2.0",
     "@nestjs/websockets": "^10.3.0",
     "@prisma/client": "^5.14.0",
-    "@purchess/shared": "workspace:*",
+    "@purechess/shared": "workspace:*",
     "@sentry/node": "^10.56.0",
     "argon2": "^0.31.0",
     "bcryptjs": "^2.4.3",
@@ -95,7 +95,7 @@
     },
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "^@purchess/shared$": "<rootDir>/../../packages/shared/src/index.ts",
+      "^@purechess/shared$": "<rootDir>/../../packages/shared/src/index.ts",
       "^(\\.\\.?/.*)\\.js$": "$1"
     }
   }

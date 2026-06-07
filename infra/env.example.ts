@@ -22,13 +22,13 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'url',
     required: true,
     description: 'Postgres connection string. Append ?sslmode=require&pgbouncer=true in prod (Neon pooler).',
-    example: 'postgresql://user:pass@host:5432/purchess?sslmode=require&pgbouncer=true',
+    example: 'postgresql://user:pass@host:5432/purechess?sslmode=require&pgbouncer=true',
   },
   DATABASE_URL_DIRECT: {
     type: 'url',
     required: false,
     description: 'Direct Postgres URL (bypass pooler) — used for migrations only.',
-    example: 'postgresql://user:pass@host:5432/purchess?sslmode=require',
+    example: 'postgresql://user:pass@host:5432/purechess?sslmode=require',
   },
   REDIS_URL: {
     type: 'url',
@@ -46,25 +46,25 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'url',
     required: false,
     description: 'Public URL of the web app — added to CORS allowed origins.',
-    example: 'https://purchess.com',
+    example: 'https://purechess.com',
   },
   NEXT_PUBLIC_APP_URL: {
     type: 'url',
     required: false,
     description: 'Public web URL exposed to client-side Next.js code.',
-    example: 'https://purchess.com',
+    example: 'https://purechess.com',
   },
   NEXT_PUBLIC_API_URL: {
     type: 'url',
     required: false,
     description: 'Public API URL exposed to client-side Next.js code.',
-    example: 'https://purchess-api.fly.dev',
+    example: 'https://purechess-api.fly.dev',
   },
   NEXT_PUBLIC_WS_URL: {
     type: 'url',
     required: false,
     description: 'WebSocket URL for real-time game events.',
-    example: 'wss://purchess-api.fly.dev',
+    example: 'wss://purechess-api.fly.dev',
   },
   OAUTH_GOOGLE_CLIENT_ID: {
     type: 'string',
@@ -80,7 +80,7 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'url',
     required: false,
     description: 'Google OAuth callback URL.',
-    example: 'https://purchess-api.fly.dev/api/auth/oauth/google/callback',
+    example: 'https://purechess-api.fly.dev/api/auth/oauth/google/callback',
   },
   OAUTH_APPLE_CLIENT_ID: {
     type: 'string',
@@ -106,7 +106,7 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'url',
     required: false,
     description: 'Apple OAuth callback URL.',
-    example: 'https://purchess-api.fly.dev/api/auth/oauth/apple/callback',
+    example: 'https://purechess-api.fly.dev/api/auth/oauth/apple/callback',
   },
   SENTRY_DSN: {
     type: 'url',
@@ -122,13 +122,13 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'string',
     required: false,
     description: 'Sentry organization slug.',
-    example: 'purchess',
+    example: 'purechess',
   },
   SENTRY_PROJECT: {
     type: 'string',
     required: false,
     description: 'Sentry project slug.',
-    example: 'purchess-web',
+    example: 'purechess-web',
   },
   SENTRY_ENV: {
     type: 'string',
@@ -172,7 +172,7 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'string',
     required: false,
     description: 'Cloudflare R2 bucket name for database backups.',
-    example: 'purchess-backups',
+    example: 'purechess-backups',
   },
   R2_ACCOUNT_ID: {
     type: 'string',

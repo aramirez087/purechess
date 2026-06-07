@@ -1,11 +1,11 @@
-# Purchess — Operational Runbook
+# Purechess — Operational Runbook
 
 ## Apps
 
 | App | Fly name | URL |
 |---|---|---|
-| API (NestJS) | `purchess-api` | `https://purchess-api.fly.dev` |
-| Web (Next.js) | `purchess-web` | `https://purchess.com` |
+| API (NestJS) | `purechess-api` | `https://purechess-api.fly.dev` |
+| Web (Next.js) | `purechess-web` | `https://purechess.com` |
 
 ---
 
@@ -28,8 +28,8 @@ gh workflow run deploy.yml
 ### Direct Fly deploy (emergency)
 
 ```bash
-flyctl deploy --app purchess-api --dockerfile apps/api/Dockerfile --remote-only
-flyctl deploy --app purchess-web --dockerfile apps/web/Dockerfile --remote-only
+flyctl deploy --app purechess-api --dockerfile apps/api/Dockerfile --remote-only
+flyctl deploy --app purechess-web --dockerfile apps/web/Dockerfile --remote-only
 ```
 
 ---
@@ -40,12 +40,12 @@ flyctl deploy --app purchess-web --dockerfile apps/web/Dockerfile --remote-only
 
 ```bash
 # List releases
-flyctl releases list -a purchess-api
-flyctl releases list -a purchess-web
+flyctl releases list -a purechess-api
+flyctl releases list -a purechess-web
 
 # Rollback to a specific version
-flyctl releases rollback <version> -a purchess-api
-flyctl releases rollback <version> -a purchess-web
+flyctl releases rollback <version> -a purechess-api
+flyctl releases rollback <version> -a purechess-web
 ```
 
 Rollback completes in under 5 minutes. Fly machines are replaced rolling.
@@ -65,27 +65,27 @@ Migrations are forward-only in MVP. If a migration breaks prod:
 Set via `flyctl secrets set`. **Never commit secrets.**
 
 ```bash
-flyctl secrets set SESSION_SECRET="..." -a purchess-api
-flyctl secrets set DATABASE_URL="postgresql://..." -a purchess-api
-flyctl secrets set REDIS_URL="rediss://..." -a purchess-api
-flyctl secrets set SENTRY_DSN="https://..." -a purchess-api
-flyctl secrets set POSTHOG_API_KEY="..." -a purchess-api
-flyctl secrets set GOOGLE_CLIENT_ID="..." -a purchess-api
-flyctl secrets set GOOGLE_CLIENT_SECRET="..." -a purchess-api
-flyctl secrets set APPLE_CLIENT_ID="..." -a purchess-api
-flyctl secrets set APPLE_CLIENT_SECRET="..." -a purchess-api
-flyctl secrets set WEB_URL="https://purchess.com" -a purchess-api
+flyctl secrets set SESSION_SECRET="..." -a purechess-api
+flyctl secrets set DATABASE_URL="postgresql://..." -a purechess-api
+flyctl secrets set REDIS_URL="rediss://..." -a purechess-api
+flyctl secrets set SENTRY_DSN="https://..." -a purechess-api
+flyctl secrets set POSTHOG_API_KEY="..." -a purechess-api
+flyctl secrets set GOOGLE_CLIENT_ID="..." -a purechess-api
+flyctl secrets set GOOGLE_CLIENT_SECRET="..." -a purechess-api
+flyctl secrets set APPLE_CLIENT_ID="..." -a purechess-api
+flyctl secrets set APPLE_CLIENT_SECRET="..." -a purechess-api
+flyctl secrets set WEB_URL="https://purechess.com" -a purechess-api
 
 # Web app
-flyctl secrets set NEXT_PUBLIC_SENTRY_DSN="..." -a purchess-web
-flyctl secrets set NEXT_PUBLIC_POSTHOG_KEY="..." -a purchess-web
+flyctl secrets set NEXT_PUBLIC_SENTRY_DSN="..." -a purechess-web
+flyctl secrets set NEXT_PUBLIC_POSTHOG_KEY="..." -a purechess-web
 ```
 
 List secrets (values redacted):
 
 ```bash
-flyctl secrets list -a purchess-api
-flyctl secrets list -a purchess-web
+flyctl secrets list -a purechess-api
+flyctl secrets list -a purechess-web
 ```
 
 ---
@@ -95,7 +95,7 @@ flyctl secrets list -a purchess-web
 ### Connect to production Postgres
 
 ```bash
-flyctl postgres connect -a purchess-db
+flyctl postgres connect -a purechess-db
 # or via DATABASE_URL directly:
 psql "$DATABASE_URL"
 ```
@@ -105,8 +105,8 @@ psql "$DATABASE_URL"
 ```bash
 # From a one-off Fly machine (preferred in prod):
 flyctl machine run \
-  --app purchess-api \
-  --image registry.fly.io/purchess-api:latest \
+  --app purechess-api \
+  --image registry.fly.io/purechess-api:latest \
   --restart no --rm \
   -- sh -c "npx prisma migrate deploy"
 
@@ -116,12 +116,12 @@ DATABASE_URL="$DATABASE_URL_DIRECT" pnpm db:migrate:deploy
 
 ### Backup
 
-Daily backups run via `scripts/db-backup.sh`. Backups are stored in Cloudflare R2 bucket `purchess-backups`.
+Daily backups run via `scripts/db-backup.sh`. Backups are stored in Cloudflare R2 bucket `purechess-backups`.
 
 Manual backup:
 
 ```bash
-R2_BUCKET=purchess-backups \
+R2_BUCKET=purechess-backups \
 R2_ENDPOINT=https://<account>.r2.cloudflarestorage.com \
 R2_ACCESS_KEY_ID=<key> \
 R2_SECRET_ACCESS_KEY=<secret> \
@@ -133,7 +133,7 @@ DATABASE_URL="$DATABASE_URL_DIRECT" \
 
 1. Download backup from R2:
    ```bash
-   aws s3 cp s3://purchess-backups/<filename>.dump.gz . \
+   aws s3 cp s3://purechess-backups/<filename>.dump.gz . \
      --endpoint-url https://<account>.r2.cloudflarestorage.com
    ```
 2. Decompress:
@@ -175,13 +175,13 @@ redis-cli -u "$REDIS_URL" flushdb
 
 ```bash
 # API logs (live)
-flyctl logs -a purchess-api
+flyctl logs -a purechess-api
 
 # Web logs
-flyctl logs -a purchess-web
+flyctl logs -a purechess-web
 
 # Last N lines
-flyctl logs -a purchess-api -n 200
+flyctl logs -a purechess-api -n 200
 ```
 
 Structured JSON logs include `requestId` (X-Request-Id), `userId`, `level`, `msg`.
@@ -192,11 +192,11 @@ Structured JSON logs include `requestId` (X-Request-Id), `userId`, `level`, `msg
 
 ```bash
 # API
-curl https://purchess-api.fly.dev/api/health
+curl https://purechess-api.fly.dev/api/health
 # → {"status":"ok","db":"ok","redis":"ok","uptime":1234}
 
 # Web
-curl https://purchess.com/api/health
+curl https://purechess.com/api/health
 # → {"status":"ok"}
 ```
 
@@ -208,21 +208,21 @@ Returns 503 if any dependency (db or redis) is unhealthy.
 
 ```bash
 # Scale API to 2 instances
-flyctl scale count 2 -a purchess-api
+flyctl scale count 2 -a purechess-api
 
 # Scale back to 1
-flyctl scale count 1 -a purchess-api
+flyctl scale count 1 -a purechess-api
 
 # Show current machines
-flyctl status -a purchess-api
-flyctl status -a purchess-web
+flyctl status -a purechess-api
+flyctl status -a purechess-web
 ```
 
 ---
 
 ## Cloudflare
 
-- DNS: `purchess.com` and `*.purchess.com` proxied through Cloudflare.
+- DNS: `purechess.com` and `*.purechess.com` proxied through Cloudflare.
 - SSL mode: **Full (strict)**.
 - Origin cert: Fly-issued Let's Encrypt cert.
 - WAF: Cloudflare Managed Rules enabled.
@@ -247,18 +247,18 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/<zone_id>/purge_cache" 
 
 ### API is down (503)
 
-1. Check health: `curl https://purchess-api.fly.dev/api/health`
-2. Check Fly status: `flyctl status -a purchess-api`
-3. Check logs: `flyctl logs -a purchess-api`
+1. Check health: `curl https://purechess-api.fly.dev/api/health`
+2. Check Fly status: `flyctl status -a purechess-api`
+3. Check logs: `flyctl logs -a purechess-api`
 4. If DB unhealthy: check Neon dashboard for outage.
 5. If Redis unhealthy: check Upstash dashboard.
-6. Rollback if recent deploy caused it: `flyctl releases rollback <version> -a purchess-api`
+6. Rollback if recent deploy caused it: `flyctl releases rollback <version> -a purechess-api`
 
 ### High error rate in Sentry
 
-1. Open Sentry → Issues → filter by `purchess-api`.
+1. Open Sentry → Issues → filter by `purechess-api`.
 2. Find the top error, read the stack trace.
-3. Check if correlated with a recent deploy via `flyctl releases list -a purchess-api`.
+3. Check if correlated with a recent deploy via `flyctl releases list -a purechess-api`.
 4. Rollback if needed.
 
 ### Database connection pool exhausted

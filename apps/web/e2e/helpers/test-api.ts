@@ -48,5 +48,5 @@ export async function resetTestDb(): Promise<void> {
 }
 
 export function sessionCookie(token: string): string {
-  return `purchess_session=${token}`;
+  return `purechess_session=${token}`;
 }

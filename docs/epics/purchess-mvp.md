@@ -1,8 +1,8 @@
-# Epic: Purchess MVP
+# Epic: Purechess MVP
 
 > Pure chess. Nothing else.
 
-This epic implements the full MVP of **Purchess**, a minimalist online chess platform. The goal is to ship a polished, real-time chess experience that beats incumbents on speed, cleanliness, and board feel — without the bloat of features like clubs, lessons, puzzles, bots, or content.
+This epic implements the full MVP of **Purechess**, a minimalist online chess platform. The goal is to ship a polished, real-time chess experience that beats incumbents on speed, cleanliness, and board feel — without the bloat of features like clubs, lessons, puzzles, bots, or content.
 
 ## Goals
 
@@ -44,61 +44,61 @@ Out of scope for this MVP: lessons, video, clubs, forums, streams, tournaments, 
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 01 | [Project scaffolding & monorepo](./purchess-mvp/session-01-project-scaffolding.md) | Monorepo, Next.js app, NestJS app, shared types, tooling, env config |
-| 02 | [Database schema & Prisma](./purchess-mvp/session-02-database-prisma.md) | Prisma schema, migrations, seed data, repository helpers |
-| 03 | [Design system & UI foundation](./purchess-mvp/session-03-design-system.md) | Tailwind, shadcn/ui, design tokens, core layout, theme switcher |
+| 01 | [Project scaffolding & monorepo](./purechess-mvp/session-01-project-scaffolding.md) | Monorepo, Next.js app, NestJS app, shared types, tooling, env config |
+| 02 | [Database schema & Prisma](./purechess-mvp/session-02-database-prisma.md) | Prisma schema, migrations, seed data, repository helpers |
+| 03 | [Design system & UI foundation](./purechess-mvp/session-03-design-system.md) | Tailwind, shadcn/ui, design tokens, core layout, theme switcher |
 
 ### Wave 2 — Core backend (parallel)
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 04 | [Authentication module](./purchess-mvp/session-04-authentication.md) | Email/password, Google + Apple OAuth, sessions, password recovery |
-| 05 | [Chess engine core (server)](./purchess-mvp/session-05-chess-engine-core.md) | Move validation, game state machine, check/mate/stalemate, clocks |
-| 06 | [Realtime infrastructure](./purchess-mvp/session-06-realtime-infrastructure.md) | Socket.IO gateway, Redis adapter, presence, reconnection |
-| 07 | [Users module & profile API](./purchess-mvp/session-07-users-profiles.md) | User CRUD, public profiles, stats, recent games API |
+| 04 | [Authentication module](./purechess-mvp/session-04-authentication.md) | Email/password, Google + Apple OAuth, sessions, password recovery |
+| 05 | [Chess engine core (server)](./purechess-mvp/session-05-chess-engine-core.md) | Move validation, game state machine, check/mate/stalemate, clocks |
+| 06 | [Realtime infrastructure](./purechess-mvp/session-06-realtime-infrastructure.md) | Socket.IO gateway, Redis adapter, presence, reconnection |
+| 07 | [Users module & profile API](./purechess-mvp/session-07-users-profiles.md) | User CRUD, public profiles, stats, recent games API |
 
 ### Wave 3 — Gameplay backend (parallel)
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 08 | [Game service & gateway](./purchess-mvp/session-08-game-service-gateway.md) | Create game, moves, resign, draw, timeout, reconnection events |
-| 09 | [Matchmaking service](./purchess-mvp/session-09-matchmaking.md) | Queues, rating range expansion, cancellation, rated/casual split |
-| 10 | [Rating system (Glicko-2)](./purchess-mvp/session-10-rating-system.md) | Per-category Glicko-2, rating deltas, history tracking |
-| 11 | [Game persistence & PGN](./purchess-mvp/session-11-game-persistence.md) | Save completed games, move records, PGN generation, fair-play signals |
+| 08 | [Game service & gateway](./purechess-mvp/session-08-game-service-gateway.md) | Create game, moves, resign, draw, timeout, reconnection events |
+| 09 | [Matchmaking service](./purechess-mvp/session-09-matchmaking.md) | Queues, rating range expansion, cancellation, rated/casual split |
+| 10 | [Rating system (Glicko-2)](./purechess-mvp/session-10-rating-system.md) | Per-category Glicko-2, rating deltas, history tracking |
+| 11 | [Game persistence & PGN](./purechess-mvp/session-11-game-persistence.md) | Save completed games, move records, PGN generation, fair-play signals |
 
 ### Wave 4 — Core frontend (parallel)
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 12 | [Chess board component](./purchess-mvp/session-12-chess-board-component.md) | Drag/drop, click-move, premoves, mobile, sounds, coordinates |
-| 13 | [Play page & matchmaking UI](./purchess-mvp/session-13-play-page.md) | Time control selection, casual/rated/friend, queue state, cancel |
-| 14 | [Active game page](./purchess-mvp/session-14-active-game-page.md) | Live board, clocks, move list, captured pieces, game controls |
-| 15 | [Auth pages](./purchess-mvp/session-15-auth-pages.md) | Login, register, OAuth, password recovery flows |
+| 12 | [Chess board component](./purechess-mvp/session-12-chess-board-component.md) | Drag/drop, click-move, premoves, mobile, sounds, coordinates |
+| 13 | [Play page & matchmaking UI](./purechess-mvp/session-13-play-page.md) | Time control selection, casual/rated/friend, queue state, cancel |
+| 14 | [Active game page](./purechess-mvp/session-14-active-game-page.md) | Live board, clocks, move list, captured pieces, game controls |
+| 15 | [Auth pages](./purechess-mvp/session-15-auth-pages.md) | Login, register, OAuth, password recovery flows |
 
 ### Wave 5 — Secondary frontend (parallel)
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 16 | [Landing page](./purchess-mvp/session-16-landing-page.md) | Hero, CTAs, trust statements, no clutter |
-| 17 | [Profile & game history](./purchess-mvp/session-17-profile-history.md) | Own/public profile, ratings, stats, recent games with filters |
-| 18 | [Game review page](./purchess-mvp/session-18-game-review.md) | Move-by-move replay, PGN copy/download, keyboard shortcuts |
+| 16 | [Landing page](./purechess-mvp/session-16-landing-page.md) | Hero, CTAs, trust statements, no clutter |
+| 17 | [Profile & game history](./purechess-mvp/session-17-profile-history.md) | Own/public profile, ratings, stats, recent games with filters |
+| 18 | [Game review page](./purechess-mvp/session-18-game-review.md) | Move-by-move replay, PGN copy/download, keyboard shortcuts |
 
 ### Wave 6 — Admin, friend invite, polish (parallel)
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 19 | [Admin module](./purchess-mvp/session-19-admin-module.md) | User/game/report views, search, disable/enable accounts |
-| 20 | [Reports & fair play](./purchess-mvp/session-20-reports-fairplay.md) | Report button, admin review page, basic signals tracking |
-| 21 | [Play a friend (invite link)](./purchess-mvp/session-21-friend-invite.md) | Invite link generation, friend game flow |
-| 22 | [Board settings & themes](./purchess-mvp/session-22-board-settings.md) | Sound, coordinates, board theme (light/dark/alt), persistence |
+| 19 | [Admin module](./purechess-mvp/session-19-admin-module.md) | User/game/report views, search, disable/enable accounts |
+| 20 | [Reports & fair play](./purechess-mvp/session-20-reports-fairplay.md) | Report button, admin review page, basic signals tracking |
+| 21 | [Play a friend (invite link)](./purechess-mvp/session-21-friend-invite.md) | Invite link generation, friend game flow |
+| 22 | [Board settings & themes](./purechess-mvp/session-22-board-settings.md) | Sound, coordinates, board theme (light/dark/alt), persistence |
 
 ### Wave 7 — Production readiness (mostly sequential)
 
 | # | Session | What it builds |
 |---|---------|----------------|
-| 23 | [Observability & analytics](./purchess-mvp/session-23-observability.md) | Sentry, PostHog, structured logging, error boundaries |
-| 24 | [Deployment & infrastructure](./purchess-mvp/session-24-deployment.md) | Fly.io/Railway configs, env management, Cloudflare, CI |
-| 25 | [E2E testing, QA & docs](./purchess-mvp/session-25-e2e-qa-docs.md) | Critical-path E2E tests, release checklist, README, ADRs |
+| 23 | [Observability & analytics](./purechess-mvp/session-23-observability.md) | Sentry, PostHog, structured logging, error boundaries |
+| 24 | [Deployment & infrastructure](./purechess-mvp/session-24-deployment.md) | Fly.io/Railway configs, env management, Cloudflare, CI |
+| 25 | [E2E testing, QA & docs](./purechess-mvp/session-25-e2e-qa-docs.md) | Critical-path E2E tests, release checklist, README, ADRs |
 
 ## Wave Dependency Diagram
 
@@ -135,13 +135,13 @@ Each session's `depends_on` frontmatter pins the exact preconditions. Parallel s
 
 ```bash
 # Preview the DAG
-python scripts/epic-dag.py --show docs/claude-sessions/purchess-mvp/
+python scripts/epic-dag.py --show docs/claude-sessions/purechess-mvp/
 
 # Dry run the whole thing
-bash scripts/run-sessions.sh docs/claude-sessions/purchess-mvp/ --dry-run
+bash scripts/run-sessions.sh docs/claude-sessions/purechess-mvp/ --dry-run
 
 # Run for real
-bash scripts/run-sessions.sh docs/claude-sessions/purchess-mvp/
+bash scripts/run-sessions.sh docs/claude-sessions/purechess-mvp/
 ```
 
 Use `--max-parallel 4` (default) to keep resource use sane. Use `--strict` in development to enforce the no-overlap rule on parallel waves.

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn, formatTimeControl } from '@/lib/utils';
-import type { GameHistorySummaryDto } from '@purchess/shared';
+import type { GameHistorySummaryDto } from '@purechess/shared';
 
 type RecentGamesProps = {
   games: GameHistorySummaryDto[];

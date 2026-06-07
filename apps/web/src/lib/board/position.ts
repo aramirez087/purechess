@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import type { Square, PieceType, Color, Piece } from '@purchess/shared';
+import type { Square, PieceType, Color, Piece } from '@purechess/shared';
 
 export function getLegalMovesForSquare(fen: string, square: Square): Square[] {
   try {

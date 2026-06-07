@@ -16,10 +16,10 @@ export class AppleOAuthStrategy extends PassportStrategy(Strategy, 'apple') {
 
   constructor(config: ConfigService) {
     super({
-      clientID: config.get<string>('OAUTH_APPLE_CLIENT_ID') ?? '',
-      teamID: config.get<string>('OAUTH_APPLE_TEAM_ID') ?? '',
-      keyID: config.get<string>('OAUTH_APPLE_KEY_ID') ?? '',
-      privateKeyString: config.get<string>('OAUTH_APPLE_PRIVATE_KEY') ?? '',
+      clientID: config.get<string>('OAUTH_APPLE_CLIENT_ID') || 'dev-placeholder',
+      teamID: config.get<string>('OAUTH_APPLE_TEAM_ID') || 'dev-placeholder',
+      keyID: config.get<string>('OAUTH_APPLE_KEY_ID') || 'dev-placeholder',
+      privateKeyString: config.get<string>('OAUTH_APPLE_PRIVATE_KEY') || 'dev-placeholder',
       callbackURL: config.get<string>('OAUTH_APPLE_CALLBACK_URL'),
       passReqToCallback: false,
     });

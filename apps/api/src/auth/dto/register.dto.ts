@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 
 const RESERVED_USERNAMES = new Set([
-  'admin', 'purchess', 'system', 'root', 'support', 'help', 'api', 'www', 'mail', 'info',
+  'admin', 'purechess', 'system', 'root', 'support', 'help', 'api', 'www', 'mail', 'info',
   'moderator', 'mod', 'staff', 'bot', 'null', 'undefined',
 ]);
 

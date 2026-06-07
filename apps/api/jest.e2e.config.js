@@ -9,7 +9,7 @@ module.exports = {
   testEnvironment: 'node',
   testTimeout: 30000,
   moduleNameMapper: {
-    '^@purchess/shared$': '<rootDir>/../../packages/shared/src/index.ts',
+    '^@purechess/shared$': '<rootDir>/../../packages/shared/src/index.ts',
     '^(\\.\\.\\.?/.*)\\.js$': '$1',
   },
 };

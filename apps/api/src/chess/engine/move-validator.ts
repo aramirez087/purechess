@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { MoveIntent, Square } from '@purchess/shared';
+import { MoveIntent, Square } from '@purechess/shared';
 
 export type MoveValidationResult =
   | { ok: true; newChess: Chess; san: string; uci: string }

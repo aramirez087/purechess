@@ -23,7 +23,7 @@ describe('Ratings (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .get(`/api/users/${alice.username}`)
-      .set('Cookie', `purchess_session=${alice.sessionToken}`)
+      .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .expect((r) => {
         expect([200, 404]).toContain(r.status);
       });

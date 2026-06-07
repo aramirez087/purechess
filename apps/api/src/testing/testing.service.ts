@@ -53,16 +53,14 @@ export class TestingService {
   }): Promise<{ id: string }> {
     const game = await this.prisma.game.create({
       data: {
-        whitePlayerId: opts.whiteUserId ?? null,
-        blackPlayerId: opts.blackUserId ?? null,
+        whitePlayer: opts.whiteUserId ? { connect: { id: opts.whiteUserId } } : undefined,
+        blackPlayer: opts.blackUserId ? { connect: { id: opts.blackUserId } } : undefined,
         status: (opts.status ?? 'active') as never,
         timeControlSeconds: opts.timeControlSeconds ?? 180,
         incrementSeconds: opts.incrementSeconds ?? 0,
         category: (opts.category ?? 'blitz') as never,
-        whiteClockMs: (opts.timeControlSeconds ?? 180) * 1000,
-        blackClockMs: (opts.timeControlSeconds ?? 180) * 1000,
         pgn: '',
-        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+        startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       },
     });
 

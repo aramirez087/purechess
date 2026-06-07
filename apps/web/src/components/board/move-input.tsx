@@ -1,6 +1,6 @@
 'use client';
 
-import type { PieceType, Color } from '@purchess/shared';
+import type { PieceType, Color } from '@purechess/shared';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 
 const PROMOTION_PIECES: PieceType[] = ['q', 'r', 'b', 'n'];

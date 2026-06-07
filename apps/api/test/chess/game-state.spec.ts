@@ -1,4 +1,4 @@
-import { GameResult, GameTermination } from '@purchess/shared';
+import { GameResult, GameTermination } from '@purechess/shared';
 import { applyMove, createGame, fromSerializable, toSerializable, unmakeMove, InvalidMoveError } from '../../src/chess/engine/game-state';
 import { startingFen } from '../../src/chess/engine/fen-utils';
 

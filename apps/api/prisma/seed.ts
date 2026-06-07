@@ -10,42 +10,42 @@ async function main() {
   const testHash = await argon2.hash('Test1234!', ARGON2_OPTIONS);
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@purchess.local' },
+    where: { email: 'admin@purechess.local' },
     update: {},
     create: {
       username: 'admin',
-      email: 'admin@purchess.local',
+      email: 'admin@purechess.local',
       passwordHash: adminHash,
       isAdmin: true,
     },
   });
 
   const alice = await prisma.user.upsert({
-    where: { email: 'alice@purchess.local' },
+    where: { email: 'alice@purechess.local' },
     update: {},
     create: {
       username: 'alice',
-      email: 'alice@purchess.local',
+      email: 'alice@purechess.local',
       passwordHash: testHash,
     },
   });
 
   const bob = await prisma.user.upsert({
-    where: { email: 'bob@purchess.local' },
+    where: { email: 'bob@purechess.local' },
     update: {},
     create: {
       username: 'bob',
-      email: 'bob@purchess.local',
+      email: 'bob@purechess.local',
       passwordHash: testHash,
     },
   });
 
   const carol = await prisma.user.upsert({
-    where: { email: 'carol@purchess.local' },
+    where: { email: 'carol@purechess.local' },
     update: {},
     create: {
       username: 'carol',
-      email: 'carol@purchess.local',
+      email: 'carol@purechess.local',
       passwordHash: testHash,
     },
   });

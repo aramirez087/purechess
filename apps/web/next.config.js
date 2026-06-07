@@ -27,7 +27,7 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  transpilePackages: ['@purchess/shared'],
+  transpilePackages: ['@purechess/shared'],
   async headers() {
     return [
       {
@@ -48,8 +48,8 @@ const nextConfig = {
 };
 
 export default withSentryConfig(nextConfig, {
-  org: process.env.SENTRY_ORG ?? 'purchess',
-  project: process.env.SENTRY_PROJECT ?? 'purchess-web',
+  org: process.env.SENTRY_ORG ?? 'purechess',
+  project: process.env.SENTRY_PROJECT ?? 'purechess-web',
   silent: true,
   hideSourceMaps: true,
   disableLogger: true,

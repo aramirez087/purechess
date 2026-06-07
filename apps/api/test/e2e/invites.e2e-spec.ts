@@ -30,7 +30,7 @@ describe('Invites (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/api/invites')
-      .set('Cookie', `purchess_session=${alice.sessionToken}`)
+      .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .send({ timeControlSeconds: 300, incrementSeconds: 0, category: 'blitz' })
       .expect((r) => {
         expect([200, 201]).toContain(r.status);
@@ -44,7 +44,7 @@ describe('Invites (e2e)', () => {
 
     const createRes = await request(app.getHttpServer())
       .post('/api/invites')
-      .set('Cookie', `purchess_session=${alice.sessionToken}`)
+      .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .send({ timeControlSeconds: 300, incrementSeconds: 0, category: 'blitz' });
 
     if (createRes.status === 201 || createRes.status === 200) {

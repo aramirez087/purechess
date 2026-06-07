@@ -1,4 +1,4 @@
-# Contributing to Purchess
+# Contributing to Purechess
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ pnpm infra:up
 pnpm db:migrate:deploy
 
 # Seed development data
-pnpm --filter @purchess/api db:seed
+pnpm --filter @purechess/api db:seed
 
 # Start both apps (ports 3000 and 4000)
 pnpm dev
@@ -41,17 +41,17 @@ pnpm dev
 pnpm test
 
 # API only
-pnpm --filter @purchess/api test
+pnpm --filter @purechess/api test
 
 # Web only
-pnpm --filter @purchess/web test
+pnpm --filter @purechess/web test
 ```
 
 ### API integration tests (E2E at the HTTP/WS level)
 
 ```bash
 # Requires: local Postgres running, NODE_ENV=test set automatically
-pnpm --filter @purchess/api test:e2e
+pnpm --filter @purechess/api test:e2e
 ```
 
 ### Playwright browser E2E
@@ -64,7 +64,7 @@ NODE_ENV=test pnpm dev
 pnpm e2e
 
 # Run a single spec
-pnpm --filter @purchess/web e2e -- --grep "anon-casual"
+pnpm --filter @purechess/web e2e -- --grep "anon-casual"
 ```
 
 ### Performance smoke test
@@ -81,7 +81,7 @@ bash scripts/smoke.sh
    - `<name>.controller.ts` — REST endpoints, `@UseGuards(AuthGuard)` where needed
    - `<name>.service.ts` — business logic, inject `PrismaService` and dependencies
 2. Register module in `apps/api/src/app.module.ts` imports array.
-3. Add Prisma models/migrations if new DB tables are needed: `pnpm --filter @purchess/api db:migrate`.
+3. Add Prisma models/migrations if new DB tables are needed: `pnpm --filter @purechess/api db:migrate`.
 4. Add unit tests in `apps/api/test/<name>/`.
 5. Add integration test in `apps/api/test/e2e/<name>.e2e-spec.ts`.
 

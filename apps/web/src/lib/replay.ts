@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import type { WireMove } from '@purchess/shared';
+import type { WireMove } from '@purechess/shared';
 
 export function replayToFen(moves: WireMove[], ply: number): string | null {
   if (ply < 0 || ply > moves.length) return null;

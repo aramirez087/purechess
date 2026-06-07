@@ -116,7 +116,7 @@ describe('AuthController', () => {
     it('200 and clears cookie', async () => {
       await request(app.getHttpServer())
         .post('/api/auth/logout')
-        .set('Cookie', 'purchess_session=valid-session-token')
+        .set('Cookie', 'purechess_session=valid-session-token')
         .expect(200);
 
       expect(mockAuthService.clearCookie).toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe('AuthController', () => {
     it('200 with valid session cookie', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/me')
-        .set('Cookie', 'purchess_session=valid-session-token')
+        .set('Cookie', 'purechess_session=valid-session-token')
         .expect(200);
     });
 

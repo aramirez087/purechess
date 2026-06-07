@@ -1,4 +1,4 @@
-import { GameResult, GameTermination, TimeCategory } from '@purchess/shared';
+import { GameResult, GameTermination, TimeCategory } from '@purechess/shared';
 import type { GameReview } from '@/types/game-review';
 
 const MOCK_GAME_ID = 'demo-game-001';
@@ -16,7 +16,7 @@ const MOCK_REVIEW: GameReview = {
     { ply: 6, san: 'a6', uci: 'a7a6', fenAfter: 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4', clockAfterMs: 178500, moveTimeMs: 1000, by: 'b' },
   ],
   finalFen: 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4',
-  pgn: '[Event "Purchess"]\n[White "Magnus"]\n[Black "Hikaru"]\n[Result "1-0"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 1-0',
+  pgn: '[Event "Purechess"]\n[White "Magnus"]\n[Black "Hikaru"]\n[Result "1-0"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 1-0',
   result: GameResult.WhiteWins,
   termination: GameTermination.Resignation,
   timeControl: { initialSeconds: 180, incrementSeconds: 0, category: TimeCategory.Blitz, label: '3 min' },

@@ -17,9 +17,9 @@ export async function serverFetch<T>(path: string, opts: FetchOptions = {}): Pro
 
   if (withAuth) {
     const cookieStore = await cookies();
-    const session = cookieStore.get('purchess_session');
+    const session = cookieStore.get('purechess_session');
     if (session) {
-      headers['Cookie'] = `purchess_session=${session.value}`;
+      headers['Cookie'] = `purechess_session=${session.value}`;
     }
   }
 

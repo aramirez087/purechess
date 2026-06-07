@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Chess } from 'chess.js';
 import { useTheme } from 'next-themes';
 import { Chessboard, BoardSettingsProvider } from '@/components/board';
-import type { MoveIntent } from '@purchess/shared';
+import type { MoveIntent } from '@purechess/shared';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -74,7 +74,7 @@ function ChessboardDemo() {
           position={fen}
           orientation={orientation}
           onMove={handleMove}
-          lastMove={lastMove as { from: import('@purchess/shared').Square; to: import('@purchess/shared').Square } | undefined}
+          lastMove={lastMove as { from: import('@purechess/shared').Square; to: import('@purechess/shared').Square } | undefined}
           className="max-w-[480px]"
         />
       </BoardSettingsProvider>
@@ -93,7 +93,7 @@ export default function DemoPage() {
         <div className="space-y-10">
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold tracking-tight">Design System</h1>
-            <p className="text-sm text-muted-foreground">Purchess component primitives</p>
+            <p className="text-sm text-muted-foreground">Purechess component primitives</p>
           </div>
 
           <section className="space-y-4">
@@ -153,7 +153,7 @@ export default function DemoPage() {
             <div className="max-w-sm space-y-3">
               <div className="space-y-1">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" placeholder="purchess_user" />
+                <Input id="username" placeholder="purechess_user" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>

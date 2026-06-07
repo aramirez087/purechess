@@ -22,7 +22,7 @@ describe('Games (e2e)', () => {
     const alice = await seedUser(app, { username: 'alice-g', email: 'alice-g@test.com' });
     await request(app.getHttpServer())
       .get('/api/games/nonexistent-id')
-      .set('Cookie', `purchess_session=${alice.sessionToken}`)
+      .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .expect(404);
   });
 
@@ -58,7 +58,7 @@ describe('Games (e2e)', () => {
 
     await request(app.getHttpServer())
       .get(`/api/games/${id}`)
-      .set('Cookie', `purchess_session=${alice.sessionToken}`)
+      .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .expect((res) => {
         expect([200, 401, 403]).toContain(res.status);
       });

@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { replayToFen, validateReplay } from '@/lib/replay';
 import type { GameReview } from '@/types/game-review';
-import type { Square } from '@purchess/shared';
+import type { Square } from '@purechess/shared';
 
 export interface GameReviewState {
   ply: number;

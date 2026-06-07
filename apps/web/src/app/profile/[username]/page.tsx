@@ -6,7 +6,7 @@ import { RatingsCard } from '@/components/profile/ratings-card';
 import { StatsCard } from '@/components/profile/stats-card';
 import { RecentGames } from '@/components/profile/recent-games';
 import { serverFetch } from '@/lib/api';
-import type { ProfileDto, SafeUser } from '@purchess/shared';
+import type { ProfileDto, SafeUser } from '@purechess/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,10 +17,10 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { username } = await params;
   return {
-    title: `${username} on Purchess`,
+    title: `${username} on Purechess`,
     description: `${username}'s chess profile, ratings, and recent games.`,
     openGraph: {
-      title: `${username} on Purchess`,
+      title: `${username} on Purechess`,
       description: `${username}'s chess profile, ratings, and recent games.`,
       images: ['/og-image.png'],
     },

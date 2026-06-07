@@ -2,7 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { GameResult, GameTermination } from '@purchess/shared';
+import { GameResult, GameTermination } from '@purechess/shared';
 import type { GameReview } from '@/types/game-review';
 
 interface ReviewMetadataProps {

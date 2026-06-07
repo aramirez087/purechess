@@ -11,7 +11,7 @@ export function Hero() {
         id="hero-wordmark"
         className="font-sans text-5xl sm:text-7xl font-bold tracking-tight"
       >
-        Purchess
+        Purechess
       </h1>
       <p className="mt-4 text-xl sm:text-2xl text-muted-foreground">
         Pure chess. Nothing else.

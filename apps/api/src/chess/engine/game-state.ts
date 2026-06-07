@@ -6,7 +6,7 @@ import {
   GameTermination,
   MoveIntent,
   SerializableEngineState,
-} from '@purchess/shared';
+} from '@purechess/shared';
 import { ClockSnapshot, applyIncrement, isTimeout, makeClock, serializeClock, tickClock } from './clock';
 import { detectResult } from './result-detector';
 import { fenPosition, startingFen } from './fen-utils';

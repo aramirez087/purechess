@@ -8,7 +8,7 @@ export class OptionalSessionAuthGuard implements CanActivate {
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = ctx.switchToHttp().getRequest<Request & { user?: unknown }>();
-    const token: string | undefined = (req.cookies as Record<string, string>)['purchess_session'];
+    const token: string | undefined = (req.cookies as Record<string, string>)['purechess_session'];
 
     if (token) {
       const result = await this.sessions.lookupSession(token);

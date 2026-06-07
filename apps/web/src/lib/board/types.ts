@@ -1,4 +1,4 @@
-import type { Square, Move, MoveIntent, PieceType } from '@purchess/shared';
+import type { Square, Move, MoveIntent, PieceType } from '@purechess/shared';
 
 export type Orientation = 'white' | 'black';
 

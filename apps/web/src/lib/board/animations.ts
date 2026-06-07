@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import type { Square } from '@purchess/shared';
+import type { Square } from '@purechess/shared';
 
 export const MOVE_DURATION_MS = 200;
 

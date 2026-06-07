@@ -1,4 +1,4 @@
-import type { PieceType, Color } from '@purchess/shared';
+import type { PieceType, Color } from '@purechess/shared';
 
 interface SvgProps {
   className?: string;

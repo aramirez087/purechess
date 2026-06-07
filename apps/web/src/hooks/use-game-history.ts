@@ -1,7 +1,7 @@
 'use client';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import type { GameHistoryResponseDto } from '@purchess/shared';
+import type { GameHistoryResponseDto } from '@purechess/shared';
 
 type GameHistoryFilters = {
   username: string;

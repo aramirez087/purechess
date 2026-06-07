@@ -1,4 +1,4 @@
-import { Color } from '@purchess/shared';
+import { Color } from '@purechess/shared';
 
 export type ClockSnapshot = {
   whiteMs: bigint;

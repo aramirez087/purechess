@@ -1,4 +1,4 @@
-# Purchess Architecture
+# Purechess Architecture
 
 ## System Diagram
 

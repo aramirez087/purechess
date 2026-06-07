@@ -4,7 +4,7 @@ import { ProfileHeader } from '@/components/profile/profile-header';
 import { RatingsCard } from '@/components/profile/ratings-card';
 import { StatsCard } from '@/components/profile/stats-card';
 import { RecentGames } from '@/components/profile/recent-games';
-import type { RatingDto, StatsDto, GameHistorySummaryDto } from '@purchess/shared';
+import type { RatingDto, StatsDto, GameHistorySummaryDto } from '@purechess/shared';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { Square } from '@purchess/shared';
+import type { Square } from '@purechess/shared';
 import { getAnimationSquares, prefersReducedMotion, MOVE_DURATION_MS } from '@/lib/board/animations';
 
 interface AnimState {

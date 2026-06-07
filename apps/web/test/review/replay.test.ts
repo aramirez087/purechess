@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { replayToFen, validateReplay } from '@/lib/replay';
-import type { WireMove } from '@purchess/shared';
+import type { WireMove } from '@purechess/shared';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 

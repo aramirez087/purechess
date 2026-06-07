@@ -12,7 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import type { User } from '@prisma/client';
-import type { AuthResponse } from '@purchess/shared';
+import type { AuthResponse } from '@purechess/shared';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -53,7 +53,7 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(OptionalSessionAuthGuard)
   async logout(@Req() req: AuthedRequest, @Res({ passthrough: true }) res: Response): Promise<void> {
-    const token = (req.cookies as Record<string, string>)['purchess_session'];
+    const token = (req.cookies as Record<string, string>)['purechess_session'];
     await this.auth.logout(token);
     this.auth.clearCookie(res);
   }

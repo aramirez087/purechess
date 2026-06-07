@@ -26,8 +26,8 @@ jobs:
       - name: Run migrations via Fly one-off machine
         run: |
           flyctl machine run \
-            --app purchess-api \
-            --image registry.fly.io/purchess-api:latest \
+            --app purechess-api \
+            --image registry.fly.io/purechess-api:latest \
             --env DATABASE_URL="$DATABASE_URL" \
             --restart no \
             --rm \
@@ -47,7 +47,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy API to Fly
-        run: flyctl deploy --app purchess-api --dockerfile apps/api/Dockerfile --remote-only --strategy rolling
+        run: flyctl deploy --app purechess-api --dockerfile apps/api/Dockerfile --remote-only --strategy rolling
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
@@ -62,7 +62,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy Web to Fly
-        run: flyctl deploy --app purchess-web --dockerfile apps/web/Dockerfile --remote-only --strategy rolling
+        run: flyctl deploy --app purechess-web --dockerfile apps/web/Dockerfile --remote-only --strategy rolling
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
@@ -73,8 +73,8 @@ jobs:
     steps:
       - name: Health check API
         run: |
-          STATUS=$(curl -sf https://purchess-api.fly.dev/api/health | jq -r '.status')
+          STATUS=$(curl -sf https://purechess-api.fly.dev/api/health | jq -r '.status')
           [ "$STATUS" = "ok" ] || (echo "API health failed post-deploy" && exit 1)
 
       - name: Health check Web
-        run: curl -sf https://purchess.com/api/health
+        run: curl -sf https://purechess.com/api/health
