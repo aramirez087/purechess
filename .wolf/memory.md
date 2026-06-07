@@ -10,3 +10,13 @@
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 10:49 | Created CLAUDE.md | — | ~1224 |
+
+| 10:49 | /init: rewrote CLAUDE.md with commands+architecture | CLAUDE.md | done | ~6k |
+| 10:49 | Session end: 1 writes across 1 files (CLAUDE.md) | 1 reads | ~1369 tok |
+
+## Session: 2026-06-07 11:05
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 11:11 | Diagnosed app-broken: .next deleted under running server, 404 chunks | apps/web/.next, /tmp/web-dev.log | restarted dev, Quick Match vs Stockfish works | ~9k |

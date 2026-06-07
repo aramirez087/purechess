@@ -1,6 +1,6 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-07T16:46:48.871Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-07T16:49:38.543Z
 > Files: 520 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
@@ -16,7 +16,7 @@
 - `.gitignore` — Git ignore rules (~36 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
-- `CLAUDE.md` — OpenWolf (~57 tok)
+- `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)

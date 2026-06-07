@@ -60,6 +60,7 @@ export function Chessboard({
 
   const [premove, setPremove] = useState<Premove | null>(null);
   const [promotion, setPromotion] = useState<PromotionState>({ active: false, from: null, to: null });
+  const [showKeyboardFocus, setShowKeyboardFocus] = useState(false);
 
   const colorToMove = useMemo(() => fenToColorToMove(position), [position]);
   const playerColor: Color = orientation === 'white' ? 'w' : 'b';
@@ -250,6 +251,8 @@ export function Chessboard({
         tabIndex={0}
         className="grid grid-cols-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         style={{ touchAction: 'none' }}
+        onFocus={() => setShowKeyboardFocus(true)}
+        onBlur={() => setShowKeyboardFocus(false)}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerCancel}
@@ -274,7 +277,7 @@ export function Chessboard({
               isInCheck={checkSquare === square}
               isPremoveFrom={premove?.from === square}
               isPreMoveTo={premove?.to === square}
-              isKeyboardFocus={focusSquare === square}
+              isKeyboardFocus={showKeyboardFocus && focusSquare === square}
               isDragSource={dragState.active && dragState.from === square}
               ghostPiece={premove?.to === square ? (getPieceAt(position, premove.from) ?? undefined) : undefined}
               ariaLabel={buildAriaLabel(square, piece, isLegalDest ? legalDests : [])}
@@ -319,4 +322,3 @@ export function Chessboard({
     </div>
   );
 }
-

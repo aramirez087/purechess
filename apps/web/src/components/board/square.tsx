@@ -50,7 +50,7 @@ export const Square = memo(function Square({
       aria-label={ariaLabel}
       role="gridcell"
       className={cn(
-        'relative flex items-center justify-center cursor-pointer',
+        'relative flex items-center justify-center cursor-pointer transition-colors duration-150',
         'w-[var(--board-sq-size)] h-[var(--board-sq-size)]',
         isLight ? 'bg-[hsl(var(--board-sq-light))]' : 'bg-[hsl(var(--board-sq-dark))]',
         isLastMoveFrom && 'sq-last-from',
@@ -58,7 +58,7 @@ export const Square = memo(function Square({
         isSelected && 'sq-selected',
         isPremoveFrom && 'sq-premove-from',
         isPreMoveTo && 'sq-premove-to',
-        isKeyboardFocus && 'ring-2 ring-inset ring-yellow-400',
+        isKeyboardFocus && 'ring-2 ring-inset ring-[#d6b563]',
       )}
       style={{
         ...(isInCheck
@@ -67,15 +67,11 @@ export const Square = memo(function Square({
         ...(isLastMoveFrom || isLastMoveTo
           ? { backgroundColor: `hsl(var(--board-highlight-last))` }
           : {}),
-        ...(isSelected
-          ? { backgroundColor: `hsl(var(--board-highlight-selected))` }
-          : {}),
+        ...(isSelected ? { backgroundColor: `hsl(var(--board-highlight-selected))` } : {}),
         ...(isPremoveFrom || isPreMoveTo
           ? { backgroundColor: `hsl(var(--board-highlight-premove))` }
           : {}),
-        ...(isInCheck
-          ? { animation: 'check-pulse 1s ease-in-out 3' }
-          : {}),
+        ...(isInCheck ? { animation: 'check-pulse 1s ease-in-out 3' } : {}),
       }}
       onPointerDown={onPointerDown ? (e) => onPointerDown(e, square) : undefined}
       onClick={onClick ? () => onClick(square) : undefined}

@@ -29,7 +29,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
+    :root:not([data-theme='light']) {
       --background: 0 0% 7%;
       --foreground: 0 0% 94%;
       --card: 0 0% 10%;
@@ -52,7 +52,7 @@
     }
   }
 
-  [data-theme="dark"] {
+  [data-theme='dark'] {
     --background: 0 0% 7%;
     --foreground: 0 0% 94%;
     --card: 0 0% 10%;
@@ -107,31 +107,32 @@
 }
 
 :root {
-  --board-sq-light: 30 20% 85%;
-  --board-sq-dark: 30 25% 48%;
+  --board-sq-light: 44 26% 78%;
+  --board-sq-dark: 142 16% 34%;
   --board-sq-size: 64px;
-  --board-highlight-last: 60 100% 50% / 0.4;
-  --board-highlight-selected: 200 100% 60% / 0.6;
+  --board-highlight-last: 43 62% 57% / 0.42;
+  --board-highlight-selected: 43 70% 62% / 0.45;
   --board-highlight-check: 0 72% 51% / 0.55;
-  --board-highlight-premove: 210 80% 60% / 0.35;
-  --board-legal-dot: 0 0% 0% / 0.18;
-  --board-legal-ring: 0 0% 0% / 0.18;
+  --board-highlight-premove: 177 28% 54% / 0.38;
+  --board-legal-dot: 43 70% 20% / 0.32;
+  --board-legal-ring: 43 62% 42% / 0.45;
 }
 
-[data-theme="dark"] {
-  --board-sq-light: 220 15% 55%;
-  --board-sq-dark: 220 25% 32%;
+[data-theme='dark'] {
+  --board-sq-light: 44 26% 78%;
+  --board-sq-dark: 142 16% 34%;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --board-sq-light: 220 15% 55%;
-    --board-sq-dark: 220 25% 32%;
+  :root:not([data-theme='light']) {
+    --board-sq-light: 44 26% 78%;
+    --board-sq-dark: 142 16% 34%;
   }
 }
 
 @keyframes check-pulse {
-  0%, 100% {
+  0%,
+  100% {
     background-color: hsl(0 72% 51% / 0.55);
   }
   50% {
@@ -153,7 +154,7 @@
   }
 }
 
-[data-board-theme="mono"] {
+[data-board-theme='mono'] {
   --board-sq-light: 0 0% 90%;
   --board-sq-dark: 0 0% 25%;
 }

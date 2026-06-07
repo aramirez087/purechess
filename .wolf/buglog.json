@@ -16,6 +16,24 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-07T16:43:01.015Z"
+    },
+    {
+      "id": "bug-002",
+      "timestamp": "2026-06-07T00:00:00.000Z",
+      "error_message": "App not working after antigravity edits; Quick Match button does nothing. Console: Refused to execute script .../_next/static/... MIME text/html, 404 on all chunks",
+      "file": "apps/web/.next (build dir)",
+      "root_cause": "apps/web/.next deleted while next-server still running; server served 404/HTML for every static chunk so React never hydrated and all buttons were dead. Source edits were fine (typecheck clean).",
+      "fix": "Killed stale next-server, restarted pnpm dev (web) to rebuild .next. Verified Quick Match creates computer game vs Stockfish (Level 4), engine played 1.Nf3.",
+      "tags": [
+        "dev-server",
+        "next.js",
+        "hydration",
+        "stale-build",
+        "404-chunks"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T00:00:00.000Z"
     }
   ]
 }

@@ -18,6 +18,9 @@ export const Piece = memo(function Piece({ type, color, ghost, className }: Piec
     <SvgComponent
       className={cn(
         'w-full h-full select-none pointer-events-none',
+        color === 'b'
+          ? 'drop-shadow-[0_3px_3px_rgba(0,0,0,0.45)]'
+          : 'drop-shadow-[0_3px_3px_rgba(0,0,0,0.25)]',
         ghost && 'opacity-40',
         className,
       )}
