@@ -13,24 +13,26 @@
       "elapsed": 0.0
     },
     "2": {
-      "status": "pending",
+      "status": "done",
       "slug": "api-stockfish-engine",
       "wave": 2,
       "title": "Api Stockfish Engine",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 925.0,
+      "started_at": 1780844853.3523
     },
     "3": {
-      "status": "pending",
+      "status": "done",
       "slug": "web-level-selector",
       "wave": 2,
       "title": "Web Level Selector",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 2.0,
+      "started_at": 1780844853.504043
     },
     "4": {
       "status": "pending",
