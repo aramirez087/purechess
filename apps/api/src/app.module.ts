@@ -13,6 +13,7 @@ import { RatingsModule } from './ratings/ratings.module';
 import { ReportsModule } from './reports/reports.module';
 import { AdminModule } from './admin/admin.module';
 import { RealtimeModule } from './realtime/realtime.module';
+import { InvitesModule } from './invites/invites.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { RealtimeModule } from './realtime/realtime.module';
     ReportsModule,
     AdminModule,
     RealtimeModule,
+    InvitesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -156,8 +156,8 @@ model RatingHistory {
 
 model Game {
   id                  String              @id @default(cuid())
-  whiteUserId         String
-  blackUserId         String
+  whiteUserId         String?
+  blackUserId         String?
   timeControlSeconds  Int
   incrementSeconds    Int                 @default(0)
   category            TimeControlCategory
@@ -177,8 +177,8 @@ model Game {
   endedAt             DateTime?
   createdAt           DateTime            @default(now())
 
-  whitePlayer   User            @relation("WhitePlayer", fields: [whiteUserId], references: [id])
-  blackPlayer   User            @relation("BlackPlayer", fields: [blackUserId], references: [id])
+  whitePlayer   User?           @relation("WhitePlayer", fields: [whiteUserId], references: [id])
+  blackPlayer   User?           @relation("BlackPlayer", fields: [blackUserId], references: [id])
   moves         Move[]
   ratingHistory RatingHistory[]
   reports       Report[]
