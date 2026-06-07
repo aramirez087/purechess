@@ -27,3 +27,10 @@ export function formatRelativeTime(date: Date): string {
 export function clampRatingDelta(n: number): number {
   return Math.max(-400, Math.min(400, n));
 }
+
+export function formatTimeControl(seconds: number, increment: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  const base = secs > 0 ? `${mins}:${secs.toString().padStart(2, '0')}` : String(mins);
+  return `${base}+${increment}`;
+}

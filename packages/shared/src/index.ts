@@ -9,3 +9,4 @@ export * from './dto/auth.dto.js';
 export * from './dto/game.dto.js';
 export * from './dto/matchmaking.dto.js';
 export * from './dto/user.dto.js';
+export * from './users.js';
