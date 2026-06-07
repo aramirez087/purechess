@@ -55,7 +55,7 @@ export type SquareHighlight =
   | 'premove-from'
   | 'premove-to';
 
-export type SoundType = 'move' | 'capture' | 'check' | 'mate' | 'game-start';
+export type SoundType = 'move' | 'capture' | 'check' | 'mate' | 'game-start' | 'tick';
 
 export interface Premove {
   from: Square;

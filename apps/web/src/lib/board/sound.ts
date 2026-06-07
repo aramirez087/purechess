@@ -10,6 +10,9 @@ interface ToneParams {
 }
 
 const TONES: Record<SoundType, ToneParams[]> = {
+  tick: [
+    { frequency: 1200, duration: 0.04, attack: 0.002, decay: 0.038, type: 'sine', volume: 0.2 },
+  ],
   move: [
     { frequency: 440, duration: 0.08, attack: 0.005, decay: 0.07, type: 'sine', volume: 0.3 },
   ],
@@ -50,6 +53,11 @@ class SoundEngine {
 
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
+  }
+
+  playTick(lowTimeSoundEnabled: boolean): void {
+    if (!lowTimeSoundEnabled) return;
+    this.play('tick');
   }
 
   play(type: SoundType): void {

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
 import { UserMenu } from './UserMenu';
+import { SettingsDialog } from '@/components/settings/settings-dialog';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
@@ -38,6 +39,7 @@ export function AppShell({ variant = 'default', children }: AppShellProps) {
             </nav>
           </div>
           <div className="flex items-center gap-2">
+            <SettingsDialog />
             <UserMenu user={null} />
             <MobileNav />
           </div>
