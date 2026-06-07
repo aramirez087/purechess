@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { ComputerGameStateDto } from '@purchess/shared';
-import type { Square } from '@purchess/shared';
-import type { MoveIntent } from '@purchess/shared';
+import type { ComputerGameStateDto } from '@purechess/shared';
+import type { Square } from '@purechess/shared';
+import type { MoveIntent } from '@purechess/shared';
 import { Chessboard } from '@/components/board/chessboard';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import { getComputerGame, submitComputerMove } from '@/lib/api/computer-games';

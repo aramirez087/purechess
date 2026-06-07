@@ -1,4 +1,4 @@
-import type { CreateComputerGameDto, ComputerGameStateDto } from '@purchess/shared';
+import type { CreateComputerGameDto, ComputerGameStateDto } from '@purechess/shared';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 

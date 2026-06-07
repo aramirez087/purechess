@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { createComputerGame } from '@/lib/api/computer-games';
-import type { CreateComputerGameDto } from '@purchess/shared';
+import type { CreateComputerGameDto } from '@purechess/shared';
 
 const TIME_CONTROLS = [
   { label: 'Bullet 1+0', seconds: 60, increment: 0 },

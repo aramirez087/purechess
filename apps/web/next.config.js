@@ -1,5 +1,18 @@
 import { withSentryConfig } from '@sentry/nextjs';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
+const scriptSrc = isDev
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.posthog.com"
+  : "script-src 'self' 'unsafe-inline' https://*.posthog.com";
+
+const connectSrc = [
+  "connect-src 'self' wss: https://*.sentry.io https://*.posthog.com https://eu.posthog.com https://*.fly.dev",
+  isDev ? 'http://localhost:4000 ws://localhost:4000' : '',
+]
+  .join(' ')
+  .trim();
+
 const securityHeaders = [
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
@@ -13,10 +26,10 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://*.posthog.com",
+      scriptSrc,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
-      "connect-src 'self' wss: https://*.sentry.io https://*.posthog.com https://eu.posthog.com https://*.fly.dev",
+      connectSrc,
       "frame-src 'none'",
       "form-action 'self' https://accounts.google.com https://appleid.apple.com",
       "base-uri 'self'",

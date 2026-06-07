@@ -12,7 +12,7 @@ import {
   GameResult,
   GameTermination,
   SerializableEngineState,
-} from '@purchess/shared';
+} from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
 import { EngineService } from '../chess/engine.service';
 import { StockfishService } from './stockfish.service';
@@ -60,7 +60,7 @@ export class ComputerGamesService {
     private readonly stockfish: StockfishService,
   ) {}
 
-  async createGame(userId: string, dto: CreateComputerGameDto): Promise<ComputerGameStateDto> {
+  async createGame(userId: string | null, dto: CreateComputerGameDto): Promise<ComputerGameStateDto> {
     const userColor = resolveColor(dto.color);
     const computerColor = userColor === 'white' ? 'black' : 'white';
 
@@ -153,7 +153,7 @@ export class ComputerGamesService {
 
   async submitMove(
     gameId: string,
-    userId: string,
+    userId: string | null,
     dto: ComputerMoveDto,
   ): Promise<ComputerGameStateDto> {
     const game = await this.prisma.game.findUnique({ where: { id: gameId } });
@@ -308,7 +308,7 @@ export class ComputerGamesService {
     );
   }
 
-  async getGame(gameId: string, userId: string): Promise<ComputerGameStateDto> {
+  async getGame(gameId: string, userId: string | null): Promise<ComputerGameStateDto> {
     const game = await this.prisma.game.findUnique({ where: { id: gameId } });
     if (!game) throw new NotFoundException('Game not found');
     if (!game.isVsComputer) throw new BadRequestException('Not a computer game');

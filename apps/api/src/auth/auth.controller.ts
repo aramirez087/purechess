@@ -18,7 +18,6 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { PasswordResetRequestDto } from './dto/password-reset-request.dto';
 import { PasswordResetConfirmDto } from './dto/password-reset-confirm.dto';
-import { SessionAuthGuard } from './guards/session-auth.guard';
 import { OptionalSessionAuthGuard } from './guards/optional-session-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { GoogleOAuthProfile } from './strategies/google-oauth.strategy';
@@ -59,9 +58,9 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(SessionAuthGuard)
-  me(@CurrentUser() user: User): { user: ReturnType<typeof toSafeUser> } {
-    return { user: toSafeUser(user) };
+  @UseGuards(OptionalSessionAuthGuard)
+  me(@CurrentUser() user: User | undefined): { user: ReturnType<typeof toSafeUser> | null } {
+    return { user: user ? toSafeUser(user) : null };
   }
 
   @Post('password-reset/request')
