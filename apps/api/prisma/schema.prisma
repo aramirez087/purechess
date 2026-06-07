@@ -184,9 +184,11 @@ model Game {
   reports       Report[]
   fairPlaySignals FairPlaySignal[]
 
-  isVsComputer  Boolean  @default(false)
-  computerLevel Int?
-  computerColor String?
+  isVsComputer     Boolean  @default(false)
+  computerLevel    Int?
+  computerColor    String?
+  engineState      Json?
+  lastComputerMove String?
 
   @@index([whiteUserId, createdAt])
   @@index([blackUserId, createdAt])
@@ -199,7 +201,8 @@ model Move {
   gameId           String
   moveNumber       Int
   ply              Int
-  userId           String
+  userId           String?
+  isComputer       Boolean  @default(false)
   san              String
   uci              String
   fenAfterMove     String
@@ -207,8 +210,8 @@ model Move {
   moveTimeMs       Int
   createdAt        DateTime @default(now())
 
-  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id])
+  game Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id])
 
   @@unique([gameId, ply])
 }
