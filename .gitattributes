@@ -1,0 +1,4 @@
+pnpm-lock.yaml merge=ours
+package.json merge=ours
+apps/*/package.json merge=ours
+packages/*/package.json merge=ours
