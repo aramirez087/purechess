@@ -1,6 +1,6 @@
 {
   "epic": "purchess-mvp",
-  "started_at": 1780806239.8774168,
+  "started_at": 1780808460.5930262,
   "sessions": {
     "1": {
       "status": "skipped",
@@ -43,15 +43,14 @@
       "elapsed": 0.0
     },
     "5": {
-      "status": "done",
+      "status": "skipped",
       "slug": "chess-engine-core",
       "wave": 3,
       "title": "Chess Engine Core",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 1136.0,
-      "started_at": 1780806242.0406148
+      "elapsed": 0.0
     },
     "12": {
       "status": "done",
@@ -61,8 +60,8 @@
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 644.0,
-      "started_at": 1780807382.203943
+      "elapsed": 876.0,
+      "started_at": 1780808464.826438
     },
     "16": {
       "status": "done",
@@ -72,8 +71,8 @@
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 392.0,
-      "started_at": 1780808028.6468952
+      "elapsed": 495.0,
+      "started_at": 1780809343.7804852
     },
     "6": {
       "status": "pending",
