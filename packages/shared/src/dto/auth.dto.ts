@@ -1,5 +1,5 @@
 export interface LoginDto {
-  email: string;
+  emailOrUsername: string;
   password: string;
 }
 
@@ -9,13 +9,11 @@ export interface RegisterDto {
   username: string;
 }
 
-export interface AuthResponseDto {
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    username: string;
-    avatarUrl: string | null;
-  };
+export interface PasswordResetRequestDto {
+  email: string;
+}
+
+export interface PasswordResetConfirmDto {
+  token: string;
+  newPassword: string;
 }
