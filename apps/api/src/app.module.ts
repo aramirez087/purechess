@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { envValidationSchema } from './config/env.config';
+import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
@@ -18,6 +19,7 @@ import { RealtimeModule } from './realtime/realtime.module';
       isGlobal: true,
       validationSchema: envValidationSchema,
     }),
+    DatabaseModule,
     AuthModule,
     UsersModule,
     GamesModule,

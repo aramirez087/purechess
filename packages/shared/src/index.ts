@@ -1,4 +1,5 @@
 export * from './chess.js';
+export * from './db.js';
 export * from './game-result.js';
 export * from './rating.js';
 export * from './time-control.js';
