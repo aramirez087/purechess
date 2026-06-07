@@ -35,14 +35,15 @@
       "started_at": 1780844853.504043
     },
     "4": {
-      "status": "pending",
+      "status": "done",
       "slug": "web-game-board",
       "wave": 3,
       "title": "Web Game Board",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 371.0,
+      "started_at": 1780845780.971933
     },
     "5": {
       "status": "pending",
