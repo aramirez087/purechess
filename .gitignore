@@ -7,3 +7,6 @@ dist/
 .env.*.local
 *.log
 .DS_Store
+.turbo/
+*.tsbuildinfo
+.pnpm-store/
