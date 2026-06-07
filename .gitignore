@@ -10,3 +10,4 @@ dist/
 .turbo/
 *.tsbuildinfo
 .pnpm-store/
+coverage/
