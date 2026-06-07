@@ -24,6 +24,9 @@ export enum WsEvent {
   MatchmakingLeave = 'matchmaking:leave',
   MatchmakingStatus = 'matchmaking:status',
 
+  InviteCreated = 'invite:created',
+  InviteAccepted = 'invite:accepted',
+
   Error = 'error',
   Ping = 'ping',
   Pong = 'pong',
@@ -58,6 +61,15 @@ export interface WsMatchFoundPayload {
   gameId: string;
   color: 'w' | 'b';
   opponentId: string;
+}
+
+export interface WsInviteCreatedPayload {
+  gameId: string;
+  inviteUrl: string;
+}
+
+export interface WsInviteAcceptedPayload {
+  gameId: string;
 }
 
 export interface WsErrorPayload {
