@@ -153,6 +153,16 @@
   }
 }
 
+[data-board-theme="mono"] {
+  --board-sq-light: 0 0% 90%;
+  --board-sq-dark: 0 0% 25%;
+}
+
+[data-no-animations] [data-animating],
+[data-no-animations] [data-fading] {
+  transition: none !important;
+}
+
 [data-animating] {
   transition: transform 200ms ease-out;
   will-change: transform;
