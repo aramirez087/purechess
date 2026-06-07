@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Chess } from 'chess.js';
 import { useTheme } from 'next-themes';
+import { Chessboard, BoardSettingsProvider } from '@/components/board';
+import type { MoveIntent } from '@purchess/shared';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -28,6 +31,57 @@ import { toast } from 'sonner';
 import { AppShell } from '@/components/layout/AppShell';
 import { MarketingPage } from '@/components/layout/MarketingPage';
 import { formatDuration, formatRelativeTime, clampRatingDelta } from '@/lib/utils';
+
+const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+function ChessboardDemo() {
+  const [chess] = useState(() => new Chess());
+  const [fen, setFen] = useState(START_FEN);
+  const [lastMove, setLastMove] = useState<{ from: string; to: string } | undefined>();
+  const [orientation, setOrientation] = useState<'white' | 'black'>('white');
+
+  function handleMove(intent: MoveIntent) {
+    if (!intent.from || !intent.to) return;
+    try {
+      const result = chess.move({ from: intent.from, to: intent.to, promotion: intent.promotion ?? 'q' });
+      if (result) {
+        setFen(chess.fen());
+        setLastMove({ from: intent.from, to: intent.to });
+      }
+    } catch {
+      /* illegal move */
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-2">
+        <button
+          className="text-xs px-2 py-1 rounded border border-border hover:bg-muted"
+          onClick={() => { chess.reset(); setFen(START_FEN); setLastMove(undefined); }}
+        >
+          Reset
+        </button>
+        <button
+          className="text-xs px-2 py-1 rounded border border-border hover:bg-muted"
+          onClick={() => setOrientation((o) => o === 'white' ? 'black' : 'white')}
+        >
+          Flip
+        </button>
+      </div>
+      <BoardSettingsProvider>
+        <Chessboard
+          position={fen}
+          orientation={orientation}
+          onMove={handleMove}
+          lastMove={lastMove as { from: import('@purchess/shared').Square; to: import('@purchess/shared').Square } | undefined}
+          className="max-w-[480px]"
+        />
+      </BoardSettingsProvider>
+      <p className="text-xs text-muted-foreground font-mono truncate">{fen}</p>
+    </div>
+  );
+}
 
 export default function DemoPage() {
   const { theme, setTheme } = useTheme();
@@ -245,6 +299,15 @@ export default function DemoPage() {
               <dt className="text-muted-foreground">clampRatingDelta(999)</dt>
               <dd className="font-mono tabular-nums">{clampRatingDelta(999)}</dd>
             </dl>
+          </section>
+
+          <Separator />
+
+          <section className="space-y-4">
+            <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+              Chess Board
+            </h2>
+            <ChessboardDemo />
           </section>
 
           <Separator />

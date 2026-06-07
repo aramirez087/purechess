@@ -42,6 +42,10 @@ const config: Config = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        board: {
+          light: 'hsl(var(--board-sq-light))',
+          dark: 'hsl(var(--board-sq-dark))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
