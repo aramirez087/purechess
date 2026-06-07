@@ -1,0 +1,253 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DATABASE_URL_DIRECT")
+  extensions = [citext]
+}
+
+enum GameResult {
+  white_wins
+  black_wins
+  draw
+}
+
+enum GameResultReason {
+  checkmate
+  resignation
+  timeout
+  stalemate
+  insufficient_material
+  threefold_repetition
+  fifty_move_rule
+  draw_agreement
+  abandonment
+}
+
+enum GameStatus {
+  pending
+  active
+  completed
+  aborted
+  invite_pending
+}
+
+enum TimeControlCategory {
+  bullet
+  blitz
+  rapid
+}
+
+enum ReportStatus {
+  open
+  reviewed
+  dismissed
+}
+
+enum OAuthProvider {
+  google
+  apple
+}
+
+enum FairPlaySignalType {
+  low_variance_move_time
+  suspicious_accuracy
+  abnormal_streak
+  multi_account_ip
+  multi_account_fingerprint
+}
+
+model User {
+  id            String    @id @default(cuid())
+  username      String    @unique @db.Citext
+  email         String    @unique @db.Citext
+  passwordHash  String?
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  isDisabled    Boolean   @default(false)
+  isAdmin       Boolean   @default(false)
+
+  oauthAccounts      OAuthAccount[]
+  sessions           Session[]
+  passwordResetTokens PasswordResetToken[]
+  ratings            Rating[]
+  ratingHistory      RatingHistory[]
+  gamesAsWhite       Game[]            @relation("WhitePlayer")
+  gamesAsBlack       Game[]            @relation("BlackPlayer")
+  moves              Move[]
+  reportsSubmitted   Report[]          @relation("ReporterUser")
+  reportsReceived    Report[]          @relation("ReportedUser")
+  reportsReviewed    Report[]          @relation("ReviewedByUser")
+  fairPlaySignals    FairPlaySignal[]
+  adminAuditLogs     AdminAuditLog[]
+}
+
+model OAuthAccount {
+  id             String        @id @default(cuid())
+  provider       OAuthProvider
+  providerUserId String
+  userId         String
+  createdAt      DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  userId     String
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id              String              @id @default(cuid())
+  userId          String
+  category        TimeControlCategory
+  rating          Int                 @default(1500)
+  ratingDeviation Int                 @default(350)
+  volatility      Float               @default(0.06)
+  gamesPlayed     Int                 @default(0)
+  updatedAt       DateTime            @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category])
+}
+
+model RatingHistory {
+  id            String              @id @default(cuid())
+  userId        String
+  category      TimeControlCategory
+  ratingBefore  Int
+  ratingAfter   Int
+  ratingDelta   Int
+  gameId        String?
+  createdAt     DateTime            @default(now())
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game? @relation(fields: [gameId], references: [id], onDelete: SetNull)
+}
+
+model Game {
+  id                  String              @id @default(cuid())
+  whiteUserId         String
+  blackUserId         String
+  timeControlSeconds  Int
+  incrementSeconds    Int                 @default(0)
+  category            TimeControlCategory
+  isRated             Boolean             @default(true)
+  result              GameResult?
+  resultReason        GameResultReason?
+  status              GameStatus          @default(pending)
+  startingFen         String?
+  finalFen            String?
+  pgn                 String?
+  whiteRatingBefore   Int?
+  blackRatingBefore   Int?
+  whiteRatingAfter    Int?
+  blackRatingAfter    Int?
+  inviteToken         String?             @unique
+  startedAt           DateTime?
+  endedAt             DateTime?
+  createdAt           DateTime            @default(now())
+
+  whitePlayer   User            @relation("WhitePlayer", fields: [whiteUserId], references: [id])
+  blackPlayer   User            @relation("BlackPlayer", fields: [blackUserId], references: [id])
+  moves         Move[]
+  ratingHistory RatingHistory[]
+  reports       Report[]
+  fairPlaySignals FairPlaySignal[]
+
+  @@index([whiteUserId, createdAt])
+  @@index([blackUserId, createdAt])
+  @@index([status, createdAt])
+  @@index([category, createdAt])
+}
+
+model Move {
+  id               String   @id @default(cuid())
+  gameId           String
+  moveNumber       Int
+  ply              Int
+  userId           String
+  san              String
+  uci              String
+  fenAfterMove     String
+  clockAfterMoveMs Int
+  moveTimeMs       Int
+  createdAt        DateTime @default(now())
+
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([gameId, ply])
+}
+
+model Report {
+  id               String       @id @default(cuid())
+  reporterUserId   String
+  reportedUserId   String
+  gameId           String?
+  reason           String
+  notes            String?
+  status           ReportStatus @default(open)
+  createdAt        DateTime     @default(now())
+  reviewedAt       DateTime?
+  reviewedByUserId String?
+
+  reporter   User  @relation("ReporterUser", fields: [reporterUserId], references: [id])
+  reported   User  @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  game       Game? @relation(fields: [gameId], references: [id], onDelete: SetNull)
+  reviewedBy User? @relation("ReviewedByUser", fields: [reviewedByUserId], references: [id])
+}
+
+model FairPlaySignal {
+  id         String             @id @default(cuid())
+  userId     String
+  gameId     String?
+  signalType FairPlaySignalType
+  score      Float
+  payload    Json
+  createdAt  DateTime           @default(now())
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game? @relation(fields: [gameId], references: [id], onDelete: SetNull)
+}
+
+model AdminAuditLog {
+  id          String   @id @default(cuid())
+  adminUserId String
+  action      String
+  targetType  String
+  targetId    String
+  payload     Json
+  createdAt   DateTime @default(now())
+
+  admin User @relation(fields: [adminUserId], references: [id])
+}
