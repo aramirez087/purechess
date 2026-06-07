@@ -1,13 +1,13 @@
 import { PrismaClient, TimeControlCategory } from '@prisma/client';
-import * as bcrypt from 'bcryptjs';
+import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();
 
-const SALT_ROUNDS = 12;
+const ARGON2_OPTIONS = { type: argon2.argon2id, memoryCost: 65536, timeCost: 3, parallelism: 1 } as const;
 
 async function main() {
-  const adminHash = await bcrypt.hash('Admin1234!', SALT_ROUNDS);
-  const testHash = await bcrypt.hash('Test1234!', SALT_ROUNDS);
+  const adminHash = await argon2.hash('Admin1234!', ARGON2_OPTIONS);
+  const testHash = await argon2.hash('Test1234!', ARGON2_OPTIONS);
 
   const admin = await prisma.user.upsert({
     where: { email: 'admin@purchess.local' },

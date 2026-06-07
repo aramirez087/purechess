@@ -1,3 +1,4 @@
+export * from './auth.js';
 export * from './chess.js';
 export * from './db.js';
 export * from './game-result.js';
