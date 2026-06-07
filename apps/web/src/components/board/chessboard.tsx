@@ -307,7 +307,14 @@ export function Chessboard({
               transform: 'translate(-50%, -50%)',
             }}
           >
-            <SvgComponent className="w-full h-full" />
+            <SvgComponent
+              className={cn(
+                'block h-full w-full',
+                p.color === 'b'
+                  ? 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.52)]'
+                  : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.28)]',
+              )}
+            />
           </div>
         );
       })()}

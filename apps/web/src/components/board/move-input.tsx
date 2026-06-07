@@ -26,7 +26,7 @@ export function MoveInput({ color, onSelect, onCancel }: MoveInputProps) {
           return (
             <button
               key={type}
-              className="w-12 h-12 p-1 rounded hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-12 w-12 rounded p-0.5 transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
               onClick={() => onSelect(type)}
               aria-label={`Promote to ${type}`}
             >

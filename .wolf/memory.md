@@ -20,3 +20,7 @@
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
 | 11:11 | Diagnosed app-broken: .next deleted under running server, 404 chunks | apps/web/.next, /tmp/web-dev.log | restarted dev, Quick Match vs Stockfish works | ~9k |
+| 11:18 | Created ../../../../tmp/inspect.cjs | — | ~262 |
+| 11:19 | Created apps/api/_repro.cjs | — | ~171 |
+| 11:20 | Edited apps/api/src/computer-games/computer-games.service.ts | expanded (+10 lines) | ~119 |
+| 11:23 | Edited apps/api/src/computer-games/computer-games.service.ts | added nullish coalescing | ~433 |

@@ -1,11 +1,12 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-07T16:49:38.543Z
-> Files: 520 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-07T17:23:36.225Z
+> Files: 522 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
 - `commit-msg.txt` — Declares in (~304 tok)
+- `inspect.cjs` — Declares p (~262 tok)
 
 ## ./
 
@@ -559,6 +560,7 @@
 
 ## apps/api/
 
+- `_repro.cjs` — Declares p (~171 tok)
 - `Dockerfile` — Docker container definition (~308 tok)
 - `eslint.config.mjs` — ESLint flat configuration (~119 tok)
 - `fly.toml` (~186 tok)
@@ -671,7 +673,7 @@
 
 - `computer-games.controller.ts` — Exports ComputerGamesController (~375 tok)
 - `computer-games.module.ts` — Exports ComputerGamesModule (~132 tok)
-- `computer-games.service.ts` — Exports ComputerGamesService (~2865 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~3191 tok)
 
 ## apps/api/src/config/
 

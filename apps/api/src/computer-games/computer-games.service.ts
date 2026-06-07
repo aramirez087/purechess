@@ -226,6 +226,40 @@ export class ComputerGamesService {
       }
       throw err;
     }
+
+    // If the side to move flagged on time, applyMove returns the game as
+    // completed WITHOUT appending the attempted move. Persist the timeout
+    // result and return — there is no new move row to write, and reusing the
+    // previous move would violate the (gameId, ply) unique constraint.
+    if (state.moves.length === engineState.moves.length) {
+      const result = state.result as string | null;
+      const reason = state.resultReason as string | null;
+
+      await this.prisma.game.update({
+        where: { id: gameId },
+        data: {
+          engineState: this.engine.toSerializable(state) as object,
+          finalFen: state.position.fen(),
+          status: "completed",
+          result: state.result as unknown as PrismaGameResult,
+          resultReason: state.resultReason as unknown as GameResultReason,
+          endedAt: new Date(nowMs),
+        },
+      });
+
+      return toStateDto(
+        gameId,
+        state.position.fen(),
+        game.pgn,
+        "completed",
+        gameComputerColor,
+        computerLevel,
+        game.lastComputerMove ?? null,
+        result,
+        reason,
+      );
+    }
+
     const engineMove = state.moves[state.moves.length - 1]!;
 
     const finalResult = this.engine.detectResult(state, nowMs);

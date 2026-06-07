@@ -17,10 +17,10 @@ export const Piece = memo(function Piece({ type, color, ghost, className }: Piec
   return (
     <SvgComponent
       className={cn(
-        'w-full h-full select-none pointer-events-none',
+        'block h-full w-full select-none pointer-events-none',
         color === 'b'
-          ? 'drop-shadow-[0_3px_3px_rgba(0,0,0,0.45)]'
-          : 'drop-shadow-[0_3px_3px_rgba(0,0,0,0.25)]',
+          ? 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.52)]'
+          : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.28)]',
         ghost && 'opacity-40',
         className,
       )}

@@ -95,17 +95,17 @@ export const Square = memo(function Square({
         />
       )}
       {piece && !isDragSource && (
-        <div className="absolute inset-0 p-[4%] z-20" data-piece-on={square}>
+        <div className="absolute inset-0 z-20 p-[1%]" data-piece-on={square}>
           <PieceComponent type={piece.type} color={piece.color} />
         </div>
       )}
       {isDragSource && piece && (
-        <div className="absolute inset-0 p-[4%] z-20 opacity-30" data-piece-on={square}>
+        <div className="absolute inset-0 z-20 p-[1%] opacity-30" data-piece-on={square}>
           <PieceComponent type={piece.type} color={piece.color} />
         </div>
       )}
       {ghostPiece && (
-        <div className="absolute inset-0 p-[4%] z-20">
+        <div className="absolute inset-0 z-20 p-[1%]">
           <PieceComponent type={ghostPiece.type} color={ghostPiece.color} ghost />
         </div>
       )}

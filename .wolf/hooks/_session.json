@@ -6,13 +6,62 @@
       "count": 1,
       "tokens": 0,
       "first_read": "2026-06-07T17:08:13.112Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.controller.ts": {
+      "count": 1,
+      "tokens": 375,
+      "first_read": "2026-06-07T17:16:18.448Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/dto/computer-game.dto.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-07T17:16:24.893Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts": {
+      "count": 2,
+      "tokens": 2865,
+      "first_read": "2026-06-07T17:16:32.927Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/observability/all-exceptions.filter.ts": {
+      "count": 1,
+      "tokens": 526,
+      "first_read": "2026-06-07T17:17:30.685Z"
     }
   },
-  "files_written": [],
-  "edit_counts": {},
-  "anatomy_hits": 0,
-  "anatomy_misses": 1,
-  "repeated_reads_warned": 0,
+  "files_written": [
+    {
+      "file": "/tmp/inspect.cjs",
+      "action": "create",
+      "tokens": 280,
+      "at": "2026-06-07T17:18:14.250Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/_repro.cjs",
+      "action": "create",
+      "tokens": 183,
+      "at": "2026-06-07T17:19:04.451Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts",
+      "action": "edit",
+      "tokens": 119,
+      "at": "2026-06-07T17:20:10.022Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts",
+      "action": "edit",
+      "tokens": 433,
+      "at": "2026-06-07T17:23:36.230Z"
+    }
+  ],
+  "edit_counts": {
+    "../../../../tmp/inspect.cjs": 1,
+    "apps/api/_repro.cjs": 1,
+    "apps/api/src/computer-games/computer-games.service.ts": 2
+  },
+  "anatomy_hits": 3,
+  "anatomy_misses": 2,
+  "repeated_reads_warned": 1,
   "cerebrum_warnings": 0,
   "stop_count": 1
 }
