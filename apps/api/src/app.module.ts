@@ -20,6 +20,7 @@ import { InvitesModule } from './invites/invites.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { MetricsModule } from './metrics/metrics.module';
 import { RedisModule } from './redis/redis.module';
+import { TestingModule } from './testing/testing.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { RedisModule } from './redis/redis.module';
     AnalyticsModule,
     MetricsModule,
     RedisModule,
+    ...(process.env['NODE_ENV'] === 'test' ? [TestingModule] : []),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,52 @@
+const API_URL = process.env['API_URL'] ?? 'http://localhost:4000';
+
+export interface TestUser {
+  id: string;
+  username: string;
+  email: string;
+  sessionToken: string;
+}
+
+export interface TestGame {
+  id: string;
+}
+
+export async function createTestUser(opts: {
+  username: string;
+  email: string;
+  isAdmin?: boolean;
+}): Promise<TestUser> {
+  const res = await fetch(`${API_URL}/api/testing/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(opts),
+  });
+  if (!res.ok) throw new Error(`createTestUser failed: ${res.status}`);
+  return res.json() as Promise<TestUser>;
+}
+
+export async function createTestGame(opts: {
+  whiteUserId?: string;
+  blackUserId?: string;
+  status?: string;
+  timeControlSeconds?: number;
+  incrementSeconds?: number;
+  category?: string;
+}): Promise<TestGame> {
+  const res = await fetch(`${API_URL}/api/testing/games`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(opts),
+  });
+  if (!res.ok) throw new Error(`createTestGame failed: ${res.status}`);
+  return res.json() as Promise<TestGame>;
+}
+
+export async function resetTestDb(): Promise<void> {
+  const res = await fetch(`${API_URL}/api/testing/reset`, { method: 'DELETE' });
+  if (!res.ok) throw new Error(`reset failed: ${res.status}`);
+}
+
+export function sessionCookie(token: string): string {
+  return `purchess_session=${token}`;
+}
