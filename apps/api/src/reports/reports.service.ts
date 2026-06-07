@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Prisma, ReportStatus } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { AuditService } from '../admin/audit.service';
+import { PosthogService } from '../analytics/posthog.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportStatusDto } from './dto/update-report-status.dto';
 import { ListReportsDto } from './dto/list-reports.dto';
@@ -14,6 +15,7 @@ export class ReportsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
+    private readonly posthog: PosthogService,
   ) {}
 
   async createReport(reporterUserId: string, dto: CreateReportDto) {
@@ -35,6 +37,13 @@ export class ReportsService {
         notes: dto.notes,
       },
     });
+
+    this.posthog.captureEvent(reporterUserId, 'player_reported', {
+      report_id: report.id,
+      reason: dto.reason,
+      has_game_context: !!dto.gameId,
+    });
+
     return { created: true, report };
   }
 

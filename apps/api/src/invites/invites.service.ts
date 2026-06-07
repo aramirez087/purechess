@@ -9,6 +9,7 @@ import { randomBytes } from 'crypto';
 import { PrismaService } from '../database/prisma.service';
 import { CreateInviteDto } from './dto/create-invite.dto';
 import { InviteGateway } from './invite-gateway';
+import { PosthogService } from '../analytics/posthog.service';
 
 const INVITE_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -19,6 +20,7 @@ export class InvitesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly gateway: InviteGateway,
+    private readonly posthog: PosthogService,
   ) {}
 
   async createInvite(
@@ -45,6 +47,14 @@ export class InvitesService {
 
     const inviteUrl = `${appUrl}/invite/${token}`;
     this.gateway.emitInviteCreated(userId, { gameId: game.id, inviteUrl });
+
+    this.posthog.captureEvent(userId, 'invite_created', {
+      game_id: game.id,
+      time_control_seconds: dto.timeControlSeconds,
+      increment_seconds: dto.incrementSeconds,
+      category: dto.category,
+      color,
+    });
 
     return { gameId: game.id, inviteToken: token, inviteUrl };
   }
@@ -151,6 +161,13 @@ export class InvitesService {
 
     this.gateway.emitInviteAccepted(creatorId!, acceptorId, { gameId: game.id });
 
+    this.posthog.captureEvent(acceptorId, 'invite_accepted', {
+      game_id: game.id,
+      time_control_seconds: game.timeControlSeconds,
+      increment_seconds: game.incrementSeconds,
+      category: game.category,
+    });
+
     return { gameId: game.id };
   }
 
@@ -171,6 +188,13 @@ export class InvitesService {
     }
 
     await this.prisma.game.update({ where: { id: game.id }, data: { status: 'aborted' } });
+
+    this.posthog.captureEvent(userId, 'invite_cancelled', {
+      game_id: game.id,
+      time_control_seconds: game.timeControlSeconds,
+      increment_seconds: game.incrementSeconds,
+      category: game.category,
+    });
 
     return { success: true };
   }

@@ -1,6 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Sentry } from './sentry';
+import type { PosthogService } from '../analytics/posthog.service';
 
 interface RequestWithUser extends Request {
   user?: {
@@ -13,6 +14,8 @@ interface RequestWithUser extends Request {
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
+
+  constructor(private readonly posthog?: PosthogService) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
@@ -37,6 +40,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
         }
         Sentry.captureException(exception);
       });
+
+      this.posthog?.captureException(exception, request.user?.id);
 
       this.logger.error(
         { err: exception, requestId: (request as Request & { id?: string }).id },

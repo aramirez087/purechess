@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 import { initSentry } from './observability/sentry';
 import { AllExceptionsFilter } from './observability/all-exceptions.filter';
+import { PosthogService } from './analytics/posthog.service';
 import { AppModule } from './app.module';
 
 initSentry();
@@ -46,7 +47,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter(app.get(PosthogService)));
 
   const port = process.env['PORT'] ?? 4000;
   await app.listen(port);

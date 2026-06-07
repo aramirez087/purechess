@@ -16,6 +16,7 @@ import {
 import { PrismaService } from '../database/prisma.service';
 import { EngineService } from '../chess/engine.service';
 import { StockfishService } from './stockfish.service';
+import { PosthogService } from '../analytics/posthog.service';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -58,6 +59,7 @@ export class ComputerGamesService {
     private readonly prisma: PrismaService,
     private readonly engine: EngineService,
     private readonly stockfish: StockfishService,
+    private readonly posthog: PosthogService,
   ) {}
 
   async createGame(userId: string | null, dto: CreateComputerGameDto): Promise<ComputerGameStateDto> {
@@ -139,6 +141,17 @@ export class ComputerGamesService {
       });
     }
 
+    if (userId) {
+      this.posthog.captureEvent(userId, 'computer_game_created', {
+        game_id: game.id,
+        player_color: userColor,
+        computer_level: dto.level,
+        time_control_seconds: dto.timeControlSeconds,
+        increment_seconds: dto.incrementSeconds ?? 0,
+        category: getCategory(dto.timeControlSeconds),
+      });
+    }
+
     return toStateDto(
       game.id,
       currentFen,
@@ -181,6 +194,16 @@ export class ComputerGamesService {
           endedAt: new Date(nowMs),
         },
       });
+
+      if (userId) {
+        this.posthog.captureEvent(userId, 'computer_game_completed', {
+          game_id: gameId,
+          result: 'loss',
+          result_reason: 'resignation',
+          computer_level: game.computerLevel ?? 1,
+          category: game.category,
+        });
+      }
 
       return toStateDto(
         gameId,
@@ -295,6 +318,28 @@ export class ComputerGamesService {
         },
       });
     });
+
+    if (finalResult && userId) {
+      const userIsWhite = game.whiteUserId === userId;
+      let outcome: 'win' | 'loss' | 'draw';
+      if (finalResult.result === GameResult.Draw) {
+        outcome = 'draw';
+      } else if (
+        (userIsWhite && finalResult.result === GameResult.WhiteWins) ||
+        (!userIsWhite && finalResult.result === GameResult.BlackWins)
+      ) {
+        outcome = 'win';
+      } else {
+        outcome = 'loss';
+      }
+      this.posthog.captureEvent(userId, 'computer_game_completed', {
+        game_id: gameId,
+        result: outcome,
+        result_reason: finalResult.reason as string,
+        computer_level: game.computerLevel ?? 1,
+        category: game.category,
+      });
+    }
 
     return toStateDto(
       gameId,

@@ -14,6 +14,7 @@ import type { SafeUser } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
 import { PasswordService } from './password.service';
 import { SessionsService } from './sessions.service';
+import { PosthogService } from '../analytics/posthog.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
@@ -40,6 +41,7 @@ export class AuthService {
     private readonly passwords: PasswordService,
     private readonly sessions: SessionsService,
     private readonly config: ConfigService,
+    private readonly posthog: PosthogService,
   ) {}
 
   private toSafeUser(user: User): SafeUser {
@@ -93,6 +95,15 @@ export class AuthService {
     });
 
     const { token, expiresAt } = await this.sessions.createSession(user.id, ipAddress, userAgent);
+
+    this.posthog.identify(user.id, {
+      username: user.username,
+      $set_once: { first_seen_at: user.createdAt.toISOString() },
+    });
+    this.posthog.captureEvent(user.id, 'user_registered', {
+      registration_method: 'email',
+    });
+
     return { user: this.toSafeUser(user), sessionToken: token, sessionExpiresAt: expiresAt };
   }
 
@@ -108,6 +119,12 @@ export class AuthService {
     if (!valid) throw new UnauthorizedException('Invalid credentials');
 
     const { token, expiresAt } = await this.sessions.createSession(user.id, ipAddress, userAgent);
+
+    this.posthog.identify(user.id, { username: user.username });
+    this.posthog.captureEvent(user.id, 'user_logged_in', {
+      login_method: 'email',
+    });
+
     return { user: this.toSafeUser(user), sessionToken: token, sessionExpiresAt: expiresAt };
   }
 
@@ -126,6 +143,8 @@ export class AuthService {
     await this.prisma.passwordResetToken.create({
       data: { userId: user.id, tokenHash, expiresAt },
     });
+
+    this.posthog.captureEvent(user.id, 'password_reset_requested');
 
     const appUrl = this.config.get<string>('NEXT_PUBLIC_APP_URL') ?? 'http://localhost:3000';
     this.logger.log(`[DEV] Password reset link: ${appUrl}/reset-password?token=${rawToken}`);
@@ -147,6 +166,8 @@ export class AuthService {
       this.prisma.user.update({ where: { id: resetToken.userId }, data: { passwordHash } }),
       this.prisma.passwordResetToken.update({ where: { id: resetToken.id }, data: { usedAt: now } }),
     ]);
+
+    this.posthog.captureEvent(resetToken.userId, 'password_reset_completed');
   }
 
   async handleOAuth(
@@ -190,7 +211,15 @@ export class AuthService {
       });
     }
 
+    const isNewUser = !oauthAccount;
     const { token, expiresAt } = await this.sessions.createSession(user.id, ipAddress, userAgent);
+
+    this.posthog.identify(user.id, { username: user.username });
+    this.posthog.captureEvent(user.id, 'oauth_authenticated', {
+      provider,
+      is_new_user: isNewUser,
+    });
+
     return { user: this.toSafeUser(user), sessionToken: token, sessionExpiresAt: expiresAt };
   }
 }

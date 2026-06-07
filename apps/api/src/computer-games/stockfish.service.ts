@@ -17,8 +17,8 @@ export class StockfishService {
     const skill = UCI_SKILL[(skillLevel - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ?? 10;
     const factory = await this.loadFactory();
 
-    return new Promise<string>((resolve, reject) => {
-      const engine = factory();
+    return new Promise<string>(async (resolve, reject) => {
+      const engine = await factory();
 
       const timeout = setTimeout(() => {
         engine.terminate?.();

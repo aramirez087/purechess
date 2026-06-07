@@ -11,9 +11,10 @@ export class PosthogService implements OnModuleDestroy {
     if (!apiKey) return;
 
     this.client = new PostHog(apiKey, {
-      host: this.config.get<string>('POSTHOG_HOST') ?? 'https://eu.posthog.com',
+      host: this.config.get<string>('POSTHOG_HOST') ?? 'https://us.i.posthog.com',
       flushAt: 20,
       flushInterval: 10000,
+      enableExceptionAutocapture: true,
     });
   }
 
@@ -24,6 +25,19 @@ export class PosthogService implements OnModuleDestroy {
   ): void {
     if (!this.client) return;
     this.client.capture({ distinctId, event, properties: properties ?? {} });
+  }
+
+  identify(
+    distinctId: string,
+    properties?: Record<string, unknown>,
+  ): void {
+    if (!this.client) return;
+    this.client.identify({ distinctId, properties });
+  }
+
+  captureException(error: unknown, distinctId?: string): void {
+    if (!this.client) return;
+    this.client.captureException(error, distinctId);
   }
 
   async onModuleDestroy(): Promise<void> {

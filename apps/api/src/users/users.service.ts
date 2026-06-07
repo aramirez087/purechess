@@ -14,6 +14,7 @@ import type {
   StatsDto,
 } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
+import { PosthogService } from '../analytics/posthog.service';
 import { UpdateMeDto } from './dto/user-profile.dto';
 import { GameHistoryQueryDto } from './dto/game-history.dto';
 
@@ -24,7 +25,10 @@ const RESERVED_USERNAMES = new Set([
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly posthog: PosthogService,
+  ) {}
 
   async getProfile(username: string, viewerUserId?: string): Promise<ProfileDto> {
     const user = await this.prisma.user.findFirst({
@@ -102,13 +106,20 @@ export class UsersService {
       if (existing) throw new ConflictException('Username already taken');
     }
 
-    return this.prisma.user.update({
+    const updated = await this.prisma.user.update({
       where: { id: userId },
       data: {
         ...(dto.username !== undefined && { username: dto.username }),
         ...(dto.avatarUrl !== undefined && { avatarUrl: dto.avatarUrl }),
       },
     });
+
+    this.posthog.captureEvent(userId, 'profile_updated', {
+      changed_username: dto.username !== undefined,
+      changed_avatar: dto.avatarUrl !== undefined,
+    });
+
+    return updated;
   }
 
   private async computeStats(userId: string): Promise<StatsDto> {

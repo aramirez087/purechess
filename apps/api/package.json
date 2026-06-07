@@ -49,7 +49,7 @@
     "posthog-node": "^5.36.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "stockfish": "^18.0.7"
+    "stockfish-web": "^0.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.3.0",

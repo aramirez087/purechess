@@ -1,0 +1,67 @@
+[
+  {
+    "event": "user_registered",
+    "description": "A new user completes registration with email and password",
+    "file": "apps/api/src/auth/auth.service.ts"
+  },
+  {
+    "event": "user_logged_in",
+    "description": "A user logs in with email/password credentials",
+    "file": "apps/api/src/auth/auth.service.ts"
+  },
+  {
+    "event": "user_logged_out",
+    "description": "A user explicitly logs out of the application",
+    "file": "apps/api/src/auth/auth.controller.ts"
+  },
+  {
+    "event": "oauth_authenticated",
+    "description": "A user authenticates via Google or Apple OAuth (new signup or returning login)",
+    "file": "apps/api/src/auth/auth.service.ts"
+  },
+  {
+    "event": "password_reset_requested",
+    "description": "A user requests a password reset email",
+    "file": "apps/api/src/auth/auth.service.ts"
+  },
+  {
+    "event": "password_reset_completed",
+    "description": "A user successfully resets their password using a reset token",
+    "file": "apps/api/src/auth/auth.service.ts"
+  },
+  {
+    "event": "computer_game_created",
+    "description": "A user starts a new game against the Stockfish computer engine",
+    "file": "apps/api/src/computer-games/computer-games.service.ts"
+  },
+  {
+    "event": "computer_game_completed",
+    "description": "A game vs the computer reaches a final result (checkmate, draw, resignation, timeout)",
+    "file": "apps/api/src/computer-games/computer-games.service.ts"
+  },
+  {
+    "event": "invite_created",
+    "description": "A user creates a game invite link to share with another player",
+    "file": "apps/api/src/invites/invites.service.ts"
+  },
+  {
+    "event": "invite_accepted",
+    "description": "A second player accepts a game invite and the game begins",
+    "file": "apps/api/src/invites/invites.service.ts"
+  },
+  {
+    "event": "invite_cancelled",
+    "description": "The creator cancels their pending game invite before it is accepted",
+    "file": "apps/api/src/invites/invites.service.ts"
+  },
+  {
+    "event": "player_reported",
+    "description": "A user submits a report against another player (e.g. for cheating or misconduct)",
+    "file": "apps/api/src/reports/reports.service.ts"
+  },
+  {
+    "event": "profile_updated",
+    "description": "A user updates their username or avatar URL in their profile settings",
+    "file": "apps/api/src/users/users.service.ts"
+  }
+]

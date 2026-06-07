@@ -14,6 +14,7 @@ import type { Request, Response } from 'express';
 import type { User } from '@prisma/client';
 import type { AuthResponse } from '@purechess/shared';
 import { AuthService } from './auth.service';
+import { PosthogService } from '../analytics/posthog.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { PasswordResetRequestDto } from './dto/password-reset-request.dto';
@@ -28,7 +29,10 @@ type AuthedRequest = Request & { user?: User };
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
 export class AuthController {
-  constructor(private readonly auth: AuthService) {}
+  constructor(
+    private readonly auth: AuthService,
+    private readonly posthog: PosthogService,
+  ) {}
 
   @Post('register')
   @HttpCode(201)
@@ -51,10 +55,17 @@ export class AuthController {
   @Post('logout')
   @HttpCode(200)
   @UseGuards(OptionalSessionAuthGuard)
-  async logout(@Req() req: AuthedRequest, @Res({ passthrough: true }) res: Response): Promise<void> {
+  async logout(
+    @Req() req: AuthedRequest,
+    @Res({ passthrough: true }) res: Response,
+    @CurrentUser() user: User | undefined,
+  ): Promise<void> {
     const token = (req.cookies as Record<string, string>)['purechess_session'];
     await this.auth.logout(token);
     this.auth.clearCookie(res);
+    if (user) {
+      this.posthog.captureEvent(user.id, 'user_logged_out');
+    }
   }
 
   @Get('me')
