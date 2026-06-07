@@ -53,8 +53,8 @@ export class TestingService {
   }): Promise<{ id: string }> {
     const game = await this.prisma.game.create({
       data: {
-        whitePlayer: opts.whiteUserId ? { connect: { id: opts.whiteUserId } } : undefined,
-        blackPlayer: opts.blackUserId ? { connect: { id: opts.blackUserId } } : undefined,
+        whiteUserId: opts.whiteUserId ?? null,
+        blackUserId: opts.blackUserId ?? null,
         status: (opts.status ?? 'active') as never,
         timeControlSeconds: opts.timeControlSeconds ?? 180,
         incrementSeconds: opts.incrementSeconds ?? 0,
