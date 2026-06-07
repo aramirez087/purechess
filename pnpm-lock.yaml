@@ -65,6 +65,9 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      chess.js:
+        specifier: 1.1.0
+        version: 1.1.0
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -2139,6 +2142,9 @@ packages:
   check-disk-space@3.4.0:
     resolution: {integrity: sha512-drVkSqfwA+TvuEhFipiR1OC9boEGZL5RrWvVsOthdcvQNXyCCuKkEiTOTXZ7qxSf/GLwq4GvzfrQD/Wz325hgw==}
     engines: {node: '>=16'}
+
+  chess.js@1.1.0:
+    resolution: {integrity: sha512-IfdeaJnpdU1LddIenp36O7Fz19nIxk3x4cznwo2Qf25T1XSeP85XRBrjWUsSpk1RpDeXdijraoLxXt3PCaudVg==}
 
   chess.js@1.4.0:
     resolution: {integrity: sha512-BBJgrrtKQOzFLonR0l+k64A98NLemPwNsCskwb+29bRwobUa4iTm51E1kwGPbWXAcfdDa18nad6vpPPKPWarqw==}
@@ -7016,6 +7022,8 @@ snapshots:
   chardet@0.7.0: {}
 
   check-disk-space@3.4.0: {}
+
+  chess.js@1.1.0: {}
 
   chess.js@1.4.0: {}
 

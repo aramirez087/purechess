@@ -46,3 +46,51 @@ export interface GameState {
   result?: GameResult;
   termination?: GameTermination;
 }
+
+export type GameResultReason = GameTermination;
+
+export interface EngineMove {
+  ply: number;
+  san: string;
+  uci: string;
+  fenAfter: string;
+  clockAfterMs: number;
+  moveTimeMs: number;
+  by: Color;
+}
+
+export interface SerializableEngineState {
+  gameId: string;
+  whiteUserId: string | null;
+  blackUserId: string | null;
+  fen: string;
+  fenHistory: string[];
+  moves: EngineMove[];
+  pendingDrawOfferBy: Color | null;
+  clock: {
+    whiteMs: number;
+    blackMs: number;
+    lastTickAt: number;
+    incrementMs: number;
+  };
+  status: 'pending' | 'active' | 'completed' | 'aborted';
+  result: GameResult | null;
+  resultReason: GameResultReason | null;
+}
+
+export type WireMove = {
+  ply: number;
+  san: string;
+  uci: string;
+  fenAfter: string;
+  clockAfterMs: number;
+  moveTimeMs: number;
+  by: Color;
+};
+
+export interface MoveIntent {
+  uci?: string;
+  from?: Square;
+  to?: Square;
+  promotion?: PieceType;
+}
