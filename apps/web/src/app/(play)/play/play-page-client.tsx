@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { InviteCreate } from '@/components/play/invite-create';
+import { posthog } from '@/lib/posthog';
 
 type PlayMode = 'select' | 'friend';
 
@@ -25,7 +26,7 @@ export function PlayPageClient() {
           Quick Match
           <span className="ml-2 text-xs text-muted-foreground">(coming soon)</span>
         </Button>
-        <Button size="lg" onClick={() => setMode('friend')}>
+        <Button size="lg" onClick={() => { posthog.capture('play_clicked', { mode: 'friend' }); setMode('friend'); }}>
           Play a Friend
         </Button>
       </div>

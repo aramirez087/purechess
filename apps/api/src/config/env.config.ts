@@ -16,6 +16,10 @@ export interface EnvConfig {
   OAUTH_APPLE_KEY_ID: string;
   OAUTH_APPLE_PRIVATE_KEY: string;
   OAUTH_APPLE_CALLBACK_URL: string;
+  SENTRY_DSN: string;
+  SENTRY_ENV: string;
+  POSTHOG_API_KEY: string;
+  POSTHOG_HOST: string;
 }
 
 export const envValidationSchema = Joi.object<EnvConfig>({
@@ -34,4 +38,8 @@ export const envValidationSchema = Joi.object<EnvConfig>({
   OAUTH_APPLE_KEY_ID: Joi.string().allow('').default(''),
   OAUTH_APPLE_PRIVATE_KEY: Joi.string().allow('').default(''),
   OAUTH_APPLE_CALLBACK_URL: Joi.string().uri().default('http://localhost:4000/api/auth/oauth/apple/callback'),
+  SENTRY_DSN: Joi.string().uri().optional().allow('').default(''),
+  SENTRY_ENV: Joi.string().optional().default('development'),
+  POSTHOG_API_KEY: Joi.string().optional().allow('').default(''),
+  POSTHOG_HOST: Joi.string().uri().optional().default('https://eu.posthog.com'),
 });
