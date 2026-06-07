@@ -14,6 +14,7 @@ export interface ComputerGameStateDto {
   fen: string;
   pgn: string;
   status: string;
+  computerColor: 'white' | 'black';
   lastComputerMove: string | null;
   result: string | null;
   resultReason: string | null;

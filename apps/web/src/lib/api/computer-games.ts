@@ -18,3 +18,14 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 export function createComputerGame(dto: CreateComputerGameDto): Promise<ComputerGameStateDto> {
   return apiFetch('/computer-games', { method: 'POST', body: JSON.stringify(dto) });
 }
+
+export function getComputerGame(gameId: string): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}`);
+}
+
+export function submitComputerMove(gameId: string, move: string): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}/move`, {
+    method: 'POST',
+    body: JSON.stringify({ move }),
+  });
+}
