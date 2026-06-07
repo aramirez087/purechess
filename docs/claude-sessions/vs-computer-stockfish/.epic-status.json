@@ -3,14 +3,15 @@
   "started_at": 1780843435.646299,
   "sessions": {
     "1": {
-      "status": "pending",
+      "status": "done",
       "slug": "charter",
       "wave": 1,
       "title": "Charter",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 504.0,
+      "started_at": 1780843435.90868
     },
     "2": {
       "status": "pending",
