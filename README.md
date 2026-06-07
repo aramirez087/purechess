@@ -1,69 +1,59 @@
 # Purchess
 
-Pure chess, nothing else. See [docs/epics/purchess-mvp.md](docs/epics/purchess-mvp.md) for the full product spec.
+Pure chess, nothing else. No puzzles, no lessons, no streams — just the game.
 
-## Architecture
-
-```
-Browser (Next.js 14)  ←→  NestJS API (:4000)  ←→  Neon (Postgres)
-         ↕                      ↕
-  WebSocket (Socket.IO)    Redis (queues/sessions)
-```
-
-- **web** (`apps/web`): Next.js 14 App Router, Tailwind, shadcn/ui, TanStack Query, Zustand.
-- **api** (`apps/api`): NestJS 10, class-validator, Prisma (session 02), Socket.IO gateway.
-- **shared** (`packages/shared`): TypeScript types, enums, DTOs, WebSocket event names.
+Purchess is a minimalist online chess platform: anonymous casual play, rated games with Glicko-2 rankings, friend invites, reconnect support, and game review with PGN export.
 
 ## Quickstart
 
 ```bash
-nvm use           # Node 20 LTS
-pnpm install      # install all workspace deps
-cp .env.example .env   # fill in DATABASE_URL, REDIS_URL, JWT_SECRET at minimum
-pnpm dev          # starts web :3000 and api :4000 in parallel
+pnpm install                          # install all workspace deps
+cp .env.example .env                  # fill in DATABASE_URL, REDIS_URL, SESSION_SECRET
+pnpm infra:up                         # start Postgres + Redis via Docker
+pnpm db:migrate:deploy                # run Prisma migrations
+pnpm dev                              # web :3000 + api :4000
 ```
 
-Health check: `curl localhost:4000/health` → `{"status":"ok"}`
+## Screenshot
 
-## Workspace Layout
+![Purchess board](docs/assets/board-placeholder.png)
 
-| Path | Description |
+*(Placeholder — replaced pre-launch)*
+
+## Architecture
+
+```
+Browser (Next.js 14)  ←──REST/WS──►  NestJS 10 API (:4000)
+                                              │
+                              ┌───────────────┼───────────────┐
+                              │               │               │
+                         Postgres          Redis         Supabase
+                          (Neon)                           Auth
+```
+
+→ [Full architecture + ADRs](docs/ARCHITECTURE.md)
+
+## Key Scripts
+
+| Command | Description |
 |---|---|
-| `apps/web/` | Next.js frontend |
-| `apps/api/` | NestJS backend |
-| `packages/shared/` | Shared types and DTOs (`@purchess/shared`) |
-| `scripts/` | Dev tooling scripts |
-| `docs/epics/` | Product spec |
-| `docs/claude-sessions/purchess-mvp/` | Per-session implementation notes |
-| `docs/roadmap/purchess-mvp/` | Session handoff docs |
-
-## Ports
-
-| Service | Port |
-|---|---|
-| Web | 3000 |
-| API | 4000 |
-
-## Scripts
-
-| Script | Description |
-|---|---|
-| `pnpm dev` | Start web + api in parallel |
-| `pnpm dev:web` | Start web only |
-| `pnpm dev:api` | Start api only |
-| `pnpm build` | Build all packages |
+| `pnpm dev` | Start web + api |
+| `pnpm test` | Unit tests (all workspaces) |
+| `pnpm e2e` | Playwright browser E2E |
+| `pnpm smoke` | Performance smoke test |
 | `pnpm lint` | Lint all workspaces |
-| `pnpm typecheck` | Type-check all workspaces |
-| `pnpm format` | Format all files with Prettier |
-| `pnpm test` | Run all tests |
+| `pnpm typecheck` | TypeScript check |
+| `pnpm infra:up` | Start local Postgres + Redis |
+| `pnpm db:migrate:deploy` | Apply Prisma migrations |
 
-## Env
+## Docs
 
-Copy `.env.example` to `.env`. Required keys: `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET`.
+- [Architecture & ADRs](docs/ARCHITECTURE.md)
+- [Contributing guide](docs/CONTRIBUTING.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [Product spec](docs/epics/purchess-mvp.md)
+- [Ops runbook](infra/RUNBOOK.md)
 
-Run `scripts/check-env.sh` to validate your `.env` before starting.
+## License
 
-## Session Docs
-
-Per-session implementation notes: `docs/claude-sessions/purchess-mvp/`
-Session handoffs: `docs/roadmap/purchess-mvp/`
+MIT
