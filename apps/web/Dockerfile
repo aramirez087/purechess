@@ -1,0 +1,31 @@
+FROM node:20.15.1-alpine AS base
+RUN corepack enable && corepack prepare pnpm@9.4.0 --activate
+
+FROM base AS deps
+WORKDIR /app
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/shared/package.json ./packages/shared/
+RUN pnpm install --frozen-lockfile --filter @purchess/web... --filter @purchess/shared
+
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
+COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules 2>/dev/null || true
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm --filter @purchess/shared build
+RUN pnpm --filter @purchess/web build
+
+FROM node:20.15.1-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=builder /app/apps/web/.next/standalone ./
+COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder /app/apps/web/public ./apps/web/public
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
+  CMD wget -qO- http://localhost:3000/api/health || exit 1
+CMD ["node", "apps/web/server.js"]

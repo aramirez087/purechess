@@ -31,6 +31,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',
       process.env['NEXT_PUBLIC_APP_URL'] ?? 'http://localhost:3000',
+      process.env['WEB_URL'] ?? 'http://localhost:3000',
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
