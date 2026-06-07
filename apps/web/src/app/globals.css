@@ -105,3 +105,60 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+:root {
+  --board-sq-light: 30 20% 85%;
+  --board-sq-dark: 30 25% 48%;
+  --board-sq-size: 64px;
+  --board-highlight-last: 60 100% 50% / 0.4;
+  --board-highlight-selected: 200 100% 60% / 0.6;
+  --board-highlight-check: 0 72% 51% / 0.55;
+  --board-highlight-premove: 210 80% 60% / 0.35;
+  --board-legal-dot: 0 0% 0% / 0.18;
+  --board-legal-ring: 0 0% 0% / 0.18;
+}
+
+[data-theme="dark"] {
+  --board-sq-light: 220 15% 55%;
+  --board-sq-dark: 220 25% 32%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board-sq-light: 220 15% 55%;
+    --board-sq-dark: 220 25% 32%;
+  }
+}
+
+@keyframes check-pulse {
+  0%, 100% {
+    background-color: hsl(0 72% 51% / 0.55);
+  }
+  50% {
+    background-color: hsl(0 72% 51% / 0.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-check {
+    animation: none !important;
+  }
+
+  [data-animating] {
+    transition: none !important;
+  }
+
+  [data-fading] {
+    transition: none !important;
+  }
+}
+
+[data-animating] {
+  transition: transform 200ms ease-out;
+  will-change: transform;
+}
+
+[data-fading] {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
