@@ -10,7 +10,6 @@ produces:
   - apps/api/src/computer-games/computer-games.service.ts
   - apps/api/src/computer-games/computer-games.controller.ts
   - apps/api/src/computer-games/computer-games.module.ts
-  - apps/api/src/computer-games/dto/**
   - docs/roadmap/vs-computer-stockfish/session-02-handoff.md
 model: "sonnet"
 ---
