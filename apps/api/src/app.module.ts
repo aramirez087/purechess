@@ -19,6 +19,7 @@ import { RealtimeModule } from './realtime/realtime.module';
 import { InvitesModule } from './invites/invites.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { MetricsModule } from './metrics/metrics.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { MetricsModule } from './metrics/metrics.module';
     InvitesModule,
     AnalyticsModule,
     MetricsModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

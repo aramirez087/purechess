@@ -20,6 +20,7 @@ export interface EnvConfig {
   SENTRY_ENV: string;
   POSTHOG_API_KEY: string;
   POSTHOG_HOST: string;
+  WEB_URL: string;
 }
 
 export const envValidationSchema = Joi.object<EnvConfig>({
@@ -42,4 +43,5 @@ export const envValidationSchema = Joi.object<EnvConfig>({
   SENTRY_ENV: Joi.string().optional().default('development'),
   POSTHOG_API_KEY: Joi.string().optional().allow('').default(''),
   POSTHOG_HOST: Joi.string().uri().optional().default('https://eu.posthog.com'),
+  WEB_URL: Joi.string().uri().default('http://localhost:3000'),
 });
