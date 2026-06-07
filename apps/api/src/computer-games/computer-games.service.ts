@@ -10,6 +10,7 @@ import {
   ComputerMoveDto,
   CreateComputerGameDto,
   GameResult,
+  GameTermination,
   SerializableEngineState,
 } from '@purchess/shared';
 import { PrismaService } from '../database/prisma.service';
@@ -34,6 +35,7 @@ function toStateDto(
   fen: string,
   pgn: string | null,
   status: string,
+  computerColor: 'white' | 'black',
   lastComputerMove: string | null,
   result: string | null,
   resultReason: string | null,
@@ -43,6 +45,7 @@ function toStateDto(
     fen,
     pgn: pgn ?? '',
     status,
+    computerColor,
     lastComputerMove,
     result,
     resultReason,
@@ -141,6 +144,7 @@ export class ComputerGamesService {
       currentFen,
       '',
       'active',
+      computerColor,
       lastComputerMove,
       null,
       null,
@@ -158,6 +162,36 @@ export class ComputerGamesService {
     if (game.status !== 'active') throw new BadRequestException('Game is not active');
     if (game.whiteUserId !== userId && game.blackUserId !== userId) {
       throw new ForbiddenException('Not your game');
+    }
+
+    const gameComputerColor = game.computerColor as 'white' | 'black';
+
+    if (dto.move === 'resign') {
+      const userIsWhite = game.whiteUserId === userId;
+      const result = userIsWhite ? GameResult.BlackWins : GameResult.WhiteWins;
+      const reason = GameTermination.Resignation;
+      const nowMs = Date.now();
+
+      await this.prisma.game.update({
+        where: { id: gameId },
+        data: {
+          status: 'completed',
+          result: result as unknown as PrismaGameResult,
+          resultReason: reason as unknown as GameResultReason,
+          endedAt: new Date(nowMs),
+        },
+      });
+
+      return toStateDto(
+        gameId,
+        game.finalFen ?? STARTING_FEN,
+        game.pgn,
+        'completed',
+        gameComputerColor,
+        game.lastComputerMove ?? null,
+        result,
+        reason,
+      );
     }
 
     if (!game.engineState) throw new BadRequestException('Engine state missing');
@@ -267,6 +301,7 @@ export class ComputerGamesService {
       finalFen,
       pgn,
       finalResult ? 'completed' : 'active',
+      gameComputerColor,
       lastComputerMove,
       finalResult ? (finalResult.result as string) : null,
       finalResult ? (finalResult.reason as string) : null,
@@ -286,6 +321,7 @@ export class ComputerGamesService {
       game.finalFen ?? STARTING_FEN,
       game.pgn,
       game.status,
+      game.computerColor as 'white' | 'black',
       game.lastComputerMove ?? null,
       game.result ?? null,
       game.resultReason ?? null,
