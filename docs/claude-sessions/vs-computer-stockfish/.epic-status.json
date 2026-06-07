@@ -1,39 +1,36 @@
 {
   "epic": "vs-computer-stockfish",
-  "started_at": 1780843435.646299,
+  "started_at": 1780844839.8190458,
   "sessions": {
     "1": {
-      "status": "done",
+      "status": "skipped",
       "slug": "charter",
       "wave": 1,
       "title": "Charter",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 504.0,
-      "started_at": 1780843435.90868
+      "elapsed": 0.0
     },
     "2": {
-      "status": "failed",
+      "status": "pending",
       "slug": "api-stockfish-engine",
       "wave": 2,
       "title": "Api Stockfish Engine",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 706.0,
-      "started_at": 1780843943.720053
+      "elapsed": 0.0
     },
     "3": {
-      "status": "done",
+      "status": "pending",
       "slug": "web-level-selector",
       "wave": 2,
       "title": "Web Level Selector",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 221.0,
-      "started_at": 1780843943.867994
+      "elapsed": 0.0
     },
     "4": {
       "status": "pending",
