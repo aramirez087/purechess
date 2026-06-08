@@ -32,6 +32,31 @@ const TIMEOUT_BUFFER_MS = 5_000;
 const UCI_ELO_MIN = 1320;
 const UCI_ELO_MAX = 3190;
 
+/**
+ * Per-level strength profile. Stockfish's "Skill Level" alone is a weak
+ * weakening knob (it only narrows the move pool) and `UCI_Elo` bottoms out at
+ * 1320 in the vendored build — neither feels weak enough at the low end on
+ * its own. We combine both for the easy levels and layer a blunder window so
+ * level-1 play is actually beatable.
+ */
+interface LevelProfile {
+  eloTarget?: number;
+  skill?: number;
+  /** ± centipawn window for human-like move selection. */
+  blunderCp: number;
+}
+
+const LEVEL_PROFILES: readonly LevelProfile[] = [
+  { eloTarget: 1320, blunderCp: 300 },
+  { eloTarget: 1350, blunderCp: 200 },
+  { eloTarget: 1400, blunderCp: 120 },
+  { skill: 3, blunderCp: 80 },
+  { skill: 8, blunderCp: 40 },
+  { skill: 14, blunderCp: 0 },
+  { skill: 17, blunderCp: 0 },
+  { skill: 20, blunderCp: 0 },
+];
+
 /** Signed sentinel used so a mate score sorts/windows against centipawn lines. */
 const MATE_CP_SENTINEL = 100_000;
 
@@ -366,16 +391,24 @@ export async function getHumanMove(
  * Returns a UCI move (e.g. "e2e4", or "e7e8q" for a promotion).
  *
  * Backward-compatible: existing callers pass `(fen, level)` and optionally a
- * movetime. Level 1-8 maps to the Skill Level buckets.
+ * movetime. Level 1-8 maps to the strength profiles in `LEVEL_PROFILES`.
  */
 export async function getBestMove(
   fen: string,
   level: number,
   movetimeMs = DEFAULT_MOVETIME_MS,
 ): Promise<string> {
-  const skill = UCI_SKILL[(level - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ?? 10;
-  const lines = await analyzeLines(fen, { skill, movetimeMs });
-  return lines[0].bestmove;
+  const profile =
+    LEVEL_PROFILES[(level - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ??
+    LEVEL_PROFILES[LEVEL_PROFILES.length - 1]!;
+  return getHumanMove(fen, { ...profile, movetimeMs, deterministicSeed: fullmoveSeed(fen) });
+}
+
+/** Pull the fullmove number off a FEN so each move picks a different blunder. */
+function fullmoveSeed(fen: string): number {
+  const parts = fen.split(/\s+/);
+  const fm = Number(parts[5] ?? '1');
+  return Number.isFinite(fm) && fm > 0 ? fm : 1;
 }
 
 /**
@@ -383,8 +416,10 @@ export async function getBestMove(
  * level. A thin level-aware wrapper over `chooseMove`/`analyze`.
  */
 export async function getHint(fen: string, level: number): Promise<string> {
-  const skill = UCI_SKILL[(level - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ?? 10;
-  return getHumanMove(fen, { skill });
+  const profile =
+    LEVEL_PROFILES[(level - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ??
+    LEVEL_PROFILES[LEVEL_PROFILES.length - 1]!;
+  return getHumanMove(fen, profile);
 }
 
 /**

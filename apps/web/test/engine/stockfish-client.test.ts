@@ -253,6 +253,64 @@ describe('getBestMove (backward compatible)', () => {
     expect(move).toBe('d2d4');
     expect(MockWorker.last.messages).toContain('go movetime 1000');
   });
+
+  it('level 1 uses ELO mode (LimitStrength on, UCI_Elo set)', async () => {
+    MockWorker.goScript = [
+      'info depth 6 score cp 5 multipv 1 pv e2e4 c7c5',
+      'info depth 6 score cp 0 multipv 2 pv d2d4 d7d5',
+      'bestmove e2e4',
+    ];
+    await getBestMove(
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      1,
+    );
+    const msgs = MockWorker.last.messages;
+    expect(msgs).toContain('setoption name UCI_LimitStrength value true');
+    expect(msgs).toContain('setoption name UCI_Elo value 1320');
+    expect(msgs).not.toContainEqual(expect.stringMatching(/Skill Level value/));
+  });
+
+  it('level 8 uses Skill 20 with no blunder window', async () => {
+    MockWorker.goScript = [
+      'info depth 12 score cp 20 multipv 1 pv d2d4 d7d5',
+      'bestmove d2d4',
+    ];
+    await getBestMove('fen', 8);
+    const msgs = MockWorker.last.messages;
+    expect(msgs).toContain('setoption name UCI_LimitStrength value false');
+    expect(msgs).toContain('setoption name Skill Level value 20');
+  });
+
+  it('low-level blunder window can pick a non-best line', async () => {
+    MockWorker.goScript = [
+      'info depth 12 score cp 200 multipv 1 pv e2e4 e7e5',
+      'info depth 12 score cp 180 multipv 2 pv d2d4 d7d5',
+      'info depth 12 score cp 160 multipv 3 pv b1c3 b8c6',
+      'bestmove e2e4',
+    ];
+    const moves = new Set<string>();
+    for (let ply = 1; ply <= 6; ply++) {
+      MockWorker.goScript = [
+        'info depth 12 score cp 200 multipv 1 pv e2e4 e7e5',
+        'info depth 12 score cp 180 multipv 2 pv d2d4 d7d5',
+        'info depth 12 score cp 160 multipv 3 pv b1c3 b8c6',
+        'bestmove e2e4',
+      ];
+      const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 ${ply}`;
+      moves.add(await getBestMove(fen, 1));
+    }
+    // With blunderCp 300 and varied seeds we should see more than one move.
+    expect(moves.size).toBeGreaterThan(1);
+  });
+
+  it('out-of-range level falls back to the last (hardest) profile', async () => {
+    MockWorker.goScript = [
+      'info depth 12 score cp 20 multipv 1 pv d2d4 d7d5',
+      'bestmove d2d4',
+    ];
+    await getBestMove('fen', 99);
+    expect(MockWorker.last.messages).toContain('setoption name Skill Level value 20');
+  });
 });
 
 describe('cancel', () => {
