@@ -2,12 +2,12 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 77520,
-    "total_reads": 121,
-    "total_writes": 71,
+    "total_tokens_estimated": 81143,
+    "total_reads": 124,
+    "total_writes": 77,
     "total_sessions": 10,
     "anatomy_hits": 39,
-    "anatomy_misses": 80,
+    "anatomy_misses": 83,
     "repeated_reads_blocked": 53,
     "estimated_savings_vs_bare_cli": 13530
   },
@@ -1260,6 +1260,71 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-06-08-1932",
+      "started": "2026-06-08T01:32:58.581Z",
+      "ended": "2026-06-08T01:36:55.519Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/dto/computer-game.dto.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/index.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/game-result.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/dto/computer-game.dto.ts",
+          "tokens_estimated": 686,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/dto/computer-game.dto.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/dto/engine-analysis.dto.ts",
+          "tokens_estimated": 192,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/packages/shared/src/index.ts",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/docs/claude-sessions/vs-computer-foundations/.epic-produces-overrides.json",
+          "tokens_estimated": 111,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s01-contracts-charter/docs/roadmap/vs-computer-foundations/session-01-handoff.md",
+          "tokens_estimated": 2596,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 0,
+        "output_tokens_estimated": 3623,
+        "reads_count": 3,
+        "writes_count": 6,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 0
       }
     }
   ],
