@@ -260,3 +260,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:23 | Edited apps/web/src/lib/openings/index.ts | added 1 condition(s) | ~88 |
 | 20:23 | Edited apps/web/test/openings/openings.test.ts | 6→6 lines | ~68 |
 | 20:23 | Created docs/roadmap/vs-computer-ui/session-07-handoff.md | — | ~1304 |
+| 20:24 | Session end: 11 writes across 6 files (eco.ts, index.ts, opening-picker.tsx, fen-setup-board.tsx, openings.test.ts) | 7 reads | ~17897 tok |
