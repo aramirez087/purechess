@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 84638,
-    "total_reads": 127,
-    "total_writes": 78,
+    "total_tokens_estimated": 93002,
+    "total_reads": 129,
+    "total_writes": 83,
     "total_sessions": 12,
-    "anatomy_hits": 40,
-    "anatomy_misses": 85,
+    "anatomy_hits": 41,
+    "anatomy_misses": 86,
     "repeated_reads_blocked": 53,
-    "estimated_savings_vs_bare_cli": 13730
+    "estimated_savings_vs_bare_cli": 13930
   },
   "sessions": [
     {
@@ -1363,6 +1363,60 @@
         "output_tokens_estimated": 3303,
         "reads_count": 3,
         "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-06-08-1938",
+      "started": "2026-06-08T01:38:41.168Z",
+      "ended": "2026-06-08T01:43:31.207Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/packages/shared/src/dto/engine-analysis.dto.ts",
+          "tokens_estimated": 192,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 3692,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 164,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/apps/web/test/engine/stockfish-client.test.ts",
+          "tokens_estimated": 2374,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s03-engine-client/docs/roadmap/vs-computer-foundations/session-03-handoff.md",
+          "tokens_estimated": 1908,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 192,
+        "output_tokens_estimated": 8172,
+        "reads_count": 2,
+        "writes_count": 5,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 1
       }

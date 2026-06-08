@@ -176,3 +176,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 19:41 | Created apps/web/test/engine/stockfish-client.test.ts | — | ~2374 |
 | 19:43 | Created docs/roadmap/vs-computer-foundations/session-03-handoff.md | — | ~1780 |
 | 19:42 | S03 engine client: analyze/getHint/getHumanMove/cancel/warmUp + EngineTimeout/CancelledError; serialized job queue over shared worker; backward-compat getBestMove | apps/web/src/lib/engine/stockfish-client.ts, apps/web/test/engine/stockfish-client.test.ts | shared build PASS, web typecheck no new errors, lint clean, 17/17 engine tests pass | ~9k |
+| 19:43 | Session end: 5 writes across 3 files (stockfish-client.ts, stockfish-client.test.ts, session-03-handoff.md) | 2 reads | ~8364 tok |
