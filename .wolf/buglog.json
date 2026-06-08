@@ -471,6 +471,102 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-08T01:40:51.892Z"
+    },
+    {
+      "id": "bug-029",
+      "timestamp": "2026-06-08T01:56:53.363Z",
+      "error_message": "Wrong reference: string should be ReactNode",
+      "file": "apps/web/src/components/admin/admin-page-header.tsx",
+      "root_cause": "Used \"string\" instead of \"ReactNode\"",
+      "fix": "Changed string → ReactNode",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:56:53.363Z"
+    },
+    {
+      "id": "bug-030",
+      "timestamp": "2026-06-08T01:57:11.292Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/home/footer.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:57:11.292Z"
+    },
+    {
+      "id": "bug-031",
+      "timestamp": "2026-06-08T01:57:14.782Z",
+      "error_message": "Wrong reference: Github should be GithubIcon",
+      "file": "apps/web/src/components/home/footer.tsx",
+      "root_cause": "Used \"Github\" instead of \"GithubIcon\"",
+      "fix": "Changed Github → GithubIcon",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-08T01:57:17.729Z"
+    },
+    {
+      "id": "bug-032",
+      "timestamp": "2026-06-08T02:04:54.813Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/api/test/auth/auth.controller.spec.ts",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 5→6 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T02:04:54.813Z"
+    },
+    {
+      "id": "bug-033",
+      "timestamp": "2026-06-08T02:09:59.036Z",
+      "error_message": "CSS fix: level",
+      "file": "apps/web/test/home/homepage.test.tsx",
+      "root_cause": "level: 1, name: /purechess/i → 1, name: /the board is/i",
+      "fix": "Changed level: 1, name: /purechess/i → 1, name: /the board is/i",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T02:09:59.036Z"
+    },
+    {
+      "id": "bug-034",
+      "timestamp": "2026-06-08T02:10:08.243Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/test/profile/profile-page.test.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5→6 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T02:10:08.243Z"
     }
   ]
 }

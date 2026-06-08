@@ -183,3 +183,56 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | S4    | Created Vitest tests (7 cases) | apps/web/test/api/computer-games.test.ts | 7/7 pass | ~3k |
 | S4    | Wrote handoff | docs/roadmap/vs-computer-foundations/session-04-handoff.md | done | ~1k |
 | 19:41 | Session end: 4 writes across 3 files (computer-games.ts, computer-games.test.ts, session-04-handoff.md) | 3 reads | ~4055 tok |
+
+## Session: 2026-06-08 19:51
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:55 | Created .session-05-plan.md | — | ~3541 |
+| 19:55 | Session end: 1 writes across 1 files (.session-05-plan.md) | 0 reads | ~3794 tok |
+
+## Session: 2026-06-08 19:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:56 | Edited apps/web/src/components/admin/admin-page-header.tsx | inline fix | ~8 |
+| 19:56 | Edited apps/web/src/components/admin/games-table.tsx | inline fix | ~26 |
+| 19:56 | Edited apps/web/src/components/admin/reports-table.tsx | inline fix | ~26 |
+| 19:57 | Edited apps/web/src/components/home/footer.tsx | modified GithubIcon() | ~395 |
+| 19:57 | Edited apps/web/src/components/home/footer.tsx | inline fix | ~14 |
+| 19:57 | Edited apps/web/src/components/home/footer.tsx | inline fix | ~12 |
+| 20:01 | Edited package.json | 6→7 lines | ~48 |
+| 20:02 | Edited apps/api/test/reports/reports.service.spec.ts | 5→8 lines | ~105 |
+| 20:02 | Edited apps/api/test/reports/reports.service.spec.ts | 3→4 lines | ~52 |
+| 20:02 | Edited apps/api/test/invites/invites.service.spec.ts | added 1 import(s) | ~78 |
+| 20:02 | Edited apps/api/test/invites/invites.service.spec.ts | 4→6 lines | ~48 |
+| 20:02 | Edited apps/api/test/invites/invites.service.spec.ts | 3→4 lines | ~53 |
+| 20:03 | Edited apps/api/test/auth/auth.service.spec.ts | added 1 import(s) | ~108 |
+| 20:03 | Edited apps/api/test/auth/auth.service.spec.ts | 3→5 lines | ~44 |
+| 20:03 | Edited apps/api/test/auth/auth.service.spec.ts | 3→4 lines | ~54 |
+| 20:03 | Edited apps/api/test/auth/auth.controller.spec.ts | added 1 import(s) | ~35 |
+| 20:03 | Edited apps/api/test/auth/auth.controller.spec.ts | 6→7 lines | ~93 |
+| 20:04 | Edited apps/api/test/reports/reports.service.spec.ts | inline fix | ~28 |
+| 20:04 | Edited apps/api/test/invites/invites.service.spec.ts | inline fix | ~28 |
+| 20:04 | Edited apps/api/test/auth/auth.service.spec.ts | inline fix | ~28 |
+| 20:04 | Edited apps/api/test/auth/auth.controller.spec.ts | inline fix | ~36 |
+| 20:04 | Edited apps/api/test/auth/auth.controller.spec.ts | 5→6 lines | ~62 |
+| 20:09 | Edited apps/web/src/components/settings/settings-form.tsx | 15→16 lines | ~147 |
+| 20:09 | Edited apps/web/src/components/settings/settings-form.tsx | 6→7 lines | ~74 |
+| 20:09 | Edited apps/web/test/settings/settings-dialog.test.tsx | 6→6 lines | ~76 |
+| 20:09 | Edited apps/web/test/home/homepage.test.tsx | 9→9 lines | ~87 |
+| 20:10 | Edited apps/web/test/profile/profile-page.test.tsx | 5→6 lines | ~76 |
+| 20:10 | Edited apps/web/test/settings/settings-dialog.test.tsx | inline fix | ~23 |
+| 20:12 | Created docs/roadmap/vs-computer-foundations/session-05-handoff.md | — | ~2415 |
+
+## Session: 2026-06-07 20:12 — Session 05 CI Gate
+
+| 20:12 | Installed deps + generated Prisma client | bootstrap | success | ~200 |
+| 20:12 | Fixed 5 typecheck errors in apps/web | footer.tsx, admin-page-header.tsx, games-table.tsx, reports-table.tsx | PASS | ~300 |
+| 20:12 | Added eslint@9 to root devDeps | package.json | pnpm -r lint passes | ~100 |
+| 20:12 | Fixed 5 failing API test suites | auth specs, invites, reports, deleted stale stockfish spec | 192/192 pass | ~400 |
+| 20:12 | Fixed 7 failing web vitest tests | homepage, profile, settings-dialog, settings-form | 137/137 pass | ~500 |
+| 20:12 | pnpm build passed for both apps | — | PASS | ~200 |
+| 20:12 | Wrote session-05-handoff.md (GO report) | docs/roadmap/vs-computer-foundations/ | done | ~100 |
+| 20:12 | Committed all changes | 21 files, session 5 ci gate | commit 34a3255 | ~50 |
+| 20:13 | Session end: 29 writes across 14 files (admin-page-header.tsx, games-table.tsx, reports-table.tsx, footer.tsx, package.json) | 19 reads | ~16894 tok |

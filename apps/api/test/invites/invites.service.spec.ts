@@ -8,6 +8,7 @@ import {
 import { InvitesService } from '../../src/invites/invites.service';
 import { PrismaService } from '../../src/database/prisma.service';
 import { InviteGateway } from '../../src/invites/invite-gateway';
+import { PosthogService } from '../../src/analytics/posthog.service';
 
 const CREATOR_ID = 'user-creator';
 const ACCEPTOR_ID = 'user-acceptor';
@@ -48,6 +49,8 @@ const mockGateway = {
   emitInviteAccepted: jest.fn(),
 };
 
+const mockPosthog = { captureEvent: jest.fn(), captureException: jest.fn(), identify: jest.fn() };
+
 describe('InvitesService', () => {
   let service: InvitesService;
 
@@ -58,6 +61,7 @@ describe('InvitesService', () => {
         InvitesService,
         { provide: PrismaService, useValue: mockPrisma },
         { provide: InviteGateway, useValue: mockGateway },
+        { provide: PosthogService, useValue: mockPosthog },
       ],
     }).compile();
 

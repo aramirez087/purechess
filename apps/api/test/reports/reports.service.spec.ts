@@ -3,6 +3,9 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ReportsService } from '../../src/reports/reports.service';
 import { AuditService } from '../../src/admin/audit.service';
 import { PrismaService } from '../../src/database/prisma.service';
+import { PosthogService } from '../../src/analytics/posthog.service';
+
+const mockPosthog = { captureEvent: jest.fn(), captureException: jest.fn(), identify: jest.fn() };
 
 const mockPrisma = {
   report: {
@@ -29,6 +32,7 @@ describe('ReportsService', () => {
         ReportsService,
         { provide: PrismaService, useValue: mockPrisma },
         { provide: AuditService, useValue: mockAudit },
+        { provide: PosthogService, useValue: mockPosthog },
       ],
     }).compile();
 

@@ -5,6 +5,7 @@ import { AuthService } from '../../src/auth/auth.service';
 import { PasswordService } from '../../src/auth/password.service';
 import { SessionsService } from '../../src/auth/sessions.service';
 import { PrismaService } from '../../src/database/prisma.service';
+import { PosthogService } from '../../src/analytics/posthog.service';
 
 const FUTURE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
@@ -39,6 +40,8 @@ const mockConfig = {
   get: jest.fn().mockReturnValue('development'),
 };
 
+const mockPosthog = { captureEvent: jest.fn(), captureException: jest.fn(), identify: jest.fn() };
+
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -53,6 +56,7 @@ describe('AuthService', () => {
         { provide: PasswordService, useValue: mockPasswords },
         { provide: SessionsService, useValue: mockSessions },
         { provide: ConfigService, useValue: mockConfig },
+        { provide: PosthogService, useValue: mockPosthog },
       ],
     }).compile();
 

@@ -44,3 +44,16 @@
 ## Decision Log
 
 <!-- Significant technical decisions with rationale. Why X was chosen over Y. -->
+
+## Key Learnings (added 2026-06-07 session 05)
+
+- **Root devDeps missing `eslint` binary:** The workspace root `eslint.config.js` uses ESLint v9 flat-config, but `eslint` itself was not in root `devDependencies`. `packages/shared` and `apps/api` both run `eslint src` in their lint scripts and fail with `eslint: command not found`. Fix: add `"eslint": "^9.0.0"` to root `devDependencies`. (`apps/web` uses `next lint` which has its own eslint and is unaffected.)
+- **PosthogService has 3 methods:** `captureEvent`, `captureException`, `identify`. All three must be mocked in NestJS unit tests or DI resolution fails with "Cannot read properties of undefined (reading 'identify')".
+- **`GET /api/auth/me` uses OptionalSessionAuthGuard:** Returns 200 `{user:null}` when unauthenticated, NOT 401. Tests asserting 401 are wrong.
+- **Curly/smart quotes break esbuild:** TypeScript/TSX files must use ASCII straight quotes (`'` not `'`/`'`). Curly quotes (from some editors/markdown) cause `Unexpected "'"` parse errors at build time.
+- **shadcn Switch needs `aria-label` for test queries:** Radix `<Switch>` renders as `<button role="switch">` but gets no accessible name unless `aria-label` or a connected `<label htmlFor>` is provided. Without it, `getByRole('switch', { name: /label/i })` fails.
+- **Board theme uses `aria-pressed` buttons, not radio:** The board theme picker in `settings-form.tsx` uses `<button aria-pressed>` not `<input type="radio">`. Tests should use `getByRole('button', { name: /theme-name/i })`.
+
+## Do-Not-Repeat (added 2026-06-07)
+
+- [2026-06-07] Don't use curly/smart quotes inside JS string literals — esbuild rejects them. Always write ASCII `'`. Check with `cat -v` if in doubt.
