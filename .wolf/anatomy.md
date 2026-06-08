@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T01:36:12.065Z
-> Files: 551 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T01:40:41.856Z
+> Files: 555 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -22,6 +22,7 @@
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
+- `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -899,11 +900,19 @@
 
 - `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
 
+## apps/web/src/lib/api/
+
+- `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
+
 ## apps/web/src/lib/board/
 
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~820 tok)
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
+
+## apps/web/test/api/
+
+- `computer-games.test.ts` — BASE: mockOkFetch (~1090 tok)
 
 ## apps/web/test/board/
 
@@ -916,6 +925,7 @@
 ## docs/roadmap/vs-computer-foundations/
 
 - `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
+- `session-04-handoff.md` — Session 04 Handoff — Web Data Layer (~1057 tok)
 
 ## packages/shared/src/
 
