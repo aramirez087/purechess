@@ -1,6 +1,6 @@
 {
   "epic": "vs-computer-ui",
-  "started_at": 1780887428.948669,
+  "started_at": 1780888422.7628999,
   "sessions": {
     "1": {
       "status": "skipped",
@@ -83,15 +83,14 @@
       "elapsed": 0.0
     },
     "9": {
-      "status": "failed",
+      "status": "pending",
       "slug": "a11y-polish",
       "wave": 3,
       "title": "A11Y Polish",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 768.0,
-      "started_at": 1780887429.5078511
+      "elapsed": 0.0
     },
     "10": {
       "status": "pending",
