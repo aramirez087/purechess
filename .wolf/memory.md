@@ -294,3 +294,26 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 21:20 | Created docs/roadmap/vs-computer-ui/session-09-handoff.md | — | ~1237 |
 | 21:20 | Session 09 a11y polish | use-game-keyboard.ts, live-announcer.tsx, test/computer-game/a11y.test.tsx, session-09-handoff.md | 186 tests pass | ~2000 |
 | 21:21 | Session end: 6 writes across 4 files (use-game-keyboard.ts, live-announcer.tsx, a11y.test.tsx, session-09-handoff.md) | 2 reads | ~5514 tok |
+
+## Session: 2026-06-08 21:21
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:23 | Created .session-10-plan.md | — | ~5049 |
+| 21:24 | Session end: 1 writes across 1 files (.session-10-plan.md) | 5 reads | ~13859 tok |
+
+## Session: 2026-06-08 21:24
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~64 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | inline fix | ~15 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 2 import(s) | ~59 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified ComputerGameClient() | ~372 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added nullish coalescing | ~143 |
+| 21:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→4 lines | ~64 |
+| 21:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→5 lines | ~55 |
+| 21:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 3→4 lines | ~44 |
+| 21:27 | Edited apps/web/src/components/game/move-panel.tsx | CSS: focus-visible, focus-visible, focus-visible | ~93 |
+| 21:28 | Created docs/roadmap/vs-computer-ui/session-10-handoff.md | — | ~1310 |
+| 21:27 | Session 10: wired useGameKeyboard+LiveAnnouncer into shell, added currentPly seek, focus ring on MoveCell, all 5 CI gates pass | computer-game-client.tsx, move-panel.tsx | GO | ~350 |

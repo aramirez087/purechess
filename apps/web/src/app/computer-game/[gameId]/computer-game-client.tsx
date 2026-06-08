@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Bot, Flag, Loader2, Plus, User } from 'lucide-react';
 import type { ComputerGameStateDto } from '@purechess/shared';
 import type { Square } from '@purechess/shared';
@@ -22,6 +23,8 @@ import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
 import { getComputerGame, submitComputerMove } from '@/lib/api/computer-games';
 import { ReviewRail } from '@/components/computer-game/review-rail';
+import { LiveAnnouncer } from '@/components/computer-game/live-announcer';
+import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 
 type Color = 'white' | 'black';
 
@@ -152,12 +155,38 @@ interface Props {
 }
 
 export function ComputerGameClient({ gameId }: Props) {
+  const router = useRouter();
   const [state, setState] = useState<PageState>({ phase: 'loading' });
   const [flipped, setFlipped] = useState(false);
+  const [currentPly, setCurrentPly] = useState(0);
   // Guards against React Strict-Mode double-invoking the bot driver, which
   // would submit the same engine move twice.
   const botLockRef = useRef(false);
   const disposedRef = useRef(false);
+
+  // Safe keyboard opts — work before game loads (function declarations hoisted)
+  const _isPlaying = state.phase === 'playing';
+  const _isGameOver = _isPlaying && state.game.status === 'completed';
+  const _isComputerThinking = _isPlaying ? state.submitting : false;
+  const _sanCount = _isPlaying ? parsePgnMoves(state.game.pgn).length : 0;
+
+  // Keep currentPly at the live end after each new move
+  useEffect(() => {
+    setCurrentPly(_sanCount);
+  }, [_sanCount]);
+
+  useGameKeyboard({
+    isGameOver: _isGameOver,
+    isComputerThinking: _isComputerThinking,
+    currentPly,
+    totalPly: _sanCount,
+    onHint: undefined,
+    onTakeback: undefined,
+    onResign: _isGameOver ? undefined : handleResign,
+    onFlip: () => setFlipped((f) => !f),
+    onNew: _isGameOver ? () => router.push('/play') : undefined,
+    onSeek: setCurrentPly,
+  });
 
   // Computes the engine's reply locally (Web Worker) and submits it. Runs
   // inside the async chain (not a state effect) so it fires exactly once per
@@ -264,6 +293,13 @@ export function ComputerGameClient({ gameId }: Props) {
   }
 
   const { game, submitting, moveError } = state;
+  const sanMoves = parsePgnMoves(game.pgn);
+  const lastComputerMoveSan: string | null = (() => {
+    if (!game.lastComputerMove || sanMoves.length === 0) return null;
+    const sideToMove = game.fen.split(' ')[1];
+    const computerJustPlayed = sideToMove !== (game.computerColor === 'white' ? 'w' : 'b');
+    return computerJustPlayed ? (sanMoves[sanMoves.length - 1] ?? null) : null;
+  })();
   const humanColor = getHumanColor(game.computerColor);
   const orientation: Color = flipped ? (humanColor === 'white' ? 'black' : 'white') : humanColor;
   const bottomColor = orientation;
@@ -272,7 +308,6 @@ export function ComputerGameClient({ gameId }: Props) {
   const isGameOver = game.status === 'completed';
   const readOnly = isGameOver || submitting;
   const lastMove = parseLastMove(game.lastComputerMove);
-  const sanMoves = parsePgnMoves(game.pgn);
   const resultLabel = getResultLabel(game.result, game.computerColor);
   const reasonLabel = game.resultReason
     ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
@@ -308,6 +343,7 @@ export function ComputerGameClient({ gameId }: Props) {
 
   return (
     <BoardSettingsProvider>
+      <LiveAnnouncer lastComputerMoveSan={lastComputerMoveSan} gameResult={resultLabel || null} />
       <GameShell
         topBar={null}
         className="[--board-reserve:10.5rem]"
@@ -356,7 +392,8 @@ export function ComputerGameClient({ gameId }: Props) {
             >
               <MovePanel
                 moves={sanMoves.map((san, i) => ({ san, ply: i + 1 }))}
-                currentPly={sanMoves.length}
+                currentPly={currentPly}
+                onSeek={setCurrentPly}
               />
             </GameRail>
 
