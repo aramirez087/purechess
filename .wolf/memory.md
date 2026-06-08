@@ -223,3 +223,16 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:09 | Edited apps/web/test/home/homepage.test.tsx | 9→9 lines | ~87 |
 | 20:10 | Edited apps/web/test/profile/profile-page.test.tsx | 5→6 lines | ~76 |
 | 20:10 | Edited apps/web/test/settings/settings-dialog.test.tsx | inline fix | ~23 |
+| 20:12 | Created docs/roadmap/vs-computer-foundations/session-05-handoff.md | — | ~2415 |
+
+## Session: 2026-06-07 20:12 — Session 05 CI Gate
+
+| 20:12 | Installed deps + generated Prisma client | bootstrap | success | ~200 |
+| 20:12 | Fixed 5 typecheck errors in apps/web | footer.tsx, admin-page-header.tsx, games-table.tsx, reports-table.tsx | PASS | ~300 |
+| 20:12 | Added eslint@9 to root devDeps | package.json | pnpm -r lint passes | ~100 |
+| 20:12 | Fixed 5 failing API test suites | auth specs, invites, reports, deleted stale stockfish spec | 192/192 pass | ~400 |
+| 20:12 | Fixed 7 failing web vitest tests | homepage, profile, settings-dialog, settings-form | 137/137 pass | ~500 |
+| 20:12 | pnpm build passed for both apps | — | PASS | ~200 |
+| 20:12 | Wrote session-05-handoff.md (GO report) | docs/roadmap/vs-computer-foundations/ | done | ~100 |
+| 20:12 | Committed all changes | 21 files, session 5 ci gate | commit 34a3255 | ~50 |
+| 20:13 | Session end: 29 writes across 14 files (admin-page-header.tsx, games-table.tsx, reports-table.tsx, footer.tsx, package.json) | 19 reads | ~16894 tok |

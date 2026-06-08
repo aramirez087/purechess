@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:10:12.238Z
-> Files: 564 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:12:40.219Z
+> Files: 565 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -953,6 +953,7 @@
 
 - `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
 - `session-04-handoff.md` — Session 04 Handoff — Web Data Layer (~1057 tok)
+- `session-05-handoff.md` — Session 05 Handoff — CI Gate / Go–No-Go Report (~2264 tok)
 
 ## packages/shared/src/
 

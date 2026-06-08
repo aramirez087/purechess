@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 93658,
-    "total_reads": 132,
-    "total_writes": 83,
+    "total_tokens_estimated": 110552,
+    "total_reads": 151,
+    "total_writes": 112,
     "total_sessions": 14,
-    "anatomy_hits": 44,
-    "anatomy_misses": 86,
-    "repeated_reads_blocked": 53,
-    "estimated_savings_vs_bare_cli": 14530
+    "anatomy_hits": 53,
+    "anatomy_misses": 96,
+    "repeated_reads_blocked": 59,
+    "estimated_savings_vs_bare_cli": 27084
   },
   "sessions": [
     {
@@ -1453,6 +1453,282 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-06-08-1955",
+      "started": "2026-06-08T01:55:42.327Z",
+      "ended": "2026-06-08T02:13:35.272Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/home/footer.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/admin/games-table.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/admin/reports-table.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/app/admin/reports/[id]/page.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/admin/admin-page-header.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/eslint.config.js",
+          "tokens_estimated": 139,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/package.json",
+          "tokens_estimated": 300,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/computer-games/stockfish.service.spec.ts",
+          "tokens_estimated": 1038,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/reports/reports.service.spec.ts",
+          "tokens_estimated": 1397,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/invites/invites.service.spec.ts",
+          "tokens_estimated": 2023,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.service.spec.ts",
+          "tokens_estimated": 1903,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.controller.spec.ts",
+          "tokens_estimated": 1589,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/src/analytics/posthog.service.ts",
+          "tokens_estimated": 371,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/src/auth/auth.controller.ts",
+          "tokens_estimated": 1430,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/home/homepage.test.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/profile/profile-page.test.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/settings/settings-dialog.test.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/home/hero.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 2253,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/admin/admin-page-header.tsx",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/admin/games-table.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/admin/reports-table.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/home/footer.tsx",
+          "tokens_estimated": 395,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/home/footer.tsx",
+          "tokens_estimated": 14,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/home/footer.tsx",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/package.json",
+          "tokens_estimated": 48,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/reports/reports.service.spec.ts",
+          "tokens_estimated": 105,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/reports/reports.service.spec.ts",
+          "tokens_estimated": 52,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/invites/invites.service.spec.ts",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/invites/invites.service.spec.ts",
+          "tokens_estimated": 48,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/invites/invites.service.spec.ts",
+          "tokens_estimated": 53,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.service.spec.ts",
+          "tokens_estimated": 108,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.service.spec.ts",
+          "tokens_estimated": 44,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.service.spec.ts",
+          "tokens_estimated": 54,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.controller.spec.ts",
+          "tokens_estimated": 35,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.controller.spec.ts",
+          "tokens_estimated": 93,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/reports/reports.service.spec.ts",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/invites/invites.service.spec.ts",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.service.spec.ts",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.controller.spec.ts",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/api/test/auth/auth.controller.spec.ts",
+          "tokens_estimated": 62,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 147,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 74,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/settings/settings-dialog.test.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/home/homepage.test.tsx",
+          "tokens_estimated": 87,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/profile/profile-page.test.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/apps/web/test/settings/settings-dialog.test.tsx",
+          "tokens_estimated": 23,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s05-ci-gate/docs/roadmap/vs-computer-foundations/session-05-handoff.md",
+          "tokens_estimated": 2587,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 12443,
+        "output_tokens_estimated": 4451,
+        "reads_count": 19,
+        "writes_count": 29,
+        "repeated_reads_blocked": 6,
+        "anatomy_lookups": 9
       }
     }
   ],
