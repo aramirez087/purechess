@@ -158,3 +158,21 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 19:35 | Created docs/claude-sessions/vs-computer-foundations/.epic-produces-overrides.json | — | ~111 |
 | 19:36 | Created docs/roadmap/vs-computer-foundations/session-01-handoff.md | — | ~2423 |
 | 19:36 | Session end: 6 writes across 5 files (computer-game.dto.ts, engine-analysis.dto.ts, index.ts, .epic-produces-overrides.json, session-01-handoff.md) | 3 reads | ~3623 tok |
+
+## Session: 2026-06-08 19:37
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:38 | Created .session-03-plan.md | — | ~3083 |
+| 19:38 | Session end: 1 writes across 1 files (.session-03-plan.md) | 3 reads | ~3495 tok |
+
+## Session: 2026-06-08 19:38
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:39 | Created apps/web/src/lib/engine/stockfish-client.ts | — | ~3692 |
+| 19:40 | Edited apps/web/src/lib/engine/stockfish-client.ts | chooseMove() → getHumanMove() | ~164 |
+| 19:40 | Edited apps/web/src/lib/engine/stockfish-client.ts | chooseMove() → getHumanMove() | ~34 |
+| 19:41 | Created apps/web/test/engine/stockfish-client.test.ts | — | ~2374 |
+| 19:43 | Created docs/roadmap/vs-computer-foundations/session-03-handoff.md | — | ~1780 |
+| 19:42 | S03 engine client: analyze/getHint/getHumanMove/cancel/warmUp + EngineTimeout/CancelledError; serialized job queue over shared worker; backward-compat getBestMove | apps/web/src/lib/engine/stockfish-client.ts, apps/web/test/engine/stockfish-client.test.ts | shared build PASS, web typecheck no new errors, lint clean, 17/17 engine tests pass | ~9k |

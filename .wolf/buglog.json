@@ -455,6 +455,22 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-08T00:30:45.049Z"
+    },
+    {
+      "id": "bug-028",
+      "timestamp": "2026-06-08T01:40:51.892Z",
+      "error_message": "Wrong reference: chooseMove should be getHumanMove",
+      "file": "apps/web/src/lib/engine/stockfish-client.ts",
+      "root_cause": "Used \"chooseMove\" instead of \"getHumanMove\"",
+      "fix": "Changed chooseMove → getHumanMove",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:40:51.892Z"
     }
   ]
 }
