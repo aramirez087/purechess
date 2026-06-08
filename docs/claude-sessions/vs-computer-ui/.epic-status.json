@@ -83,14 +83,15 @@
       "elapsed": 0.0
     },
     "9": {
-      "status": "pending",
+      "status": "done",
       "slug": "a11y-polish",
       "wave": 3,
       "title": "A11Y Polish",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 444.0,
+      "started_at": 1780888423.2686348
     },
     "10": {
       "status": "pending",
