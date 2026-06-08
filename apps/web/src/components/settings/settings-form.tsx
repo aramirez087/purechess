@@ -99,13 +99,14 @@ export function SettingsForm() {
           label="Animations"
           hint={
             reducedMotion
-              ? 'Overridden by your system’s reduced-motion setting.'
+              ? 'Disabled by the prefers-reduced-motion OS setting.'
               : 'Smooth piece movement and UI transitions.'
           }
           icon={Move3D}
         >
           <Switch
             id="animations"
+            aria-label="Animations"
             checked={settings.animations}
             onCheckedChange={(v) => settings.update({ animations: v })}
             disabled={reducedMotion}
@@ -130,6 +131,7 @@ export function SettingsForm() {
         >
           <Switch
             id="lowTimeSound"
+            aria-label="Low-time tick"
             checked={settings.lowTimeSound}
             onCheckedChange={(v) => settings.update({ lowTimeSound: v })}
             disabled={!settings.sound}

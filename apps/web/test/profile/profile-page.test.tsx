@@ -128,7 +128,8 @@ describe('RecentGames', () => {
 
   it('links each row to /games/:id', () => {
     render(<RecentGames games={[mockGame]} />);
-    const link = screen.getByRole('link');
-    expect(link.getAttribute('href')).toBe('/games/game-1');
+    const links = screen.getAllByRole('link');
+    const gameLink = links.find((l) => l.getAttribute('href') === '/games/game-1');
+    expect(gameLink).toBeDefined();
   });
 });

@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T01:40:41.856Z
-> Files: 555 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:10:12.238Z
+> Files: 564 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -23,11 +23,12 @@
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
+- `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
-- `package.json` — Node.js package manifest (~300 tok)
+- `package.json` — Node.js package manifest (~306 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~125801 tok)
 - `pnpm-workspace.yaml` (~72 tok)
 - `posthog-setup-report.md` — PostHog post-wizard report (~821 tok)
@@ -781,8 +782,8 @@
 
 ## apps/api/test/auth/
 
-- `auth.controller.spec.ts` — API routes: POST, GET (8 endpoints) (~1533 tok)
-- `auth.service.spec.ts` — Declares FUTURE (~1883 tok)
+- `auth.controller.spec.ts` — API routes: POST, GET (8 endpoints) (~1610 tok)
+- `auth.service.spec.ts` — Declares FUTURE (~1949 tok)
 - `sessions.service.spec.ts` — Declares mockPrisma (~1266 tok)
 
 ## apps/api/test/chess/
@@ -814,7 +815,7 @@
 
 ## apps/api/test/invites/
 
-- `invites.service.spec.ts` — CREATOR_ID: makeGame (~2023 tok)
+- `invites.service.spec.ts` — CREATOR_ID: makeGame (~2089 tok)
 
 ## apps/api/test/observability/
 
@@ -824,7 +825,7 @@
 ## apps/api/test/reports/
 
 - `reports-admin.controller.spec.ts` — Declares mockService (~850 tok)
-- `reports.service.spec.ts` — Prisma data access layer (~1397 tok)
+- `reports.service.spec.ts` — Declares mockPosthog (~1463 tok)
 
 ## apps/web/
 
@@ -876,6 +877,12 @@
 - `page.tsx` — formatResult (~678 tok)
 - `review-client.tsx` — STARTING_FEN (~1769 tok)
 
+## apps/web/src/components/admin/
+
+- `admin-page-header.tsx` — AdminPageHeader (~231 tok)
+- `games-table.tsx` — GamesTable — renders table (~2073 tok)
+- `reports-table.tsx` — STATUS_OPTIONS — renders table (~2248 tok)
+
 ## apps/web/src/components/board/
 
 - `chessboard.tsx` — FILES (~3125 tok)
@@ -896,9 +903,17 @@
 - `move-panel.tsx` — 1-based ply index. (~946 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
 
+## apps/web/src/components/home/
+
+- `footer.tsx` — GithubIcon (~933 tok)
+
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
+
+## apps/web/src/components/settings/
+
+- `settings-form.tsx` — APP_THEMES (~2253 tok)
 
 ## apps/web/src/lib/api/
 
@@ -917,6 +932,18 @@
 ## apps/web/test/board/
 
 - `material.test.ts` — Declares START_FEN (~560 tok)
+
+## apps/web/test/home/
+
+- `homepage.test.tsx` — link (~704 tok)
+
+## apps/web/test/profile/
+
+- `profile-page.test.tsx` — mockRatings (~1169 tok)
+
+## apps/web/test/settings/
+
+- `settings-dialog.test.tsx` — monoBtn (~676 tok)
 
 ## docs/claude-sessions/vs-computer-foundations/
 

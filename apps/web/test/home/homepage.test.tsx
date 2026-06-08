@@ -7,12 +7,12 @@ import { Footer } from '@/components/home/footer';
 describe('Hero', () => {
   it('renders wordmark as h1', () => {
     render(<Hero />);
-    expect(screen.getByRole('heading', { level: 1, name: /purechess/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /the board is/i })).toBeInTheDocument();
   });
 
   it('renders tagline', () => {
     render(<Hero />);
-    expect(screen.getByText(/pure chess\. nothing else\./i)).toBeInTheDocument();
+    expect(screen.getByText(/no puzzles, no lessons/i)).toBeInTheDocument();
   });
 
   it('Play now links to /play?mode=casual', () => {
