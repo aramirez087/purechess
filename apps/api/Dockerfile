@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/shared/package.json ./packages/shared/
-RUN pnpm install --frozen-lockfile --filter @purchess/api... --filter @purchess/shared
+RUN pnpm install --frozen-lockfile --filter @purechess/api... --filter @purechess/shared
 
 FROM base AS builder
 WORKDIR /app
@@ -14,9 +14,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules 2>/dev/null || true
 COPY . .
-RUN pnpm --filter @purchess/shared build
-RUN pnpm --filter @purchess/api exec prisma generate
-RUN pnpm --filter @purchess/api build
+RUN pnpm --filter @purechess/shared build
+RUN pnpm --filter @purechess/api exec prisma generate
+RUN pnpm --filter @purechess/api build
 
 FROM node:20.15.1-alpine AS runner
 WORKDIR /app
