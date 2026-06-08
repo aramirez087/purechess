@@ -455,6 +455,86 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-08T00:30:45.049Z"
+    },
+    {
+      "id": "bug-028",
+      "timestamp": "2026-06-08T01:44:06.339Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/api/src/computer-games/computer-games.service.ts",
+      "root_cause": "34 lines replaced/restructured",
+      "fix": "Rewrote 53→25 lines (34 removed) | Also: // Computer games are untimed: the UI presents the; // the wall clock must never flag the player while | Also: return toStateDto(; finalFen, | Also: return toStateDto(; game.id,",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 4,
+      "last_seen": "2026-06-08T01:44:57.028Z"
+    },
+    {
+      "id": "bug-029",
+      "timestamp": "2026-06-08T01:44:19.141Z",
+      "error_message": "Missing error handling in createGameFromFen",
+      "file": "apps/api/src/computer-games/computer-games.service.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:44:19.141Z"
+    },
+    {
+      "id": "bug-030",
+      "timestamp": "2026-06-08T01:44:25.988Z",
+      "error_message": "Type error",
+      "file": "apps/api/src/computer-games/computer-games.service.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:44:25.988Z"
+    },
+    {
+      "id": "bug-031",
+      "timestamp": "2026-06-08T01:46:47.426Z",
+      "error_message": "Function not marked async",
+      "file": "apps/api/test/computer-games/computer-games.service.spec.ts",
+      "root_cause": "Function uses await but wasn't declared async",
+      "fix": "Added async modifier",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:46:47.426Z"
+    },
+    {
+      "id": "bug-032",
+      "timestamp": "2026-06-08T01:49:00.955Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/api/test/computer-games/computer-games.service.spec.ts",
+      "root_cause": "Had 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w",
+      "fix": "Changed to 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T01:49:00.955Z"
     }
   ]
 }

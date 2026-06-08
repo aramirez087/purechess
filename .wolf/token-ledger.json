@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 81143,
-    "total_reads": 124,
-    "total_writes": 77,
-    "total_sessions": 10,
-    "anatomy_hits": 39,
+    "total_tokens_estimated": 95113,
+    "total_reads": 132,
+    "total_writes": 78,
+    "total_sessions": 12,
+    "anatomy_hits": 47,
     "anatomy_misses": 83,
     "repeated_reads_blocked": 53,
-    "estimated_savings_vs_bare_cli": 13530
+    "estimated_savings_vs_bare_cli": 15130
   },
   "sessions": [
     {
@@ -1325,6 +1325,76 @@
         "writes_count": 6,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-06-08-1937",
+      "started": "2026-06-08T01:37:01.788Z",
+      "ended": "2026-06-08T01:41:05.187Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/computer-games/computer-games.service.ts",
+          "tokens_estimated": 3302,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/computer-games/computer-games.controller.ts",
+          "tokens_estimated": 375,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/computer-games/computer-games.module.ts",
+          "tokens_estimated": 132,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/chess/engine.service.ts",
+          "tokens_estimated": 527,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/chess/engine/clock.ts",
+          "tokens_estimated": 491,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/chess/engine/result-detector.ts",
+          "tokens_estimated": 442,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/src/chess/engine/game-state.ts",
+          "tokens_estimated": 1416,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/apps/api/prisma/schema.prisma",
+          "tokens_estimated": 1872,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s02-api-endpoints/.session-02-plan.md",
+          "tokens_estimated": 5413,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 8557,
+        "output_tokens_estimated": 5413,
+        "reads_count": 8,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 8
       }
     }
   ],

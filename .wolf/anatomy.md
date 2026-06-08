@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T01:36:12.065Z
-> Files: 551 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T01:50:40.463Z
+> Files: 556 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -22,6 +22,7 @@
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
+- `.session-02-plan.md` — Session 02 Implementation Plan — vs-computer API endpoints (~4736 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -676,9 +677,11 @@
 
 ## apps/api/src/computer-games/
 
-- `computer-games.controller.ts` — Exports ComputerGamesController (~375 tok)
-- `computer-games.module.ts` — Exports ComputerGamesModule (~132 tok)
-- `computer-games.service.ts` — Exports ComputerGamesService (~3302 tok)
+- `computer-game-actions.service.ts` — State-mutating vs-computer actions that are NOT a normal move: takeback, (~3322 tok)
+- `computer-games.controller.ts` — Exports ComputerGamesController (~883 tok)
+- `computer-games.helpers.ts` — Position key = first four FEN fields (piece placement, side, castling, ep). (~1282 tok)
+- `computer-games.module.ts` — Exports ComputerGamesModule (~162 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~4130 tok)
 
 ## apps/api/src/config/
 
@@ -795,7 +798,8 @@
 
 ## apps/api/test/computer-games/
 
-- `computer-games.service.spec.ts` — Declares STARTING_FEN (~3640 tok)
+- `computer-game-actions.service.spec.ts` — GAME_ID: serializedFixture, gameFixture (~3996 tok)
+- `computer-games.service.spec.ts` — Declares STARTING_FEN (~5515 tok)
 - `stockfish.service.spec.ts` — TestableStockfishService: makeEngine (~1038 tok)
 
 ## apps/api/test/e2e/
@@ -916,6 +920,7 @@
 ## docs/roadmap/vs-computer-foundations/
 
 - `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
+- `session-02-handoff.md` — Session 02 Handoff — vs-computer API endpoints (~2544 tok)
 
 ## packages/shared/src/
 
@@ -925,3 +930,12 @@
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
+
+### apps/api/src/computer-games/computer-game-actions.service.ts (~330 LOC)
+ComputerGameActionsService: state-mutating vs-computer ops — takeback, rewind, abort, draw(offer/accept/decline/claim), rematch. Injects Prisma, EngineService, PosthogService, ComputerGamesService. Truncation (takeback/rewind) deletes Move rows in a $transaction (UNIQUE gameId,ply) and rebuilds state via truncateToPly. Authoritative; loadGame enforces NotFound/BadRequest/Forbidden.
+
+### apps/api/src/computer-games/computer-games.helpers.ts (~180 LOC)
+Shared helpers for the two computer-games services: STARTING_FEN, resolveColor, getCategory, fenPositionKey, computeExtras (derive clock/drawOffered/drawOfferedBy/abortable from serialized state — defensive), buildStateDto (ComputerGameStateDto builder w/ optional extras), truncateToPly (rebuild serialized state to N plies w/o replay).
+
+### apps/api/test/computer-games/computer-game-actions.service.spec.ts (~330 LOC)
+Jest spec for ComputerGameActionsService — guards, takeback (1/2/no-moves/reopen), rewind (mid/0/bounds), abort (no-move/computer-only/after-move/non-active), draw (offer/accept±offer/decline/claim±detect/non-active), rematch (settings/swapColors). Mocks Prisma/Engine/Posthog/ComputerGamesService.
