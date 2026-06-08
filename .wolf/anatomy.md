@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:28:33.774Z
-> Files: 579 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:20:29.756Z
+> Files: 584 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -25,6 +25,7 @@
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
+- `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -899,6 +900,7 @@
 
 ## apps/web/src/components/computer-game/
 
+- `live-announcer.tsx` — Last computer move in SAN notation, e.g. "Nf3". Null before first computer move. (~342 tok)
 - `review-rail.tsx` — ReviewRail (~98 tok)
 
 ## apps/web/src/components/game/
@@ -937,6 +939,7 @@
 ## apps/web/src/hooks/
 
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
+- `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
 
 ## apps/web/src/lib/api/
 
@@ -959,6 +962,10 @@
 ## apps/web/test/board/
 
 - `material.test.ts` — Declares START_FEN (~560 tok)
+
+## apps/web/test/computer-game/
+
+- `a11y.test.tsx` — --------------------------------------------------------------------------- (~2228 tok)
 
 ## apps/web/test/games/
 
@@ -991,6 +998,7 @@
 ## docs/roadmap/vs-computer-ui/
 
 - `session-08-handoff.md` — Session 08 Handoff — Review History: PGN Rail + vs-Computer Filter + Deep-Link Review (~1663 tok)
+- `session-09-handoff.md` — Session 09 Handoff — a11y Polish (Keyboard + Screen Reader) (~1160 tok)
 
 ## packages/shared/src/
 

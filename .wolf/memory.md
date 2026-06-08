@@ -274,3 +274,23 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:28 | Created docs/roadmap/vs-computer-ui/session-08-handoff.md | — | ~1774 |
 | 20:28 | Session 08: review-rail.tsx created, isVsComputer added to shared DTO + API filter + web hook + games list UI, deep-link review fallback in game-review.service.ts, 144 tests pass | multiple | ok | ~8000 |
 | 20:28 | Session end: 24 writes across 17 files (users.ts, game-history.dto.ts, users.service.ts, use-game-history.ts, pgn-actions.tsx) | 23 reads | ~21014 tok |
+
+## Session: 2026-06-08 21:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:17 | Created .session-09-plan.md | — | ~3151 |
+| 21:17 | Session end: 1 writes across 1 files (.session-09-plan.md) | 11 reads | ~10720 tok |
+
+## Session: 2026-06-08 21:17
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:18 | Created apps/web/src/hooks/use-game-keyboard.ts | — | ~610 |
+| 21:18 | Created apps/web/src/components/computer-game/live-announcer.tsx | — | ~342 |
+| 21:19 | Created apps/web/test/computer-game/a11y.test.tsx | — | ~2228 |
+| 21:19 | Edited apps/web/src/hooks/use-game-keyboard.ts | 5→5 lines | ~49 |
+| 21:19 | Edited apps/web/src/hooks/use-game-keyboard.ts | inline fix | ~18 |
+| 21:20 | Created docs/roadmap/vs-computer-ui/session-09-handoff.md | — | ~1237 |
+| 21:20 | Session 09 a11y polish | use-game-keyboard.ts, live-announcer.tsx, test/computer-game/a11y.test.tsx, session-09-handoff.md | 186 tests pass | ~2000 |
+| 21:21 | Session end: 6 writes across 4 files (use-game-keyboard.ts, live-announcer.tsx, a11y.test.tsx, session-09-handoff.md) | 2 reads | ~5514 tok |
