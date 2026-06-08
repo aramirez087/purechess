@@ -5,12 +5,12 @@ depends_on: [2, 3, 4, 5]
 touches:
   - apps/web/src/hooks/use-game-keyboard.ts
   - apps/web/src/components/computer-game/live-announcer.tsx
-  - apps/web/test/hooks/use-game-keyboard.test.ts
+  - apps/web/test/*.test.ts*
 parallel_safe: true
 produces:
   - apps/web/src/hooks/use-game-keyboard.ts
   - apps/web/src/components/computer-game/live-announcer.tsx
-  - apps/web/test/hooks/use-game-keyboard.test.ts
+  - apps/web/test/*.test.ts*
 model: "sonnet"
 ---
 
