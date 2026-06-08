@@ -253,3 +253,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:22 | Edited apps/web/test/play/computer-game-setup.test.tsx | 2→3 lines | ~59 |
 | 20:22 | Created docs/roadmap/vs-computer-ui/session-06-handoff.md | — | ~908 |
 | 20:22 | Session 06: rewrote computer-game-setup.tsx (level/time/ELO/humanlike/think-time) + test | apps/web/src/components/play/computer-game-setup.tsx, apps/web/test/play/computer-game-setup.test.tsx | 143/143 tests pass | ~6500 |
+| 20:23 | Session end: 4 writes across 3 files (computer-game-setup.tsx, computer-game-setup.test.tsx, session-06-handoff.md) | 6 reads | ~9100 tok |
