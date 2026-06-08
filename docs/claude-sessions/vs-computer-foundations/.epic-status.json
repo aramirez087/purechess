@@ -14,34 +14,37 @@
       "started_at": 1780882223.3062599
     },
     "2": {
-      "status": "pending",
+      "status": "done",
       "slug": "api-endpoints",
       "wave": 2,
       "title": "Api Endpoints",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 857.0,
+      "started_at": 1780882621.3590882
     },
     "3": {
-      "status": "pending",
+      "status": "done",
       "slug": "engine-client",
       "wave": 2,
       "title": "Engine Client",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 392.0,
+      "started_at": 1780882621.583528
     },
     "4": {
-      "status": "pending",
+      "status": "done",
       "slug": "web-data-layer",
       "wave": 2,
       "title": "Web Data Layer",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 264.0,
+      "started_at": 1780882621.8315892
     },
     "5": {
       "status": "pending",
