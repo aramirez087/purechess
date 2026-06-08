@@ -14,74 +14,81 @@
       "started_at": 1780884824.862831
     },
     "2": {
-      "status": "pending",
+      "status": "done",
       "slug": "move-control",
       "wave": 2,
       "title": "Move Control",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 0.0,
+      "started_at": 1780884827.3391721
     },
     "3": {
-      "status": "pending",
+      "status": "done",
       "slug": "engine-ui",
       "wave": 2,
       "title": "Engine Ui",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 0.0,
+      "started_at": 1780884827.516649
     },
     "4": {
-      "status": "pending",
+      "status": "done",
       "slug": "clocks",
       "wave": 2,
       "title": "Clocks",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 0.0,
+      "started_at": 1780884827.6885529
     },
     "5": {
-      "status": "pending",
+      "status": "done",
       "slug": "draws-results",
       "wave": 2,
       "title": "Draws Results",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 0.0,
+      "started_at": 1780884827.859744
     },
     "6": {
-      "status": "pending",
+      "status": "done",
       "slug": "setup-form",
       "wave": 2,
       "title": "Setup Form",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 575.0,
+      "started_at": 1780884828.123901
     },
     "7": {
-      "status": "pending",
+      "status": "done",
       "slug": "openings",
       "wave": 2,
       "title": "Openings",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 648.0,
+      "started_at": 1780884828.306729
     },
     "8": {
-      "status": "pending",
+      "status": "done",
       "slug": "review-history",
       "wave": 2,
       "title": "Review History",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0
+      "elapsed": 911.0,
+      "started_at": 1780884828.545156
     },
     "9": {
       "status": "pending",
