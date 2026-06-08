@@ -1,6 +1,0 @@
-{
-  "session-01-contracts-charter": {
-    "overrides": [],
-    "note": "No downstream produces are already satisfied and none relocate. Session 01 only defines new shared contracts (DTOs + index exports); Sessions 02/03/04 produces (controller/actions service/spec, rewritten stockfish-client + test, web api wrapper + test) remain unsatisfied and unmoved. No override required."
-  }
-}
