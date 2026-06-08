@@ -146,6 +146,58 @@ function StatusHero({
   );
 }
 
+function ResultOverlay({
+  tone,
+  resultLabel,
+  reasonLabel,
+  onDismiss,
+}: {
+  tone: ResultTone;
+  resultLabel: string;
+  reasonLabel: string | null;
+  onDismiss: () => void;
+}) {
+  const toneRing: Record<ResultTone, string> = {
+    win: 'border-[#d6b563]/45 shadow-[0_28px_80px_-22px_rgba(214,181,99,0.55)]',
+    draw: 'border-[#586059]/55 shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
+    loss: 'border-destructive/40 shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
+  };
+  return (
+    <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[10px] bg-[#0b0d0b]/55 p-4 backdrop-blur-[3px]">
+      <div
+        className={cn(
+          'animate-rise w-full max-w-[290px] rounded-[16px] border bg-gradient-to-b from-[#1a1e15] to-[#0e110c] px-6 py-6 text-center',
+          toneRing[tone],
+        )}
+      >
+        <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[#9da79c]">
+          Game over
+        </p>
+        <p className="mt-2 text-[26px] font-semibold leading-none tracking-tight text-[#f8f1de]">
+          {resultLabel}
+        </p>
+        {reasonLabel && <p className="mt-2 text-sm text-[#b9b19d]">by {reasonLabel}</p>}
+        <div className="mt-5 flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="inline-flex h-9 items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3.5 text-sm font-medium text-[#c7cfc4] transition-colors hover:border-[#3a443b] hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+          >
+            View board
+          </button>
+          <Link
+            href="/play"
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/12 px-3.5 text-sm font-semibold text-[#f3e7c4] transition-colors hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+          >
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            New game
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface Props {
   gameId: string;
 }
@@ -153,6 +205,7 @@ interface Props {
 export function ComputerGameClient({ gameId }: Props) {
   const [state, setState] = useState<PageState>({ phase: 'loading' });
   const [flipped, setFlipped] = useState(false);
+  const [resultDismissed, setResultDismissed] = useState(false);
   // Guards against React Strict-Mode double-invoking the bot driver, which
   // would submit the same engine move twice.
   const botLockRef = useRef(false);
@@ -314,6 +367,16 @@ export function ComputerGameClient({ gameId }: Props) {
           <BoardColumn
             topPlayer={stripFor(topColor)}
             bottomPlayer={stripFor(bottomColor)}
+            overlay={
+              isGameOver && !resultDismissed ? (
+                <ResultOverlay
+                  tone={resultTone}
+                  resultLabel={resultLabel}
+                  reasonLabel={reasonLabel}
+                  onDismiss={() => setResultDismissed(true)}
+                />
+              ) : undefined
+            }
           >
             <Chessboard
               position={game.fen}

@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchQueues, fetchActiveGames } from '@/lib/api/admin';
 import { Badge } from '@/components/ui/badge';
-import { formatRelativeTime, cn } from '@/lib/utils';
+import { formatRelativeTime } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Activity, Clock } from 'lucide-react';
 

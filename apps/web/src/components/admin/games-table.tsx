@@ -153,7 +153,7 @@ export function GamesTable({ userId }: GamesTableProps) {
   );
 }
 
-function Th({ children, className }: { children: React.ReactNode; className?: string }) {
+function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
   return (
     <th
       scope="col"

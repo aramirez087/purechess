@@ -1,7 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ArrowRight, Cpu, Users, Swords } from 'lucide-react';
 import { CtaButton } from './cta-button';
-import { Logo } from '@/components/layout/Logo';
 
 const FEATURES = [
   {

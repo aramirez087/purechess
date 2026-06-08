@@ -1,12 +1,13 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T00:30:45.043Z
-> Files: 545 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:13:16.974Z
+> Files: 565 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
 - `commit-msg.txt` — Declares in (~304 tok)
 - `inspect.cjs` — Declares p (~262 tok)
+- `omni-issue-body.md` — ## Summary (~573 tok)
 
 ## ../../.claude/plans/
 
@@ -865,9 +866,13 @@
 - `globals.css` — Styles: 9 rules, 75 vars (~1095 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
 
+## apps/web/src/app/(play)/play/
+
+- `play-page-client.tsx` — Full-viewport, vertically-centered play shell with a theme-aware ambient (~2243 tok)
+
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4268 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~5052 tok)
 
 ## apps/web/src/app/games/[gameId]/
 
@@ -907,3 +912,30 @@
 ## apps/web/test/board/
 
 - `material.test.ts` — Declares START_FEN (~560 tok)
+
+## docs/claude-sessions/
+
+- `vs-computer.sprint.json` (~68 tok)
+
+## docs/claude-sessions/vs-computer-foundations/
+
+- `session-00-operator-rules.md` — Session 00 — Operator Rules (vs-computer-foundations) (~903 tok)
+- `session-01-contracts-charter.md` — Session 01: Charter — shared contracts (~881 tok)
+- `session-02-api-endpoints.md` — Session 02: API capabilities (~864 tok)
+- `session-03-engine-client.md` — Session 03: Engine client capabilities (~736 tok)
+- `session-04-web-data-layer.md` — Session 04: Web data layer (~584 tok)
+- `session-05-ci-gate.md` — Session 05: CI gate (foundations) (~455 tok)
+
+## docs/claude-sessions/vs-computer-ui/
+
+- `session-00-operator-rules.md` — Session 00 — Operator Rules (vs-computer-ui) (~1037 tok)
+- `session-01-shell-charter.md` — Session 01: Charter — shell + controller + stubs (~1094 tok)
+- `session-02-move-control.md` — Session 02: Move control & navigation (~664 tok)
+- `session-03-engine-ui.md` — Session 03: Engine analysis UI (~767 tok)
+- `session-04-clocks.md` — Session 04: Clocks & time controls (~662 tok)
+- `session-05-draws-results.md` — Session 05: Draws & results (~681 tok)
+- `session-06-setup-form.md` — Session 06: Game setup & options (~698 tok)
+- `session-07-openings.md` — Session 07: Openings & custom positions (~701 tok)
+- `session-08-review-history.md` — Session 08: Game review & history (~684 tok)
+- `session-09-a11y-polish.md` — Session 09: UX & a11y polish (~673 tok)
+- `session-10-ci-gate.md` — Session 10: CI gate (UI) (~517 tok)

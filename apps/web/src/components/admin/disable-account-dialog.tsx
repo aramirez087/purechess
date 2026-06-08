@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
@@ -9,12 +8,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { disableUser, enableUser } from '@/lib/api/admin';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 
 interface DisableAccountDialogProps {
   userId: string;
@@ -40,14 +40,18 @@ export function DisableAccountDialog({ userId, username, isDisabled }: DisableAc
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant={isDisabled ? 'outline' : 'destructive'} size="sm">
-          {isDisabled ? 'Enable Account' : 'Disable Account'}
-        </Button>
-      </DialogTrigger>
+      <Button
+        variant={isDisabled ? 'outline' : 'destructive'}
+        size="sm"
+        onClick={() => setOpen(true)}
+      >
+        {isDisabled ? 'Enable account' : 'Disable account'}
+      </Button>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isDisabled ? 'Enable' : 'Disable'} {username}</DialogTitle>
+          <DialogTitle>
+            {isDisabled ? `Enable ${username}?` : `Disable ${username}?`}
+          </DialogTitle>
           <DialogDescription>
             {isDisabled
               ? 'This will restore access for the user.'
@@ -55,8 +59,13 @@ export function DisableAccountDialog({ userId, username, isDisabled }: DisableAc
           </DialogDescription>
         </DialogHeader>
         {!isDisabled && (
-          <div className="space-y-2">
-            <Label htmlFor="reason">Reason</Label>
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="reason"
+              className="text-xs uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Reason
+            </Label>
             <Input
               id="reason"
               placeholder="Explain why this account is being disabled…"
@@ -66,7 +75,7 @@ export function DisableAccountDialog({ userId, username, isDisabled }: DisableAc
           </div>
         )}
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
             Cancel
           </Button>
           <Button
@@ -74,7 +83,8 @@ export function DisableAccountDialog({ userId, username, isDisabled }: DisableAc
             disabled={mutation.isPending || (!isDisabled && !reason.trim())}
             onClick={() => mutation.mutate()}
           >
-            {mutation.isPending ? 'Saving…' : isDisabled ? 'Enable' : 'Disable'}
+            {mutation.isPending && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
+            {isDisabled ? 'Enable' : 'Disable'}
           </Button>
         </DialogFooter>
       </DialogContent>

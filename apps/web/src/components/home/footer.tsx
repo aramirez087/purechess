@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
-import { Github, Twitter } from 'lucide-react';
 
 const FOOTER_LINKS = [
   { href: '/about', label: 'About' },
@@ -28,25 +27,6 @@ export function Footer() {
               {link.label}
             </Link>
           ))}
-          <span className="mx-2 h-4 w-px bg-border/80" aria-hidden />
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-raised"
-            aria-label="GitHub"
-          >
-            <Github className="h-4 w-4" />
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-raised"
-            aria-label="Twitter"
-          >
-            <Twitter className="h-4 w-4" />
-          </a>
         </nav>
         <p className="text-xs text-muted-foreground/80">
           © {new Date().getFullYear()} Purechess

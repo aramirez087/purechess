@@ -1,14 +1,14 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { DisableAccountDialog } from '@/components/admin/disable-account-dialog';
-import { FairplaySignals, type FairPlaySignalRow } from '@/components/admin/fairplay-signals';
+import { FairplaySignals } from '@/components/admin/fairplay-signals';
 import { GamesTable } from '@/components/admin/games-table';
 import { fetchUser } from '@/lib/api/admin';
-import { formatRelativeTime, cn } from '@/lib/utils';
+import { formatRelativeTime } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AlertTriangle, ShieldCheck } from 'lucide-react';
 

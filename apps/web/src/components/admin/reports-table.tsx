@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { fetchAdminReports } from '@/lib/api/reports';
 import { formatRelativeTime, cn } from '@/lib/utils';
@@ -15,12 +14,6 @@ const STATUS_OPTIONS = [
   { value: 'reviewed', label: 'Reviewed' },
   { value: 'dismissed', label: 'Dismissed' },
 ];
-
-function statusVariant(status: string): 'default' | 'secondary' | 'outline' {
-  if (status === 'open') return 'default';
-  if (status === 'reviewed') return 'secondary';
-  return 'outline';
-}
 
 function statusClasses(status: string): string {
   if (status === 'open')
@@ -194,7 +187,7 @@ export function ReportsTable() {
   );
 }
 
-function Th({ children, className }: { children: React.ReactNode; className?: string }) {
+function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
   return (
     <th
       scope="col"

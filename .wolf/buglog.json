@@ -455,6 +455,56 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-08T00:30:45.049Z"
+    },
+    {
+      "id": "bug-028",
+      "timestamp": "2026-06-08T00:45:55.854Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/(play)/play/play-page-client.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 7→18 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T00:45:55.854Z"
+    },
+    {
+      "id": "bug-029",
+      "timestamp": "2026-06-08T01:04:08.719Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/(play)/play/play-page-client.tsx",
+      "root_cause": "Had \"mt-10 grid gap-4 sm:grid-cols-2\"",
+      "fix": "Changed to \"mt-12 grid gap-5 sm:grid-cols-2\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 6,
+      "last_seen": "2026-06-08T01:04:12.590Z"
+    },
+    {
+      "id": "bug-030",
+      "timestamp": "2026-06-08T02:53:51.000Z",
+      "error_message": "session 09 (a11y-polish) FAILED in 10m44s (exit 97): declared deliverables missing from session diff: apps/web/test/computer-game/use-game-keyboard.test.ts (not in session diff)",
+      "file": "docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md",
+      "root_cause": "Two layers. (1) Plan declared the keyboard-hook test at apps/web/test/computer-game/use-game-keyboard.test.ts but the hook lives at src/hooks/, so run 1's agent wrote the test to test/hooks/. (2) Deeper cause: the sonnet session is NON-DETERMINISTIC about test file paths/names across reruns. Run 1 produced test/hooks/use-game-keyboard.test.ts + test/computer-game/live-announcer.test.tsx; run 2 (after fixing the declared path) produced a single test/computer-game/a11y.test.tsx instead. The epic deliverables gate matches declared produces paths exactly, so chasing exact filenames was whack-a-mole. The two src deliverables (hook + live-announcer.tsx) were stable across runs; only the test path drifted.",
+      "fix": "Changed the test deliverable in session-09 plan touches+produces from an exact path to a glob: apps/web/test/*.test.ts* . The validator compiles globs to regex where * becomes .* and crosses / (validate-session-deliverables.py _matches_declared), so it matches any test under apps/web/test/ regardless of subdir/name. Kept the two stable src files exact. Each resume also requires pruning the stale epic/vs-computer--s09 worktree+branch (always ahead of trunk after a failed run, so the runner refuses to delete it and aborts at exit 1). Verified run 2's actual diff (test/computer-game/a11y.test.tsx) matches the glob.",
+      "tags": [
+        "epic-toolkit",
+        "sprint",
+        "deliverables-gate",
+        "path-mismatch",
+        "vs-computer-ui"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-08T03:14:21.000Z"
     }
   ]
 }
