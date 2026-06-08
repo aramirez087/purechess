@@ -12,9 +12,10 @@ type GamesClientProps = {
   username: string;
   initialCategory?: Category;
   initialIsRated?: boolean;
+  initialIsVsComputer?: boolean;
 };
 
-export function GamesClient({ username, initialCategory, initialIsRated }: GamesClientProps) {
+export function GamesClient({ username, initialCategory, initialIsRated, initialIsVsComputer }: GamesClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,6 +23,9 @@ export function GamesClient({ username, initialCategory, initialIsRated }: Games
   const isRatedParam = searchParams.get('isRated');
   const isRated =
     isRatedParam === 'true' ? true : isRatedParam === 'false' ? false : initialIsRated;
+  const vsComputerParam = searchParams.get('vsComputer');
+  const isVsComputer =
+    vsComputerParam === 'true' ? true : vsComputerParam === 'false' ? false : initialIsVsComputer;
 
   const updateParams = useCallback(
     (updates: Record<string, string | undefined>) => {
@@ -42,21 +46,26 @@ export function GamesClient({ username, initialCategory, initialIsRated }: Games
     username,
     category,
     isRated,
+    isVsComputer,
     pageSize: 20,
   });
 
   const allGames = data?.pages.flatMap((p) => p.games) ?? [];
   const noGamesAtAll = !data || (data.pages.length === 1 && data.pages[0].games.length === 0);
-  const hasFilters = category !== undefined || isRated !== undefined;
+  const hasFilters = category !== undefined || isRated !== undefined || isVsComputer !== undefined;
 
   return (
     <div className="flex flex-col gap-4">
       <GameHistoryFilters
         category={category}
         isRated={isRated}
+        isVsComputer={isVsComputer}
         onCategoryChange={(v) => updateParams({ category: v })}
         onRatedChange={(v) =>
           updateParams({ isRated: v === undefined ? undefined : String(v) })
+        }
+        onVsComputerChange={(v) =>
+          updateParams({ vsComputer: v === undefined ? undefined : String(v) })
         }
       />
 

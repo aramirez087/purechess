@@ -8,8 +8,10 @@ type RatedFilter = 'rated' | 'casual';
 type GameHistoryFiltersProps = {
   category: Category | undefined;
   isRated: boolean | undefined;
+  isVsComputer: boolean | undefined;
   onCategoryChange: (v: Category | undefined) => void;
   onRatedChange: (v: boolean | undefined) => void;
+  onVsComputerChange: (v: boolean | undefined) => void;
 };
 
 const CATEGORIES: { value: Category; label: string }[] = [
@@ -53,8 +55,10 @@ function FilterPill({
 export function GameHistoryFilters({
   category,
   isRated,
+  isVsComputer,
   onCategoryChange,
   onRatedChange,
+  onVsComputerChange,
 }: GameHistoryFiltersProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
@@ -95,6 +99,21 @@ export function GameHistoryFilters({
             />
           );
         })}
+      </FilterGroup>
+
+      <span className="hidden h-5 w-px bg-border/60 sm:inline-block" aria-hidden />
+
+      <FilterGroup label="Opponent">
+        <FilterPill
+          label="All"
+          active={isVsComputer === undefined}
+          onClick={() => onVsComputerChange(undefined)}
+        />
+        <FilterPill
+          label="vs Computer"
+          active={isVsComputer === true}
+          onClick={() => onVsComputerChange(isVsComputer === true ? undefined : true)}
+        />
       </FilterGroup>
     </div>
   );

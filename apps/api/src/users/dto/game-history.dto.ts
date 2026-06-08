@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { TimeControlCategory } from '@prisma/client';
 
@@ -14,6 +14,15 @@ export class GameHistoryQueryDto {
     return undefined;
   })
   isRated?: boolean;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return undefined;
+  })
+  @IsBoolean()
+  isVsComputer?: boolean;
 
   @IsOptional()
   @IsString()

@@ -236,3 +236,40 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:12 | Wrote session-05-handoff.md (GO report) | docs/roadmap/vs-computer-foundations/ | done | ~100 |
 | 20:12 | Committed all changes | 21 files, session 5 ci gate | commit 34a3255 | ~50 |
 | 20:13 | Session end: 29 writes across 14 files (admin-page-header.tsx, games-table.tsx, reports-table.tsx, footer.tsx, package.json) | 19 reads | ~16894 tok |
+
+## Session: 2026-06-08 20:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:20 | Created .session-08-plan.md | — | ~4877 |
+| 20:21 | Session end: 1 writes across 1 files (.session-08-plan.md) | 12 reads | ~10171 tok |
+
+## Session: 2026-06-08 20:21
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:22 | Edited packages/shared/src/users.ts | 12→13 lines | ~102 |
+| 20:22 | Edited apps/api/src/users/dto/game-history.dto.ts | added 2 condition(s) | ~194 |
+| 20:22 | Edited apps/api/src/users/users.service.ts | 15→18 lines | ~184 |
+| 20:22 | Edited apps/api/src/users/users.service.ts | 5→7 lines | ~94 |
+| 20:23 | Edited apps/api/src/users/users.service.ts | 12→13 lines | ~124 |
+| 20:23 | Edited apps/web/src/hooks/use-game-history.ts | added 1 condition(s) | ~395 |
+| 20:23 | Edited apps/web/src/components/review/pgn-actions.tsx | modified PgnActions() | ~387 |
+| 20:23 | Created apps/web/src/components/computer-game/review-rail.tsx | — | ~98 |
+| 20:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~68 |
+| 20:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→7 lines | ~86 |
+| 20:23 | Edited apps/web/src/components/games/game-history-filters.tsx | CSS: isVsComputer, onVsComputerChange | ~86 |
+| 20:24 | Edited apps/web/src/components/games/game-history-filters.tsx | modified GameHistoryFilters() | ~540 |
+| 20:24 | Edited apps/web/src/components/games/game-history-row.tsx | 16→21 lines | ~282 |
+| 20:24 | Edited apps/web/src/app/games/games-client.tsx | CSS: vsComputer | ~598 |
+| 20:24 | Edited apps/web/src/app/games/page.tsx | modified GamesPage() | ~474 |
+| 20:25 | Created apps/web/src/services/game-review.service.ts | — | ~1531 |
+| 20:25 | Edited apps/web/src/app/games/[gameId]/page.tsx | modified generateMetadata() | ~56 |
+| 20:25 | Edited apps/web/src/app/games/[gameId]/page.tsx | modified GameReviewPage() | ~58 |
+| 20:25 | Created apps/web/test/games/game-review.test.ts | — | ~1205 |
+| 20:27 | Edited apps/web/test/games/game-history-filters.test.tsx | CSS: isVsComputer, onVsComputerChange | ~1030 |
+| 20:27 | Edited apps/web/test/games/game-history-page.test.tsx | CSS: isVsComputer | ~82 |
+| 20:27 | Edited apps/web/test/profile/profile-page.test.tsx | CSS: isVsComputer | ~84 |
+| 20:27 | Created apps/web/test/games/game-review.test.ts | — | ~942 |
+| 20:28 | Created docs/roadmap/vs-computer-ui/session-08-handoff.md | — | ~1774 |
+| 20:28 | Session 08: review-rail.tsx created, isVsComputer added to shared DTO + API filter + web hook + games list UI, deep-link review fallback in game-review.service.ts, 144 tests pass | multiple | ok | ~8000 |

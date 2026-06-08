@@ -1,5 +1,8 @@
+import { Chess } from 'chess.js';
 import { GameResult, GameTermination, TimeCategory } from '@purechess/shared';
+import type { ComputerGameStateDto } from '@purechess/shared';
 import type { GameReview } from '@/types/game-review';
+import type { WireMove } from '@purechess/shared';
 
 const MOCK_GAME_ID = 'demo-game-001';
 
@@ -24,7 +27,103 @@ const MOCK_REVIEW: GameReview = {
   startedAt: '2026-06-06T10:00:00.000Z',
 };
 
-export async function getReview(gameId: string): Promise<GameReview | null> {
+const RESULT_MAP: Record<string, GameResult> = {
+  white_wins: GameResult.WhiteWins,
+  black_wins: GameResult.BlackWins,
+  draw: GameResult.Draw,
+};
+
+const TERM_MAP: Record<string, GameTermination> = {
+  checkmate: GameTermination.Checkmate,
+  resignation: GameTermination.Resignation,
+  timeout: GameTermination.Timeout,
+  stalemate: GameTermination.Stalemate,
+  insufficient_material: GameTermination.InsufficientMaterial,
+  threefold_repetition: GameTermination.ThreefoldRepetition,
+  fifty_move_rule: GameTermination.FiftyMoveRule,
+  draw_agreement: GameTermination.DrawAgreement,
+  abandonment: GameTermination.Abandonment,
+};
+
+function buildMovesFromPgn(pgn: string): WireMove[] {
+  if (!pgn.trim()) return [];
+  try {
+    const chess = new Chess();
+    chess.loadPgn(pgn);
+    const history = chess.history({ verbose: true });
+    const replay = new Chess();
+    return history.map((m, i) => {
+      replay.move(m.san);
+      return {
+        ply: i + 1,
+        san: m.san,
+        uci: m.from + m.to + (m.promotion ?? ''),
+        fenAfter: replay.fen(),
+        clockAfterMs: 0,
+        moveTimeMs: 0,
+        by: m.color as 'w' | 'b',
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+function buildReviewFromComputerGame(
+  state: ComputerGameStateDto,
+  currentUser: { id: string; username: string } | null,
+): GameReview {
+  const humanColor = state.computerColor === 'white' ? 'black' : 'white';
+  const human = {
+    id: currentUser?.id ?? 'player',
+    username: currentUser?.username ?? 'Player',
+    rating: 0,
+  };
+  const computer = { id: 'computer', username: 'Computer', rating: state.computerLevel };
+
+  const white = state.computerColor === 'white' ? computer : human;
+  const black = state.computerColor === 'black' ? computer : human;
+
+  return {
+    id: state.gameId,
+    white,
+    black,
+    moves: buildMovesFromPgn(state.pgn),
+    finalFen: state.fen,
+    pgn: state.pgn,
+    result: RESULT_MAP[state.result ?? ''] ?? GameResult.Draw,
+    termination: TERM_MAP[state.resultReason ?? ''] ?? GameTermination.Resignation,
+    timeControl: {
+      initialSeconds: 0,
+      incrementSeconds: 0,
+      category: TimeCategory.Rapid,
+      label: 'vs Computer',
+    },
+    rated: false,
+    startedAt: new Date(0).toISOString(),
+  };
+}
+
+async function getComputerGameReview(
+  gameId: string,
+  currentUser: { id: string; username: string } | null,
+): Promise<GameReview | null> {
+  const apiUrl = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
+  try {
+    const res = await fetch(`${apiUrl}/api/computer-games/${gameId}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const state = (await res.json()) as ComputerGameStateDto;
+    if (state.status !== 'completed') return null;
+    return buildReviewFromComputerGame(state, currentUser);
+  } catch {
+    return null;
+  }
+}
+
+export async function getReview(
+  gameId: string,
+  currentUser?: { id: string; username: string } | null,
+): Promise<GameReview | null> {
   if (gameId === MOCK_GAME_ID) {
     return MOCK_REVIEW;
   }
@@ -32,7 +131,9 @@ export async function getReview(gameId: string): Promise<GameReview | null> {
   const apiUrl = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
   try {
     const res = await fetch(`${apiUrl}/games/${gameId}`, { next: { revalidate: 60 } });
-    if (res.status === 404) return null;
+    if (res.status === 404) {
+      return getComputerGameReview(gameId, currentUser ?? null);
+    }
     if (!res.ok) return null;
     return (await res.json()) as GameReview;
   } catch {
