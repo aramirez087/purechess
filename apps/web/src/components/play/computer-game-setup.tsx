@@ -7,11 +7,11 @@ import { Label } from '@/components/ui/label';
 import { createComputerGame } from '@/lib/api/computer-games';
 import type { CreateComputerGameDto } from '@purechess/shared';
 
-const TIME_CONTROLS = [
-  { label: 'Bullet 1+0', seconds: 60, increment: 0 },
-  { label: 'Blitz 3+2', seconds: 180, increment: 2 },
-  { label: 'Rapid 10+0', seconds: 600, increment: 0 },
-];
+// Games vs the computer are untimed — the in-game UI shows the clock as
+// "Unlimited" and the server never flags on time. These values are sent only to
+// satisfy the create DTO / category column; they have no gameplay effect.
+const UNTIMED_SECONDS = 600;
+const UNTIMED_INCREMENT = 0;
 
 const LEVEL_LABELS: Record<number, string> = {
   1: 'Beginner',
@@ -38,7 +38,6 @@ interface ComputerGameSetupProps {
 export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetupProps) {
   const [level, setLevel] = useState<CreateComputerGameDto['level']>(4);
   const [color, setColor] = useState<CreateComputerGameDto['color']>('random');
-  const [tcIndex, setTcIndex] = useState(1);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,12 +45,11 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
     setIsPending(true);
     setError(null);
     try {
-      const tc = TIME_CONTROLS[tcIndex];
       const result = await createComputerGame({
         level,
         color,
-        timeControlSeconds: tc.seconds,
-        incrementSeconds: tc.increment,
+        timeControlSeconds: UNTIMED_SECONDS,
+        incrementSeconds: UNTIMED_INCREMENT,
       });
       onGameCreated(result.gameId);
     } catch (e) {
@@ -96,23 +94,6 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                 onClick={() => setColor(c.value)}
               >
                 {c.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Time Control</Label>
-          <div className="flex gap-2">
-            {TIME_CONTROLS.map((tc, i) => (
-              <Button
-                key={tc.label}
-                variant={tcIndex === i ? 'default' : 'outline'}
-                size="sm"
-                className="flex-1"
-                onClick={() => setTcIndex(i)}
-              >
-                {tc.label}
               </Button>
             ))}
           </div>

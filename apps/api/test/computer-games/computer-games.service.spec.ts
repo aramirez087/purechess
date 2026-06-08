@@ -3,28 +3,27 @@ import { BadRequestException, ForbiddenException, NotFoundException } from '@nes
 import { ComputerGamesService } from '../../src/computer-games/computer-games.service';
 import { PrismaService } from '../../src/database/prisma.service';
 import { EngineService } from '../../src/chess/engine.service';
-import { StockfishService } from '../../src/computer-games/stockfish.service';
+import { PosthogService } from '../../src/analytics/posthog.service';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+const AFTER_E4_FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 const GAME_ID = 'game-1';
 const USER_ID = 'user-1';
 
-const baseEngineState = {
+// Engine state where it is White (the human) to move, no moves played yet.
+const emptyEngineState = {
   gameId: GAME_ID,
   whiteUserId: USER_ID,
   blackUserId: null,
   fen: STARTING_FEN,
   fenHistory: [STARTING_FEN],
-  moves: [],
+  moves: [] as Array<{ ply: number; san: string; uci: string }>,
   pendingDrawOfferBy: null,
   clock: { whiteMs: 300000, blackMs: 300000, lastTickAt: 0, incrementMs: 0 },
   status: 'active' as const,
   result: null,
   resultReason: null,
-  position: {
-    fen: () => STARTING_FEN,
-    turn: () => 'w',
-  },
+  position: { fen: () => STARTING_FEN, turn: () => 'w' },
 };
 
 const mockPrisma = {
@@ -48,8 +47,9 @@ const mockEngine = {
   buildPgn: jest.fn(),
 };
 
-const mockStockfish = {
-  getBestMove: jest.fn(),
+const mockPosthog = {
+  captureEvent: jest.fn(),
+  captureException: jest.fn(),
 };
 
 describe('ComputerGamesService', () => {
@@ -63,7 +63,7 @@ describe('ComputerGamesService', () => {
         ComputerGamesService,
         { provide: PrismaService, useValue: mockPrisma },
         { provide: EngineService, useValue: mockEngine },
-        { provide: StockfishService, useValue: mockStockfish },
+        { provide: PosthogService, useValue: mockPosthog },
       ],
     }).compile();
 
@@ -71,7 +71,7 @@ describe('ComputerGamesService', () => {
   });
 
   describe('createGame', () => {
-    // color: 'white' → userColor='white', computerColor='black' → no stockfish on creation
+    // color: 'white' → userColor='white', computerColor='black'
     const dto = { color: 'white' as const, level: 3, timeControlSeconds: 300, incrementSeconds: 0 };
 
     beforeEach(() => {
@@ -82,16 +82,9 @@ describe('ComputerGamesService', () => {
         computerColor: 'black',
         computerLevel: 3,
       });
-      mockEngine.createGame.mockReturnValue({ ...baseEngineState });
-      mockEngine.applyMove.mockReturnValue({
-        ...baseEngineState,
-        moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: STARTING_FEN, clockAfterMs: 300000, moveTimeMs: 0 }],
-        position: { fen: () => STARTING_FEN, turn: () => 'b' },
-      });
+      mockEngine.createGame.mockReturnValue({ ...emptyEngineState });
       mockEngine.toSerializable.mockReturnValue({});
       mockPrisma.game.update.mockResolvedValue({});
-      mockPrisma.move.create.mockResolvedValue({});
-      mockStockfish.getBestMove.mockResolvedValue('e2e4');
     });
 
     it('creates game with user playing white, computer playing black', async () => {
@@ -111,8 +104,7 @@ describe('ComputerGamesService', () => {
       expect(result.status).toBe('active');
     });
 
-    it('calls stockfish when computer plays white', async () => {
-      // color: 'black' → userColor='black', computerColor='white' → stockfish called
+    it('records the user on the opposite color when computer plays white', async () => {
       mockPrisma.game.create.mockResolvedValue({
         id: GAME_ID,
         whiteUserId: null,
@@ -121,16 +113,143 @@ describe('ComputerGamesService', () => {
         computerLevel: 3,
       });
 
-      await service.createGame(USER_ID, { ...dto, color: 'black' });
+      const result = await service.createGame(USER_ID, { ...dto, color: 'black' });
 
-      expect(mockStockfish.getBestMove).toHaveBeenCalledWith(STARTING_FEN, 3);
+      expect(mockPrisma.game.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            whiteUserId: null,
+            blackUserId: USER_ID,
+            computerColor: 'white',
+          }),
+        }),
+      );
+      expect(result.computerColor).toBe('white');
     });
 
-    it('does not call stockfish when computer plays black', async () => {
-      // color: 'white' → computerColor='black' → no stockfish
+    it('does not run an engine on creation (moves are computed client-side)', async () => {
       await service.createGame(USER_ID, dto);
 
-      expect(mockStockfish.getBestMove).not.toHaveBeenCalled();
+      // The server no longer plays the computer's move on creation.
+      expect(mockEngine.applyMove).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('submitMove — legal move', () => {
+    const baseGame = {
+      id: GAME_ID,
+      whiteUserId: USER_ID,
+      blackUserId: null,
+      isVsComputer: true,
+      status: 'active',
+      computerColor: 'black',
+      computerLevel: 3,
+      finalFen: STARTING_FEN,
+      pgn: '',
+      lastComputerMove: null,
+      category: 'rapid',
+      engineState: {},
+    };
+
+    let txMock: { move: { create: jest.Mock }; game: { update: jest.Mock } };
+
+    beforeEach(() => {
+      mockPrisma.game.findUnique.mockResolvedValue(baseGame);
+      mockEngine.fromSerializable.mockReturnValue({ ...emptyEngineState });
+      // applyMove appends one move (human, White).
+      mockEngine.applyMove.mockReturnValue({
+        ...emptyEngineState,
+        moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 300000, moveTimeMs: 0 }],
+        position: { fen: () => AFTER_E4_FEN, turn: () => 'b' },
+      });
+      mockEngine.detectResult.mockReturnValue(null);
+      mockEngine.toSerializable.mockReturnValue({});
+      mockEngine.buildPgn.mockReturnValue('1. e4 *');
+
+      txMock = { move: { create: jest.fn() }, game: { update: jest.fn() } };
+      mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof txMock) => unknown) => cb(txMock));
+    });
+
+    it('persists the move and returns active game state', async () => {
+      const result = await service.submitMove(GAME_ID, USER_ID, { move: 'e2e4' });
+
+      expect(mockEngine.applyMove).toHaveBeenCalledWith(
+        expect.anything(),
+        { uci: 'e2e4' },
+        expect.any(Number),
+      );
+      expect(txMock.move.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ ply: 1, san: 'e4', uci: 'e2e4', isComputer: false, userId: USER_ID }),
+        }),
+      );
+      expect(result.status).toBe('active');
+      expect(result.fen).toBe(AFTER_E4_FEN);
+    });
+
+    it('throws BadRequestException on an illegal move', async () => {
+      const { InvalidMoveError } = await import('../../src/chess/engine.service');
+      mockEngine.applyMove.mockImplementation(() => {
+        throw new InvalidMoveError('illegal move');
+      });
+
+      await expect(service.submitMove(GAME_ID, USER_ID, { move: 'e2e5' })).rejects.toThrow(BadRequestException);
+      expect(txMock.move.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('submitMove — clock flagged (no move appended)', () => {
+    const baseGame = {
+      id: GAME_ID,
+      whiteUserId: USER_ID,
+      blackUserId: null,
+      isVsComputer: true,
+      status: 'active',
+      computerColor: 'black',
+      computerLevel: 3,
+      finalFen: STARTING_FEN,
+      pgn: '1. Nf3 *',
+      lastComputerMove: 'g1f3',
+      category: 'rapid',
+      engineState: {},
+    };
+
+    beforeEach(() => {
+      mockPrisma.game.findUnique.mockResolvedValue(baseGame);
+      mockPrisma.game.update.mockResolvedValue({});
+      // Engine state already has one move; the human is to move (White).
+      const flaggedState = {
+        ...emptyEngineState,
+        moves: [{ ply: 1, san: 'Nf3', uci: 'g1f3' }],
+      };
+      mockEngine.fromSerializable.mockReturnValue(flaggedState);
+      // applyMove detects the flag: returns completed WITHOUT appending a move.
+      mockEngine.applyMove.mockReturnValue({
+        ...flaggedState,
+        status: 'completed',
+        result: 'black_wins',
+        resultReason: 'timeout',
+      });
+      mockEngine.toSerializable.mockReturnValue({});
+    });
+
+    it('completes the game on timeout and does NOT create a duplicate move row', async () => {
+      const result = await service.submitMove(GAME_ID, USER_ID, { move: 'e2e4' });
+
+      expect(mockPrisma.move.create).not.toHaveBeenCalled();
+      expect(mockPrisma.$transaction).not.toHaveBeenCalled();
+      expect(mockPrisma.game.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            status: 'completed',
+            result: 'black_wins',
+            resultReason: 'timeout',
+          }),
+        }),
+      );
+      expect(result.status).toBe('completed');
+      expect(result.result).toBe('black_wins');
+      expect(result.resultReason).toBe('timeout');
     });
   });
 
@@ -146,6 +265,7 @@ describe('ComputerGamesService', () => {
       finalFen: STARTING_FEN,
       pgn: '',
       lastComputerMove: null,
+      category: 'rapid',
       engineState: {},
     };
 
@@ -171,10 +291,10 @@ describe('ComputerGamesService', () => {
       expect(result.resultReason).toBe('resignation');
     });
 
-    it('skips stockfish call on resign', async () => {
+    it('does not apply an engine move on resign', async () => {
       await service.submitMove(GAME_ID, USER_ID, { move: 'resign' });
 
-      expect(mockStockfish.getBestMove).not.toHaveBeenCalled();
+      expect(mockEngine.applyMove).not.toHaveBeenCalled();
     });
   });
 

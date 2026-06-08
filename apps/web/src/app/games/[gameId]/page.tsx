@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { getReview } from '@/services/game-review.service';
 import { buildMetadata } from '@/lib/seo';
 import { ReviewClient } from './review-client';
-import { AppShell } from '@/components/layout/AppShell';
 import { GameResult } from '@purechess/shared';
 
 interface Props {
@@ -64,9 +63,5 @@ export default async function GameReviewPage({ params }: Props) {
     }
   }
 
-  return (
-    <AppShell>
-      <ReviewClient game={review} reportTarget={reportTarget} />
-    </AppShell>
-  );
+  return <ReviewClient game={review} reportTarget={reportTarget} />;
 }

@@ -1,12 +1,16 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-07T17:23:36.225Z
-> Files: 522 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T00:00:05.926Z
+> Files: 545 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
 - `commit-msg.txt` — Declares in (~304 tok)
 - `inspect.cjs` — Declares p (~262 tok)
+
+## ../../.claude/plans/
+
+- `your-goal-is-to-squishy-platypus.md` — PureChess — Game Page Redesign: Full-Bleed Dual-Rail Shell (~3766 tok)
 
 ## ./
 
@@ -673,7 +677,7 @@
 
 - `computer-games.controller.ts` — Exports ComputerGamesController (~375 tok)
 - `computer-games.module.ts` — Exports ComputerGamesModule (~132 tok)
-- `computer-games.service.ts` — Exports ComputerGamesService (~3191 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~3302 tok)
 
 ## apps/api/src/config/
 
@@ -790,7 +794,7 @@
 
 ## apps/api/test/computer-games/
 
-- `computer-games.service.spec.ts` — Declares STARTING_FEN (~2417 tok)
+- `computer-games.service.spec.ts` — Declares STARTING_FEN (~3640 tok)
 - `stockfish.service.spec.ts` — TestableStockfishService: makeEngine (~1038 tok)
 
 ## apps/api/test/e2e/
@@ -851,3 +855,55 @@
 ## apps/web/e2e/tests/
 
 - `admin-disable.spec.ts` — Declares API_URL (~453 tok)
+
+## apps/web/public/pieces/
+
+- `ATTRIBUTION.md` — Chess piece set attribution (~128 tok)
+
+## apps/web/src/app/
+
+- `globals.css` — Styles: 9 rules, 75 vars (~1095 tok)
+- `providers.tsx` — ThemeSync (~624 tok)
+
+## apps/web/src/app/computer-game/[gameId]/
+
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~3187 tok)
+
+## apps/web/src/app/games/[gameId]/
+
+- `page.tsx` — formatResult (~678 tok)
+- `review-client.tsx` — STARTING_FEN (~1769 tok)
+
+## apps/web/src/components/board/
+
+- `chessboard.tsx` — FILES (~3125 tok)
+
+## apps/web/src/components/board/hooks/
+
+- `use-board-resize.ts` — Exports useBoardResize (~326 tok)
+
+## apps/web/src/components/game/
+
+- `board-column.tsx` — The `<Chessboard/>` element. (~574 tok)
+- `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~328 tok)
+- `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~421 tok)
+- `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~318 tok)
+- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>. (~685 tok)
+- `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
+- `index.ts` — Declares GameShellProps (~165 tok)
+- `move-panel.tsx` — 1-based ply index. (~946 tok)
+- `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~801 tok)
+
+## apps/web/src/components/play/
+
+- `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
+
+## apps/web/src/lib/board/
+
+- `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~820 tok)
+- `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
+- `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
+
+## apps/web/test/board/
+
+- `material.test.ts` — Declares START_FEN (~560 tok)

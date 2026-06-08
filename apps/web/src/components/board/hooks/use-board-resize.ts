@@ -11,8 +11,12 @@ export function useBoardResize(containerRef: React.RefObject<HTMLElement | null>
 
     function update() {
       if (!el) return;
+      // The board's square wrapper (aspect-square) already shrinks its width to
+      // fit the available height, so clientWidth is the correct side length —
+      // reading clientHeight here would feed the grid's own height back in and
+      // pin the size. Guard against a 0px first paint before layout settles.
       const size = Math.floor(el.clientWidth / 8);
-      el.style.setProperty('--board-sq-size', `${size}px`);
+      if (size > 0) el.style.setProperty('--board-sq-size', `${size}px`);
     }
 
     update();

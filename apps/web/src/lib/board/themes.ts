@@ -11,8 +11,8 @@ export const BOARD_THEMES: BoardTheme[] = [
   {
     id: 'classic',
     label: 'Classic',
-    light: '#d4c89a',
-    dark: '#8b6914',
+    light: '#e7ead0',
+    dark: '#6e9152',
   },
   {
     id: 'mono',

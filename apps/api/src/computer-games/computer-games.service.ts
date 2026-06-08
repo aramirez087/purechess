@@ -217,6 +217,12 @@ export class ComputerGamesService {
 
     const nowMs = Date.now();
 
+    // Computer games are untimed: the UI presents the clock as "Unlimited", so
+    // the wall clock must never flag the player while they think. Reset the tick
+    // origin to now before applying the move — applyMove then sees ~0 elapsed,
+    // so isTimeout never fires no matter how long the game sat idle.
+    engineState.clock = { ...engineState.clock, lastTickAt: BigInt(nowMs) };
+
     let state;
     try {
       state = this.engine.applyMove(engineState, { uci: dto.move }, nowMs);

@@ -1,67 +1,68 @@
 {
-  "session_id": "session-2026-06-07-1105",
-  "started": "2026-06-07T17:05:56.459Z",
+  "session_id": "session-2026-06-08-1819",
+  "started": "2026-06-08T00:19:16.526Z",
   "files_read": {
-    "/tmp/web-dev.log": {
+    "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": {
       "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-07T17:08:13.112Z"
+      "tokens": 3187,
+      "first_read": "2026-06-08T00:20:52.832Z"
     },
-    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.controller.ts": {
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/game-shell.tsx": {
       "count": 1,
-      "tokens": 375,
-      "first_read": "2026-06-07T17:16:18.448Z"
+      "tokens": 685,
+      "first_read": "2026-06-08T00:20:53.314Z"
     },
-    "/Users/aramirez/Code/purechess/packages/shared/src/dto/computer-game.dto.ts": {
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/game-top-bar.tsx": {
       "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-07T17:16:24.893Z"
+      "tokens": 366,
+      "first_read": "2026-06-08T00:20:54.339Z"
     },
-    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts": {
-      "count": 2,
-      "tokens": 2865,
-      "first_read": "2026-06-07T17:16:32.927Z"
-    },
-    "/Users/aramirez/Code/purechess/apps/api/src/observability/all-exceptions.filter.ts": {
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/board-column.tsx": {
       "count": 1,
-      "tokens": 526,
-      "first_read": "2026-06-07T17:17:30.685Z"
+      "tokens": 574,
+      "first_read": "2026-06-08T00:21:03.359Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/player-strip.tsx": {
+      "count": 1,
+      "tokens": 801,
+      "first_read": "2026-06-08T00:21:03.999Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/move-panel.tsx": {
+      "count": 1,
+      "tokens": 946,
+      "first_read": "2026-06-08T00:21:04.579Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/game-rail.tsx": {
+      "count": 1,
+      "tokens": 318,
+      "first_read": "2026-06-08T00:21:05.083Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/board-control-bar.tsx": {
+      "count": 1,
+      "tokens": 328,
+      "first_read": "2026-06-08T00:21:05.490Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/captured-material.tsx": {
+      "count": 1,
+      "tokens": 421,
+      "first_read": "2026-06-08T00:21:05.925Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/globals.css": {
+      "count": 1,
+      "tokens": 1095,
+      "first_read": "2026-06-08T00:22:03.399Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx": {
+      "count": 1,
+      "tokens": 1769,
+      "first_read": "2026-06-08T00:22:04.370Z"
     }
   },
-  "files_written": [
-    {
-      "file": "/tmp/inspect.cjs",
-      "action": "create",
-      "tokens": 280,
-      "at": "2026-06-07T17:18:14.250Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/purechess/apps/api/_repro.cjs",
-      "action": "create",
-      "tokens": 183,
-      "at": "2026-06-07T17:19:04.451Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts",
-      "action": "edit",
-      "tokens": 119,
-      "at": "2026-06-07T17:20:10.022Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts",
-      "action": "edit",
-      "tokens": 433,
-      "at": "2026-06-07T17:23:36.230Z"
-    }
-  ],
-  "edit_counts": {
-    "../../../../tmp/inspect.cjs": 1,
-    "apps/api/_repro.cjs": 1,
-    "apps/api/src/computer-games/computer-games.service.ts": 2
-  },
-  "anatomy_hits": 3,
-  "anatomy_misses": 2,
-  "repeated_reads_warned": 1,
+  "files_written": [],
+  "edit_counts": {},
+  "anatomy_hits": 11,
+  "anatomy_misses": 0,
+  "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
-  "stop_count": 1
+  "stop_count": 0
 }

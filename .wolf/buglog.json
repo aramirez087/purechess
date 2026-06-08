@@ -66,6 +66,315 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-07T17:23:36.231Z"
+    },
+    {
+      "id": "bug-005",
+      "timestamp": "2026-06-07T00:00:00.000Z",
+      "error_message": "POST /api/computer-games/:id/move -> 500 Internal server error. Prisma: Unique constraint failed on the fields: (gameId, ply) at tx.move.create (computer-games.service.ts:252)",
+      "file": "apps/api/src/computer-games/computer-games.service.ts",
+      "root_cause": "When the side-to-moves clock has flagged, engine applyMove() (game-state.ts isTimeout early-return) returns the game as completed WITHOUT appending the attempted move. submitMove ignored this: it took state.moves[last] (the PREVIOUS move) and re-inserted it, duplicating its ply -> unique (gameId,ply) violation -> 500. Triggered whenever a computer game sat idle past its time control.",
+      "fix": "In submitMove, after applyMove, guard: if state.moves.length === engineState.moves.length (no move appended = flag fall), persist game as completed with state.result/resultReason (timeout) and return WITHOUT creating a Move row. Verified: flagged game now returns 200 status=completed result=white_wins resultReason=timeout, no dup row; normal moves ply1-3 still 200.",
+      "tags": [
+        "computer-games",
+        "timeout",
+        "clock",
+        "prisma",
+        "unique-constraint",
+        "500",
+        "chess-engine"
+      ],
+      "related_bugs": [
+        "bug-001"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T00:00:00.000Z"
+    },
+    {
+      "id": "bug-006",
+      "timestamp": "2026-06-07T17:57:23.700Z",
+      "error_message": "Incorrect value in code",
+      "file": "../../.claude/plans/your-goal-is-to-squishy-platypus.md",
+      "root_cause": "Had `apps/web/src/components/board/chessboard.tsx`",
+      "fix": "Changed to `apps/web/public/pieces/cburnett/`",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "md"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-07T17:57:33.634Z"
+    },
+    {
+      "id": "bug-007",
+      "timestamp": "2026-06-07T18:05:49.781Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "6 lines replaced/restructured",
+      "fix": "Rewrote 11→6 lines (6 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:05:49.781Z"
+    },
+    {
+      "id": "bug-008",
+      "timestamp": "2026-06-07T18:08:32.598Z",
+      "error_message": "CSS fix: --board-sq-light, --board-sq-dark",
+      "file": "apps/web/src/app/globals.css",
+      "root_cause": "--board-sq-light: 44 26% 78% → 66 36% 86%; --board-sq-dark: 142 16% 34% → 92 28% 44%",
+      "fix": "Changed --board-sq-light: 44 26% 78% → 66 36% 86%; --board-sq-dark: 142 16% 34% → 92 28% 44%",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-06-07T18:08:47.658Z"
+    },
+    {
+      "id": "bug-009",
+      "timestamp": "2026-06-07T18:10:01.982Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/test/board/material.test.ts",
+      "root_cause": "Had 'rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNRQ w kq",
+      "fix": "Changed to 'QQ5k/8/8/8/8/8/8/6K1 w - - 0 1'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:10:01.982Z"
+    },
+    {
+      "id": "bug-010",
+      "timestamp": "2026-06-07T18:18:19.767Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/games/[gameId]/page.tsx",
+      "root_cause": "Had '@/components/layout/AppShell'",
+      "fix": "Changed to '@purechess/shared'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:18:19.767Z"
+    },
+    {
+      "id": "bug-011",
+      "timestamp": "2026-06-07T18:18:23.797Z",
+      "error_message": "Wrong return value",
+      "file": "apps/web/src/app/games/[gameId]/page.tsx",
+      "root_cause": "Was returning: (",
+      "fix": "Now returns: <ReviewClient game={review} reportTarget={reportTa",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:18:23.797Z"
+    },
+    {
+      "id": "bug-012",
+      "timestamp": "2026-06-07T18:22:49.930Z",
+      "error_message": "CSS fix: lg, sm",
+      "file": "apps/web/src/components/game/board-column.tsx",
+      "root_cause": "lg: min-h-0 lg:flex-1\"> → h-full lg:min-h-0 lg:justify-center',; sm: p-3 lg:h-full lg:w-auto lg:max-h-full\"> → p-3\">",
+      "fix": "Changed lg: min-h-0 lg:flex-1\"> → h-full lg:min-h-0 lg:justify-center',; sm: p-3 lg:h-full lg:w-auto lg:max-h-full\"> → p-3\">",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:22:49.930Z"
+    },
+    {
+      "id": "bug-013",
+      "timestamp": "2026-06-07T18:25:15.788Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/game/game-shell.tsx",
+      "root_cause": "4 lines replaced/restructured",
+      "fix": "Rewrote 10→6 lines (4 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:25:15.788Z"
+    },
+    {
+      "id": "bug-014",
+      "timestamp": "2026-06-07T18:30:52.479Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/app/providers.tsx",
+      "root_cause": "No early return/throw for edge case: !theme || storeAppTheme === theme",
+      "fix": "Added guard clause: if (!theme || storeAppTheme === theme)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:30:52.479Z"
+    },
+    {
+      "id": "bug-015",
+      "timestamp": "2026-06-07T18:32:00.000Z",
+      "error_message": "Uncaught Error: Maximum update depth exceeded. ... at ThemeSync (src/app/providers.tsx)",
+      "file": "apps/web/src/app/providers.tsx",
+      "root_cause": "PRE-EXISTING. ThemeSync had two bidirectional effects (theme->store via update(); store->theme via setTheme()). When the persisted settings-store appTheme disagreed with next-themes theme on load (e.g. localStorage purechess-settings appTheme='dark' but next-themes theme='system'), the two effects ping-ponged forever and never converged -> React 'Maximum update depth exceeded'. ThemeSync is global in Providers so it crashed EVERY page including the untouched homepage. Browser-localStorage triggered (not caused by the game redesign); surfaces for any user whose stored appTheme differs from next-themes. Restarting the dev server did NOT fix it; clearing localStorage did (confirming the trigger).",
+      "fix": "Replaced the two effects with ONE reconciliation effect + a lastSynced ref. Persisted store is source of truth (store->setTheme); next-themes changes mirror back to the store only when they did NOT originate from our own sync (ref guard breaks the echo). Verified live via chrome-devtools: appTheme='dark' + theme='system' loads with html data-theme=dark, store/next-themes both converge to dark, zero console errors, no loop. SettingsForm (sets both store+theme) and the (demo)/demo page (sets theme only) both still work.",
+      "tags": [
+        "next-themes",
+        "theme-sync",
+        "infinite-loop",
+        "maximum-update-depth",
+        "react",
+        "providers",
+        "pre-existing",
+        "localstorage"
+      ],
+      "related_bugs": [
+        "bug-014"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:32:00.000Z"
+    },
+    {
+      "id": "bug-016",
+      "timestamp": "2026-06-07T18:20:00.000Z",
+      "error_message": "TypeError: activeRef.current?.scrollIntoView is not a function (move-panel.tsx) in jsdom review-page tests",
+      "file": "apps/web/src/components/game/move-panel.tsx",
+      "root_cause": "New MovePanel called activeRef.current?.scrollIntoView({...}); jsdom elements do not implement scrollIntoView, so the method is undefined and invoking it throws. The original review-move-list guarded with an optional CALL.",
+      "fix": "Use optional call: activeRef.current?.scrollIntoView?.({ block: 'nearest' }). 7 review-page tests went green.",
+      "tags": [
+        "jsdom",
+        "vitest",
+        "scrollintoview",
+        "move-panel",
+        "optional-call"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T18:20:00.000Z"
+    },
+    {
+      "id": "bug-017",
+      "timestamp": "2026-06-07T23:34:37.465Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "12 lines replaced/restructured",
+      "fix": "Rewrote 17→4 lines (12 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T23:34:37.465Z"
+    },
+    {
+      "id": "bug-018",
+      "timestamp": "2026-06-07T23:46:14.367Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/play/computer-game-setup.tsx",
+      "root_cause": "5 lines replaced/restructured",
+      "fix": "Rewrote 7→7 lines (5 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T23:46:14.367Z"
+    },
+    {
+      "id": "bug-019",
+      "timestamp": "2026-06-07T23:46:22.224Z",
+      "error_message": "CSS fix: timeControlSeconds, incrementSeconds",
+      "file": "apps/web/src/components/play/computer-game-setup.tsx",
+      "root_cause": "timeControlSeconds: tc.seconds, → UNTIMED_SECONDS,; incrementSeconds: tc.increment, → UNTIMED_INCREMENT,",
+      "fix": "Changed timeControlSeconds: tc.seconds, → UNTIMED_SECONDS,; incrementSeconds: tc.increment, → UNTIMED_INCREMENT,",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T23:46:22.224Z"
+    },
+    {
+      "id": "bug-007",
+      "timestamp": "2026-06-07T00:00:00.000Z",
+      "error_message": "Playing vs Stockfish, idle a few mins, return shows game already lost but no checkmate",
+      "file": "apps/api/src/computer-games/computer-games.service.ts, apps/web/src/components/play/computer-game-setup.tsx",
+      "root_cause": "Computer games were created with a finite server clock (timeControlSeconds from the setup time-control picker). Engine applyMove -> isTimeout flags on real wall-clock elapsed since last move (nowMs - lastTickAt), so idling between moves drained the human clock and the next submit returned status=completed reason=timeout. But the in-game UI hardcodes clock \"∞\" / Time \"Unlimited\" and shows no countdown, so the timeout loss was an unexplained surprise (no checkmate).",
+      "fix": "Made vs-computer games untimed to match the UI. submitMove now resets engineState.clock.lastTickAt = nowMs before applyMove, so isTimeout sees ~0 elapsed and never fires regardless of idle time. Removed the time-control picker from computer-game-setup.tsx; it now sends fixed UNTIMED_SECONDS=600/inc=0 only to satisfy the DTO/category column. Kept the existing flag-fall guard as a defensive dead path (bug-005 mock test still passes). typecheck clean (api+web), 16/16 service spec green.",
+      "tags": [
+        "computer-games",
+        "timeout",
+        "clock",
+        "untimed",
+        "stockfish",
+        "ui-mismatch",
+        "wall-clock"
+      ],
+      "related_bugs": [
+        "bug-005"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T00:00:00.000Z"
+    },
+    {
+      "id": "bug-021",
+      "timestamp": "2026-06-07T23:59:44.222Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/components/game/game-shell.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T23:59:44.222Z"
+    },
+    {
+      "id": "bug-022",
+      "timestamp": "2026-06-07T23:59:51.517Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "22 lines replaced/restructured",
+      "fix": "Rewrote 26→4 lines (22 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-07T23:59:51.517Z"
     }
   ]
 }

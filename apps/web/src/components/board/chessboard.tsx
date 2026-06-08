@@ -237,14 +237,9 @@ export function Chessboard({
 
   return (
     <div
-      className={cn('relative w-full max-w-[720px] mx-auto', className)}
+      className={cn('relative w-full', className)}
       ref={containerRef}
     >
-      {settings.coordinates && (
-        <div className="relative">
-          <Coordinates orientation={orientation} />
-        </div>
-      )}
       <div
         role="grid"
         aria-label="Chess board"
@@ -291,6 +286,12 @@ export function Chessboard({
           );
         })}
       </div>
+
+      {settings.coordinates && (
+        <div className="pointer-events-none absolute inset-0 z-30">
+          <Coordinates orientation={orientation} />
+        </div>
+      )}
 
       {dragState.active && dragState.from && (() => {
         const p = getPieceAt(position, dragState.from);
