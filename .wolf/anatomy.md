@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:20:29.756Z
-> Files: 584 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:28:51.093Z
+> Files: 586 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -26,6 +26,7 @@
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
+- `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -872,7 +873,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4309 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4765 tok)
 
 ## apps/web/src/app/games/
 
@@ -912,7 +913,7 @@
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~762 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
 - `index.ts` — Declares GameShellProps (~165 tok)
-- `move-panel.tsx` — 1-based ply index. (~946 tok)
+- `move-panel.tsx` — 1-based ply index. (~972 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
 
 ## apps/web/src/components/games/
@@ -999,6 +1000,7 @@
 
 - `session-08-handoff.md` — Session 08 Handoff — Review History: PGN Rail + vs-Computer Filter + Deep-Link Review (~1663 tok)
 - `session-09-handoff.md` — Session 09 Handoff — a11y Polish (Keyboard + Screen Reader) (~1160 tok)
+- `session-10-handoff.md` — Session 10 Handoff — CI Gate / Go–No-Go (~1228 tok)
 
 ## packages/shared/src/
 
