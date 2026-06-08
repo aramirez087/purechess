@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:12:40.219Z
-> Files: 565 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:23:48.797Z
+> Files: 572 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -24,6 +24,7 @@
 - `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
+- `.session-07-plan.md` — Session 07 — Implementation Plan: Openings & Custom FEN (~2539 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -891,6 +892,11 @@
 
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
 
+## apps/web/src/components/computer-game/
+
+- `fen-setup-board.tsx` — FenSetupBoard (~1225 tok)
+- `opening-picker.tsx` — MAX_RESULTS (~1949 tok)
+
 ## apps/web/src/components/game/
 
 - `board-column.tsx` — The `<Chessboard/>` element. (~614 tok)
@@ -925,6 +931,11 @@
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
 
+## apps/web/src/lib/openings/
+
+- `eco.ts` — Exports EcoEntry, ECO_OPENINGS (~1381 tok)
+- `index.ts` — Exports applyMoves, getEcoFen, lookupByName, lookupByFen + 2 more (~510 tok)
+
 ## apps/web/test/api/
 
 - `computer-games.test.ts` — BASE: mockOkFetch (~1090 tok)
@@ -936,6 +947,10 @@
 ## apps/web/test/home/
 
 - `homepage.test.tsx` — link (~704 tok)
+
+## apps/web/test/openings/
+
+- `openings.test.ts` — Declares START_FEN (~813 tok)
 
 ## apps/web/test/profile/
 
@@ -949,11 +964,33 @@
 
 - `.epic-produces-overrides.json` (~111 tok)
 
+## apps/web/src/lib/openings/
+
+- `eco.ts` — Curated ECO dataset (~53 entries); exports EcoEntry interface + ECO_OPENINGS array (~250 tok)
+- `index.ts` — Lookup helpers: lookupByName, lookupByFen, randomOpening, getEcoFen, applyMoves, isValidFen (~120 tok)
+
+## apps/web/src/components/computer-game/
+
+- `opening-picker.tsx` — Accessible combobox for ECO opening search + Random Opening button; onSelect(fen,name,code) (~200 tok)
+- `fen-setup-board.tsx` — Paste-FEN textarea with chess.js validation, read-only board preview, submit to createComputerGameFromFen (~180 tok)
+
+## apps/web/test/openings/
+
+- `openings.test.ts` — 11 Vitest unit tests for openings lib (lookupByName, lookupByFen, randomOpening, getEcoFen, isValidFen) (~120 tok)
+
+## docs/roadmap/vs-computer-ui/
+
+- `session-07-handoff.md` — Session 07 Handoff — Openings & Custom FEN (~500 tok)
+
 ## docs/roadmap/vs-computer-foundations/
 
 - `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
 - `session-04-handoff.md` — Session 04 Handoff — Web Data Layer (~1057 tok)
 - `session-05-handoff.md` — Session 05 Handoff — CI Gate / Go–No-Go Report (~2264 tok)
+
+## docs/roadmap/vs-computer-ui/
+
+- `session-07-handoff.md` — Session 07 Handoff — Openings & Custom FEN (~1223 tok)
 
 ## packages/shared/src/
 
