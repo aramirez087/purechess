@@ -236,3 +236,20 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:12 | Wrote session-05-handoff.md (GO report) | docs/roadmap/vs-computer-foundations/ | done | ~100 |
 | 20:12 | Committed all changes | 21 files, session 5 ci gate | commit 34a3255 | ~50 |
 | 20:13 | Session end: 29 writes across 14 files (admin-page-header.tsx, games-table.tsx, reports-table.tsx, footer.tsx, package.json) | 19 reads | ~16894 tok |
+
+## Session: 2026-06-08 20:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:16 | Created .session-06-plan.md | — | ~2972 |
+| 20:16 | Session end: 1 writes across 1 files (.session-06-plan.md) | 7 reads | ~5977 tok |
+
+## Session: 2026-06-08 20:16
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:20 | Created apps/web/src/components/play/computer-game-setup.tsx | — | ~3665 |
+| 20:21 | Created apps/web/test/play/computer-game-setup.test.tsx | — | ~1252 |
+| 20:22 | Edited apps/web/test/play/computer-game-setup.test.tsx | 2→3 lines | ~59 |
+| 20:22 | Created docs/roadmap/vs-computer-ui/session-06-handoff.md | — | ~908 |
+| 20:22 | Session 06: rewrote computer-game-setup.tsx (level/time/ELO/humanlike/think-time) + test | apps/web/src/components/play/computer-game-setup.tsx, apps/web/test/play/computer-game-setup.test.tsx | 143/143 tests pass | ~6500 |
