@@ -4,19 +4,12 @@ import { useParams } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FairplaySignals, type FairPlaySignalRow } from '@/components/admin/fairplay-signals';
+import { FairplaySignals } from '@/components/admin/fairplay-signals';
 import { fetchAdminReport, updateReportStatus } from '@/lib/api/reports';
 import { formatRelativeTime, cn } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Check, X } from 'lucide-react';
-
-function statusVariant(status: string): 'default' | 'secondary' | 'outline' {
-  if (status === 'open') return 'default';
-  if (status === 'reviewed') return 'secondary';
-  return 'outline';
-}
 
 function statusClasses(status: string): string {
   if (status === 'open')

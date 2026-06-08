@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAudit, type AuditLog } from '@/lib/api/admin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { formatRelativeTime, cn } from '@/lib/utils';
+import { formatRelativeTime } from '@/lib/utils';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ChevronLeft, ChevronRight, Search, ScrollText } from 'lucide-react';
 

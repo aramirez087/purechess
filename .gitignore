@@ -1,3 +1,7 @@
+docs/claude-sessions/
+.wolf/designqc-captures/
+.wolf/scripts/
+scripts/resolve-wolf.sh
 .epic-worktrees/
 node_modules/
 .next/
