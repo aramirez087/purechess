@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 157971,
-    "total_reads": 199,
-    "total_writes": 144,
-    "total_sessions": 18,
-    "anatomy_hits": 69,
+    "total_tokens_estimated": 180819,
+    "total_reads": 208,
+    "total_writes": 155,
+    "total_sessions": 20,
+    "anatomy_hits": 78,
     "anatomy_misses": 128,
-    "repeated_reads_blocked": 59,
-    "estimated_savings_vs_bare_cli": 30284
+    "repeated_reads_blocked": 61,
+    "estimated_savings_vs_bare_cli": 41614
   },
   "sessions": [
     {
@@ -2245,6 +2245,149 @@
         "writes_count": 6,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-06-08-2121",
+      "started": "2026-06-08T03:21:12.398Z",
+      "ended": "2026-06-08T03:24:04.065Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 4309,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/hooks/use-game-keyboard.ts",
+          "tokens_estimated": 624,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/computer-game/live-announcer.tsx",
+          "tokens_estimated": 342,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/game/move-panel.tsx",
+          "tokens_estimated": 946,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/test/computer-game/a11y.test.tsx",
+          "tokens_estimated": 2228,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/.session-10-plan.md",
+          "tokens_estimated": 5410,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 8449,
+        "output_tokens_estimated": 5410,
+        "reads_count": 5,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 5
+      }
+    },
+    {
+      "id": "session-2026-06-08-2124",
+      "started": "2026-06-08T03:24:04.964Z",
+      "ended": "2026-06-08T03:29:42.657Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 4765,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/game/move-panel.tsx",
+          "tokens_estimated": 946,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/hooks/use-game-keyboard.ts",
+          "tokens_estimated": 624,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/computer-game/live-announcer.tsx",
+          "tokens_estimated": 342,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 64,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 15,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 59,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 372,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 143,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 64,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 55,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 44,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/game/move-panel.tsx",
+          "tokens_estimated": 93,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/docs/roadmap/vs-computer-ui/session-10-handoff.md",
+          "tokens_estimated": 1403,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 6677,
+        "output_tokens_estimated": 2312,
+        "reads_count": 4,
+        "writes_count": 10,
+        "repeated_reads_blocked": 2,
+        "anatomy_lookups": 4
       }
     }
   ],

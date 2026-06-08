@@ -317,3 +317,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 21:27 | Edited apps/web/src/components/game/move-panel.tsx | CSS: focus-visible, focus-visible, focus-visible | ~93 |
 | 21:28 | Created docs/roadmap/vs-computer-ui/session-10-handoff.md | — | ~1310 |
 | 21:27 | Session 10: wired useGameKeyboard+LiveAnnouncer into shell, added currentPly seek, focus ring on MoveCell, all 5 CI gates pass | computer-game-client.tsx, move-panel.tsx | GO | ~350 |
+| 21:29 | Session end: 10 writes across 3 files (computer-game-client.tsx, move-panel.tsx, session-10-handoff.md) | 4 reads | ~8989 tok |
