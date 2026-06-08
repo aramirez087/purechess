@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T00:30:45.043Z
-> Files: 545 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T01:36:12.065Z
+> Files: 551 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -21,6 +21,7 @@
 - `.gitignore` — Git ignore rules (~36 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
+- `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -907,3 +908,20 @@
 ## apps/web/test/board/
 
 - `material.test.ts` — Declares START_FEN (~560 tok)
+
+## docs/claude-sessions/vs-computer-foundations/
+
+- `.epic-produces-overrides.json` (~111 tok)
+
+## docs/roadmap/vs-computer-foundations/
+
+- `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
+
+## packages/shared/src/
+
+- `index.ts` (~136 tok)
+
+## packages/shared/src/dto/
+
+- `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
+- `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)

@@ -139,3 +139,22 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 18:30 | Edited apps/web/src/components/game/board-column.tsx | "relative mx-auto aspect-s" → "relative mx-auto aspect-s" | ~80 |
 | 18:35 | Redesigned computer-game page chromeless: removed top bar, board fills viewport via --board-reserve, rail brand+settings header + StatusHero, bot/user avatars, dropped ∞ clock, premium bg/frame | computer-game-client.tsx + game-shell/board-column/player-strip.tsx | typecheck clean; verified live play + game-over | ~6k |
 | 18:33 | Session end: 11 writes across 4 files (game-shell.tsx, board-column.tsx, player-strip.tsx, computer-game-client.tsx) | 11 reads | ~13663 tok |
+
+## Session: 2026-06-08 19:30
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:32 | Created .session-01-plan.md | — | ~4070 |
+| 19:32 | Session end: 1 writes across 1 files (.session-01-plan.md) | 16 reads | ~8971 tok |
+
+## Session: 2026-06-08 19:32
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:33 | Created packages/shared/src/dto/computer-game.dto.ts | — | ~686 |
+| 19:33 | Edited packages/shared/src/dto/computer-game.dto.ts | 3→1 lines | ~12 |
+| 19:33 | Created packages/shared/src/dto/engine-analysis.dto.ts | — | ~192 |
+| 19:33 | Edited packages/shared/src/index.ts | 1→2 lines | ~26 |
+| 19:35 | Created docs/claude-sessions/vs-computer-foundations/.epic-produces-overrides.json | — | ~111 |
+| 19:36 | Created docs/roadmap/vs-computer-foundations/session-01-handoff.md | — | ~2423 |
+| 19:36 | Session end: 6 writes across 5 files (computer-game.dto.ts, engine-analysis.dto.ts, index.ts, .epic-produces-overrides.json, session-01-handoff.md) | 3 reads | ~3623 tok |
