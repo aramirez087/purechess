@@ -8,6 +8,7 @@ import type { Game } from "@prisma/client";
 import {
   GameResult as PrismaGameResult,
   GameResultReason,
+  Prisma,
 } from "@prisma/client";
 import {
   Color,
@@ -123,7 +124,7 @@ export class ComputerGameActionsService {
       }
     }
 
-    await this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       await tx.move.deleteMany({
         where: { gameId: game.id, ply: { gt: targetPly } },
       });

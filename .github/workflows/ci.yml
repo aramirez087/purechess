@@ -36,6 +36,9 @@ jobs:
       - name: Build shared
         run: pnpm --filter @purechess/shared build
 
+      - name: Generate Prisma client
+        run: pnpm --filter @purechess/api exec prisma generate
+
       - name: Lint
         run: pnpm lint
 
@@ -62,6 +65,9 @@ jobs:
 
       - name: Build shared
         run: pnpm --filter @purechess/shared build
+
+      - name: Generate Prisma client
+        run: pnpm --filter @purechess/api exec prisma generate
 
       - name: Test
         run: pnpm test
