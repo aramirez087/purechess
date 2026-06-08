@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { SafeUser } from '@purechess/shared';
+import { Loader2 } from 'lucide-react';
 
 type EditProfileDialogProps = {
   open: boolean;
@@ -72,13 +73,15 @@ export function EditProfileDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+        <DialogHeader className="border-b border-border/60 pb-4">
+          <DialogTitle className="text-base tracking-tight">Edit profile</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4 py-2">
+        <div className="flex flex-col gap-4 py-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="edit-username">Username</Label>
+            <Label htmlFor="edit-username" className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              Username
+            </Label>
             <Input
               id="edit-username"
               value={username}
@@ -87,7 +90,9 @@ export function EditProfileDialog({
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="edit-avatar-url">Avatar URL</Label>
+            <Label htmlFor="edit-avatar-url" className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              Avatar URL
+            </Label>
             <Input
               id="edit-avatar-url"
               type="url"
@@ -95,15 +100,27 @@ export function EditProfileDialog({
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder="https://..."
             />
+            <p className="text-xs text-muted-foreground">
+              Direct link to an image. Square crops render best.
+            </p>
           </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && (
+            <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+              {error}
+            </p>
+          )}
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
+        <DialogFooter className="border-t border-border/60 pt-4">
+          <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={saving}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-foreground text-background hover:bg-foreground/90"
+          >
+            {saving && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
             {saving ? 'Saving…' : 'Save'}
           </Button>
         </DialogFooter>

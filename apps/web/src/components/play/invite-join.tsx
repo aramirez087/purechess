@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetInvite, useAcceptInvite } from '@/hooks/use-invite';
+import { Clock, Swords, User } from 'lucide-react';
 
 function formatTimeControl(seconds: number, increment: number): string {
   const mins = Math.floor(seconds / 60);
@@ -29,14 +30,14 @@ export function InviteJoin({ token }: InviteJoinProps) {
 
   if (isLoading) {
     return (
-      <Card className="w-full max-w-md">
-        <CardHeader>
+      <Card className="w-full max-w-lg border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
+        <CardHeader className="border-b border-border/60">
           <Skeleton className="h-6 w-48" />
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-6">
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-11 w-full" />
         </CardContent>
       </Card>
     );
@@ -49,12 +50,12 @@ export function InviteJoin({ token }: InviteJoinProps) {
         ? 'This invite has expired or been cancelled.'
         : 'Invite not found.';
     return (
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Invite Unavailable</CardTitle>
+      <Card className="w-full max-w-lg border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
+        <CardHeader className="border-b border-border/60">
+          <CardTitle className="text-lg tracking-tight">Invite unavailable</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">{message}</p>
+        <CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">{message}</p>
         </CardContent>
       </Card>
     );
@@ -66,42 +67,73 @@ export function InviteJoin({ token }: InviteJoinProps) {
   const timeLabel = formatTimeControl(invite.timeControlSeconds, invite.incrementSeconds);
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>
-          {invite.creator?.username ?? 'Someone'} challenges you!
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-1 text-sm">
-          <p>
-            <span className="text-muted-foreground">Time control: </span>
-            <span className="font-medium">{timeLabel}</span>
-          </p>
-          <p>
-            <span className="text-muted-foreground">Category: </span>
-            <span className="font-medium capitalize">{invite.category}</span>
-          </p>
-          <p>
-            <span className="text-muted-foreground">You play: </span>
-            <span className="font-medium">{opponentColor}</span>
-          </p>
+    <Card className="w-full max-w-lg border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
+      <CardHeader className="border-b border-border/60 pb-5">
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-brass/10 ring-1 ring-inset ring-brass/30 text-brass">
+            <Swords className="h-4 w-4" />
+          </span>
+          <div>
+            <CardTitle className="text-lg tracking-tight">
+              {invite.creator?.username ?? 'Someone'} challenges you
+            </CardTitle>
+            <p className="mt-0.5 text-xs text-muted-foreground capitalize">
+              {invite.category} · {timeLabel}
+            </p>
+          </div>
         </div>
+      </CardHeader>
+      <CardContent className="space-y-5 pt-6">
+        <dl className="grid grid-cols-3 gap-2">
+          <Detail icon={User} label="You play" value={opponentColor} />
+          <Detail icon={Clock} label="Time" value={timeLabel} mono />
+          <Detail
+            icon={Swords}
+            label="Category"
+            value={invite.category.charAt(0).toUpperCase() + invite.category.slice(1)}
+          />
+        </dl>
 
         <Button
           onClick={handleAccept}
           disabled={accept.isPending || invite.status !== 'invite_pending'}
-          className="w-full"
+          className="h-12 w-full bg-foreground text-background hover:bg-foreground/90 shadow-elevated text-[15px] font-medium"
         >
           {accept.isPending ? 'Joining…' : 'Accept & Play'}
         </Button>
 
         {accept.isError && (
-          <p className="text-sm text-destructive">
+          <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
             Failed to join. The invite may have been cancelled.
           </p>
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function Detail({
+  icon: Icon,
+  label,
+  value,
+  mono = false,
+}: {
+  icon: typeof Clock;
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div className="rounded-md border border-border/70 bg-raised/50 p-3">
+      <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <Icon className="h-3 w-3" />
+        {label}
+      </div>
+      <p
+        className={`mt-1.5 text-sm font-medium ${mono ? 'font-mono tabular-nums' : ''}`}
+      >
+        {value}
+      </p>
+    </div>
   );
 }

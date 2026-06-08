@@ -125,3 +125,17 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 18:24 | designqc: captured 6 screenshots (61KB, ~15000 tok) | /, /play, /games, /settings, /profile, /admin | ready for eval | ~0 |
+| 18:25 | Edited apps/web/src/components/game/game-shell.tsx | CSS: background | ~120 |
+| 18:25 | Edited apps/web/src/components/game/game-shell.tsx | 2→2 lines | ~34 |
+| 18:25 | Edited apps/web/src/components/game/board-column.tsx | 4→4 lines | ~115 |
+| 18:26 | Edited apps/web/src/components/game/player-strip.tsx | modified PlayerStrip() | ~865 |
+| 18:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 4 import(s) | ~249 |
+| 18:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 condition(s) | ~638 |
+| 18:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: avatar | ~124 |
+| 18:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: resultTone | ~66 |
+| 18:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: --board-reserve | ~37 |
+| 18:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+24 lines) | ~845 |
+| 18:30 | Edited apps/web/src/components/game/board-column.tsx | "relative mx-auto aspect-s" → "relative mx-auto aspect-s" | ~80 |
+| 18:35 | Redesigned computer-game page chromeless: removed top bar, board fills viewport via --board-reserve, rail brand+settings header + StatusHero, bot/user avatars, dropped ∞ clock, premium bg/frame | computer-game-client.tsx + game-shell/board-column/player-strip.tsx | typecheck clean; verified live play + game-over | ~6k |
+| 18:33 | Session end: 11 writes across 4 files (game-shell.tsx, board-column.tsx, player-strip.tsx, computer-game-client.tsx) | 11 reads | ~13663 tok |

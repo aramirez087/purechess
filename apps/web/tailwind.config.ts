@@ -42,6 +42,14 @@ const config: Config = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        brass: {
+          DEFAULT: 'hsl(var(--brass))',
+          soft: 'hsl(var(--brass-soft))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        stage: 'hsl(var(--stage))',
+        surface: 'hsl(var(--surface))',
+        raised: 'hsl(var(--raised))',
         board: {
           light: 'hsl(var(--board-sq-light))',
           dark: 'hsl(var(--board-sq-dark))',
@@ -57,19 +65,31 @@ const config: Config = {
         mono: ['var(--font-geist-mono)', 'monospace'],
       },
       lineHeight: {
-        tight: '1.2',
+        tight: '1.15',
       },
       spacing: {
-        'top-bar': '3rem',
+        'top-bar': '3.5rem',
+      },
+      boxShadow: {
+        'inner-hairline': 'inset 0 1px 0 0 hsl(var(--border) / 0.6)',
+        elevated:
+          '0 1px 0 hsl(0 0% 0% / 0.04), 0 1px 2px hsl(0 0% 0% / 0.06), 0 8px 24px hsl(0 0% 0% / 0.08)',
+        'brass-glow':
+          '0 0 0 1px hsl(var(--brass) / 0.4), 0 8px 24px hsl(var(--brass) / 0.18)',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        brassPulse: {
+          '0%, 100%': { boxShadow: '0 0 0 0 hsl(var(--brass) / 0.35)' },
+          '50%': { boxShadow: '0 0 0 6px hsl(var(--brass) / 0)' },
+        },
       },
       animation: {
         'fade-in': 'fadeIn 0.4s ease-out both',
+        'brass-pulse': 'brassPulse 2.4s ease-out infinite',
       },
     },
   },

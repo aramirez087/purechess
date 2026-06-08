@@ -1,48 +1,50 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import type { StatsDto } from '@purechess/shared';
 
 type StatsCardProps = {
   stats: StatsDto;
 };
 
+const ITEMS = [
+  { key: 'totalGames' as const, label: 'Games', accent: 'text-foreground' },
+  { key: 'wins' as const, label: 'Wins', accent: 'text-emerald-500' },
+  { key: 'losses' as const, label: 'Losses', accent: 'text-rose-500' },
+  { key: 'draws' as const, label: 'Draws', accent: 'text-foreground' },
+  { key: 'winRate' as const, label: 'Win %', accent: 'text-brass' },
+];
+
 export function StatsCard({ stats }: StatsCardProps) {
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+    <section className="rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
+      <header className="border-b border-border/60 px-5 py-3.5">
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           Statistics
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-5 gap-2 text-center">
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground">Games</span>
-            <span className="text-lg font-mono font-semibold tabular-nums">{stats.totalGames}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground">Wins</span>
-            <span className="text-lg font-mono font-semibold tabular-nums text-green-600 dark:text-green-400">
-              {stats.wins}
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground">Losses</span>
-            <span className="text-lg font-mono font-semibold tabular-nums text-destructive">
-              {stats.losses}
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground">Draws</span>
-            <span className="text-lg font-mono font-semibold tabular-nums">{stats.draws}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground">Win%</span>
-            <span className="text-lg font-mono font-semibold tabular-nums">
-              {stats.winRate.toFixed(1)}%
-            </span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </h2>
+      </header>
+      <div className="grid grid-cols-5 divide-x divide-border/60">
+        {ITEMS.map((item) => {
+          const raw = stats[item.key];
+          const value = item.key === 'winRate' ? `${raw.toFixed(1)}%` : String(raw);
+          return (
+            <div
+              key={item.key}
+              className="flex flex-col gap-1 px-3 py-5 text-center"
+            >
+              <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                {item.label}
+              </span>
+              <span
+                className={cn(
+                  'text-2xl font-mono font-semibold tabular-nums leading-none',
+                  item.accent,
+                )}
+              >
+                {value}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }

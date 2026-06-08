@@ -8,7 +8,9 @@ import { DisableAccountDialog } from '@/components/admin/disable-account-dialog'
 import { FairplaySignals, type FairPlaySignalRow } from '@/components/admin/fairplay-signals';
 import { GamesTable } from '@/components/admin/games-table';
 import { fetchUser } from '@/lib/api/admin';
-import { formatRelativeTime } from '@/lib/utils';
+import { formatRelativeTime, cn } from '@/lib/utils';
+import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AlertTriangle, ShieldCheck } from 'lucide-react';
 
 export default function AdminUserDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,77 +25,117 @@ export default function AdminUserDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-xl font-semibold flex items-center gap-2">
-            {user.username}
-            {user.isAdmin && <Badge variant="outline">Admin</Badge>}
-            {user.isDisabled && <Badge variant="destructive">Disabled</Badge>}
-          </h1>
-          <p className="text-sm text-muted-foreground">{user.email}</p>
-        </div>
-        {!user.isAdmin && (
-          <DisableAccountDialog
-            userId={user.id}
-            username={user.username}
-            isDisabled={user.isDisabled}
-          />
-        )}
-      </div>
+      <AdminPageHeader
+        title={user.username}
+        description={user.email}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            {user.isAdmin && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-brass/30 bg-brass/10 px-2.5 py-1 text-[11px] font-medium text-brass">
+                <ShieldCheck className="h-3 w-3" />
+                Admin
+              </span>
+            )}
+            {user.isDisabled && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-[11px] font-medium text-rose-600 dark:text-rose-400">
+                Disabled
+              </span>
+            )}
+            {!user.isAdmin && (
+              <DisableAccountDialog
+                userId={user.id}
+                username={user.username}
+                isDisabled={user.isDisabled}
+              />
+            )}
+          </div>
+        }
+      />
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <Stat label="Joined" value={formatRelativeTime(new Date(user.createdAt))} />
-        <Stat label="Last seen" value={user.lastLoginAt ? formatRelativeTime(new Date(user.lastLoginAt)) : 'Never'} />
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <Stat
+          label="Joined"
+          value={formatRelativeTime(new Date(user.createdAt))}
+        />
+        <Stat
+          label="Last seen"
+          value={
+            user.lastLoginAt
+              ? formatRelativeTime(new Date(user.lastLoginAt))
+              : 'Never'
+          }
+        />
         <Stat label="Games (white)" value={String(user._count.gamesAsWhite)} />
         <Stat label="Games (black)" value={String(user._count.gamesAsBlack)} />
         <Stat label="Reports received" value={String(user._count.reportsReceived)} />
         {user.ratings.map((r) => (
-          <Stat key={r.category} label={r.category} value={String(r.rating)} />
+          <Stat
+            key={r.category}
+            label={`${r.category} rating`}
+            value={String(r.rating)}
+          />
         ))}
       </div>
 
       {user.oauthAccounts.length > 0 && (
-        <div>
-          <h2 className="mb-2 text-sm font-medium">OAuth Accounts</h2>
-          <div className="flex gap-2">
+        <section>
+          <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Linked OAuth providers
+          </h2>
+          <div className="flex flex-wrap gap-2">
             {user.oauthAccounts.map((a) => (
-              <Badge key={a.provider} variant="secondary">{a.provider}</Badge>
+              <Badge
+                key={a.provider}
+                variant="secondary"
+                className="capitalize text-[11px]"
+              >
+                {a.provider}
+              </Badge>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {user.fairPlaySignals.length > 0 && (
-        <div>
+        <section className="space-y-3">
           {user.fairPlaySignals.some((s) => s.score > 0.7) && (
-            <div className="mb-3 rounded-md border border-amber-400 bg-amber-50 p-3 text-sm text-amber-800 flex items-center justify-between">
-              <span>Suspicious signals detected</span>
+            <div className="flex items-center justify-between rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-700 dark:text-amber-300">
+              <span className="flex items-center gap-2 font-medium">
+                <AlertTriangle className="h-4 w-4" />
+                Suspicious signals detected
+              </span>
               <Link
                 href={`/admin/reports?reportedUserId=${user.id}`}
-                className="underline font-medium"
+                className="text-xs font-medium underline underline-offset-2"
               >
-                Review reports
+                Review reports →
               </Link>
             </div>
           )}
-          <h2 className="mb-2 text-sm font-medium">Fair-play signals</h2>
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Fair-play signals
+          </h2>
           <FairplaySignals signals={user.fairPlaySignals} />
-        </div>
+        </section>
       )}
 
-      <div>
-        <h2 className="mb-3 text-sm font-medium">Recent Games</h2>
+      <section>
+        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Recent games
+        </h2>
         <GamesTable userId={user.id} />
-      </div>
+      </section>
     </div>
   );
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-1 font-medium">{value}</p>
+    <div className="rounded-md border border-border/70 bg-surface/60 p-3">
+      <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-medium">{value}</p>
     </div>
   );
 }

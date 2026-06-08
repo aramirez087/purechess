@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { fetchUsers, type AdminUser } from '@/lib/api/admin';
-import { formatRelativeTime } from '@/lib/utils';
+import { formatRelativeTime, cn } from '@/lib/utils';
+import { ChevronLeft, ChevronRight, Search, ShieldCheck, ShieldOff } from 'lucide-react';
 
 export function UsersTable() {
   const [q, setQ] = useState('');
@@ -29,71 +30,135 @@ export function UsersTable() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-3">
-        <Input
-          placeholder="Search username or email…"
-          value={q}
-          onChange={(e) => { setQ(e.target.value); setPage(1); }}
-          className="max-w-sm"
-        />
-        <select
-          className="rounded-md border px-3 py-2 text-sm bg-background"
-          value={disabled}
-          onChange={(e) => { setDisabled(e.target.value); setPage(1); }}
-        >
-          <option value="">All users</option>
-          <option value="false">Active</option>
-          <option value="true">Disabled</option>
-        </select>
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search username or email…"
+            value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setPage(1);
+            }}
+            className="pl-8"
+          />
+        </div>
+        <div className="inline-flex rounded-md border border-border/70 bg-raised/50 p-0.5">
+          {[
+            { value: '', label: 'All' },
+            { value: 'false', label: 'Active' },
+            { value: 'true', label: 'Disabled' },
+          ].map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                setDisabled(opt.value);
+                setPage(1);
+              }}
+              aria-pressed={disabled === opt.value}
+              className={cn(
+                'rounded-sm px-3 py-1.5 text-xs font-medium transition-all',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                disabled === opt.value
+                  ? 'bg-background text-foreground shadow-elevated'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <div className="rounded-lg border border-border/70 bg-surface/60 p-8 text-center text-sm text-muted-foreground">
+          Loading…
+        </div>
       ) : (
-        <div className="rounded-md border overflow-hidden">
+        <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="border-b border-border/60 bg-background/60">
               <tr>
-                <th className="px-4 py-2 text-left font-medium">Username</th>
-                <th className="px-4 py-2 text-left font-medium">Email</th>
-                <th className="px-4 py-2 text-left font-medium">Joined</th>
-                <th className="px-4 py-2 text-left font-medium">Last seen</th>
-                <th className="px-4 py-2 text-left font-medium">Ratings</th>
-                <th className="px-4 py-2 text-left font-medium">Status</th>
+                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  User
+                </th>
+                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Email
+                </th>
+                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Joined
+                </th>
+                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Last seen
+                </th>
+                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Ratings
+                </th>
+                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Status
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border/40">
               {users.map((user) => (
-                <tr key={user.id} className="border-t hover:bg-muted/20">
-                  <td className="px-4 py-2">
-                    <Link href={`/admin/users/${user.id}`} className="hover:underline font-medium">
-                      {user.username}
-                    </Link>
-                    {user.isAdmin && <Badge variant="outline" className="ml-2 text-xs">Admin</Badge>}
+                <tr
+                  key={user.id}
+                  className="transition-colors hover:bg-raised/40"
+                >
+                  <td className="px-4 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/admin/users/${user.id}`}
+                        className="font-medium hover:underline"
+                      >
+                        {user.username}
+                      </Link>
+                      {user.isAdmin && (
+                        <Badge variant="outline" className="text-[10px] text-brass border-brass/30 bg-brass/5">
+                          Admin
+                        </Badge>
+                      )}
+                    </div>
                   </td>
-                  <td className="px-4 py-2 text-muted-foreground">{user.email}</td>
-                  <td className="px-4 py-2 text-muted-foreground">
+                  <td className="px-4 py-2.5 text-muted-foreground">{user.email}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground text-xs">
                     {formatRelativeTime(new Date(user.createdAt))}
                   </td>
-                  <td className="px-4 py-2 text-muted-foreground">
-                    {user.lastLoginAt ? formatRelativeTime(new Date(user.lastLoginAt)) : 'Never'}
+                  <td className="px-4 py-2.5 text-muted-foreground text-xs">
+                    {user.lastLoginAt
+                      ? formatRelativeTime(new Date(user.lastLoginAt))
+                      : 'Never'}
                   </td>
-                  <td className="px-4 py-2 text-muted-foreground text-xs">
-                    {user.ratings.map((r) => `${r.category}: ${r.rating}`).join(', ') || '—'}
+                  <td className="px-4 py-2.5 text-muted-foreground text-xs">
+                    {user.ratings.length > 0
+                      ? user.ratings
+                          .map((r) => `${r.category}: ${r.rating}`)
+                          .join(' · ')
+                      : '—'}
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2.5">
                     {user.isDisabled ? (
-                      <Badge variant="destructive">Disabled</Badge>
+                      <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[11px] font-medium text-rose-600 dark:text-rose-400">
+                        <ShieldOff className="h-3 w-3" />
+                        Disabled
+                      </span>
                     ) : (
-                      <Badge variant="secondary">Active</Badge>
+                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                        <ShieldCheck className="h-3 w-3" />
+                        Active
+                      </span>
                     )}
                   </td>
                 </tr>
               ))}
               {users.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-muted-foreground">
+                  <td
+                    colSpan={6}
+                    className="px-4 py-10 text-center text-sm text-muted-foreground"
+                  >
                     No users found
                   </td>
                 </tr>
@@ -103,15 +168,29 @@ export function UsersTable() {
         </div>
       )}
 
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>{total} total</span>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
-            Previous
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span>
+          {total} {total === 1 ? 'user' : 'users'}
+        </span>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
           </Button>
-          <span className="px-2 py-1">Page {page} of {totalPages}</span>
-          <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>
-            Next
+          <span className="px-2 font-mono tabular-nums">
+            {page} / {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= totalPages}
+            onClick={() => setPage(page + 1)}
+          >
+            <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>

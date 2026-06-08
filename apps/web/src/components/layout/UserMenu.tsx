@@ -4,12 +4,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { User as UserIcon } from 'lucide-react';
+import Link from 'next/link';
 
-type User = {
+type UserAccount = {
   name: string;
   email: string;
 };
@@ -23,42 +26,56 @@ function initials(name: string): string {
     .slice(0, 2);
 }
 
-export function UserMenu({ user }: { user: User | null }) {
+export function UserMenu({ user }: { user: UserAccount | null }) {
   if (!user) {
     return (
-      <a
+      <Link
         href="/login"
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-raised transition-colors"
       >
-        Login
-      </a>
+        <UserIcon className="h-3.5 w-3.5" />
+        Sign in
+      </Link>
     );
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-          <Avatar className="h-7 w-7">
-            <AvatarFallback className="text-xs">{initials(user.name)}</AvatarFallback>
+      <DropdownMenuTrigger
+        asChild
+        className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        <button aria-label="Open user menu">
+          <Avatar className="h-8 w-8 ring-1 ring-inset ring-border">
+            <AvatarFallback className="text-[11px] font-semibold tracking-wide bg-raised">
+              {initials(user.name)}
+            </AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <div className="px-2 py-1.5">
+      <DropdownMenuContent align="end" className="w-56">
+        <div className="px-2.5 py-2">
           <p className="text-sm font-medium leading-none">{user.name}</p>
-          <p className="mt-0.5 text-xs text-muted-foreground truncate">{user.email}</p>
+          <p className="mt-1 text-xs text-muted-foreground truncate">{user.email}</p>
         </div>
         <DropdownMenuSeparator />
+        <DropdownMenuLabel className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/80">
+          Account
+        </DropdownMenuLabel>
         <DropdownMenuItem asChild>
-          <a href="/profile">Profile</a>
+          <Link href="/profile">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href="/settings">Settings</a>
+          <Link href="/settings">Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/games">Game history</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <a href="/logout">Sign out</a>
+          <Link href="/logout" className="text-destructive focus:text-destructive">
+            Sign out
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

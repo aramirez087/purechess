@@ -4,11 +4,18 @@ import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { useSettingsStore } from '@/stores/settings-store';
 import { BOARD_THEMES } from '@/lib/board/themes';
 import { prefersReducedMotion } from '@/lib/board/animations';
+import { Monitor, Moon, Sun, Volume2, Move3D, Hash, Square } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const APP_THEMES = [
+  { value: 'light' as const, label: 'Light', icon: Sun },
+  { value: 'dark' as const, label: 'Dark', icon: Moon },
+  { value: 'system' as const, label: 'System', icon: Monitor },
+];
 
 export function SettingsForm() {
   const { setTheme } = useTheme();
@@ -30,126 +37,202 @@ export function SettingsForm() {
   }
 
   return (
-    <div className="space-y-6">
-      <section>
-        <h3 className="text-sm font-medium mb-3">Appearance</h3>
-        <div className="space-y-4">
-          <div>
-            <Label className="text-xs text-muted-foreground mb-2 block">App theme</Label>
-            <RadioGroup
-              value={settings.appTheme}
-              onValueChange={handleAppTheme}
-              className="flex gap-3"
-            >
-              {(['light', 'dark', 'system'] as const).map((t) => (
-                <div key={t} className="flex items-center gap-1.5">
-                  <RadioGroupItem value={t} id={`theme-${t}`} />
-                  <Label htmlFor={`theme-${t}`} className="capitalize cursor-pointer">
-                    {t}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-          <div>
-            <Label className="text-xs text-muted-foreground mb-2 block">Board theme</Label>
-            <RadioGroup
-              value={settings.boardThemeId}
-              onValueChange={(v) => settings.update({ boardThemeId: v as 'classic' | 'mono' })}
-              className="flex gap-3"
-            >
-              {BOARD_THEMES.map((theme) => (
-                <div key={theme.id} className="flex items-center gap-2">
-                  <RadioGroupItem value={theme.id} id={`board-${theme.id}`} />
-                  <Label htmlFor={`board-${theme.id}`} className="flex items-center gap-2 cursor-pointer">
-                    <span
-                      className="inline-flex w-8 h-5 rounded overflow-hidden border border-border shrink-0"
-                      aria-hidden
-                    >
-                      <span className="flex-1" style={{ background: theme.light }} />
-                      <span className="flex-1" style={{ background: theme.dark }} />
-                    </span>
-                    {theme.label}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-        </div>
-      </section>
+    <div className="space-y-8">
+      <Section
+        title="Appearance"
+        description="How Purechess looks on your device."
+      >
+        <SettingRow label="App theme" hint="Light or dark surfaces, or follow your system.">
+          <SegmentedControl
+            value={settings.appTheme}
+            onValueChange={handleAppTheme}
+            options={APP_THEMES.map((t) => ({ value: t.value, label: t.label, icon: t.icon }))}
+          />
+        </SettingRow>
 
-      <Separator />
+        <Separator className="bg-border/60" />
 
-      <section>
-        <h3 className="text-sm font-medium mb-3">Board</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="coordinates" className="cursor-pointer">
-              Show coordinates
-            </Label>
-            <Switch
-              id="coordinates"
-              checked={settings.coordinates}
-              onCheckedChange={(v) => settings.update({ coordinates: v })}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="animations" className="cursor-pointer">
-                Animations
-              </Label>
-              {reducedMotion && (
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Overridden by prefers-reduced-motion
-                </p>
-              )}
-            </div>
-            <Switch
-              id="animations"
-              checked={settings.animations}
-              onCheckedChange={(v) => settings.update({ animations: v })}
-              disabled={reducedMotion}
-            />
-          </div>
-        </div>
-      </section>
-
-      <Separator />
-
-      <section>
-        <h3 className="text-sm font-medium mb-3">Sound</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="sound" className="cursor-pointer">
-              Sound effects
-            </Label>
-            <Switch
-              id="sound"
-              checked={settings.sound}
-              onCheckedChange={(v) => settings.update({ sound: v })}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <Label
-                htmlFor="lowTimeSound"
-                className={settings.sound ? 'cursor-pointer' : 'cursor-not-allowed text-muted-foreground'}
+        <SettingRow label="Board theme" hint="Pick a colour set for the chessboard.">
+          <div className="flex flex-wrap gap-2">
+            {BOARD_THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                type="button"
+                onClick={() => settings.update({ boardThemeId: theme.id as 'classic' | 'mono' })}
+                aria-pressed={settings.boardThemeId === theme.id}
+                className={cn(
+                  'group flex items-center gap-2.5 rounded-md border px-3 py-2 text-sm transition-all',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  settings.boardThemeId === theme.id
+                    ? 'border-brass/60 bg-brass/10 shadow-inner-hairline'
+                    : 'border-border/70 hover:border-foreground/40',
+                )}
               >
-                Low-time tick
-              </Label>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Tick each second under 10s
-              </p>
-            </div>
-            <Switch
-              id="lowTimeSound"
-              checked={settings.lowTimeSound}
-              onCheckedChange={(v) => settings.update({ lowTimeSound: v })}
-              disabled={!settings.sound}
-            />
+                <span
+                  className="inline-flex w-10 h-5 rounded overflow-hidden border border-border/80"
+                  aria-hidden
+                >
+                  <span className="flex-1" style={{ background: theme.light }} />
+                  <span className="flex-1" style={{ background: theme.dark }} />
+                </span>
+                <span className="font-medium">{theme.label}</span>
+              </button>
+            ))}
           </div>
+        </SettingRow>
+      </Section>
+
+      <Section title="Board" description="On-board information and movement.">
+        <SettingRow
+          label="Show coordinates"
+          hint="Display file and rank labels on the board edge."
+          icon={Hash}
+        >
+          <Switch
+            id="coordinates"
+            checked={settings.coordinates}
+            onCheckedChange={(v) => settings.update({ coordinates: v })}
+          />
+        </SettingRow>
+        <Separator className="bg-border/60" />
+        <SettingRow
+          label="Animations"
+          hint={
+            reducedMotion
+              ? 'Overridden by your system’s reduced-motion setting.'
+              : 'Smooth piece movement and UI transitions.'
+          }
+          icon={Move3D}
+        >
+          <Switch
+            id="animations"
+            checked={settings.animations}
+            onCheckedChange={(v) => settings.update({ animations: v })}
+            disabled={reducedMotion}
+          />
+        </SettingRow>
+      </Section>
+
+      <Section title="Sound" description="Audio cues during play.">
+        <SettingRow label="Sound effects" hint="Moves, captures, and game start." icon={Volume2}>
+          <Switch
+            id="sound"
+            checked={settings.sound}
+            onCheckedChange={(v) => settings.update({ sound: v })}
+          />
+        </SettingRow>
+        <Separator className="bg-border/60" />
+        <SettingRow
+          label="Low-time tick"
+          hint="A subtle tick each second under 10s remaining."
+          disabled={!settings.sound}
+          icon={Square}
+        >
+          <Switch
+            id="lowTimeSound"
+            checked={settings.lowTimeSound}
+            onCheckedChange={(v) => settings.update({ lowTimeSound: v })}
+            disabled={!settings.sound}
+          />
+        </SettingRow>
+      </Section>
+    </div>
+  );
+}
+
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <header className="mb-4">
+        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+        {description && (
+          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
+        )}
+      </header>
+      <div className="rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
+        <div className="divide-y divide-border/60">{children}</div>
+      </div>
+    </section>
+  );
+}
+
+function SettingRow({
+  label,
+  hint,
+  icon: Icon,
+  disabled,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  icon?: typeof Volume2;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-between gap-4 p-4',
+        disabled && 'opacity-60',
+      )}
+    >
+      <div className="flex items-start gap-3">
+        {Icon && (
+          <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-muted-foreground">
+            <Icon className="h-3.5 w-3.5" />
+          </span>
+        )}
+        <div>
+          <Label className="text-sm font-medium">{label}</Label>
+          {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
         </div>
-      </section>
+      </div>
+      <div className="shrink-0">{children}</div>
+    </div>
+  );
+}
+
+function SegmentedControl<T extends string>({
+  value,
+  onValueChange,
+  options,
+}: {
+  value: T;
+  onValueChange: (v: T) => void;
+  options: { value: T; label: string; icon?: typeof Volume2 }[];
+}) {
+  return (
+    <div className="inline-flex rounded-md border border-border/70 bg-raised/50 p-0.5">
+      {options.map((opt) => {
+        const active = value === opt.value;
+        const Icon = opt.icon;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onValueChange(opt.value)}
+            aria-pressed={active}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-xs font-medium transition-all',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              active
+                ? 'bg-background text-foreground shadow-elevated'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {Icon && <Icon className="h-3.5 w-3.5" />}
+            {opt.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

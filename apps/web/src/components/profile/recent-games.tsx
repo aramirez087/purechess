@@ -1,42 +1,60 @@
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn, formatTimeControl } from '@/lib/utils';
 import type { GameHistorySummaryDto } from '@purechess/shared';
+import { Clock, Crown, Shield, TrendingDown, TrendingUp, Minus, ArrowUpRight } from 'lucide-react';
 
 type RecentGamesProps = {
   games: GameHistorySummaryDto[];
 };
 
 function ResultBadge({ result }: { result: GameHistorySummaryDto['result'] }) {
-  if (!result) return <Badge variant="secondary">—</Badge>;
+  if (!result) return null;
+  const map = {
+    win: {
+      label: 'Win',
+      classes: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      icon: TrendingUp,
+    },
+    loss: {
+      label: 'Loss',
+      classes: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      icon: TrendingDown,
+    },
+    draw: {
+      label: 'Draw',
+      classes: 'bg-raised text-muted-foreground border-border/70',
+      icon: Minus,
+    },
+  } as const;
+  const cfg = map[result];
+  const Icon = cfg.icon;
   return (
-    <Badge
-      variant="secondary"
+    <span
       className={cn(
-        result === 'win' && 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-        result === 'loss' && 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-        result === 'draw' && 'bg-muted text-muted-foreground',
+        'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium',
+        cfg.classes,
       )}
     >
-      {result === 'win' ? 'Win' : result === 'loss' ? 'Loss' : 'Draw'}
-    </Badge>
+      <Icon className="h-3 w-3" />
+      {cfg.label}
+    </span>
   );
 }
 
 function RatingDelta({ delta }: { delta: number | null }) {
-  if (delta === null) return <span className="text-muted-foreground">—</span>;
+  if (delta === null) return <span className="text-muted-foreground/60">—</span>;
   const sign = delta > 0 ? '+' : '';
+  const color =
+    delta > 0
+      ? 'text-emerald-600 dark:text-emerald-400'
+      : delta < 0
+        ? 'text-rose-600 dark:text-rose-400'
+        : 'text-muted-foreground';
   return (
-    <span
-      className={cn(
-        'font-mono tabular-nums text-sm',
-        delta > 0 && 'text-green-600 dark:text-green-400',
-        delta < 0 && 'text-destructive',
-        delta === 0 && 'text-muted-foreground',
-      )}
-    >
-      {sign}{delta}
+    <span className={cn('font-mono tabular-nums text-sm font-medium', color)}>
+      {sign}
+      {delta}
     </span>
   );
 }
@@ -44,59 +62,81 @@ function RatingDelta({ delta }: { delta: number | null }) {
 export function RecentGames({ games }: RecentGamesProps) {
   if (games.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center text-muted-foreground text-sm">
-          No recent games.
-        </CardContent>
-      </Card>
+      <section className="rounded-lg border border-dashed border-border/70 bg-surface/40 p-8 text-center">
+        <p className="text-sm text-muted-foreground">No recent games yet.</p>
+        <Link
+          href="/play"
+          className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brass hover:underline"
+        >
+          Start your first game
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </Link>
+      </section>
     );
   }
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-          Recent Games
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <ul>
-          {games.map((g, i) => (
-            <li
-              key={g.id}
-              className={cn(
-                'border-b border-border last:border-0',
-                i === 0 && 'rounded-t-none',
-              )}
-            >
+    <section className="rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
+      <header className="flex items-center justify-between border-b border-border/60 px-5 py-3.5">
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Recent games
+        </h2>
+        <Link
+          href="/games"
+          className="text-[11px] font-medium text-muted-foreground hover:text-foreground"
+        >
+          See all →
+        </Link>
+      </header>
+      <ul className="divide-y divide-border/60">
+        {games.map((g) => {
+          const ColorIcon = g.playedAs === 'white' ? Crown : Shield;
+          const date = g.endedAt
+            ? new Date(g.endedAt).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+              })
+            : '—';
+          return (
+            <li key={g.id}>
               <Link
                 href={`/games/${g.id}`}
-                className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/50 transition-colors"
+                className="group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-raised/60"
               >
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm truncate">{g.opponentUsername}</span>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="shrink-0 text-xs font-mono"
+                <span
+                  className={cn(
+                    'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset',
+                    g.playedAs === 'white'
+                      ? 'bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:ring-amber-900/40'
+                      : 'bg-slate-100 text-slate-700 ring-slate-200 dark:bg-slate-900/40 dark:text-slate-400 dark:ring-slate-800',
+                  )}
+                  aria-label={g.playedAs}
                 >
-                  {g.playedAs === 'white' ? '♔' : '♚'}
-                </Badge>
-                <ResultBadge result={g.result} />
-                <RatingDelta delta={g.ratingDelta} />
-                <span className="text-xs text-muted-foreground font-mono shrink-0">
-                  {formatTimeControl(g.timeControlSeconds, g.incrementSeconds)}
+                  <ColorIcon className="h-3.5 w-3.5" />
                 </span>
-                {g.endedAt && (
-                  <span className="text-xs text-muted-foreground shrink-0 hidden sm:block">
-                    {new Date(g.endedAt).toLocaleDateString()}
-                  </span>
-                )}
+                <div className="flex-1 min-w-0">
+                  <p className="truncate text-sm font-medium">{g.opponentUsername}</p>
+                  <p className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-2.5 w-2.5" />
+                      {formatTimeControl(g.timeControlSeconds, g.incrementSeconds)}
+                    </span>
+                    {g.isRated && <Badge variant="outline" className="h-4 px-1.5 text-[9px]">Rated</Badge>}
+                  </p>
+                </div>
+                <div className="hidden text-xs text-muted-foreground sm:block tabular-nums">
+                  {date}
+                </div>
+                <ResultBadge result={g.result} />
+                <div className="w-12 text-right">
+                  <RatingDelta delta={g.ratingDelta} />
+                </div>
+                <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/40 transition-colors group-hover:text-foreground" />
               </Link>
             </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+          );
+        })}
+      </ul>
+    </section>
   );
 }

@@ -8,12 +8,22 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { FairplaySignals, type FairPlaySignalRow } from '@/components/admin/fairplay-signals';
 import { fetchAdminReport, updateReportStatus } from '@/lib/api/reports';
-import { formatRelativeTime } from '@/lib/utils';
+import { formatRelativeTime, cn } from '@/lib/utils';
+import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { Check, X } from 'lucide-react';
 
 function statusVariant(status: string): 'default' | 'secondary' | 'outline' {
   if (status === 'open') return 'default';
   if (status === 'reviewed') return 'secondary';
   return 'outline';
+}
+
+function statusClasses(status: string): string {
+  if (status === 'open')
+    return 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400';
+  if (status === 'reviewed')
+    return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+  return 'border-border/70 bg-raised text-muted-foreground';
 }
 
 export default function AdminReportDetailPage() {
@@ -35,110 +45,141 @@ export default function AdminReportDetailPage() {
     onError: () => toast.error('Failed to update report'),
   });
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!report) return <p className="text-sm text-destructive">Report not found</p>;
+  if (isLoading)
+    return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (!report)
+    return <p className="text-sm text-destructive">Report not found</p>;
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold">Report #{report.id.slice(-8)}</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+      <AdminPageHeader
+        title={`Report #${report.id.slice(-8)}`}
+        description={
+          <>
             Filed by{' '}
-            <Link href={`/admin/users/${report.reporter.id}`} className="underline">
+            <Link
+              href={`/admin/users/${report.reporter.id}`}
+              className="text-foreground hover:underline"
+            >
               {report.reporter.username}
             </Link>{' '}
             against{' '}
-            <Link href={`/admin/users/${report.reported.id}`} className="underline">
+            <Link
+              href={`/admin/users/${report.reported.id}`}
+              className="text-foreground hover:underline"
+            >
               {report.reported.username}
             </Link>
-          </p>
-        </div>
-        <Badge variant={statusVariant(report.status)}>{report.status}</Badge>
-      </div>
+          </>
+        }
+        actions={
+          <span
+            className={cn(
+              'inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium capitalize',
+              statusClasses(report.status),
+            )}
+          >
+            {report.status}
+          </span>
+        }
+      />
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 text-sm">
-        <div className="rounded-md border p-3">
-          <p className="text-xs text-muted-foreground">Reason</p>
-          <p className="mt-1 font-medium">{report.reason}</p>
-        </div>
-        <div className="rounded-md border p-3">
-          <p className="text-xs text-muted-foreground">Filed</p>
-          <p className="mt-1 font-medium">{formatRelativeTime(new Date(report.createdAt))}</p>
-        </div>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <Stat label="Reason" value={report.reason} />
+        <Stat
+          label="Filed"
+          value={formatRelativeTime(new Date(report.createdAt))}
+        />
         {report.reviewedAt && (
-          <div className="rounded-md border p-3">
-            <p className="text-xs text-muted-foreground">Reviewed</p>
-            <p className="mt-1 font-medium">{formatRelativeTime(new Date(report.reviewedAt))}</p>
-          </div>
+          <Stat
+            label="Reviewed"
+            value={formatRelativeTime(new Date(report.reviewedAt))}
+          />
         )}
         {report.reviewedBy && (
-          <div className="rounded-md border p-3">
-            <p className="text-xs text-muted-foreground">Reviewed by</p>
-            <p className="mt-1 font-medium">{report.reviewedBy.username}</p>
-          </div>
+          <Stat label="Reviewed by" value={report.reviewedBy.username} />
         )}
       </div>
 
       {report.notes && (
-        <div className="rounded-md border p-3 text-sm">
-          <p className="text-xs text-muted-foreground mb-1">Notes</p>
-          <p className="whitespace-pre-wrap">{report.notes}</p>
-        </div>
+        <section className="rounded-lg border border-border/70 bg-surface/60 p-4 shadow-elevated">
+          <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Notes
+          </h2>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed">{report.notes}</p>
+        </section>
       )}
 
       {report.game && (
-        <section>
-          <h2 className="text-sm font-semibold mb-2">Game</h2>
-          <div className="rounded-md border p-3 flex items-center justify-between text-sm">
+        <section className="rounded-lg border border-border/70 bg-surface/60 p-4 shadow-elevated">
+          <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Game
+          </h2>
+          <div className="flex items-center justify-between">
             <div>
               <span className="font-medium">
-                {report.game.whitePlayer.username} vs {report.game.blackPlayer.username}
+                {report.game.whitePlayer.username} vs{' '}
+                {report.game.blackPlayer.username}
               </span>
-              <span className="ml-2 text-muted-foreground">
+              <span className="ml-2 text-sm text-muted-foreground">
                 {report.game.category} · {report.game.result ?? report.game.status}
               </span>
             </div>
-            <Link href={`/games/${report.game.id}`} className="underline text-xs">
-              Review game
+            <Link
+              href={`/games/${report.game.id}`}
+              className="text-xs font-medium text-muted-foreground hover:text-foreground"
+            >
+              Review game →
             </Link>
           </div>
         </section>
       )}
 
       <section>
-        <h2 className="text-sm font-semibold mb-2">
+        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {report.reported.username}&apos;s last {report.reportedUserRecentGames.length} games
         </h2>
-        <div className="rounded-md border">
+        <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
           <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b bg-muted/40">
-                <th className="px-3 py-2 text-left font-medium">Opponent</th>
-                <th className="px-3 py-2 text-left font-medium">Result</th>
-                <th className="px-3 py-2 text-left font-medium">Category</th>
-                <th className="px-3 py-2 text-left font-medium">Date</th>
+            <thead className="border-b border-border/60 bg-background/60">
+              <tr>
+                <Th>Opponent</Th>
+                <Th>Result</Th>
+                <Th>Category</Th>
+                <Th>Date</Th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border/40">
               {report.reportedUserRecentGames.map((g) => {
                 const opponent = g.whitePlayer ?? g.blackPlayer;
                 return (
-                  <tr key={g.id} className="border-b last:border-0">
-                    <td className="px-3 py-2">
-                      <Link href={`/admin/users/${opponent?.id}`} className="underline">
+                  <tr key={g.id} className="hover:bg-raised/40 transition-colors">
+                    <td className="px-4 py-2.5">
+                      <Link
+                        href={`/admin/users/${opponent?.id}`}
+                        className="font-medium hover:underline"
+                      >
                         {opponent?.username ?? '—'}
                       </Link>
                     </td>
-                    <td className="px-3 py-2">{g.result ?? g.status}</td>
-                    <td className="px-3 py-2">{g.category}</td>
-                    <td className="px-3 py-2">{formatRelativeTime(new Date(g.createdAt))}</td>
+                    <td className="px-4 py-2.5 text-muted-foreground">
+                      {g.result ?? g.status}
+                    </td>
+                    <td className="px-4 py-2.5 text-muted-foreground capitalize">
+                      {g.category}
+                    </td>
+                    <td className="px-4 py-2.5 text-muted-foreground text-xs">
+                      {formatRelativeTime(new Date(g.createdAt))}
+                    </td>
                   </tr>
                 );
               })}
               {report.reportedUserRecentGames.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-3 py-4 text-center text-muted-foreground">
+                  <td
+                    colSpan={4}
+                    className="px-4 py-8 text-center text-sm text-muted-foreground"
+                  >
                     No games found
                   </td>
                 </tr>
@@ -149,16 +190,20 @@ export default function AdminReportDetailPage() {
       </section>
 
       <section>
-        <h2 className="text-sm font-semibold mb-2">Fair-play signals</h2>
+        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Fair-play signals
+        </h2>
         <FairplaySignals signals={report.reportedUserSignals} />
       </section>
 
       {report.status === 'open' && (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2 border-t border-border/60 pt-5">
           <Button
             onClick={() => reviewMutation.mutate('reviewed')}
             disabled={reviewMutation.isPending}
+            className="bg-emerald-500/90 text-white hover:bg-emerald-500 shadow-elevated"
           >
+            <Check className="mr-1.5 h-3.5 w-3.5" />
             Mark reviewed
           </Button>
           <Button
@@ -166,10 +211,33 @@ export default function AdminReportDetailPage() {
             onClick={() => reviewMutation.mutate('dismissed')}
             disabled={reviewMutation.isPending}
           >
+            <X className="mr-1.5 h-3.5 w-3.5" />
             Dismiss
           </Button>
         </div>
       )}
     </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-border/70 bg-surface/60 p-3">
+      <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-medium">{value}</p>
+    </div>
+  );
+}
+
+function Th({ children }: { children: React.ReactNode }) {
+  return (
+    <th
+      scope="col"
+      className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+    >
+      {children}
+    </th>
   );
 }

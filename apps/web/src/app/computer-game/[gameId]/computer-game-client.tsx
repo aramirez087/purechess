@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Flag, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Bot, Flag, Loader2, Plus, User } from 'lucide-react';
 import type { ComputerGameStateDto } from '@purechess/shared';
 import type { Square } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
@@ -15,7 +16,10 @@ import {
   BoardControlBar,
   type PlayerStripProps,
 } from '@/components/game';
+import { Logo } from '@/components/layout/Logo';
+import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { computeMaterial } from '@/lib/board/material';
+import { cn } from '@/lib/utils';
 import { getComputerGame, submitComputerMove } from '@/lib/api/computer-games';
 
 type Color = 'white' | 'black';
@@ -81,6 +85,65 @@ function parsePgnMoves(pgn: string): string[] {
     .split(/\s+/)
     .filter((t) => t && !/^\d+\./.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
   return tokens;
+}
+
+type ResultTone = 'win' | 'loss' | 'draw';
+
+function StatusHero({
+  isGameOver,
+  tone,
+  resultLabel,
+  reasonLabel,
+  computerActive,
+  level,
+}: {
+  isGameOver: boolean;
+  tone: ResultTone;
+  resultLabel: string;
+  reasonLabel: string | null;
+  computerActive: boolean;
+  level: number;
+}) {
+  if (isGameOver) {
+    const toneClasses: Record<ResultTone, string> = {
+      win: 'border-[#d6b563]/40 bg-gradient-to-b from-[#d6b563]/[0.18] to-[#d6b563]/[0.03] shadow-[0_0_44px_-14px_rgba(214,181,99,0.55)]',
+      draw: 'border-[#586059]/50 bg-gradient-to-b from-[#1b201a] to-[#11140f]',
+      loss: 'border-destructive/35 bg-gradient-to-b from-destructive/[0.14] to-destructive/[0.03]',
+    };
+    return (
+      <div className={cn('shrink-0 rounded-[12px] border px-5 py-4 text-center', toneClasses[tone])}>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9da79c]">
+          Game over
+        </p>
+        <p className="mt-1.5 text-2xl font-semibold tracking-tight text-[#f8f1de]">{resultLabel}</p>
+        {reasonLabel && <p className="mt-0.5 text-sm text-[#b9b19d]">{reasonLabel}</p>}
+      </div>
+    );
+  }
+  return (
+    <div className="shrink-0 rounded-[12px] border border-[#2b332c] bg-gradient-to-b from-[#14180f] to-[#101410] px-5 py-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span
+            aria-hidden="true"
+            className={cn(
+              'h-2.5 w-2.5 shrink-0 rounded-full',
+              computerActive
+                ? 'animate-pulse bg-[#d6b563] shadow-[0_0_10px_2px_rgba(214,181,99,0.6)]'
+                : 'bg-[#84c98a] shadow-[0_0_10px_2px_rgba(132,201,138,0.45)]',
+            )}
+          />
+          <p className="truncate text-base font-semibold tracking-tight text-[#f4efe2]">
+            {computerActive ? 'Computer is thinking' : 'Your move'}
+          </p>
+        </div>
+        {computerActive && (
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[#d6b563]" aria-hidden="true" />
+        )}
+      </div>
+      <p className="mt-1.5 text-xs text-[#9da79c]">Level {level} · Untimed</p>
+    </div>
+  );
 }
 
 interface Props {
@@ -213,6 +276,8 @@ export function ComputerGameClient({ gameId }: Props) {
   const reasonLabel = game.resultReason
     ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
     : null;
+  const resultTone: ResultTone =
+    resultLabel === 'You won' ? 'win' : resultLabel === 'Draw' ? 'draw' : 'loss';
   const computerActive = !isGameOver && (submitting || sideToMove === game.computerColor);
   const humanActive = !isGameOver && !submitting && sideToMove === humanColor;
   const statusLabel = isGameOver ? resultLabel : computerActive ? 'Thinking' : 'Your move';
@@ -229,7 +294,11 @@ export function ComputerGameClient({ gameId }: Props) {
       detail: isHuman ? `${formatColor(humanColor)} pieces` : `Level ${game.computerLevel}`,
       active,
       status: active ? statusLabel : undefined,
-      clock: '∞',
+      avatar: isHuman ? (
+        <User className="h-5 w-5" aria-hidden="true" />
+      ) : (
+        <Bot className="h-5 w-5" aria-hidden="true" />
+      ),
       captured,
       capturedColor,
       advantage,
@@ -239,6 +308,8 @@ export function ComputerGameClient({ gameId }: Props) {
   return (
     <BoardSettingsProvider>
       <GameShell
+        topBar={null}
+        className="[--board-reserve:10.5rem]"
         board={
           <BoardColumn
             topPlayer={stripFor(topColor)}
@@ -256,12 +327,26 @@ export function ComputerGameClient({ gameId }: Props) {
         }
         rightRail={
           <div className="flex h-full min-h-0 flex-col gap-4">
-            {isGameOver && (
-              <div className="rounded-[6px] border border-[#d6b563]/35 bg-[#d6b563]/10 px-4 py-3 text-center">
-                <p className="text-lg font-semibold text-[#f8f1de]">{resultLabel}</p>
-                {reasonLabel && <p className="mt-1 text-sm text-[#b9b19d]">{reasonLabel}</p>}
-              </div>
-            )}
+            <div className="flex shrink-0 items-center justify-between">
+              <Link
+                href="/"
+                aria-label="PureChess home"
+                className="rounded-[6px] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+              >
+                <Logo className="text-lg text-[#f1eee6]" />
+              </Link>
+              <SettingsDialog />
+            </div>
+
+            <StatusHero
+              isGameOver={isGameOver}
+              tone={resultTone}
+              resultLabel={resultLabel}
+              reasonLabel={reasonLabel}
+              computerActive={computerActive}
+              level={game.computerLevel}
+            />
+
             <GameRail
               title="Moves"
               aside={`${sanMoves.length} ply`}
@@ -273,13 +358,23 @@ export function ComputerGameClient({ gameId }: Props) {
                 currentPly={sanMoves.length}
               />
             </GameRail>
+
             {moveError && (
-              <p className="rounded-[6px] border border-destructive/35 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <p className="shrink-0 rounded-[8px] border border-destructive/35 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 {moveError}
               </p>
             )}
+
             <BoardControlBar onFlip={() => setFlipped((f) => !f)}>
-              {!isGameOver && (
+              {isGameOver ? (
+                <Link
+                  href="/play"
+                  className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-colors hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                >
+                  <Plus className="h-4 w-4" aria-hidden="true" />
+                  New game
+                </Link>
+              ) : (
                 <button
                   onClick={handleResign}
                   disabled={submitting}

@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Cpu, Play } from 'lucide-react';
 import { createComputerGame } from '@/lib/api/computer-games';
 import type { CreateComputerGameDto } from '@purechess/shared';
+import { cn } from '@/lib/utils';
 
 // Games vs the computer are untimed — the in-game UI shows the clock as
 // "Unlimited" and the server never flags on time. These values are sent only to
@@ -60,55 +62,97 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Play vs Computer</CardTitle>
+    <Card className="border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
+      <CardHeader className="border-b border-border/60 pb-5">
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-brass">
+            <Cpu className="h-4 w-4" />
+          </span>
+          <div>
+            <CardTitle className="text-lg tracking-tight">Play vs Computer</CardTitle>
+            <p className="mt-0.5 text-xs text-muted-foreground">Untimed · 8 difficulty levels</p>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label>Difficulty</Label>
-          <div className="grid grid-cols-4 gap-2">
+      <CardContent className="space-y-7 pt-6">
+        <div className="space-y-3">
+          <div className="flex items-baseline justify-between">
+            <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              Difficulty
+            </Label>
+            <span className="text-sm font-medium text-brass">
+              Level {level} · {LEVEL_LABELS[level]}
+            </span>
+          </div>
+          <div className="grid grid-cols-8 gap-1.5">
             {([1, 2, 3, 4, 5, 6, 7, 8] as CreateComputerGameDto['level'][]).map((l) => (
-              <Button
+              <button
                 key={l}
-                variant={level === l ? 'default' : 'outline'}
-                size="sm"
+                type="button"
                 onClick={() => setLevel(l)}
+                aria-pressed={level === l}
+                className={cn(
+                  'h-10 rounded-md text-sm font-mono tabular-nums transition-all',
+                  'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  level === l
+                    ? 'border-brass/60 bg-brass/10 text-foreground shadow-inner-hairline'
+                    : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+                )}
               >
                 {l}
-              </Button>
+              </button>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground">{LEVEL_LABELS[level]}</p>
         </div>
 
-        <div className="space-y-2">
-          <Label>Play as</Label>
-          <div className="flex gap-2">
+        <div className="space-y-3">
+          <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+            Play as
+          </Label>
+          <div className="grid grid-cols-3 gap-1.5">
             {COLORS.map((c) => (
-              <Button
+              <button
                 key={c.value}
-                variant={color === c.value ? 'default' : 'outline'}
-                size="sm"
-                className="flex-1"
+                type="button"
                 onClick={() => setColor(c.value)}
+                aria-pressed={color === c.value}
+                className={cn(
+                  'h-10 rounded-md text-sm font-medium transition-all',
+                  'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  color === c.value
+                    ? 'border-brass/60 bg-brass/10 text-foreground shadow-inner-hairline'
+                    : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+                )}
               >
                 {c.label}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button onClick={handleStart} disabled={isPending} className="flex-1">
+        <div className="flex flex-col gap-2 pt-2 sm:flex-row">
+          <Button
+            onClick={handleStart}
+            disabled={isPending}
+            className="h-11 flex-1 bg-foreground text-background hover:bg-foreground/90 shadow-elevated"
+          >
+            <Play className="mr-2 h-4 w-4" />
             {isPending ? 'Starting…' : 'Start Game'}
           </Button>
-          <Button variant="ghost" onClick={onCancel} className="flex-1">
+          <Button
+            variant="ghost"
+            onClick={onCancel}
+            className="h-11 flex-1 text-muted-foreground hover:text-foreground"
+          >
             Back
           </Button>
         </div>
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && (
+          <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+            {error}
+          </p>
+        )}
       </CardContent>
     </Card>
   );

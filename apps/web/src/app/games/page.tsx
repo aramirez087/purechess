@@ -5,6 +5,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { serverFetch } from '@/lib/api';
 import type { SafeUser } from '@purechess/shared';
 import { GamesClient } from './games-client';
+import { History } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,8 +34,18 @@ export default async function GamesPage({ searchParams }: Props) {
 
   return (
     <AppShell>
-      <div className="max-w-4xl mx-auto px-4 py-8 w-full flex flex-col gap-6">
-        <h1 className="text-xl font-semibold">Game history</h1>
+      <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 py-10 sm:py-14 flex flex-col gap-6">
+        <header className="flex items-center gap-3">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-brass">
+            <History className="h-4 w-4" />
+          </span>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-[-0.02em]">Game history</h1>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              All your games, filterable by time control and rating type.
+            </p>
+          </div>
+        </header>
         <Suspense>
           <GamesClient
             username={result.user.username}

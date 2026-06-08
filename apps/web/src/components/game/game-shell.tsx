@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import { GameTopBar } from './game-top-bar';
 
 export interface GameShellProps {
-  /** Top app bar. Defaults to a plain <GameTopBar/>. */
-  topBar?: React.ReactNode;
+  /** Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. */
+  topBar?: React.ReactNode | null;
   /**
    * Optional left info rail. When omitted the shell collapses to a
    * board-dominant 2-zone grid (board · right rail), letting the board grow to
@@ -34,11 +34,15 @@ export function GameShell({ topBar, leftRail, board, rightRail, className }: Gam
   return (
     <div
       className={cn(
-        'flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-[#0b0d0b] text-[#f1eee6]',
+        'relative flex h-[100dvh] min-h-0 flex-col overflow-hidden text-[#f1eee6]',
         className,
       )}
+      style={{
+        background:
+          'radial-gradient(135% 85% at 50% -15%, rgba(214,181,99,0.07), transparent 55%), radial-gradient(120% 120% at 50% 120%, rgba(0,0,0,0.5), transparent 55%), #0b0d0b',
+      }}
     >
-      {topBar ?? <GameTopBar />}
+      {topBar === undefined ? <GameTopBar /> : topBar}
       <main id="main-content" className="min-h-0 flex-1 overflow-hidden">
         <div
           className={cn(

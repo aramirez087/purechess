@@ -5,7 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAudit, type AuditLog } from '@/lib/api/admin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { formatRelativeTime } from '@/lib/utils';
+import { formatRelativeTime, cn } from '@/lib/utils';
+import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { ChevronLeft, ChevronRight, Search, ScrollText } from 'lucide-react';
 
 export default function AdminAuditPage() {
   const [adminUserId, setAdminUserId] = useState('');
@@ -27,55 +29,79 @@ export default function AdminAuditPage() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Audit Log</h1>
+    <div className="space-y-6">
+      <AdminPageHeader
+        title="Audit log"
+        description="Every administrative action, in order."
+      />
 
-      <div className="flex gap-3">
-        <Input
-          placeholder="Admin user ID…"
-          value={adminUserId}
-          onChange={(e) => { setAdminUserId(e.target.value); setPage(1); }}
-          className="max-w-xs"
-        />
-        <Input
-          placeholder="Action (e.g. disable_user)…"
-          value={action}
-          onChange={(e) => { setAction(e.target.value); setPage(1); }}
-          className="max-w-xs"
-        />
+      <div className="flex flex-wrap gap-2">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Admin user ID…"
+            value={adminUserId}
+            onChange={(e) => {
+              setAdminUserId(e.target.value);
+              setPage(1);
+            }}
+            className="pl-8"
+          />
+        </div>
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <ScrollText className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Action (e.g. disable_user)…"
+            value={action}
+            onChange={(e) => {
+              setAction(e.target.value);
+              setPage(1);
+            }}
+            className="pl-8"
+          />
+        </div>
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <div className="rounded-lg border border-border/70 bg-surface/60 p-8 text-center text-sm text-muted-foreground">
+          Loading…
+        </div>
       ) : (
-        <div className="rounded-md border overflow-hidden">
+        <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50">
+            <thead className="border-b border-border/60 bg-background/60">
               <tr>
-                <th className="px-4 py-2 text-left font-medium">When</th>
-                <th className="px-4 py-2 text-left font-medium">Admin</th>
-                <th className="px-4 py-2 text-left font-medium">Action</th>
-                <th className="px-4 py-2 text-left font-medium">Target</th>
-                <th className="px-4 py-2 text-left font-medium">Target ID</th>
+                <Th>When</Th>
+                <Th>Admin</Th>
+                <Th>Action</Th>
+                <Th>Target</Th>
+                <Th>Target ID</Th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border/40">
               {logs.map((log) => (
-                <tr key={log.id} className="border-t">
-                  <td className="px-4 py-2 text-muted-foreground text-xs">
+                <tr key={log.id} className="hover:bg-raised/40 transition-colors">
+                  <td className="px-4 py-2.5 text-muted-foreground text-xs tabular-nums">
                     {formatRelativeTime(new Date(log.createdAt))}
                   </td>
-                  <td className="px-4 py-2">{log.admin.username}</td>
-                  <td className="px-4 py-2 font-mono text-xs">{log.action}</td>
-                  <td className="px-4 py-2 text-muted-foreground">{log.targetType}</td>
-                  <td className="px-4 py-2 font-mono text-xs text-muted-foreground">
+                  <td className="px-4 py-2.5 font-medium">{log.admin.username}</td>
+                  <td className="px-4 py-2.5">
+                    <code className="rounded bg-raised px-1.5 py-0.5 font-mono text-[11px]">
+                      {log.action}
+                    </code>
+                  </td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{log.targetType}</td>
+                  <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
                     {log.targetId.slice(0, 12)}…
                   </td>
                 </tr>
               ))}
               {logs.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">
+                  <td
+                    colSpan={5}
+                    className="px-4 py-10 text-center text-sm text-muted-foreground"
+                  >
                     No audit entries
                   </td>
                 </tr>
@@ -85,18 +111,43 @@ export default function AdminAuditPage() {
         </div>
       )}
 
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>{total} total</span>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
-            Previous
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span>
+          {total} {total === 1 ? 'entry' : 'entries'}
+        </span>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
           </Button>
-          <span className="px-2 py-1">Page {page} of {totalPages}</span>
-          <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>
-            Next
+          <span className="px-2 font-mono tabular-nums">
+            {page} / {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= totalPages}
+            onClick={() => setPage(page + 1)}
+          >
+            <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
     </div>
+  );
+}
+
+function Th({ children }: { children: React.ReactNode }) {
+  return (
+    <th
+      scope="col"
+      className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+    >
+      {children}
+    </th>
   );
 }

@@ -45,7 +45,7 @@ export default async function ProfilePage({ params }: Props) {
 
   return (
     <AppShell>
-      <div className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
+      <div className="mx-auto w-full max-w-3xl px-4 sm:px-6 py-10 sm:py-14 flex flex-col gap-6">
         <ProfileHeader
           username={profile.username}
           avatarUrl={profile.avatarUrl}

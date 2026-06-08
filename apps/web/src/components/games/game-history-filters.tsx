@@ -38,10 +38,11 @@ function FilterPill({
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        'px-3 py-1 text-sm rounded border transition-colors',
+        'rounded-md border px-3 py-1.5 text-xs font-medium transition-all',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         active
-          ? 'bg-foreground text-background border-foreground'
-          : 'bg-background text-muted-foreground border-border hover:border-foreground hover:text-foreground',
+          ? 'border-brass/50 bg-brass/10 text-foreground shadow-inner-hairline'
+          : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
       )}
     >
       {label}
@@ -56,8 +57,8 @@ export function GameHistoryFilters({
   onRatedChange,
 }: GameHistoryFiltersProps) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="flex items-center gap-1.5" role="group" aria-label="Time control category">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+      <FilterGroup label="Time control">
         <FilterPill
           label="All"
           active={category === undefined}
@@ -73,11 +74,11 @@ export function GameHistoryFilters({
             }
           />
         ))}
-      </div>
+      </FilterGroup>
 
-      <div className="w-px h-4 bg-border" aria-hidden="true" />
+      <span className="hidden h-5 w-px bg-border/60 sm:inline-block" aria-hidden />
 
-      <div className="flex items-center gap-1.5" role="group" aria-label="Game type">
+      <FilterGroup label="Type">
         <FilterPill
           label="All"
           active={isRated === undefined}
@@ -94,7 +95,24 @@ export function GameHistoryFilters({
             />
           );
         })}
-      </div>
+      </FilterGroup>
+    </div>
+  );
+}
+
+function FilterGroup({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        {label}
+      </span>
+      <div className="flex items-center gap-1.5">{children}</div>
     </div>
   );
 }

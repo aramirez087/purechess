@@ -36,10 +36,10 @@ export function BoardColumn({ topPlayer, bottomPlayer, children, overlay, classN
           viewport height (100dvh minus the top bar, paddings, both strips and
           gaps) so the square board never overflows vertically, and the strips —
           being `w-full` of this same stack — align exactly to the board edges. */}
-      <div className="flex w-full flex-col gap-2 sm:gap-3 lg:max-w-[min(100%,calc(100dvh-13rem))]">
+      <div className="flex w-full flex-col gap-2 sm:gap-3 lg:max-w-[min(100%,calc(100dvh-var(--board-reserve,13rem)))]">
         <PlayerStrip {...topPlayer} />
 
-        <div className="relative mx-auto aspect-square w-full rounded-[6px] border border-[#2b332c] bg-[#121511] p-2 shadow-[0_28px_90px_rgba(0,0,0,0.38)] sm:p-3">
+        <div className="relative mx-auto aspect-square w-full rounded-[12px] border border-[#2f372f] bg-gradient-to-b from-[#161a12] to-[#0f120d] p-2.5 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75),0_0_120px_-40px_rgba(214,181,99,0.16),inset_0_1px_0_rgba(255,255,255,0.05)] sm:p-3">
           {children}
           {overlay}
         </div>

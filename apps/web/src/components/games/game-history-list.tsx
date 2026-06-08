@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { GameHistorySummaryDto } from '@purechess/shared';
 import { GameHistoryRow } from './game-history-row';
+import { cn } from '@/lib/utils';
 
 type GameHistoryListProps = {
   games: GameHistorySummaryDto[];
@@ -12,7 +13,15 @@ type GameHistoryListProps = {
   isLoadingMore: boolean;
 };
 
-const TABLE_HEADERS = ['Date', 'Opponent', 'Color', 'Result', 'Rating Δ', 'Time', ''];
+const TABLE_HEADERS = [
+  { label: 'Date', className: 'w-24' },
+  { label: 'Opponent', className: '' },
+  { label: 'Color', className: 'w-16 text-center' },
+  { label: 'Result', className: 'w-20' },
+  { label: 'Rating Δ', className: 'w-20 text-right' },
+  { label: 'Time', className: 'w-20' },
+  { label: '', className: 'w-16' },
+];
 
 function VirtualizedBody({ games }: { games: GameHistorySummaryDto[] }) {
   const parentRef = useRef<HTMLDivElement>(null);
@@ -20,24 +29,30 @@ function VirtualizedBody({ games }: { games: GameHistorySummaryDto[] }) {
   const rowVirtualizer = useVirtualizer({
     count: games.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 42,
+    estimateSize: () => 48,
     overscan: 10,
   });
 
   const items = rowVirtualizer.getVirtualItems();
 
   return (
-    <div ref={parentRef} className="overflow-auto max-h-[600px]">
+    <div
+      ref={parentRef}
+      className="max-h-[600px] overflow-auto rounded-lg border border-border/70 bg-surface/60"
+    >
       <table className="w-full text-left">
-        <thead className="sticky top-0 bg-background border-b border-border">
+        <thead className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border/60">
           <tr>
             {TABLE_HEADERS.map((h) => (
               <th
-                key={h}
+                key={h.label}
                 scope="col"
-                className="px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wide"
+                className={cn(
+                  'px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground',
+                  h.className,
+                )}
               >
-                {h}
+                {h.label}
               </th>
             ))}
           </tr>
@@ -59,7 +74,7 @@ function VirtualizedBody({ games }: { games: GameHistorySummaryDto[] }) {
                   width: '100%',
                   transform: `translateY(${vRow.start}px)`,
                 }}
-                className="border-b border-border hover:bg-muted/30 transition-colors"
+                className="border-b border-border/40 hover:bg-raised/40 transition-colors"
               >
                 <GameHistoryRow game={game} />
               </tr>
@@ -73,17 +88,20 @@ function VirtualizedBody({ games }: { games: GameHistorySummaryDto[] }) {
 
 function FlatBody({ games }: { games: GameHistorySummaryDto[] }) {
   return (
-    <div className="overflow-auto">
+    <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/60">
       <table className="w-full text-left">
-        <thead className="border-b border-border">
+        <thead className="border-b border-border/60 bg-background/60">
           <tr>
             {TABLE_HEADERS.map((h) => (
               <th
-                key={h}
+                key={h.label}
                 scope="col"
-                className="px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wide"
+                className={cn(
+                  'px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground',
+                  h.className,
+                )}
               >
-                {h}
+                {h.label}
               </th>
             ))}
           </tr>
@@ -117,7 +135,7 @@ export function GameHistoryList({ games, onLoadMore, hasMore, isLoadingMore }: G
             type="button"
             onClick={onLoadMore}
             disabled={isLoadingMore}
-            className="px-4 py-2 text-sm border border-border rounded hover:bg-muted transition-colors disabled:opacity-50"
+            className="rounded-md border border-border/70 bg-raised/40 px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:opacity-50"
           >
             {isLoadingMore ? 'Loading…' : 'Load more'}
           </button>

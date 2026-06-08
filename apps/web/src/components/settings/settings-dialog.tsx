@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { SettingsForm } from './settings-form';
 
@@ -16,17 +15,26 @@ export function SettingsDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
+      <button
+        type="button"
         aria-label="Open settings"
-        className="flex items-center justify-center w-8 h-8 rounded text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        onClick={() => setOpen(true)}
+        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <Settings2 size={16} />
-      </DialogTrigger>
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
+        <Settings2 className="h-4 w-4" />
+      </button>
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogHeader className="border-b border-border/60 pb-4">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-brass">
+              <Settings2 className="h-3.5 w-3.5" />
+            </span>
+            <DialogTitle className="text-base tracking-tight">Settings</DialogTitle>
+          </div>
         </DialogHeader>
-        <SettingsForm />
+        <div className="py-4">
+          <SettingsForm />
+        </div>
       </DialogContent>
     </Dialog>
   );

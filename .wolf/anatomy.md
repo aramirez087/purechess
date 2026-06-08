@@ -1,6 +1,6 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T00:00:05.926Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T00:30:45.043Z
 > Files: 545 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
@@ -867,7 +867,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~3187 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4268 tok)
 
 ## apps/web/src/app/games/[gameId]/
 
@@ -884,15 +884,15 @@
 
 ## apps/web/src/components/game/
 
-- `board-column.tsx` — The `<Chessboard/>` element. (~574 tok)
+- `board-column.tsx` — The `<Chessboard/>` element. (~614 tok)
 - `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~328 tok)
 - `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~421 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~318 tok)
-- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>. (~685 tok)
+- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~762 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
 - `index.ts` — Declares GameShellProps (~165 tok)
 - `move-panel.tsx` — 1-based ply index. (~946 tok)
-- `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~801 tok)
+- `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
 
 ## apps/web/src/components/play/
 
