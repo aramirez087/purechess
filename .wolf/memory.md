@@ -193,3 +193,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 01:52 | Decided NO migration (aborted status + all reasons exist; engineState reused; pendingDrawOfferBy derives draw fields) | schema.prisma (unchanged) | confirmed | — |
 | 01:54 | Specs for new actions + clock-aware/create-from-fen | computer-game-actions.service.spec.ts (new), computer-games.service.spec.ts | 46+ cases pass | — |
 | 01:55 | Handoff written | docs/roadmap/vs-computer-foundations/session-02-handoff.md | done | — |
+| 19:51 | Session end: 15 writes across 8 files (computer-games.helpers.ts, computer-games.service.ts, computer-game-actions.service.ts, computer-games.module.ts, computer-games.controller.ts) | 10 reads | ~26849 tok |
