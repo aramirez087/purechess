@@ -293,3 +293,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 21:19 | Edited apps/web/src/hooks/use-game-keyboard.ts | inline fix | ~18 |
 | 21:20 | Created docs/roadmap/vs-computer-ui/session-09-handoff.md | — | ~1237 |
 | 21:20 | Session 09 a11y polish | use-game-keyboard.ts, live-announcer.tsx, test/computer-game/a11y.test.tsx, session-09-handoff.md | 186 tests pass | ~2000 |
+| 21:21 | Session end: 6 writes across 4 files (use-game-keyboard.ts, live-announcer.tsx, a11y.test.tsx, session-09-handoff.md) | 2 reads | ~5514 tok |

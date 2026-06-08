@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 141737,
-    "total_reads": 186,
-    "total_writes": 137,
-    "total_sessions": 16,
-    "anatomy_hits": 63,
-    "anatomy_misses": 121,
+    "total_tokens_estimated": 157971,
+    "total_reads": 199,
+    "total_writes": 144,
+    "total_sessions": 18,
+    "anatomy_hits": 69,
+    "anatomy_misses": 128,
     "repeated_reads_blocked": 59,
-    "estimated_savings_vs_bare_cli": 29084
+    "estimated_savings_vs_bare_cli": 30284
   },
   "sessions": [
     {
@@ -2098,6 +2098,153 @@
         "writes_count": 24,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 8
+      }
+    },
+    {
+      "id": "session-2026-06-08-2113",
+      "started": "2026-06-08T03:13:43.657Z",
+      "ended": "2026-06-08T03:17:38.469Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/docs/roadmap/vs-computer-ui/session-08-handoff.md",
+          "tokens_estimated": 1663,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/app/computer-game/[gameId]/use-computer-game.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/computer-game/review-rail.tsx",
+          "tokens_estimated": 98,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 4309,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/game/move-panel.tsx",
+          "tokens_estimated": 946,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/docs/roadmap/vs-computer-ui/session-07-handoff.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/review/review-controls.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/docs/roadmap/vs-computer-ui/session-06-handoff.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/test/board/keyboard.test.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/game/board-control-bar.tsx",
+          "tokens_estimated": 328,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/.session-09-plan.md",
+          "tokens_estimated": 3376,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 7344,
+        "output_tokens_estimated": 3376,
+        "reads_count": 11,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 5
+      }
+    },
+    {
+      "id": "session-2026-06-08-2117",
+      "started": "2026-06-08T03:17:39.388Z",
+      "ended": "2026-06-08T03:21:06.110Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/review/review-controls.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/test/games/game-review.test.ts",
+          "tokens_estimated": 942,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
+          "tokens_estimated": 610,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/computer-game/live-announcer.tsx",
+          "tokens_estimated": 342,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/test/computer-game/a11y.test.tsx",
+          "tokens_estimated": 2228,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
+          "tokens_estimated": 49,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/docs/roadmap/vs-computer-ui/session-09-handoff.md",
+          "tokens_estimated": 1325,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 942,
+        "output_tokens_estimated": 4572,
+        "reads_count": 2,
+        "writes_count": 6,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
       }
     }
   ],

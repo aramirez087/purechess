@@ -1,291 +1,64 @@
 {
-  "session_id": "session-2026-06-08-2021",
-  "started": "2026-06-08T02:21:11.434Z",
+  "session_id": "session-2026-06-08-2117",
+  "started": "2026-06-08T03:17:39.388Z",
   "files_read": {
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/users.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/review/review-controls.tsx": {
       "count": 1,
       "tokens": 0,
-      "first_read": "2026-06-08T02:21:21.454Z"
+      "first_read": "2026-06-08T03:17:50.650Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/dto/computer-game.dto.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/test/games/game-review.test.ts": {
       "count": 1,
-      "tokens": 666,
-      "first_read": "2026-06-08T02:21:22.405Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/hooks/use-game-history.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:22.765Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/services/game-review.service.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:23.294Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/[gameId]/page.tsx": {
-      "count": 1,
-      "tokens": 678,
-      "first_read": "2026-06-08T02:21:28.310Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/review/pgn-actions.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:29.196Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/api/src/users/dto/game-history.dto.ts": {
-      "count": 1,
-      "tokens": 191,
-      "first_read": "2026-06-08T02:21:29.865Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/api/src/users/users.service.ts": {
-      "count": 1,
-      "tokens": 2216,
-      "first_read": "2026-06-08T02:21:30.135Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": {
-      "count": 1,
-      "tokens": 4268,
-      "first_read": "2026-06-08T02:21:35.171Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/games-client.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:40.512Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/page.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:40.958Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/games/game-history-filters.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:41.359Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/games/game-history-row.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:41.610Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/index.ts": {
-      "count": 1,
-      "tokens": 136,
-      "first_read": "2026-06-08T02:21:45.875Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/types/game-review.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:51.229Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/game-result.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:51.751Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/time-control.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:21:51.843Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/dto/game.dto.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:22:03.418Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/chess.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:22:08.458Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/api/computer-games.test.ts": {
-      "count": 1,
-      "tokens": 1090,
-      "first_read": "2026-06-08T02:25:27.928Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/games/game-history-filters.test.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:26:47.100Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/games/game-history-page.test.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-08T02:26:47.951Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/profile/profile-page.test.tsx": {
-      "count": 1,
-      "tokens": 1169,
-      "first_read": "2026-06-08T02:26:48.245Z"
+      "tokens": 942,
+      "first_read": "2026-06-08T03:18:06.539Z"
     }
   },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/packages/shared/src/users.ts",
-      "action": "edit",
-      "tokens": 102,
-      "at": "2026-06-08T02:22:21.403Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/api/src/users/dto/game-history.dto.ts",
-      "action": "edit",
-      "tokens": 194,
-      "at": "2026-06-08T02:22:37.803Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/api/src/users/users.service.ts",
-      "action": "edit",
-      "tokens": 184,
-      "at": "2026-06-08T02:22:50.021Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/api/src/users/users.service.ts",
-      "action": "edit",
-      "tokens": 94,
-      "at": "2026-06-08T02:22:54.934Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/api/src/users/users.service.ts",
-      "action": "edit",
-      "tokens": 124,
-      "at": "2026-06-08T02:23:01.346Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/hooks/use-game-history.ts",
-      "action": "edit",
-      "tokens": 395,
-      "at": "2026-06-08T02:23:11.857Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/review/pgn-actions.tsx",
-      "action": "edit",
-      "tokens": 387,
-      "at": "2026-06-08T02:23:21.060Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/computer-game/review-rail.tsx",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
       "action": "create",
-      "tokens": 98,
-      "at": "2026-06-08T02:23:25.860Z"
+      "tokens": 610,
+      "at": "2026-06-08T03:18:19.672Z"
     },
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 68,
-      "at": "2026-06-08T02:23:42.142Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 86,
-      "at": "2026-06-08T02:23:46.903Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/games/game-history-filters.tsx",
-      "action": "edit",
-      "tokens": 86,
-      "at": "2026-06-08T02:23:51.360Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/games/game-history-filters.tsx",
-      "action": "edit",
-      "tokens": 540,
-      "at": "2026-06-08T02:24:02.266Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/components/games/game-history-row.tsx",
-      "action": "edit",
-      "tokens": 282,
-      "at": "2026-06-08T02:24:11.452Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/games-client.tsx",
-      "action": "edit",
-      "tokens": 598,
-      "at": "2026-06-08T02:24:25.552Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/page.tsx",
-      "action": "edit",
-      "tokens": 474,
-      "at": "2026-06-08T02:24:39.225Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/services/game-review.service.ts",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/components/computer-game/live-announcer.tsx",
       "action": "create",
-      "tokens": 1531,
-      "at": "2026-06-08T02:25:09.424Z"
+      "tokens": 342,
+      "at": "2026-06-08T03:18:31.199Z"
     },
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/[gameId]/page.tsx",
-      "action": "edit",
-      "tokens": 56,
-      "at": "2026-06-08T02:25:14.310Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/src/app/games/[gameId]/page.tsx",
-      "action": "edit",
-      "tokens": 58,
-      "at": "2026-06-08T02:25:19.103Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/games/game-review.test.ts",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/test/computer-game/a11y.test.tsx",
       "action": "create",
-      "tokens": 1205,
-      "at": "2026-06-08T02:25:51.978Z"
+      "tokens": 2228,
+      "at": "2026-06-08T03:19:03.726Z"
     },
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/games/game-history-filters.test.tsx",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
       "action": "edit",
-      "tokens": 1030,
-      "at": "2026-06-08T02:27:06.939Z"
+      "tokens": 49,
+      "at": "2026-06-08T03:19:26.163Z"
     },
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/games/game-history-page.test.tsx",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/apps/web/src/hooks/use-game-keyboard.ts",
       "action": "edit",
-      "tokens": 82,
-      "at": "2026-06-08T02:27:12.614Z"
+      "tokens": 18,
+      "at": "2026-06-08T03:19:50.548Z"
     },
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/profile/profile-page.test.tsx",
-      "action": "edit",
-      "tokens": 84,
-      "at": "2026-06-08T02:27:18.708Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/apps/web/test/games/game-review.test.ts",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s09-a11y-polish/docs/roadmap/vs-computer-ui/session-09-handoff.md",
       "action": "create",
-      "tokens": 942,
-      "at": "2026-06-08T02:27:35.916Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s08-review-history/docs/roadmap/vs-computer-ui/session-08-handoff.md",
-      "action": "create",
-      "tokens": 1900,
-      "at": "2026-06-08T02:28:33.780Z"
+      "tokens": 1325,
+      "at": "2026-06-08T03:20:29.762Z"
     }
   ],
   "edit_counts": {
-    "packages/shared/src/users.ts": 1,
-    "apps/api/src/users/dto/game-history.dto.ts": 1,
-    "apps/api/src/users/users.service.ts": 3,
-    "apps/web/src/hooks/use-game-history.ts": 1,
-    "apps/web/src/components/review/pgn-actions.tsx": 1,
-    "apps/web/src/components/computer-game/review-rail.tsx": 1,
-    "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": 2,
-    "apps/web/src/components/games/game-history-filters.tsx": 2,
-    "apps/web/src/components/games/game-history-row.tsx": 1,
-    "apps/web/src/app/games/games-client.tsx": 1,
-    "apps/web/src/app/games/page.tsx": 1,
-    "apps/web/src/services/game-review.service.ts": 1,
-    "apps/web/src/app/games/[gameId]/page.tsx": 2,
-    "apps/web/test/games/game-review.test.ts": 2,
-    "apps/web/test/games/game-history-filters.test.tsx": 1,
-    "apps/web/test/games/game-history-page.test.tsx": 1,
-    "apps/web/test/profile/profile-page.test.tsx": 1,
-    "docs/roadmap/vs-computer-ui/session-08-handoff.md": 1
+    "apps/web/src/hooks/use-game-keyboard.ts": 3,
+    "apps/web/src/components/computer-game/live-announcer.tsx": 1,
+    "apps/web/test/computer-game/a11y.test.tsx": 1,
+    "docs/roadmap/vs-computer-ui/session-09-handoff.md": 1
   },
-  "anatomy_hits": 8,
-  "anatomy_misses": 15,
+  "anatomy_hits": 1,
+  "anatomy_misses": 1,
   "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
   "stop_count": 1
