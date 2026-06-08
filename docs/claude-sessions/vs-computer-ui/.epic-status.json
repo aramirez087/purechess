@@ -1,105 +1,96 @@
 {
   "epic": "vs-computer-ui",
-  "started_at": 1780884824.50756,
+  "started_at": 1780887428.948669,
   "sessions": {
     "1": {
-      "status": "done",
+      "status": "skipped",
       "slug": "shell-charter",
       "wave": 1,
       "title": "Shell Charter",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 2.0,
-      "started_at": 1780884824.862831
+      "elapsed": 0.0
     },
     "2": {
-      "status": "done",
+      "status": "skipped",
       "slug": "move-control",
       "wave": 2,
       "title": "Move Control",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0,
-      "started_at": 1780884827.3391721
+      "elapsed": 0.0
     },
     "3": {
-      "status": "done",
+      "status": "skipped",
       "slug": "engine-ui",
       "wave": 2,
       "title": "Engine Ui",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0,
-      "started_at": 1780884827.516649
+      "elapsed": 0.0
     },
     "4": {
-      "status": "done",
+      "status": "skipped",
       "slug": "clocks",
       "wave": 2,
       "title": "Clocks",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0,
-      "started_at": 1780884827.6885529
+      "elapsed": 0.0
     },
     "5": {
-      "status": "done",
+      "status": "skipped",
       "slug": "draws-results",
       "wave": 2,
       "title": "Draws Results",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 0.0,
-      "started_at": 1780884827.859744
+      "elapsed": 0.0
     },
     "6": {
-      "status": "done",
+      "status": "skipped",
       "slug": "setup-form",
       "wave": 2,
       "title": "Setup Form",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 575.0,
-      "started_at": 1780884828.123901
+      "elapsed": 0.0
     },
     "7": {
-      "status": "done",
+      "status": "skipped",
       "slug": "openings",
       "wave": 2,
       "title": "Openings",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 648.0,
-      "started_at": 1780884828.306729
+      "elapsed": 0.0
     },
     "8": {
-      "status": "done",
+      "status": "skipped",
       "slug": "review-history",
       "wave": 2,
       "title": "Review History",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 911.0,
-      "started_at": 1780884828.545156
+      "elapsed": 0.0
     },
     "9": {
-      "status": "failed",
+      "status": "pending",
       "slug": "a11y-polish",
       "wave": 3,
       "title": "A11Y Polish",
       "step": 0,
       "tool": "",
       "target": "",
-      "elapsed": 644.0,
-      "started_at": 1780885753.752285
+      "elapsed": 0.0
     },
     "10": {
       "status": "pending",
