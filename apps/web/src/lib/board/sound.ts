@@ -11,6 +11,13 @@ interface ExciterSpec {
   filterHz: number;
 }
 
+interface AttackSpec {
+  duration: number;
+  filterHz: number;
+  q: number;
+  gain: number;
+}
+
 interface ThudSpec {
   freq: number;
   duration: number;
@@ -26,6 +33,7 @@ interface ImpactHit {
   delay: number;
   baseFreq: number;
   modes: ModalSpec[];
+  attack?: AttackSpec;
   exciter: ExciterSpec;
   thud?: ThudSpec;
   pitchDroop?: PitchDroop;
@@ -39,12 +47,13 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   tick: [
     {
       delay: 0,
-      baseFreq: 600,
+      baseFreq: 650,
       modes: [
-        { ratio: 1, q: 12, gain: 1.0 },
-        { ratio: 2.5, q: 7, gain: 0.3 },
+        { ratio: 1, q: 14, gain: 1.0 },
+        { ratio: 2.5, q: 8, gain: 0.35 },
       ],
-      exciter: { duration: 0.03, filterHz: 2200 },
+      attack: { duration: 0.003, filterHz: 3200, q: 1.2, gain: 0.2 },
+      exciter: { duration: 0.03, filterHz: 3000 },
       voices: 1,
       detune: 0,
       volume: 0.3,
@@ -54,14 +63,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   move: [
     {
       delay: 0,
-      baseFreq: 200,
+      baseFreq: 220,
       modes: [
-        { ratio: 1, q: 12, gain: 1.0 },
-        { ratio: 2.3, q: 8, gain: 0.4 },
-        { ratio: 4.5, q: 4, gain: 0.12 },
+        { ratio: 1, q: 13, gain: 1.0 },
+        { ratio: 2.3, q: 9, gain: 0.5 },
+        { ratio: 4.5, q: 5, gain: 0.18 },
       ],
-      exciter: { duration: 0.12, filterHz: 1800 },
-      thud: { freq: 90, duration: 0.1, gain: 0.3 },
+      attack: { duration: 0.003, filterHz: 2500, q: 0.9, gain: 0.12 },
+      exciter: { duration: 0.1, filterHz: 2500 },
+      thud: { freq: 95, duration: 0.1, gain: 0.22 },
       voices: 2,
       detune: 6,
       volume: 0.65,
@@ -71,14 +81,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   capture: [
     {
       delay: 0,
-      baseFreq: 160,
+      baseFreq: 180,
       modes: [
-        { ratio: 1, q: 14, gain: 1.0 },
-        { ratio: 2.3, q: 9, gain: 0.45 },
-        { ratio: 4.2, q: 5, gain: 0.15 },
+        { ratio: 1, q: 15, gain: 1.0 },
+        { ratio: 2.3, q: 10, gain: 0.55 },
+        { ratio: 4.5, q: 6, gain: 0.2 },
       ],
-      exciter: { duration: 0.18, filterHz: 1500 },
-      thud: { freq: 75, duration: 0.14, gain: 0.35 },
+      attack: { duration: 0.004, filterHz: 2200, q: 0.8, gain: 0.15 },
+      exciter: { duration: 0.16, filterHz: 2200 },
+      thud: { freq: 80, duration: 0.13, gain: 0.28 },
       pitchDroop: { amount: 0.08, time: 0.05 },
       voices: 2,
       detune: 10,
@@ -87,13 +98,14 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
     },
     {
       delay: 0.08,
-      baseFreq: 140,
+      baseFreq: 150,
       modes: [
         { ratio: 1, q: 10, gain: 0.7 },
         { ratio: 2.4, q: 6, gain: 0.3 },
       ],
-      exciter: { duration: 0.1, filterHz: 1400 },
-      thud: { freq: 65, duration: 0.12, gain: 0.25 },
+      attack: { duration: 0.003, filterHz: 2000, q: 0.9, gain: 0.1 },
+      exciter: { duration: 0.1, filterHz: 1800 },
+      thud: { freq: 65, duration: 0.12, gain: 0.2 },
       voices: 1,
       detune: 0,
       volume: 0.5,
@@ -103,14 +115,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   check: [
     {
       delay: 0,
-      baseFreq: 240,
+      baseFreq: 260,
       modes: [
-        { ratio: 1, q: 11, gain: 1.0 },
-        { ratio: 2, q: 7, gain: 0.4 },
-        { ratio: 3.8, q: 4, gain: 0.1 },
+        { ratio: 1, q: 12, gain: 1.0 },
+        { ratio: 2, q: 8, gain: 0.45 },
+        { ratio: 3.8, q: 5, gain: 0.15 },
       ],
-      exciter: { duration: 0.09, filterHz: 2000 },
-      thud: { freq: 110, duration: 0.07, gain: 0.22 },
+      attack: { duration: 0.003, filterHz: 2800, q: 1.0, gain: 0.12 },
+      exciter: { duration: 0.085, filterHz: 2800 },
+      thud: { freq: 115, duration: 0.07, gain: 0.18 },
       voices: 2,
       detune: 5,
       volume: 0.65,
@@ -120,14 +133,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   mate: [
     {
       delay: 0,
-      baseFreq: 120,
+      baseFreq: 140,
       modes: [
-        { ratio: 1, q: 18, gain: 1.0 },
-        { ratio: 2.1, q: 12, gain: 0.55 },
-        { ratio: 3.6, q: 7, gain: 0.2 },
+        { ratio: 1, q: 20, gain: 1.0 },
+        { ratio: 2.1, q: 14, gain: 0.6 },
+        { ratio: 3.8, q: 8, gain: 0.25 },
       ],
-      exciter: { duration: 0.4, filterHz: 1200 },
-      thud: { freq: 55, duration: 0.4, gain: 0.45 },
+      attack: { duration: 0.005, filterHz: 1800, q: 0.7, gain: 0.2 },
+      exciter: { duration: 0.35, filterHz: 1800 },
+      thud: { freq: 60, duration: 0.35, gain: 0.4 },
       pitchDroop: { amount: 0.12, time: 0.08 },
       voices: 2,
       detune: 8,
@@ -138,14 +152,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   'game-start': [
     {
       delay: 0,
-      baseFreq: 300,
+      baseFreq: 320,
       modes: [
         { ratio: 1, q: 10, gain: 1.0 },
-        { ratio: 2.1, q: 6, gain: 0.35 },
-        { ratio: 4, q: 4, gain: 0.1 },
+        { ratio: 2.1, q: 6, gain: 0.4 },
+        { ratio: 3.8, q: 4, gain: 0.15 },
       ],
-      exciter: { duration: 0.07, filterHz: 2000 },
-      thud: { freq: 130, duration: 0.05, gain: 0.15 },
+      attack: { duration: 0.003, filterHz: 2500, q: 1.0, gain: 0.1 },
+      exciter: { duration: 0.07, filterHz: 2500 },
+      thud: { freq: 130, duration: 0.05, gain: 0.12 },
       voices: 1,
       detune: 0,
       volume: 0.5,
@@ -153,14 +168,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
     },
     {
       delay: 0.12,
-      baseFreq: 380,
+      baseFreq: 400,
       modes: [
         { ratio: 1, q: 10, gain: 1.0 },
-        { ratio: 2.1, q: 6, gain: 0.35 },
-        { ratio: 4, q: 4, gain: 0.1 },
+        { ratio: 2.1, q: 6, gain: 0.4 },
+        { ratio: 3.8, q: 4, gain: 0.15 },
       ],
-      exciter: { duration: 0.07, filterHz: 2000 },
-      thud: { freq: 130, duration: 0.05, gain: 0.15 },
+      attack: { duration: 0.003, filterHz: 2500, q: 1.0, gain: 0.1 },
+      exciter: { duration: 0.07, filterHz: 2500 },
+      thud: { freq: 130, duration: 0.05, gain: 0.12 },
       voices: 1,
       detune: 0,
       volume: 0.5,
@@ -168,14 +184,15 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
     },
     {
       delay: 0.24,
-      baseFreq: 480,
+      baseFreq: 500,
       modes: [
         { ratio: 1, q: 10, gain: 1.0 },
-        { ratio: 2.1, q: 6, gain: 0.35 },
-        { ratio: 4, q: 4, gain: 0.1 },
+        { ratio: 2.1, q: 6, gain: 0.4 },
+        { ratio: 3.8, q: 4, gain: 0.15 },
       ],
-      exciter: { duration: 0.07, filterHz: 2000 },
-      thud: { freq: 130, duration: 0.05, gain: 0.15 },
+      attack: { duration: 0.003, filterHz: 2500, q: 1.0, gain: 0.1 },
+      exciter: { duration: 0.07, filterHz: 2500 },
+      thud: { freq: 130, duration: 0.05, gain: 0.12 },
       voices: 1,
       detune: 0,
       volume: 0.55,
@@ -315,6 +332,28 @@ class SoundEngine {
         }
 
         const stopTime = start + attack + hit.exciter.duration + 0.01;
+        src.start(start);
+        src.stop(stopTime);
+      }
+
+      if (hit.attack) {
+        const src = ctx.createBufferSource();
+        src.buffer = this.getNoiseBuffer(ctx);
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = hit.attack.filterHz;
+        filter.Q.value = hit.attack.q;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(floor, start);
+        gain.gain.exponentialRampToValueAtTime(1, start + attack);
+        gain.gain.exponentialRampToValueAtTime(
+          floor,
+          start + attack + hit.attack.duration,
+        );
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(mix);
+        const stopTime = start + attack + hit.attack.duration + 0.01;
         src.start(start);
         src.stop(stopTime);
       }
