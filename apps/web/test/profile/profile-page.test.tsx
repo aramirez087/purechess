@@ -39,7 +39,6 @@ const mockGame: GameHistorySummaryDto = {
   timeControlSeconds: 300,
   incrementSeconds: 0,
   isRated: true,
-  isVsComputer: false,
   endedAt: '2024-03-15T10:00:00Z',
 };
 
@@ -129,7 +128,7 @@ describe('RecentGames', () => {
 
   it('links each row to /games/:id', () => {
     render(<RecentGames games={[mockGame]} />);
-    const links = screen.getAllByRole('link');
+    const links = screen.getAllByRole('link', { name: /bobby/i });
     const gameLink = links.find((l) => l.getAttribute('href') === '/games/game-1');
     expect(gameLink).toBeDefined();
   });

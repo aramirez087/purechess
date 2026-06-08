@@ -318,3 +318,28 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 21:28 | Created docs/roadmap/vs-computer-ui/session-10-handoff.md | — | ~1310 |
 | 21:27 | Session 10: wired useGameKeyboard+LiveAnnouncer into shell, added currentPly seek, focus ring on MoveCell, all 5 CI gates pass | computer-game-client.tsx, move-panel.tsx | GO | ~350 |
 | 21:29 | Session end: 10 writes across 3 files (computer-game-client.tsx, move-panel.tsx, session-10-handoff.md) | 4 reads | ~8989 tok |
+| 20:53 | Edited docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md | inline fix | ~14 |
+| 20:57 | sprint vs-computer: epic1 foundations done+merged; epic2 ui failed s09 (exit97 deliverables path-mismatch); fixed plan path test/computer-game→test/hooks, pruned stale s09 wt+branch, resumed s9 | docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md, .wolf/buglog.json | resume running (task bxfbnz8ws) | ~22k |
+| 20:57 | Session end: 1 writes across 1 files (session-09-a11y-polish.md) | 3 reads | ~770 tok |
+| 21:01 | Created ../../../../tmp/omni-issue-body.md | — | ~611 |
+| 21:01 | Session end: 2 writes across 2 files (session-09-a11y-polish.md, omni-issue-body.md) | 3 reads | ~1425 tok |
+| 21:13 | Edited docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md | inline fix | ~8 |
+| 21:15 | s09 failed AGAIN (exit97): agent non-deterministic test path (run2 wrote test/computer-game/a11y.test.tsx). Fixed produces→glob apps/web/test/*.test.ts*, pruned stale s09, resumed | session-09-a11y-polish.md, buglog bug-030, cerebrum | resume running (task blxf75zb5) | ~30k |
+| 21:15 | Session end: 3 writes across 2 files (session-09-a11y-polish.md, omni-issue-body.md) | 4 reads | ~1433 tok |
+| 21:27 | Created ../../../../tmp/epic-issue-body.md | — | ~1363 |
+| 21:27 | Session end: 4 writes across 3 files (session-09-a11y-polish.md, omni-issue-body.md, epic-issue-body.md) | 4 reads | ~2893 tok |
+| 22:08 | Edited ../pc-merge-vscomputer/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→2 lines | ~33 |
+| 22:10 | sprint vs-computer DONE: both epics merged, PR #3. Resolved PR conflicts in temp worktree: .wolf/*=ours, footer.tsx=main(drop social links), client.tsx=union(ResultOverlay+a11y). typecheck green, pushed 7a19fcb, PR now MERGEABLE | PR #3 | complete | ~40k |
+| 22:11 | Session end: 5 writes across 4 files (session-09-a11y-polish.md, omni-issue-body.md, epic-issue-body.md, computer-game-client.tsx) | 5 reads | ~7978 tok |
+
+## Session: 2026-06-08 22:17
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:22 | Edited ../../../../tmp/purechess-pr3/.github/workflows/ci.yml | 5→8 lines | ~64 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/.github/workflows/ci.yml | 5→8 lines | ~64 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-game-actions.service.ts | 4→5 lines | ~28 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-games.service.ts | 4→5 lines | ~28 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-game-actions.service.ts | 2→2 lines | ~32 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-games.service.ts | 2→2 lines | ~30 |
+| 22:23 | Session end: 6 writes across 3 files (ci.yml, computer-game-actions.service.ts, computer-games.service.ts) | 6 reads | ~10268 tok |

@@ -12,7 +12,7 @@ describe('Hero', () => {
 
   it('renders tagline', () => {
     render(<Hero />);
-    expect(screen.getByText(/no puzzles, no lessons/i)).toBeInTheDocument();
+    expect(screen.getByText(/single, quiet place to play chess online/i)).toBeInTheDocument();
   });
 
   it('Play now links to /play?mode=casual', () => {

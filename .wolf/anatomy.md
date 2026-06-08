@@ -2,15 +2,31 @@
 
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:28:51.093Z
 > Files: 586 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T04:22:41.215Z
+> Files: 570 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
 - `commit-msg.txt` — Declares in (~304 tok)
+- `epic-issue-body.md` — Bug 1 — the printed resume command aborts on the failed session's own branch (~1278 tok)
 - `inspect.cjs` — Declares p (~262 tok)
+
+## ../../../../tmp/purechess-pr3/.github/workflows/
+
+- `ci.yml` — CI: CI (~1260 tok)
+
+## ../../../../tmp/purechess-pr3/apps/api/src/computer-games/
+
+- `computer-game-actions.service.ts` — State-mutating vs-computer actions that are NOT a normal move: takeback, (~3332 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~4140 tok)
 
 ## ../../.claude/plans/
 
 - `your-goal-is-to-squishy-platypus.md` — PureChess — Game Page Redesign: Full-Bleed Dual-Rail Shell (~3766 tok)
+
+## ../pc-merge-vscomputer/apps/web/src/app/computer-game/[gameId]/
+
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~5550 tok)
 
 ## ./
 
