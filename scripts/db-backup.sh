@@ -2,7 +2,7 @@
 set -euo pipefail
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="purchess_${TIMESTAMP}.dump"
+BACKUP_FILE="purechess_${TIMESTAMP}.dump"
 COMPRESSED_FILE="${BACKUP_FILE}.gz"
 
 : "${DATABASE_URL:?DATABASE_URL is required}"

@@ -1,4 +1,4 @@
-app = "purchess-web"
+app = "purechess-web"
 primary_region = "iad"
 
 [build]

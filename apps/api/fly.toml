@@ -1,4 +1,4 @@
-app = "purchess-api"
+app = "purechess-api"
 primary_region = "iad"
 
 [build]
