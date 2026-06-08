@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:23:48.797Z
-> Files: 572 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:28:33.774Z
+> Files: 579 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -24,7 +24,7 @@
 - `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
-- `.session-07-plan.md` — Session 07 — Implementation Plan: Openings & Custom FEN (~2539 tok)
+- `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -769,11 +769,11 @@
 
 - `users.controller.ts` — Exports UsersController (~510 tok)
 - `users.module.ts` — Exports UsersModule (~100 tok)
-- `users.service.ts` — Prisma data access layer (~2216 tok)
+- `users.service.ts` — Exports UsersService (~2280 tok)
 
 ## apps/api/src/users/dto/
 
-- `game-history.dto.ts` — Exports GameHistoryQueryDto (~191 tok)
+- `game-history.dto.ts` — Exports GameHistoryQueryDto (~250 tok)
 - `user-profile.dto.ts` — Exports UpdateMeDto (~126 tok)
 
 ## apps/api/test/admin/
@@ -871,11 +871,16 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4268 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4309 tok)
+
+## apps/web/src/app/games/
+
+- `games-client.tsx` — GamesClient (~988 tok)
+- `page.tsx` — dynamic (~613 tok)
 
 ## apps/web/src/app/games/[gameId]/
 
-- `page.tsx` — formatResult (~678 tok)
+- `page.tsx` — formatResult (~680 tok)
 - `review-client.tsx` — STARTING_FEN (~1769 tok)
 
 ## apps/web/src/components/admin/
@@ -894,8 +899,7 @@
 
 ## apps/web/src/components/computer-game/
 
-- `fen-setup-board.tsx` — FenSetupBoard (~1225 tok)
-- `opening-picker.tsx` — MAX_RESULTS (~1949 tok)
+- `review-rail.tsx` — ReviewRail (~98 tok)
 
 ## apps/web/src/components/game/
 
@@ -909,6 +913,11 @@
 - `move-panel.tsx` — 1-based ply index. (~946 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
 
+## apps/web/src/components/games/
+
+- `game-history-filters.tsx` — CATEGORIES (~1054 tok)
+- `game-history-row.tsx` — resultLabel (~1183 tok)
+
 ## apps/web/src/components/home/
 
 - `footer.tsx` — GithubIcon (~933 tok)
@@ -917,9 +926,17 @@
 
 - `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
 
+## apps/web/src/components/review/
+
+- `pgn-actions.tsx` — PgnActions (~388 tok)
+
 ## apps/web/src/components/settings/
 
 - `settings-form.tsx` — APP_THEMES (~2253 tok)
+
+## apps/web/src/hooks/
+
+- `use-game-history.ts` — Exports useGameHistory (~482 tok)
 
 ## apps/web/src/lib/api/
 
@@ -931,10 +948,9 @@
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
 
-## apps/web/src/lib/openings/
+## apps/web/src/services/
 
-- `eco.ts` — Exports EcoEntry, ECO_OPENINGS (~1381 tok)
-- `index.ts` — Exports applyMoves, getEcoFen, lookupByName, lookupByFen + 2 more (~510 tok)
+- `game-review.service.ts` — Exports getReview (~1531 tok)
 
 ## apps/web/test/api/
 
@@ -944,17 +960,19 @@
 
 - `material.test.ts` — Declares START_FEN (~560 tok)
 
+## apps/web/test/games/
+
+- `game-history-filters.test.tsx` — defaultProps (~1031 tok)
+- `game-history-page.test.tsx` — mockGame (~788 tok)
+- `game-review.test.ts` — Declares makeComputerState (~942 tok)
+
 ## apps/web/test/home/
 
 - `homepage.test.tsx` — link (~704 tok)
 
-## apps/web/test/openings/
-
-- `openings.test.ts` — Declares START_FEN (~813 tok)
-
 ## apps/web/test/profile/
 
-- `profile-page.test.tsx` — mockRatings (~1169 tok)
+- `profile-page.test.tsx` — mockRatings (~1176 tok)
 
 ## apps/web/test/settings/
 
@@ -964,24 +982,6 @@
 
 - `.epic-produces-overrides.json` (~111 tok)
 
-## apps/web/src/lib/openings/
-
-- `eco.ts` — Curated ECO dataset (~53 entries); exports EcoEntry interface + ECO_OPENINGS array (~250 tok)
-- `index.ts` — Lookup helpers: lookupByName, lookupByFen, randomOpening, getEcoFen, applyMoves, isValidFen (~120 tok)
-
-## apps/web/src/components/computer-game/
-
-- `opening-picker.tsx` — Accessible combobox for ECO opening search + Random Opening button; onSelect(fen,name,code) (~200 tok)
-- `fen-setup-board.tsx` — Paste-FEN textarea with chess.js validation, read-only board preview, submit to createComputerGameFromFen (~180 tok)
-
-## apps/web/test/openings/
-
-- `openings.test.ts` — 11 Vitest unit tests for openings lib (lookupByName, lookupByFen, randomOpening, getEcoFen, isValidFen) (~120 tok)
-
-## docs/roadmap/vs-computer-ui/
-
-- `session-07-handoff.md` — Session 07 Handoff — Openings & Custom FEN (~500 tok)
-
 ## docs/roadmap/vs-computer-foundations/
 
 - `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
@@ -990,11 +990,12 @@
 
 ## docs/roadmap/vs-computer-ui/
 
-- `session-07-handoff.md` — Session 07 Handoff — Openings & Custom FEN (~1223 tok)
+- `session-08-handoff.md` — Session 08 Handoff — Review History: PGN Rail + vs-Computer Filter + Deep-Link Review (~1663 tok)
 
 ## packages/shared/src/
 
 - `index.ts` (~136 tok)
+- `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto + 2 more (~275 tok)
 
 ## packages/shared/src/dto/
 

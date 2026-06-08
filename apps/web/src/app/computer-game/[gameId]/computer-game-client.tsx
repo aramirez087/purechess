@@ -21,6 +21,7 @@ import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
 import { getComputerGame, submitComputerMove } from '@/lib/api/computer-games';
+import { ReviewRail } from '@/components/computer-game/review-rail';
 
 type Color = 'white' | 'black';
 
@@ -358,6 +359,8 @@ export function ComputerGameClient({ gameId }: Props) {
                 currentPly={sanMoves.length}
               />
             </GameRail>
+
+            <ReviewRail pgn={game.pgn} fen={game.fen} gameId={gameId} />
 
             {moveError && (
               <p className="shrink-0 rounded-[8px] border border-destructive/35 bg-destructive/10 px-3 py-2 text-sm text-destructive">

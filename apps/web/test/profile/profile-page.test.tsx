@@ -39,6 +39,7 @@ const mockGame: GameHistorySummaryDto = {
   timeControlSeconds: 300,
   incrementSeconds: 0,
   isRated: true,
+  isVsComputer: false,
   endedAt: '2024-03-15T10:00:00Z',
 };
 

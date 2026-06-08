@@ -570,51 +570,83 @@
     },
     {
       "id": "bug-035",
-      "timestamp": "2026-06-08T02:20:44.540Z",
-      "error_message": "Incorrect value in code",
-      "file": "apps/web/src/lib/openings/eco.ts",
-      "root_cause": "Had 'E60'",
-      "fix": "Changed to 'D90'",
+      "timestamp": "2026-06-08T02:23:21.061Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/review/pgn-actions.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 40→54 lines (2 removed)",
       "tags": [
         "auto-detected",
-        "wrong-value",
-        "ts"
+        "refactor",
+        "tsx"
       ],
       "related_bugs": [],
       "occurrences": 1,
-      "last_seen": "2026-06-08T02:20:44.540Z"
+      "last_seen": "2026-06-08T02:23:21.061Z"
     },
     {
       "id": "bug-036",
-      "timestamp": "2026-06-08T02:21:03.424Z",
-      "error_message": "Incorrect value in code",
-      "file": "apps/web/src/lib/openings/index.ts",
-      "root_cause": "Had './eco.js'",
-      "fix": "Changed to './eco'",
+      "timestamp": "2026-06-08T02:24:02.267Z",
+      "error_message": "CSS fix: undefined",
+      "file": "apps/web/src/components/games/game-history-filters.tsx",
+      "root_cause": "undefined: val) → true)",
+      "fix": "Changed undefined: val) → true)",
       "tags": [
         "auto-detected",
-        "wrong-value",
-        "ts"
+        "style-fix",
+        "tsx"
       ],
       "related_bugs": [],
       "occurrences": 1,
-      "last_seen": "2026-06-08T02:21:03.424Z"
+      "last_seen": "2026-06-08T02:24:02.267Z"
     },
     {
       "id": "bug-037",
-      "timestamp": "2026-06-08T02:23:03.457Z",
-      "error_message": "Missing guard clause",
-      "file": "apps/web/src/lib/openings/index.ts",
-      "root_cause": "No early return/throw for edge case: !trimmed",
-      "fix": "Added guard clause: if (!trimmed)",
+      "timestamp": "2026-06-08T02:24:25.553Z",
+      "error_message": "CSS fix: true",
+      "file": "apps/web/src/app/games/games-client.tsx",
+      "root_cause": "true: isRatedParam === 'false' ? false : initialIsRated → vsComputerParam === 'false' ? false : initialIsVsComputer",
+      "fix": "Changed true: isRatedParam === 'false' ? false : initialIsRated → vsComputerParam === 'false' ? false : initialIsVsComputer",
       "tags": [
         "auto-detected",
-        "guard-clause",
-        "ts"
+        "style-fix",
+        "tsx"
       ],
       "related_bugs": [],
       "occurrences": 1,
-      "last_seen": "2026-06-08T02:23:03.457Z"
+      "last_seen": "2026-06-08T02:24:25.553Z"
+    },
+    {
+      "id": "bug-038",
+      "timestamp": "2026-06-08T02:24:39.226Z",
+      "error_message": "CSS fix: true",
+      "file": "apps/web/src/app/games/page.tsx",
+      "root_cause": "true: sp.isRated === 'false' ? false : undefined → sp.vsComputer === 'false' ? false : undefined",
+      "fix": "Changed true: sp.isRated === 'false' ? false : undefined → sp.vsComputer === 'false' ? false : undefined",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T02:24:39.226Z"
+    },
+    {
+      "id": "bug-039",
+      "timestamp": "2026-06-08T02:27:06.940Z",
+      "error_message": "Type error",
+      "file": "apps/web/test/games/game-history-filters.test.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-08T02:27:06.940Z"
     }
   ]
 }

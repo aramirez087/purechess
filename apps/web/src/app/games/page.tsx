@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: Promise<{ category?: string; isRated?: string }>;
+  searchParams: Promise<{ category?: string; isRated?: string; vsComputer?: string }>;
 };
 
 export default async function GamesPage({ searchParams }: Props) {
@@ -31,6 +31,8 @@ export default async function GamesPage({ searchParams }: Props) {
     : undefined;
   const isRated =
     sp.isRated === 'true' ? true : sp.isRated === 'false' ? false : undefined;
+  const isVsComputer =
+    sp.vsComputer === 'true' ? true : sp.vsComputer === 'false' ? false : undefined;
 
   return (
     <AppShell>
@@ -51,6 +53,7 @@ export default async function GamesPage({ searchParams }: Props) {
             username={result.user.username}
             initialCategory={category}
             initialIsRated={isRated}
+            initialIsVsComputer={isVsComputer}
           />
         </Suspense>
       </div>

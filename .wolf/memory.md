@@ -3,7 +3,6 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 | 10:42 | Edited apps/api/src/computer-games/computer-games.service.ts | 3→3 lines | ~57 |
-| 20:23 | Session 07: created lib/openings/eco.ts + index.ts (53-entry ECO dataset + helpers), opening-picker.tsx (combobox), fen-setup-board.tsx (FEN input + preview), test/openings/openings.test.ts (11 tests pass) | 5 new files | 151 tests ✅ |
 | 10:43 | Edited apps/api/src/computer-games/computer-games.service.ts | added error handling | ~98 |
 | 10:46 | Created ../../../../tmp/commit-msg.txt | — | ~324 |
 
@@ -242,22 +241,36 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 20:17 | Created .session-07-plan.md | — | ~2708 |
-| 20:17 | Session end: 1 writes across 1 files (.session-07-plan.md) | 8 reads | ~9645 tok |
+| 20:20 | Created .session-08-plan.md | — | ~4877 |
+| 20:21 | Session end: 1 writes across 1 files (.session-08-plan.md) | 12 reads | ~10171 tok |
 
-## Session: 2026-06-08 20:17
+## Session: 2026-06-08 20:21
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 20:20 | Created apps/web/src/lib/openings/eco.ts | — | ~1381 |
-| 20:20 | Edited apps/web/src/lib/openings/eco.ts | "E60" → "D90" | ~22 |
-| 20:20 | Created apps/web/src/lib/openings/index.ts | — | ~474 |
-| 20:21 | Edited apps/web/src/lib/openings/index.ts | 2→2 lines | ~22 |
-| 20:21 | Created apps/web/src/components/computer-game/opening-picker.tsx | — | ~1953 |
-| 20:21 | Edited apps/web/src/components/computer-game/opening-picker.tsx | inline fix | ~21 |
-| 20:21 | Created apps/web/src/components/computer-game/fen-setup-board.tsx | — | ~1225 |
-| 20:22 | Created apps/web/test/openings/openings.test.ts | — | ~818 |
-| 20:23 | Edited apps/web/src/lib/openings/index.ts | added 1 condition(s) | ~88 |
-| 20:23 | Edited apps/web/test/openings/openings.test.ts | 6→6 lines | ~68 |
-| 20:23 | Created docs/roadmap/vs-computer-ui/session-07-handoff.md | — | ~1304 |
-| 20:24 | Session end: 11 writes across 6 files (eco.ts, index.ts, opening-picker.tsx, fen-setup-board.tsx, openings.test.ts) | 7 reads | ~17897 tok |
+| 20:22 | Edited packages/shared/src/users.ts | 12→13 lines | ~102 |
+| 20:22 | Edited apps/api/src/users/dto/game-history.dto.ts | added 2 condition(s) | ~194 |
+| 20:22 | Edited apps/api/src/users/users.service.ts | 15→18 lines | ~184 |
+| 20:22 | Edited apps/api/src/users/users.service.ts | 5→7 lines | ~94 |
+| 20:23 | Edited apps/api/src/users/users.service.ts | 12→13 lines | ~124 |
+| 20:23 | Edited apps/web/src/hooks/use-game-history.ts | added 1 condition(s) | ~395 |
+| 20:23 | Edited apps/web/src/components/review/pgn-actions.tsx | modified PgnActions() | ~387 |
+| 20:23 | Created apps/web/src/components/computer-game/review-rail.tsx | — | ~98 |
+| 20:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~68 |
+| 20:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→7 lines | ~86 |
+| 20:23 | Edited apps/web/src/components/games/game-history-filters.tsx | CSS: isVsComputer, onVsComputerChange | ~86 |
+| 20:24 | Edited apps/web/src/components/games/game-history-filters.tsx | modified GameHistoryFilters() | ~540 |
+| 20:24 | Edited apps/web/src/components/games/game-history-row.tsx | 16→21 lines | ~282 |
+| 20:24 | Edited apps/web/src/app/games/games-client.tsx | CSS: vsComputer | ~598 |
+| 20:24 | Edited apps/web/src/app/games/page.tsx | modified GamesPage() | ~474 |
+| 20:25 | Created apps/web/src/services/game-review.service.ts | — | ~1531 |
+| 20:25 | Edited apps/web/src/app/games/[gameId]/page.tsx | modified generateMetadata() | ~56 |
+| 20:25 | Edited apps/web/src/app/games/[gameId]/page.tsx | modified GameReviewPage() | ~58 |
+| 20:25 | Created apps/web/test/games/game-review.test.ts | — | ~1205 |
+| 20:27 | Edited apps/web/test/games/game-history-filters.test.tsx | CSS: isVsComputer, onVsComputerChange | ~1030 |
+| 20:27 | Edited apps/web/test/games/game-history-page.test.tsx | CSS: isVsComputer | ~82 |
+| 20:27 | Edited apps/web/test/profile/profile-page.test.tsx | CSS: isVsComputer | ~84 |
+| 20:27 | Created apps/web/test/games/game-review.test.ts | — | ~942 |
+| 20:28 | Created docs/roadmap/vs-computer-ui/session-08-handoff.md | — | ~1774 |
+| 20:28 | Session 08: review-rail.tsx created, isVsComputer added to shared DTO + API filter + web hook + games list UI, deep-link review fallback in game-review.service.ts, 144 tests pass | multiple | ok | ~8000 |
+| 20:28 | Session end: 24 writes across 17 files (users.ts, game-history.dto.ts, users.service.ts, use-game-history.ts, pgn-actions.tsx) | 23 reads | ~21014 tok |
