@@ -273,3 +273,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 20:27 | Created apps/web/test/games/game-review.test.ts | — | ~942 |
 | 20:28 | Created docs/roadmap/vs-computer-ui/session-08-handoff.md | — | ~1774 |
 | 20:28 | Session 08: review-rail.tsx created, isVsComputer added to shared DTO + API filter + web hook + games list UI, deep-link review fallback in game-review.service.ts, 144 tests pass | multiple | ok | ~8000 |
+| 20:28 | Session end: 24 writes across 17 files (users.ts, game-history.dto.ts, users.service.ts, use-game-history.ts, pgn-actions.tsx) | 23 reads | ~21014 tok |
