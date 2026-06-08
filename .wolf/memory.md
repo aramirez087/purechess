@@ -158,3 +158,39 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 19:35 | Created docs/claude-sessions/vs-computer-foundations/.epic-produces-overrides.json | — | ~111 |
 | 19:36 | Created docs/roadmap/vs-computer-foundations/session-01-handoff.md | — | ~2423 |
 | 19:36 | Session end: 6 writes across 5 files (computer-game.dto.ts, engine-analysis.dto.ts, index.ts, .epic-produces-overrides.json, session-01-handoff.md) | 3 reads | ~3623 tok |
+
+## Session: 2026-06-08 19:37
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:40 | Created .session-02-plan.md | — | ~5052 |
+| 19:41 | Session end: 1 writes across 1 files (.session-02-plan.md) | 8 reads | ~13970 tok |
+
+## Session: 2026-06-08 19:41
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:43 | Created apps/api/src/computer-games/computer-games.helpers.ts | — | ~1282 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | reduced (-28 lines) | ~185 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | added error handling | ~776 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | 14→19 lines | ~149 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | added 1 condition(s) | ~160 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | modified if() | ~295 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | modified buildStateDto() | ~141 |
+| 19:44 | Edited apps/api/src/computer-games/computer-games.service.ts | expanded (+6 lines) | ~165 |
+| 19:45 | Created apps/api/src/computer-games/computer-game-actions.service.ts | — | ~3322 |
+| 19:45 | Edited apps/api/src/computer-games/computer-games.module.ts | added 1 import(s) | ~108 |
+| 19:46 | Created apps/api/src/computer-games/computer-games.controller.ts | — | ~883 |
+| 19:46 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | expanded (+161 lines) | ~1886 |
+| 19:47 | Created apps/api/test/computer-games/computer-game-actions.service.spec.ts | — | ~3996 |
+| 19:49 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | 1→2 lines | ~45 |
+| 19:50 | Created docs/roadmap/vs-computer-foundations/session-02-handoff.md | — | ~2714 |
+
+## Session 02 — vs-computer API endpoints (2026-06-08)
+| HH:MM | description | file(s) | outcome | ~tokens |
+|---|---|---|---|---|
+| 01:50 | Added takeback/rewind/abort/draw/rematch + create-from-fen + clock-aware submitMove | computer-game-actions.service.ts (new), computer-games.helpers.ts (new), computer-games.service.ts, controller, module | typecheck+lint clean; 111 scope tests pass; engine gate 96.31/87.67/100 | ~60k |
+| 01:52 | Decided NO migration (aborted status + all reasons exist; engineState reused; pendingDrawOfferBy derives draw fields) | schema.prisma (unchanged) | confirmed | — |
+| 01:54 | Specs for new actions + clock-aware/create-from-fen | computer-game-actions.service.spec.ts (new), computer-games.service.spec.ts | 46+ cases pass | — |
+| 01:55 | Handoff written | docs/roadmap/vs-computer-foundations/session-02-handoff.md | done | — |
+| 19:51 | Session end: 15 writes across 8 files (computer-games.helpers.ts, computer-games.service.ts, computer-game-actions.service.ts, computer-games.module.ts, computer-games.controller.ts) | 10 reads | ~26849 tok |
