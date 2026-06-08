@@ -37,7 +37,7 @@ async function getCurrentUser(): Promise<{ id: string; username: string } | null
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const review = await getReview(params.gameId);
+  const review = await getReview(params.gameId, null);
   if (!review) return { title: 'Game not found — Purechess' };
   const resultLabel = formatResult(review.result);
   return buildMetadata({
@@ -48,10 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GameReviewPage({ params }: Props) {
-  const [review, currentUser] = await Promise.all([
-    getReview(params.gameId),
-    getCurrentUser(),
-  ]);
+  const currentUser = await getCurrentUser();
+  const review = await getReview(params.gameId, currentUser);
   if (!review) notFound();
 
   let reportTarget: { opponentId: string; opponentUsername: string } | null = null;

@@ -85,6 +85,7 @@ export function SettingsForm() {
       <Section title="Board" description="On-board information and movement.">
         <SettingRow
           label="Show coordinates"
+          htmlFor="coordinates"
           hint="Display file and rank labels on the board edge."
           icon={Hash}
         >
@@ -97,15 +98,17 @@ export function SettingsForm() {
         <Separator className="bg-border/60" />
         <SettingRow
           label="Animations"
+          htmlFor="animations"
           hint={
             reducedMotion
-              ? 'Overridden by your system’s reduced-motion setting.'
+              ? 'Disabled by the prefers-reduced-motion OS setting.'
               : 'Smooth piece movement and UI transitions.'
           }
           icon={Move3D}
         >
           <Switch
             id="animations"
+            aria-label="Animations"
             checked={settings.animations}
             onCheckedChange={(v) => settings.update({ animations: v })}
             disabled={reducedMotion}
@@ -114,7 +117,7 @@ export function SettingsForm() {
       </Section>
 
       <Section title="Sound" description="Audio cues during play.">
-        <SettingRow label="Sound effects" hint="Moves, captures, and game start." icon={Volume2}>
+        <SettingRow label="Sound effects" htmlFor="sound" hint="Moves, captures, and game start." icon={Volume2}>
           <Switch
             id="sound"
             checked={settings.sound}
@@ -124,12 +127,14 @@ export function SettingsForm() {
         <Separator className="bg-border/60" />
         <SettingRow
           label="Low-time tick"
+          htmlFor="lowTimeSound"
           hint="A subtle tick each second under 10s remaining."
           disabled={!settings.sound}
           icon={Square}
         >
           <Switch
             id="lowTimeSound"
+            aria-label="Low-time tick"
             checked={settings.lowTimeSound}
             onCheckedChange={(v) => settings.update({ lowTimeSound: v })}
             disabled={!settings.sound}
@@ -166,12 +171,14 @@ function Section({
 
 function SettingRow({
   label,
+  htmlFor,
   hint,
   icon: Icon,
   disabled,
   children,
 }: {
   label: string;
+  htmlFor?: string;
   hint?: string;
   icon?: typeof Volume2;
   disabled?: boolean;
@@ -191,7 +198,9 @@ function SettingRow({
           </span>
         )}
         <div>
-          <Label className="text-sm font-medium">{label}</Label>
+          <Label htmlFor={htmlFor} className="text-sm font-medium">
+            {label}
+          </Label>
           {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
         </div>
       </div>

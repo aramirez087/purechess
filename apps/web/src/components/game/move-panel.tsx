@@ -92,6 +92,7 @@ function MoveCell({
           aria-current={active ? 'true' : undefined}
           className={cn(
             'block w-full px-2 py-1.5 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[#181c17]',
+            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]',
             active ? 'bg-[#d6b563]/15 text-[#f8f1de]' : 'text-[#d8d2c3]',
           )}
         >

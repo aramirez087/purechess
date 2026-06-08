@@ -8,6 +8,7 @@
     "start": "node dist/main.js",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
+    "pretest": "prisma generate",
     "test": "jest",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",

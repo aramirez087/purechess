@@ -33,10 +33,10 @@ describe('SettingsDialog', () => {
 });
 
 describe('SettingsForm', () => {
-  it('board theme radio changes boardThemeId in store', () => {
+  it('board theme button changes boardThemeId in store', () => {
     render(<SettingsForm />);
-    const monoRadio = screen.getByRole('radio', { name: /mono/i });
-    fireEvent.click(monoRadio);
+    const monoButton = screen.getByRole('button', { name: /mono/i });
+    fireEvent.click(monoButton);
     expect(useSettingsStore.getState().boardThemeId).toBe('mono');
   });
 
@@ -59,6 +59,6 @@ describe('SettingsForm', () => {
     render(<SettingsForm />);
     const animSwitch = screen.getByRole('switch', { name: /animations/i });
     expect(animSwitch).toBeDisabled();
-    expect(screen.getByText(/prefers-reduced-motion/i)).toBeTruthy();
+    expect(screen.getByText(/reduced-motion/i)).toBeTruthy();
   });
 });

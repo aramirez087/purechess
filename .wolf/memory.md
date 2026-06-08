@@ -139,61 +139,185 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 18:30 | Edited apps/web/src/components/game/board-column.tsx | "relative mx-auto aspect-s" → "relative mx-auto aspect-s" | ~80 |
 | 18:35 | Redesigned computer-game page chromeless: removed top bar, board fills viewport via --board-reserve, rail brand+settings header + StatusHero, bot/user avatars, dropped ∞ clock, premium bg/frame | computer-game-client.tsx + game-shell/board-column/player-strip.tsx | typecheck clean; verified live play + game-over | ~6k |
 | 18:33 | Session end: 11 writes across 4 files (game-shell.tsx, board-column.tsx, player-strip.tsx, computer-game-client.tsx) | 11 reads | ~13663 tok |
-| 18:44 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified ResultOverlay() | ~677 |
-| 18:44 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 2→3 lines | ~53 |
-| 18:44 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+10 lines) | ~136 |
-| 18:45 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | CSS: children, sm, background | ~350 |
-| 18:45 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | modified if() | ~170 |
-| 18:45 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | modified if() | ~138 |
-| 18:45 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | expanded (+11 lines) | ~302 |
-| 18:46 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 6→6 lines | ~20 |
-| 18:49 | designqc: captured 6 screenshots (137KB, ~15000 tok) | /, /play, /settings, /games, /admin | ready for eval | ~0 |
-| 18:50 | designqc: captured 6 screenshots (144KB, ~15000 tok) | /settings, /admin, /profile/aramirez, /games, /play/computer-game/test | ready for eval | ~0 |
-| 18:51 | designqc: captured 2 screenshots (19KB, ~5000 tok) | /games | ready for eval | ~0 |
-| 18:52 | designqc: captured 6 screenshots (134KB, ~15000 tok) | /demo | ready for eval | ~0 |
 
-| 18:30 | Design pass: replaced Junior dev's flat black/white design with Silent Tournament aesthetic across home, play, settings, profile, games, admin, errors, loading, footer, app shell. Updated design tokens (globals.css, tailwind.config), added brass color, real Logo SVG mark, premium hero, lobby play page, segmented controls, improved tables. Board and pieces untouched. | apps/web/src/app/globals.css, apps/web/tailwind.config.ts, apps/web/src/components/layout/, apps/web/src/components/home/, apps/web/src/components/play/, apps/web/src/components/settings/, apps/web/src/components/profile/, apps/web/src/components/games/, apps/web/src/components/admin/, apps/web/src/app/(play)/, apps/web/src/app/admin/, apps/web/src/app/profile/, apps/web/src/app/games/, apps/web/src/app/settings/ | design-only pass, all routes 200, typecheck clean | ~25k |
-| 18:59 | Created apps/web/src/app/(play)/play/play-page-client.tsx | — | ~2025 |
-| 18:55 | Game-over message ON board (ResultOverlay via BoardColumn overlay prop, dismissible, shows result + "by <reason>"); redesigned /play into full-viewport centered PlayShell (ambient bg + grain + brand) | computer-game-client.tsx, (play)/play/play-page-client.tsx | typecheck clean; verified live (overlay "You lost · by Resignation"; /play centered+brand). NOTE: play-page-client was reverted externally mid-session, re-applied via Write | ~5k |
-| 19:01 | Session end: 20 writes across 5 files (game-shell.tsx, board-column.tsx, player-strip.tsx, computer-game-client.tsx, play-page-client.tsx) | 13 reads | ~20596 tok |
-| 19:03 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | expanded (+12 lines) | ~296 |
-| 19:04 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | "mt-10 grid gap-4 sm:grid-" → "mt-12 grid gap-5 sm:grid-" | ~16 |
-| 19:04 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | "group relative flex flex-" → "group relative flex min-h" | ~47 |
-| 19:04 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | "inline-flex h-10 w-10 ite" → "inline-flex h-12 w-12 ite" | ~29 |
-| 19:04 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | "h-5 w-5" → "h-6 w-6" | ~13 |
-| 19:04 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | "text-lg font-semibold tra" → "text-xl font-semibold tra" | ~23 |
-| 19:04 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | "text-sm text-muted-foregr" → "text-[15px] text-muted-fo" | ~27 |
-| 19:04 | Session end: 27 writes across 5 files (game-shell.tsx, board-column.tsx, player-strip.tsx, computer-game-client.tsx, play-page-client.tsx) | 13 reads | ~21047 tok |
-
-## Session: 2026-06-08 19:11
+## Session: 2026-06-08 19:30
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 19:21 | Created docs/claude-sessions/vs-computer-foundations/session-00-operator-rules.md | — | ~963 |
-| 19:21 | Created docs/claude-sessions/vs-computer-foundations/session-01-contracts-charter.md | — | ~940 |
-| 19:21 | Created docs/claude-sessions/vs-computer-foundations/session-02-api-endpoints.md | — | ~921 |
-| 19:22 | Created docs/claude-sessions/vs-computer-foundations/session-03-engine-client.md | — | ~786 |
-| 19:22 | Created docs/claude-sessions/vs-computer-foundations/session-04-web-data-layer.md | — | ~623 |
-| 19:22 | Created docs/claude-sessions/vs-computer-foundations/session-05-ci-gate.md | — | ~486 |
-| 19:23 | Created docs/claude-sessions/vs-computer-ui/session-00-operator-rules.md | — | ~1106 |
-| 19:23 | Created docs/claude-sessions/vs-computer-ui/session-01-shell-charter.md | — | ~1167 |
-| 19:23 | Created docs/claude-sessions/vs-computer-ui/session-02-move-control.md | — | ~708 |
-| 19:24 | Created docs/claude-sessions/vs-computer-ui/session-03-engine-ui.md | — | ~818 |
-| 19:24 | Created docs/claude-sessions/vs-computer-ui/session-04-clocks.md | — | ~706 |
-| 19:24 | Created docs/claude-sessions/vs-computer-ui/session-05-draws-results.md | — | ~727 |
-| 19:24 | Created docs/claude-sessions/vs-computer-ui/session-06-setup-form.md | — | ~745 |
-| 19:25 | Created docs/claude-sessions/vs-computer-ui/session-07-openings.md | — | ~748 |
-| 19:25 | Created docs/claude-sessions/vs-computer-ui/session-08-review-history.md | — | ~730 |
-| 19:25 | Created docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md | — | ~734 |
-| 19:26 | Created docs/claude-sessions/vs-computer-ui/session-10-ci-gate.md | — | ~551 |
-| 19:26 | Created docs/claude-sessions/vs-computer.sprint.json | — | ~68 |
-| 19:26 | Generated 2-epic sprint "vs-computer" (foundations 5 + ui 10 sessions) for Play-vs-Computer missing features | docs/claude-sessions/vs-computer-*/, vs-computer.sprint.json | DAG verified: waves 3+4, max 7-wide | ~24k |
-| 19:26 | Session end: 18 writes across 17 files (session-00-operator-rules.md, session-01-contracts-charter.md, session-02-api-endpoints.md, session-03-engine-client.md, session-04-web-data-layer.md) | 8 reads | ~21491 tok |
+| 19:32 | Created .session-01-plan.md | — | ~4070 |
+| 19:32 | Session end: 1 writes across 1 files (.session-01-plan.md) | 16 reads | ~8971 tok |
 
-## Session: 2026-06-08 19:29
+## Session: 2026-06-08 19:32
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 19:33 | Created packages/shared/src/dto/computer-game.dto.ts | — | ~686 |
+| 19:33 | Edited packages/shared/src/dto/computer-game.dto.ts | 3→1 lines | ~12 |
+| 19:33 | Created packages/shared/src/dto/engine-analysis.dto.ts | — | ~192 |
+| 19:33 | Edited packages/shared/src/index.ts | 1→2 lines | ~26 |
+| 19:35 | Created docs/claude-sessions/vs-computer-foundations/.epic-produces-overrides.json | — | ~111 |
+| 19:36 | Created docs/roadmap/vs-computer-foundations/session-01-handoff.md | — | ~2423 |
+| 19:36 | Session end: 6 writes across 5 files (computer-game.dto.ts, engine-analysis.dto.ts, index.ts, .epic-produces-overrides.json, session-01-handoff.md) | 3 reads | ~3623 tok |
+
+## Session: 2026-06-08 19:37
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:38 | Created .session-04-plan.md | — | ~2931 |
+| 19:38 | Session end: 1 writes across 1 files (.session-04-plan.md) | 5 reads | ~4666 tok |
+
+## Session: 2026-06-08 19:38
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:39 | Edited apps/web/src/lib/api/computer-games.ts | expanded (+9 lines) | ~54 |
+| 19:39 | Edited apps/web/src/lib/api/computer-games.ts | modified submitComputerMove() | ~477 |
+| 19:39 | Created apps/web/test/api/computer-games.test.ts | — | ~1090 |
+| 19:40 | Created docs/roadmap/vs-computer-foundations/session-04-handoff.md | — | ~1127 |
+
+## Session: 2026-06-07 Session-04
+
+| Time  | Action | File(s) | Outcome | ~Tokens |
+|-------|--------|---------|---------|--------|
+| S4    | Extended import + added 6 fetch wrappers | apps/web/src/lib/api/computer-games.ts | done | ~2k |
+| S4    | Created Vitest tests (7 cases) | apps/web/test/api/computer-games.test.ts | 7/7 pass | ~3k |
+| S4    | Wrote handoff | docs/roadmap/vs-computer-foundations/session-04-handoff.md | done | ~1k |
+| 19:41 | Session end: 4 writes across 3 files (computer-games.ts, computer-games.test.ts, session-04-handoff.md) | 3 reads | ~4055 tok |
+
+## Session: 2026-06-08 19:51
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:55 | Created .session-05-plan.md | — | ~3541 |
+| 19:55 | Session end: 1 writes across 1 files (.session-05-plan.md) | 0 reads | ~3794 tok |
+
+## Session: 2026-06-08 19:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:56 | Edited apps/web/src/components/admin/admin-page-header.tsx | inline fix | ~8 |
+| 19:56 | Edited apps/web/src/components/admin/games-table.tsx | inline fix | ~26 |
+| 19:56 | Edited apps/web/src/components/admin/reports-table.tsx | inline fix | ~26 |
+| 19:57 | Edited apps/web/src/components/home/footer.tsx | modified GithubIcon() | ~395 |
+| 19:57 | Edited apps/web/src/components/home/footer.tsx | inline fix | ~14 |
+| 19:57 | Edited apps/web/src/components/home/footer.tsx | inline fix | ~12 |
+| 20:01 | Edited package.json | 6→7 lines | ~48 |
+| 20:02 | Edited apps/api/test/reports/reports.service.spec.ts | 5→8 lines | ~105 |
+| 20:02 | Edited apps/api/test/reports/reports.service.spec.ts | 3→4 lines | ~52 |
+| 20:02 | Edited apps/api/test/invites/invites.service.spec.ts | added 1 import(s) | ~78 |
+| 20:02 | Edited apps/api/test/invites/invites.service.spec.ts | 4→6 lines | ~48 |
+| 20:02 | Edited apps/api/test/invites/invites.service.spec.ts | 3→4 lines | ~53 |
+| 20:03 | Edited apps/api/test/auth/auth.service.spec.ts | added 1 import(s) | ~108 |
+| 20:03 | Edited apps/api/test/auth/auth.service.spec.ts | 3→5 lines | ~44 |
+| 20:03 | Edited apps/api/test/auth/auth.service.spec.ts | 3→4 lines | ~54 |
+| 20:03 | Edited apps/api/test/auth/auth.controller.spec.ts | added 1 import(s) | ~35 |
+| 20:03 | Edited apps/api/test/auth/auth.controller.spec.ts | 6→7 lines | ~93 |
+| 20:04 | Edited apps/api/test/reports/reports.service.spec.ts | inline fix | ~28 |
+| 20:04 | Edited apps/api/test/invites/invites.service.spec.ts | inline fix | ~28 |
+| 20:04 | Edited apps/api/test/auth/auth.service.spec.ts | inline fix | ~28 |
+| 20:04 | Edited apps/api/test/auth/auth.controller.spec.ts | inline fix | ~36 |
+| 20:04 | Edited apps/api/test/auth/auth.controller.spec.ts | 5→6 lines | ~62 |
+| 20:09 | Edited apps/web/src/components/settings/settings-form.tsx | 15→16 lines | ~147 |
+| 20:09 | Edited apps/web/src/components/settings/settings-form.tsx | 6→7 lines | ~74 |
+| 20:09 | Edited apps/web/test/settings/settings-dialog.test.tsx | 6→6 lines | ~76 |
+| 20:09 | Edited apps/web/test/home/homepage.test.tsx | 9→9 lines | ~87 |
+| 20:10 | Edited apps/web/test/profile/profile-page.test.tsx | 5→6 lines | ~76 |
+| 20:10 | Edited apps/web/test/settings/settings-dialog.test.tsx | inline fix | ~23 |
+| 20:12 | Created docs/roadmap/vs-computer-foundations/session-05-handoff.md | — | ~2415 |
+
+## Session: 2026-06-07 20:12 — Session 05 CI Gate
+
+| 20:12 | Installed deps + generated Prisma client | bootstrap | success | ~200 |
+| 20:12 | Fixed 5 typecheck errors in apps/web | footer.tsx, admin-page-header.tsx, games-table.tsx, reports-table.tsx | PASS | ~300 |
+| 20:12 | Added eslint@9 to root devDeps | package.json | pnpm -r lint passes | ~100 |
+| 20:12 | Fixed 5 failing API test suites | auth specs, invites, reports, deleted stale stockfish spec | 192/192 pass | ~400 |
+| 20:12 | Fixed 7 failing web vitest tests | homepage, profile, settings-dialog, settings-form | 137/137 pass | ~500 |
+| 20:12 | pnpm build passed for both apps | — | PASS | ~200 |
+| 20:12 | Wrote session-05-handoff.md (GO report) | docs/roadmap/vs-computer-foundations/ | done | ~100 |
+| 20:12 | Committed all changes | 21 files, session 5 ci gate | commit 34a3255 | ~50 |
+| 20:13 | Session end: 29 writes across 14 files (admin-page-header.tsx, games-table.tsx, reports-table.tsx, footer.tsx, package.json) | 19 reads | ~16894 tok |
+
+## Session: 2026-06-08 20:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:20 | Created .session-08-plan.md | — | ~4877 |
+| 20:21 | Session end: 1 writes across 1 files (.session-08-plan.md) | 12 reads | ~10171 tok |
+
+## Session: 2026-06-08 20:21
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:22 | Edited packages/shared/src/users.ts | 12→13 lines | ~102 |
+| 20:22 | Edited apps/api/src/users/dto/game-history.dto.ts | added 2 condition(s) | ~194 |
+| 20:22 | Edited apps/api/src/users/users.service.ts | 15→18 lines | ~184 |
+| 20:22 | Edited apps/api/src/users/users.service.ts | 5→7 lines | ~94 |
+| 20:23 | Edited apps/api/src/users/users.service.ts | 12→13 lines | ~124 |
+| 20:23 | Edited apps/web/src/hooks/use-game-history.ts | added 1 condition(s) | ~395 |
+| 20:23 | Edited apps/web/src/components/review/pgn-actions.tsx | modified PgnActions() | ~387 |
+| 20:23 | Created apps/web/src/components/computer-game/review-rail.tsx | — | ~98 |
+| 20:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~68 |
+| 20:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→7 lines | ~86 |
+| 20:23 | Edited apps/web/src/components/games/game-history-filters.tsx | CSS: isVsComputer, onVsComputerChange | ~86 |
+| 20:24 | Edited apps/web/src/components/games/game-history-filters.tsx | modified GameHistoryFilters() | ~540 |
+| 20:24 | Edited apps/web/src/components/games/game-history-row.tsx | 16→21 lines | ~282 |
+| 20:24 | Edited apps/web/src/app/games/games-client.tsx | CSS: vsComputer | ~598 |
+| 20:24 | Edited apps/web/src/app/games/page.tsx | modified GamesPage() | ~474 |
+| 20:25 | Created apps/web/src/services/game-review.service.ts | — | ~1531 |
+| 20:25 | Edited apps/web/src/app/games/[gameId]/page.tsx | modified generateMetadata() | ~56 |
+| 20:25 | Edited apps/web/src/app/games/[gameId]/page.tsx | modified GameReviewPage() | ~58 |
+| 20:25 | Created apps/web/test/games/game-review.test.ts | — | ~1205 |
+| 20:27 | Edited apps/web/test/games/game-history-filters.test.tsx | CSS: isVsComputer, onVsComputerChange | ~1030 |
+| 20:27 | Edited apps/web/test/games/game-history-page.test.tsx | CSS: isVsComputer | ~82 |
+| 20:27 | Edited apps/web/test/profile/profile-page.test.tsx | CSS: isVsComputer | ~84 |
+| 20:27 | Created apps/web/test/games/game-review.test.ts | — | ~942 |
+| 20:28 | Created docs/roadmap/vs-computer-ui/session-08-handoff.md | — | ~1774 |
+| 20:28 | Session 08: review-rail.tsx created, isVsComputer added to shared DTO + API filter + web hook + games list UI, deep-link review fallback in game-review.service.ts, 144 tests pass | multiple | ok | ~8000 |
+| 20:28 | Session end: 24 writes across 17 files (users.ts, game-history.dto.ts, users.service.ts, use-game-history.ts, pgn-actions.tsx) | 23 reads | ~21014 tok |
+
+## Session: 2026-06-08 21:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:17 | Created .session-09-plan.md | — | ~3151 |
+| 21:17 | Session end: 1 writes across 1 files (.session-09-plan.md) | 11 reads | ~10720 tok |
+
+## Session: 2026-06-08 21:17
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:18 | Created apps/web/src/hooks/use-game-keyboard.ts | — | ~610 |
+| 21:18 | Created apps/web/src/components/computer-game/live-announcer.tsx | — | ~342 |
+| 21:19 | Created apps/web/test/computer-game/a11y.test.tsx | — | ~2228 |
+| 21:19 | Edited apps/web/src/hooks/use-game-keyboard.ts | 5→5 lines | ~49 |
+| 21:19 | Edited apps/web/src/hooks/use-game-keyboard.ts | inline fix | ~18 |
+| 21:20 | Created docs/roadmap/vs-computer-ui/session-09-handoff.md | — | ~1237 |
+| 21:20 | Session 09 a11y polish | use-game-keyboard.ts, live-announcer.tsx, test/computer-game/a11y.test.tsx, session-09-handoff.md | 186 tests pass | ~2000 |
+| 21:21 | Session end: 6 writes across 4 files (use-game-keyboard.ts, live-announcer.tsx, a11y.test.tsx, session-09-handoff.md) | 2 reads | ~5514 tok |
+
+## Session: 2026-06-08 21:21
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:23 | Created .session-10-plan.md | — | ~5049 |
+| 21:24 | Session end: 1 writes across 1 files (.session-10-plan.md) | 5 reads | ~13859 tok |
+
+## Session: 2026-06-08 21:24
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~64 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | inline fix | ~15 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 2 import(s) | ~59 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified ComputerGameClient() | ~372 |
+| 21:26 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added nullish coalescing | ~143 |
+| 21:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→4 lines | ~64 |
+| 21:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→5 lines | ~55 |
+| 21:27 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 3→4 lines | ~44 |
+| 21:27 | Edited apps/web/src/components/game/move-panel.tsx | CSS: focus-visible, focus-visible, focus-visible | ~93 |
+| 21:28 | Created docs/roadmap/vs-computer-ui/session-10-handoff.md | — | ~1310 |
+| 21:27 | Session 10: wired useGameKeyboard+LiveAnnouncer into shell, added currentPly seek, focus ring on MoveCell, all 5 CI gates pass | computer-game-client.tsx, move-panel.tsx | GO | ~350 |
+| 21:29 | Session end: 10 writes across 3 files (computer-game-client.tsx, move-panel.tsx, session-10-handoff.md) | 4 reads | ~8989 tok |
 | 20:53 | Edited docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md | inline fix | ~14 |
 | 20:57 | sprint vs-computer: epic1 foundations done+merged; epic2 ui failed s09 (exit97 deliverables path-mismatch); fixed plan path test/computer-game→test/hooks, pruned stale s09 wt+branch, resumed s9 | docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md, .wolf/buglog.json | resume running (task bxfbnz8ws) | ~22k |
 | 20:57 | Session end: 1 writes across 1 files (session-09-a11y-polish.md) | 3 reads | ~770 tok |
@@ -202,3 +326,20 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 21:13 | Edited docs/claude-sessions/vs-computer-ui/session-09-a11y-polish.md | inline fix | ~8 |
 | 21:15 | s09 failed AGAIN (exit97): agent non-deterministic test path (run2 wrote test/computer-game/a11y.test.tsx). Fixed produces→glob apps/web/test/*.test.ts*, pruned stale s09, resumed | session-09-a11y-polish.md, buglog bug-030, cerebrum | resume running (task blxf75zb5) | ~30k |
 | 21:15 | Session end: 3 writes across 2 files (session-09-a11y-polish.md, omni-issue-body.md) | 4 reads | ~1433 tok |
+| 21:27 | Created ../../../../tmp/epic-issue-body.md | — | ~1363 |
+| 21:27 | Session end: 4 writes across 3 files (session-09-a11y-polish.md, omni-issue-body.md, epic-issue-body.md) | 4 reads | ~2893 tok |
+| 22:08 | Edited ../pc-merge-vscomputer/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→2 lines | ~33 |
+| 22:10 | sprint vs-computer DONE: both epics merged, PR #3. Resolved PR conflicts in temp worktree: .wolf/*=ours, footer.tsx=main(drop social links), client.tsx=union(ResultOverlay+a11y). typecheck green, pushed 7a19fcb, PR now MERGEABLE | PR #3 | complete | ~40k |
+| 22:11 | Session end: 5 writes across 4 files (session-09-a11y-polish.md, omni-issue-body.md, epic-issue-body.md, computer-game-client.tsx) | 5 reads | ~7978 tok |
+
+## Session: 2026-06-08 22:17
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:22 | Edited ../../../../tmp/purechess-pr3/.github/workflows/ci.yml | 5→8 lines | ~64 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/.github/workflows/ci.yml | 5→8 lines | ~64 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-game-actions.service.ts | 4→5 lines | ~28 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-games.service.ts | 4→5 lines | ~28 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-game-actions.service.ts | 2→2 lines | ~32 |
+| 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-games.service.ts | 2→2 lines | ~30 |
+| 22:23 | Session end: 6 writes across 3 files (ci.yml, computer-game-actions.service.ts, computer-games.service.ts) | 6 reads | ~10268 tok |

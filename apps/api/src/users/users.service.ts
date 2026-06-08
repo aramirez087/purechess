@@ -207,6 +207,9 @@ export class UsersService {
         status: GameStatus.completed,
         ...(query.category && { category: query.category }),
         ...(query.isRated !== undefined && { isRated: query.isRated }),
+        ...(query.isVsComputer !== undefined && {
+          isVsComputer: query.isVsComputer,
+        }),
         ...cursorCondition,
       },
       include: {
@@ -222,9 +225,11 @@ export class UsersService {
 
     const summaries: GameHistorySummaryDto[] = slice.map((g) => {
       const playedAsWhite = g.whiteUserId === userId;
-      const opponentUsername = playedAsWhite
-        ? (g.blackPlayer?.username ?? "")
-        : (g.whitePlayer?.username ?? "");
+      const opponentUsername = g.isVsComputer
+        ? `Computer (Lv ${g.computerLevel ?? 1})`
+        : playedAsWhite
+          ? (g.blackPlayer?.username ?? "")
+          : (g.whitePlayer?.username ?? "");
 
       let result: "win" | "loss" | "draw" | null = null;
       if (g.result === GameResult.draw) {
@@ -263,6 +268,7 @@ export class UsersService {
         timeControlSeconds: g.timeControlSeconds,
         incrementSeconds: g.incrementSeconds,
         isRated: g.isRated,
+        isVsComputer: g.isVsComputer,
         endedAt: g.endedAt?.toISOString() ?? null,
       };
     });

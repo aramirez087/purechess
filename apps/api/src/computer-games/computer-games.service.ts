@@ -4,15 +4,17 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { Chess } from "chess.js";
 import {
   GameResult as PrismaGameResult,
   GameResultReason,
-  TimeControlCategory,
+  Prisma,
 } from "@prisma/client";
 import {
   ComputerGameStateDto,
   ComputerMoveDto,
   CreateComputerGameDto,
+  CreateFromFenDto,
   GameResult,
   GameTermination,
   SerializableEngineState,
@@ -20,43 +22,14 @@ import {
 import { PrismaService } from "../database/prisma.service";
 import { EngineService, InvalidMoveError } from "../chess/engine.service";
 import { PosthogService } from "../analytics/posthog.service";
-
-const STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-function resolveColor(color: "white" | "black" | "random"): "white" | "black" {
-  if (color === "random") return Math.random() < 0.5 ? "white" : "black";
-  return color;
-}
-
-function getCategory(secs: number): TimeControlCategory {
-  if (secs < 180) return TimeControlCategory.bullet;
-  if (secs <= 600) return TimeControlCategory.blitz;
-  return TimeControlCategory.rapid;
-}
-
-function toStateDto(
-  gameId: string,
-  fen: string,
-  pgn: string | null,
-  status: string,
-  computerColor: "white" | "black",
-  computerLevel: number,
-  lastComputerMove: string | null,
-  result: string | null,
-  resultReason: string | null,
-): ComputerGameStateDto {
-  return {
-    gameId,
-    fen,
-    pgn: pgn ?? "",
-    status,
-    computerColor,
-    computerLevel,
-    lastComputerMove,
-    result,
-    resultReason,
-  };
-}
+import {
+  STARTING_FEN,
+  buildStateDto,
+  computeExtras,
+  fenPositionKey,
+  getCategory,
+  resolveColor,
+} from "./computer-games.helpers";
 
 @Injectable()
 export class ComputerGamesService {
@@ -132,17 +105,103 @@ export class ComputerGamesService {
       });
     }
 
-    return toStateDto(
-      game.id,
-      STARTING_FEN,
-      "",
-      "active",
+    return buildStateDto({
+      gameId: game.id,
+      fen: STARTING_FEN,
+      pgn: "",
+      status: "active",
       computerColor,
-      dto.level,
-      null,
-      null,
-      null,
-    );
+      computerLevel: dto.level,
+      lastComputerMove: null,
+      result: null,
+      resultReason: null,
+      extras: computeExtras(serialized, computerColor, "active"),
+    });
+  }
+
+  async createGameFromFen(
+    userId: string | null,
+    dto: CreateFromFenDto,
+  ): Promise<ComputerGameStateDto> {
+    let chess: Chess;
+    try {
+      chess = new Chess(dto.fen);
+    } catch {
+      throw new BadRequestException("Invalid FEN");
+    }
+    const fen = chess.fen();
+
+    const userColor = resolveColor(dto.color);
+    const computerColor = userColor === "white" ? "black" : "white";
+    const whiteUserId = userColor === "white" ? userId : null;
+    const blackUserId = userColor === "black" ? userId : null;
+
+    const nowMs = Date.now();
+    const timeMs = dto.timeControlSeconds * 1000;
+    const incrementMs = (dto.incrementSeconds ?? 0) * 1000;
+
+    const game = await this.prisma.game.create({
+      data: {
+        whiteUserId,
+        blackUserId,
+        timeControlSeconds: dto.timeControlSeconds,
+        incrementSeconds: dto.incrementSeconds ?? 0,
+        category: getCategory(dto.timeControlSeconds),
+        isRated: false,
+        isVsComputer: true,
+        computerLevel: dto.level,
+        computerColor,
+        status: "active",
+        startedAt: new Date(nowMs),
+        startingFen: fen,
+        finalFen: fen,
+        pgn: "",
+      },
+    });
+
+    const serialized: SerializableEngineState = {
+      gameId: game.id,
+      whiteUserId,
+      blackUserId,
+      fen,
+      fenHistory: [fenPositionKey(fen)],
+      moves: [],
+      pendingDrawOfferBy: null,
+      clock: { whiteMs: timeMs, blackMs: timeMs, lastTickAt: nowMs, incrementMs },
+      status: "active",
+      result: null,
+      resultReason: null,
+    };
+
+    await this.prisma.game.update({
+      where: { id: game.id },
+      data: { engineState: serialized as object, finalFen: fen },
+    });
+
+    if (userId) {
+      this.posthog.captureEvent(userId, "computer_game_created", {
+        game_id: game.id,
+        player_color: userColor,
+        computer_level: dto.level,
+        time_control_seconds: dto.timeControlSeconds,
+        increment_seconds: dto.incrementSeconds ?? 0,
+        category: getCategory(dto.timeControlSeconds),
+        from_fen: true,
+      });
+    }
+
+    return buildStateDto({
+      gameId: game.id,
+      fen,
+      pgn: "",
+      status: "active",
+      computerColor,
+      computerLevel: dto.level,
+      lastComputerMove: null,
+      result: null,
+      resultReason: null,
+      extras: computeExtras(serialized, computerColor, "active"),
+    });
   }
 
   async submitMove(
@@ -190,17 +249,22 @@ export class ComputerGamesService {
         });
       }
 
-      return toStateDto(
+      return buildStateDto({
         gameId,
-        game.finalFen ?? STARTING_FEN,
-        game.pgn,
-        "completed",
-        gameComputerColor,
+        fen: game.finalFen ?? STARTING_FEN,
+        pgn: game.pgn,
+        status: "completed",
+        computerColor: gameComputerColor,
         computerLevel,
-        game.lastComputerMove ?? null,
+        lastComputerMove: game.lastComputerMove ?? null,
         result,
-        reason,
-      );
+        resultReason: reason,
+        extras: computeExtras(
+          game.engineState as unknown as SerializableEngineState | null,
+          gameComputerColor,
+          "completed",
+        ),
+      });
     }
 
     if (!game.engineState)
@@ -217,11 +281,15 @@ export class ComputerGamesService {
 
     const nowMs = Date.now();
 
-    // Computer games are untimed: the UI presents the clock as "Unlimited", so
-    // the wall clock must never flag the player while they think. Reset the tick
-    // origin to now before applying the move — applyMove then sees ~0 elapsed,
-    // so isTimeout never fires no matter how long the game sat idle.
-    engineState.clock = { ...engineState.clock, lastTickAt: BigInt(nowMs) };
+    // Clock-aware move submission. For an untimed game (timeControlSeconds <= 0)
+    // the UI presents the clock as "Unlimited", so the wall clock must never
+    // flag the player: reset the tick origin to now before applying, so
+    // isTimeout sees ~0 elapsed and never fires. For a timed game keep the
+    // persisted lastTickAt so applyMove ticks real elapsed, applies increment,
+    // and flag-fall (bug-005 path) can fire.
+    if (game.timeControlSeconds <= 0) {
+      engineState.clock = { ...engineState.clock, lastTickAt: BigInt(nowMs) };
+    }
 
     let state;
     try {
@@ -240,11 +308,12 @@ export class ComputerGamesService {
     if (state.moves.length === engineState.moves.length) {
       const result = state.result as string | null;
       const reason = state.resultReason as string | null;
+      const serializedFlag = this.engine.toSerializable(state);
 
       await this.prisma.game.update({
         where: { id: gameId },
         data: {
-          engineState: this.engine.toSerializable(state) as object,
+          engineState: serializedFlag as object,
           finalFen: state.position.fen(),
           status: "completed",
           result: state.result as unknown as PrismaGameResult,
@@ -253,17 +322,18 @@ export class ComputerGamesService {
         },
       });
 
-      return toStateDto(
+      return buildStateDto({
         gameId,
-        state.position.fen(),
-        game.pgn,
-        "completed",
-        gameComputerColor,
+        fen: state.position.fen(),
+        pgn: game.pgn,
+        status: "completed",
+        computerColor: gameComputerColor,
         computerLevel,
-        game.lastComputerMove ?? null,
+        lastComputerMove: game.lastComputerMove ?? null,
         result,
-        reason,
-      );
+        resultReason: reason,
+        extras: computeExtras(serializedFlag, gameComputerColor, "completed"),
+      });
     }
 
     const engineMove = state.moves[state.moves.length - 1]!;
@@ -288,7 +358,7 @@ export class ComputerGamesService {
       ? dto.move
       : (game.lastComputerMove ?? null);
 
-    await this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       await tx.move.create({
         data: {
           gameId,
@@ -344,17 +414,22 @@ export class ComputerGamesService {
       });
     }
 
-    return toStateDto(
+    return buildStateDto({
       gameId,
-      finalFen,
+      fen: finalFen,
       pgn,
-      finalResult ? "completed" : "active",
-      gameComputerColor,
+      status: finalResult ? "completed" : "active",
+      computerColor: gameComputerColor,
       computerLevel,
       lastComputerMove,
-      finalResult ? (finalResult.result as string) : null,
-      finalResult ? (finalResult.reason as string) : null,
-    );
+      result: finalResult ? (finalResult.result as string) : null,
+      resultReason: finalResult ? (finalResult.reason as string) : null,
+      extras: computeExtras(
+        serialized,
+        gameComputerColor,
+        finalResult ? "completed" : "active",
+      ),
+    });
   }
 
   async getGame(
@@ -369,16 +444,22 @@ export class ComputerGamesService {
       throw new ForbiddenException("Not your game");
     }
 
-    return toStateDto(
-      game.id,
-      game.finalFen ?? STARTING_FEN,
-      game.pgn,
-      game.status,
-      game.computerColor as "white" | "black",
-      game.computerLevel ?? 1,
-      game.lastComputerMove ?? null,
-      game.result ?? null,
-      game.resultReason ?? null,
-    );
+    const computerColor = game.computerColor as "white" | "black";
+    return buildStateDto({
+      gameId: game.id,
+      fen: game.finalFen ?? STARTING_FEN,
+      pgn: game.pgn,
+      status: game.status,
+      computerColor,
+      computerLevel: game.computerLevel ?? 1,
+      lastComputerMove: game.lastComputerMove ?? null,
+      result: game.result ?? null,
+      resultReason: game.resultReason ?? null,
+      extras: computeExtras(
+        game.engineState as unknown as SerializableEngineState | null,
+        computerColor,
+        game.status,
+      ),
+    });
   }
 }

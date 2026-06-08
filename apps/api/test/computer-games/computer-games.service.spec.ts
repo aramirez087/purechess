@@ -376,4 +376,166 @@ describe('ComputerGamesService', () => {
       await expect(service.getGame(GAME_ID, USER_ID)).rejects.toThrow(ForbiddenException);
     });
   });
+
+  describe('submitMove — clock-aware (timed game)', () => {
+    const timedGame = {
+      id: GAME_ID,
+      whiteUserId: USER_ID,
+      blackUserId: null,
+      isVsComputer: true,
+      status: 'active',
+      computerColor: 'black',
+      computerLevel: 3,
+      timeControlSeconds: 300,
+      finalFen: STARTING_FEN,
+      pgn: '',
+      lastComputerMove: null,
+      category: 'rapid',
+      engineState: {},
+    };
+
+    let txMock: { move: { create: jest.Mock }; game: { update: jest.Mock } };
+
+    beforeEach(() => {
+      mockPrisma.game.findUnique.mockResolvedValue(timedGame);
+      // lastTickAt deliberately non-zero so we can assert it is NOT reset for a timed game.
+      mockEngine.fromSerializable.mockReturnValue({
+        ...emptyEngineState,
+        clock: { whiteMs: 300000n, blackMs: 300000n, lastTickAt: 1000n, incrementMs: 2000n },
+      });
+      mockEngine.applyMove.mockReturnValue({
+        ...emptyEngineState,
+        moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 297000, moveTimeMs: 5000, by: 'w' }],
+        position: { fen: () => AFTER_E4_FEN, turn: () => 'b' },
+      });
+      mockEngine.detectResult.mockReturnValue(null);
+      // Serialized state carries the ticked clock (white spent 3s + 2s increment net).
+      mockEngine.toSerializable.mockReturnValue({
+        clock: { whiteMs: 297000, blackMs: 300000, lastTickAt: 99999, incrementMs: 2000 },
+        moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 297000, moveTimeMs: 5000, by: 'w' }],
+        pendingDrawOfferBy: null,
+      });
+      mockEngine.buildPgn.mockReturnValue('1. e4 *');
+
+      txMock = { move: { create: jest.fn() }, game: { update: jest.fn() } };
+      mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof txMock) => unknown) => cb(txMock));
+    });
+
+    it('does NOT reset lastTickAt for a timed game (lets applyMove tick real elapsed)', async () => {
+      await service.submitMove(GAME_ID, USER_ID, { move: 'e2e4' });
+
+      const passedState = mockEngine.applyMove.mock.calls[0]![0] as { clock: { lastTickAt: bigint } };
+      expect(passedState.clock.lastTickAt).toBe(1000n);
+    });
+
+    it('populates the serialized clock on the returned state DTO', async () => {
+      const result = await service.submitMove(GAME_ID, USER_ID, { move: 'e2e4' });
+
+      expect(result.clock).toEqual({
+        whiteMs: 297000,
+        blackMs: 300000,
+        lastTickAt: 99999,
+        incrementMs: 2000,
+      });
+    });
+
+    it('flags on time without a 500 or duplicate move row (bug-005 guard, timed path)', async () => {
+      mockEngine.applyMove.mockReturnValue({
+        ...emptyEngineState,
+        status: 'completed',
+        result: 'black_wins',
+        resultReason: 'timeout',
+      });
+      mockEngine.toSerializable.mockReturnValue({ clock: { whiteMs: 0, blackMs: 300000, lastTickAt: 1, incrementMs: 2000 }, moves: [], pendingDrawOfferBy: null });
+      mockPrisma.game.update.mockResolvedValue({});
+
+      const result = await service.submitMove(GAME_ID, USER_ID, { move: 'e2e4' });
+
+      expect(mockPrisma.move.create).not.toHaveBeenCalled();
+      expect(mockPrisma.$transaction).not.toHaveBeenCalled();
+      expect(result.status).toBe('completed');
+      expect(result.resultReason).toBe('timeout');
+    });
+  });
+
+  describe('submitMove — untimed game still never flags', () => {
+    const untimedGame = {
+      id: GAME_ID,
+      whiteUserId: USER_ID,
+      blackUserId: null,
+      isVsComputer: true,
+      status: 'active',
+      computerColor: 'black',
+      computerLevel: 3,
+      timeControlSeconds: 0,
+      finalFen: STARTING_FEN,
+      pgn: '',
+      lastComputerMove: null,
+      category: 'rapid',
+      engineState: {},
+    };
+
+    beforeEach(() => {
+      mockPrisma.game.findUnique.mockResolvedValue(untimedGame);
+      mockEngine.fromSerializable.mockReturnValue({
+        ...emptyEngineState,
+        clock: { whiteMs: 0n, blackMs: 0n, lastTickAt: 1000n, incrementMs: 0n },
+      });
+      mockEngine.applyMove.mockReturnValue({
+        ...emptyEngineState,
+        moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 0, moveTimeMs: 0, by: 'w' }],
+        position: { fen: () => AFTER_E4_FEN, turn: () => 'b' },
+      });
+      mockEngine.detectResult.mockReturnValue(null);
+      mockEngine.toSerializable.mockReturnValue({ clock: { whiteMs: 0, blackMs: 0, lastTickAt: 0, incrementMs: 0 }, moves: [], pendingDrawOfferBy: null });
+      mockEngine.buildPgn.mockReturnValue('1. e4 *');
+      const txMock = { move: { create: jest.fn() }, game: { update: jest.fn() } };
+      mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof txMock) => unknown) => cb(txMock));
+    });
+
+    it('resets lastTickAt to now so isTimeout cannot fire', async () => {
+      await service.submitMove(GAME_ID, USER_ID, { move: 'e2e4' });
+
+      const passedState = mockEngine.applyMove.mock.calls[0]![0] as { clock: { lastTickAt: bigint } };
+      expect(passedState.clock.lastTickAt).not.toBe(1000n);
+    });
+  });
+
+  describe('createGameFromFen', () => {
+    // No en-passant target: chess.js round-trips this FEN unchanged.
+    const VALID_FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const dto = { fen: VALID_FEN, color: 'white' as const, level: 4 as const, timeControlSeconds: 300, incrementSeconds: 2 };
+
+    beforeEach(() => {
+      mockPrisma.game.create.mockResolvedValue({ id: GAME_ID });
+      mockPrisma.game.update.mockResolvedValue({});
+    });
+
+    it('creates an active game at the supplied position', async () => {
+      const result = await service.createGameFromFen(USER_ID, dto);
+
+      expect(mockPrisma.game.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            isVsComputer: true,
+            isRated: false,
+            computerColor: 'black',
+            startingFen: VALID_FEN,
+            finalFen: VALID_FEN,
+          }),
+        }),
+      );
+      expect(result.status).toBe('active');
+      expect(result.fen).toBe(VALID_FEN);
+      expect(result.clock).toEqual({ whiteMs: 300000, blackMs: 300000, lastTickAt: expect.any(Number), incrementMs: 2000 });
+      expect(result.abortable).toBe(true);
+    });
+
+    it('rejects an invalid FEN with BadRequestException', async () => {
+      await expect(
+        service.createGameFromFen(USER_ID, { ...dto, fen: 'not a real fen' }),
+      ).rejects.toThrow(BadRequestException);
+      expect(mockPrisma.game.create).not.toHaveBeenCalled();
+    });
+  });
 });

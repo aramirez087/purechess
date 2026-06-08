@@ -55,6 +55,11 @@ export function GameHistoryRow({ game }: GameHistoryRowProps) {
             <ColorIcon className="h-2.5 w-2.5" />
           </span>
           {game.opponentUsername}
+          {game.isVsComputer && (
+            <span className="ml-1 rounded px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide bg-[#d6b563]/10 text-[#d6b563] border border-[#d6b563]/20">
+              Computer
+            </span>
+          )}
         </span>
       </td>
       <td className="px-4 py-2.5 text-center">

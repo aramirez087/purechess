@@ -1,17 +1,32 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:13:16.974Z
-> Files: 565 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:28:51.093Z
+> Files: 586 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T04:22:41.215Z
+> Files: 570 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
 - `commit-msg.txt` — Declares in (~304 tok)
+- `epic-issue-body.md` — Bug 1 — the printed resume command aborts on the failed session's own branch (~1278 tok)
 - `inspect.cjs` — Declares p (~262 tok)
-- `omni-issue-body.md` — ## Summary (~573 tok)
+
+## ../../../../tmp/purechess-pr3/.github/workflows/
+
+- `ci.yml` — CI: CI (~1260 tok)
+
+## ../../../../tmp/purechess-pr3/apps/api/src/computer-games/
+
+- `computer-game-actions.service.ts` — State-mutating vs-computer actions that are NOT a normal move: takeback, (~3332 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~4140 tok)
 
 ## ../../.claude/plans/
 
 - `your-goal-is-to-squishy-platypus.md` — PureChess — Game Page Redesign: Full-Bleed Dual-Rail Shell (~3766 tok)
+
+## ../pc-merge-vscomputer/apps/web/src/app/computer-game/[gameId]/
+
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~5550 tok)
 
 ## ./
 
@@ -22,11 +37,17 @@
 - `.gitignore` — Git ignore rules (~36 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
+- `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
+- `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
+- `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
+- `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
+- `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
+- `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
-- `package.json` — Node.js package manifest (~300 tok)
+- `package.json` — Node.js package manifest (~306 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~125801 tok)
 - `pnpm-workspace.yaml` (~72 tok)
 - `posthog-setup-report.md` — PostHog post-wizard report (~821 tok)
@@ -766,11 +787,11 @@
 
 - `users.controller.ts` — Exports UsersController (~510 tok)
 - `users.module.ts` — Exports UsersModule (~100 tok)
-- `users.service.ts` — Prisma data access layer (~2216 tok)
+- `users.service.ts` — Exports UsersService (~2280 tok)
 
 ## apps/api/src/users/dto/
 
-- `game-history.dto.ts` — Exports GameHistoryQueryDto (~191 tok)
+- `game-history.dto.ts` — Exports GameHistoryQueryDto (~250 tok)
 - `user-profile.dto.ts` — Exports UpdateMeDto (~126 tok)
 
 ## apps/api/test/admin/
@@ -780,8 +801,8 @@
 
 ## apps/api/test/auth/
 
-- `auth.controller.spec.ts` — API routes: POST, GET (8 endpoints) (~1533 tok)
-- `auth.service.spec.ts` — Declares FUTURE (~1883 tok)
+- `auth.controller.spec.ts` — API routes: POST, GET (8 endpoints) (~1610 tok)
+- `auth.service.spec.ts` — Declares FUTURE (~1949 tok)
 - `sessions.service.spec.ts` — Declares mockPrisma (~1266 tok)
 
 ## apps/api/test/chess/
@@ -813,7 +834,7 @@
 
 ## apps/api/test/invites/
 
-- `invites.service.spec.ts` — CREATOR_ID: makeGame (~2023 tok)
+- `invites.service.spec.ts` — CREATOR_ID: makeGame (~2089 tok)
 
 ## apps/api/test/observability/
 
@@ -823,7 +844,7 @@
 ## apps/api/test/reports/
 
 - `reports-admin.controller.spec.ts` — Declares mockService (~850 tok)
-- `reports.service.spec.ts` — Prisma data access layer (~1397 tok)
+- `reports.service.spec.ts` — Declares mockPosthog (~1463 tok)
 
 ## apps/web/
 
@@ -866,18 +887,25 @@
 - `globals.css` — Styles: 9 rules, 75 vars (~1095 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
 
-## apps/web/src/app/(play)/play/
-
-- `play-page-client.tsx` — Full-viewport, vertically-centered play shell with a theme-aware ambient (~2243 tok)
-
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~5052 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4765 tok)
+
+## apps/web/src/app/games/
+
+- `games-client.tsx` — GamesClient (~988 tok)
+- `page.tsx` — dynamic (~613 tok)
 
 ## apps/web/src/app/games/[gameId]/
 
-- `page.tsx` — formatResult (~678 tok)
+- `page.tsx` — formatResult (~680 tok)
 - `review-client.tsx` — STARTING_FEN (~1769 tok)
+
+## apps/web/src/components/admin/
+
+- `admin-page-header.tsx` — AdminPageHeader (~231 tok)
+- `games-table.tsx` — GamesTable — renders table (~2073 tok)
+- `reports-table.tsx` — STATUS_OPTIONS — renders table (~2248 tok)
 
 ## apps/web/src/components/board/
 
@@ -886,6 +914,11 @@
 ## apps/web/src/components/board/hooks/
 
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
+
+## apps/web/src/components/computer-game/
+
+- `live-announcer.tsx` — Last computer move in SAN notation, e.g. "Nf3". Null before first computer move. (~342 tok)
+- `review-rail.tsx` — ReviewRail (~98 tok)
 
 ## apps/web/src/components/game/
 
@@ -896,12 +929,38 @@
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~762 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
 - `index.ts` — Declares GameShellProps (~165 tok)
-- `move-panel.tsx` — 1-based ply index. (~946 tok)
+- `move-panel.tsx` — 1-based ply index. (~972 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
+
+## apps/web/src/components/games/
+
+- `game-history-filters.tsx` — CATEGORIES (~1054 tok)
+- `game-history-row.tsx` — resultLabel (~1183 tok)
+
+## apps/web/src/components/home/
+
+- `footer.tsx` — GithubIcon (~933 tok)
 
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
+
+## apps/web/src/components/review/
+
+- `pgn-actions.tsx` — PgnActions (~388 tok)
+
+## apps/web/src/components/settings/
+
+- `settings-form.tsx` — APP_THEMES (~2253 tok)
+
+## apps/web/src/hooks/
+
+- `use-game-history.ts` — Exports useGameHistory (~482 tok)
+- `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
+
+## apps/web/src/lib/api/
+
+- `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 
 ## apps/web/src/lib/board/
 
@@ -909,33 +968,62 @@
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
 
+## apps/web/src/services/
+
+- `game-review.service.ts` — Exports getReview (~1531 tok)
+
+## apps/web/test/api/
+
+- `computer-games.test.ts` — BASE: mockOkFetch (~1090 tok)
+
 ## apps/web/test/board/
 
 - `material.test.ts` — Declares START_FEN (~560 tok)
 
-## docs/claude-sessions/
+## apps/web/test/computer-game/
 
-- `vs-computer.sprint.json` (~68 tok)
+- `a11y.test.tsx` — --------------------------------------------------------------------------- (~2228 tok)
+
+## apps/web/test/games/
+
+- `game-history-filters.test.tsx` — defaultProps (~1031 tok)
+- `game-history-page.test.tsx` — mockGame (~788 tok)
+- `game-review.test.ts` — Declares makeComputerState (~942 tok)
+
+## apps/web/test/home/
+
+- `homepage.test.tsx` — link (~704 tok)
+
+## apps/web/test/profile/
+
+- `profile-page.test.tsx` — mockRatings (~1176 tok)
+
+## apps/web/test/settings/
+
+- `settings-dialog.test.tsx` — monoBtn (~676 tok)
 
 ## docs/claude-sessions/vs-computer-foundations/
 
-- `session-00-operator-rules.md` — Session 00 — Operator Rules (vs-computer-foundations) (~903 tok)
-- `session-01-contracts-charter.md` — Session 01: Charter — shared contracts (~881 tok)
-- `session-02-api-endpoints.md` — Session 02: API capabilities (~864 tok)
-- `session-03-engine-client.md` — Session 03: Engine client capabilities (~736 tok)
-- `session-04-web-data-layer.md` — Session 04: Web data layer (~584 tok)
-- `session-05-ci-gate.md` — Session 05: CI gate (foundations) (~455 tok)
+- `.epic-produces-overrides.json` (~111 tok)
 
-## docs/claude-sessions/vs-computer-ui/
+## docs/roadmap/vs-computer-foundations/
 
-- `session-00-operator-rules.md` — Session 00 — Operator Rules (vs-computer-ui) (~1037 tok)
-- `session-01-shell-charter.md` — Session 01: Charter — shell + controller + stubs (~1094 tok)
-- `session-02-move-control.md` — Session 02: Move control & navigation (~664 tok)
-- `session-03-engine-ui.md` — Session 03: Engine analysis UI (~767 tok)
-- `session-04-clocks.md` — Session 04: Clocks & time controls (~662 tok)
-- `session-05-draws-results.md` — Session 05: Draws & results (~681 tok)
-- `session-06-setup-form.md` — Session 06: Game setup & options (~698 tok)
-- `session-07-openings.md` — Session 07: Openings & custom positions (~701 tok)
-- `session-08-review-history.md` — Session 08: Game review & history (~684 tok)
-- `session-09-a11y-polish.md` — Session 09: UX & a11y polish (~673 tok)
-- `session-10-ci-gate.md` — Session 10: CI gate (UI) (~517 tok)
+- `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
+- `session-04-handoff.md` — Session 04 Handoff — Web Data Layer (~1057 tok)
+- `session-05-handoff.md` — Session 05 Handoff — CI Gate / Go–No-Go Report (~2264 tok)
+
+## docs/roadmap/vs-computer-ui/
+
+- `session-08-handoff.md` — Session 08 Handoff — Review History: PGN Rail + vs-Computer Filter + Deep-Link Review (~1663 tok)
+- `session-09-handoff.md` — Session 09 Handoff — a11y Polish (Keyboard + Screen Reader) (~1160 tok)
+- `session-10-handoff.md` — Session 10 Handoff — CI Gate / Go–No-Go (~1228 tok)
+
+## packages/shared/src/
+
+- `index.ts` (~136 tok)
+- `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto + 2 more (~275 tok)
+
+## packages/shared/src/dto/
+
+- `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
+- `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)

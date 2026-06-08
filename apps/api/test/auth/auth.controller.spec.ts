@@ -9,6 +9,7 @@ import { OptionalSessionAuthGuard } from '../../src/auth/guards/optional-session
 import { SessionsService } from '../../src/auth/sessions.service';
 import { AdminGuard } from '../../src/auth/guards/admin.guard';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { PosthogService } from '../../src/analytics/posthog.service';
 
 const FUTURE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
@@ -64,6 +65,7 @@ describe('AuthController', () => {
       providers: [
         { provide: AuthService, useValue: mockAuthService },
         { provide: SessionsService, useValue: mockSessionsService },
+        { provide: PosthogService, useValue: { captureEvent: jest.fn(), captureException: jest.fn(), identify: jest.fn() } },
         SessionAuthGuard,
         OptionalSessionAuthGuard,
         AdminGuard,
@@ -131,10 +133,11 @@ describe('AuthController', () => {
         .expect(200);
     });
 
-    it('401 without cookie', async () => {
-      await request(app.getHttpServer())
+    it('200 with null user when no cookie', async () => {
+      const res = await request(app.getHttpServer())
         .get('/api/auth/me')
-        .expect(401);
+        .expect(200);
+      expect(res.body).toEqual({ user: null });
     });
   });
 

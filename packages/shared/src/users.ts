@@ -22,6 +22,7 @@ export type GameHistorySummaryDto = {
   timeControlSeconds: number;
   incrementSeconds: number;
   isRated: boolean;
+  isVsComputer: boolean;
   endedAt: string | null;
 };
 

@@ -6,17 +6,17 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/shared/package.json ./packages/shared/
-RUN pnpm install --frozen-lockfile --filter @purchess/web... --filter @purchess/shared
+RUN pnpm install --frozen-lockfile --filter @purechess/web... --filter @purechess/shared
 
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
-COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules 2>/dev/null || true
+    COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm --filter @purchess/shared build
-RUN pnpm --filter @purchess/web build
+RUN pnpm --filter @purechess/shared build
+RUN pnpm --filter @purechess/web build
 
 FROM node:20.15.1-alpine AS runner
 WORKDIR /app
