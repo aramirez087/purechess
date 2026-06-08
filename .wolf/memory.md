@@ -3,6 +3,7 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 | 10:42 | Edited apps/api/src/computer-games/computer-games.service.ts | 3→3 lines | ~57 |
+| 20:23 | Session 07: created lib/openings/eco.ts + index.ts (53-entry ECO dataset + helpers), opening-picker.tsx (combobox), fen-setup-board.tsx (FEN input + preview), test/openings/openings.test.ts (11 tests pass) | 5 new files | 151 tests ✅ |
 | 10:43 | Edited apps/api/src/computer-games/computer-games.service.ts | added error handling | ~98 |
 | 10:46 | Created ../../../../tmp/commit-msg.txt | — | ~324 |
 
@@ -241,16 +242,22 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 20:16 | Created .session-06-plan.md | — | ~2972 |
-| 20:16 | Session end: 1 writes across 1 files (.session-06-plan.md) | 7 reads | ~5977 tok |
+| 20:17 | Created .session-07-plan.md | — | ~2708 |
+| 20:17 | Session end: 1 writes across 1 files (.session-07-plan.md) | 8 reads | ~9645 tok |
 
-## Session: 2026-06-08 20:16
+## Session: 2026-06-08 20:17
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 20:20 | Created apps/web/src/components/play/computer-game-setup.tsx | — | ~3665 |
-| 20:21 | Created apps/web/test/play/computer-game-setup.test.tsx | — | ~1252 |
-| 20:22 | Edited apps/web/test/play/computer-game-setup.test.tsx | 2→3 lines | ~59 |
-| 20:22 | Created docs/roadmap/vs-computer-ui/session-06-handoff.md | — | ~908 |
-| 20:22 | Session 06: rewrote computer-game-setup.tsx (level/time/ELO/humanlike/think-time) + test | apps/web/src/components/play/computer-game-setup.tsx, apps/web/test/play/computer-game-setup.test.tsx | 143/143 tests pass | ~6500 |
-| 20:23 | Session end: 4 writes across 3 files (computer-game-setup.tsx, computer-game-setup.test.tsx, session-06-handoff.md) | 6 reads | ~9100 tok |
+| 20:20 | Created apps/web/src/lib/openings/eco.ts | — | ~1381 |
+| 20:20 | Edited apps/web/src/lib/openings/eco.ts | "E60" → "D90" | ~22 |
+| 20:20 | Created apps/web/src/lib/openings/index.ts | — | ~474 |
+| 20:21 | Edited apps/web/src/lib/openings/index.ts | 2→2 lines | ~22 |
+| 20:21 | Created apps/web/src/components/computer-game/opening-picker.tsx | — | ~1953 |
+| 20:21 | Edited apps/web/src/components/computer-game/opening-picker.tsx | inline fix | ~21 |
+| 20:21 | Created apps/web/src/components/computer-game/fen-setup-board.tsx | — | ~1225 |
+| 20:22 | Created apps/web/test/openings/openings.test.ts | — | ~818 |
+| 20:23 | Edited apps/web/src/lib/openings/index.ts | added 1 condition(s) | ~88 |
+| 20:23 | Edited apps/web/test/openings/openings.test.ts | 6→6 lines | ~68 |
+| 20:23 | Created docs/roadmap/vs-computer-ui/session-07-handoff.md | — | ~1304 |
+| 20:24 | Session end: 11 writes across 6 files (eco.ts, index.ts, opening-picker.tsx, fen-setup-board.tsx, openings.test.ts) | 7 reads | ~17897 tok |
