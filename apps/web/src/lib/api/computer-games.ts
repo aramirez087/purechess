@@ -1,4 +1,13 @@
-import type { CreateComputerGameDto, ComputerGameStateDto } from '@purechess/shared';
+import type {
+  CreateComputerGameDto,
+  ComputerGameStateDto,
+  TakebackDto,
+  RewindToPlyDto,
+  AbortDto,
+  DrawActionDto,
+  RematchDto,
+  CreateFromFenDto,
+} from '@purechess/shared';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
@@ -27,5 +36,55 @@ export function submitComputerMove(gameId: string, move: string): Promise<Comput
   return apiFetch(`/computer-games/${gameId}/move`, {
     method: 'POST',
     body: JSON.stringify({ move }),
+  });
+}
+
+export function takebackComputerMove(gameId: string, plies: 1 | 2): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}/takeback`, {
+    method: 'POST',
+    body: JSON.stringify({ plies } satisfies TakebackDto),
+  });
+}
+
+export function rewindComputerGame(gameId: string, ply: number): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}/rewind`, {
+    method: 'POST',
+    body: JSON.stringify({ ply } satisfies RewindToPlyDto),
+  });
+}
+
+export function abortComputerGame(gameId: string): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}/abort`, {
+    method: 'POST',
+    body: JSON.stringify({} satisfies AbortDto),
+  });
+}
+
+export function drawComputerGame(
+  gameId: string,
+  action: DrawActionDto['action'],
+): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}/draw`, {
+    method: 'POST',
+    body: JSON.stringify({ action } satisfies DrawActionDto),
+  });
+}
+
+export function rematchComputerGame(
+  gameId: string,
+  swapColors?: boolean,
+): Promise<ComputerGameStateDto> {
+  return apiFetch(`/computer-games/${gameId}/rematch`, {
+    method: 'POST',
+    body: JSON.stringify({ swapColors } satisfies RematchDto),
+  });
+}
+
+export function createComputerGameFromFen(
+  payload: CreateFromFenDto,
+): Promise<ComputerGameStateDto> {
+  return apiFetch('/computer-games/from-fen', {
+    method: 'POST',
+    body: JSON.stringify(payload),
   });
 }

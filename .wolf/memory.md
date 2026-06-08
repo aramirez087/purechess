@@ -163,17 +163,23 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 19:38 | Created .session-03-plan.md | — | ~3083 |
-| 19:38 | Session end: 1 writes across 1 files (.session-03-plan.md) | 3 reads | ~3495 tok |
+| 19:38 | Created .session-04-plan.md | — | ~2931 |
+| 19:38 | Session end: 1 writes across 1 files (.session-04-plan.md) | 5 reads | ~4666 tok |
 
 ## Session: 2026-06-08 19:38
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 19:39 | Created apps/web/src/lib/engine/stockfish-client.ts | — | ~3692 |
-| 19:40 | Edited apps/web/src/lib/engine/stockfish-client.ts | chooseMove() → getHumanMove() | ~164 |
-| 19:40 | Edited apps/web/src/lib/engine/stockfish-client.ts | chooseMove() → getHumanMove() | ~34 |
-| 19:41 | Created apps/web/test/engine/stockfish-client.test.ts | — | ~2374 |
-| 19:43 | Created docs/roadmap/vs-computer-foundations/session-03-handoff.md | — | ~1780 |
-| 19:42 | S03 engine client: analyze/getHint/getHumanMove/cancel/warmUp + EngineTimeout/CancelledError; serialized job queue over shared worker; backward-compat getBestMove | apps/web/src/lib/engine/stockfish-client.ts, apps/web/test/engine/stockfish-client.test.ts | shared build PASS, web typecheck no new errors, lint clean, 17/17 engine tests pass | ~9k |
-| 19:43 | Session end: 5 writes across 3 files (stockfish-client.ts, stockfish-client.test.ts, session-03-handoff.md) | 2 reads | ~8364 tok |
+| 19:39 | Edited apps/web/src/lib/api/computer-games.ts | expanded (+9 lines) | ~54 |
+| 19:39 | Edited apps/web/src/lib/api/computer-games.ts | modified submitComputerMove() | ~477 |
+| 19:39 | Created apps/web/test/api/computer-games.test.ts | — | ~1090 |
+| 19:40 | Created docs/roadmap/vs-computer-foundations/session-04-handoff.md | — | ~1127 |
+
+## Session: 2026-06-07 Session-04
+
+| Time  | Action | File(s) | Outcome | ~Tokens |
+|-------|--------|---------|---------|--------|
+| S4    | Extended import + added 6 fetch wrappers | apps/web/src/lib/api/computer-games.ts | done | ~2k |
+| S4    | Created Vitest tests (7 cases) | apps/web/test/api/computer-games.test.ts | 7/7 pass | ~3k |
+| S4    | Wrote handoff | docs/roadmap/vs-computer-foundations/session-04-handoff.md | done | ~1k |
+| 19:41 | Session end: 4 writes across 3 files (computer-games.ts, computer-games.test.ts, session-04-handoff.md) | 3 reads | ~4055 tok |
