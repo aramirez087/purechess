@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:12:40.219Z
-> Files: 565 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T02:22:54.145Z
+> Files: 568 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -24,6 +24,7 @@
 - `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
+- `.session-06-plan.md` — Session 06 Implementation Plan — Setup Form: Level Selection + Options (~2786 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -909,7 +910,7 @@
 
 ## apps/web/src/components/play/
 
-- `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
+- `computer-game-setup.tsx` — Setup form for vs-computer games: level picker (1-8, gold-fill active), time-control picker (untimed/bullet/blitz/rapid), strength mode (level vs ELO), human-like switch, think-time buttons; builds CreateComputerGameDto payload (~5200 tok)
 
 ## apps/web/src/components/settings/
 
@@ -937,6 +938,10 @@
 
 - `homepage.test.tsx` — link (~704 tok)
 
+## apps/web/test/play/
+
+- `computer-game-setup.test.tsx` — mockCreate (~1278 tok)
+
 ## apps/web/test/profile/
 
 - `profile-page.test.tsx` — mockRatings (~1169 tok)
@@ -954,6 +959,10 @@
 - `session-01-handoff.md` — Session 01 Handoff — vs-computer Contracts Charter (~2271 tok)
 - `session-04-handoff.md` — Session 04 Handoff — Web Data Layer (~1057 tok)
 - `session-05-handoff.md` — Session 05 Handoff — CI Gate / Go–No-Go Report (~2264 tok)
+
+## docs/roadmap/vs-computer-ui/
+
+- `session-06-handoff.md` — Session 06 Handoff — Setup Form: Level Selection + Options (~851 tok)
 
 ## packages/shared/src/
 

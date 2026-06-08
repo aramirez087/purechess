@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 110552,
-    "total_reads": 151,
-    "total_writes": 112,
-    "total_sessions": 14,
-    "anatomy_hits": 53,
-    "anatomy_misses": 96,
+    "total_tokens_estimated": 125629,
+    "total_reads": 164,
+    "total_writes": 117,
+    "total_sessions": 16,
+    "anatomy_hits": 61,
+    "anatomy_misses": 101,
     "repeated_reads_blocked": 59,
-    "estimated_savings_vs_bare_cli": 27084
+    "estimated_savings_vs_bare_cli": 28684
   },
   "sessions": [
     {
@@ -1729,6 +1729,143 @@
         "writes_count": 29,
         "repeated_reads_blocked": 6,
         "anatomy_lookups": 9
+      }
+    },
+    {
+      "id": "session-2026-06-08-2013",
+      "started": "2026-06-08T02:13:48.539Z",
+      "ended": "2026-06-08T02:16:20.758Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 1037,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/packages/shared/src/dto/computer-game.dto.ts",
+          "tokens_estimated": 666,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/docs/roadmap/vs-computer-ui/session-01-handoff.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/docs/roadmap/vs-computer-foundations/session-01-handoff.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/docs/claude-sessions/vs-computer-ui/session-06-setup-form.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/test/api/computer-games.test.ts",
+          "tokens_estimated": 1090,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/packages/shared/src/time-control.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/.session-06-plan.md",
+          "tokens_estimated": 3184,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 2793,
+        "output_tokens_estimated": 3184,
+        "reads_count": 7,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-06-08-2016",
+      "started": "2026-06-08T02:16:21.317Z",
+      "ended": "2026-06-08T02:23:22.717Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 1037,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/packages/shared/src/dto/computer-game.dto.ts",
+          "tokens_estimated": 666,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/packages/shared/src/time-control.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/test/settings/settings-dialog.test.tsx",
+          "tokens_estimated": 676,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/src/components/ui/switch.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/src/lib/api/computer-games.ts",
+          "tokens_estimated": 772,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 3665,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/test/play/computer-game-setup.test.tsx",
+          "tokens_estimated": 1252,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/apps/web/test/play/computer-game-setup.test.tsx",
+          "tokens_estimated": 59,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s06-setup-form/docs/roadmap/vs-computer-ui/session-06-handoff.md",
+          "tokens_estimated": 973,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 3151,
+        "output_tokens_estimated": 5949,
+        "reads_count": 6,
+        "writes_count": 4,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 4
       }
     }
   ],
