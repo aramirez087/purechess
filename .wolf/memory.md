@@ -182,3 +182,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | S4    | Extended import + added 6 fetch wrappers | apps/web/src/lib/api/computer-games.ts | done | ~2k |
 | S4    | Created Vitest tests (7 cases) | apps/web/test/api/computer-games.test.ts | 7/7 pass | ~3k |
 | S4    | Wrote handoff | docs/roadmap/vs-computer-foundations/session-04-handoff.md | done | ~1k |
+| 19:41 | Session end: 4 writes across 3 files (computer-games.ts, computer-games.test.ts, session-04-handoff.md) | 3 reads | ~4055 tok |
