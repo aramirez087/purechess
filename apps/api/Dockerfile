@@ -1,24 +1,37 @@
 # Stage 0: Rust builder — compiles the napi .node binary for Linux musl.
-FROM rust:1-bookworm AS rust-builder
-RUN apt-get update && apt-get install -y musl-tools && rm -rf /var/lib/apt/lists/*
-RUN rustup target add x86_64-unknown-linux-musl
+# Use `rust:1-alpine` as the base: Alpine is musl-native, so the host target
+# IS `x86_64-unknown-linux-musl` and no cross-compile toolchain is needed.
+# The full musl toolchain (musl-dev, libgcc, crt1.o, Scrt1.o) is preinstalled.
+# `rust:1-bookworm` was tried first but `musl-tools` on Debian only provides
+# a `musl-gcc` wrapper, not the full musl sysroot (libgcc_s, libm, etc.) —
+# static linking fails with "cannot find libgcc_s.so.1".
+FROM rust:1-alpine AS rust-builder
+# Install Node + the napi-rs CLI. The `nodejs` package on Alpine 3.23 is v24;
+# it's only used to invoke the napi CLI at build time, not linked into the
+# .node binary (which uses the napi ABI, not a specific Node version). The
+# runtime image stays on `node:20.15.1-alpine`.
+RUN apk add --no-cache nodejs npm
 RUN npm install -g @napi-rs/cli@^3.0.0
 
 WORKDIR /build
-# Layer-cache trick: copy Cargo manifests + lock first, create a dummy lib to allow
-# `cargo fetch`, then overwrite with real source. Dep resolution is cached on src-only changes.
+# Layer-cache trick: copy Cargo manifests + lock first, create dummy src + bench
+# files so `cargo fetch` can parse the manifest, then overwrite with real source.
+# Dep resolution is cached on src-only changes. cargo 1.93 validates bench paths
+# even on `cargo fetch`, so a dummy benches/perft.rs is required alongside the
+# dummy lib.rs.
 COPY Cargo.toml Cargo.lock ./
 COPY crates/purechess-engine/Cargo.toml ./crates/purechess-engine/Cargo.toml
-RUN mkdir -p crates/purechess-engine/src && \
+RUN mkdir -p crates/purechess-engine/src crates/purechess-engine/benches && \
     echo 'pub fn placeholder(){}' > crates/purechess-engine/src/lib.rs && \
-    cargo fetch --target x86_64-unknown-linux-musl
+    echo 'fn main(){}' > crates/purechess-engine/benches/perft.rs && \
+    cargo fetch
 
 COPY crates/purechess-engine ./crates/purechess-engine
 WORKDIR /build/crates/purechess-engine
 RUN npm install
-RUN napi build --platform --release --strip \
-      --target x86_64-unknown-linux-musl \
-      --features ffi
+# Host is already x86_64-unknown-linux-musl (Alpine), so no cross-compile.
+# The musl toolchain (libc.so, libgcc_s.so, crt1.o) is preinstalled at /usr/lib.
+RUN napi build --platform --release --strip --features ffi
 # Outputs: purechess-engine.linux-x64-musl.node, index.js, index.d.ts
 
 # ── Node base ────────────────────────────────────────────────────────────────
