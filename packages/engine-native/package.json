@@ -1,0 +1,15 @@
+{
+  "name": "@purechess/engine-native",
+  "version": "0.1.0",
+  "main": "index.js",
+  "types": "dist/index.d.ts",
+  "type": "commonjs",
+  "files": ["dist", "index.js"],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

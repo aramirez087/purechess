@@ -66,6 +66,25 @@
 - **shadcn Switch needs `aria-label` for test queries:** Radix `<Switch>` renders as `<button role="switch">` but gets no accessible name unless `aria-label` or a connected `<label htmlFor>` is provided. Without it, `getByRole('switch', { name: /label/i })` fails.
 - **Board theme uses `aria-pressed` buttons, not radio:** The board theme picker in `settings-form.tsx` uses `<button aria-pressed>` not `<input type="radio">`. Tests should use `getByRole('button', { name: /theme-name/i })`.
 
+## Key Learnings (added 2026-06-08 session WP3)
+
+- **napi-rs v3 (3.9.0) has NO `napi::module_init` attribute.** Export registration is automatic via `#[napi]`. The plan referenced this macro but it doesn't exist. `use napi::bindgen_prelude::*` is also unnecessary — the macro expansions handle it internally.
+- **napi-rs v3 auto-camelCases field names.** `new_fen` → `newFen`, `is_capture` → `isCapture`, etc. in the generated TS. Design `*Js` structs with snake_case Rust field names; consumers see camelCase automatically.
+- **`purechess-engine-native` is NOT a pnpm workspace member.** It's a napi-rs output artifact in `crates/purechess-engine/`. Installed in Docker by manually copying `.node`+`index.js`+`index.d.ts` into `node_modules/purechess-engine-native/`. Do NOT list it in `pnpm-workspace.yaml` or `packages/engine-native` deps.
+- **`export declare function` in `.ts` files is valid TypeScript.** Using ambient function declarations in `packages/engine-native/src/index.ts` lets TypeScript generate correct `.d.ts` output without the native binary present at typecheck time. Runtime behavior comes from `index.js`.
+- **musl cross-compilation from `rust:1-bookworm`**: install `musl-tools` via apt, then `rustup target add x86_64-unknown-linux-musl`. The resulting `.node` runs on Alpine. No separate cross-compilation container needed.
+- **napi build output file name**: `purechess-engine.linux-x64-musl.node` for the musl target. The prefix comes from the `"name": "purechess-engine"` field in the crate's `package.json`.
+
 ## Do-Not-Repeat (added 2026-06-07)
 
 - [2026-06-07] Don't use curly/smart quotes inside JS string literals — esbuild rejects them. Always write ASCII `'`. Check with `cat -v` if in doubt.
+
+## Do-Not-Repeat (added 2026-06-08 WP3)
+
+- [2026-06-08] `#[napi::module_init]` does not exist in napi-rs v3. If the plan references it, skip it — registration is automatic.
+- [2026-06-08] Don't add `use napi::bindgen_prelude::*` unless actually using something from it. The `#[napi]` macros handle that namespace internally.
+
+## Decision Log (added 2026-06-08 WP3)
+
+- **[2026-06-08 · rust-engine-migration WP3] Two-tier napi package layout.** `crates/purechess-engine` is the raw napi crate (npm name `purechess-engine-native`, NOT a pnpm workspace member). `packages/engine-native` is the user-facing pnpm workspace package (`@purechess/engine-native`). The indirection allows updating the binary without changing the API import path. Types declared via `export declare function` in `src/index.ts` so typecheck works without the binary. Runtime via `index.js` CJS shim.
+- **[2026-06-08 · rust-engine-migration WP3] Enum fields in napi objects are `String`, not `#[napi(string_enum)]`.** Using `serde_json::to_value(&enum_val).as_str()` at the boundary serializes to the exact serde discriminants ("white_wins", "w", "checkmate") that byte-match the TS enums. `#[napi(string_enum)]` would produce PascalCase variant names by default, requiring per-variant rename annotations.

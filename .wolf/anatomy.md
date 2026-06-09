@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T00:56:14.059Z
-> Files: 610 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T01:20:05.146Z
+> Files: 621 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -36,6 +36,7 @@
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 — Implementation Plan: Rust Engine Contracts Charter (WP1) (~6112 tok)
+- `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
@@ -586,12 +587,12 @@
 ## apps/api/
 
 - `_repro.cjs` — Declares p (~171 tok)
-- `Dockerfile` — Docker container definition (~308 tok)
+- `Dockerfile` — Docker container definition (~938 tok)
 - `eslint.config.mjs` — ESLint flat configuration (~119 tok)
-- `fly.toml` (~186 tok)
+- `fly.toml` (~195 tok)
 - `jest.e2e.config.js` (~117 tok)
 - `nest-cli.json` (~62 tok)
-- `package.json` — Node.js package manifest (~791 tok)
+- `package.json` — Node.js package manifest (~814 tok)
 - `README.md` — Project documentation (~554 tok)
 - `tsconfig.build.json` — TypeScript build configuration (~31 tok)
 - `tsconfig.json` — TypeScript configuration (~128 tok)
@@ -1003,7 +1004,9 @@
 
 ## crates/purechess-engine/
 
-- `Cargo.toml` — Rust package manifest (~243 tok)
+- `build.rs` (~11 tok)
+- `Cargo.toml` — Rust package manifest (~302 tok)
+- `package.json` — Node.js package manifest (~152 tok)
 - `README.md` — Project documentation (~926 tok)
 
 ## crates/purechess-engine/ (Rust engine — WP1 frozen contract, stubs only)
@@ -1022,7 +1025,8 @@
 
 - `error.rs` — Typed engine errors. Frozen WP1 contract — variants are part of the C-ABI surface (~274 tok)
 - `fen.rs` — FEN parsing. Frozen WP1 surface — the inverse of fen-utils.ts#toFen, exposed so the (~322 tok)
-- `lib.rs` — PureChess native engine — frozen WP1 contract. (~826 tok)
+- `ffi.rs` — napi-rs bindings — WP3. Exposes the frozen Rust API to Node.js. (~2075 tok)
+- `lib.rs` — PureChess native engine — frozen WP1 contract. (~836 tok)
 - `types.rs` — Public value types for the engine contract. Frozen WP1 surface. (~1439 tok)
 
 ## crates/purechess-engine/tests/
@@ -1040,6 +1044,7 @@
 ## docs/roadmap/rust-engine-migration/
 
 - `session-01-handoff.md` — Session 01 Handoff — Rust Engine Contracts Charter (WP1) (~3179 tok)
+- `session-03-handoff.md` — Session 03 Handoff — napi-rs Bindings (WP3) (~2432 tok)
 
 ## docs/roadmap/vs-computer-foundations/
 
@@ -1053,6 +1058,17 @@
 - `session-09-handoff.md` — Session 09 Handoff — a11y Polish (Keyboard + Screen Reader) (~1160 tok)
 - `session-10-handoff.md` — Session 10 Handoff — CI Gate / Go–No-Go (~1228 tok)
 
+## packages/engine-native/
+
+- `index.js` (~20 tok)
+- `package.json` — Node.js package manifest (~85 tok)
+- `tsconfig.json` — TypeScript configuration (~84 tok)
+
+## packages/engine-native/src/
+
+- `index.ts` — Typed re-exports for @purechess/engine-native. (~276 tok)
+- `types.ts` — TypeScript interfaces mirroring the napi-rs generated shapes. (~479 tok)
+
 ## packages/shared/src/
 
 - `index.ts` (~136 tok)
@@ -1062,3 +1078,7 @@
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
+
+## scripts/
+
+- `build-engine.sh` — Build the purechess-engine native binary for the host platform. (~199 tok)

@@ -1,0 +1,24 @@
+{
+  "name": "purechess-engine-native",
+  "version": "0.1.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "commonjs",
+  "napi": {
+    "name": "purechess-engine",
+    "triples": {
+      "defaults": true,
+      "additional": [
+        "aarch64-apple-darwin",
+        "x86_64-unknown-linux-musl"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "napi build --platform --release --strip --features ffi",
+    "build:debug": "napi build --platform --features ffi"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^3.0.0"
+  }
+}
