@@ -9,7 +9,7 @@
 #[cfg(feature = "impl")]
 mod parity {
     use purechess_engine::{apply_moves, legal_moves};
-    use shakmaty::{CastlingMode, EnPassantMode, fen::Fen, Position};
+    use shakmaty::{CastlingMode, EnPassantMode, fen::Fen};
 
     const STARTPOS: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
