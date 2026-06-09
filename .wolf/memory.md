@@ -400,3 +400,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 ## Session: 2026-06-08 — WP3 napi-rs bindings
 | Session | WP3 complete: napi bindings, @purechess/engine-native package, multi-stage Dockerfile | All gates green; WP2 stubs mean runtime panics (expected) | ~12000 |
+| 19:21 | Session end: 17 writes across 13 files (Cargo.toml, build.rs, ffi.rs, lib.rs, package.json) | 12 reads | ~11998 tok |

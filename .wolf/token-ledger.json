@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 208077,
-    "total_reads": 218,
-    "total_writes": 169,
+    "total_tokens_estimated": 220075,
+    "total_reads": 230,
+    "total_writes": 186,
     "total_sessions": 24,
-    "anatomy_hits": 88,
+    "anatomy_hits": 100,
     "anatomy_misses": 128,
     "repeated_reads_blocked": 61,
-    "estimated_savings_vs_bare_cli": 43614
+    "estimated_savings_vs_bare_cli": 46014
   },
   "sessions": [
     {
@@ -2568,6 +2568,180 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 9
+      }
+    },
+    {
+      "id": "session-2026-06-09-1900",
+      "started": "2026-06-09T01:00:57.640Z",
+      "ended": "2026-06-09T01:21:28.638Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/Cargo.toml",
+          "tokens_estimated": 158,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 826,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/types.rs",
+          "tokens_estimated": 1439,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/Dockerfile",
+          "tokens_estimated": 308,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/fly.toml",
+          "tokens_estimated": 186,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/pnpm-workspace.yaml",
+          "tokens_estimated": 72,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/package.json",
+          "tokens_estimated": 306,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/tsconfig.json",
+          "tokens_estimated": 128,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/tsconfig.base.json",
+          "tokens_estimated": 121,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/fen.rs",
+          "tokens_estimated": 322,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/error.rs",
+          "tokens_estimated": 274,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/Cargo.toml",
+          "tokens_estimated": 158,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/Cargo.toml",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/build.rs",
+          "tokens_estimated": 12,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/ffi.rs",
+          "tokens_estimated": 2266,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 23,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/package.json",
+          "tokens_estimated": 152,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/packages/engine-native/package.json",
+          "tokens_estimated": 85,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/packages/engine-native/tsconfig.json",
+          "tokens_estimated": 84,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/packages/engine-native/src/types.ts",
+          "tokens_estimated": 479,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/packages/engine-native/src/index.ts",
+          "tokens_estimated": 276,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/packages/engine-native/index.js",
+          "tokens_estimated": 20,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/package.json",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/ffi.rs",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/crates/purechess-engine/src/ffi.rs",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/Dockerfile",
+          "tokens_estimated": 1005,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/apps/api/fly.toml",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/scripts/build-engine.sh",
+          "tokens_estimated": 213,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s03-napi-bindings/docs/roadmap/rust-engine-migration/session-03-handoff.md",
+          "tokens_estimated": 2780,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 4298,
+        "output_tokens_estimated": 7700,
+        "reads_count": 12,
+        "writes_count": 17,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 12
       }
     }
   ],
