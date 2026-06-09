@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 234499,
-    "total_reads": 239,
-    "total_writes": 170,
+    "total_tokens_estimated": 243254,
+    "total_reads": 244,
+    "total_writes": 178,
     "total_sessions": 28,
-    "anatomy_hits": 105,
+    "anatomy_hits": 110,
     "anatomy_misses": 130,
     "repeated_reads_blocked": 63,
-    "estimated_savings_vs_bare_cli": 50622
+    "estimated_savings_vs_bare_cli": 51622
   },
   "sessions": [
     {
@@ -2716,6 +2716,93 @@
         "writes_count": 1,
         "repeated_reads_blocked": 2,
         "anatomy_lookups": 15
+      }
+    },
+    {
+      "id": "session-2026-06-09-1959",
+      "started": "2026-06-09T01:59:47.297Z",
+      "ended": "2026-06-09T02:09:35.184Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/config/engine-backend.config.ts",
+          "tokens_estimated": 194,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/test/engine/ts-adapter.spec.ts",
+          "tokens_estimated": 1900,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/ts-adapter.ts",
+          "tokens_estimated": 1418,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/fen-utils.ts",
+          "tokens_estimated": 121,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/docs/roadmap/rust-engine-migration/session-03-handoff.md",
+          "tokens_estimated": 2432,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/index.ts",
+          "tokens_estimated": 22,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/config/engine-backend.config.ts",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/test/engine/ts-adapter.spec.ts",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/test/engine/ts-adapter.spec.ts",
+          "tokens_estimated": 101,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/test/engine/ts-adapter.spec.ts",
+          "tokens_estimated": 126,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/package.json",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/test/engine/ts-adapter.spec.ts",
+          "tokens_estimated": 350,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/docs/roadmap/rust-engine-migration/session-04-handoff.md",
+          "tokens_estimated": 1893,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 6065,
+        "output_tokens_estimated": 2690,
+        "reads_count": 5,
+        "writes_count": 8,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 5
       }
     }
   ],

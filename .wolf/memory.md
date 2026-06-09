@@ -490,3 +490,4 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 ## Session: 2026-06-09 WP4 summary
 
 WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, TsEngineAdapter and NativeEngineAdapter implemented, EngineService migrated to async adapter injection, all test mocks updated to mockResolvedValue, 3 test bugs fixed (wrong FEN active-color, wrong stalemate FEN, chess.js en-passant FEN quirk), 2 coverage tests added (preResult branch, threefold repetition), branch coverage gate passes at 85.08%. Handoff doc written. Cerebrum updated with 7 key learnings and 2 do-not-repeat entries.
+| 20:09 | Session end: 8 writes across 5 files (index.ts, engine-backend.config.ts, ts-adapter.spec.ts, package.json, session-04-handoff.md) | 5 reads | ~8755 tok |
