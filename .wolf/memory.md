@@ -368,3 +368,43 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 18:55 | Created docs/roadmap/rust-engine-migration/session-01-handoff.md | — | ~3391 |
 | 18:56 | Edited .gitignore | 2→5 lines | ~16 |
 | 18:56 | Session end: 12 writes across 10 files (Cargo.toml, error.rs, types.rs, fen.rs, lib.rs) | 1 reads | ~9681 tok |
+
+## Session: 2026-06-09 18:56
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:06 | Created .session-02-plan.md | — | ~9369 |
+| 19:06 | Session end: 1 writes across 1 files (.session-02-plan.md) | 13 reads | ~16775 tok |
+
+## Session: 2026-06-09 19:06
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:11 | Edited Cargo.toml | 2→3 lines | ~25 |
+| 19:11 | Edited crates/purechess-engine/Cargo.toml | 3→8 lines | ~43 |
+| 19:11 | Created crates/purechess-engine/src/board.rs | — | ~531 |
+| 19:12 | Created crates/purechess-engine/src/fen.rs | — | ~708 |
+| 19:12 | Created crates/purechess-engine/src/result.rs | — | ~638 |
+| 19:12 | Created crates/purechess-engine/src/moves.rs | — | ~1036 |
+| 19:12 | Created crates/purechess-engine/src/pgn.rs | — | ~612 |
+| 19:13 | Created crates/purechess-engine/src/lib.rs | — | ~676 |
+| 19:13 | Created crates/purechess-engine/benches/perft.rs | — | ~402 |
+| 19:13 | Edited crates/purechess-engine/src/board.rs | inline fix | ~19 |
+| 19:14 | Created crates/purechess-engine/tests/perft.rs | — | ~1306 |
+| 19:15 | Created crates/purechess-engine/tests/fen_roundtrip.rs | — | ~2868 |
+| 19:16 | Created crates/purechess-engine/tests/result_detection.rs | — | ~2184 |
+| 19:18 | Edited crates/purechess-engine/tests/fen_roundtrip.rs | modified roundtrip_ep_h_file() | ~62 |
+| 19:18 | Edited crates/purechess-engine/tests/fen_roundtrip.rs | modified roundtrip_kings_indian() | ~66 |
+| 19:18 | Edited crates/purechess-engine/tests/fen_roundtrip.rs | modified roundtrip_multiple_promotions() | ~52 |
+| 19:22 | Edited crates/purechess-engine/tests/result_detection.rs | modified checkmate_black_wins() | ~170 |
+| 19:22 | Edited crates/purechess-engine/tests/result_detection.rs | stalemate_white_to_move() → stalemate_side_to_move() | ~84 |
+| 19:22 | Edited crates/purechess-engine/tests/result_detection.rs | modified insufficient_material_same_color_bishops() | ~88 |
+| 19:22 | Edited crates/purechess-engine/src/pgn.rs | inline fix | ~12 |
+| 19:23 | Edited crates/purechess-engine/benches/perft.rs | 1→3 lines | ~28 |
+| 19:24 | Created docs/roadmap/rust-engine-migration/session-02-handoff.md | — | ~2965 |
+| 19:25 | Session 02 complete: WP2 impl — validate_move/legal_moves/apply_moves/detect_result/to_pgn/parse_fen/perft | crates/purechess-engine/src/*.rs + tests/*.rs | all gates green | ~12000 |
+
+## Session: 2026-06-09 19:28
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
