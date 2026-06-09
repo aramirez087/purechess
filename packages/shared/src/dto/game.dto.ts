@@ -1,6 +1,6 @@
-import type { GameStatus, Move } from '../chess.js';
-import type { GameResult, GameTermination } from '../game-result.js';
-import type { TimeControl } from '../time-control.js';
+import type { GameStatus, Move } from '../chess';
+import type { GameResult, GameTermination } from '../game-result';
+import type { TimeControl } from '../time-control';
 
 export interface CreateGameDto {
   timeControl: TimeControl;

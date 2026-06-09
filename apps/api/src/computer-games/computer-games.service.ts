@@ -8,7 +8,6 @@ import { Chess } from "chess.js";
 import {
   GameResult as PrismaGameResult,
   GameResultReason,
-  Prisma,
 } from "@prisma/client";
 import {
   ComputerGameStateDto,
@@ -358,7 +357,7 @@ export class ComputerGamesService {
       ? dto.move
       : (game.lastComputerMove ?? null);
 
-    await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    await this.prisma.$transaction(async (tx) => {
       await tx.move.create({
         data: {
           gameId,

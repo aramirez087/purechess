@@ -39,7 +39,23 @@ RUN napi build --platform --release --strip --features ffi
 FROM node:20.15.1-alpine AS base
 RUN corepack enable && corepack prepare pnpm@9.4.0 --activate
 
-# ── Deps: install Node dependencies ─────────────────────────────────────────
+# ── Deps: populate the pnpm virtual store from the lockfile ───────────────
+#
+# This stage populates the pnpm virtual store (node_modules/.pnpm/) from
+# the lockfile via `pnpm fetch`. No per-package symlinks are created at
+# this point — that happens in the `builder` stage via an `--offline`
+# install. Splitting fetch from install is the canonical pnpm + Docker
+# pattern: it produces deterministic symlink hashes in the builder (because
+# pnpm's resolver never re-runs against the live registry) and avoids the
+# peer-dep-hash divergence that occurred when `pnpm install` was run once
+# in `deps` and then implicitly re-resolved by later pnpm invocations in
+# `builder` (the original Bug 5).
+#
+# The deps stage fetches the ENTIRE lockfile (including devDeps of all
+# workspace members) because the builder needs devDeps at compile time
+# (typescript, nest CLI, prisma, etc.) and we cannot predict at fetch time
+# which transitive devDeps the builder will need. The virtual store is
+# then carried forward to the builder.
 
 FROM base AS deps
 WORKDIR /app
@@ -47,64 +63,75 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/shared/package.json ./packages/shared/
 COPY packages/engine-native/package.json ./packages/engine-native/
-RUN pnpm install --frozen-lockfile \
+RUN pnpm fetch
+
+# ── Builder: create symlinks from the populated virtual store, then compile ─
+
+FROM base AS builder
+WORKDIR /app
+# Carry the populated virtual store forward. Without this, the builder
+# stage's `pnpm install --offline` would have no packages to draw from
+# and would fail with ERR_PNPM_NO_OFFLINE_TARBALL for every package.
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+# Full install (with devDeps) for the compile phase.
+RUN pnpm install --offline --frozen-lockfile \
       --filter @purechess/api... \
       --filter @purechess/shared \
       --filter @purechess/engine-native
 
-# ── Builder: compile apps ────────────────────────────────────────────────────
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
-COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
-COPY --from=deps /app/packages/engine-native/node_modules ./packages/engine-native/node_modules
-COPY . .
-
-# Install the prebuilt native binary into node_modules so engine-native/index.js can load it.
-RUN mkdir -p ./node_modules/purechess-engine-native
+# Install the prebuilt native binary into apps/api/node_modules so the
+# engine-native CJS shim can require it. This MUST happen before
+# `pnpm deploy` so the binary gets included in the deployed directory.
+RUN mkdir -p ./apps/api/node_modules/purechess-engine-native
 COPY --from=rust-builder /build/crates/purechess-engine/index.js \
-     ./node_modules/purechess-engine-native/index.js
+     ./apps/api/node_modules/purechess-engine-native/index.js
 COPY --from=rust-builder /build/crates/purechess-engine/index.d.ts \
-     ./node_modules/purechess-engine-native/index.d.ts
+     ./apps/api/node_modules/purechess-engine-native/index.d.ts
 COPY --from=rust-builder \
      /build/crates/purechess-engine/purechess-engine.linux-x64-musl.node \
-     ./node_modules/purechess-engine-native/purechess-engine.linux-x64-musl.node
+     ./apps/api/node_modules/purechess-engine-native/purechess-engine.linux-x64-musl.node
 RUN printf '{"name":"purechess-engine-native","version":"0.1.0","main":"index.js","type":"commonjs"}' \
-    > ./node_modules/purechess-engine-native/package.json
+    > ./apps/api/node_modules/purechess-engine-native/package.json
 
 RUN pnpm --filter @purechess/shared build
 RUN pnpm --filter @purechess/engine-native build
 RUN pnpm --filter @purechess/api exec prisma generate
 RUN pnpm --filter @purechess/api build
 
+# Deploy the api as a self-contained directory with only its prod deps.
+# `pnpm deploy` resolves the prod closure, copies the relevant subset of
+# the virtual store, and lays out per-package node_modules with the right
+# symlinks — all in one command.
+RUN pnpm deploy --filter @purechess/api --prod /deploy
+
+# Inject the prebuilt native binary into the deployed directory. We do
+# this after `pnpm deploy` because the binary lives outside the pnpm
+# workspace (it's built by the rust-builder stage) and is hand-rolled
+# into apps/api/node_modules/purechess-engine-native/, which `pnpm deploy`
+# doesn't know about.
+RUN mkdir -p /deploy/node_modules/purechess-engine-native
+COPY --from=rust-builder /build/crates/purechess-engine/index.js \
+     /deploy/node_modules/purechess-engine-native/index.js
+COPY --from=rust-builder /build/crates/purechess-engine/index.d.ts \
+     /deploy/node_modules/purechess-engine-native/index.d.ts
+COPY --from=rust-builder \
+     /build/crates/purechess-engine/purechess-engine.linux-x64-musl.node \
+     /deploy/node_modules/purechess-engine-native/purechess-engine.linux-x64-musl.node
+RUN printf '{"name":"purechess-engine-native","version":"0.1.0","main":"index.js","type":"commonjs"}' \
+    > /deploy/node_modules/purechess-engine-native/package.json
+
 # ── Runner: minimal production image ────────────────────────────────────────
 
 FROM node:20.15.1-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-# Preserve the apps/api/* path: Node's module resolution walks up from
-# apps/api/dist/main.js → apps/api/node_modules (where pnpm hoisted the api's
-# deps with node-linker=hoisted) → /app/node_modules/.pnpm. Collapsing dist to
-# /app/dist would break that resolution chain.
-COPY --from=builder /app/apps/api/dist ./apps/api/dist
-# Workspace package sources (built dist + package.json). The symlinks under
-# apps/api/node_modules/@purechess/* resolve into these directories.
-COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
-COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
-COPY --from=builder /app/packages/engine-native/dist ./packages/engine-native/dist
-COPY --from=builder /app/packages/engine-native/package.json ./packages/engine-native/package.json
-# pnpm virtual store and per-package node_modules. The .pnpm/ store must live
-# at /app/node_modules/.pnpm/ — the symlinks under apps/api/node_modules resolve
-# relative to that path. Per-package node_modules carry workspace-package deps
-# (@nestjs/*, @prisma/*, @sentry/*, etc.) which aren't at the root.
-COPY --from=builder /app/node_modules/.pnpm ./node_modules/.pnpm
-COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
-COPY --from=builder /app/packages/shared/node_modules ./packages/shared/node_modules
-COPY --from=builder /app/packages/engine-native/node_modules ./packages/engine-native/node_modules
-COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
-WORKDIR /app/apps/api
+# `pnpm deploy` already produced a self-contained directory at /deploy
+# with only the api's prod deps, the pruned virtual store, and the
+# workspace packages laid out at the right relative paths. Copy the
+# whole thing in.
+COPY --from=builder /deploy /app
+WORKDIR /app
 EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
   CMD wget -qO- http://localhost:4000/api/health || exit 1

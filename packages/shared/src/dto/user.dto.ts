@@ -1,4 +1,4 @@
-import type { RatingRecord } from '../rating.js';
+import type { RatingRecord } from '../rating';
 
 export interface UserProfileDto {
   id: string;

@@ -1,5 +1,5 @@
-import type { GameState, Move } from './chess.js';
-import type { GameResult, GameTermination } from './game-result.js';
+import type { GameState, Move } from './chess';
+import type { GameResult, GameTermination } from './game-result';
 
 export enum WsEvent {
   Connect = 'connect',
