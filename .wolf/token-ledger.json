@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 214260,
-    "total_reads": 222,
-    "total_writes": 169,
-    "total_sessions": 25,
-    "anatomy_hits": 90,
-    "anatomy_misses": 128,
-    "repeated_reads_blocked": 61,
-    "estimated_savings_vs_bare_cli": 44014
+    "total_tokens_estimated": 234499,
+    "total_reads": 239,
+    "total_writes": 170,
+    "total_sessions": 28,
+    "anatomy_hits": 105,
+    "anatomy_misses": 130,
+    "repeated_reads_blocked": 63,
+    "estimated_savings_vs_bare_cli": 50622
   },
   "sessions": [
     {
@@ -2592,6 +2592,130 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 11
+      }
+    },
+    {
+      "id": "session-2026-06-09-1932",
+      "started": "2026-06-09T01:32:59.142Z",
+      "ended": "2026-06-09T01:41:58.073Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/move-validator.ts",
+          "tokens_estimated": 497,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/game-state.ts",
+          "tokens_estimated": 1416,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/fen-utils.ts",
+          "tokens_estimated": 121,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/result-detector.ts",
+          "tokens_estimated": 442,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/pgn-builder.ts",
+          "tokens_estimated": 506,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/clock.ts",
+          "tokens_estimated": 491,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/realtime/realtime.gateway.ts",
+          "tokens_estimated": 74,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/games/games.service.ts",
+          "tokens_estimated": 26,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/computer-games/computer-games.service.ts",
+          "tokens_estimated": 3302,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/jest.config.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/package.json",
+          "tokens_estimated": 306,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/.env.example",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/config/env.config.ts",
+          "tokens_estimated": 586,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/test/computer-games/computer-games.service.spec.ts",
+          "tokens_estimated": 3640,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine.service.ts",
+          "tokens_estimated": 527,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/engine/index.ts",
+          "tokens_estimated": 53,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/apps/api/src/chess/chess.module.ts",
+          "tokens_estimated": 57,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s04-ts-adapter/.session-04-plan.md",
+          "tokens_estimated": 8195,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 12044,
+        "output_tokens_estimated": 8195,
+        "reads_count": 17,
+        "writes_count": 1,
+        "repeated_reads_blocked": 2,
+        "anatomy_lookups": 15
       }
     }
   ],

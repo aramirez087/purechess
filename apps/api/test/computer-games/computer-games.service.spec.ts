@@ -157,12 +157,12 @@ describe('ComputerGamesService', () => {
       mockPrisma.game.findUnique.mockResolvedValue(baseGame);
       mockEngine.fromSerializable.mockReturnValue({ ...emptyEngineState });
       // applyMove appends one move (human, White).
-      mockEngine.applyMove.mockReturnValue({
+      mockEngine.applyMove.mockResolvedValue({
         ...emptyEngineState,
         moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 300000, moveTimeMs: 0 }],
         position: { fen: () => AFTER_E4_FEN, turn: () => 'b' },
       });
-      mockEngine.detectResult.mockReturnValue(null);
+      mockEngine.detectResult.mockResolvedValue(null);
       mockEngine.toSerializable.mockReturnValue({});
       mockEngine.buildPgn.mockReturnValue('1. e4 *');
 
@@ -224,7 +224,7 @@ describe('ComputerGamesService', () => {
       };
       mockEngine.fromSerializable.mockReturnValue(flaggedState);
       // applyMove detects the flag: returns completed WITHOUT appending a move.
-      mockEngine.applyMove.mockReturnValue({
+      mockEngine.applyMove.mockResolvedValue({
         ...flaggedState,
         status: 'completed',
         result: 'black_wins',
@@ -403,12 +403,12 @@ describe('ComputerGamesService', () => {
         ...emptyEngineState,
         clock: { whiteMs: 300000n, blackMs: 300000n, lastTickAt: 1000n, incrementMs: 2000n },
       });
-      mockEngine.applyMove.mockReturnValue({
+      mockEngine.applyMove.mockResolvedValue({
         ...emptyEngineState,
         moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 297000, moveTimeMs: 5000, by: 'w' }],
         position: { fen: () => AFTER_E4_FEN, turn: () => 'b' },
       });
-      mockEngine.detectResult.mockReturnValue(null);
+      mockEngine.detectResult.mockResolvedValue(null);
       // Serialized state carries the ticked clock (white spent 3s + 2s increment net).
       mockEngine.toSerializable.mockReturnValue({
         clock: { whiteMs: 297000, blackMs: 300000, lastTickAt: 99999, incrementMs: 2000 },
@@ -440,7 +440,7 @@ describe('ComputerGamesService', () => {
     });
 
     it('flags on time without a 500 or duplicate move row (bug-005 guard, timed path)', async () => {
-      mockEngine.applyMove.mockReturnValue({
+      mockEngine.applyMove.mockResolvedValue({
         ...emptyEngineState,
         status: 'completed',
         result: 'black_wins',
@@ -481,12 +481,12 @@ describe('ComputerGamesService', () => {
         ...emptyEngineState,
         clock: { whiteMs: 0n, blackMs: 0n, lastTickAt: 1000n, incrementMs: 0n },
       });
-      mockEngine.applyMove.mockReturnValue({
+      mockEngine.applyMove.mockResolvedValue({
         ...emptyEngineState,
         moves: [{ ply: 1, san: 'e4', uci: 'e2e4', fenAfter: AFTER_E4_FEN, clockAfterMs: 0, moveTimeMs: 0, by: 'w' }],
         position: { fen: () => AFTER_E4_FEN, turn: () => 'b' },
       });
-      mockEngine.detectResult.mockReturnValue(null);
+      mockEngine.detectResult.mockResolvedValue(null);
       mockEngine.toSerializable.mockReturnValue({ clock: { whiteMs: 0, blackMs: 0, lastTickAt: 0, incrementMs: 0 }, moves: [], pendingDrawOfferBy: null });
       mockEngine.buildPgn.mockReturnValue('1. e4 *');
       const txMock = { move: { create: jest.fn() }, game: { update: jest.fn() } };

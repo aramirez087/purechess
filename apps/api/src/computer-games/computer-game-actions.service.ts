@@ -267,7 +267,7 @@ export class ComputerGameActionsService {
 
     // action === "claim": only a genuine, server-detected draw is honoured.
     const state = this.engine.fromSerializable(serialized);
-    const detected = this.engine.detectResult(state, nowMs);
+    const detected = await this.engine.detectResult(state, nowMs);
     if (!detected || detected.result !== GameResult.Draw) {
       throw new BadRequestException("No draw to claim");
     }
