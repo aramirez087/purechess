@@ -1,9 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:28:51.093Z
-> Files: 586 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T04:22:41.215Z
-> Files: 570 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T00:56:14.059Z
+> Files: 610 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -34,15 +32,16 @@
 - `.DS_Store` (~2186 tok)
 - `.editorconfig` — Editor configuration (~51 tok)
 - `.gitattributes` — Git attributes (~31 tok)
-- `.gitignore` — Git ignore rules (~36 tok)
+- `.gitignore` — Git ignore rules (~69 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
-- `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
+- `.session-01-plan.md` — Session 01 — Implementation Plan: Rust Engine Contracts Charter (WP1) (~6112 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
+- `Cargo.toml` — Rust package manifest (~158 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -1002,9 +1001,45 @@
 
 - `settings-dialog.test.tsx` — monoBtn (~676 tok)
 
+## crates/purechess-engine/
+
+- `Cargo.toml` — Rust package manifest (~243 tok)
+- `README.md` — Project documentation (~926 tok)
+
+## crates/purechess-engine/ (Rust engine — WP1 frozen contract, stubs only)
+
+- `crates/purechess-engine/Cargo.toml` — Library crate, `crate-type=["cdylib","rlib"]`, features `impl`/`ffi`, lints. (~260 tok)
+- `crates/purechess-engine/README.md` — Stack, public API, run commands. (~700 tok)
+- `crates/purechess-engine/src/error.rs` — `EngineError` thiserror enum (InvalidFen/IllegalMove/AmbiguousMove/Internal). (~180 tok)
+- `crates/purechess-engine/src/fen.rs` — `ParsedFen` (6 FEN fields) + `parse` stub; inverse of fen-utils.ts#toFen. (~230 tok)
+- `crates/purechess-engine/src/lib.rs` — Frozen 6-fn public API (validate_move/legal_moves/apply_moves/detect_result/to_pgn/parse_fen) + gated `perft`; all bodies `unimplemented!("WP2")`. (~640 tok)
+- `crates/purechess-engine/src/types.rs` — Public value types/enums; serde discriminants byte-match TS (Color/PieceKind/GameResult/GameTermination, MoveOutcome, GameState, Ply, ClockSnapshot, DetectOutcome, PgnHeaders). (~900 tok)
+- `crates/purechess-engine/tests/fixtures/perft_cases.json` — CPW perft tables: startpos, kiwipete, endgame, ep_castle_stress. (~330 tok)
+- `crates/purechess-engine/tests/perft.rs` — Per-position perft tests, gated `#[cfg(feature="impl")]`; depth 4-5 `#[ignore]`. (~900 tok)
+- `docs/roadmap/rust-engine-migration/session-01-handoff.md` — WP1 handoff: crates+versions, frozen API, fixtures, open questions, WP2 inputs. (~2400 tok)
+
+## crates/purechess-engine/src/
+
+- `error.rs` — Typed engine errors. Frozen WP1 contract — variants are part of the C-ABI surface (~274 tok)
+- `fen.rs` — FEN parsing. Frozen WP1 surface — the inverse of fen-utils.ts#toFen, exposed so the (~322 tok)
+- `lib.rs` — PureChess native engine — frozen WP1 contract. (~826 tok)
+- `types.rs` — Public value types for the engine contract. Frozen WP1 surface. (~1439 tok)
+
+## crates/purechess-engine/tests/
+
+- `perft.rs` — Perft conformance suite for the PureChess native engine. (~1053 tok)
+
+## crates/purechess-engine/tests/fixtures/
+
+- `perft_cases.json` (~246 tok)
+
 ## docs/claude-sessions/vs-computer-foundations/
 
 - `.epic-produces-overrides.json` (~111 tok)
+
+## docs/roadmap/rust-engine-migration/
+
+- `session-01-handoff.md` — Session 01 Handoff — Rust Engine Contracts Charter (WP1) (~3179 tok)
 
 ## docs/roadmap/vs-computer-foundations/
 

@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 180819,
-    "total_reads": 208,
-    "total_writes": 155,
-    "total_sessions": 20,
-    "anatomy_hits": 78,
+    "total_tokens_estimated": 197485,
+    "total_reads": 209,
+    "total_writes": 168,
+    "total_sessions": 22,
+    "anatomy_hits": 79,
     "anatomy_misses": 128,
     "repeated_reads_blocked": 61,
-    "estimated_savings_vs_bare_cli": 41614
+    "estimated_savings_vs_bare_cli": 41814
   },
   "sessions": [
     {
@@ -2388,6 +2388,110 @@
         "writes_count": 10,
         "repeated_reads_blocked": 2,
         "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-06-09-1847",
+      "started": "2026-06-09T00:47:48.722Z",
+      "ended": "2026-06-09T00:51:10.779Z",
+      "reads": [],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/.session-01-plan.md",
+          "tokens_estimated": 6985,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 0,
+        "output_tokens_estimated": 6985,
+        "reads_count": 0,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-06-09-1851",
+      "started": "2026-06-09T00:51:11.638Z",
+      "ended": "2026-06-09T00:56:31.678Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/.gitignore",
+          "tokens_estimated": 36,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/Cargo.toml",
+          "tokens_estimated": 169,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/Cargo.toml",
+          "tokens_estimated": 260,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/error.rs",
+          "tokens_estimated": 293,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/types.rs",
+          "tokens_estimated": 1542,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/fen.rs",
+          "tokens_estimated": 345,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 886,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/tests/fixtures/perft_cases.json",
+          "tokens_estimated": 246,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/tests/perft.rs",
+          "tokens_estimated": 1128,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 66,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/README.md",
+          "tokens_estimated": 1059,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/docs/roadmap/rust-engine-migration/session-01-handoff.md",
+          "tokens_estimated": 3634,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/.gitignore",
+          "tokens_estimated": 17,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 36,
+        "output_tokens_estimated": 9645,
+        "reads_count": 1,
+        "writes_count": 12,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
       }
     }
   ],
