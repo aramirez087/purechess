@@ -16,7 +16,9 @@ pub fn fen_to_pos(fen: &str) -> Result<Chess, EngineError> {
 }
 
 pub fn pos_to_fen(pos: &Chess) -> String {
-    Fen::from_position(pos.clone(), EnPassantMode::Always).to_string()
+    // EnPassantMode::Legal matches chess.js 1.x: emit EP square only when a legal
+    // EP capture exists. This ensures FEN round-trips across the FFI boundary agree.
+    Fen::from_position(pos.clone(), EnPassantMode::Legal).to_string()
 }
 
 /// Parse UCI string and validate legality against the position.

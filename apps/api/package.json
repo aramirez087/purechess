@@ -15,7 +15,8 @@
     "db:reset": "prisma migrate reset --force",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
-    "test:e2e": "NODE_ENV=test jest --config jest.e2e.config.js --runInBand"
+    "test:e2e": "NODE_ENV=test jest --config jest.e2e.config.js --runInBand",
+    "engine:shadow": "jest --testPathPattern='test/engine/parity\\.spec\\.ts' --testTimeout=120000"
   },
   "prisma": {
     "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts"

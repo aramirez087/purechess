@@ -61,6 +61,8 @@ export interface AdapterParsedFen {
 
 export type ResultPayload = { result: GameResult; reason: GameTermination };
 
+export type AdapterName = 'native' | 'ts' | 'shadow-ts';
+
 export interface EngineAdapter {
   validateMove(fen: string, uci: string): Promise<MoveOutcome>;
   legalMoves(fen: string): Promise<LegalMove[]>;
@@ -68,5 +70,5 @@ export interface EngineAdapter {
   detectResult(fen: string): Promise<ResultPayload | null>;
   toPgn(fen: string, ucis: string[], headers: AdapterPgnHeaders): Promise<string>;
   parseFen(fen: string): Promise<AdapterParsedFen>;
-  name(): 'native' | 'ts';
+  name(): AdapterName;
 }

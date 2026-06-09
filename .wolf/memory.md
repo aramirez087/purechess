@@ -2,6 +2,25 @@
 
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
+
+## Session: 2026-06-08 (WP5 — Shadow Mode CI Gate)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| — | Created ShadowAdapter (dual-run ts+native, ts wins, Sentry divergence) | apps/api/src/chess/engine/shadow-adapter.ts | done | ~1280 |
+| — | Created shadow-runner.ts (runShadowSuite — all 4 methods at every ply) | apps/api/src/chess/engine/shadow-runner.ts | done | ~1117 |
+| — | Generated 203 game traces (20 adversarial + 83 deterministic + 100 partial) | apps/api/src/chess/engine/__fixtures__/game-traces.json | done | ~25k |
+| — | Wired ENGINE_SHADOW=1 in engine/index.ts and chess.module.ts | apps/api/src/chess/engine/index.ts, apps/api/src/chess/chess.module.ts | done | ~500 |
+| — | Created scripts/shadow-runner.ts CLI (ESM, createRequire for JSON) | scripts/shadow-runner.ts | done | ~602 |
+| — | Created tsconfig.scripts.json for tsx path resolution | tsconfig.scripts.json | done | ~200 |
+| — | Added pnpm engine:shadow root script and tsx devDep | package.json | done | ~100 |
+| — | Created shadow-adapter.spec.ts (22 tests, all methods + divergence paths) | apps/api/test/engine/shadow-adapter.spec.ts | done | ~2628 |
+| — | Created parity.spec.ts (10-trace ts-vs-ts + 6 divergence-detection tests) | apps/api/test/engine/parity.spec.ts | done | ~1441 |
+| — | Fixed EnPassantMode: Rust pos_to_fen → EnPassantMode::Legal | crates/purechess-engine/src/board.rs | done | ~300 |
+| — | Created crates/purechess-engine/tests/parity.rs (100 FEN round-trips) | crates/purechess-engine/tests/parity.rs | done | ~1190 |
+| — | Extended CI with engine-shadow + rust-parity jobs | .github/workflows/ci.yml | done | ~500 |
+| — | Fixed coverage gate: added branch tests to cover divergence paths | parity.spec.ts, shadow-adapter.spec.ts | 246 tests pass, 86.2% branches | ~3k |
+| — | Created session-05-handoff.md | docs/roadmap/rust-engine-migration/session-05-handoff.md | done | ~2k |
 | 10:42 | Edited apps/api/src/computer-games/computer-games.service.ts | 3→3 lines | ~57 |
 | 10:43 | Edited apps/api/src/computer-games/computer-games.service.ts | added error handling | ~98 |
 | 10:46 | Created ../../../../tmp/commit-msg.txt | — | ~324 |
@@ -491,3 +510,45 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, TsEngineAdapter and NativeEngineAdapter implemented, EngineService migrated to async adapter injection, all test mocks updated to mockResolvedValue, 3 test bugs fixed (wrong FEN active-color, wrong stalemate FEN, chess.js en-passant FEN quirk), 2 coverage tests added (preResult branch, threefold repetition), branch coverage gate passes at 85.08%. Handoff doc written. Cerebrum updated with 7 key learnings and 2 do-not-repeat entries.
 | 20:09 | Session end: 8 writes across 5 files (index.ts, engine-backend.config.ts, ts-adapter.spec.ts, package.json, session-04-handoff.md) | 5 reads | ~8755 tok |
+
+## Session: 2026-06-09 20:09
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:13 | Created .session-05-plan.md | — | ~6164 |
+| 09:00 | session-05 plan written: shadow adapter, runner, 200-trace fixture, Rust parity, CI gate | .session-05-plan.md | complete | ~4000 |
+| 20:14 | Session end: 1 writes across 1 files (.session-05-plan.md) | 9 reads | ~15466 tok |
+
+## Session: 2026-06-09 20:14
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:21 | Edited apps/api/src/chess/engine/adapter.ts | modified validateMove() | ~148 |
+| 20:21 | Created apps/api/src/chess/engine/shadow-adapter.ts | — | ~1304 |
+| 20:21 | Created apps/api/src/chess/engine/shadow-runner.ts | — | ~1117 |
+| 20:21 | Created apps/api/src/chess/engine/index.ts | — | ~344 |
+| 20:21 | Created apps/api/src/chess/chess.module.ts | — | ~290 |
+| 20:21 | Created apps/api/src/config/engine-backend.config.ts | — | ~153 |
+| 20:22 | Created apps/api/test/engine/shadow-adapter.spec.ts | — | ~1691 |
+| 20:22 | Created apps/api/test/engine/parity.spec.ts | — | ~252 |
+| 20:23 | Created scripts/generate-traces.ts | — | ~1885 |
+| 20:28 | Created tsconfig.scripts.json | — | ~95 |
+| 20:28 | Created scripts/shadow-runner.ts | — | ~569 |
+| 20:28 | Edited package.json | 9→11 lines | ~91 |
+| 20:28 | Edited apps/api/package.json | 1→2 lines | ~51 |
+| 20:28 | Edited crates/purechess-engine/src/board.rs | modified pos_to_fen() | ~76 |
+| 20:29 | Created crates/purechess-engine/tests/parity.rs | — | ~1190 |
+| 20:29 | Edited .github/workflows/ci.yml | expanded (+46 lines) | ~334 |
+| 20:30 | Edited apps/api/src/chess/engine/shadow-adapter.ts | 13→10 lines | ~104 |
+| 20:31 | Edited scripts/shadow-runner.ts | 3→2 lines | ~47 |
+| 20:31 | Edited scripts/shadow-runner.ts | 6→9 lines | ~163 |
+| 20:33 | Created apps/api/test/engine/shadow-adapter.spec.ts | — | ~2628 |
+
+## Session: 2026-06-09 20:35
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:36 | Created apps/api/test/engine/parity.spec.ts | — | ~1292 |
+| 20:36 | Edited apps/api/test/engine/parity.spec.ts | modified badAdapter() | ~235 |
+| 20:37 | Created docs/roadmap/rust-engine-migration/session-05-handoff.md | — | ~1721 |
+| 20:38 | Session end: 3 writes across 2 files (parity.spec.ts, session-05-handoff.md) | 3 reads | ~6397 tok |
