@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 258720,
-    "total_reads": 253,
-    "total_writes": 179,
+    "total_tokens_estimated": 265117,
+    "total_reads": 256,
+    "total_writes": 182,
     "total_sessions": 31,
-    "anatomy_hits": 119,
+    "anatomy_hits": 122,
     "anatomy_misses": 130,
     "repeated_reads_blocked": 63,
-    "estimated_savings_vs_bare_cli": 53422
+    "estimated_savings_vs_bare_cli": 54022
   },
   "sessions": [
     {
@@ -2879,6 +2879,56 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 9
+      }
+    },
+    {
+      "id": "session-2026-06-09-2035",
+      "started": "2026-06-09T02:35:35.098Z",
+      "ended": "2026-06-09T02:38:57.617Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s05-shadow-mode/apps/api/src/chess/engine/shadow-runner.ts",
+          "tokens_estimated": 1117,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s05-shadow-mode/apps/api/test/engine/parity.spec.ts",
+          "tokens_estimated": 252,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s05-shadow-mode/docs/roadmap/rust-engine-migration/session-04-handoff.md",
+          "tokens_estimated": 1657,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s05-shadow-mode/apps/api/test/engine/parity.spec.ts",
+          "tokens_estimated": 1292,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s05-shadow-mode/apps/api/test/engine/parity.spec.ts",
+          "tokens_estimated": 235,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s05-shadow-mode/docs/roadmap/rust-engine-migration/session-05-handoff.md",
+          "tokens_estimated": 1844,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 3026,
+        "output_tokens_estimated": 3371,
+        "reads_count": 3,
+        "writes_count": 3,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 3
       }
     }
   ],
