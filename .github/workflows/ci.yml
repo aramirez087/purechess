@@ -102,6 +102,58 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  engine-shadow:
+    name: Engine Shadow Parity
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared
+        run: pnpm --filter @purechess/shared build
+
+      - name: Generate Prisma client
+        run: pnpm --filter @purechess/api exec prisma generate
+
+      - name: Run shadow parity suite (ts-vs-ts mode)
+        run: pnpm engine:shadow
+        env:
+          ENGINE_BACKEND: ts
+
+  rust-parity:
+    name: Rust Parity Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "crates/purechess-engine"
+
+      - name: Cargo test (parity + perft)
+        run: cargo test --features impl
+        working-directory: crates/purechess-engine
+
+      - name: Cargo clippy (deny warnings)
+        run: cargo clippy --all-targets --features impl -- -D warnings
+        working-directory: crates/purechess-engine
+
   smoke:
     name: Smoke Tests
     runs-on: ubuntu-latest

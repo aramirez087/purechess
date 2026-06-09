@@ -15,3 +15,6 @@ dist/
 *.tsbuildinfo
 .pnpm-store/
 coverage/
+
+# Rust (crates/ workspace)
+target/

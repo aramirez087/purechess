@@ -1,4 +1,4 @@
-import type { GameResult, GameTermination } from './game-result.js';
+import type { GameResult, GameTermination } from './game-result';
 
 export type Color = 'w' | 'b';
 

@@ -1,9 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T03:28:51.093Z
-> Files: 586 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-08T04:22:41.215Z
-> Files: 570 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T02:41:22.989Z
+> Files: 653 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -34,20 +32,24 @@
 - `.DS_Store` (~2186 tok)
 - `.editorconfig` — Editor configuration (~51 tok)
 - `.gitattributes` — Git attributes (~31 tok)
-- `.gitignore` — Git ignore rules (~36 tok)
+- `.gitignore` — Git ignore rules (~69 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
-- `.session-01-plan.md` — Session 01 Implementation Plan — vs-computer Contracts Charter (~3816 tok)
-- `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
-- `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
+- `.session-01-plan.md` — Session 01 — Implementation Plan: Rust Engine Contracts Charter (WP1) (~6112 tok)
+- `.session-02-plan.md` — Session 02 Implementation Plan — Rust Core Implementation (WP2) (~8784 tok)
+- `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
+- `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
+- `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
+- `.session-06-plan.md` — Session 06 — Implementation Plan: Engine Cutover (WP6) (~3069 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
+- `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
-- `package.json` — Node.js package manifest (~306 tok)
+- `package.json` — Node.js package manifest (~349 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~125801 tok)
 - `pnpm-workspace.yaml` (~72 tok)
 - `posthog-setup-report.md` — PostHog post-wizard report (~821 tok)
@@ -55,6 +57,7 @@
 - `README.md` — Project documentation (~462 tok)
 - `skills-lock.json` (~1316 tok)
 - `tsconfig.base.json` (~121 tok)
+- `tsconfig.scripts.json` (~95 tok)
 
 ## .agents/skills/accessibility/
 
@@ -575,7 +578,7 @@
 
 ## .github/workflows/
 
-- `ci.yml` — CI: CI (~1202 tok)
+- `ci.yml` — CI: CI (~1585 tok)
 - `deploy.yml` — CI: Deploy (~619 tok)
 
 ## .opencode/
@@ -587,12 +590,12 @@
 ## apps/api/
 
 - `_repro.cjs` — Declares p (~171 tok)
-- `Dockerfile` — Docker container definition (~308 tok)
+- `Dockerfile` — Docker container definition (~938 tok)
 - `eslint.config.mjs` — ESLint flat configuration (~119 tok)
-- `fly.toml` (~186 tok)
+- `fly.toml` (~195 tok)
 - `jest.e2e.config.js` (~117 tok)
 - `nest-cli.json` (~62 tok)
-- `package.json` — Node.js package manifest (~791 tok)
+- `package.json` — Node.js package manifest (~866 tok)
 - `README.md` — Project documentation (~554 tok)
 - `tsconfig.build.json` — TypeScript build configuration (~31 tok)
 - `tsconfig.json` — TypeScript configuration (~128 tok)
@@ -682,27 +685,34 @@
 
 ## apps/api/src/chess/
 
-- `chess.module.ts` — Exports ChessEngineModule (~57 tok)
-- `engine.service.ts` — Exports EngineService (~527 tok)
+- `chess.module.ts` — Exports ChessEngineModule (~290 tok)
+- `engine.service.ts` — Exports EngineService (~1661 tok)
 
 ## apps/api/src/chess/engine/
 
+- `adapter.ts` — Exports MoveOutcome, LegalMove, AdapterMove, AdapterGameState + 6 more (~483 tok)
 - `clock.ts` — Exports ClockSnapshot, makeClock, tickClock, applyIncrement + 2 more (~491 tok)
 - `fen-utils.ts` — Exports startingFen, fenPosition, halfmoveClock, toFen (~121 tok)
 - `game-state.ts` — Exports EngineState, CreateGameOpts, InvalidMoveError, createGame + 4 more (~1416 tok)
-- `index.ts` (~53 tok)
+- `index.ts` — Exports engine (~344 tok)
 - `move-validator.ts` — Exports MoveValidationResult, validateMove (~497 tok)
+- `native-adapter.ts` — Exports NativeEngineAdapter (~821 tok)
 - `pgn-builder.ts` — Exports PgnHeaders, buildPgn (~506 tok)
 - `result-detector.ts` — Exports ResultPayload, detectResult (~442 tok)
+- `shadow-adapter.ts` — Exports ShadowLogger, ShadowAdapter (~1280 tok)
+- `shadow-runner.ts` — Exports GameTrace, DivergenceDetail, ShadowSummary, runShadowSuite (~1117 tok)
+- `ts-adapter.ts` — Exports TsEngineAdapter (~1418 tok)
 
 ## apps/api/src/computer-games/
 
+- `computer-game-actions.service.ts` — State-mutating vs-computer actions that are NOT a normal move: takeback, (~3334 tok)
 - `computer-games.controller.ts` — Exports ComputerGamesController (~375 tok)
 - `computer-games.module.ts` — Exports ComputerGamesModule (~132 tok)
-- `computer-games.service.ts` — Exports ComputerGamesService (~3302 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~4144 tok)
 
 ## apps/api/src/config/
 
+- `engine-backend.config.ts` — Exports ENGINE_BACKEND, ENGINE_ADAPTER, getEngineBackend (~153 tok)
 - `env.config.ts` — Exports EnvConfig, envValidationSchema (~586 tok)
 
 ## apps/api/src/database/
@@ -816,7 +826,8 @@
 
 ## apps/api/test/computer-games/
 
-- `computer-games.service.spec.ts` — Declares STARTING_FEN (~3640 tok)
+- `computer-game-actions.service.spec.ts` — GAME_ID: serializedFixture, gameFixture (~3998 tok)
+- `computer-games.service.spec.ts` — Declares STARTING_FEN (~5519 tok)
 - `stockfish.service.spec.ts` — TestableStockfishService: makeEngine (~1038 tok)
 
 ## apps/api/test/e2e/
@@ -827,6 +838,14 @@
 - `matchmaking.e2e-spec.ts` — API routes: DELETE, POST (5 endpoints) (~565 tok)
 - `ratings.e2e-spec.ts` — API routes: GET, POST (2 endpoints) (~448 tok)
 - `setup.ts` — API routes: POST (1 endpoints) (~458 tok)
+
+## apps/api/test/engine/
+
+- `adapter.spec.ts` — Compile-time satisfaction: if either class fails to implement EngineAdapter, (~442 tok)
+- `native-adapter.spec.ts` — Declares STARTPOS (~569 tok)
+- `parity.spec.ts` — Returns an adapter that delegates to TsEngineAdapter except for the provided overrides. (~1441 tok)
+- `shadow-adapter.spec.ts` — STARTPOS: mockAdapter (~2628 tok)
+- `ts-adapter.spec.ts` — Declares STARTPOS (~2172 tok)
 
 ## apps/api/test/health/
 
@@ -1002,9 +1021,66 @@
 
 - `settings-dialog.test.tsx` — monoBtn (~676 tok)
 
+## crates/purechess-engine/
+
+- `build.rs` (~11 tok)
+- `Cargo.toml` — Rust package manifest (~263 tok)
+- `Cargo.toml` — Rust package manifest (~302 tok)
+- `package.json` — Node.js package manifest (~152 tok)
+- `README.md` — Project documentation (~926 tok)
+
+## crates/purechess-engine/ (Rust engine — WP1 frozen contract, stubs only)
+
+- `crates/purechess-engine/Cargo.toml` — Library crate, `crate-type=["cdylib","rlib"]`, features `impl`/`ffi`, lints. (~260 tok)
+- `crates/purechess-engine/README.md` — Stack, public API, run commands. (~700 tok)
+- `crates/purechess-engine/src/error.rs` — `EngineError` thiserror enum (InvalidFen/IllegalMove/AmbiguousMove/Internal). (~180 tok)
+- `crates/purechess-engine/src/fen.rs` — `ParsedFen` (6 FEN fields) + `parse` stub; inverse of fen-utils.ts#toFen. (~230 tok)
+- `crates/purechess-engine/src/lib.rs` — Frozen 6-fn public API (validate_move/legal_moves/apply_moves/detect_result/to_pgn/parse_fen) + gated `perft`; all bodies `unimplemented!("WP2")`. (~640 tok)
+- `crates/purechess-engine/src/types.rs` — Public value types/enums; serde discriminants byte-match TS (Color/PieceKind/GameResult/GameTermination, MoveOutcome, GameState, Ply, ClockSnapshot, DetectOutcome, PgnHeaders). (~900 tok)
+- `crates/purechess-engine/tests/fixtures/perft_cases.json` — CPW perft tables: startpos, kiwipete, endgame, ep_castle_stress. (~330 tok)
+- `crates/purechess-engine/tests/perft.rs` — Per-position perft tests, gated `#[cfg(feature="impl")]`; depth 4-5 `#[ignore]`. (~900 tok)
+- `docs/roadmap/rust-engine-migration/session-01-handoff.md` — WP1 handoff: crates+versions, frozen API, fixtures, open questions, WP2 inputs. (~2400 tok)
+
+## crates/purechess-engine/benches/
+
+- `perft.rs` — criterion benchmarks for legal_moves and apply_moves at depths 1/3/5. WP5 instrument, CI not gated on it. (~200 tok)
+
+## crates/purechess-engine/src/
+
+- `board.rs` — fen_to_pos, pos_to_fen, uci_to_move, move_to_uci_str, move_to_san (~573 tok)
+- `error.rs` — Typed engine errors. Frozen WP1 contract — variants are part of the C-ABI surface (~274 tok)
+- `fen.rs` — FEN parsing. Frozen WP1 surface — the inverse of fen-utils.ts#toFen, exposed so the (~708 tok)
+- `fen.rs` — FEN parsing. Frozen WP1 surface — the inverse of fen-utils.ts#toFen, exposed so the (~322 tok)
+- `ffi.rs` — napi-rs bindings — WP3. Exposes the frozen Rust API to Node.js. (~2075 tok)
+- `lib.rs` — PureChess native engine — WP2 implementation. (~676 tok)
+- `lib.rs` — PureChess native engine — frozen WP1 contract. (~836 tok)
+- `moves.rs` — validate_move_impl, legal_moves_impl, apply_moves_impl (with threefold detection and bug-005 early-return). WP2 internal module. (~420 tok)
+- `pgn.rs` — to_pgn_impl: builds PGN from FEN + UCI list + PgnHeaders. WP2 internal module. (~160 tok)
+- `result.rs` — detect_result_impl, detect_from_pos (used by apply_moves), is_insufficient_material. WP2 internal module. (~220 tok)
+- `types.rs` — Public value types for the engine contract. Frozen WP1 surface. (~1439 tok)
+
+## crates/purechess-engine/tests/
+
+- `fen_roundtrip.rs` — 50 hand-written FEN round-trip tests + 256-case proptest. (#[cfg(feature="impl")]) (~1800 tok)
+- `parity.rs` — Rust-side parity tests: verifies that `apply_moves` returns FENs that are (~1190 tok)
+- `perft.rs` — Perft conformance suite for the PureChess native engine. (~1306 tok)
+- `result_detection.rs` — 17 positions: checkmate (scholars/kq-vs-k/backrank/black), stalemate (x2), 50-move (x2), threefold via apply_moves, insufficient material (K+K/K+B/K+N/same-color bishops), ongoing (x3). (~660 tok)
+
+## crates/purechess-engine/tests/fixtures/
+
+- `perft_cases.json` (~246 tok)
+
 ## docs/claude-sessions/vs-computer-foundations/
 
 - `.epic-produces-overrides.json` (~111 tok)
+
+## docs/roadmap/rust-engine-migration/
+
+- `session-01-handoff.md` — Session 01 Handoff — Rust Engine Contracts Charter (WP1) (~3179 tok)
+- `session-02-handoff.md` — Session 02 Handoff — Rust Core Implementation (WP2) (~2779 tok)
+- `session-03-handoff.md` — Session 03 Handoff — napi-rs Bindings (WP3) (~2432 tok)
+- `session-04-handoff.md` — Session 04 Handoff — EngineAdapter Interface (WP4) (~1657 tok)
+- `session-05-handoff.md` — Session 05 Handoff — Shadow Mode CI Gate (WP5) (~1613 tok)
 
 ## docs/roadmap/vs-computer-foundations/
 
@@ -1018,6 +1094,17 @@
 - `session-09-handoff.md` — Session 09 Handoff — a11y Polish (Keyboard + Screen Reader) (~1160 tok)
 - `session-10-handoff.md` — Session 10 Handoff — CI Gate / Go–No-Go (~1228 tok)
 
+## packages/engine-native/
+
+- `index.js` (~20 tok)
+- `package.json` — Node.js package manifest (~85 tok)
+- `tsconfig.json` — TypeScript configuration (~84 tok)
+
+## packages/engine-native/src/
+
+- `index.ts` — Typed re-exports for @purechess/engine-native. (~276 tok)
+- `types.ts` — TypeScript interfaces mirroring the napi-rs generated shapes. (~479 tok)
+
 ## packages/shared/src/
 
 - `index.ts` (~136 tok)
@@ -1027,3 +1114,9 @@
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
+
+## scripts/
+
+- `build-engine.sh` — Build the purechess-engine native binary for the host platform. (~199 tok)
+- `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
+- `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)

@@ -1,0 +1,42 @@
+[package]
+name = "purechess-engine"
+version = "0.1.0"
+edition = "2021"
+license = "UNLICENSED"
+publish = false
+description = "Native chess engine core for PureChess — frozen WP1 contract (stubs only)."
+
+[lib]
+# rlib  -> linkable by `cargo test` and the future packages/engine-native Rust glue.
+# cdylib -> napi-rs (WP3) produces the `.node` from this.
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# WP2 enables `impl` to write the real bodies; the perft suite is gated on it so
+# WP1 (this session) compiles and runs zero perft assertions — a pure spec pass.
+impl = []
+# WP3 enables `ffi` to expose the napi surface and relax `forbid(unsafe_code)`.
+ffi = ["napi", "napi-derive"]
+
+[dependencies]
+shakmaty = { workspace = true }
+thiserror = { workspace = true }
+arrayvec = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+napi        = { version = "3", optional = true, default-features = false, features = ["napi4", "serde-json"] }
+napi-derive = { version = "3", optional = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+criterion = { workspace = true }
+
+[[bench]]
+name = "perft"
+harness = false
+
+[build-dependencies]
+napi-build = "1"
+
+[lints]
+workspace = true

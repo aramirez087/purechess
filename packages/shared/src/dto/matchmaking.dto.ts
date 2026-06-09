@@ -1,4 +1,4 @@
-import type { TimeControl } from '../time-control.js';
+import type { TimeControl } from '../time-control';
 
 export interface JoinQueueDto {
   timeControl: TimeControl;
