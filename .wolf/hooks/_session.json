@@ -1,98 +1,103 @@
 {
-  "session_id": "session-2026-06-08-2124",
-  "started": "2026-06-08T03:24:04.964Z",
+  "session_id": "session-2026-06-09-1851",
+  "started": "2026-06-09T00:51:11.638Z",
   "files_read": {
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": {
-      "count": 3,
-      "tokens": 4765,
-      "first_read": "2026-06-08T03:24:15.691Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/game/move-panel.tsx": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/.gitignore": {
       "count": 1,
-      "tokens": 946,
-      "first_read": "2026-06-08T03:24:16.479Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/hooks/use-game-keyboard.ts": {
-      "count": 1,
-      "tokens": 624,
-      "first_read": "2026-06-08T03:24:47.088Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/computer-game/live-announcer.tsx": {
-      "count": 1,
-      "tokens": 342,
-      "first_read": "2026-06-08T03:24:47.766Z"
+      "tokens": 36,
+      "first_read": "2026-06-09T00:56:11.170Z"
     }
   },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 64,
-      "at": "2026-06-08T03:26:31.433Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 15,
-      "at": "2026-06-08T03:26:36.321Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 59,
-      "at": "2026-06-08T03:26:40.332Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 372,
-      "at": "2026-06-08T03:26:51.268Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 143,
-      "at": "2026-06-08T03:26:59.070Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 64,
-      "at": "2026-06-08T03:27:06.549Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 55,
-      "at": "2026-06-08T03:27:11.774Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
-      "action": "edit",
-      "tokens": 44,
-      "at": "2026-06-08T03:27:16.316Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/apps/web/src/components/game/move-panel.tsx",
-      "action": "edit",
-      "tokens": 93,
-      "at": "2026-06-08T03:27:22.668Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--vs-computer--s10-ci-gate/docs/roadmap/vs-computer-ui/session-10-handoff.md",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/Cargo.toml",
       "action": "create",
-      "tokens": 1403,
-      "at": "2026-06-08T03:28:51.099Z"
+      "tokens": 169,
+      "at": "2026-06-09T00:51:28.965Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/Cargo.toml",
+      "action": "create",
+      "tokens": 260,
+      "at": "2026-06-09T00:51:35.921Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/error.rs",
+      "action": "create",
+      "tokens": 293,
+      "at": "2026-06-09T00:51:42.909Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/types.rs",
+      "action": "create",
+      "tokens": 1542,
+      "at": "2026-06-09T00:52:07.209Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/fen.rs",
+      "action": "create",
+      "tokens": 345,
+      "at": "2026-06-09T00:52:15.395Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/lib.rs",
+      "action": "create",
+      "tokens": 886,
+      "at": "2026-06-09T00:52:31.906Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/tests/fixtures/perft_cases.json",
+      "action": "create",
+      "tokens": 246,
+      "at": "2026-06-09T00:52:41.006Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/tests/perft.rs",
+      "action": "create",
+      "tokens": 1128,
+      "at": "2026-06-09T00:53:04.801Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/src/lib.rs",
+      "action": "edit",
+      "tokens": 66,
+      "at": "2026-06-09T00:53:40.386Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/crates/purechess-engine/README.md",
+      "action": "create",
+      "tokens": 1059,
+      "at": "2026-06-09T00:54:14.248Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/docs/roadmap/rust-engine-migration/session-01-handoff.md",
+      "action": "create",
+      "tokens": 3634,
+      "at": "2026-06-09T00:55:26.841Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s01-contracts-charter/.gitignore",
+      "action": "edit",
+      "tokens": 17,
+      "at": "2026-06-09T00:56:14.066Z"
     }
   ],
   "edit_counts": {
-    "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": 8,
-    "apps/web/src/components/game/move-panel.tsx": 1,
-    "docs/roadmap/vs-computer-ui/session-10-handoff.md": 1
+    "Cargo.toml": 1,
+    "crates/purechess-engine/Cargo.toml": 1,
+    "crates/purechess-engine/src/error.rs": 1,
+    "crates/purechess-engine/src/types.rs": 1,
+    "crates/purechess-engine/src/fen.rs": 1,
+    "crates/purechess-engine/src/lib.rs": 2,
+    "crates/purechess-engine/tests/fixtures/perft_cases.json": 1,
+    "crates/purechess-engine/tests/perft.rs": 1,
+    "crates/purechess-engine/README.md": 1,
+    "docs/roadmap/rust-engine-migration/session-01-handoff.md": 1,
+    ".gitignore": 1
   },
-  "anatomy_hits": 4,
+  "anatomy_hits": 1,
   "anatomy_misses": 0,
-  "repeated_reads_warned": 2,
+  "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
-  "stop_count": 1
+  "stop_count": 0
 }

@@ -54,6 +54,9 @@
 
 <!-- Significant technical decisions with rationale. Why X was chosen over Y. -->
 
+- **[2026-06-08 · rust-engine-migration WP1] Rust engine crate stack = `shakmaty`, NOT `pleco`.** The epic brief recommended `pleco`; chose `shakmaty 0.27` instead because our frozen contract mandates SAN (`MoveOutcome.san`, `LegalMove.san`) which shakmaty generates natively and pleco does not; shakmaty is actively maintained (lichess), pure-Rust, and portable to the Fly.io `x86_64-unknown-linux-musl` target. No server-side search is needed (computer games use client-side Stockfish), so pleco's search/eval machinery is dead weight. Switch cost ≈ 0 at WP1 (stubs only). WP2 to sign off. See `docs/roadmap/rust-engine-migration/session-01-handoff.md`.
+- **[2026-06-08 · rust-engine-migration WP1] Two ratified signature deviations from the brief.** (1) `detect_result(fen) -> Result<Option<DetectOutcome>, EngineError>` (NOT a bare tuple) — `Ok(None)` mirrors TS `detectResult` returning `null` for ongoing games; only position-derivable terminations (Checkmate/Stalemate/InsufficientMaterial/FiftyMoveRule) are in scope, threefold+timeout detected elsewhere. (2) `GameState.result`/`reason` are `Option` (ongoing-game parity). `apply_moves` takes no clock, so it never flags on time — bug-005 flag-fall path stays in the TS service. These are authoritative per the "contract is law" rule; any change updates the handoff + both-language tests together.
+
 ## Key Learnings (added 2026-06-07 session 05)
 
 - **Root devDeps missing `eslint` binary:** The workspace root `eslint.config.js` uses ESLint v9 flat-config, but `eslint` itself was not in root `devDependencies`. `packages/shared` and `apps/api` both run `eslint src` in their lint scripts and fail with `eslint: command not found`. Fix: add `"eslint": "^9.0.0"` to root `devDependencies`. (`apps/web` uses `next lint` which has its own eslint and is unaffected.)

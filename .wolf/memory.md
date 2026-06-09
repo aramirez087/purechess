@@ -343,3 +343,27 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 | 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-game-actions.service.ts | 2→2 lines | ~32 |
 | 22:22 | Edited ../../../../tmp/purechess-pr3/apps/api/src/computer-games/computer-games.service.ts | 2→2 lines | ~30 |
 | 22:23 | Session end: 6 writes across 3 files (ci.yml, computer-game-actions.service.ts, computer-games.service.ts) | 6 reads | ~10268 tok |
+
+## Session: 2026-06-09 18:47
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:51 | Created .session-01-plan.md | — | ~6520 |
+| 18:51 | Session end: 1 writes across 1 files (.session-01-plan.md) | 0 reads | ~6985 tok |
+
+## Session: 2026-06-09 18:51
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:51 | Created Cargo.toml | — | ~158 |
+| 18:51 | Created crates/purechess-engine/Cargo.toml | — | ~243 |
+| 18:51 | Created crates/purechess-engine/src/error.rs | — | ~274 |
+| 18:52 | Created crates/purechess-engine/src/types.rs | — | ~1439 |
+| 18:52 | Created crates/purechess-engine/src/fen.rs | — | ~322 |
+| 18:52 | Created crates/purechess-engine/src/lib.rs | — | ~827 |
+| 18:52 | Created crates/purechess-engine/tests/fixtures/perft_cases.json | — | ~246 |
+| 18:53 | Created crates/purechess-engine/tests/perft.rs | — | ~1053 |
+| 18:53 | Edited crates/purechess-engine/src/lib.rs | 3→3 lines | ~62 |
+| 18:54 | Created crates/purechess-engine/README.md | — | ~988 |
+| 18:55 | Created docs/roadmap/rust-engine-migration/session-01-handoff.md | — | ~3391 |
+| 18:56 | Edited .gitignore | 2→5 lines | ~16 |
