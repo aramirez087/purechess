@@ -16,6 +16,9 @@ mod moves;
 mod pgn;
 mod result;
 
+#[cfg(feature = "ffi")]
+pub mod ffi;
+
 pub use error::EngineError;
 pub use fen::{parse as parse_fen, ParsedFen};
 pub use types::{

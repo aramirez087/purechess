@@ -15,23 +15,28 @@ crate-type = ["cdylib", "rlib"]
 # WP2 enables `impl` to write the real bodies; the perft suite is gated on it so
 # WP1 (this session) compiles and runs zero perft assertions — a pure spec pass.
 impl = []
-# WP3 enables `ffi` to relax `forbid(unsafe_code)` at the napi boundary only.
-ffi = []
+# WP3 enables `ffi` to expose the napi surface and relax `forbid(unsafe_code)`.
+ffi = ["napi", "napi-derive"]
 
 [dependencies]
 shakmaty = { workspace = true }
 thiserror = { workspace = true }
 arrayvec = { workspace = true }
 serde = { workspace = true }
+serde_json = { workspace = true }
+napi        = { version = "3", optional = true, default-features = false, features = ["napi4", "serde-json"] }
+napi-derive = { version = "3", optional = true }
 
 [dev-dependencies]
-serde_json = { workspace = true }
 proptest = { workspace = true }
 criterion = { workspace = true }
 
 [[bench]]
 name = "perft"
 harness = false
+
+[build-dependencies]
+napi-build = "1"
 
 [lints]
 workspace = true

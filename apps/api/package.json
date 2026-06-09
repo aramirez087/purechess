@@ -32,6 +32,7 @@
     "@nestjs/throttler": "^5.2.0",
     "@nestjs/websockets": "^10.3.0",
     "@prisma/client": "^5.14.0",
+    "@purechess/engine-native": "workspace:*",
     "@purechess/shared": "workspace:*",
     "@sentry/node": "^10.56.0",
     "argon2": "^0.31.0",

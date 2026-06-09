@@ -408,3 +408,31 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 19:00 | Created .session-03-plan.md | — | ~6543 |
+| 19:00 | Session end: 1 writes across 1 files (.session-03-plan.md) | 9 reads | ~10592 tok |
+
+## Session: 2026-06-09 19:00
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:14 | Edited crates/purechess-engine/Cargo.toml | 19→24 lines | ~199 |
+| 19:15 | Created crates/purechess-engine/build.rs | — | ~11 |
+| 19:15 | Created crates/purechess-engine/src/ffi.rs | — | ~2115 |
+| 19:15 | Edited crates/purechess-engine/src/lib.rs | 3→6 lines | ~22 |
+| 19:15 | Created crates/purechess-engine/package.json | — | ~152 |
+| 19:15 | Created packages/engine-native/package.json | — | ~85 |
+| 19:16 | Created packages/engine-native/tsconfig.json | — | ~84 |
+| 19:16 | Created packages/engine-native/src/types.ts | — | ~479 |
+| 19:16 | Created packages/engine-native/src/index.ts | — | ~276 |
+| 19:16 | Created packages/engine-native/index.js | — | ~20 |
+| 19:16 | Edited apps/api/package.json | 1→2 lines | ~25 |
+| 19:17 | Edited crates/purechess-engine/src/ffi.rs | 2→1 lines | ~6 |
+| 19:17 | Edited crates/purechess-engine/src/ffi.rs | 6→1 lines | ~22 |
+| 19:18 | Created apps/api/Dockerfile | — | ~938 |
+| 19:18 | Edited apps/api/fly.toml | 3→4 lines | ~34 |
+| 19:18 | Created scripts/build-engine.sh | — | ~199 |
+| 19:20 | Created docs/roadmap/rust-engine-migration/session-03-handoff.md | — | ~2594 |
+
+## Session: 2026-06-08 — WP3 napi-rs bindings
+| Session | WP3 complete: napi bindings, @purechess/engine-native package, multi-stage Dockerfile | All gates green; WP2 stubs mean runtime panics (expected) | ~12000 |
+| 19:21 | Session end: 17 writes across 13 files (Cargo.toml, build.rs, ffi.rs, lib.rs, package.json) | 12 reads | ~11998 tok |
