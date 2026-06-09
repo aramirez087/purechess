@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T00:56:14.059Z
-> Files: 610 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T01:24:46.379Z
+> Files: 619 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -36,12 +36,13 @@
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 — Implementation Plan: Rust Engine Contracts Charter (WP1) (~6112 tok)
+- `.session-02-plan.md` — Session 02 Implementation Plan — Rust Core Implementation (WP2) (~8784 tok)
 - `.session-04-plan.md` — Session 04 — Implementation Plan (~2748 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — CI Gate / Go–No-Go (~3319 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
-- `Cargo.toml` — Rust package manifest (~158 tok)
+- `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -1003,7 +1004,7 @@
 
 ## crates/purechess-engine/
 
-- `Cargo.toml` — Rust package manifest (~243 tok)
+- `Cargo.toml` — Rust package manifest (~263 tok)
 - `README.md` — Project documentation (~926 tok)
 
 ## crates/purechess-engine/ (Rust engine — WP1 frozen contract, stubs only)
@@ -1018,16 +1019,26 @@
 - `crates/purechess-engine/tests/perft.rs` — Per-position perft tests, gated `#[cfg(feature="impl")]`; depth 4-5 `#[ignore]`. (~900 tok)
 - `docs/roadmap/rust-engine-migration/session-01-handoff.md` — WP1 handoff: crates+versions, frozen API, fixtures, open questions, WP2 inputs. (~2400 tok)
 
+## crates/purechess-engine/benches/
+
+- `perft.rs` — criterion benchmarks for legal_moves and apply_moves at depths 1/3/5. WP5 instrument, CI not gated on it. (~200 tok)
+
 ## crates/purechess-engine/src/
 
+- `board.rs` — shakmaty conversion helpers: fen_to_pos, pos_to_fen, uci_to_move, move_to_uci_str, move_to_san, role_to_piece_kind, color_from_shakmaty, fen_position_key. WP2 internal module. (~280 tok)
 - `error.rs` — Typed engine errors. Frozen WP1 contract — variants are part of the C-ABI surface (~274 tok)
-- `fen.rs` — FEN parsing. Frozen WP1 surface — the inverse of fen-utils.ts#toFen, exposed so the (~322 tok)
-- `lib.rs` — PureChess native engine — frozen WP1 contract. (~826 tok)
+- `fen.rs` — FEN parsing. Frozen WP1 surface — the inverse of fen-utils.ts#toFen, exposed so the (~708 tok)
+- `lib.rs` — PureChess native engine — WP2 implementation. (~676 tok)
+- `moves.rs` — validate_move_impl, legal_moves_impl, apply_moves_impl (with threefold detection and bug-005 early-return). WP2 internal module. (~420 tok)
+- `pgn.rs` — to_pgn_impl: builds PGN from FEN + UCI list + PgnHeaders. WP2 internal module. (~160 tok)
+- `result.rs` — detect_result_impl, detect_from_pos (used by apply_moves), is_insufficient_material. WP2 internal module. (~220 tok)
 - `types.rs` — Public value types for the engine contract. Frozen WP1 surface. (~1439 tok)
 
 ## crates/purechess-engine/tests/
 
-- `perft.rs` — Perft conformance suite for the PureChess native engine. (~1053 tok)
+- `fen_roundtrip.rs` — 50 hand-written FEN round-trip tests + 256-case proptest. (#[cfg(feature="impl")]) (~1800 tok)
+- `perft.rs` — Perft conformance suite for the PureChess native engine. (~1306 tok)
+- `result_detection.rs` — 17 positions: checkmate (scholars/kq-vs-k/backrank/black), stalemate (x2), 50-move (x2), threefold via apply_moves, insufficient material (K+K/K+B/K+N/same-color bishops), ongoing (x3). (~660 tok)
 
 ## crates/purechess-engine/tests/fixtures/
 
@@ -1040,6 +1051,7 @@
 ## docs/roadmap/rust-engine-migration/
 
 - `session-01-handoff.md` — Session 01 Handoff — Rust Engine Contracts Charter (WP1) (~3179 tok)
+- `session-02-handoff.md` — Session 02 Handoff — Rust Core Implementation (WP2) (~2779 tok)
 
 ## docs/roadmap/vs-computer-foundations/
 

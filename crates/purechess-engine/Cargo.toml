@@ -27,6 +27,11 @@ serde = { workspace = true }
 [dev-dependencies]
 serde_json = { workspace = true }
 proptest = { workspace = true }
+criterion = { workspace = true }
+
+[[bench]]
+name = "perft"
+harness = false
 
 [lints]
 workspace = true

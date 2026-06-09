@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 197485,
-    "total_reads": 209,
-    "total_writes": 168,
-    "total_sessions": 22,
-    "anatomy_hits": 79,
+    "total_tokens_estimated": 214260,
+    "total_reads": 222,
+    "total_writes": 169,
+    "total_sessions": 25,
+    "anatomy_hits": 90,
     "anatomy_misses": 128,
     "repeated_reads_blocked": 61,
-    "estimated_savings_vs_bare_cli": 41814
+    "estimated_savings_vs_bare_cli": 44014
   },
   "sessions": [
     {
@@ -2492,6 +2492,106 @@
         "writes_count": 12,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-06-09-1856",
+      "started": "2026-06-09T00:56:37.305Z",
+      "ended": "2026-06-09T01:06:42.644Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 826,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/src/types.rs",
+          "tokens_estimated": 1439,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/src/error.rs",
+          "tokens_estimated": 274,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/src/fen.rs",
+          "tokens_estimated": 322,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/Cargo.toml",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/tests/perft.rs",
+          "tokens_estimated": 1053,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/apps/api/src/chess/engine/fen-utils.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/crates/purechess-engine/tests/fixtures/perft_cases.json",
+          "tokens_estimated": 246,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/apps/api/src/chess/engine/result-detector.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/apps/api/src/chess/engine/game-state.ts",
+          "tokens_estimated": 1416,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/apps/api/src/chess/engine/move-validator.ts",
+          "tokens_estimated": 497,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/apps/api/src/chess/engine/pgn-builder.ts",
+          "tokens_estimated": 506,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/Cargo.toml",
+          "tokens_estimated": 158,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s02-rust-core-impl/.session-02-plan.md",
+          "tokens_estimated": 10038,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 6737,
+        "output_tokens_estimated": 10038,
+        "reads_count": 13,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 11
       }
     }
   ],
