@@ -75,9 +75,24 @@
 - **musl cross-compilation from `rust:1-bookworm`**: install `musl-tools` via apt, then `rustup target add x86_64-unknown-linux-musl`. The resulting `.node` runs on Alpine. No separate cross-compilation container needed.
 - **napi build output file name**: `purechess-engine.linux-x64-musl.node` for the musl target. The prefix comes from the `"name": "purechess-engine"` field in the crate's `package.json`.
 
+## Key Learnings (added 2026-06-09 session WP4)
+
+- **chess.js 1.x omits en passant from FEN when no adjacent enemy pawn can capture it.** After `e2e4` with no black pawn on d4/f4, `chess.fen()` returns `-` for the en passant field, not `e3`. Tests that assert the en passant FEN field must use an explicit hand-crafted FEN string (e.g. `'...b KQkq e3 0 1'`), not a FEN derived from chess.js moves.
+- **`@typescript-eslint/no-var-requires` (not `no-require-imports`) fires on class property `require()` calls.** When a CJS `require()` appears as a class property initializer (not a top-level module-scope `require()`), the rule that triggers is `no-var-requires`. The eslint-disable directive must name `@typescript-eslint/no-var-requires` exactly. Using `no-require-imports` generates an "unused directive" warning and the real error remains unfixed.
+- **`require()` in a try-catch block does NOT trigger `no-require-imports` or `no-var-requires`.** The lint rules apply to `require()` as a statement, but inside a `try` block the rule doesn't fire. Do not add eslint-disable directives to try-catch `require()` calls — they produce "unused directive" warnings.
+- **`export * from './result-detector'` conflicts with `adapter.ts` `ResultPayload`.** Both files export `ResultPayload`. Removing `result-detector` from the `engine/index.ts` barrel resolves the ambiguity. `result-detector.ts` remains functional internally; tests import it directly by file path rather than through the barrel.
+- **`engine/index.ts` barrel + singleton belongs in `collectCoverageFrom` exclusions.** The barrel's module-level try-catch `require()` for binary detection runs zero test code paths. Exclude `index.ts` alongside `native-adapter.ts` from the Jest coverage collection to avoid dragging down the branch coverage gate.
+- **`EngineAdapter.detectResult` is position-only** — no timeout, no threefold. Timeout detection requires the clock state held by `EngineService`. Threefold detection requires the FEN history. Both stay in `EngineService`; the adapter only detects position-derivable results (checkmate, stalemate, insufficient material, 50-move rule).
+- **`applyMoves` preResult branch test requires a FEN that is ALREADY terminal.** To cover the early-return path `if (preResult) { return ... }` at the top of the for loop, call `applyMoves(TERMINAL_FEN, ['some_move'])` — the loop fires the preResult guard on the first iteration. The test `'stops at terminal...'` does NOT cover this path because it reaches the postResult return inside the same iteration.
+
 ## Do-Not-Repeat (added 2026-06-07)
 
 - [2026-06-07] Don't use curly/smart quotes inside JS string literals — esbuild rejects them. Always write ASCII `'`. Check with `cat -v` if in doubt.
+
+## Do-Not-Repeat (added 2026-06-09 session WP4)
+
+- [2026-06-09] Don't write eslint-disable directives for `@typescript-eslint/no-require-imports` when suppressing a CJS `require()` in a class property initializer — the actual rule is `@typescript-eslint/no-var-requires`. Wrong rule name → "unused directive" warning + real error stays.
+- [2026-06-09] Don't add eslint-disable directives to `require()` calls inside try-catch blocks — they don't trigger lint rules and produce "unused directive" warnings instead.
 
 ## Do-Not-Repeat (added 2026-06-08 WP3)
 

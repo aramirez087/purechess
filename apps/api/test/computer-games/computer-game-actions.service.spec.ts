@@ -285,7 +285,7 @@ describe('ComputerGameActionsService', () => {
     it('claim succeeds when the engine detects a draw', async () => {
       mockPrisma.game.findUnique.mockResolvedValue(gameFixture());
       mockEngine.fromSerializable.mockReturnValue({});
-      mockEngine.detectResult.mockReturnValue({ result: 'draw', reason: 'threefold_repetition' });
+      mockEngine.detectResult.mockResolvedValue({ result: 'draw', reason: 'threefold_repetition' });
 
       const result = await service.draw(GAME_ID, USER_ID, 'claim');
 
@@ -298,7 +298,7 @@ describe('ComputerGameActionsService', () => {
     it('claim is rejected when no draw is detectable', async () => {
       mockPrisma.game.findUnique.mockResolvedValue(gameFixture());
       mockEngine.fromSerializable.mockReturnValue({});
-      mockEngine.detectResult.mockReturnValue(null);
+      mockEngine.detectResult.mockResolvedValue(null);
 
       await expect(service.draw(GAME_ID, USER_ID, 'claim')).rejects.toThrow(BadRequestException);
     });
@@ -306,7 +306,7 @@ describe('ComputerGameActionsService', () => {
     it('claim is rejected when the detected result is not a draw', async () => {
       mockPrisma.game.findUnique.mockResolvedValue(gameFixture());
       mockEngine.fromSerializable.mockReturnValue({});
-      mockEngine.detectResult.mockReturnValue({ result: 'white_wins', reason: 'checkmate' });
+      mockEngine.detectResult.mockResolvedValue({ result: 'white_wins', reason: 'checkmate' });
 
       await expect(service.draw(GAME_ID, USER_ID, 'claim')).rejects.toThrow(BadRequestException);
     });

@@ -293,7 +293,7 @@ export class ComputerGamesService {
 
     let state;
     try {
-      state = this.engine.applyMove(engineState, { uci: dto.move }, nowMs);
+      state = await this.engine.applyMove(engineState, { uci: dto.move }, nowMs);
     } catch (err) {
       if (err instanceof InvalidMoveError) {
         throw new BadRequestException(err.message);
@@ -338,7 +338,7 @@ export class ComputerGamesService {
 
     const engineMove = state.moves[state.moves.length - 1]!;
 
-    const finalResult = this.engine.detectResult(state, nowMs);
+    const finalResult = await this.engine.detectResult(state, nowMs);
     const serialized = this.engine.toSerializable(state);
     const finalFen = state.position.fen();
 

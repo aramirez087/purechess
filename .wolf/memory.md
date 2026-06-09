@@ -436,3 +436,58 @@ Found + fixed a PRE-EXISTING global crash: ThemeSync infinite update loop (bug-0
 ## Session: 2026-06-08 — WP3 napi-rs bindings
 | Session | WP3 complete: napi bindings, @purechess/engine-native package, multi-stage Dockerfile | All gates green; WP2 stubs mean runtime panics (expected) | ~12000 |
 | 19:21 | Session end: 17 writes across 13 files (Cargo.toml, build.rs, ffi.rs, lib.rs, package.json) | 12 reads | ~11998 tok |
+
+## Session: 2026-06-09 19:32
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:41 | Created .session-04-plan.md | — | ~7649 |
+| 19:41 | Session end: 1 writes across 1 files (.session-04-plan.md) | 17 reads | ~20239 tok |
+
+## Session: 2026-06-09 19:41
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:51 | Created apps/api/src/chess/engine/adapter.ts | — | ~468 |
+| 19:51 | Created apps/api/src/chess/engine/ts-adapter.ts | — | ~1418 |
+| 19:51 | Created apps/api/src/chess/engine/native-adapter.ts | — | ~822 |
+| 19:52 | Created apps/api/src/config/engine-backend.config.ts | — | ~194 |
+| 19:52 | Created apps/api/src/chess/engine/index.ts | — | ~240 |
+| 19:52 | Created apps/api/src/chess/chess.module.ts | — | ~227 |
+| 19:52 | Created apps/api/src/chess/engine.service.ts | — | ~1661 |
+| 19:52 | Edited apps/api/src/computer-games/computer-games.service.ts | inline fix | ~24 |
+| 19:52 | Edited apps/api/src/computer-games/computer-games.service.ts | inline fix | ~20 |
+| 19:52 | Edited apps/api/src/computer-games/computer-game-actions.service.ts | inline fix | ~19 |
+| 19:53 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | mockReturnValue() → mockResolvedValue() | ~91 |
+| 19:53 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | mockReturnValue() → mockResolvedValue() | ~73 |
+| 19:53 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | mockReturnValue() → mockResolvedValue() | ~95 |
+| 19:53 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | 7→7 lines | ~98 |
+| 19:53 | Edited apps/api/test/computer-games/computer-games.service.spec.ts | mockReturnValue() → mockResolvedValue() | ~92 |
+| 19:53 | Edited apps/api/test/computer-games/computer-game-actions.service.spec.ts | inline fix | ~29 |
+| 19:53 | Edited apps/api/test/computer-games/computer-game-actions.service.spec.ts | inline fix | ~16 |
+| 19:53 | Edited apps/api/test/computer-games/computer-game-actions.service.spec.ts | inline fix | ~28 |
+| 19:54 | Created apps/api/test/engine/adapter.spec.ts | — | ~442 |
+| 19:54 | Created apps/api/test/engine/ts-adapter.spec.ts | — | ~1900 |
+| 19:54 | Created apps/api/test/engine/native-adapter.spec.ts | — | ~569 |
+| 19:55 | Edited apps/api/package.json | 3→4 lines | ~30 |
+| 19:56 | Edited apps/api/src/chess/engine/index.ts | 7→6 lines | ~50 |
+| 19:57 | Edited apps/api/src/chess/engine/native-adapter.ts | 2→2 lines | ~46 |
+
+## Session: 2026-06-09 19:59
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:59 | Edited apps/api/src/chess/engine/index.ts | 4→3 lines | ~22 |
+| 20:00 | Edited apps/api/src/config/engine-backend.config.ts | 4→3 lines | ~61 |
+| 20:04 | Edited apps/api/test/engine/ts-adapter.spec.ts | 8→6 lines | ~97 |
+| 20:04 | Edited apps/api/test/engine/ts-adapter.spec.ts | Ka6() → Ka8() | ~101 |
+| 20:04 | Edited apps/api/test/engine/ts-adapter.spec.ts | 5→8 lines | ~126 |
+| 20:06 | Edited apps/api/package.json | 4→5 lines | ~40 |
+| 20:07 | Edited apps/api/test/engine/ts-adapter.spec.ts | expanded (+18 lines) | ~350 |
+| 20:08 | Created docs/roadmap/rust-engine-migration/session-04-handoff.md | — | ~1767 |
+| 20:10 | Session WP4 complete: lint clean, 221/221 tests pass, coverage gate 85.08% | multiple | ✅ done | ~80k |
+
+## Session: 2026-06-09 WP4 summary
+
+WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, TsEngineAdapter and NativeEngineAdapter implemented, EngineService migrated to async adapter injection, all test mocks updated to mockResolvedValue, 3 test bugs fixed (wrong FEN active-color, wrong stalemate FEN, chess.js en-passant FEN quirk), 2 coverage tests added (preResult branch, threefold repetition), branch coverage gate passes at 85.08%. Handoff doc written. Cerebrum updated with 7 key learnings and 2 do-not-repeat entries.
+| 20:09 | Session end: 8 writes across 5 files (index.ts, engine-backend.config.ts, ts-adapter.spec.ts, package.json, session-04-handoff.md) | 5 reads | ~8755 tok |
