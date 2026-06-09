@@ -18,12 +18,14 @@
     "db:migrate:deploy": "pnpm --filter @purechess/api exec prisma migrate deploy",
     "e2e": "pnpm --filter @purechess/web e2e",
     "e2e:setup": "pnpm --filter @purechess/web e2e:setup",
-    "smoke": "bash scripts/smoke.sh"
+    "smoke": "bash scripts/smoke.sh",
+    "engine:shadow": "tsx --tsconfig tsconfig.scripts.json scripts/shadow-runner.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
     "prettier": "^3.3.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.4.0",
     "typescript-eslint": "^7.0.0"
   },

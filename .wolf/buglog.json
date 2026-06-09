@@ -911,6 +911,38 @@
       "related_bugs": [],
       "occurrences": 3,
       "last_seen": "2026-06-09T01:53:52.505Z"
+    },
+    {
+      "id": "bug-056",
+      "timestamp": "2026-06-09T02:31:37.108Z",
+      "error_message": "Missing import: ../apps/api/src/chess/engine/__fixtures__/game-traces.json",
+      "file": "scripts/shadow-runner.ts",
+      "root_cause": "Module(s) not imported: ../apps/api/src/chess/engine/__fixtures__/game-traces.json",
+      "fix": "Added import(s) for ../apps/api/src/chess/engine/__fixtures__/game-traces.json",
+      "tags": [
+        "auto-detected",
+        "missing-import",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-09T02:31:37.108Z"
+    },
+    {
+      "id": "bug-057",
+      "timestamp": "2026-06-09T02:36:35.925Z",
+      "error_message": "Wrong return value",
+      "file": "apps/api/test/engine/parity.spec.ts",
+      "root_cause": "Was returning: { ...real, name: () => 'ts' as const, ...overrides",
+      "fix": "Now returns: {",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-09T02:36:35.925Z"
     }
   ]
 }

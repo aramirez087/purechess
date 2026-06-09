@@ -75,6 +75,15 @@
 - **musl cross-compilation from `rust:1-bookworm`**: install `musl-tools` via apt, then `rustup target add x86_64-unknown-linux-musl`. The resulting `.node` runs on Alpine. No separate cross-compilation container needed.
 - **napi build output file name**: `purechess-engine.linux-x64-musl.node` for the musl target. The prefix comes from the `"name": "purechess-engine"` field in the crate's `package.json`.
 
+## Key Learnings (added 2026-06-09 session WP5 — shadow mode)
+
+- **`EnPassantMode::Legal` in Rust pos_to_fen matches chess.js 1.x.** shakmaty's `EnPassantMode::Always` emits an EP square even when no enemy pawn can capture (phantom EP). chess.js 1.x omits it. Changing to `EnPassantMode::Legal` aligns FEN output; verified all existing Rust tests still pass. Any Rust FEN comparison against TS must use `EnPassantMode::Legal`.
+- **Class instance spread loses prototype methods.** Spreading a class instance (`{ ...obj, override }`) only copies own enumerable properties — prototype methods are NOT copied. To create a partial mock that delegates to a real instance, build a new object literal with explicit method delegation (`name: () => real.name()`, etc.), then spread overrides on top.
+- **tsx ESM + JSON imports: use `createRequire`.** Under `"type": "module"` in root `package.json`, tsx scripts run ESM. Bare `require()` throws `ReferenceError: require is not defined`. `import * as X from 'file.json'` wraps JSON in `{ default: [...] }`, making the object non-iterable as an array. Fix: `import { createRequire } from 'module'; const _require = createRequire(import.meta.url); const data = _require('./file.json')`.
+- **`Sentry.metrics` not available in `@sentry/node ^10.56.0`.** The `metrics.increment()` API either doesn't exist or types don't match at this version. Use `Sentry.captureEvent(...)` for divergence tracking instead. Wrap in `try/catch` since Sentry may be uninitialized in test/script contexts.
+- **`DivergenceContext as Record<string, unknown>` requires double cast.** TypeScript won't cast non-overlapping types directly. Use `value as unknown as Record<string, unknown>`.
+- **Coverage gate needs divergence-path tests.** Shadow adapter tests that only use ts-vs-ts (always agree) leave the divergence push branches (lines 71, 92, 110, 129 in shadow-runner.ts) uncovered. Must add tests with a `badAdapter` that returns wrong results to hit those branches and pass the 85% branch gate.
+
 ## Key Learnings (added 2026-06-09 session WP4)
 
 - **chess.js 1.x omits en passant from FEN when no adjacent enemy pawn can capture it.** After `e2e4` with no black pawn on d4/f4, `chess.fen()` returns `-` for the en passant field, not `e3`. Tests that assert the en passant FEN field must use an explicit hand-crafted FEN string (e.g. `'...b KQkq e3 0 1'`), not a FEN derived from chess.js moves.
