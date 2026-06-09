@@ -139,6 +139,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -146,6 +148,10 @@ jobs:
 
       - name: Cargo test (parity + perft)
         run: cargo test --features impl
+        working-directory: crates/purechess-engine
+
+      - name: Cargo clippy (deny warnings)
+        run: cargo clippy --all-targets --features impl -- -D warnings
         working-directory: crates/purechess-engine
 
   smoke:
