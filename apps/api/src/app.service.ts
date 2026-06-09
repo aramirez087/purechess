@@ -9,6 +9,8 @@ export interface HealthStatus {
   uptime: number;
 }
 
+const HEALTH_CHECK_TIMEOUT_MS = 1500;
+
 @Injectable()
 export class AppService {
   constructor(
@@ -22,7 +24,8 @@ export class AppService {
       this.checkRedis(),
     ]);
 
-    const status = dbStatus === 'ok' && redisStatus === 'ok' ? 'ok' : 'error';
+    const status: HealthStatus['status'] =
+      dbStatus === 'ok' && redisStatus === 'ok' ? 'ok' : 'error';
 
     return {
       status,
@@ -33,20 +36,34 @@ export class AppService {
   }
 
   private async checkDb(): Promise<'ok' | 'error'> {
-    try {
-      await this.prisma.$queryRaw`SELECT 1`;
-      return 'ok';
-    } catch {
-      return 'error';
-    }
+    return this.withTimeout(this.prisma.$queryRaw`SELECT 1`.then(() => 'ok' as const));
   }
 
   private async checkRedis(): Promise<'ok' | 'error'> {
+    return this.withTimeout(
+      this.redis
+        .ping()
+        .then((pong) => (pong === 'PONG' ? ('ok' as const) : ('error' as const))),
+    );
+  }
+
+  private async withTimeout(
+    check: Promise<'ok' | 'error'>,
+  ): Promise<'ok' | 'error'> {
+    let timer: NodeJS.Timeout | undefined;
     try {
-      const pong = await this.redis.ping();
-      return pong === 'PONG' ? 'ok' : 'error';
+      return await Promise.race([
+        check,
+        new Promise<'error'>((resolve) => {
+          timer = setTimeout(() => {
+            resolve('error');
+          }, HEALTH_CHECK_TIMEOUT_MS);
+        }),
+      ]);
     } catch {
       return 'error';
+    } finally {
+      if (timer) clearTimeout(timer);
     }
   }
 }

@@ -142,4 +142,17 @@ describe('AppService.getHealth', () => {
     expect(result.db).toBe('ok');
     expect(result.redis).toBe('error');
   });
+
+  it('returns db error when prisma hangs past the health timeout', async () => {
+    mockPrisma.$queryRaw.mockImplementation(
+      () => new Promise(() => {}) as Promise<unknown>,
+    );
+    mockRedis.ping.mockResolvedValue('PONG');
+
+    const result = await service.getHealth();
+
+    expect(result.status).toBe('error');
+    expect(result.db).toBe('error');
+    expect(result.redis).toBe('ok');
+  });
 });
