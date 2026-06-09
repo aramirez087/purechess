@@ -208,6 +208,9 @@ jobs:
       - name: Build shared
         run: pnpm --filter @purechess/shared build
 
+      - name: Generate Prisma client
+        run: pnpm --filter @purechess/api exec prisma generate
+
       - name: Run migrations
         run: pnpm --filter @purechess/api exec prisma migrate deploy
 
