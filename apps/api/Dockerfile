@@ -84,9 +84,27 @@ RUN pnpm --filter @purechess/api build
 FROM node:20.15.1-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/api/package.json ./package.json
+# Preserve the apps/api/* path: Node's module resolution walks up from
+# apps/api/dist/main.js → apps/api/node_modules (where pnpm hoisted the api's
+# deps with node-linker=hoisted) → /app/node_modules/.pnpm. Collapsing dist to
+# /app/dist would break that resolution chain.
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+# Workspace package sources (built dist + package.json). The symlinks under
+# apps/api/node_modules/@purechess/* resolve into these directories.
+COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
+COPY --from=builder /app/packages/engine-native/dist ./packages/engine-native/dist
+COPY --from=builder /app/packages/engine-native/package.json ./packages/engine-native/package.json
+# pnpm virtual store and per-package node_modules. The .pnpm/ store must live
+# at /app/node_modules/.pnpm/ — the symlinks under apps/api/node_modules resolve
+# relative to that path. Per-package node_modules carry workspace-package deps
+# (@nestjs/*, @prisma/*, @sentry/*, etc.) which aren't at the root.
+COPY --from=builder /app/node_modules/.pnpm ./node_modules/.pnpm
+COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /app/packages/shared/node_modules ./packages/shared/node_modules
+COPY --from=builder /app/packages/engine-native/node_modules ./packages/engine-native/node_modules
+COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
+WORKDIR /app/apps/api
 EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
   CMD wget -qO- http://localhost:4000/api/health || exit 1
