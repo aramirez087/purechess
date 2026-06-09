@@ -19,6 +19,7 @@
     "engine:shadow": "jest --testPathPattern='test/engine/parity\\.spec\\.ts' --testTimeout=120000"
   },
   "prisma": {
+    "schema": "prisma/schema.prisma",
     "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts"
   },
   "dependencies": {
