@@ -35,18 +35,32 @@ The interface uses a near-black stage, mineral green board tones, ivory pieces, 
 - Border: `#2b332c`
 - Text: `#f1eee6`
 - Muted text: `#9da79c`
-- Board light: `hsl(44 26% 78%)`
-- Board dark: `hsl(142 16% 34%)`
+- Board light (bone): `hsl(46 30% 81%)`
+- Board dark (mineral): `hsl(138 14% 36%)`
 - Accent brass: `#d6b563`
 - Danger: `#ef4444`
 
+Board highlights are brass-family washes layered OVER the square colour
+(never replacing it): last move `hsl(41 78% 55% / 0.4)`, selected
+`hsl(41 85% 56% / 0.5)`, check is a red radial glow, legal moves are small
+dark dots / a dark ring on captures.
+
 ## Typography
 
-Use the existing Geist Sans and Geist Mono stack. The product should be typographically restrained:
+Three voices, each with one job:
 
-- Player names and status: medium weight, compact tracking.
-- Notation: mono or tabular numerals for scan speed.
-- Buttons: small, direct labels with icons where available.
+- **Display: Fraunces** (`--font-display`, variable, opsz + italic). Used
+  only for page-level headlines and brand moments — the home hero, the
+  play-mode prompt, result states. Italic Fraunces is the signature flourish
+  ("the product."). Never used inside the game chrome.
+- **Body: Geist Sans.** Everything functional. Player names and status:
+  medium weight, compact tracking.
+- **Notation: Geist Mono.** Move lists, clocks, coordinates, numerals —
+  always tabular.
+
+The game screens stay typographically silent (sans + mono only); the serif
+voice exists so the marketing/landing surfaces feel like a private club
+invitation rather than a SaaS template.
 
 ## Layout
 
@@ -65,10 +79,27 @@ Mobile:
 
 ## Component Rules
 
-- Board frame: thin border, 6px radius, subtle shadow, no ornate container.
+- Board frame: dark gradient frame, 14px outer radius, inner playing surface
+  clipped at 7px with a hairline; deep shadow plus a faint brass halo.
+- Coordinates: in-square corner labels (ranks top-right of the last file,
+  files bottom-left of the last rank), tinted with the opposite square
+  colour. No gutters around the board.
+- Pieces: vendored cburnett SVGs at ~92% of the square (4% padding), soft
+  2px drop shadow. Pieces must never touch square edges.
 - Player strips: compact rows above and below the board with color, side, and status.
 - Thinking state: centered translucent overlay with a spinner, never a full-page interruption.
-- Result state: compact banner in the board column, not a modal.
+- Result state: the one theatrical moment in the product. A board overlay with
+  the verdict as a large italic Fraunces word — "Checkmate." / "Stalemate." /
+  "Victory." / "Defeat." / "Draw." — over a small-caps outcome line and a
+  brass hairline; the mechanical reason ("by resignation") stays small. The
+  rail banner echoes it in smaller italic serif.
+- Move list: a printed score sheet — ruled hairlines, right-aligned move
+  numbers with periods, tabular mono SAN, and a 2px brass left bar marking
+  the current ply. Empty state is italic serif.
+- Home hero art: a static rendering of the Immortal Game's final position
+  (Anderssen–Kieseritzky 1851, 23.Be7#) in the real board palette with the
+  mating squares highlighted — the literal product as the hero image, with a
+  small-caps mono caption.
 - Move list: tabular rows with number, white move, black move. The latest row may be slightly stronger.
 - Resign: icon plus label, quiet outline by default, clear red hover/focus state.
 

@@ -119,8 +119,14 @@ function StatusHero({
         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9da79c]">
           Game over
         </p>
-        <p className="mt-1.5 text-2xl font-semibold tracking-tight text-[#f8f1de]">{resultLabel}</p>
-        {reasonLabel && <p className="mt-0.5 text-sm text-[#b9b19d]">{reasonLabel}</p>}
+        <p className="font-display mt-1.5 text-[26px] italic leading-tight text-[#f8f1de]">
+          {resultLabel}
+        </p>
+        {reasonLabel && (
+          <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-[#b9b19d]">
+            by {reasonLabel}
+          </p>
+        )}
       </div>
     );
   }
@@ -150,6 +156,19 @@ function StatusHero({
   );
 }
 
+/**
+ * The big serif word for the result moment. Checkmate keeps its iconic name
+ * for both sides; everything else resolves to a verdict word, with the
+ * mechanical reason relegated to the small line underneath.
+ */
+function getTheaterWord(tone: ResultTone, reasonLabel: string | null): string {
+  if (reasonLabel === 'Checkmate') return 'Checkmate.';
+  if (reasonLabel === 'Stalemate') return 'Stalemate.';
+  if (tone === 'win') return 'Victory.';
+  if (tone === 'loss') return 'Defeat.';
+  return 'Draw.';
+}
+
 function ResultOverlay({
   tone,
   resultLabel,
@@ -162,25 +181,51 @@ function ResultOverlay({
   onDismiss: () => void;
 }) {
   const toneRing: Record<ResultTone, string> = {
-    win: 'border-[#d6b563]/45 shadow-[0_28px_80px_-22px_rgba(214,181,99,0.55)]',
-    draw: 'border-[#586059]/55 shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
-    loss: 'border-destructive/40 shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
+    win: 'shadow-[0_28px_90px_-20px_rgba(214,181,99,0.5)]',
+    draw: 'shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
+    loss: 'shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
+  };
+  const toneWord: Record<ResultTone, string> = {
+    win: 'text-[#f3e7c4]',
+    draw: 'text-[#e8e4d8]',
+    loss: 'text-[#e8e4d8]',
+  };
+  const toneRule: Record<ResultTone, string> = {
+    win: 'via-[#d6b563]/80',
+    draw: 'via-[#9da79c]/60',
+    loss: 'via-destructive/60',
   };
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[10px] bg-[#0b0d0b]/55 p-4 backdrop-blur-[3px]">
+    <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[10px] bg-[#0b0d0b]/70 p-4 backdrop-blur-[4px]">
       <div
         className={cn(
-          'animate-rise w-full max-w-[290px] rounded-[16px] border bg-gradient-to-b from-[#1a1e15] to-[#0e110c] px-6 py-6 text-center',
+          'animate-rise w-full max-w-[340px] rounded-[18px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-7 pb-7 pt-8 text-center',
           toneRing[tone],
         )}
       >
-        <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[#9da79c]">
-          Game over
-        </p>
-        <p className="mt-2 text-[26px] font-semibold leading-none tracking-tight text-[#f8f1de]">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#9da79c]">
           {resultLabel}
         </p>
-        {reasonLabel && <p className="mt-2 text-sm text-[#b9b19d]">by {reasonLabel}</p>}
+        <p
+          className={cn(
+            'font-display mt-3 text-[clamp(2.5rem,6vw,3.25rem)] italic leading-none tracking-[-0.01em]',
+            toneWord[tone],
+          )}
+        >
+          {getTheaterWord(tone, reasonLabel)}
+        </p>
+        <div
+          aria-hidden
+          className={cn(
+            'mx-auto mt-4 h-px w-2/3 bg-gradient-to-r from-transparent to-transparent',
+            toneRule[tone],
+          )}
+        />
+        {reasonLabel && (
+          <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[#b9b19d]">
+            by {reasonLabel}
+          </p>
+        )}
         <div className="mt-5 flex items-center justify-center gap-2">
           <button
             type="button"

@@ -582,3 +582,45 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 19:28 | designqc: captured 6 screenshots (185KB, ~15000 tok) | /, /play | ready for eval | ~0 |
+| 19:32 | Edited apps/web/src/app/layout.tsx | expanded (+9 lines) | ~82 |
+| 19:32 | Edited apps/web/src/app/layout.tsx | "${GeistSans.variable} ${G" → "${GeistSans.variable} ${G" | ~24 |
+| 19:32 | Edited apps/web/tailwind.config.ts | 2→3 lines | ~53 |
+| 19:32 | Edited apps/web/src/app/globals.css | modified media() | ~170 |
+| 19:32 | Edited apps/web/src/app/globals.css | CSS: opacity, opacity | ~27 |
+| 19:32 | Edited apps/web/src/lib/board/themes.ts | 5→5 lines | ~26 |
+| 19:33 | Edited apps/web/src/components/board/square.tsx | CSS: background, inset, border | ~675 |
+| 19:33 | Edited apps/web/src/components/board/piece.tsx | 0_4px_4px_rgba() → 0_2px_2px_rgba() | ~38 |
+| 19:33 | Edited apps/web/src/components/board/chessboard.tsx | 0_4px_4px_rgba() → 0_3px_4px_rgba() | ~46 |
+| 19:33 | Created apps/web/src/components/board/coordinates.tsx | — | ~643 |
+| 19:34 | Edited apps/web/src/components/game/board-column.tsx | 4→6 lines | ~139 |
+| 19:34 | Edited apps/web/src/components/home/hero.tsx | 14→14 lines | ~166 |
+| 19:34 | Edited apps/web/src/components/home/hero.tsx | CSS: group-hover | ~264 |
+| 19:34 | Edited apps/web/src/components/home/hero.tsx | 20→17 lines | ~117 |
+| 19:34 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 3→3 lines | ~41 |
+| 19:36 | Edited apps/web/src/app/globals.css | CSS: font-family | ~33 |
+| 19:37 | Edited apps/web/src/components/home/hero.tsx | "pl-[2.05rem] text-sm text" → "pl-[1.7rem] text-sm text-" | ~28 |
+| 19:38 | Edited design.md | modified light() | ~291 |
+| 19:38 | Edited design.md | expanded (+6 lines) | ~129 |
+| 19:45 | Design level-up: Fraunces display font (layout.tsx, tailwind, globals.css utility), bespoke bone/mineral board palette + brass overlay highlights (globals.css, square.tsx), in-square coordinates (coordinates.tsx), softer piece shadows + 4% padding (piece.tsx, chessboard.tsx drag), board frame inner clip (board-column.tsx), editorial hero rows + serif headlines (hero.tsx, play-page-client.tsx), themes.ts swatches, design.md updated | apps/web/* design.md | 190 vitest pass, typecheck clean, verified live | ~60k |
+| 19:39 | Session end: 19 writes across 12 files (layout.tsx, tailwind.config.ts, globals.css, themes.ts, square.tsx) | 18 reads | ~8017 tok |
+| 19:45 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: toneWord, toneRule | ~667 |
+| 19:45 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+6 lines) | ~159 |
+| 19:45 | Edited apps/web/src/components/game/move-panel.tsx | 12→14 lines | ~190 |
+| 19:46 | Edited apps/web/src/components/game/move-panel.tsx | modified if() | ~322 |
+| 19:46 | Created apps/web/src/components/home/hero-board.tsx | — | ~1007 |
+| 19:46 | Edited apps/web/src/components/home/hero-board.tsx | inline fix | ~12 |
+| 19:46 | Edited apps/web/src/components/home/hero.tsx | CSS: sm | ~71 |
+| 19:46 | Edited apps/web/src/components/home/hero.tsx | added 1 import(s) | ~36 |
+| 19:48 | Edited design.md | expanded (+11 lines) | ~240 |
+| 19:50 | Round 2: result theater (ResultOverlay giant italic Fraunces verdict word via getTheaterWord, StatusHero serif), move list score-sheet restyle (brass left-bar active marker, numbered "1.", italic serif empty state), HeroBoard server component (Immortal Game final FEN, board palette, Be7#/f6 highlights, mono caption) wired into hero.tsx, design.md component rules updated | computer-game-client.tsx move-panel.tsx hero-board.tsx hero.tsx design.md | 190 tests pass, typecheck clean, resign flow verified live | ~25k |
+| 19:48 | Session end: 28 writes across 15 files (layout.tsx, tailwind.config.ts, globals.css, themes.ts, square.tsx) | 21 reads | ~16793 tok |
+| 19:55 | Edited apps/web/src/components/game/captured-material.tsx | added 1 condition(s) | ~317 |
+| 19:56 | Created apps/web/test/board/captured-material.test.tsx | — | ~613 |
+| 19:59 | Captured-material: group consecutive same-type glyphs, overlap within group (-ml-[11px]), gap-1 between groups; added captured-material.test.tsx (4 tests) | captured-material.tsx test/board/captured-material.test.tsx | 194 tests pass, verified live (2-pawn stack + advantage chip) | ~12k |
+| 19:59 | Session end: 30 writes across 17 files (layout.tsx, tailwind.config.ts, globals.css, themes.ts, square.tsx) | 22 reads | ~18144 tok |
+
+## Session: 2026-06-10 19:59
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|

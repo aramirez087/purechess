@@ -1,20 +1,18 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { ArrowRight, Cpu, Users, Swords } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { CtaButton } from './cta-button';
+import { HeroBoard } from './hero-board';
 
 const FEATURES = [
   {
-    icon: Swords,
     title: 'Rated matches',
     body: 'Glicko-2 ratings across bullet, blitz, and rapid.',
   },
   {
-    icon: Cpu,
     title: 'Practice offline',
     body: 'Play against eight levels of computer, untimed.',
   },
   {
-    icon: Users,
     title: 'Invite a friend',
     body: 'Send a link. Pick a time control. Start a game.',
   },
@@ -36,11 +34,11 @@ export function Hero() {
 
         <h1
           id="hero-wordmark"
-          className="animate-rise-2 mt-6 font-sans text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.04em]"
+          className="animate-rise-2 mt-6 font-display text-[clamp(3rem,7.5vw,6rem)] font-medium leading-[1.04] tracking-[-0.015em]"
         >
           The board is
           <br className="hidden sm:block" />
-          <span className="relative inline-block">
+          <span className="relative inline-block italic">
             the product.
             <span
               aria-hidden
@@ -80,21 +78,29 @@ export function Hero() {
         <p className="mt-6 text-xs text-muted-foreground/80">
           Free to start. No ads. No tracking beyond product analytics.
         </p>
+
+        <div className="mt-16 w-full sm:mt-20">
+          <HeroBoard />
+        </div>
       </div>
 
-      <div className="relative mx-auto grid max-w-6xl gap-3 px-6 pb-24 sm:grid-cols-3">
-        {FEATURES.map(({ icon: Icon, title, body }, i) => (
+      <div className="relative mx-auto grid max-w-6xl gap-x-10 gap-y-8 px-6 pb-24 sm:grid-cols-3">
+        {FEATURES.map(({ title, body }, i) => (
           <article
             key={title}
-            className={`group relative flex flex-col gap-3 rounded-lg border border-border/70 bg-surface/60 p-5 shadow-elevated backdrop-blur-sm transition-colors hover:border-brass/40 animate-rise-${i + 2}`}
+            className={`group relative flex flex-col gap-2.5 border-t border-border/70 pt-5 animate-rise-${i + 2}`}
           >
-            <div className="flex items-center gap-2.5">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-brass">
-                <Icon className="h-4 w-4" />
+            <span
+              aria-hidden
+              className="absolute -top-px left-0 h-px w-10 bg-brass/80 transition-all duration-300 group-hover:w-20"
+            />
+            <div className="flex items-baseline gap-3">
+              <span className="font-mono text-[11px] tracking-[0.18em] text-brass">
+                0{i + 1}
               </span>
               <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{body}</p>
+            <p className="pl-[1.7rem] text-sm text-muted-foreground leading-relaxed">{body}</p>
           </article>
         ))}
       </div>

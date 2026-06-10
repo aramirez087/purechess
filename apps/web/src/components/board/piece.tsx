@@ -19,8 +19,8 @@ export const Piece = memo(function Piece({ type, color, ghost, className }: Piec
       className={cn(
         'block h-full w-full select-none pointer-events-none',
         color === 'b'
-          ? 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.52)]'
-          : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.28)]',
+          ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.38)]'
+          : 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.25)]',
         ghost && 'opacity-40',
         className,
       )}

@@ -6,7 +6,7 @@
       "timestamp": "2026-06-07T16:43:01.015Z",
       "error_message": "Missing error handling in unknown",
       "file": "apps/api/src/computer-games/computer-games.service.ts",
-      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
       "fix": "Added try/catch block",
       "tags": [
         "auto-detected",
@@ -111,7 +111,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/components/board/chessboard.tsx",
       "root_cause": "6 lines replaced/restructured",
-      "fix": "Rewrote 11\u21926 lines (6 removed)",
+      "fix": "Rewrote 11→6 lines (6 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -126,8 +126,8 @@
       "timestamp": "2026-06-07T18:08:32.598Z",
       "error_message": "CSS fix: --board-sq-light, --board-sq-dark",
       "file": "apps/web/src/app/globals.css",
-      "root_cause": "--board-sq-light: 44 26% 78% \u2192 66 36% 86%; --board-sq-dark: 142 16% 34% \u2192 92 28% 44%",
-      "fix": "Changed --board-sq-light: 44 26% 78% \u2192 66 36% 86%; --board-sq-dark: 142 16% 34% \u2192 92 28% 44%",
+      "root_cause": "--board-sq-light: 44 26% 78% → 66 36% 86%; --board-sq-dark: 142 16% 34% → 92 28% 44%",
+      "fix": "Changed --board-sq-light: 44 26% 78% → 66 36% 86%; --board-sq-dark: 142 16% 34% → 92 28% 44%",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -190,8 +190,8 @@
       "timestamp": "2026-06-07T18:22:49.930Z",
       "error_message": "CSS fix: lg, sm",
       "file": "apps/web/src/components/game/board-column.tsx",
-      "root_cause": "lg: min-h-0 lg:flex-1\"> \u2192 h-full lg:min-h-0 lg:justify-center',; sm: p-3 lg:h-full lg:w-auto lg:max-h-full\"> \u2192 p-3\">",
-      "fix": "Changed lg: min-h-0 lg:flex-1\"> \u2192 h-full lg:min-h-0 lg:justify-center',; sm: p-3 lg:h-full lg:w-auto lg:max-h-full\"> \u2192 p-3\">",
+      "root_cause": "lg: min-h-0 lg:flex-1\"> → h-full lg:min-h-0 lg:justify-center',; sm: p-3 lg:h-full lg:w-auto lg:max-h-full\"> → p-3\">",
+      "fix": "Changed lg: min-h-0 lg:flex-1\"> → h-full lg:min-h-0 lg:justify-center',; sm: p-3 lg:h-full lg:w-auto lg:max-h-full\"> → p-3\">",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -207,7 +207,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/components/game/game-shell.tsx",
       "root_cause": "4 lines replaced/restructured",
-      "fix": "Rewrote 10\u21926 lines (4 removed)",
+      "fix": "Rewrote 10→6 lines (4 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -280,7 +280,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
       "root_cause": "12 lines replaced/restructured",
-      "fix": "Rewrote 17\u21924 lines (12 removed)",
+      "fix": "Rewrote 17→4 lines (12 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -296,7 +296,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/components/play/computer-game-setup.tsx",
       "root_cause": "5 lines replaced/restructured",
-      "fix": "Rewrote 7\u21927 lines (5 removed)",
+      "fix": "Rewrote 7→7 lines (5 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -311,8 +311,8 @@
       "timestamp": "2026-06-07T23:46:22.224Z",
       "error_message": "CSS fix: timeControlSeconds, incrementSeconds",
       "file": "apps/web/src/components/play/computer-game-setup.tsx",
-      "root_cause": "timeControlSeconds: tc.seconds, \u2192 UNTIMED_SECONDS,; incrementSeconds: tc.increment, \u2192 UNTIMED_INCREMENT,",
-      "fix": "Changed timeControlSeconds: tc.seconds, \u2192 UNTIMED_SECONDS,; incrementSeconds: tc.increment, \u2192 UNTIMED_INCREMENT,",
+      "root_cause": "timeControlSeconds: tc.seconds, → UNTIMED_SECONDS,; incrementSeconds: tc.increment, → UNTIMED_INCREMENT,",
+      "fix": "Changed timeControlSeconds: tc.seconds, → UNTIMED_SECONDS,; incrementSeconds: tc.increment, → UNTIMED_INCREMENT,",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -344,7 +344,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
       "root_cause": "22 lines replaced/restructured",
-      "fix": "Rewrote 26\u21924 lines (22 removed)",
+      "fix": "Rewrote 26→4 lines (22 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -360,7 +360,7 @@
       "error_message": "Wrong operator: ?? should be ===",
       "file": "apps/web/src/components/game/game-shell.tsx",
       "root_cause": "Used \"??\" instead of \"===\"",
-      "fix": "Changed operator ?? \u2192 ===",
+      "fix": "Changed operator ?? → ===",
       "tags": [
         "auto-detected",
         "operator-fix",
@@ -376,7 +376,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/components/game/board-column.tsx",
       "root_cause": "2 lines replaced/restructured",
-      "fix": "Rewrote 4\u21924 lines (2 removed)",
+      "fix": "Rewrote 4→4 lines (2 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -392,7 +392,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/components/game/player-strip.tsx",
       "root_cause": "6 lines replaced/restructured",
-      "fix": "Rewrote 65\u219286 lines (6 removed)",
+      "fix": "Rewrote 65→86 lines (6 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -408,7 +408,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
       "root_cause": "6 lines replaced/restructured",
-      "fix": "Rewrote 39\u219263 lines (6 removed)",
+      "fix": "Rewrote 39→63 lines (6 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -440,7 +440,7 @@
       "error_message": "Wrong reference: chooseMove should be getHumanMove",
       "file": "apps/web/src/lib/engine/stockfish-client.ts",
       "root_cause": "Used \"chooseMove\" instead of \"getHumanMove\"",
-      "fix": "Changed chooseMove \u2192 getHumanMove",
+      "fix": "Changed chooseMove → getHumanMove",
       "tags": [
         "auto-detected",
         "wrong-reference",
@@ -456,7 +456,7 @@
       "error_message": "Wrong reference: string should be ReactNode",
       "file": "apps/web/src/components/admin/admin-page-header.tsx",
       "root_cause": "Used \"string\" instead of \"ReactNode\"",
-      "fix": "Changed string \u2192 ReactNode",
+      "fix": "Changed string → ReactNode",
       "tags": [
         "auto-detected",
         "wrong-reference",
@@ -488,7 +488,7 @@
       "error_message": "Wrong reference: Github should be GithubIcon",
       "file": "apps/web/src/components/home/footer.tsx",
       "root_cause": "Used \"Github\" instead of \"GithubIcon\"",
-      "fix": "Changed Github \u2192 GithubIcon",
+      "fix": "Changed Github → GithubIcon",
       "tags": [
         "auto-detected",
         "wrong-reference",
@@ -504,7 +504,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/api/test/auth/auth.controller.spec.ts",
       "root_cause": "3 lines replaced/restructured",
-      "fix": "Rewrote 5\u21926 lines (3 removed)",
+      "fix": "Rewrote 5→6 lines (3 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -519,8 +519,8 @@
       "timestamp": "2026-06-08T02:09:59.036Z",
       "error_message": "CSS fix: level",
       "file": "apps/web/test/home/homepage.test.tsx",
-      "root_cause": "level: 1, name: /purechess/i \u2192 1, name: /the board is/i",
-      "fix": "Changed level: 1, name: /purechess/i \u2192 1, name: /the board is/i",
+      "root_cause": "level: 1, name: /purechess/i → 1, name: /the board is/i",
+      "fix": "Changed level: 1, name: /purechess/i → 1, name: /the board is/i",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -536,7 +536,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/test/profile/profile-page.test.tsx",
       "root_cause": "2 lines replaced/restructured",
-      "fix": "Rewrote 5\u21926 lines (2 removed)",
+      "fix": "Rewrote 5→6 lines (2 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -552,7 +552,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/components/review/pgn-actions.tsx",
       "root_cause": "2 lines replaced/restructured",
-      "fix": "Rewrote 40\u219254 lines (2 removed)",
+      "fix": "Rewrote 40→54 lines (2 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -567,8 +567,8 @@
       "timestamp": "2026-06-08T02:24:02.267Z",
       "error_message": "CSS fix: undefined",
       "file": "apps/web/src/components/games/game-history-filters.tsx",
-      "root_cause": "undefined: val) \u2192 true)",
-      "fix": "Changed undefined: val) \u2192 true)",
+      "root_cause": "undefined: val) → true)",
+      "fix": "Changed undefined: val) → true)",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -583,8 +583,8 @@
       "timestamp": "2026-06-08T02:24:25.553Z",
       "error_message": "CSS fix: true",
       "file": "apps/web/src/app/games/games-client.tsx",
-      "root_cause": "true: isRatedParam === 'false' ? false : initialIsRated \u2192 vsComputerParam === 'false' ? false : initialIsVsComputer",
-      "fix": "Changed true: isRatedParam === 'false' ? false : initialIsRated \u2192 vsComputerParam === 'false' ? false : initialIsVsComputer",
+      "root_cause": "true: isRatedParam === 'false' ? false : initialIsRated → vsComputerParam === 'false' ? false : initialIsVsComputer",
+      "fix": "Changed true: isRatedParam === 'false' ? false : initialIsRated → vsComputerParam === 'false' ? false : initialIsVsComputer",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -599,8 +599,8 @@
       "timestamp": "2026-06-08T02:24:39.226Z",
       "error_message": "CSS fix: true",
       "file": "apps/web/src/app/games/page.tsx",
-      "root_cause": "true: sp.isRated === 'false' ? false : undefined \u2192 sp.vsComputer === 'false' ? false : undefined",
-      "fix": "Changed true: sp.isRated === 'false' ? false : undefined \u2192 sp.vsComputer === 'false' ? false : undefined",
+      "root_cause": "true: sp.isRated === 'false' ? false : undefined → sp.vsComputer === 'false' ? false : undefined",
+      "fix": "Changed true: sp.isRated === 'false' ? false : undefined → sp.vsComputer === 'false' ? false : undefined",
       "tags": [
         "auto-detected",
         "style-fix",
@@ -679,7 +679,7 @@
       "timestamp": "2026-06-07T00:00:00.000Z",
       "error_message": "Playing vs Stockfish, idle a few mins, return shows game already lost but no checkmate",
       "file": "apps/api/src/computer-games/computer-games.service.ts, apps/web/src/components/play/computer-game-setup.tsx",
-      "root_cause": "Computer games were created with a finite server clock (timeControlSeconds from the setup time-control picker). Engine applyMove -> isTimeout flags on real wall-clock elapsed since last move (nowMs - lastTickAt), so idling between moves drained the human clock and the next submit returned status=completed reason=timeout. But the in-game UI hardcodes clock \"\u221e\" / Time \"Unlimited\" and shows no countdown, so the timeout loss was an unexplained surprise (no checkmate).",
+      "root_cause": "Computer games were created with a finite server clock (timeControlSeconds from the setup time-control picker). Engine applyMove -> isTimeout flags on real wall-clock elapsed since last move (nowMs - lastTickAt), so idling between moves drained the human clock and the next submit returned status=completed reason=timeout. But the in-game UI hardcodes clock \"∞\" / Time \"Unlimited\" and shows no countdown, so the timeout loss was an unexplained surprise (no checkmate).",
       "fix": "Made vs-computer games untimed to match the UI. submitMove now resets engineState.clock.lastTickAt = nowMs before applyMove, so isTimeout sees ~0 elapsed and never fires regardless of idle time. Removed the time-control picker from computer-game-setup.tsx; it now sends fixed UNTIMED_SECONDS=600/inc=0 only to satisfy the DTO/category column. Kept the existing flag-fall guard as a defensive dead path (bug-005 mock test still passes). typecheck clean (api+web), 16/16 service spec green.",
       "tags": [
         "computer-games",
@@ -701,7 +701,7 @@
       "timestamp": "2026-06-07T00:00:00.000Z",
       "error_message": "Playing vs Stockfish, idle a few mins, return shows game already lost but no checkmate",
       "file": "apps/api/src/computer-games/computer-games.service.ts, apps/web/src/components/play/computer-game-setup.tsx",
-      "root_cause": "Computer games were created with a finite server clock (timeControlSeconds from the setup time-control picker). Engine applyMove -> isTimeout flags on real wall-clock elapsed since last move (nowMs - lastTickAt), so idling between moves drained the human clock and the next submit returned status=completed reason=timeout. But the in-game UI hardcodes clock \"\u221e\" / Time \"Unlimited\" and shows no countdown, so the timeout loss was an unexplained surprise (no checkmate).",
+      "root_cause": "Computer games were created with a finite server clock (timeControlSeconds from the setup time-control picker). Engine applyMove -> isTimeout flags on real wall-clock elapsed since last move (nowMs - lastTickAt), so idling between moves drained the human clock and the next submit returned status=completed reason=timeout. But the in-game UI hardcodes clock \"∞\" / Time \"Unlimited\" and shows no countdown, so the timeout loss was an unexplained surprise (no checkmate).",
       "fix": "Made vs-computer games untimed to match the UI. submitMove now resets engineState.clock.lastTickAt = nowMs before applyMove, so isTimeout sees ~0 elapsed and never fires regardless of idle time. Removed the time-control picker from computer-game-setup.tsx; it now sends fixed UNTIMED_SECONDS=600/inc=0 only to satisfy the DTO/category column. Kept the existing flag-fall guard as a defensive dead path (bug-005 mock test still passes). typecheck clean (api+web), 16/16 service spec green.",
       "tags": [
         "computer-games",
@@ -724,7 +724,7 @@
       "error_message": "Significant refactor of ",
       "file": "apps/web/src/app/(play)/play/play-page-client.tsx",
       "root_cause": "2 lines replaced/restructured",
-      "fix": "Rewrote 7\u219218 lines (2 removed)",
+      "fix": "Rewrote 7→18 lines (2 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -806,7 +806,7 @@
       "error_message": "Significant refactor of ",
       "file": "crates/purechess-engine/tests/result_detection.rs",
       "root_cause": "6 lines replaced/restructured",
-      "fix": "Rewrote 11\u21928 lines (6 removed)",
+      "fix": "Rewrote 11→8 lines (6 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -822,7 +822,7 @@
       "error_message": "Wrong reference: Position should be Role",
       "file": "crates/purechess-engine/src/board.rs",
       "root_cause": "Used \"Position\" instead of \"Role\"",
-      "fix": "Changed Position \u2192 Role",
+      "fix": "Changed Position → Role",
       "tags": [
         "auto-detected",
         "wrong-reference",
@@ -838,7 +838,7 @@
       "error_message": "Significant refactor of ",
       "file": "crates/purechess-engine/Cargo.toml",
       "root_cause": "2 lines replaced/restructured",
-      "fix": "Rewrote 19\u219224 lines (2 removed)",
+      "fix": "Rewrote 19→24 lines (2 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -869,7 +869,7 @@
       "timestamp": "2026-06-09T01:52:56.375Z",
       "error_message": "Missing await",
       "file": "apps/api/src/computer-games/computer-game-actions.service.ts",
-      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "root_cause": "Async call without await — returned Promise instead of value",
       "fix": "Added await to async call",
       "tags": [
         "auto-detected",
@@ -886,7 +886,7 @@
       "error_message": "Wrong reference: mockReturnValue should be mockResolvedValue",
       "file": "apps/api/test/computer-games/computer-game-actions.service.spec.ts",
       "root_cause": "Used \"mockReturnValue\" instead of \"mockResolvedValue\"",
-      "fix": "Changed mockReturnValue \u2192 mockResolvedValue",
+      "fix": "Changed mockReturnValue → mockResolvedValue",
       "tags": [
         "auto-detected",
         "wrong-reference",
@@ -933,7 +933,7 @@
       "timestamp": "2026-06-09T01:52:48.809Z",
       "error_message": "Missing await",
       "file": "apps/api/src/computer-games/computer-games.service.ts",
-      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "root_cause": "Async call without await — returned Promise instead of value",
       "fix": "Added await to async call | Also: const finalResult = await this.engine.detectResult(state, no",
       "tags": [
         "auto-detected",
@@ -950,7 +950,7 @@
       "error_message": "Significant refactor of ",
       "file": "../.epic-worktrees/purechess/epic--rust-engine-migration/crates/purechess-engine/src/lib.rs",
       "root_cause": "3 lines replaced/restructured",
-      "fix": "Rewrote 9\u21927 lines (3 removed)",
+      "fix": "Rewrote 9→7 lines (3 removed)",
       "tags": [
         "auto-detected",
         "refactor",
@@ -959,6 +959,199 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-09T01:32:37.750Z"
+    },
+    {
+      "id": "bug-059",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-060",
+      "timestamp": "2026-06-10T01:32:05.666Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Had `${GeistSans.variable} ${GeistMono.variable}`",
+      "fix": "Changed to `${GeistSans.variable} ${GeistMono.variable} ${fra",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:05.666Z"
+    },
+    {
+      "id": "bug-061",
+      "timestamp": "2026-06-10T01:32:36.859Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/globals.css",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 9→9 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:36.859Z"
+    },
+    {
+      "id": "bug-062",
+      "timestamp": "2026-06-10T01:33:16.107Z",
+      "error_message": "CSS fix: animation, width, height",
+      "file": "apps/web/src/components/board/square.tsx",
+      "root_cause": "animation: 'check-pulse 1s ease-in-out 3' → 'check-pulse 1s ease-in-out 3',; width: '33%', → '30%',; height: '33%', → '30%',",
+      "fix": "Changed animation: 'check-pulse 1s ease-in-out 3' → 'check-pulse 1s ease-in-out 3',; width: '33%', → '30%',; height: '33%', → '30%',",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:33:16.107Z"
+    },
+    {
+      "id": "bug-063",
+      "timestamp": "2026-06-10T01:34:20.707Z",
+      "error_message": "CSS fix: sm",
+      "file": "apps/web/src/components/game/board-column.tsx",
+      "root_cause": "sm: p-3\"> → p-2.5\">",
+      "fix": "Changed sm: p-3\"> → p-2.5\">",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:34:20.707Z"
+    },
+    {
+      "id": "bug-064",
+      "timestamp": "2026-06-10T01:34:56.339Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/(play)/play/play-page-client.tsx",
+      "root_cause": "Had \"mt-5 font-sans text-3xl sm:text-4xl font-semibold",
+      "fix": "Changed to \"mt-5 font-display text-4xl sm:text-5xl font-mediu",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:34:56.339Z"
+    },
+    {
+      "id": "bug-065",
+      "timestamp": "2026-06-10T01:37:14.936Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/home/hero.tsx",
+      "root_cause": "Had \"pl-[2.05rem] text-sm text-muted-foreground leadin",
+      "fix": "Changed to \"pl-[1.7rem] text-sm text-muted-foreground leading",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:37:14.936Z"
+    },
+    {
+      "id": "bug-066",
+      "timestamp": "2026-06-10T01:38:20.359Z",
+      "error_message": "Significant refactor of ",
+      "file": "design.md",
+      "root_cause": "6 lines replaced/restructured",
+      "fix": "Rewrote 12→26 lines (6 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "md"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:38:20.359Z"
+    },
+    {
+      "id": "bug-067",
+      "timestamp": "2026-06-10T01:39:02.995Z",
+      "error_message": "font-display tailwind class rendered as Geist fallback — Fraunces never applied on hero headline",
+      "file": "apps/web/src/app/globals.css",
+      "root_cause": "tailwind.config.ts fontFamily.display added while next dev was running; tailwind does not regenerate utilities on config change without a dev-server restart, so .font-display had no CSS rule",
+      "fix": "added .font-display { font-family: var(--font-display), Georgia, serif } to globals.css @layer utilities (hot-reloads); tailwind key kept for builds",
+      "tags": [
+        "tailwind",
+        "next-dev",
+        "fonts",
+        "design"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:39:02.995Z"
+    },
+    {
+      "id": "bug-068",
+      "timestamp": "2026-06-10T01:45:15.185Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "No early return/throw for edge case: reasonLabel === 'Checkmate'",
+      "fix": "Added guard clause: if (reasonLabel === 'Checkmate')",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:45:15.185Z"
+    },
+    {
+      "id": "bug-069",
+      "timestamp": "2026-06-10T01:46:56.207Z",
+      "error_message": "CSS fix: isLight",
+      "file": "apps/web/src/components/home/hero-board.tsx",
+      "root_cause": "isLight: (fileIdx + rank) % 2 === 1, → (fileIdx + rank) % 2 === 0,",
+      "fix": "Changed isLight: (fileIdx + rank) % 2 === 1, → (fileIdx + rank) % 2 === 0,",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:46:56.207Z"
+    },
+    {
+      "id": "bug-070",
+      "timestamp": "2026-06-10T01:55:42.506Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/game/captured-material.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:55:42.506Z"
     }
   ]
 }

@@ -125,7 +125,7 @@ export function PlayPageClient() {
           <Swords className="h-3 w-3 text-brass" />
           Choose a mode
         </span>
-        <h1 className="mt-5 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.025em]">
+        <h1 className="mt-5 font-display text-4xl sm:text-5xl font-medium tracking-[-0.01em]">
           How do you want to play?
         </h1>
         <p className="mt-3 text-sm sm:text-base text-muted-foreground">

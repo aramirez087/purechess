@@ -1,9 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T02:41:22.989Z
-> Files: 653 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T01:32:37.744Z
-> Files: 592 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-10T01:56:59.783Z
+> Files: 664 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -52,6 +50,7 @@
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
+- `design.md` — Purechess Design Direction (~1373 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
@@ -883,6 +882,7 @@
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
+- `tailwind.config.ts` — /*.{ts,tsx}'], (~908 tok)
 
 ## apps/web/e2e/
 
@@ -909,12 +909,17 @@
 
 ## apps/web/src/app/
 
-- `globals.css` — Styles: 9 rules, 75 vars (~1095 tok)
+- `globals.css` — Styles: 19 rules, 94 vars (~1937 tok)
+- `layout.tsx` — fraunces (~335 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
+
+## apps/web/src/app/(play)/play/
+
+- `play-page-client.tsx` — Full-viewport, vertically-centered play shell with a theme-aware ambient (~2243 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~4765 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~5910 tok)
 
 ## apps/web/src/app/games/
 
@@ -935,6 +940,9 @@
 ## apps/web/src/components/board/
 
 - `chessboard.tsx` — FILES (~3125 tok)
+- `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~643 tok)
+- `piece.tsx` — Piece (~216 tok)
+- `square.tsx` — Square (~1169 tok)
 
 ## apps/web/src/components/board/hooks/
 
@@ -947,14 +955,14 @@
 
 ## apps/web/src/components/game/
 
-- `board-column.tsx` — The `<Chessboard/>` element. (~614 tok)
+- `board-column.tsx` — The `<Chessboard/>` element. (~656 tok)
 - `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~328 tok)
-- `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~421 tok)
+- `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~632 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~318 tok)
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~762 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
 - `index.ts` — Declares GameShellProps (~165 tok)
-- `move-panel.tsx` — 1-based ply index. (~972 tok)
+- `move-panel.tsx` — 1-based ply index. (~1028 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
 
 ## apps/web/src/components/games/
@@ -965,6 +973,8 @@
 ## apps/web/src/components/home/
 
 - `footer.tsx` — GithubIcon (~933 tok)
+- `hero-board.tsx` — Static board art for the home hero — "the board is the product", so the (~1007 tok)
+- `hero.tsx` — FEATURES (~1469 tok)
 
 ## apps/web/src/components/play/
 
@@ -1003,6 +1013,7 @@
 
 ## apps/web/test/board/
 
+- `captured-material.test.tsx` — pieces (~613 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 
 ## apps/web/test/computer-game/

@@ -7,30 +7,60 @@ interface CoordinatesProps {
   orientation: Orientation;
 }
 
+const COORD_FONT_SIZE = 'max(9px, calc(var(--board-sq-size) * 0.14))';
+
+/**
+ * In-square corner coordinates (lichess-style): rank numbers in the top-right
+ * corner of the rightmost file, file letters in the bottom-right corner of the
+ * bottom rank. Each label is tinted with the opposite square colour so it
+ * reads on both light and dark squares without a gutter.
+ *
+ * The bottom-right square of the board is always light regardless of
+ * orientation, so square colour alternates from `index % 2 === 1` (light) on
+ * both axes.
+ */
 export function Coordinates({ orientation }: CoordinatesProps) {
   return (
     <>
-      <div className="absolute right-0 top-0 flex flex-col" style={{ width: '16px' }}>
-        {Array.from({ length: 8 }, (_, i) => (
-          <div
-            key={i}
-            className="flex items-center justify-center text-[10px] font-mono text-muted-foreground select-none"
-            style={{ height: 'var(--board-sq-size)' }}
-          >
-            {rankLabel(i, orientation)}
-          </div>
-        ))}
+      <div className="absolute right-0 top-0 bottom-0 flex flex-col">
+        {Array.from({ length: 8 }, (_, i) => {
+          const onLight = i % 2 === 1;
+          return (
+            <div
+              key={i}
+              className="flex items-start justify-end pr-[3px] pt-[2px] font-mono font-semibold select-none"
+              style={{
+                height: 'var(--board-sq-size)',
+                fontSize: COORD_FONT_SIZE,
+                color: onLight
+                  ? 'hsl(var(--board-sq-dark) / 0.85)'
+                  : 'hsl(var(--board-sq-light) / 0.85)',
+              }}
+            >
+              {rankLabel(i, orientation)}
+            </div>
+          );
+        })}
       </div>
-      <div className="absolute bottom-0 left-0 flex flex-row" style={{ height: '14px' }}>
-        {Array.from({ length: 8 }, (_, i) => (
-          <div
-            key={i}
-            className="flex items-center justify-center text-[10px] font-mono text-muted-foreground select-none"
-            style={{ width: 'var(--board-sq-size)' }}
-          >
-            {fileLabel(i, orientation)}
-          </div>
-        ))}
+      <div className="absolute bottom-0 left-0 right-0 flex flex-row">
+        {Array.from({ length: 8 }, (_, i) => {
+          const onLight = i % 2 === 1;
+          return (
+            <div
+              key={i}
+              className="flex items-end justify-start pl-[4px] pb-[1px] font-mono font-semibold select-none"
+              style={{
+                width: 'var(--board-sq-size)',
+                fontSize: COORD_FONT_SIZE,
+                color: onLight
+                  ? 'hsl(var(--board-sq-dark) / 0.85)'
+                  : 'hsl(var(--board-sq-light) / 0.85)',
+              }}
+            >
+              {fileLabel(i, orientation)}
+            </div>
+          );
+        })}
       </div>
     </>
   );

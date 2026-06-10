@@ -120,6 +120,10 @@
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+  }
+
   .tabular-nums {
     font-feature-settings: 'tnum';
     font-variant-numeric: tabular-nums;
@@ -179,36 +183,36 @@
 }
 
 :root {
-  --board-sq-light: 66 36% 86%;
-  --board-sq-dark: 92 28% 44%;
+  --board-sq-light: 46 30% 81%;
+  --board-sq-dark: 138 14% 36%;
   --board-sq-size: 64px;
-  --board-highlight-last: 43 68% 56% / 0.5;
-  --board-highlight-selected: 43 72% 60% / 0.5;
-  --board-highlight-check: 0 72% 51% / 0.55;
-  --board-highlight-premove: 177 28% 54% / 0.38;
-  --board-legal-dot: 43 70% 20% / 0.32;
-  --board-legal-ring: 43 62% 42% / 0.45;
+  --board-highlight-last: 41 78% 55% / 0.4;
+  --board-highlight-selected: 41 85% 56% / 0.5;
+  --board-highlight-check: 0 72% 51%;
+  --board-highlight-premove: 177 30% 52% / 0.35;
+  --board-legal-dot: 44 45% 10% / 0.28;
+  --board-legal-ring: 44 45% 10% / 0.3;
 }
 
 [data-theme='dark'] {
-  --board-sq-light: 66 36% 86%;
-  --board-sq-dark: 92 28% 44%;
+  --board-sq-light: 46 30% 81%;
+  --board-sq-dark: 138 14% 36%;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --board-sq-light: 66 36% 86%;
-    --board-sq-dark: 92 28% 44%;
+    --board-sq-light: 46 30% 81%;
+    --board-sq-dark: 138 14% 36%;
   }
 }
 
 @keyframes check-pulse {
   0%,
   100% {
-    background-color: hsl(0 72% 51% / 0.55);
+    opacity: 1;
   }
   50% {
-    background-color: hsl(0 72% 51% / 0.25);
+    opacity: 0.45;
   }
 }
 

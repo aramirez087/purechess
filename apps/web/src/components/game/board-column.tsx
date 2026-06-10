@@ -39,8 +39,10 @@ export function BoardColumn({ topPlayer, bottomPlayer, children, overlay, classN
       <div className="flex w-full flex-col gap-2 sm:gap-3 lg:max-w-[min(100%,calc(100dvh-var(--board-reserve,13rem)))]">
         <PlayerStrip {...topPlayer} />
 
-        <div className="relative mx-auto aspect-square w-full rounded-[12px] border border-[#2f372f] bg-gradient-to-b from-[#161a12] to-[#0f120d] p-2.5 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75),0_0_120px_-40px_rgba(214,181,99,0.16),inset_0_1px_0_rgba(255,255,255,0.05)] sm:p-3">
-          {children}
+        <div className="relative mx-auto aspect-square w-full rounded-[14px] border border-[#2f372f] bg-gradient-to-b from-[#171b13] to-[#0e110c] p-2 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.75),0_0_120px_-40px_rgba(214,181,99,0.16),inset_0_1px_0_rgba(255,255,255,0.05)] sm:p-2.5">
+          <div className="relative h-full w-full overflow-hidden rounded-[7px] shadow-[0_0_0_1px_rgba(0,0,0,0.55)] [&>*]:h-full">
+            {children}
+          </div>
           {overlay}
         </div>
 

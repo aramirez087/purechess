@@ -24,13 +24,32 @@ export function CapturedMaterial({ pieces, advantage, color, className }: Captur
       ? 'drop-shadow-[0_0_1px_rgba(255,255,255,0.55)]'
       : 'drop-shadow-[0_1px_1px_rgba(0,0,0,0.45)]';
 
+  // Group consecutive same-type pieces (input is sorted by value) so each
+  // type renders as one tight overlapping stack — five pawns read as a pile,
+  // not a fence — with clear air between different piece types.
+  const groups: Array<{ type: PieceType; count: number }> = [];
+  for (const type of pieces) {
+    const last = groups[groups.length - 1];
+    if (last && last.type === type) last.count++;
+    else groups.push({ type, count: 1 });
+  }
+
   return (
-    <div className={cn('flex items-center gap-1', className)}>
-      {pieces.length > 0 && (
-        <div className="flex items-center">
-          {pieces.map((type, i) => {
+    <div className={cn('flex items-center gap-1.5', className)}>
+      {groups.length > 0 && (
+        <div className="flex items-center gap-1">
+          {groups.map(({ type, count }, g) => {
             const Svg = getPieceSvg(type, color);
-            return <Svg key={`${type}-${i}`} className={cn('h-4 w-4', glow, i > 0 && '-ml-2')} />;
+            return (
+              <div key={`${type}-${g}`} className="flex items-center">
+                {Array.from({ length: count }, (_, i) => (
+                  <Svg
+                    key={i}
+                    className={cn('h-4 w-4 shrink-0', glow, i > 0 && '-ml-[11px]')}
+                  />
+                ))}
+              </div>
+            );
           })}
         </div>
       )}

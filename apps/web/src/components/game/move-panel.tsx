@@ -45,7 +45,9 @@ export function MovePanel({ moves, currentPly, onSeek, className }: MovePanelPro
   return (
     <div ref={scrollRef} className={cn('h-full overflow-y-auto text-sm', className)}>
       {pairs.length === 0 ? (
-        <p className="px-4 py-5 text-sm text-[#7f897f]">No moves yet.</p>
+        <p className="font-display px-4 py-5 text-[15px] italic text-[#7f897f]">
+          No moves yet.
+        </p>
       ) : (
         <table className="w-full border-separate border-spacing-0">
           <tbody>
@@ -53,8 +55,8 @@ export function MovePanel({ moves, currentPly, onSeek, className }: MovePanelPro
               const rowActive = currentPly === p.white?.ply || currentPly === p.black?.ply;
               return (
                 <tr key={p.no} ref={rowActive ? activeRef : undefined}>
-                  <td className="w-10 border-b border-[#232a24] px-3 py-1.5 font-mono text-xs tabular-nums text-[#6f7a70]">
-                    {p.no}
+                  <td className="w-10 border-b border-[#232a24]/70 py-1.5 pl-2 pr-2.5 text-right font-mono text-[11px] tabular-nums text-[#6f7a70]">
+                    {p.no}.
                   </td>
                   <MoveCell move={p.white} currentPly={currentPly} onSeek={onSeek} />
                   <MoveCell move={p.black} currentPly={currentPly} onSeek={onSeek} />
@@ -77,7 +79,7 @@ function MoveCell({
   currentPly?: number;
   onSeek?: (ply: number) => void;
 }) {
-  const cellBase = 'w-1/2 border-b border-[#232a24]';
+  const cellBase = 'w-1/2 border-b border-[#232a24]/70';
 
   if (!move) return <td className={cn(cellBase, 'px-2 py-1.5')} />;
 
@@ -91,9 +93,11 @@ function MoveCell({
           onClick={() => onSeek(move.ply)}
           aria-current={active ? 'true' : undefined}
           className={cn(
-            'block w-full px-2 py-1.5 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[#181c17]',
+            'block w-full px-2.5 py-1.5 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[#181c17]',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]',
-            active ? 'bg-[#d6b563]/15 text-[#f8f1de]' : 'text-[#d8d2c3]',
+            active
+              ? 'bg-[#d6b563]/[0.12] text-[#f8f1de] shadow-[inset_2px_0_0_0_#d6b563]'
+              : 'text-[#c9c3b2]',
           )}
         >
           {move.san}
@@ -106,8 +110,10 @@ function MoveCell({
     <td
       className={cn(
         cellBase,
-        'px-2 py-1.5 font-mono text-[13px] tabular-nums',
-        active ? 'bg-[#d6b563]/[0.06] text-[#f1eee6]' : 'text-[#d8d2c3]',
+        'px-2.5 py-1.5 font-mono text-[13px] tabular-nums',
+        active
+          ? 'bg-[#d6b563]/[0.08] text-[#f1eee6] shadow-[inset_2px_0_0_0_#d6b563]'
+          : 'text-[#c9c3b2]',
       )}
     >
       {move.san}

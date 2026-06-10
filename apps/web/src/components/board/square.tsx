@@ -50,7 +50,7 @@ export const Square = memo(function Square({
       aria-label={ariaLabel}
       role="gridcell"
       className={cn(
-        'relative flex items-center justify-center cursor-pointer transition-colors duration-150',
+        'relative flex items-center justify-center cursor-pointer',
         'w-[var(--board-sq-size)] h-[var(--board-sq-size)]',
         isLight ? 'bg-[hsl(var(--board-sq-light))]' : 'bg-[hsl(var(--board-sq-dark))]',
         isLastMoveFrom && 'sq-last-from',
@@ -58,54 +58,73 @@ export const Square = memo(function Square({
         isSelected && 'sq-selected',
         isPremoveFrom && 'sq-premove-from',
         isPreMoveTo && 'sq-premove-to',
-        isKeyboardFocus && 'ring-2 ring-inset ring-[#d6b563]',
+        isKeyboardFocus && 'ring-2 ring-inset ring-[hsl(var(--brass))]',
       )}
-      style={{
-        ...(isInCheck
-          ? { animation: 'check-pulse 1s ease-in-out 3', backgroundColor: undefined }
-          : {}),
-        ...(isLastMoveFrom || isLastMoveTo
-          ? { backgroundColor: `hsl(var(--board-highlight-last))` }
-          : {}),
-        ...(isSelected ? { backgroundColor: `hsl(var(--board-highlight-selected))` } : {}),
-        ...(isPremoveFrom || isPreMoveTo
-          ? { backgroundColor: `hsl(var(--board-highlight-premove))` }
-          : {}),
-        ...(isInCheck ? { animation: 'check-pulse 1s ease-in-out 3' } : {}),
-      }}
       onPointerDown={onPointerDown ? (e) => onPointerDown(e, square) : undefined}
       onClick={onClick ? () => onClick(square) : undefined}
     >
+      {(isLastMoveFrom || isLastMoveTo) && !isSelected && (
+        <div
+          aria-hidden
+          className="absolute inset-0 z-[5] pointer-events-none"
+          style={{ backgroundColor: `hsl(var(--board-highlight-last))` }}
+        />
+      )}
+      {isSelected && (
+        <div
+          aria-hidden
+          className="absolute inset-0 z-[5] pointer-events-none"
+          style={{ backgroundColor: `hsl(var(--board-highlight-selected))` }}
+        />
+      )}
+      {(isPremoveFrom || isPreMoveTo) && (
+        <div
+          aria-hidden
+          className="absolute inset-0 z-[5] pointer-events-none"
+          style={{ backgroundColor: `hsl(var(--board-highlight-premove))` }}
+        />
+      )}
+      {isInCheck && (
+        <div
+          aria-hidden
+          className="sq-check absolute inset-0 z-[5] pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at 50% 50%, hsl(var(--board-highlight-check) / 0.65) 0%, hsl(var(--board-highlight-check) / 0.35) 55%, transparent 78%)`,
+            animation: 'check-pulse 1s ease-in-out 3',
+          }}
+        />
+      )}
       {isLegalMove && !isLegalCapture && (
         <div
           className="absolute rounded-full pointer-events-none z-10"
           style={{
-            width: '33%',
-            height: '33%',
+            width: '30%',
+            height: '30%',
             backgroundColor: `hsl(var(--board-legal-dot))`,
           }}
         />
       )}
       {isLegalCapture && (
         <div
-          className="absolute inset-0 pointer-events-none z-10 rounded-none"
+          className="absolute pointer-events-none z-10 rounded-full"
           style={{
-            boxShadow: `inset 0 0 0 4px hsl(var(--board-legal-ring))`,
+            inset: '3%',
+            border: `calc(var(--board-sq-size) * 0.085) solid hsl(var(--board-legal-ring))`,
           }}
         />
       )}
       {piece && !isDragSource && (
-        <div className="absolute inset-0 z-20 p-[1%]" data-piece-on={square}>
+        <div className="absolute inset-0 z-20 p-[4%]" data-piece-on={square}>
           <PieceComponent type={piece.type} color={piece.color} />
         </div>
       )}
       {isDragSource && piece && (
-        <div className="absolute inset-0 z-20 p-[1%] opacity-30" data-piece-on={square}>
+        <div className="absolute inset-0 z-20 p-[4%] opacity-30" data-piece-on={square}>
           <PieceComponent type={piece.type} color={piece.color} />
         </div>
       )}
       {ghostPiece && (
-        <div className="absolute inset-0 z-20 p-[1%]">
+        <div className="absolute inset-0 z-20 p-[4%]">
           <PieceComponent type={ghostPiece.type} color={ghostPiece.color} ghost />
         </div>
       )}

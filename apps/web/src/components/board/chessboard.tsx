@@ -312,8 +312,8 @@ export function Chessboard({
               className={cn(
                 'block h-full w-full',
                 p.color === 'b'
-                  ? 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.52)]'
-                  : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.28)]',
+                  ? 'drop-shadow-[0_3px_4px_rgba(0,0,0,0.45)]'
+                  : 'drop-shadow-[0_3px_4px_rgba(0,0,0,0.30)]',
               )}
             />
           </div>
