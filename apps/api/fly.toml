@@ -10,6 +10,9 @@ primary_region = "iad"
   PORT = "4000"
   ENGINE_BACKEND = "native"
   NAPI_PREBUILT_BINARY_HOST_MIRROR = "https://npmmirror.com/mirrors/napi-rs"
+  WEB_URL = "https://purechess.com"
+  NEXT_PUBLIC_APP_URL = "https://purechess.com"
+  NEXT_PUBLIC_API_URL = "https://purechess-api.fly.dev"
 
 [http_service]
   internal_port = 4000
