@@ -2,16 +2,15 @@ app = "purechess-api"
 primary_region = "iad"
 
 [build]
-  dockerfile = "apps/api/Dockerfile"
-  dockerignore_file = ".dockerignore"
+  dockerfile = "Dockerfile"
 
 [env]
   NODE_ENV = "production"
   PORT = "4000"
   ENGINE_BACKEND = "native"
   NAPI_PREBUILT_BINARY_HOST_MIRROR = "https://npmmirror.com/mirrors/napi-rs"
-  WEB_URL = "https://purechess.com"
-  NEXT_PUBLIC_APP_URL = "https://purechess.com"
+  WEB_URL = "https://purechess-web.fly.dev"
+  NEXT_PUBLIC_APP_URL = "https://purechess-web.fly.dev"
   NEXT_PUBLIC_API_URL = "https://purechess-api.fly.dev"
 
 [http_service]

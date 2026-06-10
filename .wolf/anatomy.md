@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-10T23:19:28.820Z
-> Files: 695 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-10T23:53:30.367Z
+> Files: 700 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -584,7 +584,7 @@
 ## .github/workflows/
 
 - `ci.yml` — CI: CI (~1585 tok)
-- `deploy.yml` — CI: Deploy (~619 tok)
+- `deploy.yml` — CI: Deploy (~473 tok)
 
 ## .opencode/
 
@@ -636,7 +636,7 @@
 - `app.controller.ts` — Exports AppController (~157 tok)
 - `app.module.ts` — API routes: GET (2 endpoints) (~781 tok)
 - `app.service.ts` — Exports HealthStatus, AppService (~337 tok)
-- `main.ts` — Declares bootstrap (~470 tok)
+- `main.ts` — Declares bootstrap (~481 tok)
 
 ## apps/api/src/admin/
 
@@ -661,7 +661,7 @@
 
 - `auth.controller.ts` — Exports AuthController (~1430 tok)
 - `auth.module.ts` — Exports AuthModule (~297 tok)
-- `auth.service.ts` — Zustand store (~2302 tok)
+- `auth.service.ts` — Exports AuthResult, AuthService (~2428 tok)
 - `password.service.ts` — Exports PasswordService (~142 tok)
 - `sessions.service.ts` — Exports SessionsService (~633 tok)
 
@@ -879,7 +879,7 @@
 - `fly.toml` (~194 tok)
 - `next-env.d.ts` — / <reference types="next" /> (~58 tok)
 - `next.config.js` — Next.js configuration (~581 tok)
-- `next.config.mjs` — Next.js configuration (~95 tok)
+- `next.config.mjs` — Declares isDev (~588 tok)
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
@@ -921,12 +921,9 @@
 ## apps/web/src/app/(play)/play/[gameId]/
 
 - `live-game-client.tsx` — POLL_MS (~4626 tok)
-- `page.tsx` — metadata (~100 tok)
-
-## apps/web/src/app/(play)/play/[gameId]/
-
-- `page.tsx` — Live PvP game page wrapper (~110 tok)
 - `live-game-client.tsx` — Polling live PvP client: clocks, premove, resign, ResultOverlay (~3200 tok)
+- `page.tsx` — metadata (~100 tok)
+- `page.tsx` — Live PvP game page wrapper (~110 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
 
@@ -993,11 +990,11 @@
 - `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~632 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~318 tok)
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~962 tok)
-- `result-overlay.tsx` — Shared game-over card (victory halo + sparks; optional onRematch) (~1100 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
 - `index.ts` — Declares GameShellProps (~165 tok)
 - `move-panel.tsx` — 1-based ply index. (~1028 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
+- `result-overlay.tsx` — Shared game-over card (victory halo + sparks; optional onRematch) (~1100 tok)
 - `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1777 tok)
 
 ## apps/web/src/components/games/
@@ -1047,8 +1044,8 @@
 
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `auth.ts` — Exports register, login, logout, getMe — client auth API (~350 tok)
-- `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame (~280 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
+- `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame (~280 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame (~304 tok)
 
 ## apps/web/src/lib/board/
@@ -1188,8 +1185,8 @@
 ## packages/shared/src/dto/
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
-- `pvp-game.dto.ts` — PvpGameStateDto/PvpPlayerDto/PvpMoveDto for live friend games (~330 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
+- `pvp-game.dto.ts` — PvpGameStateDto/PvpPlayerDto/PvpMoveDto for live friend games (~330 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~288 tok)
 
 ## scripts/

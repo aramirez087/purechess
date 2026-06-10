@@ -73,13 +73,21 @@ export class AuthService {
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: "lax",
+      // Web and API are served from different registrable sites in production
+      // (*.fly.dev is on the Public Suffix List), so Lax cookies are never
+      // sent on cross-site XHR — auth silently fails. None requires Secure.
+      sameSite: isProduction ? "none" : "lax",
       expires: expiresAt,
     });
   }
 
   clearCookie(res: Response): void {
-    res.clearCookie(COOKIE_NAME);
+    const isProduction = this.config.get<string>("NODE_ENV") === "production";
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    });
   }
 
   async register(

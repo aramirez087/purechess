@@ -163,3 +163,11 @@
 - **ResultOverlay is shared now:** `components/game/result-overlay.tsx` (exports ResultTone; `onRematch` optional). computer-game-client imports it.
 - **PvP review:** game-review.service `getPvpGameReview` fetches `/api/games/:id/state` with the viewer's `purechess_session` cookie forwarded (player-scoped endpoint); review page passes the cookie. getReview no longer tries the legacy unprefixed `/games/:id` fetch (always 404ed).
 - **Known quirk:** invite preview shows "You play Black" for random-color invites (creator provisionally stored as white; accept re-randomizes). DB loses the 'random' choice — fixing needs a column.
+
+## Key Learnings (added 2026-06-11 — Fly.io production)
+
+- **Deploy command is `flyctl deploy . -c apps/<x>/fly.toml --remote-only`** from repo root. `-c` is mandatory (without it the repo fly.toml is silently ignored and machines keep stale config — that's how prod ran a raw TCP service with ports 4000/3000 publicly exposed and dead 80/443). The `[build].dockerfile` path resolves relative to the CONFIG dir (now `"Dockerfile"`), the build context is the `.` argument. Remote builder required on Apple Silicon (api image x86_64-only Rust).
+- **Prod origin is https://purechess-web.fly.dev until purechess.com is purchased** — WEB_URL/NEXT_PUBLIC_APP_URL (api fly.toml) and NEXT_PUBLIC_SITE_URL (web build arg) all point there; flip all three + CORS when the domain lands.
+- **Cross-site auth on fly.dev needs SameSite=None**: *.fly.dev is on the Public Suffix List → web and api are different sites; session cookie is None+Secure in production, Lax in dev (auth.service.setCookie/clearCookie).
+- **Prod CSP needs `'wasm-unsafe-eval'`** in script-src for client Stockfish; dev masks this because dev CSP has full 'unsafe-eval'.
+- Note: next.config.mjs also REWRITES /api/* to the API — a same-origin path that could replace cross-site cookies later if NEXT_PUBLIC_API_URL were set to ''.

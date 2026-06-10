@@ -765,3 +765,10 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:19 | Edited apps/web/src/app/games/[gameId]/page.tsx | added optional chaining | ~95 |
 | 18:45 | Round 4 — LIVE PVP SHIPPED: GamesService/Controller (state/move/resign, engine-validated, Move rows, idle flag-fall on poll), PvpGameStateDto in shared, /play/[gameId] live page (1.5s poll, clocks, premove, ResultOverlay), invite acceptance poll (old WS push was protocol-mismatched dead code), PvP review via cookie-forwarded state fetch, ResultOverlay extracted to components/game | api/games/*, shared pvp-game.dto, (play)/play/[gameId]/*, invite-create, game-review.service, result-overlay.tsx | full 2-browser E2E: invite→accept→alternating moves→clocks→resign→Victory overlay→review; 194 web + 247 api green | ~25k |
 | 17:22 | Session end: 107 writes across 34 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 40 reads | ~71331 tok |
+| 17:29 | Edited .github/workflows/deploy.yml | 2→5 lines | ~102 |
+| 17:38 | Edited .github/workflows/deploy.yml | 5→6 lines | ~120 |
+| 17:38 | Edited .github/workflows/deploy.yml | 2→2 lines | ~33 |
+| 17:44 | Edited apps/api/src/auth/auth.service.ts | modified setCookie() | ~232 |
+| 17:44 | Edited apps/api/src/main.ts | 6→7 lines | ~68 |
+| 17:53 | Edited apps/web/next.config.mjs | 3→5 lines | ~90 |
+| 00:00 | Fly.io prod fixed end-to-end: CI deployed without -c so http_service never applied (raw TCP :4000 exposed, 80/443 dead); dockerfile path doubling; CORS+SameSite=None for cross-site fly.dev auth; CSP 'wasm-unsafe-eval' for prod Stockfish; all URLs → purechess-web.fly.dev until domain bought | deploy.yml, fly.tomls, main.ts, auth.service.ts, next.config.mjs | verified live: register 201 + /me, computer game e4→e5 bot reply on prod | ~15k |

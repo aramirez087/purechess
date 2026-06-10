@@ -2,11 +2,10 @@ app = "purechess-web"
 primary_region = "iad"
 
 [build]
-  dockerfile = "apps/web/Dockerfile"
-  dockerignore_file = ".dockerignore"
+  dockerfile = "Dockerfile"
   [build.args]
     NEXT_PUBLIC_API_URL = "https://purechess-api.fly.dev"
-    NEXT_PUBLIC_SITE_URL = "https://purechess.com"
+    NEXT_PUBLIC_SITE_URL = "https://purechess-web.fly.dev"
     NEXT_PUBLIC_POSTHOG_KEY = ""
     NEXT_PUBLIC_POSTHOG_HOST = "https://eu.posthog.com"
 

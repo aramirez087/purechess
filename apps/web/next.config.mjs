@@ -2,9 +2,11 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
+// 'wasm-unsafe-eval' is required in production for the client-side Stockfish
+// worker (WebAssembly.instantiate is CSP-gated); it does NOT allow JS eval.
 const scriptSrc = isDev
   ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.posthog.com"
-  : "script-src 'self' 'unsafe-inline' https://*.posthog.com";
+  : "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://*.posthog.com";
 
 const connectSrc = [
   "connect-src 'self' wss: https://*.sentry.io https://*.posthog.com https://eu.posthog.com https://*.fly.dev",

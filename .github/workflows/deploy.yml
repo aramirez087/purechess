@@ -24,7 +24,11 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy API to Fly
-        run: flyctl deploy --app purechess-api --dockerfile apps/api/Dockerfile --remote-only --strategy rolling
+        # `.` context + -c are required: without -c flyctl deploys with the
+        # app's existing machine config and the repo fly.toml (http_service,
+        # release_command, env) is silently ignored. The dockerfile path in
+        # fly.toml resolves relative to the config dir, the context is `.`.
+        run: flyctl deploy . -c apps/api/fly.toml --remote-only --strategy rolling
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
@@ -38,7 +42,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy Web to Fly
-        run: flyctl deploy --app purechess-web --dockerfile apps/web/Dockerfile --remote-only --strategy rolling
+        run: flyctl deploy . -c apps/web/fly.toml --remote-only --strategy rolling
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
@@ -53,4 +57,4 @@ jobs:
           [ "$STATUS" = "ok" ] || (echo "API health failed post-deploy" && exit 1)
 
       - name: Health check Web
-        run: curl -sf https://purechess.com/api/health
+        run: curl -sf https://purechess-web.fly.dev/api/health

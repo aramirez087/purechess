@@ -33,6 +33,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       "http://localhost:3000",
+      "https://purechess-web.fly.dev",
       process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000",
       process.env["WEB_URL"] ?? "http://localhost:3000",
     ],

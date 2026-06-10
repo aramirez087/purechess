@@ -1827,6 +1827,74 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-10T18:45:00Z"
+    },
+    {
+      "id": "bug-112",
+      "timestamp": "2026-06-10T23:44:31.216Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/api/src/auth/auth.service.ts",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 13\u219221 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T23:44:31.216Z"
+    },
+    {
+      "id": "bug-113",
+      "timestamp": "2026-06-10T23:59:00Z",
+      "error_message": "Both fly.dev apps unreachable on 80/443 (TLS handshake timeout) while machines were healthy; port 4000/3000 exposed raw to the internet",
+      "file": ".github/workflows/deploy.yml, apps/api/fly.toml, apps/web/fly.toml",
+      "root_cause": "CI ran `flyctl deploy --app X --dockerfile ...` WITHOUT -c fly.toml, so the repo config (http_service with 80/443 handlers, release_command, env, checks) was never applied \u2014 machines kept a bare raw-TCP service on the internal port. Separately, flyctl resolves the [build].dockerfile path relative to the CONFIG dir, so 'apps/api/Dockerfile' inside apps/api/fly.toml doubled to apps/api/apps/api/Dockerfile.",
+      "fix": "deploy.yml now runs `flyctl deploy . -c apps/<x>/fly.toml --remote-only`; fly.tomls use dockerfile = \"Dockerfile\" (config-dir relative) with `.` as build context.",
+      "tags": [
+        "fly",
+        "deploy",
+        "ci",
+        "http_service"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T23:59:00Z"
+    },
+    {
+      "id": "bug-114",
+      "timestamp": "2026-06-10T23:59:00Z",
+      "error_message": "Prod register failed 'Failed to fetch'; even with CORS fixed the session would not persist cross-site",
+      "file": "apps/api/src/main.ts, apps/api/src/auth/auth.service.ts, apps/api/fly.toml",
+      "root_cause": "CORS allowlist only had purechess.com (not purchased/pointed yet) so purechess-web.fly.dev got no Access-Control-Allow-Origin; and the session cookie was SameSite=Lax \u2014 *.fly.dev is on the Public Suffix List so web\u2194api are different registrable sites and Lax cookies are never sent on cross-site XHR.",
+      "fix": "Added https://purechess-web.fly.dev to CORS origins; cookie is SameSite=None+Secure in production (clearCookie matches); WEB_URL/NEXT_PUBLIC_APP_URL/SITE_URL point at purechess-web.fly.dev until the domain is bought.",
+      "tags": [
+        "cors",
+        "cookies",
+        "samesite",
+        "fly",
+        "auth"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T23:59:00Z"
+    },
+    {
+      "id": "bug-115",
+      "timestamp": "2026-06-10T23:59:00Z",
+      "error_message": "Prod computer games stuck on 'Computer is thinking' forever \u2014 CSP CompileError: WebAssembly.instantiate violates script-src",
+      "file": "apps/web/next.config.mjs",
+      "root_cause": "Production CSP script-src lacked 'wasm-unsafe-eval', so the client-side Stockfish WASM worker could not instantiate (dev worked because dev CSP has 'unsafe-eval').",
+      "fix": "Added 'wasm-unsafe-eval' to the production script-src (allows WASM only, not JS eval).",
+      "tags": [
+        "csp",
+        "wasm",
+        "stockfish",
+        "next"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T23:59:00Z"
     }
   ]
 }
