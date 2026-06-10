@@ -12,3 +12,4 @@ export * from './dto/user.dto';
 export * from './users';
 export * from './dto/computer-game.dto';
 export * from './dto/engine-analysis.dto';
+export * from './dto/pvp-game.dto';

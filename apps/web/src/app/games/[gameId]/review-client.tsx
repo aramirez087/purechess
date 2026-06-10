@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Bot, User } from 'lucide-react';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import {
@@ -12,6 +13,7 @@ import {
   type PlayerStripProps,
 } from '@/components/game';
 import { ReviewControls } from '@/components/review/review-controls';
+import { EvalPanel } from '@/components/review/eval-panel';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
@@ -99,21 +101,37 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
   const topColor: Color = bottomColor === 'white' ? 'black' : 'white';
   const sideToMove: Color = displayFen.split(' ')[1] === 'b' ? 'black' : 'white';
   const material = computeMaterial(displayFen);
-  const date = new Date(game.startedAt).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  // Computer-game reviews carry no start date (startedAt: '') — omit the row.
+  const startedAtMs = game.startedAt ? new Date(game.startedAt).getTime() : 0;
+  const date =
+    startedAtMs > 0
+      ? new Date(startedAtMs).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
+      : null;
 
   function stripFor(color: Color): PlayerStripProps {
     const player = color === 'white' ? game.white : game.black;
+    const isComputer = player.id === 'computer';
     const captured = color === 'white' ? material.byWhite : material.byBlack;
     const capturedColor = color === 'white' ? 'b' : 'w';
     const advantage = color === 'white' ? material.advantage : -material.advantage;
     return {
       name: player.username,
-      detail: String(player.rating),
+      // Computer reviews stash the level in `rating`; a 0 rating means unrated.
+      detail: isComputer
+        ? `Level ${player.rating}`
+        : player.rating > 0
+          ? String(player.rating)
+          : undefined,
       active: color === sideToMove,
+      avatar: isComputer ? (
+        <Bot className="h-5 w-5" aria-hidden="true" />
+      ) : (
+        <User className="h-5 w-5" aria-hidden="true" />
+      ),
       captured,
       capturedColor,
       advantage,
@@ -131,7 +149,7 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
                 <InfoRow label="By" value={formatTermination(game.termination)} />
                 <InfoRow label="Time" value={game.timeControl.label} />
                 <InfoRow label="Type" value={game.rated ? 'Rated' : 'Casual'} />
-                <InfoRow label="Date" value={date} />
+                {date && <InfoRow label="Date" value={date} />}
               </dl>
             </GameRail>
             <PgnActions pgn={game.pgn} gameId={game.id} />
@@ -157,6 +175,9 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
         }
         rightRail={
           <div className="flex h-full min-h-0 flex-col gap-4">
+            <GameRail title="Evaluation" className="shrink-0">
+              <EvalPanel fen={displayFen} />
+            </GameRail>
             <GameRail
               title="Moves"
               aside={`${game.moves.length} ply`}

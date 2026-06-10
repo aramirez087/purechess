@@ -8,6 +8,8 @@ import { Piece as PieceComponent } from './piece';
 interface SquareProps {
   square: SquareType;
   piece: Piece | null;
+  /** Suppress the static piece render (it is being animated by the AnimationLayer). */
+  hidePiece?: boolean;
   isLight: boolean;
   isSelected: boolean;
   isLegalMove: boolean;
@@ -19,6 +21,8 @@ interface SquareProps {
   isPreMoveTo: boolean;
   isKeyboardFocus: boolean;
   isDragSource: boolean;
+  /** A drag is in flight and the pointer is over this square. */
+  isDragOver?: boolean;
   ghostPiece?: Piece;
   onPointerDown?: (e: React.PointerEvent, square: SquareType) => void;
   onClick?: (square: SquareType) => void;
@@ -28,6 +32,7 @@ interface SquareProps {
 export const Square = memo(function Square({
   square,
   piece,
+  hidePiece,
   isLight,
   isSelected,
   isLegalMove,
@@ -39,6 +44,7 @@ export const Square = memo(function Square({
   isPreMoveTo,
   isKeyboardFocus,
   isDragSource,
+  isDragOver,
   ghostPiece,
   onPointerDown,
   onClick,
@@ -84,6 +90,12 @@ export const Square = memo(function Square({
           style={{ backgroundColor: `hsl(var(--board-highlight-premove))` }}
         />
       )}
+      {isDragOver && (
+        <div
+          aria-hidden
+          className="absolute inset-0 z-[6] pointer-events-none ring-inset ring-[3px] ring-[hsl(var(--brass)/0.75)]"
+        />
+      )}
       {isInCheck && (
         <div
           aria-hidden
@@ -96,7 +108,7 @@ export const Square = memo(function Square({
       )}
       {isLegalMove && !isLegalCapture && (
         <div
-          className="absolute rounded-full pointer-events-none z-10"
+          className="sq-legal-dot absolute rounded-full pointer-events-none z-10"
           style={{
             width: '30%',
             height: '30%',
@@ -106,14 +118,14 @@ export const Square = memo(function Square({
       )}
       {isLegalCapture && (
         <div
-          className="absolute pointer-events-none z-10 rounded-full"
+          className="sq-legal-ring absolute pointer-events-none z-10 rounded-full"
           style={{
             inset: '3%',
             border: `calc(var(--board-sq-size) * 0.085) solid hsl(var(--board-legal-ring))`,
           }}
         />
       )}
-      {piece && !isDragSource && (
+      {piece && !isDragSource && !hidePiece && (
         <div className="absolute inset-0 z-20 p-[4%]" data-piece-on={square}>
           <PieceComponent type={piece.type} color={piece.color} />
         </div>

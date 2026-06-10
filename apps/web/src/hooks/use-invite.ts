@@ -56,6 +56,11 @@ export function useCreateInvite() {
   });
 }
 
+/** One-shot invite fetch — used by the creator's acceptance poll. */
+export function getInvite(token: string): Promise<InvitePreview> {
+  return apiFetch<InvitePreview>(`/invites/${token}`);
+}
+
 export function useGetInvite(token: string | null) {
   return useQuery({
     queryKey: ['invite', token],

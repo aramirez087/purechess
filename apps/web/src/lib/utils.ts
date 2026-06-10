@@ -29,6 +29,7 @@ export function clampRatingDelta(n: number): number {
 }
 
 export function formatTimeControl(seconds: number, increment: number): string {
+  if (seconds <= 0) return 'Untimed';
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   const base = secs > 0 ? `${mins}:${secs.toString().padStart(2, '0')}` : String(mins);

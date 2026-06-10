@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import { GameResult, GameTermination, TimeCategory } from '@purechess/shared';
-import type { ComputerGameStateDto } from '@purechess/shared';
+import type { ComputerGameStateDto, PvpGameStateDto } from '@purechess/shared';
 import type { GameReview } from '@/types/game-review';
 import type { WireMove } from '@purechess/shared';
 
@@ -97,10 +97,11 @@ function buildReviewFromComputerGame(
       initialSeconds: 0,
       incrementSeconds: 0,
       category: TimeCategory.Rapid,
-      label: 'vs Computer',
+      label: state.clock ? 'Timed' : 'Untimed',
     },
     rated: false,
-    startedAt: new Date(0).toISOString(),
+    // The computer-game DTO carries no start date — empty string means "omit".
+    startedAt: '',
   };
 }
 
@@ -120,23 +121,70 @@ async function getComputerGameReview(
   }
 }
 
+function buildReviewFromPvpGame(state: PvpGameStateDto): GameReview {
+  return {
+    id: state.gameId,
+    white: {
+      id: state.white?.id ?? 'white',
+      username: state.white?.username ?? 'White',
+      rating: 0,
+    },
+    black: {
+      id: state.black?.id ?? 'black',
+      username: state.black?.username ?? 'Black',
+      rating: 0,
+    },
+    moves: buildMovesFromPgn(state.pgn),
+    finalFen: state.fen,
+    pgn: state.pgn,
+    result: RESULT_MAP[state.result ?? ''] ?? GameResult.Draw,
+    termination: TERM_MAP[state.resultReason ?? ''] ?? GameTermination.Resignation,
+    timeControl: {
+      initialSeconds: state.timeControlSeconds,
+      incrementSeconds: state.incrementSeconds,
+      category: TimeCategory.Rapid,
+      label:
+        state.timeControlSeconds > 0
+          ? `${Math.floor(state.timeControlSeconds / 60)}+${state.incrementSeconds}`
+          : 'Untimed',
+    },
+    rated: false,
+    startedAt: '',
+  };
+}
+
+/** PvP state is player-scoped — forward the viewer's session cookie. */
+async function getPvpGameReview(
+  gameId: string,
+  sessionCookie: string | null,
+): Promise<GameReview | null> {
+  if (!sessionCookie) return null;
+  const apiUrl = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
+  try {
+    const res = await fetch(`${apiUrl}/api/games/${gameId}/state`, {
+      cache: 'no-store',
+      headers: { Cookie: `purechess_session=${sessionCookie}` },
+    });
+    if (!res.ok) return null;
+    const state = (await res.json()) as PvpGameStateDto;
+    if (state.status !== 'completed') return null;
+    return buildReviewFromPvpGame(state);
+  } catch {
+    return null;
+  }
+}
+
 export async function getReview(
   gameId: string,
   currentUser?: { id: string; username: string } | null,
+  sessionCookie?: string | null,
 ): Promise<GameReview | null> {
   if (gameId === MOCK_GAME_ID) {
     return MOCK_REVIEW;
   }
 
-  const apiUrl = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
-  try {
-    const res = await fetch(`${apiUrl}/games/${gameId}`, { next: { revalidate: 60 } });
-    if (res.status === 404) {
-      return getComputerGameReview(gameId, currentUser ?? null);
-    }
-    if (!res.ok) return null;
-    return (await res.json()) as GameReview;
-  } catch {
-    return null;
-  }
+  const computer = await getComputerGameReview(gameId, currentUser ?? null);
+  if (computer) return computer;
+
+  return getPvpGameReview(gameId, sessionCookie ?? null);
 }

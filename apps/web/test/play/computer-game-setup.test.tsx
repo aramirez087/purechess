@@ -63,7 +63,7 @@ describe('ComputerGameSetup', () => {
       expect(mockCreate).toHaveBeenCalledWith({
         level: 4,
         color: 'random',
-        timeControlSeconds: 600,
+        timeControlSeconds: 0,
         incrementSeconds: 0,
       }),
     );
@@ -79,7 +79,7 @@ describe('ComputerGameSetup', () => {
       expect(mockCreate).toHaveBeenCalledWith({
         level: 6,
         color: 'random',
-        timeControlSeconds: 600,
+        timeControlSeconds: 0,
         incrementSeconds: 0,
       }),
     );

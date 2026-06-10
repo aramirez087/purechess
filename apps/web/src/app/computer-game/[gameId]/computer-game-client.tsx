@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Chess } from 'chess.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Bot, Flag, Loader2, Plus, User } from 'lucide-react';
+import { Bot, Flag, Loader2, Plus, RotateCcw, User } from 'lucide-react';
 import type { ComputerGameStateDto } from '@purechess/shared';
 import type { Square } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
@@ -21,10 +22,19 @@ import { Logo } from '@/components/layout/Logo';
 import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
-import { getComputerGame, submitComputerMove } from '@/lib/api/computer-games';
-import { ReviewRail } from '@/components/computer-game/review-rail';
+import {
+  getComputerGame,
+  submitComputerMove,
+  takebackComputerMove,
+  rematchComputerGame,
+} from '@/lib/api/computer-games';
+import { PgnIconActions } from '@/components/review/pgn-actions';
+import { ResultOverlay, type ResultTone } from '@/components/game/result-overlay';
 import { LiveAnnouncer } from '@/components/computer-game/live-announcer';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
+import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
+import { useSettingsStore } from '@/stores/settings-store';
+import { soundEngine } from '@/lib/board/sound';
 
 type Color = 'white' | 'black';
 
@@ -91,7 +101,6 @@ function parsePgnMoves(pgn: string): string[] {
   return tokens;
 }
 
-type ResultTone = 'win' | 'loss' | 'draw';
 
 function StatusHero({
   isGameOver,
@@ -100,6 +109,7 @@ function StatusHero({
   reasonLabel,
   computerActive,
   level,
+  timed,
 }: {
   isGameOver: boolean;
   tone: ResultTone;
@@ -107,6 +117,7 @@ function StatusHero({
   reasonLabel: string | null;
   computerActive: boolean;
   level: number;
+  timed: boolean;
 }) {
   if (isGameOver) {
     const toneClasses: Record<ResultTone, string> = {
@@ -151,101 +162,13 @@ function StatusHero({
           <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[#d6b563]" aria-hidden="true" />
         )}
       </div>
-      <p className="mt-1.5 text-xs text-[#9da79c]">Level {level} · Untimed</p>
+      <p className="mt-1.5 text-xs text-[#9da79c]">
+        Level {level} · {timed ? 'Timed' : 'Untimed'}
+      </p>
     </div>
   );
 }
 
-/**
- * The big serif word for the result moment. Checkmate keeps its iconic name
- * for both sides; everything else resolves to a verdict word, with the
- * mechanical reason relegated to the small line underneath.
- */
-function getTheaterWord(tone: ResultTone, reasonLabel: string | null): string {
-  if (reasonLabel === 'Checkmate') return 'Checkmate.';
-  if (reasonLabel === 'Stalemate') return 'Stalemate.';
-  if (tone === 'win') return 'Victory.';
-  if (tone === 'loss') return 'Defeat.';
-  return 'Draw.';
-}
-
-function ResultOverlay({
-  tone,
-  resultLabel,
-  reasonLabel,
-  onDismiss,
-}: {
-  tone: ResultTone;
-  resultLabel: string;
-  reasonLabel: string | null;
-  onDismiss: () => void;
-}) {
-  const toneRing: Record<ResultTone, string> = {
-    win: 'shadow-[0_28px_90px_-20px_rgba(214,181,99,0.5)]',
-    draw: 'shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
-    loss: 'shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
-  };
-  const toneWord: Record<ResultTone, string> = {
-    win: 'text-[#f3e7c4]',
-    draw: 'text-[#e8e4d8]',
-    loss: 'text-[#e8e4d8]',
-  };
-  const toneRule: Record<ResultTone, string> = {
-    win: 'via-[#d6b563]/80',
-    draw: 'via-[#9da79c]/60',
-    loss: 'via-destructive/60',
-  };
-  return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[10px] bg-[#0b0d0b]/70 p-4 backdrop-blur-[4px]">
-      <div
-        className={cn(
-          'animate-rise w-full max-w-[340px] rounded-[18px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-7 pb-7 pt-8 text-center',
-          toneRing[tone],
-        )}
-      >
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#9da79c]">
-          {resultLabel}
-        </p>
-        <p
-          className={cn(
-            'font-display mt-3 text-[clamp(2.5rem,6vw,3.25rem)] italic leading-none tracking-[-0.01em]',
-            toneWord[tone],
-          )}
-        >
-          {getTheaterWord(tone, reasonLabel)}
-        </p>
-        <div
-          aria-hidden
-          className={cn(
-            'mx-auto mt-4 h-px w-2/3 bg-gradient-to-r from-transparent to-transparent',
-            toneRule[tone],
-          )}
-        />
-        {reasonLabel && (
-          <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[#b9b19d]">
-            by {reasonLabel}
-          </p>
-        )}
-        <div className="mt-5 flex items-center justify-center gap-2">
-          <button
-            type="button"
-            onClick={onDismiss}
-            className="inline-flex h-9 items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3.5 text-sm font-medium text-[#c7cfc4] transition-colors hover:border-[#3a443b] hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-          >
-            View board
-          </button>
-          <Link
-            href="/play"
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/12 px-3.5 text-sm font-semibold text-[#f3e7c4] transition-colors hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            New game
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 interface Props {
   gameId: string;
@@ -279,12 +202,70 @@ export function ComputerGameClient({ gameId }: Props) {
     currentPly,
     totalPly: _sanCount,
     onHint: undefined,
-    onTakeback: undefined,
+    onTakeback: _isGameOver ? undefined : handleTakeback,
     onResign: _isGameOver ? undefined : handleResign,
     onFlip: () => setFlipped((f) => !f),
     onNew: _isGameOver ? () => router.push('/play') : undefined,
     onSeek: setCurrentPly,
   });
+
+  // Live per-side countdown for timed games; null for untimed (clock omitted
+  // from the DTO). Must run before the loading/error early returns.
+  const liveClock = useLiveClock(
+    _isPlaying ? state.game.clock : null,
+    _isPlaying ? getSideToMove(state.game.fen) : 'white',
+    _isPlaying && state.game.status === 'active',
+  );
+
+  // Low-time tick: one per second while the human's clock runs under 10s.
+  const lowTimeSound = useSettingsStore((s) => s.lowTimeSound);
+  const lastTickSecondRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!_isPlaying || !liveClock || state.game.status !== 'active') return;
+    const humanIsWhite = getHumanColor(state.game.computerColor) === 'white';
+    const humanTurn = getSideToMove(state.game.fen) === (humanIsWhite ? 'white' : 'black');
+    const ms = humanIsWhite ? liveClock.whiteMs : liveClock.blackMs;
+    if (!humanTurn || ms <= 0 || ms >= 10_000) {
+      lastTickSecondRef.current = null;
+      return;
+    }
+    const sec = Math.ceil(ms / 1000);
+    if (lastTickSecondRef.current !== sec) {
+      lastTickSecondRef.current = sec;
+      soundEngine.playTick(lowTimeSound);
+    }
+  }, [_isPlaying, liveClock, state, lowTimeSound]);
+
+  // When the side to move hits 0:00 client-side, the server only learns about
+  // the flag on the next submit — so claim it: any move attempt on a flagged
+  // clock resolves to a completed/timeout state (engine checks time before
+  // validating the move).
+  const flagClaimedRef = useRef(false);
+  useEffect(() => {
+    if (!_isPlaying || !liveClock || flagClaimedRef.current) return;
+    if (state.game.status !== 'active') return;
+    const stm = getSideToMove(state.game.fen);
+    const ms = stm === 'white' ? liveClock.whiteMs : liveClock.blackMs;
+    if (ms > 0) return;
+    flagClaimedRef.current = true;
+    let uci = 'resign';
+    try {
+      const m = new Chess(state.game.fen).moves({ verbose: true })[0];
+      if (m) uci = m.from + m.to + (m.promotion ?? '');
+    } catch {
+      // unparseable FEN — resign fallback still ends the game
+    }
+    submitComputerMove(gameId, uci)
+      .then((next) => {
+        if (!disposedRef.current) {
+          setState({ phase: 'playing', game: next, submitting: false, moveError: null });
+        }
+      })
+      .catch(() => {
+        flagClaimedRef.current = false;
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_isPlaying, liveClock, state, gameId]);
 
   // Computes the engine's reply locally (Web Worker) and submits it. Runs
   // inside the async chain (not a state effect) so it fires exactly once per
@@ -363,6 +344,38 @@ export function ComputerGameClient({ gameId }: Props) {
     }
   }
 
+  // Undo the last full move (your move + the computer's reply).
+  async function handleTakeback() {
+    if (state.phase !== 'playing') return;
+    setState((s: PageState) =>
+      s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s,
+    );
+    try {
+      const next = await takebackComputerMove(gameId, 2);
+      setState({ phase: 'playing', game: next, submitting: false, moveError: null });
+    } catch (err) {
+      setState((s: PageState) =>
+        s.phase === 'playing' ? { ...s, submitting: false, moveError: (err as Error).message } : s,
+      );
+    }
+  }
+
+  // Same opponent and settings, colours swapped — navigates to the new game.
+  async function handleRematch() {
+    if (state.phase !== 'playing') return;
+    setState((s: PageState) =>
+      s.phase === 'playing' ? { ...s, moveError: null } : s,
+    );
+    try {
+      const next = await rematchComputerGame(gameId, true);
+      router.push(`/computer-game/${next.gameId}`);
+    } catch (err) {
+      setState((s: PageState) =>
+        s.phase === 'playing' ? { ...s, moveError: (err as Error).message } : s,
+      );
+    }
+  }
+
   if (state.phase === 'loading') {
     return (
       <main
@@ -416,6 +429,16 @@ export function ComputerGameClient({ gameId }: Props) {
   const humanActive = !isGameOver && !submitting && sideToMove === humanColor;
   const statusLabel = isGameOver ? resultLabel : computerActive ? 'Thinking' : 'Your move';
   const material = computeMaterial(game.fen);
+  // On a timeout the engine's flag-fall path returns the clock un-ticked, so
+  // the loser's stored value is stale — display the flagged side at zero.
+  const flaggedColor: Color | null =
+    isGameOver && game.resultReason === 'timeout'
+      ? game.result === 'white_wins'
+        ? 'black'
+        : game.result === 'black_wins'
+          ? 'white'
+          : null
+      : null;
 
   function stripFor(color: Color): PlayerStripProps {
     const isHuman = color === humanColor;
@@ -428,6 +451,11 @@ export function ComputerGameClient({ gameId }: Props) {
       detail: isHuman ? `${formatColor(humanColor)} pieces` : `Level ${game.computerLevel}`,
       active,
       status: active ? statusLabel : undefined,
+      clock: liveClock
+        ? color === flaggedColor
+          ? formatClock(0)
+          : formatClock(color === 'white' ? liveClock.whiteMs : liveClock.blackMs)
+        : undefined,
       avatar: isHuman ? (
         <User className="h-5 w-5" aria-hidden="true" />
       ) : (
@@ -456,6 +484,7 @@ export function ComputerGameClient({ gameId }: Props) {
                   resultLabel={resultLabel}
                   reasonLabel={reasonLabel}
                   onDismiss={() => setResultDismissed(true)}
+                  onRematch={handleRematch}
                 />
               ) : undefined
             }
@@ -490,11 +519,17 @@ export function ComputerGameClient({ gameId }: Props) {
               reasonLabel={reasonLabel}
               computerActive={computerActive}
               level={game.computerLevel}
+              timed={game.clock != null}
             />
 
             <GameRail
               title="Moves"
-              aside={`${sanMoves.length} ply`}
+              aside={
+                <span className="flex items-center gap-2.5">
+                  {`${sanMoves.length} ply`}
+                  <PgnIconActions pgn={game.pgn} fen={game.fen} gameId={gameId} />
+                </span>
+              }
               className="min-h-0 flex-1"
               bodyClassName="flex-1"
             >
@@ -505,8 +540,6 @@ export function ComputerGameClient({ gameId }: Props) {
               />
             </GameRail>
 
-            <ReviewRail pgn={game.pgn} fen={game.fen} gameId={gameId} />
-
             {moveError && (
               <p className="shrink-0 rounded-[8px] border border-destructive/35 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 {moveError}
@@ -515,22 +548,42 @@ export function ComputerGameClient({ gameId }: Props) {
 
             <BoardControlBar onFlip={() => setFlipped((f) => !f)}>
               {isGameOver ? (
-                <Link
-                  href="/play"
-                  className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-colors hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                >
-                  <Plus className="h-4 w-4" aria-hidden="true" />
-                  New game
-                </Link>
+                <>
+                  <button
+                    onClick={handleRematch}
+                    className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-colors hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                  >
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                    Rematch
+                  </button>
+                  <Link
+                    href="/play"
+                    className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-colors hover:border-[#3a443b] hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                  >
+                    <Plus className="h-4 w-4" aria-hidden="true" />
+                    New game
+                  </Link>
+                </>
               ) : (
-                <button
-                  onClick={handleResign}
-                  disabled={submitting}
-                  className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-destructive/45 bg-transparent px-3 text-sm font-medium text-destructive transition-colors hover:border-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Flag className="h-4 w-4" aria-hidden="true" />
-                  Resign
-                </button>
+                <>
+                  <button
+                    onClick={handleTakeback}
+                    disabled={submitting || !humanActive || sanMoves.length < 2}
+                    title="Take back your last move"
+                    className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-colors hover:border-[#3a443b] hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                    Takeback
+                  </button>
+                  <button
+                    onClick={handleResign}
+                    disabled={submitting}
+                    className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-[5px] border border-destructive/45 bg-transparent px-3 text-sm font-medium text-destructive transition-colors hover:border-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Flag className="h-4 w-4" aria-hidden="true" />
+                    Resign
+                  </button>
+                </>
               )}
             </BoardControlBar>
           </div>

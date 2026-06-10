@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-10T01:56:59.783Z
-> Files: 664 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-10T23:19:28.820Z
+> Files: 695 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -54,7 +54,7 @@
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
-- `package.json` — Node.js package manifest (~349 tok)
+- `package.json` — Node.js package manifest (~366 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~125801 tok)
 - `pnpm-workspace.yaml` (~72 tok)
 - `posthog-setup-report.md` — PostHog post-wizard report (~821 tok)
@@ -712,8 +712,9 @@
 
 - `computer-game-actions.service.ts` — State-mutating vs-computer actions that are NOT a normal move: takeback, (~3334 tok)
 - `computer-games.controller.ts` — Exports ComputerGamesController (~375 tok)
+- `computer-games.helpers.ts` — Engine clock for untimed games (timeControlSeconds <= 0). The engine's (~1580 tok)
 - `computer-games.module.ts` — Exports ComputerGamesModule (~132 tok)
-- `computer-games.service.ts` — Exports ComputerGamesService (~4144 tok)
+- `computer-games.service.ts` — Exports ComputerGamesService (~4147 tok)
 
 ## apps/api/src/config/
 
@@ -727,9 +728,9 @@
 
 ## apps/api/src/games/
 
-- `games.controller.ts` — Exports GamesController (~60 tok)
-- `games.module.ts` — Exports GamesModule (~79 tok)
-- `games.service.ts` — Exports GamesService (~26 tok)
+- `games.controller.ts` — Live PvP (friend-invite) games — players only, session required. (~355 tok)
+- `games.module.ts` — Exports GamesModule (~123 tok)
+- `games.service.ts` — Live PvP (friend-invite) games. Mirrors the clock/persistence semantics of (~3120 tok)
 
 ## apps/api/src/invites/
 
@@ -909,7 +910,7 @@
 
 ## apps/web/src/app/
 
-- `globals.css` — Styles: 19 rules, 94 vars (~1937 tok)
+- `globals.css` — Styles: 24 rules, 94 vars (~2274 tok)
 - `layout.tsx` — fraunces (~335 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
 
@@ -917,19 +918,43 @@
 
 - `play-page-client.tsx` — Full-viewport, vertically-centered play shell with a theme-aware ambient (~2243 tok)
 
+## apps/web/src/app/(play)/play/[gameId]/
+
+- `live-game-client.tsx` — POLL_MS (~4626 tok)
+- `page.tsx` — metadata (~100 tok)
+
+## apps/web/src/app/(play)/play/[gameId]/
+
+- `page.tsx` — Live PvP game page wrapper (~110 tok)
+- `live-game-client.tsx` — Polling live PvP client: clocks, premove, resign, ResultOverlay (~3200 tok)
+
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~5910 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~8345 tok)
 
 ## apps/web/src/app/games/
 
 - `games-client.tsx` — GamesClient (~988 tok)
-- `page.tsx` — dynamic (~613 tok)
+- `page.tsx` — dynamic (~644 tok)
 
 ## apps/web/src/app/games/[gameId]/
 
-- `page.tsx` — formatResult (~680 tok)
-- `review-client.tsx` — STARTING_FEN (~1769 tok)
+- `page.tsx` — formatResult (~717 tok)
+- `review-client.tsx` — STARTING_FEN (~2015 tok)
+
+## apps/web/src/app/login/
+
+- `login-form.tsx` — Sign-in form vs POST /api/auth/login, return-param aware (~900 tok)
+- `login-form.tsx` — LoginForm — renders form (~1092 tok)
+- `page.tsx` — Suspense wrapper for LoginForm (~120 tok)
+- `page.tsx` — metadata (~90 tok)
+
+## apps/web/src/app/register/
+
+- `page.tsx` — Suspense wrapper for RegisterForm (~120 tok)
+- `page.tsx` — metadata (~96 tok)
+- `register-form.tsx` — Sign-up form vs POST /api/auth/register, local DTO-mirroring validation (~1100 tok)
+- `register-form.tsx` — USERNAME_PATTERN — renders form (~1510 tok)
 
 ## apps/web/src/components/admin/
 
@@ -937,21 +962,29 @@
 - `games-table.tsx` — GamesTable — renders table (~2073 tok)
 - `reports-table.tsx` — STATUS_OPTIONS — renders table (~2248 tok)
 
+## apps/web/src/components/auth/
+
+- `auth-shell.tsx` — Full-viewport centered shell for the auth pages. Theme-aware ambient built (~480 tok)
+- `auth-shell.tsx` — Centered full-viewport shell for /login + /register (token ambient, Fraunces title, footer link) (~450 tok)
+
 ## apps/web/src/components/board/
 
-- `chessboard.tsx` — FILES (~3125 tok)
+- `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~596 tok)
+- `chessboard.tsx` — FILES (~3579 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~643 tok)
+- `move-input.tsx` — PROMOTION_PIECES (~552 tok)
 - `piece.tsx` — Piece (~216 tok)
-- `square.tsx` — Square (~1169 tok)
+- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1302 tok)
 
 ## apps/web/src/components/board/hooks/
 
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
+- `use-move-animation.ts` — Monotonic id so consecutive moves restart the slide. (~725 tok)
+- `use-move-animation.ts` — Monotonic id so consecutive moves restart the slide. (~714 tok)
 
 ## apps/web/src/components/computer-game/
 
 - `live-announcer.tsx` — Last computer move in SAN notation, e.g. "Nf3". Null before first computer move. (~342 tok)
-- `review-rail.tsx` — ReviewRail (~98 tok)
 
 ## apps/web/src/components/game/
 
@@ -959,11 +992,13 @@
 - `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~328 tok)
 - `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~632 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~318 tok)
-- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~762 tok)
+- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~962 tok)
+- `result-overlay.tsx` — Shared game-over card (victory halo + sparks; optional onRematch) (~1100 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~366 tok)
 - `index.ts` — Declares GameShellProps (~165 tok)
 - `move-panel.tsx` — 1-based ply index. (~1028 tok)
 - `player-strip.tsx` — Highlights the strip (gold) — use for the side to move. (~1070 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1777 tok)
 
 ## apps/web/src/components/games/
 
@@ -976,13 +1011,20 @@
 - `hero-board.tsx` — Static board art for the home hero — "the board is the product", so the (~1007 tok)
 - `hero.tsx` — FEATURES (~1469 tok)
 
+## apps/web/src/components/layout/
+
+- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~915 tok)
+- `UserMenu.tsx` — Top-bar account chip — resolves the session itself via /api/auth/me. (~938 tok)
+
 ## apps/web/src/components/play/
 
-- `computer-game-setup.tsx` — UNTIMED_SECONDS (~1037 tok)
+- `computer-game-setup.tsx` — UNTIMED_SECONDS (~3656 tok)
+- `invite-create.tsx` — TIME_CONTROLS (~2699 tok)
 
 ## apps/web/src/components/review/
 
-- `pgn-actions.tsx` — PgnActions (~388 tok)
+- `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~791 tok)
+- `pgn-actions.tsx` — Compact icon-only variant for tight chrome (e.g. the Moves panel header). (~808 tok)
 
 ## apps/web/src/components/settings/
 
@@ -992,10 +1034,22 @@
 
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
+- `use-live-clock.ts` — Exports formatClock, useLiveClock — live per-side countdown from serialized server clock (~500 tok)
+- `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~496 tok)
+- `use-position-eval.ts` — Exports usePositionEval — debounced White-POV Stockfish eval of a FEN (~550 tok)
+- `use-position-eval.ts` — Centipawns from White's POV; absent when a mate is found. (~547 tok)
+
+## apps/web/src/lib/
+
+- `utils.ts` — Exports cn, formatDuration, formatRelativeTime, clampRatingDelta, formatTimeControl (~369 tok)
 
 ## apps/web/src/lib/api/
 
+- `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
+- `auth.ts` — Exports register, login, logout, getMe — client auth API (~350 tok)
+- `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame (~280 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
+- `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame (~304 tok)
 
 ## apps/web/src/lib/board/
 
@@ -1005,7 +1059,7 @@
 
 ## apps/web/src/services/
 
-- `game-review.service.ts` — Exports getReview (~1531 tok)
+- `game-review.service.ts` — PvP state is player-scoped — forward the viewer's session cookie. (~1975 tok)
 
 ## apps/web/test/api/
 
@@ -1029,6 +1083,10 @@
 ## apps/web/test/home/
 
 - `homepage.test.tsx` — link (~704 tok)
+
+## apps/web/test/play/
+
+- `computer-game-setup.test.tsx` — mockCreate (~1277 tok)
 
 ## apps/web/test/profile/
 
@@ -1130,7 +1188,9 @@
 ## packages/shared/src/dto/
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
+- `pvp-game.dto.ts` — PvpGameStateDto/PvpPlayerDto/PvpMoveDto for live friend games (~330 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
+- `pvp-game.dto.ts` — Move submission for a live PvP game. (~288 tok)
 
 ## scripts/
 

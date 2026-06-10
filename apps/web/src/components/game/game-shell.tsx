@@ -49,13 +49,27 @@ export function GameShell({ topBar, leftRail, board, rightRail, className }: Gam
             'mx-auto grid h-full min-h-0 w-full grid-cols-1 gap-4 overflow-y-auto px-3 py-3 lg:gap-6 lg:overflow-hidden lg:px-6 lg:py-5',
             hasLeft
               ? 'max-w-[1600px] lg:grid-cols-[minmax(240px,300px)_minmax(0,1fr)_minmax(300px,360px)]'
-              : 'max-w-[1760px] lg:grid-cols-[minmax(0,1fr)_minmax(340px,400px)]',
+              : 'max-w-[1760px] lg:justify-center lg:grid-cols-[auto_minmax(340px,400px)]',
           )}
         >
           {hasLeft && (
             <div className="order-2 min-w-0 lg:order-1 lg:min-h-0 lg:overflow-y-auto">{leftRail}</div>
           )}
-          <div className="order-1 min-h-0 lg:order-2">{board}</div>
+          <div
+            className={cn(
+              // min-h-0 only on lg: in the stacked mobile flow it would let the
+              // stretched grid compress this cell under the rail (board overlap).
+              'order-1 lg:order-2 lg:min-h-0',
+              // In the 2-zone layout the board track is `auto`, so give the cell
+              // a definite width (viewport height bound, clamped to the space the
+              // rail + gutters leave) — the centered grid then hugs board + rail
+              // as one unit instead of stranding the board left of a dead gap.
+              !hasLeft &&
+                'lg:w-[min(calc(100dvh-var(--board-reserve,13rem)),calc(100vw-27rem))]',
+            )}
+          >
+            {board}
+          </div>
           <div className="order-3 flex min-w-0 flex-col lg:order-3 lg:min-h-0 lg:overflow-hidden">
             {rightRail}
           </div>

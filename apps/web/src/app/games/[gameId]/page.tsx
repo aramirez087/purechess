@@ -49,7 +49,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GameReviewPage({ params }: Props) {
   const currentUser = await getCurrentUser();
-  const review = await getReview(params.gameId, currentUser);
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('purechess_session')?.value ?? null;
+  const review = await getReview(params.gameId, currentUser, sessionCookie);
   if (!review) notFound();
 
   let reportTarget: { opponentId: string; opponentUsername: string } | null = null;

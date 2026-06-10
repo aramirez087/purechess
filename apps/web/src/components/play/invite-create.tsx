@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { useCreateInvite, useCancelInvite, useInviteSocket } from '@/hooks/use-invite';
+import { useCreateInvite, useCancelInvite, getInvite } from '@/hooks/use-invite';
 import type { InviteColor, TimeControlCategory } from '@/hooks/use-invite';
 import { Check, Copy, Link2, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -40,9 +40,26 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
   const createInvite = useCreateInvite();
   const cancelInvite = useCancelInvite();
 
-  useInviteSocket(inviteResult?.gameId ?? null, (gameId) => {
-    router.push(`/play/${gameId}`);
-  });
+  // Poll the invite until the opponent accepts (status flips to 'active'),
+  // then jump straight into the live game.
+  useEffect(() => {
+    if (!inviteResult) return;
+    const token = inviteResult.inviteUrl.split('/invite/')[1];
+    if (!token) return;
+    const id = setInterval(async () => {
+      try {
+        const invite = await getInvite(token);
+        if (invite.status === 'active') {
+          clearInterval(id);
+          router.push(`/play/${invite.gameId}`);
+        }
+      } catch {
+        // invite gone (cancelled/expired) — stop polling
+        clearInterval(id);
+      }
+    }, 2000);
+    return () => clearInterval(id);
+  }, [inviteResult, router]);
 
   async function handleCreate() {
     const tc = TIME_CONTROLS[selectedTimeControl];

@@ -11,8 +11,8 @@ import type { CreateComputerGameDto } from '@purechess/shared';
 import { TIME_CONTROL_PRESETS } from '@purechess/shared';
 import { cn } from '@/lib/utils';
 
-// Dummy sentinel for untimed games — keeps the DTO valid; has no gameplay effect.
-const UNTIMED_SECONDS = 600;
+// timeControlSeconds <= 0 = untimed on the API (engine clock never flags).
+const UNTIMED_SECONDS = 0;
 const UNTIMED_INCREMENT = 0;
 
 const LEVEL_LABELS: Record<number, string> = {
@@ -50,7 +50,7 @@ const COLORS: { label: string; value: CreateComputerGameDto['color'] }[] = [
 const PILL_BASE =
   'rounded-md text-xs font-medium transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const PILL_ACTIVE =
-  'bg-brass text-background font-semibold border-brass ring-2 ring-brass ring-offset-1 ring-offset-background';
+  'border-brass/70 bg-brass/15 font-semibold text-brass shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]';
 const PILL_INACTIVE =
   'bg-raised/40 border-border/60 text-muted-foreground hover:bg-raised hover:text-foreground';
 
@@ -192,7 +192,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                     'relative h-11 rounded-md text-sm font-mono tabular-nums transition-all',
                     'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     level === l
-                      ? 'bg-brass text-background font-semibold border-brass ring-2 ring-brass ring-offset-1 ring-offset-background'
+                      ? 'border-brass/70 bg-brass/15 font-semibold text-brass shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
                       : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
                   )}
                 >
@@ -257,7 +257,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                   'h-10 rounded-md text-sm font-medium transition-all',
                   'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   color === c.value
-                    ? 'bg-brass text-background font-semibold border-brass ring-2 ring-brass ring-offset-1 ring-offset-background'
+                    ? 'border-brass/70 bg-brass/15 font-semibold text-brass shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
                     : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
                 )}
               >

@@ -6,6 +6,7 @@ import type { Square as SquareType, Piece, Move, MoveIntent, PieceType, Color } 
 import type { ChessboardProps, Premove, PromotionState } from '@/lib/board/types';
 import { getLegalMovesForSquare, getLegalCapturesForSquare, getPieceAt, fenToColorToMove, isPromotion, getCheckSquare } from '@/lib/board/position';
 import { validatePremove } from '@/lib/board/premove';
+import { getAnimationSquares } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
 import { cn } from '@/lib/utils';
 import { useBoardSettings } from './board-context';
@@ -13,7 +14,9 @@ import { useBoardResize } from './hooks/use-board-resize';
 import { useDrag } from './hooks/use-drag';
 import { useClickMove } from './hooks/use-click-move';
 import { useKeyboard } from './hooks/use-keyboard';
+import { useMoveAnimation, type DragMoveRef } from './hooks/use-move-animation';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
+import { AnimationLayer } from './animation-layer';
 import { Square } from './square';
 import { Coordinates } from './coordinates';
 import { MoveInput } from './move-input';
@@ -61,6 +64,9 @@ export function Chessboard({
   const [premove, setPremove] = useState<Premove | null>(null);
   const [promotion, setPromotion] = useState<PromotionState>({ active: false, from: null, to: null });
   const [showKeyboardFocus, setShowKeyboardFocus] = useState(false);
+  const lastDragMoveRef = useRef<DragMoveRef | null>(null);
+
+  const anim = useMoveAnimation(position, lastDragMoveRef, settings.animationMs > 0);
 
   const colorToMove = useMemo(() => fenToColorToMove(position), [position]);
   const playerColor: Color = orientation === 'white' ? 'w' : 'b';
@@ -71,6 +77,34 @@ export function Chessboard({
     [checkSquareProp, position],
   );
 
+  // One sound per confirmed position change, typed by what happened — covers
+  // both players' moves (the optimistic per-handler plays were move-only and
+  // silent for the opponent).
+  const prevSoundPosRef = useRef(position);
+  useEffect(() => {
+    const prev = prevSoundPosRef.current;
+    if (prev === position) return;
+    prevSoundPosRef.current = position;
+    if (!settings.sound) return;
+
+    const squares = getAnimationSquares(prev, position);
+    if (!squares) return;
+    try {
+      const next = new Chess(position);
+      if (next.isCheckmate()) {
+        soundEngine.play('mate');
+        return;
+      }
+      if (next.inCheck()) {
+        soundEngine.play('check');
+        return;
+      }
+    } catch {
+      // unparseable FEN — fall through to the generic sound
+    }
+    soundEngine.play(squares.capturedAt ? 'capture' : 'move');
+  }, [position, settings.sound]);
+
   useEffect(() => {
     if (!premove) return;
     if (!isPlayerTurn) return;
@@ -79,9 +113,8 @@ export function Chessboard({
     setPremove(null);
     if (result && onMove) {
       onMove({ from: result.from, to: result.to, promotion: result.promotion });
-      if (settings.sound) soundEngine.play('move');
     }
-  }, [position, isPlayerTurn, premove, onMove, settings.sound]);
+  }, [position, isPlayerTurn, premove, onMove]);
 
   const getPieceAtMemo = useCallback(
     (sq: SquareType) => getPieceAt(position, sq),
@@ -145,9 +178,8 @@ export function Chessboard({
       }
 
       onMove(intent);
-      if (settings.sound) soundEngine.play('move');
     },
-    [onMove, readOnly, position, isPlayerTurn, settings.sound],
+    [onMove, readOnly, position, isPlayerTurn],
   );
 
   const { selectedSquare, handleSquareClick, deselect } = useClickMove({
@@ -170,10 +202,17 @@ export function Chessboard({
     },
     onDragEnd: (from, to) => {
       if (!to || from === to) return;
+      lastDragMoveRef.current = { from, to };
       handleMove({ from, to });
     },
     getSquareFromPoint,
   });
+
+  const dragOverSquare = useMemo(
+    () =>
+      dragState.active ? getSquareFromPoint(dragState.x, dragState.y) : null,
+    [dragState.active, dragState.x, dragState.y, getSquareFromPoint],
+  );
 
   const { focusSquare, selectedSquare: keyboardSelected, handleKeyDown } = useKeyboard({
     orientation,
@@ -206,7 +245,6 @@ export function Chessboard({
 
     if (onMove) {
       onMove(intent);
-      if (settings.sound) soundEngine.play('move');
     }
   }
 
@@ -257,12 +295,14 @@ export function Chessboard({
           const legalDests = effectiveSelected ? selectedDests : [];
           const isLegalDest = legalDests.includes(square);
           const isCapture = selectedCaptures.includes(square);
+          const isAnimTarget = anim?.pieces.some((p) => p.to === square) ?? false;
 
           return (
             <Square
               key={square}
               square={square}
               piece={piece}
+              hidePiece={isAnimTarget}
               isLight={isLight}
               isSelected={effectiveSelected === square}
               isLegalMove={isLegalDest && !isCapture}
@@ -274,6 +314,7 @@ export function Chessboard({
               isPreMoveTo={premove?.to === square}
               isKeyboardFocus={showKeyboardFocus && focusSquare === square}
               isDragSource={dragState.active && dragState.from === square}
+              isDragOver={dragState.active && dragOverSquare === square && dragState.from !== square}
               ghostPiece={premove?.to === square ? (getPieceAt(position, premove.from) ?? undefined) : undefined}
               ariaLabel={buildAriaLabel(square, piece, isLegalDest ? legalDests : [])}
               onPointerDown={readOnly ? undefined : (e, sq) => {
@@ -292,6 +333,8 @@ export function Chessboard({
           <Coordinates orientation={orientation} />
         </div>
       )}
+
+      {anim && <AnimationLayer anim={anim} orientation={orientation} />}
 
       {dragState.active && dragState.from && (() => {
         const p = getPieceAt(position, dragState.from);

@@ -25,8 +25,10 @@ import {
   STARTING_FEN,
   buildStateDto,
   computeExtras,
+  engineTimeMs,
   fenPositionKey,
   getCategory,
+  isUntimed,
   resolveColor,
 } from "./computer-games.helpers";
 
@@ -49,7 +51,7 @@ export class ComputerGamesService {
     const blackUserId = userColor === "black" ? userId : null;
 
     const nowMs = Date.now();
-    const timeMs = dto.timeControlSeconds * 1000;
+    const timeMs = engineTimeMs(dto.timeControlSeconds);
     const incrementMs = (dto.incrementSeconds ?? 0) * 1000;
 
     const game = await this.prisma.game.create({
@@ -136,7 +138,7 @@ export class ComputerGamesService {
     const blackUserId = userColor === "black" ? userId : null;
 
     const nowMs = Date.now();
-    const timeMs = dto.timeControlSeconds * 1000;
+    const timeMs = engineTimeMs(dto.timeControlSeconds);
     const incrementMs = (dto.incrementSeconds ?? 0) * 1000;
 
     const game = await this.prisma.game.create({
@@ -286,7 +288,7 @@ export class ComputerGamesService {
     // isTimeout sees ~0 elapsed and never fires. For a timed game keep the
     // persisted lastTickAt so applyMove ticks real elapsed, applies increment,
     // and flag-fall (bug-005 path) can fire.
-    if (game.timeControlSeconds <= 0) {
+    if (isUntimed(game.timeControlSeconds)) {
       engineState.clock = { ...engineState.clock, lastTickAt: BigInt(nowMs) };
     }
 

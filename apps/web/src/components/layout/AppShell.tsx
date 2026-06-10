@@ -83,7 +83,7 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
 
           <div className="ml-auto flex items-center gap-1">
             <SettingsDialog />
-            <UserMenu user={null} />
+            <UserMenu />
             <MobileNav />
           </div>
         </div>

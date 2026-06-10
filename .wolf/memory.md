@@ -624,3 +624,144 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+
+## Session: 2026-06-10 09:12
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-06-10 09:14
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 09:16 | Fixed argon2 napi-v3 binary missing (node-pre-gyp install) | node_modules argon2 | API can start | ~1k |
+| 09:20 | Edited package.json | 1→2 lines | ~29 |
+| 09:21 | infra:up scoped to postgres+redis (arm64 napi build broke full compose) | package.json | infra up, migrations applied | ~2k |
+| 09:21 | Session end: 1 writes across 1 files (package.json) | 2 reads | ~874 tok |
+
+## Session: 2026-06-10 15:57
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 15:59 | designqc: captured 6 screenshots (192KB, ~15000 tok) | /, /play | ready for eval | ~0 |
+| 16:06 | Created apps/web/src/components/board/hooks/use-move-animation.ts | — | ~714 |
+| 16:06 | Created apps/web/src/components/board/animation-layer.tsx | — | ~596 |
+| 16:06 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~90 |
+| 16:06 | Edited apps/web/src/components/board/chessboard.tsx | added 2 import(s) | ~107 |
+| 16:06 | Edited apps/web/src/components/board/chessboard.tsx | 3→6 lines | ~102 |
+| 16:07 | Edited apps/web/src/components/board/chessboard.tsx | added error handling | ~382 |
+| 16:07 | Edited apps/web/src/components/board/chessboard.tsx | modified if() | ~48 |
+| 16:07 | Edited apps/web/src/components/board/chessboard.tsx | 4→5 lines | ~44 |
+| 16:07 | Edited apps/web/src/components/board/chessboard.tsx | modified if() | ~14 |
+| 16:07 | Edited apps/web/src/components/board/chessboard.tsx | added optional chaining | ~155 |
+| 16:07 | Edited apps/web/src/components/board/chessboard.tsx | 5→7 lines | ~72 |
+| 16:07 | Edited apps/web/src/components/board/square.tsx | 4→6 lines | ~57 |
+| 16:07 | Edited apps/web/src/components/board/square.tsx | modified Square() | ~25 |
+| 16:07 | Edited apps/web/src/components/board/square.tsx | 5→5 lines | ~62 |
+| 16:08 | Edited apps/web/src/components/board/square.tsx | 19→19 lines | ~170 |
+| 16:08 | Edited apps/web/src/app/globals.css | modified media() | ~188 |
+| 16:08 | Edited apps/web/src/app/globals.css | 2→2 lines | ~23 |
+| 16:08 | Edited apps/web/src/components/game/game-shell.tsx | 3→3 lines | ~61 |
+| 16:09 | Edited apps/web/src/components/game/game-shell.tsx | expanded (+12 lines) | ~169 |
+| 16:11 | Edited apps/web/src/components/review/pgn-actions.tsx | modified usePgnHandlers() | ~808 |
+| 16:11 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | "@/components/computer-gam" → "@/components/review/pgn-a" | ~19 |
+| 16:11 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 14→17 lines | ~174 |
+| 16:13 | Edited apps/web/src/components/game/game-shell.tsx | 1→3 lines | ~60 |
+| 16:14 | Edited apps/web/src/components/play/computer-game-setup.tsx | 2→2 lines | ~36 |
+| 16:14 | Edited apps/web/src/components/play/computer-game-setup.tsx | "bg-brass text-background " → "border-brass/70 bg-brass/" | ~36 |
+| 16:14 | Edited apps/web/src/components/play/computer-game-setup.tsx | "bg-brass text-background " → "border-brass/70 bg-brass/" | ~35 |
+| 16:18 | Edited apps/api/src/computer-games/computer-games.helpers.ts | modified isUntimed() | ~222 |
+| 16:18 | Edited apps/api/src/computer-games/computer-games.helpers.ts | added 1 condition(s) | ~82 |
+| 16:19 | Edited apps/api/src/computer-games/computer-games.helpers.ts | inline fix | ~16 |
+| 16:19 | Edited apps/api/src/computer-games/computer-games.service.ts | 21→21 lines | ~186 |
+| 16:19 | Edited apps/api/src/computer-games/computer-games.service.ts | 22→22 lines | ~191 |
+| 16:19 | Edited apps/api/src/computer-games/computer-games.service.ts | 6→8 lines | ~42 |
+| 16:19 | Edited apps/api/src/computer-games/computer-games.service.ts | 3→3 lines | ~38 |
+| 16:20 | Edited apps/api/src/computer-games/computer-games.helpers.ts | 9→14 lines | ~143 |
+| 16:21 | Edited apps/web/src/components/play/computer-game-setup.tsx | 3→3 lines | ~38 |
+| 16:21 | Created apps/web/src/hooks/use-live-clock.ts | — | ~496 |
+| 16:22 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~37 |
+| 16:22 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: clock | ~204 |
+| 16:22 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: clock, whiteMs | ~96 |
+| 16:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: timed | ~67 |
+| 16:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 1→3 lines | ~34 |
+| 16:23 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 8→9 lines | ~91 |
+| 16:25 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~34 |
+| 16:25 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added error handling | ~451 |
+| 16:26 | Edited apps/web/test/play/computer-game-setup.test.tsx | 600 → 0 | ~9 |
+| 16:30 | Board UX pass: wired orphaned animations.ts into Chessboard (new use-move-animation hook + AnimationLayer, drag drops land instant), centralized typed sounds (capture/check/mate/move, opponent moves now audible) | apps/web/src/components/board/* | done, anim verified live | ~9k |
+| 16:30 | Layout: 2-zone GameShell now centers board+rail as one unit (auto track + justify-center + definite cell width); fixed mobile rail-over-board overlap (lg:min-h-0) | game-shell.tsx | verified 1440+390px | ~3k |
+| 16:30 | Rail: PGN actions to icon buttons in Moves header (PgnIconActions), deleted review-rail.tsx; setup pills softened (brass tint, not solid gold) | pgn-actions.tsx, computer-game-client.tsx, computer-game-setup.tsx | done | ~3k |
+| 16:30 | Fixed untimed-timeout regression (bug-091): client sends 0, server sentinel clock; added live clock display for timed computer games (use-live-clock + PlayerStrip clock chips + client-side flag claim) | api helpers/service, web client | curl + live verified, 194 web + 247 api tests green | ~8k |
+| 16:29 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: flaggedColor, null | ~198 |
+| 16:29 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified formatClock() | ~54 |
+| 16:30 | Edited apps/web/src/components/board/chessboard.tsx | modified getSquareFromPoint() | ~82 |
+| 16:30 | Edited apps/web/src/components/board/chessboard.tsx | 2→3 lines | ~72 |
+| 16:30 | Edited apps/web/src/components/board/square.tsx | 3→5 lines | ~47 |
+| 16:30 | Edited apps/web/src/components/board/square.tsx | 3→4 lines | ~18 |
+| 16:30 | Edited apps/web/src/components/board/square.tsx | expanded (+6 lines) | ~62 |
+| 16:40 | Drag-over brass ring on Square; flagged side clock renders 0.0 on timeout; all verified live (drag d2-d4, untimed no-clock, flag claim resolves to Game Over) | square.tsx, chessboard.tsx, computer-game-client.tsx | 194 web + 247 api tests green, tsc clean | ~3k |
+| 16:32 | Session end: 52 writes across 13 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 23 reads | ~35240 tok |
+| 16:33 | Edited apps/web/src/services/game-review.service.ts | 9→10 lines | ~81 |
+| 16:34 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: startedAt, avatar | ~461 |
+| 16:34 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~36 |
+| 16:34 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 5→5 lines | ~108 |
+| 16:35 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+39 lines) | ~593 |
+| 16:35 | Edited apps/web/src/app/globals.css | expanded (+28 lines) | ~157 |
+| 16:35 | Edited apps/web/src/app/globals.css | 5→10 lines | ~57 |
+| 16:38 | Edited apps/web/src/app/globals.css | CSS: root | ~83 |
+| 16:39 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | modified useMoveAnimation() | ~156 |
+| 16:39 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | 5→5 lines | ~65 |
+| 16:40 | Edited apps/web/src/components/board/chessboard.tsx | 3→3 lines | ~42 |
+| 16:40 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 2 import(s) | ~68 |
+| 16:40 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: tick, whiteMs | ~270 |
+| 16:41 | Edited apps/web/src/app/games/page.tsx | modified if() | ~74 |
+| 16:43 | Created apps/web/src/lib/api/auth.ts | — | ~350 |
+| 16:43 | Created apps/web/src/components/auth/auth-shell.tsx | — | ~480 |
+| 16:44 | Created apps/web/src/app/login/login-form.tsx | — | ~1092 |
+| 16:44 | Created apps/web/src/app/login/page.tsx | — | ~90 |
+| 16:44 | Created apps/web/src/app/register/register-form.tsx | — | ~1510 |
+| 16:44 | Created apps/web/src/app/register/page.tsx | — | ~96 |
+| 16:46 | Edited apps/web/src/lib/api/auth.ts | modified logout() | ~76 |
+| 16:46 | Created apps/web/src/components/layout/UserMenu.tsx | — | ~938 |
+| 16:47 | Edited apps/web/src/components/layout/AppShell.tsx | inline fix | ~7 |
+| 17:15 | Round 2: fixed mono board-theme CSS specificity (bug-093); review-page epoch date/raw ratings (bug-101); /games null-user crash + built /login + /register + self-fetching UserMenu w/ real sign-out (bug-100); victory halo+sparks on win overlay; wired Animations toggle + low-time tick | globals.css, review-client, game-review.service, login/register pages, UserMenu, AppShell, computer-game-client | register→games flow + mono theme + win overlay verified live; 194 web tests green, tsc clean | ~12k |
+| 16:49 | Created apps/web/src/components/board/move-input.tsx | — | ~552 |
+| 17:30 | Promotion dialog redesigned (dark card, 64px pieces, brass hover, named aria-labels) + verified live (e8=Q#); full suite green (194 web + 247 api, tsc clean both) | move-input.tsx | session complete | ~3k |
+| 16:52 | Session end: 76 writes across 23 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 32 reads | ~49969 tok |
+| 16:53 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 1→6 lines | ~38 |
+| 16:53 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 2 condition(s) | ~470 |
+| 16:54 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: onTakeback | ~44 |
+| 16:54 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→3 lines | ~39 |
+| 16:54 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+20 lines) | ~838 |
+| 16:54 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | inline fix | ~21 |
+| 16:55 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: onRematch | ~64 |
+| 16:55 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+8 lines) | ~479 |
+| 16:55 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 6→7 lines | ~80 |
+| 16:56 | Created apps/web/src/hooks/use-position-eval.ts | — | ~547 |
+| 16:56 | Created apps/web/src/components/review/eval-panel.tsx | — | ~791 |
+| 16:56 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~55 |
+| 16:56 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 4→7 lines | ~76 |
+| 17:55 | Round 3: Takeback + Rematch wired into computer-game (handlers + control bar + ResultOverlay + T keyboard shortcut; API fns existed unused); EvalPanel on review page (use-position-eval → local Stockfish analyze(), white-POV bar + score + depth + best SAN) | computer-game-client.tsx, eval-panel.tsx, use-position-eval.ts, review-client.tsx | all verified live (takeback→0 ply, rematch→swapped colors+bot opened Nf3, eval +0.8 d19 start / +0.7 best Nf3 after e5); 194 web tests green | ~8k |
+| 17:01 | Edited apps/web/src/lib/utils.ts | added 1 condition(s) | ~89 |
+| 18:05 | QC sweep: settings + profile pages verified good; formatTimeControl(<=0) now "Untimed" (was "0+0" chips in history/profile) | lib/utils.ts | tests green | ~2k |
+| 17:02 | Session end: 90 writes across 26 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 33 reads | ~53600 tok |
+| 17:05 | Created packages/shared/src/dto/pvp-game.dto.ts | — | ~289 |
+| 17:05 | Edited packages/shared/src/dto/pvp-game.dto.ts | "./computer-game.dto.js" → "./computer-game.dto" | ~18 |
+| 17:07 | Created apps/api/src/games/games.service.ts | — | ~3119 |
+| 17:08 | Created apps/api/src/games/games.controller.ts | — | ~355 |
+| 17:08 | Created apps/api/src/games/games.module.ts | — | ~123 |
+| 17:08 | Edited apps/api/src/games/games.service.ts | 2→2 lines | ~25 |
+| 17:09 | Created apps/web/src/components/game/result-overlay.tsx | — | ~1777 |
+| 17:10 | Created apps/web/src/lib/api/pvp-games.ts | — | ~304 |
+| 17:10 | Created apps/web/src/app/(play)/play/[gameId]/page.tsx | — | ~100 |
+| 17:11 | Created apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | — | ~4594 |
+| 17:12 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: turn | ~66 |
+| 17:15 | Edited apps/web/src/components/play/invite-create.tsx | 9→9 lines | ~126 |
+| 17:15 | Edited apps/web/src/components/play/invite-create.tsx | added error handling | ~218 |
+| 17:18 | Edited apps/web/src/services/game-review.service.ts | added optional chaining | ~627 |
+| 17:19 | Edited apps/web/src/services/game-review.service.ts | modified getReview() | ~116 |
+| 17:19 | Edited apps/web/src/services/game-review.service.ts | 3→3 lines | ~55 |
+| 17:19 | Edited apps/web/src/app/games/[gameId]/page.tsx | added optional chaining | ~95 |
+| 18:45 | Round 4 — LIVE PVP SHIPPED: GamesService/Controller (state/move/resign, engine-validated, Move rows, idle flag-fall on poll), PvpGameStateDto in shared, /play/[gameId] live page (1.5s poll, clocks, premove, ResultOverlay), invite acceptance poll (old WS push was protocol-mismatched dead code), PvP review via cookie-forwarded state fetch, ResultOverlay extracted to components/game | api/games/*, shared pvp-game.dto, (play)/play/[gameId]/*, invite-create, game-review.service, result-overlay.tsx | full 2-browser E2E: invite→accept→alternating moves→clocks→resign→Victory overlay→review; 194 web + 247 api green | ~25k |
+| 17:22 | Session end: 107 writes across 34 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 40 reads | ~71331 tok |

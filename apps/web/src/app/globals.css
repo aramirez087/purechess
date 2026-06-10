@@ -190,8 +190,8 @@
   --board-highlight-selected: 41 85% 56% / 0.5;
   --board-highlight-check: 0 72% 51%;
   --board-highlight-premove: 177 30% 52% / 0.35;
-  --board-legal-dot: 44 45% 10% / 0.28;
-  --board-legal-ring: 44 45% 10% / 0.3;
+  --board-legal-dot: 44 45% 10% / 0.34;
+  --board-legal-ring: 44 45% 10% / 0.34;
 }
 
 [data-theme='dark'] {
@@ -216,8 +216,71 @@
   }
 }
 
+@keyframes legal-hint-in {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes victory-halo {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes victory-spark {
+  0% {
+    transform: translateY(14px) scale(0.5);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-52px) scale(1);
+    opacity: 0;
+  }
+}
+
+.sq-legal-dot {
+  animation: legal-hint-in 140ms ease-out;
+  transition: transform 120ms ease;
+}
+
+[data-square]:hover > .sq-legal-dot {
+  transform: scale(1.35);
+}
+
+.sq-legal-ring {
+  animation: legal-hint-in 140ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sq-check {
+    animation: none !important;
+  }
+
+  .sq-legal-dot,
+  .sq-legal-ring {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  [style*='victory-halo'],
+  [style*='victory-spark'] {
     animation: none !important;
   }
 
@@ -230,7 +293,10 @@
   }
 }
 
-[data-board-theme='mono'] {
+/* :root prefix beats the dark-mode `:root:not([data-theme='light'])` re-pin
+   of the classic colours (0,2,0 specificity) — a bare attribute selector loses
+   and the picker silently no-ops. */
+:root[data-board-theme='mono'] {
   --board-sq-light: 0 0% 90%;
   --board-sq-dark: 0 0% 25%;
 }

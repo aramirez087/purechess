@@ -8,6 +8,25 @@ import {
 export const STARTING_FEN =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
+/**
+ * Engine clock for untimed games (timeControlSeconds <= 0). The engine's
+ * isTimeout uses `remaining <= elapsed`, so a 0ms clock flags immediately —
+ * untimed games instead get this ~100h sentinel, and submitMove additionally
+ * resets lastTickAt on every move so the sentinel never drains.
+ */
+export const UNTIMED_CLOCK_MS = 359_999_000;
+
+export function isUntimed(timeControlSeconds: number): boolean {
+  return timeControlSeconds <= 0;
+}
+
+/** Milliseconds for the engine clock — sentinel for untimed games. */
+export function engineTimeMs(timeControlSeconds: number): number {
+  return isUntimed(timeControlSeconds)
+    ? UNTIMED_CLOCK_MS
+    : timeControlSeconds * 1000;
+}
+
 export function resolveColor(
   color: "white" | "black" | "random",
 ): "white" | "black" {
@@ -16,6 +35,7 @@ export function resolveColor(
 }
 
 export function getCategory(secs: number): TimeControlCategory {
+  if (secs <= 0) return TimeControlCategory.rapid; // untimed — closest bucket
   if (secs < 180) return TimeControlCategory.bullet;
   if (secs <= 600) return TimeControlCategory.blitz;
   return TimeControlCategory.rapid;
@@ -52,14 +72,19 @@ export function computeExtras(
     offerBy === "w" ? "white" : offerBy === "b" ? "black" : null;
 
   const c = serialized?.clock;
-  const clock: ComputerClockDto | null = c
-    ? {
-        whiteMs: c.whiteMs,
-        blackMs: c.blackMs,
-        lastTickAt: c.lastTickAt,
-        incrementMs: c.incrementMs,
-      }
-    : null;
+  // Untimed games carry the never-draining sentinel on both sides — surface
+  // them as "no clock" so clients don't render a 100h countdown.
+  const untimed =
+    c != null && c.whiteMs >= UNTIMED_CLOCK_MS && c.blackMs >= UNTIMED_CLOCK_MS;
+  const clock: ComputerClockDto | null =
+    c && !untimed
+      ? {
+          whiteMs: c.whiteMs,
+          blackMs: c.blackMs,
+          lastTickAt: c.lastTickAt,
+          incrementMs: c.incrementMs,
+        }
+      : null;
 
   return {
     clock,
@@ -120,7 +145,7 @@ export function truncateToPly(
   const fen = targetPly > 0 ? moves[targetPly - 1]!.fenAfter : startFen;
   const fenHistory = serialized.fenHistory.slice(0, targetPly + 1);
 
-  const baseMs = game.timeControlSeconds * 1000;
+  const baseMs = engineTimeMs(game.timeControlSeconds);
   let whiteMs = baseMs;
   let blackMs = baseMs;
   let whiteSet = false;

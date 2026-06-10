@@ -19,9 +19,12 @@ type Props = {
 };
 
 export default async function GamesPage({ searchParams }: Props) {
-  const result = await serverFetch<{ user: SafeUser }>('/api/auth/me', { withAuth: true });
+  const result = await serverFetch<{ user: SafeUser | null }>('/api/auth/me', {
+    withAuth: true,
+  });
 
-  if (!result) {
+  // /api/auth/me returns 200 {user: null} when unauthenticated — not a 4xx.
+  if (!result || !result.user) {
     redirect('/login?return=/games');
   }
 
