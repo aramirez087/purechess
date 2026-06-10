@@ -51,6 +51,11 @@
       "sourceType": "autoskills-registry",
       "computedHash": "7361ab02fb6b09913e3bdd9cf61c629ed6c17de9485e6a781054e5d437ccfc29"
     },
+    "nodejs-express-server": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "autoskills-registry",
+      "computedHash": "b15b3e6dda23d3f3c230285a122de9df3aabae6408dc2bd52038445e60ba745e"
+    },
     "playwright-best-practices": {
       "source": "currents-dev/playwright-best-practices-skill",
       "sourceType": "autoskills-registry",
@@ -80,6 +85,11 @@
       "source": "vercel-labs/agent-skills",
       "sourceType": "autoskills-registry",
       "computedHash": "502eb06700e2c3cb1bd7f710860528f72281320bd5171a2087b05a090b573dc1"
+    },
+    "rust-best-practices": {
+      "source": "apollographql/skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "5f3890a1ccc7df4c47b7fd14600e2ddd629c513d58118ab668260f4d5d6b30d5"
     },
     "seo": {
       "source": "addyosmani/web-quality-skills",

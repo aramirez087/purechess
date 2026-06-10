@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 265117,
-    "total_reads": 256,
+    "total_tokens_estimated": 277856,
+    "total_reads": 287,
     "total_writes": 182,
-    "total_sessions": 32,
-    "anatomy_hits": 122,
-    "anatomy_misses": 130,
+    "total_sessions": 34,
+    "anatomy_hits": 135,
+    "anatomy_misses": 148,
     "repeated_reads_blocked": 63,
-    "estimated_savings_vs_bare_cli": 54022
+    "estimated_savings_vs_bare_cli": 56622
   },
   "sessions": [
     {
@@ -2929,6 +2929,240 @@
         "writes_count": 3,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-06-10-1823",
+      "started": "2026-06-10T00:23:22.193Z",
+      "ended": "2026-06-10T00:32:52.861Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/.claude/skills/integration-javascript_node/SKILL.md",
+          "tokens_estimated": 773,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-home.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-after-play-now.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-play-page.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/Dockerfile",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/Dockerfile",
+          "tokens_estimated": 938,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 1711,
+        "output_tokens_estimated": 0,
+        "reads_count": 6,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-06-10-1823",
+      "started": "2026-06-10T00:23:22.193Z",
+      "ended": "2026-06-10T00:35:06.094Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/.claude/skills/integration-javascript_node/SKILL.md",
+          "tokens_estimated": 773,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-home.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-after-play-now.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-play-page.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/Dockerfile",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/Dockerfile",
+          "tokens_estimated": 938,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 676,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/crates/purechess-engine/src/ffi.rs",
+          "tokens_estimated": 2075,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 4462,
+        "output_tokens_estimated": 0,
+        "reads_count": 8,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-06-10-1823",
+      "started": "2026-06-10T00:23:22.193Z",
+      "ended": "2026-06-10T00:38:56.032Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/.claude/skills/integration-javascript_node/SKILL.md",
+          "tokens_estimated": 773,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-home.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-after-play-now.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-play-page.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/Dockerfile",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/Dockerfile",
+          "tokens_estimated": 938,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/crates/purechess-engine/src/lib.rs",
+          "tokens_estimated": 676,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/crates/purechess-engine/src/ffi.rs",
+          "tokens_estimated": 2075,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/chess",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/chess/engine.service.ts",
+          "tokens_estimated": 1661,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/config/engine-backend.config.ts",
+          "tokens_estimated": 153,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/chess/chess.module.ts",
+          "tokens_estimated": 290,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/.env",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-computer-level.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-game-board.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-after-e4.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/purechess-wait-screenshot.png",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 6566,
+        "output_tokens_estimated": 0,
+        "reads_count": 17,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 7
       }
     }
   ],

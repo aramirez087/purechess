@@ -558,3 +558,27 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
 | 20:41 | Created .session-06-plan.md | — | ~3274 |
+## Session: 2026-06-09 18:45
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:32 | Edited ../.epic-worktrees/purechess/epic--rust-engine-migration/crates/purechess-engine/src/lib.rs | 9→7 lines | ~22 |
+| 19:35 | Session end: 1 writes across 1 files (lib.rs) | 4 reads | ~23 tok |
+| 19:43 | Session end: 1 writes across 1 files (lib.rs) | 4 reads | ~23 tok |
+
+## Session: 2026-06-09 09:15
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-06-10 18:23
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:25 | Started app: home → play → computer game setup → board initialization | apps/web, apps/api | ✓ Full flow works; Nf3 validated and displayed | 8k |
+| 18:28 | Switched to Rust engine: set ENGINE_BACKEND=native in .env, restarted API | .env | ✓ NativeEngineAdapter active; computer game initialized and validated move with Rust | 2k |
+
+## Session: 2026-06-10 18:46
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|

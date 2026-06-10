@@ -1,55 +1,10 @@
 {
-  "session_id": "session-2026-06-09-2039",
-  "started": "2026-06-09T02:39:04.230Z",
-  "files_read": {
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/apps/api/fly.toml": {
-      "count": 1,
-      "tokens": 195,
-      "first_read": "2026-06-09T02:39:19.090Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/apps/api/src/chess/engine/index.ts": {
-      "count": 1,
-      "tokens": 344,
-      "first_read": "2026-06-09T02:39:19.551Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/apps/api/src/config/engine-backend.config.ts": {
-      "count": 1,
-      "tokens": 153,
-      "first_read": "2026-06-09T02:39:20.456Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/.github/workflows/ci.yml": {
-      "count": 1,
-      "tokens": 1585,
-      "first_read": "2026-06-09T02:39:22.156Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/apps/api/src/chess/engine.service.ts": {
-      "count": 1,
-      "tokens": 1661,
-      "first_read": "2026-06-09T02:39:29.259Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/apps/api/src/chess/chess.module.ts": {
-      "count": 1,
-      "tokens": 290,
-      "first_read": "2026-06-09T02:39:33.372Z"
-    },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/apps/api/src/observability/sentry.ts": {
-      "count": 1,
-      "tokens": 137,
-      "first_read": "2026-06-09T02:39:34.045Z"
-    }
-  },
-  "files_written": [
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--rust-engine-migration--s06-cutover/.session-06-plan.md",
-      "action": "create",
-      "tokens": 3507,
-      "at": "2026-06-09T02:41:22.995Z"
-    }
-  ],
-  "edit_counts": {
-    ".session-06-plan.md": 1
-  },
-  "anatomy_hits": 7,
+  "session_id": "session-2026-06-10-1846",
+  "started": "2026-06-10T00:46:53.330Z",
+  "files_read": {},
+  "files_written": [],
+  "edit_counts": {},
+  "anatomy_hits": 0,
   "anatomy_misses": 0,
   "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,

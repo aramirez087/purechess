@@ -2,6 +2,8 @@
 
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-09T02:41:22.989Z
 > Files: 653 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-09T01:32:37.744Z
+> Files: 592 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -21,6 +23,10 @@
 ## ../../.claude/plans/
 
 - `your-goal-is-to-squishy-platypus.md` — PureChess — Game Page Redesign: Full-Bleed Dual-Rail Shell (~3766 tok)
+
+## ../.epic-worktrees/purechess/epic--rust-engine-migration/crates/purechess-engine/src/
+
+- `lib.rs` — PureChess native engine — WP2 implementation. (~687 tok)
 
 ## ../pc-merge-vscomputer/apps/web/src/app/computer-game/[gameId]/
 
