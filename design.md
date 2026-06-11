@@ -103,6 +103,25 @@ Mobile:
 - Move list: tabular rows with number, white move, black move. The latest row may be slightly stronger.
 - Resign: icon plus label, quiet outline by default, clear red hover/focus state.
 
+## Primary Action Color: brass is the door
+
+Two primary-button voices exist on purpose, and the split is by meaning,
+not by page:
+
+- **Solid brass (`bg-brass`)** is reserved for *crossing the threshold into
+  the club*: the auth forms (sign in / create account) and nothing else.
+  Brass at full strength marks the one decision that changes who you are to
+  the product. Hero/landing CTAs that lead toward auth may use the brass
+  *tint* recipes (border + wash), never a second solid-brass block per view.
+- **Bone (`bg-foreground text-background`)** is the in-app primary: start a
+  game, accept an invite, copy a link, analyze. Inside the club everything
+  competes only with the board, so the strongest neutral wins.
+
+Rule of thumb: if the user is not signed in and the action signs them in,
+it may be solid brass. Otherwise it is bone. Do not introduce new
+solid-brass fills; the accent budget is already spent on status, last-move
+washes, selection, and the auth door.
+
 ## Motion
 
 Motion should be functional:

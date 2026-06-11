@@ -18,7 +18,7 @@ export function SettingsPageClient() {
               <Settings2 className="h-4 w-4" />
             </span>
             <div>
-              <h1 className="text-2xl font-semibold tracking-[-0.02em]">Settings</h1>
+              <h1 className="font-display text-3xl tracking-[-0.01em] sm:text-4xl">Settings</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">
                 Tweak the look, sound, and feel of Purechess.
               </p>

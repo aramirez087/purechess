@@ -157,7 +157,9 @@ function Section({
   return (
     <section>
       <header className="mb-4">
-        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+        <h3 className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+          {title}
+        </h3>
         {description && (
           <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
         )}

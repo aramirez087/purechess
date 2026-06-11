@@ -34,7 +34,7 @@ export function ProfileHeader({ username, avatarUrl, createdAt, isOwnProfile }: 
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <h1 className="truncate text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
+          <h1 className="truncate font-display text-3xl tracking-[-0.01em] sm:text-4xl">
             {username}
           </h1>
         </div>

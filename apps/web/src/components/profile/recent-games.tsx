@@ -13,12 +13,12 @@ function ResultBadge({ result }: { result: GameHistorySummaryDto['result'] }) {
   const map = {
     win: {
       label: 'Win',
-      classes: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      classes: 'bg-success/10 text-success border-success/25',
       icon: TrendingUp,
     },
     loss: {
       label: 'Loss',
-      classes: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      classes: 'bg-destructive/10 text-destructive border-destructive/25',
       icon: TrendingDown,
     },
     draw: {
@@ -47,9 +47,9 @@ function RatingDelta({ delta }: { delta: number | null }) {
   const sign = delta > 0 ? '+' : '';
   const color =
     delta > 0
-      ? 'text-emerald-600 dark:text-emerald-400'
+      ? 'text-success'
       : delta < 0
-        ? 'text-rose-600 dark:text-rose-400'
+        ? 'text-destructive'
         : 'text-muted-foreground';
   return (
     <span className={cn('font-mono tabular-nums text-sm font-medium', color)}>
@@ -104,25 +104,27 @@ export function RecentGames({ games }: RecentGamesProps) {
                 className="group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-raised/60"
               >
                 <span
+                  role="img"
                   className={cn(
                     'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset',
                     g.playedAs === 'white'
-                      ? 'bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:ring-amber-900/40'
-                      : 'bg-slate-100 text-slate-700 ring-slate-200 dark:bg-slate-900/40 dark:text-slate-400 dark:ring-slate-800',
+                      ? 'bg-foreground/90 text-background ring-border'
+                      : 'bg-raised text-muted-foreground ring-border',
                   )}
-                  aria-label={g.playedAs}
+                  aria-label={`Played as ${g.playedAs}`}
                 >
                   <ColorIcon className="h-3.5 w-3.5" />
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="truncate text-sm font-medium">{g.opponentUsername}</p>
-                  <p className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+                  {/* div, not p: Badge renders a <div> and divs inside <p> break hydration (bug-224) */}
+                  <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Clock className="h-2.5 w-2.5" />
                       {formatTimeControl(g.timeControlSeconds, g.incrementSeconds)}
                     </span>
                     {g.isRated && <Badge variant="outline" className="h-4 px-1.5 text-[9px]">Rated</Badge>}
-                  </p>
+                  </div>
                 </div>
                 <div className="hidden text-xs text-muted-foreground sm:block tabular-nums">
                   {date}
