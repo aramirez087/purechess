@@ -40,11 +40,11 @@ function FilterPill({
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        'rounded-md border px-3 py-1.5 text-xs font-medium transition-all',
+        'rounded-[4px] px-2.5 py-1 text-xs font-medium transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         active
-          ? 'border-brass/50 bg-brass/10 text-foreground shadow-inner-hairline'
-          : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+          ? 'bg-brass/15 text-foreground ring-1 ring-inset ring-brass/40'
+          : 'text-muted-foreground hover:bg-raised hover:text-foreground',
       )}
     >
       {label}
@@ -80,8 +80,6 @@ export function GameHistoryFilters({
         ))}
       </FilterGroup>
 
-      <span className="hidden h-5 w-px bg-border/60 sm:inline-block" aria-hidden />
-
       <FilterGroup label="Type">
         <FilterPill
           label="All"
@@ -100,8 +98,6 @@ export function GameHistoryFilters({
           );
         })}
       </FilterGroup>
-
-      <span className="hidden h-5 w-px bg-border/60 sm:inline-block" aria-hidden />
 
       <FilterGroup label="Opponent">
         <FilterPill
@@ -131,7 +127,9 @@ function FilterGroup({
       <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
-      <div className="flex items-center gap-1.5">{children}</div>
+      <div className="inline-flex items-center gap-0.5 rounded-md border border-border/70 bg-raised/40 p-0.5">
+        {children}
+      </div>
     </div>
   );
 }

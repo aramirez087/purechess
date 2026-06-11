@@ -85,10 +85,10 @@ describe('ComputerGameSetup', () => {
     );
   });
 
-  it('choosing blitz 3|2 sets timeControlSeconds:180 incrementSeconds:2', async () => {
+  it('choosing blitz 3+2 sets timeControlSeconds:180 incrementSeconds:2', async () => {
     render(<ComputerGameSetup onCancel={vi.fn()} onGameCreated={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /blitz 3\|2/i }));
+    fireEvent.click(screen.getByRole('button', { name: /blitz 3\+2/i }));
     fireEvent.click(screen.getByRole('button', { name: /start game/i }));
 
     await waitFor(() =>

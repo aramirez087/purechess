@@ -163,7 +163,8 @@ describe('ReviewClient', () => {
 
   it('corrupt PGN shows error message instead of crashing', () => {
     render(<ReviewClient game={CORRUPT_GAME} />);
-    expect(screen.getByText('Could not load this game')).toBeTruthy();
+    expect(screen.getByText('The position was lost.')).toBeTruthy();
+    expect(screen.getByText(/game record appears to be corrupt/i)).toBeTruthy();
     expect(screen.queryByTestId('chessboard')).toBeNull();
   });
 

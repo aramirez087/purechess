@@ -23,6 +23,10 @@ export function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!emailOrUsername.trim() || !password) {
+      setError('Enter your email and password.');
+      return;
+    }
     setPending(true);
     setError(null);
     try {
@@ -44,35 +48,36 @@ export function LoginForm() {
           New to Purechess?{' '}
           <Link
             href={`/register?return=${encodeURIComponent(returnTo)}`}
-            className="font-medium text-brass underline-offset-4 hover:underline"
+            className="font-medium text-brass underline decoration-brass/30 underline-offset-4 transition-colors hover:text-brass/90 hover:decoration-brass"
           >
             Create an account
           </Link>
         </>
       }
     >
-      <Card className="border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
+      <Card className="relative overflow-hidden border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-brass/40 before:to-transparent">
         <CardContent className="pt-6">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+            <div className="space-y-1.5">
               <Label
                 htmlFor="emailOrUsername"
-                className="text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Email or username
               </Label>
               <Input
                 id="emailOrUsername"
                 autoComplete="username"
+                autoFocus
                 required
                 value={emailOrUsername}
                 onChange={(e) => setEmailOrUsername(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label
                 htmlFor="password"
-                className="text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Password
               </Label>
@@ -89,7 +94,7 @@ export function LoginForm() {
             {error && (
               <p
                 role="alert"
-                className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+                className="animate-error-in rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive dark:text-[hsl(0_72%_70%)]"
               >
                 {error}
               </p>
@@ -97,13 +102,13 @@ export function LoginForm() {
 
             <Button
               type="submit"
-              disabled={pending || !emailOrUsername || !password}
-              className="mt-1 h-11 w-full bg-foreground text-background shadow-elevated hover:bg-foreground/90"
+              disabled={pending}
+              className="mt-1 h-11 w-full bg-brass font-semibold text-accent-foreground shadow-elevated transition-all duration-150 hover:bg-brass/90 hover:shadow-brass-glow active:translate-y-px disabled:opacity-70"
             >
               {pending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
               ) : (
-                <LogIn className="mr-2 h-4 w-4" aria-hidden="true" />
+                <LogIn className="h-4 w-4" aria-hidden="true" />
               )}
               {pending ? 'Signing in…' : 'Sign in'}
             </Button>

@@ -35,7 +35,10 @@ export function Logo({
           aria-hidden
           className={cn(
             'relative inline-flex items-center justify-center rounded-md',
-            'bg-raised ring-1 ring-inset ring-border/70 shadow-elevated',
+            'bg-raised ring-1 ring-inset shadow-elevated',
+            tone === 'brass'
+              ? 'ring-brass/30 shadow-[0_0_20px_hsl(var(--brass)/0.12)]'
+              : 'ring-border/70',
             s.box,
           )}
         >

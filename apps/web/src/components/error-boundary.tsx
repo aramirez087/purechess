@@ -3,6 +3,7 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import * as Sentry from '@sentry/nextjs';
 import { Button } from '@/components/ui/button';
+import { ErrorState } from '@/components/error-state';
 
 interface Props {
   children: ReactNode;
@@ -47,19 +48,26 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.props.fallback) return this.props.fallback;
 
     return (
-      <div className="flex min-h-[200px] flex-col items-center justify-center gap-4 p-6 text-center">
-        <p className="text-sm text-muted-foreground">
-          Something went wrong. Refresh to try again.
-        </p>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={this.handleCopy}>
-            Copy error details
-          </Button>
-          <Button size="sm" onClick={() => window.location.reload()}>
-            Refresh
-          </Button>
-        </div>
-      </div>
+      <ErrorState
+        headline="Something broke."
+        description="This section failed to render. Refresh to try again."
+        eventId={this.state.eventId}
+        className="min-h-[240px] bg-transparent"
+        actions={
+          <>
+            <Button
+              size="sm"
+              onClick={() => window.location.reload()}
+              className="bg-foreground text-background hover:bg-foreground/90"
+            >
+              Refresh
+            </Button>
+            <Button variant="ghost" size="sm" onClick={this.handleCopy}>
+              Copy error details
+            </Button>
+          </>
+        }
+      />
     );
   }
 }

@@ -17,7 +17,12 @@ export default function AdminGameDetailPage() {
   });
 
   if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!game) return <p className="text-sm text-destructive">Game not found</p>;
+  if (!game)
+    return (
+      <div className="rounded-lg border border-border/70 bg-surface px-6 py-10 text-center text-sm text-muted-foreground">
+        Game not found
+      </div>
+    );
 
   return (
     <div className="space-y-6">

@@ -27,10 +27,10 @@ describe('Hero', () => {
     expect(link).toHaveAttribute('href', '/register');
   });
 
-  it('Analyze CTA is disabled', () => {
+  it('Analyze CTA is marked disabled for assistive tech', () => {
     render(<Hero />);
     const btn = screen.getByRole('button', { name: /analyze a game/i });
-    expect(btn).toBeDisabled();
+    expect(btn).toHaveAttribute('aria-disabled', 'true');
   });
 });
 
@@ -39,7 +39,7 @@ describe('TrustStrip', () => {
     render(<TrustStrip />);
     expect(screen.getByText('Fast matchmaking')).toBeInTheDocument();
     expect(screen.getByText('Clean board')).toBeInTheDocument();
-    expect(screen.getByText('Free to start')).toBeInTheDocument();
+    expect(screen.getByText('No ads, ever')).toBeInTheDocument();
     expect(screen.getByText('No distractions')).toBeInTheDocument();
   });
 });

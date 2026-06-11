@@ -54,7 +54,7 @@ describe('GamesClient', () => {
     });
 
     render(<GamesClient username="alice" />);
-    expect(screen.getByText(/haven't played any games yet/i)).toBeTruthy();
+    expect(screen.getByText(/no games recorded/i)).toBeTruthy();
   });
 
   it('shows filter empty state when filters active but no results', () => {
@@ -66,7 +66,7 @@ describe('GamesClient', () => {
     });
 
     render(<GamesClient username="alice" initialCategory="bullet" />);
-    expect(screen.getByText(/no games match these filters/i)).toBeTruthy();
+    expect(screen.getByText(/nothing matches this filter/i)).toBeTruthy();
   });
 
   it('shows Load more button when nextCursor exists', () => {
@@ -78,7 +78,7 @@ describe('GamesClient', () => {
     });
 
     render(<GamesClient username="alice" />);
-    expect(screen.getByRole('button', { name: /load more/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /load older games/i })).toBeTruthy();
   });
 
   it('renders game rows', () => {

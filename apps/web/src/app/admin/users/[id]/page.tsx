@@ -21,7 +21,12 @@ export default function AdminUserDetailPage() {
   });
 
   if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!user) return <p className="text-sm text-destructive">User not found</p>;
+  if (!user)
+    return (
+      <div className="rounded-lg border border-border/70 bg-surface px-6 py-10 text-center text-sm text-muted-foreground">
+        User not found
+      </div>
+    );
 
   return (
     <div className="space-y-6">

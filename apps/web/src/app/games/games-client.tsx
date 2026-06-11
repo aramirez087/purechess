@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 import { GameHistoryFilters } from '@/components/games/game-history-filters';
 import { GameHistoryList } from '@/components/games/game-history-list';
+import { Button } from '@/components/ui/button';
 import { useGameHistory } from '@/hooks/use-game-history';
 
 type Category = 'bullet' | 'blitz' | 'rapid';
@@ -56,50 +58,58 @@ export function GamesClient({ username, initialCategory, initialIsRated, initial
 
   return (
     <div className="flex flex-col gap-4">
-      <GameHistoryFilters
-        category={category}
-        isRated={isRated}
-        isVsComputer={isVsComputer}
-        onCategoryChange={(v) => updateParams({ category: v })}
-        onRatedChange={(v) =>
-          updateParams({ isRated: v === undefined ? undefined : String(v) })
-        }
-        onVsComputerChange={(v) =>
-          updateParams({ vsComputer: v === undefined ? undefined : String(v) })
-        }
-      />
+      <div className="animate-rise-1">
+        <GameHistoryFilters
+          category={category}
+          isRated={isRated}
+          isVsComputer={isVsComputer}
+          onCategoryChange={(v) => updateParams({ category: v })}
+          onRatedChange={(v) =>
+            updateParams({ isRated: v === undefined ? undefined : String(v) })
+          }
+          onVsComputerChange={(v) =>
+            updateParams({ vsComputer: v === undefined ? undefined : String(v) })
+          }
+        />
+      </div>
 
       {noGamesAtAll && !hasFilters && (
-        <p className="text-sm text-muted-foreground py-8 text-center">
-          You haven&apos;t played any games yet.{' '}
-          <a href="/play" className="underline underline-offset-2 hover:text-foreground">
-            Start with /play
-          </a>
-          .
-        </p>
+        <div className="animate-rise-2 rounded-lg border border-border/70 bg-surface/60 px-6 py-14 text-center">
+          <p className="font-display text-2xl italic">No games recorded.</p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+            Your finished games will be archived here, ready for review.
+          </p>
+          <Button
+            asChild
+            variant="outline"
+            className="mt-6 border-brass/50 text-brass-text hover:border-brass/70 hover:bg-brass/10 hover:text-brass-text"
+          >
+            <Link href="/play">Play your first game</Link>
+          </Button>
+        </div>
       )}
 
       {noGamesAtAll && hasFilters && (
-        <p className="text-sm text-muted-foreground py-8 text-center">
-          No games match these filters.{' '}
-          <button
-            type="button"
-            className="underline underline-offset-2 hover:text-foreground"
-            onClick={() => router.push('/games')}
-          >
-            Try clearing them
-          </button>
-          .
-        </p>
+        <div className="animate-rise-2 rounded-lg border border-border/70 bg-surface/60 px-6 py-14 text-center">
+          <p className="font-display text-2xl italic">Nothing matches this filter.</p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+            Adjust the filters above, or clear them to see every game.
+          </p>
+          <Button variant="ghost" className="mt-6" onClick={() => router.push('/games')}>
+            Clear filters
+          </Button>
+        </div>
       )}
 
       {allGames.length > 0 && (
-        <GameHistoryList
-          games={allGames}
-          onLoadMore={fetchNextPage}
-          hasMore={hasNextPage}
-          isLoadingMore={isFetchingNextPage}
-        />
+        <div className="animate-rise-2">
+          <GameHistoryList
+            games={allGames}
+            onLoadMore={fetchNextPage}
+            hasMore={hasNextPage}
+            isLoadingMore={isFetchingNextPage}
+          />
+        </div>
       )}
     </div>
   );

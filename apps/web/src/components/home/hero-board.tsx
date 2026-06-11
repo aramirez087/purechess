@@ -58,6 +58,16 @@ const PIECE_NAMES: Record<string, string> = {
   P: 'pawn',
 };
 
+/* Corner coordinates, matching the live board's Coordinates component: the
+   hero board has no --board-sq-size, so scale against the viewport instead. */
+const COORD_FONT_SIZE = 'clamp(8px, 0.9vw, 12px)';
+
+function coordTint(isLight: boolean): string {
+  return isLight
+    ? 'hsl(var(--board-sq-dark) / 0.85)'
+    : 'hsl(var(--board-sq-light) / 0.85)';
+}
+
 export function HeroBoard() {
   const squares = parseFenBoard(IMMORTAL_FEN_BOARD);
 
@@ -90,6 +100,24 @@ export function HeroBoard() {
                     className="absolute inset-0 h-full w-full p-[4%] drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
                     draggable={false}
                   />
+                )}
+                {square[0] === 'h' && (
+                  <span
+                    aria-hidden
+                    className="absolute right-[3px] top-[2px] font-mono font-semibold leading-none select-none"
+                    style={{ fontSize: COORD_FONT_SIZE, color: coordTint(isLight) }}
+                  >
+                    {square[1]}
+                  </span>
+                )}
+                {square[1] === '1' && (
+                  <span
+                    aria-hidden
+                    className="absolute bottom-[1px] left-[4px] font-mono font-semibold leading-none select-none"
+                    style={{ fontSize: COORD_FONT_SIZE, color: coordTint(isLight) }}
+                  >
+                    {square[0]}
+                  </span>
                 )}
               </div>
             ))}

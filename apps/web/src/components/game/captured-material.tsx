@@ -45,7 +45,7 @@ export function CapturedMaterial({ pieces, advantage, color, className }: Captur
                 {Array.from({ length: count }, (_, i) => (
                   <Svg
                     key={i}
-                    className={cn('h-4 w-4 shrink-0', glow, i > 0 && '-ml-[11px]')}
+                    className={cn('h-[18px] w-[18px] shrink-0', glow, i > 0 && '-ml-2')}
                   />
                 ))}
               </div>
@@ -54,7 +54,7 @@ export function CapturedMaterial({ pieces, advantage, color, className }: Captur
         </div>
       )}
       {advantage > 0 && (
-        <span className="text-xs font-medium tabular-nums text-[#9da79c]">+{advantage}</span>
+        <span className="font-mono text-[13px] tabular-nums text-[#d6b563]">+{advantage}</span>
       )}
     </div>
   );

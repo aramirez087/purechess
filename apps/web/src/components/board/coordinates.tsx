@@ -11,7 +11,7 @@ const COORD_FONT_SIZE = 'max(9px, calc(var(--board-sq-size) * 0.14))';
 
 /**
  * In-square corner coordinates (lichess-style): rank numbers in the top-right
- * corner of the rightmost file, file letters in the bottom-right corner of the
+ * corner of the rightmost file, file letters in the bottom-left corner of the
  * bottom rank. Each label is tinted with the opposite square colour so it
  * reads on both light and dark squares without a gutter.
  *
@@ -33,8 +33,8 @@ export function Coordinates({ orientation }: CoordinatesProps) {
                 height: 'var(--board-sq-size)',
                 fontSize: COORD_FONT_SIZE,
                 color: onLight
-                  ? 'hsl(var(--board-sq-dark) / 0.85)'
-                  : 'hsl(var(--board-sq-light) / 0.85)',
+                  ? 'hsl(var(--board-sq-dark))'
+                  : 'hsl(var(--board-sq-light))',
               }}
             >
               {rankLabel(i, orientation)}
@@ -48,13 +48,13 @@ export function Coordinates({ orientation }: CoordinatesProps) {
           return (
             <div
               key={i}
-              className="flex items-end justify-start pl-[4px] pb-[1px] font-mono font-semibold select-none"
+              className="flex items-end justify-start pl-[3px] pb-[2px] font-mono font-semibold select-none"
               style={{
                 width: 'var(--board-sq-size)',
                 fontSize: COORD_FONT_SIZE,
                 color: onLight
-                  ? 'hsl(var(--board-sq-dark) / 0.85)'
-                  : 'hsl(var(--board-sq-light) / 0.85)',
+                  ? 'hsl(var(--board-sq-dark))'
+                  : 'hsl(var(--board-sq-light))',
               }}
             >
               {fileLabel(i, orientation)}

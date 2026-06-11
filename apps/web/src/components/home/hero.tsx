@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ArrowRight } from 'lucide-react';
+import { Logo } from '@/components/layout/Logo';
 import { CtaButton } from './cta-button';
 import { HeroBoard } from './hero-board';
 
@@ -22,9 +24,23 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-wordmark"
-      className="relative overflow-hidden"
+      className="grain relative overflow-hidden"
     >
       <BoardGridBackdrop />
+
+      <div className="absolute inset-x-0 top-0 z-10">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+          <Link href="/" aria-label="PureChess home">
+            <Logo size="sm" />
+          </Link>
+          <Link
+            href="/login"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Sign in
+          </Link>
+        </div>
+      </div>
 
       <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 text-center">
         <span className="animate-rise-1 inline-flex items-center gap-2 rounded-full border border-border/80 bg-raised/60 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground backdrop-blur-sm">
@@ -42,7 +58,7 @@ export function Hero() {
             the product.
             <span
               aria-hidden
-              className="absolute -bottom-1 left-1/2 h-[3px] w-3/4 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-brass to-transparent"
+              className="absolute -bottom-2.5 left-1/2 -z-10 h-[3px] w-3/4 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-brass to-transparent"
             />
           </span>
         </h1>
@@ -56,7 +72,10 @@ export function Hero() {
         <div className="animate-rise-4 mt-10 flex w-full max-w-sm flex-col items-center gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:justify-center">
           <CtaButton variant="primary" href="/play?mode=casual">
             Play now
-            <ArrowRight className="ml-1 h-4 w-4" aria-hidden />
+            <ArrowRight
+              className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden
+            />
           </CtaButton>
           <CtaButton variant="secondary" href="/register">
             Create account
@@ -64,9 +83,12 @@ export function Hero() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span tabIndex={0} className="inline-flex">
+                <span tabIndex={0} className="inline-flex w-full justify-center sm:w-auto">
                   <CtaButton variant="tertiary" disabled>
                     Analyze a game
+                    <span className="rounded-full border border-brass/30 bg-brass/10 px-1.5 font-mono text-[10px] uppercase text-brass-text">
+                      Soon
+                    </span>
                   </CtaButton>
                 </span>
               </TooltipTrigger>
@@ -88,19 +110,19 @@ export function Hero() {
         {FEATURES.map(({ title, body }, i) => (
           <article
             key={title}
-            className={`group relative flex flex-col gap-2.5 border-t border-border/70 pt-5 animate-rise-${i + 2}`}
+            className="group relative flex flex-col gap-2.5 border-t border-border/70 pt-5"
           >
             <span
               aria-hidden
               className="absolute -top-px left-0 h-px w-10 bg-brass/80 transition-all duration-300 group-hover:w-20"
             />
-            <div className="flex items-baseline gap-3">
-              <span className="font-mono text-[11px] tracking-[0.18em] text-brass">
+            <div className="flex items-baseline">
+              <span className="inline-block w-7 shrink-0 font-mono text-[11px] tracking-[0.18em] text-brass">
                 0{i + 1}
               </span>
-              <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+              <h3 className="text-[15px] font-semibold tracking-tight">{title}</h3>
             </div>
-            <p className="pl-[1.7rem] text-sm text-muted-foreground leading-relaxed">{body}</p>
+            <p className="pl-7 text-sm text-muted-foreground leading-relaxed">{body}</p>
           </article>
         ))}
       </div>
@@ -115,7 +137,7 @@ function BoardGridBackdrop() {
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
       <div
-        className="absolute inset-0 opacity-[0.06] dark:opacity-[0.08]"
+        className="absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
             'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',

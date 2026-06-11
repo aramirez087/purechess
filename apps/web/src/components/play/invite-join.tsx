@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,11 +52,22 @@ export function InviteJoin({ token }: InviteJoinProps) {
         : 'Invite not found.';
     return (
       <Card className="w-full max-w-lg border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
-        <CardHeader className="border-b border-border/60">
-          <CardTitle className="text-lg tracking-tight">Invite unavailable</CardTitle>
+        <CardHeader className="border-b border-border/60 pb-5">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-brass/10 ring-1 ring-inset ring-brass/30 text-brass">
+              <Swords className="h-4 w-4" />
+            </span>
+            <CardTitle className="text-lg tracking-tight">Invite unavailable</CardTitle>
+          </div>
         </CardHeader>
-        <CardContent className="pt-6">
+        <CardContent className="space-y-5 pt-6">
           <p className="text-sm text-muted-foreground">{message}</p>
+          <Button
+            asChild
+            className="h-12 w-full bg-foreground text-background hover:bg-foreground/90 shadow-elevated text-[15px] font-medium"
+          >
+            <Link href="/play">Start your own game</Link>
+          </Button>
         </CardContent>
       </Card>
     );
@@ -103,9 +115,15 @@ export function InviteJoin({ token }: InviteJoinProps) {
         </Button>
 
         {accept.isError && (
-          <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-            Failed to join. The invite may have been cancelled.
-          </p>
+          <div className="animate-error-in rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm">
+            <p className="text-destructive">Failed to join. The invite may have been cancelled.</p>
+            <Link
+              href="/play"
+              className="mt-1 inline-block text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+            >
+              Back to play
+            </Link>
+          </div>
         )}
       </CardContent>
     </Card>

@@ -1,3 +1,4 @@
+import { Crown } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function LoadingShell() {
@@ -14,14 +15,14 @@ export function LoadingShell() {
           <Skeleton className="h-9 w-16 rounded-md" />
         </div>
       </div>
-      <div className="flex-1 px-4 sm:px-6 py-10 mx-auto w-full max-w-3xl space-y-6">
-        <div className="space-y-2">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-4 w-72" />
-        </div>
-        <Skeleton className="h-24 w-full rounded-lg" />
-        <Skeleton className="h-32 w-full rounded-lg" />
-        <Skeleton className="h-40 w-full rounded-lg" />
+      <div role="status" className="flex flex-1 flex-col items-center justify-center gap-4 px-6">
+        <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-brass/40 bg-brass/10 text-brass animate-brass-pulse">
+          <Crown className="h-6 w-6" aria-hidden="true" />
+        </span>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+          Purechess
+        </p>
+        <span className="sr-only">Loading</span>
       </div>
     </div>
   );

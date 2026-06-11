@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useCreateInvite, useCancelInvite, getInvite } from '@/hooks/use-invite';
 import type { InviteColor, TimeControlCategory } from '@/hooks/use-invite';
 import { Check, Copy, Link2, Users } from 'lucide-react';
+import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
 import { cn } from '@/lib/utils';
 
 const TIME_CONTROLS: { label: string; sub: string; seconds: number; increment: number; category: TimeControlCategory }[] = [
@@ -158,35 +159,32 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
       </CardHeader>
       <CardContent className="space-y-7 pt-6">
         <div className="space-y-3">
-          <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Time control
           </Label>
-          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-7">
             {TIME_CONTROLS.map((tc, i) => (
               <button
                 key={tc.label}
                 type="button"
                 onClick={() => setSelectedTimeControl(i)}
                 aria-pressed={selectedTimeControl === i}
+                aria-label={tc.sub + ' ' + tc.label}
                 className={cn(
-                  'h-12 rounded-md text-sm font-medium transition-all',
-                  'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  selectedTimeControl === i
-                    ? 'border-brass/60 bg-brass/10 text-foreground shadow-inner-hairline'
-                    : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+                  PILL_BASE,
+                  'flex h-auto flex-col items-center justify-center gap-0.5 py-2',
+                  selectedTimeControl === i ? PILL_ACTIVE : PILL_INACTIVE,
                 )}
               >
-                <span className="block font-mono tabular-nums">{tc.label}</span>
-                <span className="block text-[10px] uppercase tracking-wider opacity-70">
-                  {tc.sub}
-                </span>
+                <span className="font-mono text-[11px] leading-none tabular-nums">{tc.label}</span>
+                <span className="text-[11px] leading-none">{tc.sub}</span>
               </button>
             ))}
           </div>
         </div>
 
         <div className="space-y-3">
-          <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Play as
           </Label>
           <div className="grid grid-cols-3 gap-1.5">
@@ -197,11 +195,9 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
                 onClick={() => setSelectedColor(c.value)}
                 aria-pressed={selectedColor === c.value}
                 className={cn(
-                  'h-10 rounded-md text-sm font-medium transition-all',
-                  'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  selectedColor === c.value
-                    ? 'border-brass/60 bg-brass/10 text-foreground shadow-inner-hairline'
-                    : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+                  PILL_BASE,
+                  'h-10 text-sm',
+                  selectedColor === c.value ? PILL_ACTIVE : PILL_INACTIVE,
                 )}
               >
                 {c.label}
@@ -210,20 +206,13 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 pt-2 sm:flex-row">
+        <div className="pt-2">
           <Button
             onClick={handleCreate}
             disabled={createInvite.isPending}
-            className="h-11 flex-1 bg-foreground text-background hover:bg-foreground/90 shadow-elevated"
+            className="h-11 w-full bg-foreground text-background hover:bg-foreground/90 shadow-elevated"
           >
             {createInvite.isPending ? 'Creating…' : 'Create invite link'}
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={onCancel}
-            className="h-11 flex-1 text-muted-foreground hover:text-foreground"
-          >
-            Back
           </Button>
         </div>
 

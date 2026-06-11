@@ -39,6 +39,14 @@ export default function GlobalError({
           textAlign: 'center',
         }}
       >
+        {/* global-error renders without the root layout, so interactive states
+            must be self-contained here. */}
+        <style>{`
+          .ge-btn { transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease; }
+          .ge-btn:focus-visible { outline: 2px solid #d6b563; outline-offset: 2px; }
+          .ge-btn-ghost:hover { background-color: #181c17; border-color: #3a443b; }
+          .ge-btn-solid:hover { opacity: 0.9; }
+        `}</style>
         <p
           style={{
             color: '#9da79c',
@@ -49,9 +57,22 @@ export default function GlobalError({
         >
           Purechess
         </p>
-        <h2 style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0 }}>
-          Something went wrong
+        <h2
+          style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontStyle: 'italic',
+            fontSize: '1.75rem',
+            fontWeight: 500,
+            letterSpacing: '-0.01em',
+            margin: 0,
+          }}
+        >
+          Something broke.
         </h2>
+        <div
+          aria-hidden="true"
+          style={{ height: 1, width: 40, background: 'rgba(214,181,99,0.6)' }}
+        />
         <p style={{ color: '#9da79c', fontSize: '0.875rem', margin: 0 }}>
           Refresh to try again.
         </p>
@@ -70,6 +91,7 @@ export default function GlobalError({
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button
             onClick={handleCopy}
+            className="ge-btn ge-btn-ghost"
             style={{
               padding: '0.5rem 1rem',
               border: '1px solid #2b332c',
@@ -84,6 +106,7 @@ export default function GlobalError({
           </button>
           <button
             onClick={reset}
+            className="ge-btn ge-btn-solid"
             style={{
               padding: '0.5rem 1rem',
               borderRadius: '0.375rem',

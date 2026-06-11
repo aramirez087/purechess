@@ -778,3 +778,256 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:17 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 condition(s) | ~425 |
 | 18:17 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 condition(s) | ~370 |
 | 00:35 | Prod latency pass: same-origin /api proxy (no CORS preflight) over Fly 6PN internal, SSR via API_INTERNAL_URL, optimistic move rendering both clients; fixed empty-build-arg localhost fallback (bug-116) | next.config.mjs, web Dockerfile+fly.toml, lib/api/*, both game clients | verified prod: move slide starts instantly, bot loop green, GET ~RTT | ~12k |
+| 18:28 | Session end: 117 writes across 39 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 46 reads | ~76189 tok |
+
+## Session: 2026-06-11 18:43
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:47 | designqc: captured 6 screenshots (192KB, ~15000 tok) | /, /play, /login, /register, /games | ready for eval | ~0 |
+| 18:47 | designqc: captured 2 screenshots (12KB, ~5000 tok) | /play | ready for eval | ~0 |
+| 18:47 | designqc: captured 2 screenshots (19KB, ~5000 tok) | /login | ready for eval | ~0 |
+| 18:47 | designqc: captured 2 screenshots (19KB, ~5000 tok) | /games | ready for eval | ~0 |
+| 18:48 | designqc: captured 2 screenshots (19KB, ~5000 tok) | /computer-game/cmq8s3lib0001svhzsmdkxhc0 | ready for eval | ~0 |
+| 19:00 | Design audit of /play mode-select (screenshot + code review, 14 findings) | apps/web/src/app/(play)/play/play-page-client.tsx, components/play/*, globals.css | findings returned to orchestrator | ~9k |
+| 2026-06-10 | Design audit of /games/[gameId] review page (screenshot + code) — 8 findings returned as structured output | review-client.tsx, eval-panel.tsx, game shell components | done | ~14k |
+| 19:12 | Design audit of /login + /register (Silent Tournament QC) | auth-shell.tsx, login-form.tsx, register-form.tsx, ui/button.tsx, ui/input.tsx | 11 findings returned as structured output (gray disabled CTA = top issue) | ~6k |
+| 19:12 | Design audit of /games game-history page (screenshot + code review, 11 findings) | apps/web/src/app/games/*, components/games/* | findings returned via structured output | ~9k |
+| 19:13 | Design audit of /games/[gameId] review page (subagent) — 10 findings vs design.md | review-client.tsx, eval-panel.tsx, game-rail.tsx, move-panel.tsx | findings returned via structured output | ~25k |
+| 12:00 | Design audit: chessboard surface (frame, highlights, coords, drag, promo picker) | apps/web/src/components/board/*, globals.css | 12 findings returned via structured output | ~9k |
+| 19:14 | Design audit: /play mode-select + setup steps (subagent) | apps/web/src/app/(play)/play/play-page-client.tsx, components/play/* | 12 findings returned via structured output | ~9k |
+| 19:18 | Edited apps/web/src/app/globals.css | expanded (+6 lines) | ~210 |
+| 19:18 | Edited apps/web/src/app/globals.css | 9→9 lines | ~27 |
+| 19:18 | Edited apps/web/src/app/globals.css | CSS: --success, --warning | ~46 |
+| 19:19 | Edited apps/web/src/app/globals.css | CSS: --success, --warning | ~43 |
+| 19:19 | Edited apps/web/src/app/globals.css | removed 8 lines | ~3 |
+| 19:19 | Edited apps/web/src/app/globals.css | modified media() | ~189 |
+| 19:19 | Edited apps/web/src/app/globals.css | expanded (+11 lines) | ~48 |
+| 19:19 | Edited apps/web/src/app/globals.css | expanded (+18 lines) | ~151 |
+| 19:20 | Edited apps/web/src/app/globals.css | CSS: animation, skeleton-shimmer, animation | ~86 |
+| 19:20 | Edited apps/web/tailwind.config.ts | 2→2 lines | ~44 |
+| 19:20 | Edited apps/web/src/components/ui/button.tsx | 5→5 lines | ~92 |
+| 19:20 | Edited apps/web/src/components/ui/input.tsx | "flex h-10 w-full rounded-" → "flex h-10 w-full rounded-" | ~147 |
+| 19:20 | Created apps/web/src/components/game/board-column.tsx | — | ~769 |
+| 19:21 | Created apps/web/src/components/game/player-strip.tsx | — | ~1437 |
+| 19:10 | Design audit: 8 parallel agents, ~90 findings across all surfaces | .wolf/design-audit/*.jpeg | ok | ~525k |
+| 19:25 | Foundation design tokens: split board highlight vars, legal dot 0.55, premove mineral, check-pulse 0.65, dark shadow-elevated re-pin, error-in/skeleton-shimmer, success/warning dark tokens | apps/web/src/app/globals.css, tailwind.config.ts | ok | ~2k |
+| 19:30 | Primitives: quiet outline/ghost button hover (no brass flash), brass input focus + inset well; BoardColumn evalBar slot + concentric 14/7 bezel + visible halo; PlayerStrip 3-zone restructure (side swatch, resultChip, subtle variant, right-cluster captured) | ui/button.tsx, ui/input.tsx, game/board-column.tsx, game/player-strip.tsx | ok | ~3k |
+| 19:26 | Edited apps/web/src/app/login/login-form.tsx | 7→7 lines | ~96 |
+| 19:26 | Edited apps/web/src/app/login/login-form.tsx | 25→26 lines | ~355 |
+| 19:26 | Edited apps/web/src/app/login/login-form.tsx | CSS: active, disabled | ~231 |
+| 19:26 | Edited apps/web/src/app/register/register-form.tsx | 7→7 lines | ~94 |
+| 19:26 | Edited apps/web/src/app/register/register-form.tsx | 56→57 lines | ~674 |
+| 19:26 | Edited apps/web/src/app/register/register-form.tsx | CSS: active, disabled | ~232 |
+| 19:27 | Edited apps/web/src/components/layout/Logo.tsx | 8→11 lines | ~107 |
+| 19:27 | Created apps/web/src/components/play/pill-styles.ts | — | ~191 |
+| 19:27 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | added 1 import(s) | ~183 |
+| 19:27 | Created apps/web/src/components/auth/auth-shell.tsx | — | ~666 |
+| 19:27 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 8→8 lines | ~176 |
+| 19:27 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 10→11 lines | ~146 |
+| 19:27 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 7→8 lines | ~116 |
+| 19:27 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | CSS: maskImage, WebkitMaskImage | ~195 |
+| 19:28 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 7→8 lines | ~159 |
+| 19:28 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | CSS: active, active | ~227 |
+| 19:28 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 2→2 lines | ~34 |
+| 19:28 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 3→3 lines | ~43 |
+| 19:28 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 9→9 lines | ~160 |
+| 19:28 | Created apps/web/src/components/home/cta-button.tsx | — | ~533 |
+| 19:28 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 6→11 lines | ~64 |
+| 19:28 | Edited apps/web/src/components/play/computer-game-setup.tsx | added 1 import(s) | ~88 |
+| 19:28 | Edited apps/web/src/components/play/computer-game-setup.tsx | 7→7 lines | ~99 |
+| 19:28 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 9 lines | ~10 |
+| 19:28 | Created apps/web/src/components/games/game-history-row.tsx | — | ~1501 |
+| 19:28 | Edited apps/web/src/components/play/computer-game-setup.tsx | modified ComputerGameSetup() | ~76 |
+| 19:28 | Created apps/web/src/components/home/hero.tsx | — | ~1688 |
+| 19:28 | Edited apps/web/src/components/home/hero-board.tsx | CSS: component, isLight | ~140 |
+| 19:29 | Edited apps/web/src/components/play/computer-game-setup.tsx | 2→2 lines | ~47 |
+| 19:29 | Created apps/web/src/components/games/game-history-list.tsx | — | ~1259 |
+| 19:29 | Edited apps/web/src/components/home/hero-board.tsx | expanded (+18 lines) | ~327 |
+| 19:29 | Edited apps/web/src/components/play/computer-game-setup.tsx | CSS: PILL_ACTIVE | ~62 |
+| 19:29 | Edited apps/web/src/components/play/computer-game-setup.tsx | CSS: PILL_ACTIVE | ~52 |
+| 19:29 | Created apps/web/src/components/home/trust-strip.tsx | — | ~256 |
+| 19:29 | Edited apps/web/src/components/play/computer-game-setup.tsx | hsl() → 0_1px_4px_rgba() | ~276 |
+| 19:29 | Created apps/web/src/components/games/game-history-filters.tsx | — | ~1013 |
+| 19:29 | Edited apps/web/src/components/play/computer-game-setup.tsx | reduced (-7 lines) | ~105 |
+| 19:29 | Edited apps/web/src/components/play/invite-create.tsx | added 1 import(s) | ~51 |
+| 19:29 | Edited apps/web/src/components/play/invite-create.tsx | CSS: PILL_ACTIVE | ~242 |
+| 19:29 | Created apps/web/src/app/games/games-client.tsx | — | ~1195 |
+| 19:29 | Edited apps/web/src/components/play/invite-create.tsx | CSS: PILL_ACTIVE | ~54 |
+| 19:29 | Edited apps/web/src/app/games/page.tsx | 2→1 lines | ~13 |
+| 19:29 | Edited apps/web/src/components/play/invite-create.tsx | reduced (-7 lines) | ~102 |
+| 19:29 | Edited apps/web/src/app/games/page.tsx | CSS: sm | ~120 |
+| 19:29 | Created apps/web/src/components/error-state.tsx | — | ~529 |
+| 19:29 | Created apps/web/src/app/error.tsx | — | ~288 |
+| 19:30 | Created apps/web/src/app/games/error.tsx | — | ~232 |
+| 19:30 | Created apps/web/src/app/games/[gameId]/error.tsx | — | ~248 |
+| 19:30 | Created apps/web/src/app/(play)/play/error.tsx | — | ~233 |
+| 19:30 | Created apps/web/src/app/not-found.tsx | — | ~157 |
+| 19:30 | Created apps/web/src/components/LoadingShell.tsx | — | ~354 |
+| 19:30 | Created apps/web/src/components/game/game-rail.tsx | — | ~454 |
+| 19:30 | Edited apps/web/src/components/board/square.tsx | CSS: board | ~77 |
+| 19:30 | Edited apps/web/src/components/board/square.tsx | 14→16 lines | ~115 |
+| 19:30 | Created apps/web/src/app/computer-game/[gameId]/loading.tsx | — | ~481 |
+| 19:30 | Edited apps/web/src/components/board/square.tsx | CSS: boxShadow | ~242 |
+| 19:30 | Edited apps/web/src/components/board/square.tsx | "check-pulse 1s ease-in-ou" → "check-pulse 1.4s ease-in-" | ~16 |
+| 19:30 | Created apps/web/src/app/(play)/play/[gameId]/loading.tsx | — | ~480 |
+| 19:30 | Created apps/web/src/components/game/move-panel.tsx | — | ~1329 |
+| 19:30 | Created apps/web/src/components/review/eval-panel.tsx | — | ~1038 |
+| 19:30 | Edited apps/web/src/components/board/coordinates.tsx | modified coordinates() | ~84 |
+| 19:30 | Edited apps/web/src/components/ui/skeleton.tsx | 1→4 lines | ~39 |
+| 19:30 | Edited apps/web/src/components/game/captured-material.tsx | 6→6 lines | ~69 |
+| 19:30 | Edited apps/web/src/components/board/coordinates.tsx | 8→8 lines | ~106 |
+| 19:30 | Edited apps/web/src/components/game/captured-material.tsx | 3→3 lines | ~38 |
+| 19:30 | Edited apps/web/src/components/board/coordinates.tsx | 8→8 lines | ~105 |
+| 19:30 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | 4→3 lines | ~59 |
+| 19:30 | Edited apps/web/src/components/ui/sonner.tsx | CSS: title | ~212 |
+| 19:30 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | expanded (+6 lines) | ~86 |
+| 19:30 | Edited apps/web/src/components/ui/dialog.tsx | "fixed inset-0 z-50 bg-bla" → "fixed inset-0 z-50 bg-[hs" | ~56 |
+| 19:30 | Created apps/web/src/components/review/review-controls.tsx | — | ~887 |
+| 19:30 | Edited apps/web/src/components/game/board-control-bar.tsx | CSS: active, active | ~296 |
+| 19:30 | Edited apps/web/src/lib/board/animations.ts | added 1 condition(s) | ~166 |
+| 19:30 | Edited apps/web/src/components/ui/dialog.tsx | "fixed left-[50%] top-[50%" → "fixed left-[50%] top-[50%" | ~173 |
+| 19:31 | Edited apps/web/src/components/review/pgn-actions.tsx | added 1 import(s) | ~77 |
+| 19:31 | Edited apps/web/src/components/ui/dialog.tsx | "absolute right-4 top-4 ro" → "absolute right-4 top-4 -m" | ~97 |
+| 19:31 | Edited apps/web/src/components/game/result-overlay.tsx | "animate-rise w-full max-w" → "animate-rise w-full max-w" | ~46 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | inline fix | ~29 |
+| 19:31 | Edited apps/web/src/components/ui/sheet.tsx | "fixed inset-0 z-50 bg-bla" → "fixed inset-0 z-50 bg-[hs" | ~56 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | 5→7 lines | ~81 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | inline fix | ~14 |
+| 19:31 | Edited apps/web/src/components/ui/sheet.tsx | "fixed z-50 gap-4 bg-backg" → "fixed z-50 gap-4 border-b" | ~80 |
+| 19:31 | Edited apps/web/src/components/ui/sheet.tsx | "absolute right-4 top-4 ro" → "absolute right-4 top-4 -m" | ~86 |
+| 19:31 | Edited apps/web/src/components/review/pgn-actions.tsx | CSS: footer | ~225 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | added 2 condition(s) | ~166 |
+| 19:31 | Edited apps/web/src/components/game/result-overlay.tsx | 24→24 lines | ~572 |
+| 19:31 | Edited apps/web/src/components/play/invite-join.tsx | added 1 import(s) | ~36 |
+| 19:31 | Edited apps/web/src/components/play/invite-join.tsx | CSS: hover | ~283 |
+| 19:31 | Edited apps/web/src/components/game/game-top-bar.tsx | CSS: md | ~267 |
+| 19:31 | Edited apps/web/src/components/play/invite-join.tsx | CSS: hover | ~150 |
+| 19:31 | Created apps/web/src/components/board/animation-layer.tsx | — | ~1136 |
+| 19:31 | Edited apps/web/src/components/error-boundary.tsx | added 1 import(s) | ~58 |
+| 19:31 | Edited apps/web/src/components/error-boundary.tsx | CSS: hover | ~190 |
+| 19:31 | Created apps/web/src/components/game/game-error-state.tsx | — | ~993 |
+| 19:31 | Edited apps/web/src/components/board/animation-layer.tsx | 9→11 lines | ~94 |
+| 19:31 | Created apps/web/src/components/game/move-error-notice.tsx | — | ~239 |
+| 19:31 | Edited apps/web/src/components/game/index.ts | 1→3 lines | ~70 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-drag.ts | 8→10 lines | ~88 |
+| 19:31 | Edited apps/web/src/app/global-error.tsx | expanded (+21 lines) | ~333 |
+| 19:31 | Edited apps/web/src/app/global-error.tsx | 3→4 lines | ~33 |
+| 19:31 | Created apps/web/src/app/games/[gameId]/review-client.tsx | — | ~3139 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-drag.ts | 4→5 lines | ~67 |
+| 19:31 | Edited apps/web/src/app/global-error.tsx | 3→4 lines | ~32 |
+| 19:31 | Edited apps/web/src/components/board/hooks/use-drag.ts | 8→9 lines | ~46 |
+| 19:32 | Edited apps/web/src/app/admin/users/[id]/page.tsx | 1→6 lines | ~55 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | inline fix | ~26 |
+| 19:32 | Edited apps/web/src/app/admin/games/[gameId]/page.tsx | 1→6 lines | ~55 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | inline fix | ~24 |
+| 19:32 | Edited apps/web/src/app/admin/reports/[id]/page.tsx | 2→6 lines | ~56 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | inline fix | ~31 |
+| 19:32 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 17→20 lines | ~218 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | 1→5 lines | ~87 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+7 lines) | ~110 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | 2→3 lines | ~59 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | 5→5 lines | ~51 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | reduced (-21 lines) | ~71 |
+| 19:32 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: result, color | ~722 |
+| 19:32 | Edited apps/web/src/components/board/chessboard.tsx | added 1 condition(s) | ~510 |
+| 19:32 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→6 lines | ~103 |
+| 19:32 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified handleRetry() | ~182 |
+| 19:32 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified if() | ~33 |
+| 19:32 | Edited apps/web/src/components/board/move-input.tsx | added 1 condition(s) | ~205 |
+| 19:32 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→3 lines | ~62 |
+| 19:32 | Edited apps/web/src/components/board/move-input.tsx | CSS: active | ~143 |
+| 19:33 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: side, resultChip | ~357 |
+| 19:33 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 89→88 lines | ~1582 |
+| 19:33 | Edited apps/web/src/components/board/chessboard.tsx | inline fix | ~29 |
+| 19:33 | Edited apps/web/src/components/board/chessboard.tsx | inline fix | ~16 |
+| 19:33 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 18→21 lines | ~245 |
+| 19:34 | Board micro-interactions: per-tone washes + brass selection hairline, capture-hold + landing settle, drag lift ghost, cursor system, coord z-fix, promotion a11y | components/board/*, lib/board/animations.ts | done, tests+lint+tsc clean | ~28k |
+| 19:34 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: result, color | ~719 |
+| 19:34 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 5→7 lines | ~113 |
+| 19:34 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified handleRetry() | ~149 |
+| 19:34 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified if() | ~33 |
+| 19:34 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: side, resultChip | ~379 |
+| 19:35 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 69→68 lines | ~1069 |
+| 19:40 | Unified game rails into single score-sheet panel (GameRail header/footer slots), densified ruled MovePanel, brass StatusHero, king avatars, quiet Resign, new GameErrorState/MoveErrorNotice, radius/AA/press-state sweep | components/game/* + computer-game-client.tsx + live-game-client.tsx | tsc clean, lint clean, scope tests pass | ~52k |
+| 19:38 | Edited apps/web/test/home/homepage.test.tsx | toBeDisabled() → toHaveAttribute() | ~64 |
+| 19:38 | Edited apps/web/test/home/homepage.test.tsx | "Free to start" → "No ads, ever" | ~19 |
+| 19:39 | Edited apps/web/test/games/game-history-page.test.tsx | inline fix | ~19 |
+| 19:39 | Edited apps/web/test/games/game-history-page.test.tsx | inline fix | ~22 |
+| 19:39 | Edited apps/web/test/games/game-history-page.test.tsx | inline fix | ~24 |
+| 19:39 | Edited apps/web/test/play/computer-game-setup.test.tsx | 4→4 lines | ~69 |
+| 19:40 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 7→8 lines | ~37 |
+| 19:40 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | expanded (+11 lines) | ~133 |
+| 19:44 | Edited apps/web/src/components/games/game-history-row.tsx | "inline-flex items-center " → "inline-flex items-center " | ~38 |
+| 19:55 | Implementation workflow: 8 parallel agents (~721k tok) — board interactions, unified rail, review score card + vertical eval bar, play lobby, home polish, games ledger (+nested-tr fix), brass auth, branded states | 69 files, +4760/-1795 | ok | ~721k |
+| 20:05 | Fixed 6 stale test assertions (copy/notation/aria-disabled), wired GameTopBar center in review-client, result-chip nowrap; 194/194 vitest, tsc clean; visual verify all surfaces via chrome-devtools | apps/web/test/*, review-client.tsx, game-history-row.tsx | ok | ~8k |
+| 19:56 | Created ../../../../tmp/contrast.mjs | — | ~403 |
+| 19:57 | Created ../../../../tmp/contrast-check.mjs | — | ~356 |
+| 19:58 | Created ../../../../tmp/contrast.mjs | — | ~659 |
+| 20:02 | Reviewed uncommitted design-elevation diff (apps/web, 69 files) for functional regressions; found dark-theme shadow-elevated override clobbering ring/hover-glow utilities + several minor issues | apps/web (review only) | findings reported to orchestrator | ~60k |
+| 20:09 | Edited apps/web/src/app/globals.css | modified media() | ~261 |
+| 20:09 | Edited apps/web/tailwind.config.ts | 2→1 lines | ~13 |
+| 20:09 | Edited apps/web/src/app/globals.css | 2→2 lines | ~16 |
+| 20:09 | Edited apps/web/src/app/globals.css | CSS: --brass-text | ~52 |
+| 20:09 | Edited apps/web/src/app/globals.css | CSS: --brass-text | ~34 |
+| 20:09 | Edited apps/web/src/app/globals.css | CSS: --brass-text | ~38 |
+| 20:10 | Edited apps/web/tailwind.config.ts | 5→7 lines | ~80 |
+| 20:10 | Edited apps/web/src/components/ui/button.tsx | 5→5 lines | ~92 |
+| 20:10 | Edited apps/web/src/components/ui/input.tsx | inline fix | ~30 |
+| 20:10 | Edited apps/web/src/components/game/player-strip.tsx | 6→6 lines | ~111 |
+| 20:10 | Edited apps/web/src/components/game/player-strip.tsx | 4→5 lines | ~51 |
+| 20:10 | Edited apps/web/src/components/game/player-strip.tsx | 5→8 lines | ~98 |
+| 20:12 | Edited apps/web/src/app/login/login-form.tsx | added 1 condition(s) | ~62 |
+| 20:12 | Edited apps/web/src/app/login/login-form.tsx | "animate-error-in rounded-" → "animate-error-in rounded-" | ~47 |
+| 20:12 | Edited apps/web/src/app/register/register-form.tsx | "animate-error-in rounded-" → "animate-error-in rounded-" | ~47 |
+| 20:12 | Edited apps/web/src/app/register/register-form.tsx | inline fix | ~14 |
+| 20:12 | Edited apps/web/src/components/play/pill-styles.ts | inset_0_1px_0_rgba() → inset_0_1px_0_hsl() | ~40 |
+| 20:12 | Edited apps/web/src/components/games/game-history-row.tsx | added optional chaining | ~132 |
+| 20:12 | Edited apps/web/src/components/games/game-history-row.tsx | 3→3 lines | ~56 |
+| 20:12 | Edited apps/web/src/components/games/game-history-row.tsx | 2→3 lines | ~72 |
+| 20:12 | Edited apps/web/src/components/play/computer-game-setup.tsx | "text-xs uppercase trackin" → "font-mono text-[11px] fon" | ~28 |
+| 20:12 | Edited apps/web/src/components/play/invite-create.tsx | "text-xs uppercase trackin" → "font-mono text-[11px] fon" | ~28 |
+| 20:12 | Edited apps/web/src/components/games/game-history-list.tsx | expanded (+7 lines) | ~133 |
+| 20:12 | Edited apps/web/src/components/home/hero.tsx | 2→4 lines | ~55 |
+| 20:12 | Edited apps/web/src/components/home/hero.tsx | 3→3 lines | ~56 |
+| 20:12 | Edited apps/web/src/app/games/games-client.tsx | "mt-6 border-brass/50 text" → "mt-6 border-brass/50 text" | ~35 |
+| 20:13 | Edited apps/web/src/app/(play)/play/error.tsx | 4→6 lines | ~77 |
+| 20:13 | Edited apps/web/src/app/not-found.tsx | "inline-flex items-center " → "inline-flex items-center " | ~86 |
+| 20:13 | Edited apps/web/src/components/ui/dialog.tsx | "fixed inset-0 z-50 bg-[hs" → "fixed inset-0 z-50 bg-bla" | ~52 |
+| 20:13 | Edited apps/web/src/components/ui/dialog.tsx | inline fix | ~72 |
+| 20:13 | Edited apps/web/src/components/ui/sheet.tsx | "fixed inset-0 z-50 bg-[hs" → "fixed inset-0 z-50 bg-bla" | ~52 |
+| 20:13 | Edited apps/web/src/components/ui/sheet.tsx | inline fix | ~49 |
+| 20:13 | Edited apps/web/src/components/ui/skeleton.tsx | "skeleton-shimmer rounded-" → "skeleton-shimmer rounded-" | ~24 |
+| 20:13 | Edited apps/web/src/components/ui/sonner.tsx | 7→7 lines | ~103 |
+| 20:13 | Edited apps/web/src/components/ui/sonner.tsx | "group toast group-[.toast" → "group toast group-[.toast" | ~65 |
+| 20:13 | Fixed code-review findings: row-click guard + neutral swatch + brass-text badge (game-history-row), a11y tally + shown-count (game-history-list), CTA brass-text (games-client), min-h-100dvh (play/error), focus-visible ring (not-found), theme-safe overlay/shadow/ring (dialog, sheet), bg-muted skeleton, sonner icon colors + tokenized shadow | apps/web/src/{components/games,app,components/ui} | typecheck clean | ~9k |
+| 20:14 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 3→6 lines | ~64 |
+| 20:14 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified if() | ~61 |
+| 20:14 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 import(s) | ~62 |
+| 20:14 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 3→6 lines | ~64 |
+| 20:14 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified if() | ~61 |
+| 20:14 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~52 |
+| 20:15 | Edited apps/web/src/components/review/review-controls.tsx | 3→6 lines | ~271 |
+| 20:15 | Edited apps/web/src/components/review/review-controls.tsx | added 4 condition(s) | ~377 |
+| 20:15 | Created apps/web/src/components/board/move-input.tsx | — | ~1398 |
+| 20:15 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 8→9 lines | ~42 |
+| 20:15 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | modified if() | ~73 |
+| 20:15 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 7→8 lines | ~86 |
+| 20:15 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: active, active | ~187 |
+| 20:15 | Edited apps/web/src/components/game/move-error-notice.tsx | CSS: pointer-events-none | ~257 |
+| 20:15 | Created apps/web/src/app/games/[gameId]/error.tsx | — | ~134 |
+| 20:15 | Edited apps/web/src/components/game/move-panel.tsx | 3→6 lines | ~117 |
+| 20:16 | Edited apps/web/src/components/game/move-panel.tsx | "repeating-linear-gradient" → "repeating-linear-gradient" | ~62 |
+| 20:16 | Edited apps/web/src/components/board/chessboard.tsx | inline fix | ~24 |
+| 20:16 | Edited apps/web/src/components/board/chessboard.tsx | prefersReducedMotion() → animationsDisabled() | ~59 |
+| 20:16 | Created apps/web/src/components/game/game-loading-skeleton.tsx | — | ~663 |
+| 20:16 | Created apps/web/src/app/computer-game/[gameId]/loading.tsx | — | ~64 |
+| 20:16 | Created apps/web/src/app/(play)/play/[gameId]/loading.tsx | — | ~60 |
+| 20:18 | Edited apps/web/test/review/review-page.test.tsx | 5→6 lines | ~95 |
+| 20:25 | Adversarial review workflow (23 agents, 1.5M tok): 19 confirmed findings, 0 refuted, 31 minors | full diff | ok | ~1.5M |
+| 20:30 | Fix round: shadow-elevated var-based composition fix, --brass-text token, promotion focus trap, aria-disabled seek, turn aria-live, GameLoadingSkeleton, dialog/sheet/skeleton/sonner theme fixes, row click guards, GameErrorState on dark routes | 25 files | ok | ~250k |
+| 20:35 | Final verify: tsc clean, 194/194 vitest, dark+light screenshots of all surfaces OK. Session: full design elevation, ~75 files | — | done | ~3M total |
+| 20:22 | Session end: 218 writes across 65 files (globals.css, tailwind.config.ts, button.tsx, input.tsx, board-column.tsx) | 101 reads | ~127013 tok |
+| 20:27 | Created docs/HANDOFF-next-level.md | — | ~1952 |
+| 20:45 | Wrote next-session handoff (state, conventions, ranked backlog A-D, verification loop) | docs/HANDOFF-next-level.md | done | ~2k |
+| 20:28 | Session end: 219 writes across 66 files (globals.css, tailwind.config.ts, button.tsx, input.tsx, board-column.tsx) | 101 reads | ~129105 tok |

@@ -45,6 +45,8 @@ const config: Config = {
         brass: {
           DEFAULT: 'hsl(var(--brass))',
           soft: 'hsl(var(--brass-soft))',
+          // Darker in light theme so brass stays legible as small text.
+          text: 'hsl(var(--brass-text))',
           foreground: 'hsl(var(--accent-foreground))',
         },
         stage: 'hsl(var(--stage))',
@@ -73,8 +75,7 @@ const config: Config = {
       },
       boxShadow: {
         'inner-hairline': 'inset 0 1px 0 0 hsl(var(--border) / 0.6)',
-        elevated:
-          '0 1px 0 hsl(0 0% 0% / 0.04), 0 1px 2px hsl(0 0% 0% / 0.06), 0 8px 24px hsl(0 0% 0% / 0.08)',
+        elevated: 'var(--shadow-elevated)',
         'brass-glow':
           '0 0 0 1px hsl(var(--brass) / 0.4), 0 8px 24px hsl(var(--brass) / 0.18)',
       },

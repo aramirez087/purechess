@@ -1,12 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
-import type { Square as SquareType, Piece, Move, MoveIntent, PieceType, Color } from '@purechess/shared';
+import type { Square as SquareType, Piece, MoveIntent, PieceType, Color } from '@purechess/shared';
 import type { ChessboardProps, Premove, PromotionState } from '@/lib/board/types';
 import { getLegalMovesForSquare, getLegalCapturesForSquare, getPieceAt, fenToColorToMove, isPromotion, getCheckSquare } from '@/lib/board/position';
 import { validatePremove } from '@/lib/board/premove';
-import { getAnimationSquares } from '@/lib/board/animations';
+import { getAnimationSquares, animationsDisabled } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
 import { cn } from '@/lib/utils';
 import { useBoardSettings } from './board-context';
@@ -195,7 +195,7 @@ export function Chessboard({
     return sq.getAttribute('data-square') as SquareType | null;
   }, []);
 
-  const { dragState, onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useDrag({
+  const { dragState, pointerType, onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useDrag({
     onDragStart: (sq) => {
       if (!isOwnPiece(sq) && isPlayerTurn) return;
       deselect();
@@ -282,7 +282,11 @@ export function Chessboard({
         role="grid"
         aria-label="Chess board"
         tabIndex={0}
-        className="grid grid-cols-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(
+          'grid grid-cols-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          // Squares set their own cursor; override them all while a drag is live.
+          dragState.active && 'cursor-grabbing [&_[data-square]]:!cursor-grabbing',
+        )}
         style={{ touchAction: 'none' }}
         onFocus={() => setShowKeyboardFocus(true)}
         onBlur={() => setShowKeyboardFocus(false)}
@@ -291,11 +295,18 @@ export function Chessboard({
         onPointerCancel={onPointerCancel}
         onKeyDown={handleKeyDown}
       >
-        {squares.map(({ square, piece, fileIdx, rankIdx, isLight }) => {
+        {squares.map(({ square, piece, isLight }) => {
           const legalDests = effectiveSelected ? selectedDests : [];
           const isLegalDest = legalDests.includes(square);
           const isCapture = selectedCaptures.includes(square);
           const isAnimTarget = anim?.pieces.some((p) => p.to === square) ?? false;
+          const cursor = readOnly
+            ? 'default'
+            : piece && piece.color === playerColor
+              ? 'grab'
+              : isLegalDest
+                ? 'pointer'
+                : 'default';
 
           return (
             <Square
@@ -315,6 +326,7 @@ export function Chessboard({
               isKeyboardFocus={showKeyboardFocus && focusSquare === square}
               isDragSource={dragState.active && dragState.from === square}
               isDragOver={dragState.active && dragOverSquare === square && dragState.from !== square}
+              cursor={cursor}
               ghostPiece={premove?.to === square ? (getPieceAt(position, premove.from) ?? undefined) : undefined}
               ariaLabel={buildAriaLabel(square, piece, isLegalDest ? legalDests : [])}
               onPointerDown={readOnly ? undefined : (e, sq) => {
@@ -329,7 +341,7 @@ export function Chessboard({
       </div>
 
       {settings.coordinates && (
-        <div className="pointer-events-none absolute inset-0 z-30">
+        <div className="pointer-events-none absolute inset-0 z-10">
           <Coordinates orientation={orientation} />
         </div>
       )}
@@ -339,28 +351,7 @@ export function Chessboard({
       {dragState.active && dragState.from && (() => {
         const p = getPieceAt(position, dragState.from);
         if (!p) return null;
-        const SvgComponent = getPieceSvg(p.type, p.color);
-        return (
-          <div
-            className="fixed pointer-events-none z-50"
-            style={{
-              left: dragState.x,
-              top: dragState.y,
-              width: 'var(--board-sq-size)',
-              height: 'var(--board-sq-size)',
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            <SvgComponent
-              className={cn(
-                'block h-full w-full',
-                p.color === 'b'
-                  ? 'drop-shadow-[0_3px_4px_rgba(0,0,0,0.45)]'
-                  : 'drop-shadow-[0_3px_4px_rgba(0,0,0,0.30)]',
-              )}
-            />
-          </div>
-        );
+        return <DragGhost piece={p} x={dragState.x} y={dragState.y} pointerType={pointerType} />;
       })()}
 
       {promotion.active && promotion.to && (
@@ -370,6 +361,68 @@ export function Chessboard({
           onCancel={() => setPromotion({ active: false, from: null, to: null })}
         />
       )}
+    </div>
+  );
+}
+
+/**
+ * Pointer-following drag piece. Mounts at rest under the pointer, then lifts
+ * (offset + scale) over 80ms so the grab reads as picking the piece up. Touch
+ * lifts higher so the piece stays visible above the finger.
+ */
+function DragGhost({
+  piece,
+  x,
+  y,
+  pointerType,
+}: {
+  piece: Piece;
+  x: number;
+  y: number;
+  pointerType: string;
+}) {
+  const [lifted, setLifted] = useState(false);
+  // animationsDisabled() covers both OS reduced motion and the board-settings
+  // `data-no-animations` kill switch.
+  const reduced = animationsDisabled();
+
+  useLayoutEffect(() => {
+    if (reduced) {
+      setLifted(true);
+      return;
+    }
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setLifted(true));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [reduced]);
+
+  const SvgComponent = getPieceSvg(piece.type, piece.color);
+  const liftTransform =
+    pointerType === 'touch'
+      ? 'translate(-50%, -110%) scale(1.15)'
+      : 'translate(-50%, -55%) scale(1.1)';
+
+  return (
+    <div
+      className="fixed pointer-events-none z-50"
+      style={{
+        left: x,
+        top: y,
+        width: 'var(--board-sq-size)',
+        height: 'var(--board-sq-size)',
+        transform: lifted ? liftTransform : 'translate(-50%, -50%) scale(1)',
+        transition: lifted && !reduced ? 'transform 80ms ease-out' : 'none',
+      }}
+    >
+      <SvgComponent
+        className={cn(
+          'block h-full w-full',
+          piece.color === 'b'
+            ? 'drop-shadow-[0_7px_10px_rgba(0,0,0,0.55)]'
+            : 'drop-shadow-[0_7px_10px_rgba(0,0,0,0.40)]',
+        )}
+      />
     </div>
   );
 }

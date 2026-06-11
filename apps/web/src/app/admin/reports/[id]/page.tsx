@@ -41,7 +41,11 @@ export default function AdminReportDetailPage() {
   if (isLoading)
     return <p className="text-sm text-muted-foreground">Loading…</p>;
   if (!report)
-    return <p className="text-sm text-destructive">Report not found</p>;
+    return (
+      <div className="rounded-lg border border-border/70 bg-surface px-6 py-10 text-center text-sm text-muted-foreground">
+        Report not found
+      </div>
+    );
 
   return (
     <div className="space-y-6 max-w-3xl">

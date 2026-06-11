@@ -23,6 +23,8 @@ interface SquareProps {
   isDragSource: boolean;
   /** A drag is in flight and the pointer is over this square. */
   isDragOver?: boolean;
+  /** Affordance computed by the board: own piece = grab, legal destination = pointer. */
+  cursor?: 'grab' | 'pointer' | 'default';
   ghostPiece?: Piece;
   onPointerDown?: (e: React.PointerEvent, square: SquareType) => void;
   onClick?: (square: SquareType) => void;
@@ -45,6 +47,7 @@ export const Square = memo(function Square({
   isKeyboardFocus,
   isDragSource,
   isDragOver,
+  cursor = 'default',
   ghostPiece,
   onPointerDown,
   onClick,
@@ -56,7 +59,8 @@ export const Square = memo(function Square({
       aria-label={ariaLabel}
       role="gridcell"
       className={cn(
-        'relative flex items-center justify-center cursor-pointer',
+        'relative flex items-center justify-center',
+        cursor === 'grab' ? 'cursor-grab' : cursor === 'pointer' ? 'cursor-pointer' : 'cursor-default',
         'w-[var(--board-sq-size)] h-[var(--board-sq-size)]',
         isLight ? 'bg-[hsl(var(--board-sq-light))]' : 'bg-[hsl(var(--board-sq-dark))]',
         isLastMoveFrom && 'sq-last-from',
@@ -73,14 +77,24 @@ export const Square = memo(function Square({
         <div
           aria-hidden
           className="absolute inset-0 z-[5] pointer-events-none"
-          style={{ backgroundColor: `hsl(var(--board-highlight-last))` }}
+          style={{
+            backgroundColor: isLight
+              ? `hsl(var(--board-highlight-last-light))`
+              : `hsl(var(--board-highlight-last-dark))`,
+          }}
         />
       )}
       {isSelected && (
         <div
           aria-hidden
           className="absolute inset-0 z-[5] pointer-events-none"
-          style={{ backgroundColor: `hsl(var(--board-highlight-selected))` }}
+          style={{
+            backgroundColor: isLight
+              ? `hsl(var(--board-highlight-selected-light))`
+              : `hsl(var(--board-highlight-selected-dark))`,
+            // Inset brass hairline so selection reads "held" vs the last-move wash.
+            boxShadow: 'inset 0 0 0 2px hsl(41 85% 60% / 0.85)',
+          }}
         />
       )}
       {(isPremoveFrom || isPreMoveTo) && (
@@ -102,7 +116,7 @@ export const Square = memo(function Square({
           className="sq-check absolute inset-0 z-[5] pointer-events-none"
           style={{
             background: `radial-gradient(circle at 50% 50%, hsl(var(--board-highlight-check) / 0.65) 0%, hsl(var(--board-highlight-check) / 0.35) 55%, transparent 78%)`,
-            animation: 'check-pulse 1s ease-in-out 3',
+            animation: 'check-pulse 1.4s ease-in-out 2',
           }}
         />
       )}

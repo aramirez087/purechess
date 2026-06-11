@@ -21,6 +21,8 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
     y: 0,
     pointerId: null,
   });
+  // Drives the touch-vs-mouse ghost offset; kept outside DragState (shared type).
+  const [pointerType, setPointerType] = useState<string>('mouse');
 
   const startPos = useRef<{ x: number; y: number } | null>(null);
   const isDragging = useRef(false);
@@ -45,6 +47,7 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
       if (!isDragging.current && Math.sqrt(dx * dx + dy * dy) > DRAG_THRESHOLD) {
         isDragging.current = true;
         onDragStart?.(fromSquare.current);
+        setPointerType(e.pointerType || 'mouse');
         setDragState({
           active: true,
           from: fromSquare.current,
@@ -91,6 +94,7 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
 
   return {
     dragState,
+    pointerType,
     isDragging: isDragging.current,
     onPointerDown,
     onPointerMove,

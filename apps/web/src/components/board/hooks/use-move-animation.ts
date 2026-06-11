@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Piece, Square } from '@purechess/shared';
-import { getAnimationSquares, prefersReducedMotion, MOVE_DURATION_MS } from '@/lib/board/animations';
+import { getAnimationSquares, animationsDisabled, MOVE_DURATION_MS } from '@/lib/board/animations';
 import { getPieceAt } from '@/lib/board/position';
 
 export interface AnimatedPieceSpec {
@@ -13,6 +13,8 @@ export interface AnimatedPieceSpec {
 
 export interface MoveAnimation {
   pieces: AnimatedPieceSpec[];
+  /** Victim of a capture: held at its square by the AnimationLayer while the mover slides in. */
+  captured?: { piece: Piece; at: Square };
   /** Monotonic id so consecutive moves restart the slide. */
   key: number;
 }
@@ -49,7 +51,7 @@ export function useMoveAnimation(
     const dragMove = lastDragMoveRef.current;
     lastDragMoveRef.current = null;
 
-    if (!enabled || prefersReducedMotion()) return;
+    if (!enabled || animationsDisabled()) return;
 
     const squares = getAnimationSquares(prev, position);
     if (!squares) {
@@ -70,9 +72,17 @@ export function useMoveAnimation(
     }
     if (pieces.length === 0) return;
 
+    // The victim only exists in the pre-move position.
+    let captured: MoveAnimation['captured'];
+    if (squares.capturedAt) {
+      const victim = getPieceAt(prev, squares.capturedAt);
+      if (victim) captured = { piece: victim, at: squares.capturedAt };
+    }
+
     keyRef.current += 1;
-    setAnim({ pieces, key: keyRef.current });
-    const timer = setTimeout(() => setAnim(null), MOVE_DURATION_MS + 60);
+    setAnim({ pieces, captured, key: keyRef.current });
+    // +120ms covers the layer's 2-rAF transition start plus the 60ms settle.
+    const timer = setTimeout(() => setAnim(null), MOVE_DURATION_MS + 120);
     return () => clearTimeout(timer);
   }, [position, lastDragMoveRef, enabled]);
 

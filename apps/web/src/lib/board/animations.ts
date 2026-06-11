@@ -8,6 +8,16 @@ export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+/**
+ * True when move animations must be skipped entirely (instant placement, no
+ * capture-hold): OS reduced motion, or the `data-no-animations` kill switch
+ * that globals.css uses to disable transitions.
+ */
+export function animationsDisabled(): boolean {
+  if (prefersReducedMotion()) return true;
+  return typeof document !== 'undefined' && document.querySelector('[data-no-animations]') !== null;
+}
+
 export interface AnimationSquares {
   from: Square;
   to: Square;

@@ -2,12 +2,14 @@
 
 import { Copy, Download, Hash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 interface PgnActionsProps {
   pgn: string;
   gameId: string;
   fen?: string;
+  className?: string;
 }
 
 function usePgnHandlers({ pgn, gameId, fen }: PgnActionsProps) {
@@ -40,19 +42,23 @@ function usePgnHandlers({ pgn, gameId, fen }: PgnActionsProps) {
   return { handleCopy, handleCopyFen, handleDownload };
 }
 
+/**
+ * Full-button variant, sized to dock as a panel footer: each action splits
+ * the row evenly. Quiet outline look comes from the Button variant itself.
+ */
 export function PgnActions(props: PgnActionsProps) {
   const { handleCopy, handleCopyFen, handleDownload } = usePgnHandlers(props);
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <Button variant="outline" size="sm" onClick={handleCopy}>
+    <div className={cn('flex items-center gap-2', props.className)}>
+      <Button variant="outline" size="sm" className="flex-1" onClick={handleCopy}>
         Copy PGN
       </Button>
-      <Button variant="outline" size="sm" onClick={handleDownload}>
+      <Button variant="outline" size="sm" className="flex-1" onClick={handleDownload}>
         Download PGN
       </Button>
       {props.fen && (
-        <Button variant="outline" size="sm" onClick={handleCopyFen}>
+        <Button variant="outline" size="sm" className="flex-1" onClick={handleCopyFen}>
           Copy FEN
         </Button>
       )}

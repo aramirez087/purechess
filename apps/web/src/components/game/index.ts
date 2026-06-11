@@ -6,3 +6,5 @@ export { CapturedMaterial, type CapturedMaterialProps } from './captured-materia
 export { GameRail, type GameRailProps } from './game-rail';
 export { MovePanel, type MovePanelMove, type MovePanelProps } from './move-panel';
 export { BoardControlBar, type BoardControlBarProps } from './board-control-bar';
+export { GameErrorState, type GameErrorStateProps } from './game-error-state';
+export { MoveErrorNotice, type MoveErrorNoticeProps } from './move-error-notice';

@@ -9,6 +9,7 @@ import { Check, Cpu, Play } from 'lucide-react';
 import { createComputerGame } from '@/lib/api/computer-games';
 import type { CreateComputerGameDto } from '@purechess/shared';
 import { TIME_CONTROL_PRESETS } from '@purechess/shared';
+import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
 import { cn } from '@/lib/utils';
 
 // timeControlSeconds <= 0 = untimed on the API (engine clock never flags).
@@ -28,10 +29,10 @@ const LEVEL_LABELS: Record<number, string> = {
 
 const TIME_PICKER_PRESETS: { key: string; sublabel: string; label: string }[] = [
   { key: 'untimed', sublabel: '∞', label: 'Untimed' },
-  { key: '1+0', sublabel: '1|0', label: 'Bullet' },
-  { key: '3+2', sublabel: '3|2', label: 'Blitz' },
-  { key: '5+0', sublabel: '5|0', label: 'Blitz' },
-  { key: '10+0', sublabel: '10|0', label: 'Rapid' },
+  { key: '1+0', sublabel: '1+0', label: 'Bullet' },
+  { key: '3+2', sublabel: '3+2', label: 'Blitz' },
+  { key: '5+0', sublabel: '5+0', label: 'Blitz' },
+  { key: '10+0', sublabel: '10+0', label: 'Rapid' },
 ];
 
 const THINK_TIME_MAP: Record<string, number> = {
@@ -46,20 +47,13 @@ const COLORS: { label: string; value: CreateComputerGameDto['color'] }[] = [
   { label: 'Random', value: 'random' },
 ];
 
-// Shared pill class fragments.
-const PILL_BASE =
-  'rounded-md text-xs font-medium transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
-const PILL_ACTIVE =
-  'border-brass/70 bg-brass/15 font-semibold text-brass shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]';
-const PILL_INACTIVE =
-  'bg-raised/40 border-border/60 text-muted-foreground hover:bg-raised hover:text-foreground';
-
 interface ComputerGameSetupProps {
-  onCancel: () => void;
+  /** Retained for callers; back navigation now lives in the page-level link. */
+  onCancel?: () => void;
   onGameCreated: (gameId: string) => void;
 }
 
-export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetupProps) {
+export function ComputerGameSetup({ onGameCreated }: ComputerGameSetupProps) {
   const [level, setLevel] = useState<CreateComputerGameDto['level']>(4);
   const [color, setColor] = useState<CreateComputerGameDto['color']>('random');
   const [isPending, setIsPending] = useState(false);
@@ -124,7 +118,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
       <CardContent className="space-y-6 pt-6">
         {/* Time control */}
         <div className="space-y-3">
-          <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Time Control
           </Label>
           <div className="grid grid-cols-5 gap-1.5">
@@ -142,7 +136,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                 )}
               >
                 <span className="font-mono text-[11px] leading-none">{p.sublabel}</span>
-                <span className="text-[10px] leading-none opacity-70">{p.label}</span>
+                <span className="text-[11px] leading-none">{p.label}</span>
               </button>
             ))}
           </div>
@@ -151,7 +145,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
         {/* Strength */}
         <div className="space-y-3">
           <div className="flex items-baseline justify-between">
-            <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+            <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
               Strength
             </Label>
             {strengthMode === 'level' && (
@@ -189,11 +183,9 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                   aria-pressed={level === l}
                   aria-label={'Level ' + l + ' ' + LEVEL_LABELS[l]}
                   className={cn(
-                    'relative h-11 rounded-md text-sm font-mono tabular-nums transition-all',
-                    'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                    level === l
-                      ? 'border-brass/70 bg-brass/15 font-semibold text-brass shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
-                      : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+                    PILL_BASE,
+                    'relative h-11 font-mono text-sm tabular-nums',
+                    level === l ? PILL_ACTIVE : PILL_INACTIVE,
                   )}
                 >
                   {level === l && (
@@ -218,7 +210,12 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                   value={eloTarget}
                   onChange={(e) => setEloTarget(Number(e.target.value))}
                   aria-label="ELO target"
-                  className="h-2 flex-1 cursor-pointer [accent-color:hsl(var(--brass))]"
+                  className={cn(
+                    'h-1 flex-1 cursor-pointer appearance-none rounded-full bg-raised',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                    '[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brass [&::-webkit-slider-thumb]:shadow-[0_1px_4px_rgba(0,0,0,0.5)] [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110',
+                    '[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-brass [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:hover:scale-110',
+                  )}
                 />
                 <input
                   type="number"
@@ -243,7 +240,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
 
         {/* Play as */}
         <div className="space-y-3">
-          <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Play as
           </Label>
           <div className="grid grid-cols-3 gap-1.5">
@@ -254,11 +251,9 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
                 onClick={() => setColor(c.value)}
                 aria-pressed={color === c.value}
                 className={cn(
-                  'h-10 rounded-md text-sm font-medium transition-all',
-                  'border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  color === c.value
-                    ? 'border-brass/70 bg-brass/15 font-semibold text-brass shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
-                    : 'border-border/70 bg-raised/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+                  PILL_BASE,
+                  'h-10 text-sm',
+                  color === c.value ? PILL_ACTIVE : PILL_INACTIVE,
                 )}
               >
                 {c.label}
@@ -269,7 +264,7 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
 
         {/* Think time */}
         <div className="space-y-3">
-          <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Think Time
           </Label>
           <div className="grid grid-cols-4 gap-1.5">
@@ -305,21 +300,14 @@ export function ComputerGameSetup({ onCancel, onGameCreated }: ComputerGameSetup
           />
         </div>
 
-        <div className="flex flex-col gap-2 pt-2 sm:flex-row">
+        <div className="pt-2">
           <Button
             onClick={handleStart}
             disabled={isPending}
-            className="h-11 flex-1 bg-foreground text-background hover:bg-foreground/90 shadow-elevated"
+            className="h-11 w-full bg-foreground text-background hover:bg-foreground/90 shadow-elevated"
           >
             <Play className="mr-2 h-4 w-4" />
             {isPending ? 'Starting…' : 'Start Game'}
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={onCancel}
-            className="h-11 flex-1 text-muted-foreground hover:text-foreground"
-          >
-            Back
           </Button>
         </div>
 

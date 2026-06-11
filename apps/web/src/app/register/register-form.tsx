@@ -63,20 +63,20 @@ export function RegisterForm() {
           Already have an account?{' '}
           <Link
             href={`/login?return=${encodeURIComponent(returnTo)}`}
-            className="font-medium text-brass underline-offset-4 hover:underline"
+            className="font-medium text-brass underline decoration-brass/30 underline-offset-4 transition-colors hover:text-brass/90 hover:decoration-brass"
           >
             Sign in
           </Link>
         </>
       }
     >
-      <Card className="border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
+      <Card className="relative overflow-hidden border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-brass/40 before:to-transparent">
         <CardContent className="pt-6">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+            <div className="space-y-1.5">
               <Label
                 htmlFor="email"
-                className="text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Email
               </Label>
@@ -84,15 +84,16 @@ export function RegisterForm() {
                 id="email"
                 type="email"
                 autoComplete="email"
+                autoFocus
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label
                 htmlFor="username"
-                className="text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Username
               </Label>
@@ -103,14 +104,14 @@ export function RegisterForm() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[11px] leading-relaxed text-muted-foreground">
                 3–20 characters. Letters, numbers, _ or -.
               </p>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label
                 htmlFor="password"
-                className="text-xs uppercase tracking-[0.14em] text-muted-foreground"
+                className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Password
               </Label>
@@ -122,7 +123,7 @@ export function RegisterForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[11px] leading-relaxed text-muted-foreground">
                 At least 8 characters, one uppercase letter, one number.
               </p>
             </div>
@@ -130,7 +131,7 @@ export function RegisterForm() {
             {error && (
               <p
                 role="alert"
-                className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+                className="animate-error-in rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive dark:text-[hsl(0_72%_70%)]"
               >
                 {error}
               </p>
@@ -138,13 +139,13 @@ export function RegisterForm() {
 
             <Button
               type="submit"
-              disabled={pending || !email || !username || !password}
-              className="mt-1 h-11 w-full bg-foreground text-background shadow-elevated hover:bg-foreground/90"
+              disabled={pending}
+              className="mt-1 h-11 w-full bg-brass font-semibold text-accent-foreground shadow-elevated transition-all duration-150 hover:bg-brass/90 hover:shadow-brass-glow active:translate-y-px disabled:opacity-70"
             >
               {pending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
               ) : (
-                <UserPlus className="mr-2 h-4 w-4" aria-hidden="true" />
+                <UserPlus className="h-4 w-4" aria-hidden="true" />
               )}
               {pending ? 'Creating account…' : 'Create account'}
             </Button>
