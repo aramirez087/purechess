@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Flag, Loader2, Plus, RotateCcw } from 'lucide-react';
+import { Ban, Flag, Handshake, Loader2, Plus, RotateCcw } from 'lucide-react';
 import type { ComputerGameStateDto } from '@purechess/shared';
 import type { Square } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
@@ -31,6 +31,8 @@ import {
   submitComputerMove,
   takebackComputerMove,
   rematchComputerGame,
+  abortComputerGame,
+  drawComputerGame,
 } from '@/lib/api/computer-games';
 import { PgnIconActions } from '@/components/review/pgn-actions';
 import { ResultOverlay, type ResultTone } from '@/components/game/result-overlay';
@@ -215,7 +217,8 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
 
   // Safe keyboard opts — work before game loads (function declarations hoisted)
   const _isPlaying = state.phase === 'playing';
-  const _isGameOver = _isPlaying && state.game.status === 'completed';
+  const _isGameOver =
+    _isPlaying && (state.game.status === 'completed' || state.game.status === 'aborted');
   const _isComputerThinking = _isPlaying ? state.submitting : false;
   const _sanCount = _isPlaying ? parsePgnMoves(state.game.pgn).length : 0;
 
@@ -232,6 +235,7 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     onHint: undefined,
     onTakeback: _isGameOver ? undefined : handleTakeback,
     onResign: _isGameOver ? undefined : handleResign,
+    onDraw: _isGameOver ? undefined : handleClaimDraw,
     onFlip: () => setFlipped((f) => !f),
     onNew: _isGameOver ? () => router.push('/play') : undefined,
     onSeek: setCurrentPly,
@@ -401,6 +405,41 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     }
   }
 
+  // Abort: only before the human has moved (server-enforced); no result,
+  // no rating impact — mirrors the PvP ply<2 abort.
+  async function handleAbort() {
+    if (state.phase !== 'playing') return;
+    setState((s: PageState) =>
+      s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s,
+    );
+    try {
+      const next = await abortComputerGame(gameId);
+      setState({ phase: 'playing', game: next, submitting: false, moveError: null });
+    } catch (err) {
+      setState((s: PageState) =>
+        s.phase === 'playing' ? { ...s, submitting: false, moveError: (err as Error).message } : s,
+      );
+    }
+  }
+
+  // The computer never answers offers — vs the bot, "draw" means claiming a
+  // genuine, server-detected draw (threefold / fifty-move / insufficient
+  // material). An unfounded claim 400s and surfaces as a move error.
+  async function handleClaimDraw() {
+    if (state.phase !== 'playing' || state.submitting) return;
+    setState((s: PageState) =>
+      s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s,
+    );
+    try {
+      const next = await drawComputerGame(gameId, 'claim');
+      setState({ phase: 'playing', game: next, submitting: false, moveError: null });
+    } catch (err) {
+      setState((s: PageState) =>
+        s.phase === 'playing' ? { ...s, submitting: false, moveError: (err as Error).message } : s,
+      );
+    }
+  }
+
   // Undo the last full move (your move + the computer's reply).
   async function handleTakeback() {
     if (state.phase !== 'playing') return;
@@ -454,17 +493,27 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
   const bottomColor = orientation;
   const topColor: Color = bottomColor === 'white' ? 'black' : 'white';
   const sideToMove = getSideToMove(game.fen);
-  const isGameOver = game.status === 'completed';
+  const isAborted = game.status === 'aborted';
+  const isGameOver = game.status === 'completed' || isAborted;
   const readOnly = isGameOver || submitting;
   const lastMove = parseLastMove(game.lastComputerMove);
-  const resultLabel = getResultLabel(game.result, game.computerColor);
-  const reasonLabel = game.resultReason
-    ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
-    : null;
+  const resultLabel = isAborted ? 'Aborted' : getResultLabel(game.result, game.computerColor);
+  const reasonLabel =
+    !isAborted && game.resultReason
+      ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
+      : null;
   const resultTone: ResultTone =
-    resultLabel === 'You won' ? 'win' : resultLabel === 'Draw' ? 'draw' : 'loss';
+    resultLabel === 'You won' ? 'win' : resultLabel === 'You lost' ? 'loss' : 'draw';
   const computerActive = !isGameOver && (submitting || sideToMove === game.computerColor);
   const humanActive = !isGameOver && !submitting && sideToMove === humanColor;
+  // Abort window: the human hasn't moved yet (server rule). Who moved first
+  // follows from move-count parity against the side to move — robust for
+  // from-fen games where black may start.
+  const firstMover: Color =
+    sanMoves.length % 2 === 0 ? sideToMove : sideToMove === 'white' ? 'black' : 'white';
+  const humanHasMoved =
+    firstMover === humanColor ? sanMoves.length >= 1 : sanMoves.length >= 2;
+  const canAbort = !isGameOver && !humanHasMoved;
   const material = computeMaterial(game.fen);
   // On a timeout the engine's flag-fall path returns the clock un-ticked, so
   // the loser's stored value is stale — display the flagged side at zero.
@@ -595,6 +644,18 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
                       New game
                     </Link>
                   </>
+                ) : canAbort ? (
+                  <button
+                    onClick={handleAbort}
+                    disabled={submitting}
+                    className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Ban
+                      className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
+                      aria-hidden="true"
+                    />
+                    Abort
+                  </button>
                 ) : (
                   <>
                     <button
@@ -605,6 +666,15 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
                     >
                       <RotateCcw className="h-4 w-4" aria-hidden="true" />
                       Takeback
+                    </button>
+                    <button
+                      onClick={handleClaimDraw}
+                      disabled={submitting}
+                      title="Claim a draw (threefold repetition or fifty-move rule)"
+                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <Handshake className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+                      Draw
                     </button>
                     <button
                       onClick={handleResign}
