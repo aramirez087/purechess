@@ -1,166 +1,189 @@
 {
-  "session_id": "session-2026-06-11-2225",
-  "started": "2026-06-11T04:25:42.958Z",
+  "session_id": "session-2026-06-11-0616",
+  "started": "2026-06-11T12:16:11.197Z",
   "files_read": {
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/docs/claude-sessions/purechess-category-best/session-00-operator-rules.md": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx": {
       "count": 1,
-      "tokens": 0,
-      "first_read": "2026-06-11T04:26:00.073Z"
+      "tokens": 1251,
+      "first_read": "2026-06-11T12:16:22.951Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-game-socket.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx": {
       "count": 1,
-      "tokens": 904,
-      "first_read": "2026-06-11T04:26:04.687Z"
+      "tokens": 1654,
+      "first_read": "2026-06-11T12:16:23.482Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-live-clock.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx": {
       "count": 1,
-      "tokens": 578,
-      "first_read": "2026-06-11T04:26:05.625Z"
+      "tokens": 915,
+      "first_read": "2026-06-11T12:16:24.201Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/realtime/realtime.gateway.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/auth/auth-shell.tsx": {
       "count": 1,
-      "tokens": 1519,
-      "first_read": "2026-06-11T04:26:06.095Z"
+      "tokens": 666,
+      "first_read": "2026-06-11T12:16:28.197Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/database/prisma.service.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx": {
       "count": 1,
-      "tokens": 100,
-      "first_read": "2026-06-11T04:26:06.758Z"
+      "tokens": 2253,
+      "first_read": "2026-06-11T12:16:28.765Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-game-socket.test.tsx": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-list.tsx": {
       "count": 1,
-      "tokens": 1160,
-      "first_read": "2026-06-11T04:26:20.304Z"
+      "tokens": 1485,
+      "first_read": "2026-06-11T12:16:33.719Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-live-clock-offset.test.tsx": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx": {
       "count": 1,
-      "tokens": 377,
-      "first_read": "2026-06-11T04:26:21.249Z"
+      "tokens": 1646,
+      "first_read": "2026-06-11T12:16:34.134Z"
     },
-    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/test/realtime/realtime.gateway.spec.ts": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/settings/settings-dialog.test.tsx": {
       "count": 1,
-      "tokens": 2755,
-      "first_read": "2026-06-11T04:26:21.833Z"
+      "tokens": 676,
+      "first_read": "2026-06-11T12:16:50.806Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/games/game-history-page.test.tsx": {
+      "count": 1,
+      "tokens": 1204,
+      "first_read": "2026-06-11T12:16:51.125Z"
     }
   },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/database/prisma.service.ts",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx",
+      "action": "edit",
+      "tokens": 51,
+      "at": "2026-06-11T12:18:03.178Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx",
+      "action": "edit",
+      "tokens": 51,
+      "at": "2026-06-11T12:18:04.853Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx",
+      "action": "edit",
+      "tokens": 31,
+      "at": "2026-06-11T12:18:08.515Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx",
+      "action": "edit",
+      "tokens": 31,
+      "at": "2026-06-11T12:18:09.752Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+      "action": "edit",
+      "tokens": 45,
+      "at": "2026-06-11T12:18:14.906Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+      "action": "edit",
+      "tokens": 34,
+      "at": "2026-06-11T12:18:19.655Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-06-11T12:18:23.187Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+      "action": "edit",
+      "tokens": 104,
+      "at": "2026-06-11T12:18:27.612Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/auth/auth-shell.tsx",
+      "action": "edit",
+      "tokens": 49,
+      "at": "2026-06-11T12:18:31.916Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+      "action": "edit",
+      "tokens": 86,
+      "at": "2026-06-11T12:18:41.051Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+      "action": "edit",
+      "tokens": 90,
+      "at": "2026-06-11T12:18:45.179Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+      "action": "edit",
+      "tokens": 242,
+      "at": "2026-06-11T12:18:54.684Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+      "action": "edit",
+      "tokens": 21,
+      "at": "2026-06-11T12:18:58.363Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-list.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-06-11T12:19:01.997Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-06-11T12:19:05.582Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx",
+      "action": "edit",
+      "tokens": 42,
+      "at": "2026-06-11T12:19:09.300Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/settings/settings-dialog.test.tsx",
+      "action": "edit",
+      "tokens": 408,
+      "at": "2026-06-11T12:19:21.800Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/games/game-history-page.test.tsx",
+      "action": "edit",
+      "tokens": 385,
+      "at": "2026-06-11T12:19:32.546Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/games/game-history-page.test.tsx",
+      "action": "edit",
+      "tokens": 140,
+      "at": "2026-06-11T12:19:57.562Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/docs/roadmap/purechess-category-best/session-06-handoff.md",
       "action": "create",
-      "tokens": 409,
-      "at": "2026-06-11T04:26:41.795Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/test/database/prisma.service.spec.ts",
-      "action": "create",
-      "tokens": 920,
-      "at": "2026-06-11T04:26:59.985Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/realtime/realtime.gateway.ts",
-      "action": "edit",
-      "tokens": 202,
-      "at": "2026-06-11T04:27:10.035Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/test/realtime/realtime.gateway.spec.ts",
-      "action": "edit",
-      "tokens": 57,
-      "at": "2026-06-11T04:27:41.939Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/test/realtime/realtime.gateway.spec.ts",
-      "action": "edit",
-      "tokens": 278,
-      "at": "2026-06-11T04:27:48.988Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/test/realtime/realtime.gateway.spec.ts",
-      "action": "edit",
-      "tokens": 637,
-      "at": "2026-06-11T04:28:04.533Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-live-clock.ts",
-      "action": "edit",
-      "tokens": 281,
-      "at": "2026-06-11T04:28:19.175Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-game-socket.ts",
-      "action": "edit",
-      "tokens": 516,
-      "at": "2026-06-11T04:28:31.922Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-game-socket.ts",
-      "action": "edit",
-      "tokens": 72,
-      "at": "2026-06-11T04:28:42.376Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-game-socket.test.tsx",
-      "action": "edit",
-      "tokens": 195,
-      "at": "2026-06-11T04:28:52.629Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-game-socket.test.tsx",
-      "action": "edit",
-      "tokens": 929,
-      "at": "2026-06-11T04:29:08.846Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-live-clock-visibility.test.tsx",
-      "action": "create",
-      "tokens": 872,
-      "at": "2026-06-11T04:29:27.392Z"
-    },
-    {
-      "file": "/tmp/pc-reconnect-measure.mjs",
-      "action": "create",
-      "tokens": 1490,
-      "at": "2026-06-11T04:34:19.974Z"
-    },
-    {
-      "file": "/tmp/pc-reconnect-measure.mjs",
-      "action": "create",
-      "tokens": 1175,
-      "at": "2026-06-11T04:34:52.993Z"
-    },
-    {
-      "file": "/tmp/pc-reconnect-measure.mjs",
-      "action": "edit",
-      "tokens": 19,
-      "at": "2026-06-11T04:35:47.322Z"
-    },
-    {
-      "file": "/tmp/pc-reconnect-measure.mjs",
-      "action": "edit",
-      "tokens": 50,
-      "at": "2026-06-11T04:36:28.296Z"
-    },
-    {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/docs/roadmap/purechess-category-best/session-02-handoff.md",
-      "action": "create",
-      "tokens": 3581,
-      "at": "2026-06-11T04:39:28.303Z"
+      "tokens": 2663,
+      "at": "2026-06-11T12:21:18.551Z"
     }
   ],
   "edit_counts": {
-    "apps/api/src/database/prisma.service.ts": 1,
-    "apps/api/test/database/prisma.service.spec.ts": 1,
-    "apps/api/src/realtime/realtime.gateway.ts": 1,
-    "apps/api/test/realtime/realtime.gateway.spec.ts": 3,
-    "apps/web/src/hooks/use-live-clock.ts": 1,
-    "apps/web/src/hooks/use-game-socket.ts": 2,
-    "apps/web/test/play/use-game-socket.test.tsx": 2,
-    "apps/web/test/play/use-live-clock-visibility.test.tsx": 1,
-    "../../../../../../tmp/pc-reconnect-measure.mjs": 4,
-    "docs/roadmap/purechess-category-best/session-02-handoff.md": 1
+    "apps/web/src/app/login/login-form.tsx": 2,
+    "apps/web/src/app/register/register-form.tsx": 2,
+    "apps/web/src/components/layout/AppShell.tsx": 4,
+    "apps/web/src/components/auth/auth-shell.tsx": 1,
+    "apps/web/src/components/settings/settings-form.tsx": 4,
+    "apps/web/src/components/games/game-history-list.tsx": 1,
+    "apps/web/src/components/games/game-history-row.tsx": 2,
+    "apps/web/test/settings/settings-dialog.test.tsx": 1,
+    "apps/web/test/games/game-history-page.test.tsx": 2,
+    "docs/roadmap/purechess-category-best/session-06-handoff.md": 1
   },
-  "anatomy_hits": 7,
-  "anatomy_misses": 1,
+  "anatomy_hits": 9,
+  "anatomy_misses": 0,
   "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
   "stop_count": 1

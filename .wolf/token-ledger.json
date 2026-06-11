@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 1148639,
-    "total_reads": 888,
-    "total_writes": 1443,
-    "total_sessions": 44,
-    "anatomy_hits": 526,
+    "total_tokens_estimated": 1197724,
+    "total_reads": 913,
+    "total_writes": 1464,
+    "total_sessions": 46,
+    "anatomy_hits": 551,
     "anatomy_misses": 356,
-    "repeated_reads_blocked": 832,
-    "estimated_savings_vs_bare_cli": 1515613
+    "repeated_reads_blocked": 835,
+    "estimated_savings_vs_bare_cli": 1529334
   },
   "sessions": [
     {
@@ -13363,6 +13363,295 @@
         "writes_count": 17,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 7
+      }
+    },
+    {
+      "id": "session-2026-06-11-0608",
+      "started": "2026-06-11T12:08:04.038Z",
+      "ended": "2026-06-11T12:16:10.364Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/design.md",
+          "tokens_estimated": 1616,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/.session-06-plan.md",
+          "tokens_estimated": 3069,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/auth/auth-shell.tsx",
+          "tokens_estimated": 666,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx",
+          "tokens_estimated": 1251,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx",
+          "tokens_estimated": 1654,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 2253,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx",
+          "tokens_estimated": 1646,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-list.tsx",
+          "tokens_estimated": 1485,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 915,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/UserMenu.tsx",
+          "tokens_estimated": 938,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/profile/profile-header.tsx",
+          "tokens_estimated": 594,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/globals.css",
+          "tokens_estimated": 2907,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/layout.tsx",
+          "tokens_estimated": 335,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/play/invite-create.tsx",
+          "tokens_estimated": 2848,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/computer-game/a11y.test.tsx",
+          "tokens_estimated": 2228,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/play/invite-join.tsx",
+          "tokens_estimated": 1752,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/.session-06-plan.md",
+          "tokens_estimated": 6648,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 26157,
+        "output_tokens_estimated": 6648,
+        "reads_count": 16,
+        "writes_count": 1,
+        "repeated_reads_blocked": 3,
+        "anatomy_lookups": 16
+      }
+    },
+    {
+      "id": "session-2026-06-11-0616",
+      "started": "2026-06-11T12:16:11.197Z",
+      "ended": "2026-06-11T12:21:44.745Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx",
+          "tokens_estimated": 1251,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx",
+          "tokens_estimated": 1654,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 915,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/auth/auth-shell.tsx",
+          "tokens_estimated": 666,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 2253,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-list.tsx",
+          "tokens_estimated": 1485,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx",
+          "tokens_estimated": 1646,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/settings/settings-dialog.test.tsx",
+          "tokens_estimated": 676,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/games/game-history-page.test.tsx",
+          "tokens_estimated": 1204,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx",
+          "tokens_estimated": 51,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx",
+          "tokens_estimated": 51,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/login/login-form.tsx",
+          "tokens_estimated": 31,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/app/register/register-form.tsx",
+          "tokens_estimated": 31,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 45,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/auth/auth-shell.tsx",
+          "tokens_estimated": 49,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 86,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 90,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 242,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-list.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/src/components/games/game-history-row.tsx",
+          "tokens_estimated": 42,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/settings/settings-dialog.test.tsx",
+          "tokens_estimated": 408,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/games/game-history-page.test.tsx",
+          "tokens_estimated": 385,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/apps/web/test/games/game-history-page.test.tsx",
+          "tokens_estimated": 140,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s06-surface-a11y-light/docs/roadmap/purechess-category-best/session-06-handoff.md",
+          "tokens_estimated": 2663,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 11750,
+        "output_tokens_estimated": 4530,
+        "reads_count": 9,
+        "writes_count": 20,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 9
       }
     }
   ],
