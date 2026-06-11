@@ -1,11 +1,12 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:24:24.582Z
-> Files: 758 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:25:50.234Z
+> Files: 759 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
 - `pc-reconnect-measure.mjs` — Live reconnect-to-correct-board measurement (Session 02). (~1074 tok)
+- `s04-commit-msg.txt` (~204 tok)
 
 ## ../../../../tmp/
 

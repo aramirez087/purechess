@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 1148639,
-    "total_reads": 888,
-    "total_writes": 1443,
-    "total_sessions": 44,
-    "anatomy_hits": 526,
-    "anatomy_misses": 356,
-    "repeated_reads_blocked": 832,
-    "estimated_savings_vs_bare_cli": 1515613
+    "total_tokens_estimated": 1162091,
+    "total_reads": 899,
+    "total_writes": 1451,
+    "total_sessions": 45,
+    "anatomy_hits": 532,
+    "anatomy_misses": 360,
+    "repeated_reads_blocked": 833,
+    "estimated_savings_vs_bare_cli": 1516813
   },
   "sessions": [
     {
@@ -13363,6 +13363,129 @@
         "writes_count": 17,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 7
+      }
+    },
+    {
+      "id": "session-2026-06-11-0608",
+      "started": "2026-06-11T12:08:03.563Z",
+      "ended": "2026-06-11T12:26:10.541Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/posthog-provider.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/home/hero-board.tsx",
+          "tokens_estimated": 3364,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/home/home-viewed-tracker.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/lib/posthog.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/app/providers.tsx",
+          "tokens_estimated": 624,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/app/layout.tsx",
+          "tokens_estimated": 335,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/sentry.client.config.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/next.config.mjs",
+          "tokens_estimated": 681,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/hooks/use-position-eval.ts",
+          "tokens_estimated": 550,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/docs/roadmap/purechess-category-best/ownership.md",
+          "tokens_estimated": 1901,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/home/hero.tsx",
+          "tokens_estimated": 1490,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/posthog-provider.tsx",
+          "tokens_estimated": 455,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/home/home-viewed-tracker.tsx",
+          "tokens_estimated": 67,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/home/hero-board.tsx",
+          "tokens_estimated": 116,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/src/components/home/hero-board.tsx",
+          "tokens_estimated": 31,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/sentry.client.config.ts",
+          "tokens_estimated": 406,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/apps/web/sentry.client.config.ts",
+          "tokens_estimated": 143,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s04-speed-shell/docs/roadmap/purechess-category-best/session-04-handoff.md",
+          "tokens_estimated": 3056,
+          "action": "create"
+        },
+        {
+          "file": "/tmp/s04-commit-msg.txt",
+          "tokens_estimated": 233,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 8945,
+        "output_tokens_estimated": 4507,
+        "reads_count": 11,
+        "writes_count": 8,
+        "repeated_reads_blocked": 1,
+        "anatomy_lookups": 6
       }
     }
   ],
