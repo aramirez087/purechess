@@ -4,6 +4,7 @@ import { Logo } from '@/components/layout/Logo';
 import { CtaButton } from './cta-button';
 import { HeroAuthLink } from './hero-auth-link';
 import { HeroBoard } from './hero-board';
+import { HeroHeading } from './hero-heading';
 
 const FEATURES = [
   {
@@ -22,10 +23,7 @@ const FEATURES = [
 
 export function Hero() {
   return (
-    <section
-      aria-labelledby="hero-wordmark"
-      className="grain relative overflow-hidden"
-    >
+    <section aria-labelledby="hero-wordmark" className="grain relative overflow-hidden">
       <BoardGridBackdrop />
 
       <div className="absolute inset-x-0 top-0 z-10">
@@ -43,25 +41,16 @@ export function Hero() {
           Silent Tournament
         </span>
 
-        <h1
-          id="hero-wordmark"
-          className="animate-rise-2 mt-6 font-display text-[clamp(3rem,7.5vw,6rem)] font-medium leading-[1.04] tracking-[-0.015em]"
-        >
-          The board is
-          <br className="hidden sm:block" />
-          <span className="relative inline-block italic">
-            the product.
-            <span
-              aria-hidden
-              className="absolute -bottom-2.5 left-1/2 -z-10 h-[3px] w-3/4 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-brass to-transparent"
-            />
-          </span>
-        </h1>
+        <HeroHeading />
 
-        <p className="animate-rise-3 mt-6 max-w-xl text-balance text-base sm:text-lg text-muted-foreground">
-          Purechess is a single, quiet place to play chess online. No
-          puzzles, no lessons, no streams — just you, the clock, and a
-          board that respects your time.
+        {/* No entrance animation: this subtitle is the largest above-the-fold
+            text and the page's LCP element under throttled load. animate-rise-*
+            is fadeInUp (opacity:0 backwards-fill), which defers its contentful
+            paint and pushes LCP out to ~5s in Lighthouse. Static = LCP at FCP.
+            (S07 — Lighthouse gate; same reason HeroHeading is static.) */}
+        <p className="mt-6 max-w-xl text-balance text-base sm:text-lg text-muted-foreground">
+          Purechess is a single, quiet place to play chess online. No puzzles, no lessons, no
+          streams — just you, the clock, and a board that respects your time.
         </p>
 
         <div className="animate-rise-4 mt-10 flex w-full max-w-sm flex-col items-center gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:justify-center">
@@ -115,18 +104,14 @@ export function Hero() {
 
 function BoardGridBackdrop() {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       <div
         className="absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
             'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
-          maskImage:
-            'radial-gradient(ellipse 70% 60% at 50% 35%, black 35%, transparent 75%)',
+          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 35%, black 35%, transparent 75%)',
           WebkitMaskImage:
             'radial-gradient(ellipse 70% 60% at 50% 35%, black 35%, transparent 75%)',
         }}

@@ -8,9 +8,18 @@ const scriptSrc = isDev
   ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.posthog.com"
   : "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://*.posthog.com";
 
+// In dev, allow the local API/WS origin so the browser app can reach an API on
+// a non-default port (e.g. when :4000 is taken and the API runs on :4100 — the
+// operator-prescribed alt-port setup). Hardcoding :4000 broke alt-port dev/e2e.
+// Prod is unaffected: it only allows 'self', wss:, and the fly.dev origin.
+const devApiOrigins =
+  process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL.startsWith('http://localhost')
+    ? `${process.env.NEXT_PUBLIC_API_URL} ${process.env.NEXT_PUBLIC_API_URL.replace('http://', 'ws://')}`
+    : 'http://localhost:4000 ws://localhost:4000';
+
 const connectSrc = [
   "connect-src 'self' wss: https://*.sentry.io https://*.posthog.com https://eu.posthog.com https://*.fly.dev",
-  isDev ? 'http://localhost:4000 ws://localhost:4000' : '',
+  isDev ? devApiOrigins : '',
 ]
   .join(' ')
   .trim();
@@ -22,7 +31,8 @@ const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
+    value:
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
   },
   {
     key: 'Content-Security-Policy',

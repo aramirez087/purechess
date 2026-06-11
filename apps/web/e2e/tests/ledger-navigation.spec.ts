@@ -62,7 +62,10 @@ test.describe('Game ledger navigation', () => {
     const page = await aliceContext.newPage();
     await page.goto('/games');
 
-    const reviewLink = page.locator('[data-testid="game-row"]').first().getByRole('link', { name: /review/i });
+    const reviewLink = page
+      .locator('[data-testid="game-row"]')
+      .first()
+      .getByRole('link', { name: /review/i });
     await expect(reviewLink).toBeVisible({ timeout: 10000 });
     await reviewLink.click();
 

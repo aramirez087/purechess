@@ -35,7 +35,7 @@ test.describe('Premove (out-of-turn input)', () => {
     expect(afterCount).toBe(beforeCount);
   });
 
-  test("Alice cannot move twice in a row — second move is rejected", async ({
+  test('Alice cannot move twice in a row — second move is rejected', async ({
     alice,
     bob,
     aliceContext,
@@ -62,9 +62,12 @@ test.describe('Premove (out-of-turn input)', () => {
     await alicePage.locator('[data-square="e4"]').click();
 
     // Wait for the move to register.
-    await alicePage.waitForFunction(() => {
-      return document.querySelectorAll('[data-move-number]').length >= 1;
-    }, { timeout: 5000 });
+    await alicePage.waitForFunction(
+      () => {
+        return document.querySelectorAll('[data-move-number]').length >= 1;
+      },
+      { timeout: 5000 },
+    );
 
     // Alice immediately tries a second move while it's Bob's turn.
     await alicePage.locator('[data-square="d2"]').click();

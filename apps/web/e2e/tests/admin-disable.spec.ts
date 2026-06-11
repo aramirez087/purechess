@@ -34,7 +34,9 @@ test.describe('Admin: disable user', () => {
       await adminPage.waitForTimeout(1000);
     }
 
-    const meRes = await fetch(`${API_URL}/api/users/me`, {
+    // The authenticated identity endpoint is /api/auth/me (/api/users/me does
+    // not exist — that path resolves to the :username route and 404s).
+    const meRes = await fetch(`${API_URL}/api/auth/me`, {
       headers: { Cookie: sessionCookie(target.sessionToken) },
     });
     expect(meRes.status).toBe(401);

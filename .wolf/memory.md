@@ -1417,3 +1417,63 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 06:21 | Created docs/roadmap/purechess-category-best/session-06-handoff.md | — | ~2486 |
 | 06:21 | Session 06 a11y fixes — contrast/focus/SR/motion across auth,settings,games,AppShell | multiple | ✅ 259 tests pass, tsc clean | ~4k |
 | 06:21 | Session end: 20 writes across 10 files (login-form.tsx, register-form.tsx, AppShell.tsx, auth-shell.tsx, settings-form.tsx) | 9 reads | ~16280 tok |
+
+## Session: 2026-06-11 06:29
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:32 | Created .session-07-plan.md | — | ~3560 |
+| 06:32 | Session end: 1 writes across 1 files (.session-07-plan.md) | 2 reads | ~6403 tok |
+
+## Session: 2026-06-11 06:32
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:35 | Created apps/web/src/components/home/hero-heading.tsx | — | ~367 |
+| 06:35 | Edited apps/web/src/components/home/hero.tsx | added 1 import(s) | ~30 |
+| 06:35 | Edited apps/web/src/components/home/hero.tsx | removed 14 lines | ~7 |
+| 06:36 | Created apps/web/test/home/hero-heading.test.tsx | — | ~357 |
+| 06:43 | Created apps/web/src/components/home/hero-heading.tsx | — | ~456 |
+| 06:43 | Created apps/web/test/home/hero-heading.test.tsx | — | ~396 |
+| 06:45 | Edited apps/web/src/app/layout.tsx | expanded (+6 lines) | ~177 |
+| 06:47 | Edited apps/web/src/app/layout.tsx | removed 9 lines | ~15 |
+| 06:48 | Edited apps/web/src/components/home/hero.tsx | CSS: animation, opacity | ~140 |
+| 06:52 | Edited apps/web/src/app/layout.tsx | CSS: face, preload | ~109 |
+| 06:53 | Edited apps/web/src/app/layout.tsx | removed 8 lines | ~15 |
+| 06:58 | Edited apps/api/src/testing/testing.controller.ts | expanded (+38 lines) | ~355 |
+| 07:00 | Edited apps/web/next.config.mjs | 6→7 lines | ~89 |
+| 07:04 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+8 lines) | ~214 |
+| 07:04 | Edited apps/web/src/components/board/chessboard.tsx | 6→8 lines | ~37 |
+| 07:09 | Edited apps/web/src/components/game/game-loading-skeleton.tsx | CSS: On-brand | ~278 |
+| 07:10 | Edited apps/web/src/components/game/game-loading-skeleton.tsx | CSS: darkCells, x, y | ~273 |
+| 07:10 | Created apps/web/test/game/game-loading-skeleton.test.tsx | — | ~320 |
+| 07:12 | Edited apps/web/next.config.mjs | 7→6 lines | ~59 |
+| 07:21 | Edited apps/api/src/testing/testing.service.ts | modified constructor() | ~293 |
+| 07:21 | Edited apps/api/src/testing/testing.service.ts | inline fix | ~14 |
+| 07:22 | Edited apps/web/next.config.mjs | expanded (+10 lines) | ~211 |
+| 07:23 | Edited apps/web/e2e/tests/analyze-flow.spec.ts | 2→5 lines | ~102 |
+| 07:37 | Edited apps/web/src/components/game/move-panel.tsx | inline fix | ~28 |
+| 07:40 | Edited apps/web/e2e/tests/result-overlay.spec.ts | 5→8 lines | ~109 |
+| 07:41 | Edited apps/web/e2e/tests/game-end.spec.ts | 4→7 lines | ~148 |
+| 07:41 | Edited apps/web/e2e/tests/result-overlay.spec.ts | 6→9 lines | ~174 |
+| 07:43 | Edited apps/web/e2e/tests/admin-disable.spec.ts | 4→6 lines | ~90 |
+| 07:46 | Edited .gitignore | 4→6 lines | ~21 |
+
+## Session 07 — CI gate / integration / go-no-go (2026-06-11)
+| HH:MM | description | file(s) | outcome | ~tokens |
+| --- | --- | --- | --- | --- |
+| s07 | Bootstrap: install, shared build, db:generate, rebuild argon2 binding | — | ok | — |
+| s07 | Full Phase-B matrix B1-B7 green (lint, api tsc+jest 302 + engine 98.36/86.2/100, web tsc+vitest 287, root build) | — | all green | — |
+| s07 | Hero LCP fix: static HeroHeading + static subtitle (was animate-rise opacity:0) | hero.tsx, hero-heading.tsx(+test) | devtools / perf 99 LCP 1.7s | — |
+| s07 | Board a11y: role=row layer (display:contents) grid→row→gridcell | chessboard.tsx | CG a11y 89→100 | — |
+| s07 | Skeleton FCP: inline SVG board silhouette (bg-color doesn't fire FCP) | game-loading-skeleton.tsx(+test) | FCP 6.4s→1.7s | — |
+| s07 | TestingService session HMAC used hard-coded 'test-secret' ≠ configured SESSION_SECRET → all authed e2e 401 | testing.service.ts | fixed (ConfigService) | — |
+| s07 | Testing DTOs undecorated → ValidationPipe 400 | testing.controller.ts | fixed (class-validator) | — |
+| s07 | Dev CSP hard-coded :4000 → alt-port e2e blocked | next.config.mjs | env-driven dev origin | — |
+| s07 | e2e selector/flow fixes (data-move-number, alert scope, New scope, auth/me, resign timing) | move-panel.tsx, 4 e2e specs | e2e 7→22 passing | — |
+| s07 | Lighthouse: / perf99/a11y95 (devtools), CG a11y100/perf72; simulate is a localhost artifact | — | home GO | — |
+| s07 | Screenshot sweep → .wolf/design-audit/ (home dark/light/390, analyze, CG, login) | .wolf/design-audit | design.md-compliant | — |
+
+**Verdict: GO for home + reliability + a11y; CG-page perf (≥95) is the one unmet exit gate — blocked by S04-deferred route-bundle split. See session-07-handoff.md.**
+| 07:54 | Created docs/roadmap/purechess-category-best/session-07-handoff.md | — | ~4275 |
+| 07:55 | Session end: 30 writes across 17 files (hero-heading.tsx, hero.tsx, hero-heading.test.tsx, layout.tsx, testing.controller.ts) | 21 reads | ~33427 tok |

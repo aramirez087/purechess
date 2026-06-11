@@ -1,13 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:18:24.468Z
-> Files: 760 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:25:50.234Z
-> Files: 759 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:28:23.087Z
-> Files: 768 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:21:18.545Z
-> Files: 755 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T13:54:18.939Z
+> Files: 793 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -50,7 +44,7 @@
 - `.DS_Store` (~2186 tok)
 - `.editorconfig` — Editor configuration (~51 tok)
 - `.gitattributes` — Git attributes (~31 tok)
-- `.gitignore` — Git ignore rules (~69 tok)
+- `.gitignore` — Git ignore rules (~78 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 Implementation Plan — Charter + Baselines (~2935 tok)
@@ -59,6 +53,7 @@
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
+- `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
@@ -806,9 +801,9 @@
 
 ## apps/api/src/testing/
 
-- `testing.controller.ts` — Exports TestingController (~379 tok)
+- `testing.controller.ts` — Exports TestingController (~592 tok)
 - `testing.module.ts` — Exports TestingModule (~75 tok)
-- `testing.service.ts` — Exports TestingService (~819 tok)
+- `testing.service.ts` — Derive the session-row id exactly as SessionsService does. Previously this (~1011 tok)
 
 ## apps/api/src/types/
 
@@ -911,7 +906,7 @@
 - `fly.toml` (~194 tok)
 - `next-env.d.ts` — / <reference types="next" /> (~58 tok)
 - `next.config.js` — Next.js configuration (~581 tok)
-- `next.config.mjs` — Declares isDev (~681 tok)
+- `next.config.mjs` — Declares isDev (~833 tok)
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
@@ -935,19 +930,19 @@
 
 ## apps/web/e2e/tests/
 
-- `admin-disable.spec.ts` — Declares API_URL (~453 tok)
-- `analyze-flow.spec.ts` — Declares VALID_PGN (~556 tok)
+- `admin-disable.spec.ts` — Declares API_URL (~496 tok)
+- `analyze-flow.spec.ts` — Declares VALID_PGN (~614 tok)
 - `anon-casual.spec.ts` — Anonymous matchmaking is not implemented — requires auth for all game modes. (~118 tok)
 - `flag-fall.spec.ts` — Declares game (~665 tok)
 - `friend-invite.spec.ts` — Declares alicePage (~333 tok)
-- `game-end.spec.ts` — Declares game (~414 tok)
+- `game-end.spec.ts` — Declares game (~487 tok)
 - `ledger-navigation.spec.ts` — Declares page (~620 tok)
 - `premove.spec.ts` — Declares game (~742 tok)
 - `promotion-keyboard.spec.ts` — White pawn on a7, kings clear of a8 — one move from promotion. (~1206 tok)
 - `rated-finalization.spec.ts` — Fool's mate: 1. f3 e5 2. g4 Qh4# — shortest possible checkmate. (~667 tok)
 - `rated-game.spec.ts` — Matchmaking UI is not implemented — players currently start games via friend (~138 tok)
 - `reconnect.spec.ts` — Declares game (~284 tok)
-- `result-overlay.spec.ts` — Declares game (~845 tok)
+- `result-overlay.spec.ts` — Declares game (~959 tok)
 
 ## apps/web/public/pieces/
 
@@ -1037,7 +1032,7 @@
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
-- `chessboard.tsx` — FILES (~4289 tok)
+- `chessboard.tsx` — FILES (~4488 tok)
 - `chessboard.tsx` — FILES (~4137 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
@@ -1061,25 +1056,25 @@
 - `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~381 tok)
 - `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~634 tok)
 - `game-error-state.tsx` — Branded full-screen game error: eyebrow, Fraunces verdict, brass hairline, back/retry (~450 tok)
-- `game-loading-skeleton.tsx` — Shared board-shaped loading skeleton (GameShell 2-zone silhouette, continuous rounded-10 rail) used by route loading.tsx files + both game clients (~400 tok)
+- `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~1088 tok)
 - `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~663 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~454 tok)
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~1010 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~455 tok)
 - `index.ts` — Declares GameShellProps (~211 tok)
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
-- `move-panel.tsx` — 1-based ply index. (~1397 tok)
+- `move-panel.tsx` — 1-based ply index. (~1404 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1506 tok)
-- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1885 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1497 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1885 tok)
 - `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1886 tok)
 
 ## apps/web/src/components/games/
 
 - `game-history-filters.tsx` — CATEGORIES (~944 tok)
 - `game-history-list.tsx` — Ledger table + mono footer: shows API `total` when present (falls back to "N shown"), W-L-D tally labelled "latest N:" when partial (~1485 tok)
-- `game-history-row.tsx` — resultLabel (~1655 tok)
 - `game-history-list.tsx` — Total games matching the filters, from the API (ignores pagination). (~1491 tok)
+- `game-history-row.tsx` — resultLabel (~1655 tok)
 - `game-history-row.tsx` — resultLabel (~1656 tok)
 
 ## apps/web/src/components/home/
@@ -1088,7 +1083,8 @@
 - `footer.tsx` — GithubIcon (~933 tok)
 - `hero-auth-link.tsx` — Session-aware hero nav CTA. Renders the signed-out "Sign in" markup by (~281 tok)
 - `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3400 tok)
-- `hero.tsx` — FEATURES (~1490 tok)
+- `hero-heading.tsx` — The hero's LCP heading. It deliberately carries NO entrance animation. (~456 tok)
+- `hero.tsx` — FEATURES (~1450 tok)
 - `home-viewed-tracker.tsx` — HomeViewedTracker (~68 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
@@ -1189,6 +1185,10 @@
 
 - `a11y.test.tsx` — --------------------------------------------------------------------------- (~2228 tok)
 
+## apps/web/test/game/
+
+- `game-loading-skeleton.test.tsx` — The skeleton must paint a real contentful element (an SVG board silhouette), (~320 tok)
+
 ## apps/web/test/games/
 
 - `game-history-filters.test.tsx` — defaultProps (~1031 tok)
@@ -1199,6 +1199,7 @@
 
 - `hero-auth.test.tsx` — mockGetMe (~658 tok)
 - `hero-board.test.tsx` — The hero board's replay enhancement: static Immortal Game final position (~1767 tok)
+- `hero-heading.test.tsx` — LCP fix (S04 §5.1 / S07): the hero h1 is the page's LCP element (verified via (~396 tok)
 - `homepage.test.tsx` — Hero contains the session-aware HeroAuthLink — keep /api/auth/me off the (~958 tok)
 
 ## apps/web/test/play/
@@ -1287,6 +1288,7 @@
 - `session-04-handoff.md` — Session 04 Handoff — Speed Shell (~2674 tok)
 - `session-05-handoff.md` — Session 05 Handoff — E2E Interactions (~1149 tok)
 - `session-06-handoff.md` — Session 06 Handoff — Surface A11y + Light Mode (~2330 tok)
+- `session-07-handoff.md` — Session 07 Handoff — CI Gate / Integration / GO·NO-GO (~4007 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1333,6 +1335,9 @@
 
 ## scripts/
 
+- `apps/web/src/components/home/hero-heading.tsx` — Static hero h1 ("The board is the product."). Deliberately NO animation: it is the LCP element, so animate-rise-* would block LCP. (~340 tok)
+- `apps/web/test/game/game-loading-skeleton.test.tsx` — Locks: GameLoadingSkeleton renders a contentful SVG (33 rects) so FCP can fire; keeps role=status loading label. (~260 tok)
+- `apps/web/test/home/hero-heading.test.tsx` — Locks: hero h1 carries no rise/fade entrance animation in SSR or post-mount (LCP guard). (~250 tok)
 - `build-engine.sh` — Build the purechess-engine native binary for the host platform. (~199 tok)
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)

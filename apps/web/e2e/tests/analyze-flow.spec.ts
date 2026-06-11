@@ -29,8 +29,11 @@ test.describe('Analyze flow', () => {
     await page.locator('#analysis-input').fill(INVALID_INPUT);
     await page.getByRole('button', { name: /analyze/i }).click();
 
-    await expect(page.getByRole('alert')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByRole('alert')).toContainText(/couldn't read that/i);
+    // Scope to the app's error alert: Next injects an empty
+    // role="alert" route-announcer, so an unscoped getByRole('alert') is
+    // ambiguous (strict-mode violation). Filter by the error text.
+    const errorAlert = page.getByRole('alert').filter({ hasText: /couldn't read that/i });
+    await expect(errorAlert).toBeVisible({ timeout: 5000 });
   });
 
   test('"New analysis" button resets the view', async ({ page }) => {

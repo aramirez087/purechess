@@ -56,9 +56,12 @@ test.describe('Result overlay', () => {
     const page = await aliceContext.newPage();
     await page.goto(`/play/${game.id}`);
 
-    await expect(page.locator('[data-testid="game-result"]')).toBeVisible({ timeout: 10000 });
+    const overlay = page.locator('[data-testid="game-result"]');
+    await expect(overlay).toBeVisible({ timeout: 10000 });
 
-    await page.getByRole('link', { name: /new/i }).click();
+    // Scope to the overlay: an unscoped /new/i link is ambiguous (the page
+    // chrome also carries a "new"-matching link).
+    await overlay.getByRole('link', { name: /new/i }).click();
 
     await expect(page).toHaveURL(/\/play$/, { timeout: 10000 });
   });
@@ -85,6 +88,9 @@ test.describe('Result overlay', () => {
     await bobPage.goto(`/play/${game.id}`);
 
     await expect(alicePage.locator('[data-testid="chess-board"]')).toBeVisible({ timeout: 10000 });
+    // Bob must be subscribed to the WS room before Alice resigns, or he misses
+    // the game-over push (it is not replayed on late join).
+    await expect(bobPage.locator('[data-testid="chess-board"]')).toBeVisible({ timeout: 10000 });
 
     await alicePage.getByRole('button', { name: /resign/i }).click();
 
