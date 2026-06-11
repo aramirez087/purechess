@@ -241,3 +241,24 @@
 - **Selection-control recipes are unified in `components/play/pill-styles.ts`:** PILL_* = free-standing bordered chips (setup pickers); SEGMENT_* (GROUP/BASE/ACTIVE/INACTIVE) = one bordered track with ring-marked active segment (dense filter rows like /games). Do not hand-roll either grammar again.
 - **`EmptyState` lives in `components/error-state.tsx`** (additive next to ErrorState): framed token-surface card (rounded-lg border-border/70 bg-surface/60, italic display headline, muted description, actions slot). Use for in-page "nothing here" moments; ErrorState stays full-screen.
 - **`GameHistoryResponseDto.total` is OPTIONAL** (filtered count, cursor excluded — counted on the filter `where`, not the paginated one). The /games ledger footer shows the API total when present and labels the loaded-rows W-L-D tally "latest N:" when partial. Prettier-check on `users.service.ts`/games-client/game-history-* was already failing at HEAD (API file is double-quoted vs root single-quote config) — don't whole-file format them in a feature change.
+
+## Key Learnings (added 2026-06-10 — category-best epic session 01 baselines)
+- **No bundle analyzer wired.** `apps/web` has no `ANALYZE` flag / `@next/bundle-analyzer`.
+  Baseline bundle path = plain `cd apps/web && pnpm build`, read the "First Load JS" column.
+- **Baseline First Load JS (2026-06-10):** shared-by-all floor **204 kB**; `/` 348, `/play` 304,
+  `/games` 294, `/analyze` 356, `/play/[gameId]` 297, `/computer-game/[gameId]` 283. The 204 kB
+  shared floor (Sentry+PostHog+framework) caps every route — shrinking shared is top leverage.
+- **Lighthouse prod (PORT=3100 pnpm start):** `/` perf **78** / a11y **95** / LCP **6.3s**;
+  `/play` perf 78 / a11y 100 / LCP 6.0s. a11y already meets ≥95 floor; perf debt is entirely
+  **LCP ~6s** (TBT/CLS already excellent). Target LCP ≤ 2.5s.
+- **`/computer-game/[gameId]` Lighthouse = NO_FCP** for an unseeded/unauth id (renders nothing).
+  Must seed a game + pass `purechess_session` cookie via `--extra-headers` to capture it.
+- **Reconnect path:** `use-game-socket.ts` uses socket.io DEFAULTS (no explicit reconnection opts):
+  reconnectionDelay 1000ms jittered, attempts Infinity, timeout 20000ms. Gateway has NO ping opts
+  → defaults pingInterval 25000 / pingTimeout 20000 → server dead-peer detection up to ~45s (gap).
+- **Web `tsc --noEmit` is now GREEN** (was predicted red for lucide Github/Twitter + admin-table
+  children in an earlier cerebrum note — those are fixed). API tsc green after `db:generate`.
+- **Epic session files absent:** `docs/claude-sessions/purechess-category-best/` does not exist in
+  the worktree. Downstream session 02-06 plans (touches/produces frontmatter) could not be read;
+  ownership charter built best-effort from operator-rules hardening surfaces + Tier D backlog.
+- Charter deliverables live at `docs/roadmap/purechess-category-best/{budgets,ownership,session-01-handoff}.md`.

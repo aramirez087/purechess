@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:49:43.156Z
-> Files: 747 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:22:44.870Z
+> Files: 750 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -42,7 +42,7 @@
 - `.gitignore` — Git ignore rules (~69 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
-- `.session-01-plan.md` — Session 01 — Implementation Plan: Rust Engine Contracts Charter (WP1) (~6112 tok)
+- `.session-01-plan.md` — Session 01 Implementation Plan — Charter + Baselines (~2935 tok)
 - `.session-02-plan.md` — Session 02 Implementation Plan — Rust Core Implementation (WP2) (~8784 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
@@ -1234,6 +1234,12 @@
 ## docs/claude-sessions/vs-computer-foundations/
 
 - `.epic-produces-overrides.json` (~111 tok)
+
+## docs/roadmap/purechess-category-best/
+
+- `budgets.md` — Purechess "Category Best" — Performance & Reliability Budgets (~2588 tok)
+- `ownership.md` — Purechess "Category Best" — File-Ownership Charter (Sessions 02–06) (~1901 tok)
+- `session-01-handoff.md` — Session 01 Handoff — Charter + Baselines (~2099 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
