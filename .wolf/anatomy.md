@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:39:28.297Z
-> Files: 754 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:18:24.468Z
+> Files: 760 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -972,7 +972,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7209 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7160 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~64 tok)
 
 ## apps/web/src/app/games/
@@ -1016,16 +1016,17 @@
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
-- `chessboard.tsx` — FILES (~4128 tok)
+- `chessboard.tsx` — FILES (~4289 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~216 tok)
-- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1478 tok)
+- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1518 tok)
 
 ## apps/web/src/components/board/hooks/
 
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
-- `use-drag.ts` — Exports useDrag (~855 tok)
+- `use-drag.ts` — Exports useDrag (~906 tok)
+- `use-keyboard.ts` — Exports useKeyboard (~883 tok)
 - `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~866 tok)
 
 ## apps/web/src/components/computer-game/
@@ -1035,7 +1036,7 @@
 ## apps/web/src/components/game/
 
 - `board-column.tsx` — The `<Chessboard/>` element. (~769 tok)
-- `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~378 tok)
+- `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~381 tok)
 - `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~634 tok)
 - `game-error-state.tsx` — Branded full-screen game error: eyebrow, Fraunces verdict, brass hairline, back/retry (~450 tok)
 - `game-loading-skeleton.tsx` — Shared board-shaped loading skeleton (GameShell 2-zone silhouette, continuous rounded-10 rail) used by route loading.tsx files + both game clients (~400 tok)
@@ -1046,8 +1047,8 @@
 - `index.ts` — Declares GameShellProps (~211 tok)
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
 - `move-panel.tsx` — 1-based ply index. (~1397 tok)
-- `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1497 tok)
-- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1879 tok)
+- `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1506 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1885 tok)
 
 ## apps/web/src/components/games/
 
@@ -1127,6 +1128,7 @@
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~656 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~820 tok)
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
+- `sr-announce.ts` — Derives a human-readable SR announcement from consecutive FENs. (~557 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
 
 ## apps/web/src/services/
@@ -1149,8 +1151,11 @@
 ## apps/web/test/board/
 
 - `captured-material.test.tsx` — pieces (~613 tok)
+- `chessboard-sr.test.tsx` — START_FEN (~999 tok)
+- `keyboard.test.tsx` — START_FEN (~1672 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 - `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)
+- `sr-announce.test.ts` — START_FEN: fenAfterMoves (~756 tok)
 
 ## apps/web/test/computer-game/
 
@@ -1250,6 +1255,7 @@
 - `ownership.md` — Purechess "Category Best" — File-Ownership Charter (Sessions 02–06) (~1901 tok)
 - `session-01-handoff.md` — Session 01 Handoff — Charter + Baselines (~2099 tok)
 - `session-02-handoff.md` — Session 02 Handoff — Realtime Resilience (~3134 tok)
+- `session-03-handoff.md` — Session 03 Handoff — Board Feel & Accessibility (~3312 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

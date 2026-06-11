@@ -1275,3 +1275,54 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 22:39 | Created docs/roadmap/purechess-category-best/session-02-handoff.md | — | ~3343 |
 | 22:40 | S02 realtime resilience: socket reconnect tuning + online/visibility resync, clock visibility snap, gateway ping 10s/10s, Prisma Neon keepalive; live kill/restart 8/8 zero rewind, median ~640ms | use-game-socket.ts, use-live-clock.ts, realtime.gateway.ts, prisma.service.ts +specs | green, <2s budget met | ~46k |
 | 22:40 | Session end: 17 writes across 10 files (prisma.service.ts, prisma.service.spec.ts, realtime.gateway.ts, realtime.gateway.spec.ts, use-live-clock.ts) | 8 reads | ~19076 tok |
+
+## Session: 2026-06-11 06:08
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:09 | Created apps/web/src/lib/board/sr-announce.ts | — | ~557 |
+| 06:09 | Edited apps/web/src/components/board/hooks/use-keyboard.ts | 5→5 lines | ~54 |
+| 06:09 | Edited apps/web/src/components/game/board-control-bar.tsx | "flex shrink-0 items-cente" → "flex shrink-0 flex-wrap i" | ~24 |
+| 06:09 | Edited apps/web/src/components/board/hooks/use-keyboard.ts | modified useKeyboard() | ~113 |
+| 06:09 | Edited apps/web/src/components/board/hooks/use-keyboard.ts | 2→3 lines | ~21 |
+| 06:09 | Edited apps/web/src/components/board/square.tsx | CSS: true, boxShadow | ~285 |
+| 06:09 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~43 |
+| 06:09 | Edited apps/web/src/components/board/chessboard.tsx | added 2 condition(s) | ~168 |
+| 06:09 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+9 lines) | ~117 |
+| 06:10 | Edited apps/web/src/components/game/result-overlay.tsx | 6→7 lines | ~75 |
+| 06:10 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 2→1 lines | ~18 |
+| 06:10 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→3 lines | ~16 |
+| 06:10 | Edited apps/web/src/components/board/hooks/use-drag.ts | added error handling | ~171 |
+| 06:10 | Edited apps/web/src/components/game/player-strip.tsx | CSS: sm, sm, sm | ~103 |
+| 06:10 | Created apps/web/test/board/sr-announce.test.ts | — | ~734 |
+| 06:11 | Edited apps/web/test/board/keyboard.test.tsx | added 3 import(s) | ~102 |
+| 06:11 | Edited apps/web/test/board/keyboard.test.tsx | modified makeHookOpts() | ~1219 |
+| 06:12 | Created apps/web/test/board/chessboard-sr.test.tsx | — | ~981 |
+| 06:12 | Edited apps/web/test/board/sr-announce.test.ts | 9→9 lines | ~105 |
+| 06:12 | Edited apps/web/test/board/sr-announce.test.ts | 8→8 lines | ~106 |
+| 06:12 | Edited apps/web/test/board/chessboard-sr.test.tsx | 6→6 lines | ~65 |
+| 06:13 | Edited apps/web/test/board/sr-announce.test.ts | 9→9 lines | ~112 |
+| 06:13 | Edited apps/web/test/board/chessboard-sr.test.tsx | CSS: from, to | ~77 |
+| 06:14 | Edited apps/web/test/board/sr-announce.test.ts | 9→10 lines | ~123 |
+| 06:14 | designqc: captured 3 screenshots (93KB, ~7500 tok) | /play | ready for eval | ~0 |
+
+## Session: 2026-06-11 — S03 Board Feel A11y
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| — | Created sr-announce.ts (FEN-diff → human-readable SR text) | apps/web/src/lib/board/sr-announce.ts | done | ~557 |
+| — | Added role="status" live region to Chessboard | apps/web/src/components/board/chessboard.tsx | done | ~200 |
+| — | Added role="alert" to ResultOverlay card | apps/web/src/components/game/result-overlay.tsx | done | ~50 |
+| — | Removed LiveAnnouncer from computer-game-client | apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | done | ~100 |
+| — | use-keyboard: Space=Enter, orientation-aware initial focus | apps/web/src/components/board/hooks/use-keyboard.ts | done | ~300 |
+| — | square.tsx: aria-selected + boxShadow focus ring (AA both squares) | apps/web/src/components/board/square.tsx | done | ~200 |
+| — | use-drag: setPointerCapture after threshold | apps/web/src/components/board/hooks/use-drag.ts | done | ~100 |
+| — | board-control-bar: flex-wrap for 390px | apps/web/src/components/game/board-control-bar.tsx | done | ~50 |
+| — | player-strip: responsive clock chip text-base/sm:text-xl | apps/web/src/components/game/player-strip.tsx | done | ~80 |
+| — | Created sr-announce.test.ts (9 unit tests) | apps/web/test/board/sr-announce.test.ts | done | ~756 |
+| — | Created chessboard-sr.test.tsx (6 integration tests) | apps/web/test/board/chessboard-sr.test.tsx | done | ~999 |
+| — | Extended keyboard.test.tsx (+10 useKeyboard hook tests) | apps/web/test/board/keyboard.test.tsx | done | ~1672 |
+| — | 280/280 tests pass, tsc clean | apps/web | done | — |
+| — | Created session-03-handoff.md | docs/roadmap/purechess-category-best/session-03-handoff.md | done | ~3500 |
+| — | Updated cerebrum.md (SR narration, pointer capture, focus ring patterns) | .wolf/cerebrum.md | done | ~800 |
+| 06:20 | Session end: 1 writes across 1 files (session-03-handoff.md) | 1 reads | ~6919 tok |
