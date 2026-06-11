@@ -9,6 +9,7 @@ import { validatePremove } from '@/lib/board/premove';
 import { getAnimationSquares, animationsDisabled } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
 import { cn } from '@/lib/utils';
+import { buildMoveAnnouncement } from '@/lib/board/sr-announce';
 import { useBoardSettings } from './board-context';
 import { useBoardResize } from './hooks/use-board-resize';
 import { useDrag } from './hooks/use-drag';
@@ -76,6 +77,17 @@ export function Chessboard({
     () => checkSquareProp ?? getCheckSquare(position),
     [checkSquareProp, position],
   );
+
+  const [srAnnouncement, setSrAnnouncement] = useState('');
+  const prevSrRef = useRef(position);
+
+  useEffect(() => {
+    const prev = prevSrRef.current;
+    if (prev === position) return;
+    prevSrRef.current = position;
+    const msg = buildMoveAnnouncement(prev, position);
+    if (msg) setSrAnnouncement(msg);
+  }, [position]);
 
   // One sound per confirmed position change, typed by what happened — covers
   // both players' moves (the optimistic per-handler plays were move-only and
@@ -367,6 +379,15 @@ export function Chessboard({
           onCancel={() => setPromotion({ active: false, from: null, to: null })}
         />
       )}
+
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {srAnnouncement}
+      </div>
     </div>
   );
 }

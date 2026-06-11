@@ -34,7 +34,6 @@ import {
 } from '@/lib/api/computer-games';
 import { PgnIconActions } from '@/components/review/pgn-actions';
 import { ResultOverlay, type ResultTone } from '@/components/game/result-overlay';
-import { LiveAnnouncer } from '@/components/computer-game/live-announcer';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
 import { useSettingsStore } from '@/stores/settings-store';
@@ -506,7 +505,6 @@ export function ComputerGameClient({ gameId }: Props) {
 
   return (
     <BoardSettingsProvider>
-      <LiveAnnouncer lastComputerMoveSan={lastComputerMoveSan} gameResult={resultLabel || null} />
       <GameShell
         topBar={null}
         className="[--board-reserve:10.5rem]"

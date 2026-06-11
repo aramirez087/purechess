@@ -95,6 +95,7 @@ export function ResultOverlay({
         </div>
       )}
       <div
+        role="alert"
         className={cn(
           'animate-rise w-full max-w-[340px] rounded-[14px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-6 pb-7 pt-8 text-center',
           toneRing[tone],

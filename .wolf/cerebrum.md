@@ -277,6 +277,43 @@
 - [2026-06-10] Fresh worktree: `pnpm install` does NOT fetch argon2's prebuilt native binding (build scripts ignored) → `apps/api` auth.*.spec fail to RUN with `Cannot find module '.../argon2.node'`. Fix: `pnpm rebuild argon2` or `node-pre-gyp install --fallback-to-build` in the argon2 pkg dir. Add to bootstrap. (`bug-263`)
 - [2026-06-10] `apps/api` ConfigModule.forRoot has NO `envFilePath`, so it reads `.env` from CWD (`apps/api`), NOT the repo root. A root `.env` won't be picked up — export DATABASE_URL/REDIS_URL/SESSION_SECRET inline (or put `.env` in `apps/api/`) when running the API standalone for measurement. Port 4000 is usually held by another checkout — use PORT=4100.
 
+## Key Learnings (added 2026-06-11 — S03 board feel a11y)
+
+- **SR narration: single Chessboard `role="status"` covers all game modes.** Every mode (PvP,
+  computer, review, analyze) drives the board via the `position` prop. A `useRef`/`useEffect` pair
+  diffs consecutive `position` values and calls `buildMoveAnnouncement` (lib/board/sr-announce.ts).
+  Adding per-mode announcers is wrong — they would double-announce and miss mode switches.
+- **`buildMoveAnnouncement` uses chess.js 4-field FEN prefix matching.** Enumerate moves from
+  prevFen, apply each via `new Chess(prevFen).move({from,to,promotion})`, compare first 4 FEN
+  fields against nextFen. Flags `k`/`q` = castling; `test.isCheckmate()`, `inCheck()`, etc. for
+  suffixes. Returns null for same FEN or try/catch (invalid FEN). Does NOT parse SAN strings.
+- **Pointer capture after drag threshold, not on pointerdown.** `e.currentTarget.setPointerCapture`
+  must be called inside the `if (!isDragging.current && sqrt > DRAG_THRESHOLD)` branch in
+  `use-drag.ts`. Capturing on pointerdown steals the click event and breaks tap-tap piece moves.
+  Wrapped in try/catch (setPointerCapture unsupported on some legacy devices).
+- **Focus ring on chessboard squares: use boxShadow sandwich, not Tailwind ring.** Tailwind
+  `ring-2 ring-[--brass]` is invisible on bone (light) squares where the brass ring composites
+  against near-identical fill. Instead: `boxShadow: 'inset 0 0 0 3px rgba(0,0,0,0.45), inset 0 0 0 2px hsl(41 56% 62%)'` (dark inner + brass outer) passes AA on both bone and mineral squares.
+- **`aria-selected` on `gridcell` for keyboard selection state.** Correct ARIA for "this cell is
+  chosen" inside a `role="grid"` widget. Set to `true` when `isSelected || isKeyboardFocus`, else
+  `undefined` (omitted from DOM). Do NOT use a live region to announce focus moves — that would
+  fire on every arrow key and be extremely chatty.
+- **`useKeyboard` Space key = Enter.** Add `case ' ':` as a fallthrough before `case 'Enter':`.
+  Space is the natural "activate" key for keyboard-only users; without it, a keyboard player who
+  doesn't know to press Enter cannot play. Also call `e.preventDefault()` on Space (prevents page
+  scroll).
+- **Orientation-aware initial focus in `useKeyboard`.** `useState<Square>(() => orientation ===
+  'white' ? 'e2' : 'e7')` + `useEffect(() => { setFocusSquare(…) }, [orientation])`. On mount,
+  the cursor starts at the side's active pawn rank (board-flip in review mode resets it).
+
+## Do-Not-Repeat (added 2026-06-11 — S03)
+
+- [2026-06-11] Don't move `setPointerCapture` to `onPointerDown` — it fires before the drag
+  threshold and swallows the `click` event needed for tap-tap moves in `use-drag.ts`.
+- [2026-06-11] Don't use a Tailwind `ring-*` utility for the keyboard focus ring on chess squares —
+  it's invisible on the light (bone) square because the brass ring composites against the near-brass
+  fill. Use the inline boxShadow sandwich (dark inner + brass outer).
+
 ## Decision Log (added 2026-06-10 — S02)
 
 - **Skipped the in-Jest real-socket.io integration spec** (plan task 6): `apps/api` has no `socket.io-client` dev dep and a listening HTTP server in the unit Jest config risks destabilizing the fast suite. Locked presence/rejoin/disconnect via extended UNIT specs + verified the full authed-handshake→join→state path LIVE against a running Nest app instead. Stronger evidence, zero unit-suite risk.
