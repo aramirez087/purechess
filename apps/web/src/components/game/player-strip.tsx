@@ -126,7 +126,7 @@ export function PlayerStrip({
         {clock && (
           <div
             className={cn(
-              'shrink-0 rounded-[7px] border px-3 py-1 font-mono text-xl font-semibold tabular-nums',
+              'shrink-0 rounded-[7px] border px-2 py-0.5 sm:px-3 sm:py-1 font-mono text-base sm:text-xl font-semibold tabular-nums',
               active
                 ? 'border-[#d6b563]/45 bg-[#0b0d0b] text-[#f8f1de]'
                 : 'border-[#2b332c] bg-[#0b0d0b]/60 text-[#c7cfc4]',

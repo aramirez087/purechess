@@ -57,6 +57,7 @@ export const Square = memo(function Square({
     <div
       data-square={square}
       aria-label={ariaLabel}
+      aria-selected={isSelected || isKeyboardFocus ? true : undefined}
       role="gridcell"
       className={cn(
         'relative flex items-center justify-center',
@@ -68,8 +69,10 @@ export const Square = memo(function Square({
         isSelected && 'sq-selected',
         isPremoveFrom && 'sq-premove-from',
         isPreMoveTo && 'sq-premove-to',
-        isKeyboardFocus && 'ring-2 ring-inset ring-[hsl(var(--brass))]',
       )}
+      style={isKeyboardFocus ? {
+        boxShadow: 'inset 0 0 0 3px rgba(0,0,0,0.45), inset 0 0 0 2px hsl(41 56% 62%)',
+      } : undefined}
       onPointerDown={onPointerDown ? (e) => onPointerDown(e, square) : undefined}
       onClick={onClick ? () => onClick(square) : undefined}
     >

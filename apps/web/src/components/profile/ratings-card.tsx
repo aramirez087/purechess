@@ -13,7 +13,7 @@ const CATEGORIES: { value: 'bullet' | 'blitz' | 'rapid'; label: string }[] = [
 
 export function RatingsCard({ ratings }: RatingsCardProps) {
   return (
-    <section className="rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
+    <section data-testid="user-rating" className="rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
       <header className="flex items-center justify-between border-b border-border/60 px-5 py-3.5">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           Ratings

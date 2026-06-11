@@ -57,6 +57,13 @@ interface SocketData {
     ],
     credentials: true,
   },
+  // Mobile backgrounding can vanish a peer with no TCP FIN. Socket.IO defaults
+  // (25s ping / 20s timeout) leave a ghost in the room — and a stale presence
+  // dot — for ~45s. 10s/10s caps dead-peer detection at ~20s worst case while
+  // staying well clear of a healthy mobile client's heartbeat, so a briefly
+  // stalled-but-alive socket on flaky wifi is not falsely dropped.
+  pingInterval: 10_000,
+  pingTimeout: 10_000,
 })
 export class RealtimeGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect

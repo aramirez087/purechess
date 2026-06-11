@@ -61,6 +61,7 @@ export const GameHistoryRow = forwardRef<HTMLTableRowElement, GameHistoryRowProp
         ref={ref}
         style={style}
         {...rest}
+        data-testid="game-row"
         onClick={(e) => {
           // Don't hijack modified clicks (open-in-new-tab etc.), non-primary
           // buttons, or clicks that are part of a text selection.
@@ -94,7 +95,7 @@ export const GameHistoryRow = forwardRef<HTMLTableRowElement, GameHistoryRowProp
         <td className="px-4 py-2.5 text-center">
           <span
             role="img"
-            aria-label={game.playedAs}
+            aria-label={`Played as ${game.playedAs}`}
             className={cn(
               'inline-block h-3 w-3 rounded-[3px] align-middle ring-1 ring-inset ring-border',
               // Fixed neutral side colors, independent of the board-theme picker.
@@ -139,7 +140,7 @@ export const GameHistoryRow = forwardRef<HTMLTableRowElement, GameHistoryRowProp
             className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-brass group-hover:text-brass"
           >
             Review
-            <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowUpRight aria-hidden="true" className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </td>
       </tr>

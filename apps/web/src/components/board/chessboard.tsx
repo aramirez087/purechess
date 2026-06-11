@@ -4,11 +4,19 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { Chess } from 'chess.js';
 import type { Square as SquareType, Piece, MoveIntent, PieceType, Color } from '@purechess/shared';
 import type { ChessboardProps, Premove, PromotionState } from '@/lib/board/types';
-import { getLegalMovesForSquare, getLegalCapturesForSquare, getPieceAt, fenToColorToMove, isPromotion, getCheckSquare } from '@/lib/board/position';
+import {
+  getLegalMovesForSquare,
+  getLegalCapturesForSquare,
+  getPieceAt,
+  fenToColorToMove,
+  isPromotion,
+  getCheckSquare,
+} from '@/lib/board/position';
 import { validatePremove } from '@/lib/board/premove';
 import { getAnimationSquares, animationsDisabled } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
 import { cn } from '@/lib/utils';
+import { buildMoveAnnouncement } from '@/lib/board/sr-announce';
 import { useBoardSettings } from './board-context';
 import { useBoardResize } from './hooks/use-board-resize';
 import { useDrag } from './hooks/use-drag';
@@ -38,7 +46,9 @@ function buildAriaLabel(square: SquareType, piece: Piece | null, legalDests: Squ
   const parts: string[] = [square];
   if (piece) {
     const colorName = piece.color === 'w' ? 'white' : 'black';
-    const typeName = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }[piece.type] ?? piece.type;
+    const typeName =
+      { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }[piece.type] ??
+      piece.type;
     parts.push(`${colorName} ${typeName}`);
   }
   if (legalDests.length > 0) {
@@ -62,7 +72,11 @@ export function Chessboard({
   useBoardResize(containerRef);
 
   const [premove, setPremove] = useState<Premove | null>(null);
-  const [promotion, setPromotion] = useState<PromotionState>({ active: false, from: null, to: null });
+  const [promotion, setPromotion] = useState<PromotionState>({
+    active: false,
+    from: null,
+    to: null,
+  });
   const [showKeyboardFocus, setShowKeyboardFocus] = useState(false);
   const lastDragMoveRef = useRef<DragMoveRef | null>(null);
 
@@ -76,6 +90,17 @@ export function Chessboard({
     () => checkSquareProp ?? getCheckSquare(position),
     [checkSquareProp, position],
   );
+
+  const [srAnnouncement, setSrAnnouncement] = useState('');
+  const prevSrRef = useRef(position);
+
+  useEffect(() => {
+    const prev = prevSrRef.current;
+    if (prev === position) return;
+    prevSrRef.current = position;
+    const msg = buildMoveAnnouncement(prev, position);
+    if (msg) setSrAnnouncement(msg);
+  }, [position]);
 
   // One sound per confirmed position change, typed by what happened — covers
   // both players' moves (the optimistic per-handler plays were move-only and
@@ -116,10 +141,7 @@ export function Chessboard({
     }
   }, [position, isPlayerTurn, premove, onMove]);
 
-  const getPieceAtMemo = useCallback(
-    (sq: SquareType) => getPieceAt(position, sq),
-    [position],
-  );
+  const getPieceAtMemo = useCallback((sq: SquareType) => getPieceAt(position, sq), [position]);
 
   const isOwnPiece = useCallback(
     (sq: SquareType) => {
@@ -195,26 +217,30 @@ export function Chessboard({
     return sq.getAttribute('data-square') as SquareType | null;
   }, []);
 
-  const { dragState, pointerType, onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useDrag({
-    onDragStart: (sq) => {
-      if (!isOwnPiece(sq) && isPlayerTurn) return;
-      deselect();
-    },
-    onDragEnd: (from, to) => {
-      if (!to || from === to) return;
-      lastDragMoveRef.current = { from, to };
-      handleMove({ from, to });
-    },
-    getSquareFromPoint,
-  });
+  const { dragState, pointerType, onPointerDown, onPointerMove, onPointerUp, onPointerCancel } =
+    useDrag({
+      onDragStart: (sq) => {
+        if (!isOwnPiece(sq) && isPlayerTurn) return;
+        deselect();
+      },
+      onDragEnd: (from, to) => {
+        if (!to || from === to) return;
+        lastDragMoveRef.current = { from, to };
+        handleMove({ from, to });
+      },
+      getSquareFromPoint,
+    });
 
   const dragOverSquare = useMemo(
-    () =>
-      dragState.active ? getSquareFromPoint(dragState.x, dragState.y) : null,
+    () => (dragState.active ? getSquareFromPoint(dragState.x, dragState.y) : null),
     [dragState.active, dragState.x, dragState.y, getSquareFromPoint],
   );
 
-  const { focusSquare, selectedSquare: keyboardSelected, handleKeyDown } = useKeyboard({
+  const {
+    focusSquare,
+    selectedSquare: keyboardSelected,
+    handleKeyDown,
+  } = useKeyboard({
     orientation,
     legalDestinations: getLegalDests,
     onMove: handleMove,
@@ -277,6 +303,7 @@ export function Chessboard({
     <div
       className={cn('relative w-full', className)}
       ref={containerRef}
+      data-testid="chess-board"
       // Board-settings kill switch. animationMs is 0 when the user turns
       // animations off OR prefers reduced motion (board-context), so this
       // engages BOTH the globals.css `[data-no-animations] …` rules and the
@@ -301,49 +328,69 @@ export function Chessboard({
         onPointerCancel={onPointerCancel}
         onKeyDown={handleKeyDown}
       >
-        {squares.map(({ square, piece, isLight }) => {
-          const legalDests = effectiveSelected ? selectedDests : [];
-          const isLegalDest = legalDests.includes(square);
-          const isCapture = selectedCaptures.includes(square);
-          const isAnimTarget = anim?.pieces.some((p) => p.to === square) ?? false;
-          const cursor = readOnly
-            ? 'default'
-            : piece && piece.color === playerColor
-              ? 'grab'
-              : isLegalDest
-                ? 'pointer'
-                : 'default';
+        {/* role="grid" requires role="row" children wrapping the gridcells
+            (ARIA grid pattern: grid → row → gridcell). `display: contents`
+            keeps the row in the accessibility tree without disturbing the
+            `grid grid-cols-8` layout — the 64 cells still flow into the parent
+            grid. Without the row layer, axe flags aria-required-children /
+            aria-required-parent on every board route. (S07) */}
+        {Array.from({ length: 8 }, (_, rowIdx) => (
+          <div key={`row-${rowIdx}`} role="row" style={{ display: 'contents' }}>
+            {squares.slice(rowIdx * 8, rowIdx * 8 + 8).map(({ square, piece, isLight }) => {
+              const legalDests = effectiveSelected ? selectedDests : [];
+              const isLegalDest = legalDests.includes(square);
+              const isCapture = selectedCaptures.includes(square);
+              const isAnimTarget = anim?.pieces.some((p) => p.to === square) ?? false;
+              const cursor = readOnly
+                ? 'default'
+                : piece && piece.color === playerColor
+                  ? 'grab'
+                  : isLegalDest
+                    ? 'pointer'
+                    : 'default';
 
-          return (
-            <Square
-              key={square}
-              square={square}
-              piece={piece}
-              hidePiece={isAnimTarget}
-              isLight={isLight}
-              isSelected={effectiveSelected === square}
-              isLegalMove={isLegalDest && !isCapture}
-              isLegalCapture={isLegalDest && isCapture}
-              isLastMoveFrom={lastMove?.from === square}
-              isLastMoveTo={lastMove?.to === square}
-              isInCheck={checkSquare === square}
-              isPremoveFrom={premove?.from === square}
-              isPreMoveTo={premove?.to === square}
-              isKeyboardFocus={showKeyboardFocus && focusSquare === square}
-              isDragSource={dragState.active && dragState.from === square}
-              isDragOver={dragState.active && dragOverSquare === square && dragState.from !== square}
-              cursor={cursor}
-              ghostPiece={premove?.to === square ? (getPieceAt(position, premove.from) ?? undefined) : undefined}
-              ariaLabel={buildAriaLabel(square, piece, isLegalDest ? legalDests : [])}
-              onPointerDown={readOnly ? undefined : (e, sq) => {
-                if (isOwnPiece(sq) || !isPlayerTurn) {
-                  onPointerDown(e, sq);
-                }
-              }}
-              onClick={readOnly ? undefined : handleSquareClick}
-            />
-          );
-        })}
+              return (
+                <Square
+                  key={square}
+                  square={square}
+                  piece={piece}
+                  hidePiece={isAnimTarget}
+                  isLight={isLight}
+                  isSelected={effectiveSelected === square}
+                  isLegalMove={isLegalDest && !isCapture}
+                  isLegalCapture={isLegalDest && isCapture}
+                  isLastMoveFrom={lastMove?.from === square}
+                  isLastMoveTo={lastMove?.to === square}
+                  isInCheck={checkSquare === square}
+                  isPremoveFrom={premove?.from === square}
+                  isPreMoveTo={premove?.to === square}
+                  isKeyboardFocus={showKeyboardFocus && focusSquare === square}
+                  isDragSource={dragState.active && dragState.from === square}
+                  isDragOver={
+                    dragState.active && dragOverSquare === square && dragState.from !== square
+                  }
+                  cursor={cursor}
+                  ghostPiece={
+                    premove?.to === square
+                      ? (getPieceAt(position, premove.from) ?? undefined)
+                      : undefined
+                  }
+                  ariaLabel={buildAriaLabel(square, piece, isLegalDest ? legalDests : [])}
+                  onPointerDown={
+                    readOnly
+                      ? undefined
+                      : (e, sq) => {
+                          if (isOwnPiece(sq) || !isPlayerTurn) {
+                            onPointerDown(e, sq);
+                          }
+                        }
+                  }
+                  onClick={readOnly ? undefined : handleSquareClick}
+                />
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       {settings.coordinates && (
@@ -354,11 +401,13 @@ export function Chessboard({
 
       {anim && <AnimationLayer anim={anim} orientation={orientation} />}
 
-      {dragState.active && dragState.from && (() => {
-        const p = getPieceAt(position, dragState.from);
-        if (!p) return null;
-        return <DragGhost piece={p} x={dragState.x} y={dragState.y} pointerType={pointerType} />;
-      })()}
+      {dragState.active &&
+        dragState.from &&
+        (() => {
+          const p = getPieceAt(position, dragState.from);
+          if (!p) return null;
+          return <DragGhost piece={p} x={dragState.x} y={dragState.y} pointerType={pointerType} />;
+        })()}
 
       {promotion.active && promotion.to && (
         <MoveInput
@@ -367,6 +416,10 @@ export function Chessboard({
           onCancel={() => setPromotion({ active: false, from: null, to: null })}
         />
       )}
+
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {srAnnouncement}
+      </div>
     </div>
   );
 }

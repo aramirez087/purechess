@@ -21,6 +21,7 @@ export function AuthShell({
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       className="grain relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 py-10"
       style={{
         background:

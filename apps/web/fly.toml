@@ -10,6 +10,10 @@ primary_region = "iad"
     # Fly 6PN private network — no TLS, no edge hop, ~1ms in-region.
     API_PROXY_URL = "http://purechess-api.internal:4000"
     NEXT_PUBLIC_SITE_URL = "https://purechess-web.fly.dev"
+    # WS cannot ride the /api same-origin rewrite (rewrites don't upgrade); the
+    # browser talks to the API origin directly. Bake it explicitly so WS_URL does
+    # not depend on the NODE_ENV fallback branch in use-game-socket.ts.
+    NEXT_PUBLIC_WS_URL = "https://purechess-api.fly.dev"
     NEXT_PUBLIC_POSTHOG_KEY = ""
     NEXT_PUBLIC_POSTHOG_HOST = "https://eu.posthog.com"
 

@@ -3,6 +3,17 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
+| 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
+| 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
+| 06:23 | Session 04 handoff | docs/roadmap/purechess-category-best/session-04-handoff.md | full measurements documented | ~400 tok |
+## Session: 2026-06-11 (S06 — Surface A11y + Light Mode)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 04:40 | Read wolf files, design.md, buglog; inspected all owned component files | .wolf/*, design.md, apps/web/src/... | planning only | ~12k |
+| 04:55 | Wrote .session-06-plan.md — 9-phase a11y implementation plan | .session-06-plan.md | done | ~5k |
+
 ## Session: 2026-06-08 (WP5 — Shadow Mode CI Gate)
 
 | Time | Action | File(s) | Outcome | ~Tokens |
@@ -1240,3 +1251,279 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 06:05 | epic purechess-category-best wave2 failed: s03-06 hit Claude session limit (resets 12am CR) | docs/claude-sessions/purechess-category-best/ | s01,s02 merged; diagnosed via transcript synthetic msgs | ~3k |
 | 06:15 | killed orphan nest-watch procs, removed s02-s06 worktrees (macOS fuser false positive), resumed epic --start 3 (bg b228lbkzi) | .epic-worktrees | running | ~2k |
 | 08:45 | epic purechess-category-best COMPLETE: 8/8 sessions merged to epic/purechess-category-best (95 files, +4563/-2304). exit 134 was omni wrapper UTF-8 panic post-success. No git remote -> no PR | epic branch | success | ~2k |
+
+## Session: 2026-06-11 22:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:15 | Created .session-01-plan.md | — | ~3130 |
+| 22:15 | Session end: 1 writes across 1 files (.session-01-plan.md) | 1 reads | ~3354 tok |
+
+## Session: 2026-06-11 22:15
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:20 | Created docs/roadmap/purechess-category-best/budgets.md | — | ~2761 |
+| 22:21 | Created docs/roadmap/purechess-category-best/ownership.md | — | ~2028 |
+
+## Session — category-best epic S01 (charter + baselines) 2026-06-10
+| 14:00 | bootstrap worktree: install + shared build + db:generate | (root) | ok | ~1k |
+| 14:05 | bundle baseline `pnpm build` web, captured route First Load JS | apps/web | ok, no analyzer | ~2k |
+| 14:10 | lighthouse / + /play prod (PORT=3100), CG=NO_FCP | apps/web | perf 78 a11y 95-100 LCP ~6s | ~3k |
+| 14:15 | read use-game-socket + realtime.gateway: socket.io defaults, no ping opts | apps/{web,api} | reliability gaps noted | ~2k |
+| 14:25 | wrote budgets.md + ownership.md (best-effort, session files absent) | docs/roadmap/purechess-category-best | ok | ~3k |
+| 14:30 | tsc gates: api green, web GREEN (predicted red now fixed) | apps/* | ok | ~1k |
+| 22:22 | Created docs/roadmap/purechess-category-best/session-01-handoff.md | — | ~2239 |
+| 22:23 | Session end: 3 writes across 3 files (budgets.md, ownership.md, session-01-handoff.md) | 3 reads | ~16800 tok |
+
+## Session: 2026-06-11 22:23
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:25 | Created .session-02-plan.md | — | ~4290 |
+| 22:25 | Session end: 1 writes across 1 files (.session-02-plan.md) | 10 reads | ~21871 tok |
+
+## Session: 2026-06-11 22:25
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:26 | Created apps/api/src/database/prisma.service.ts | — | ~409 |
+| 22:26 | Created apps/api/test/database/prisma.service.spec.ts | — | ~920 |
+| 22:27 | Edited apps/api/src/realtime/realtime.gateway.ts | expanded (+7 lines) | ~202 |
+| 22:27 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | added 1 import(s) | ~57 |
+| 22:27 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | expanded (+20 lines) | ~278 |
+| 22:28 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | expanded (+48 lines) | ~637 |
+| 22:28 | Edited apps/web/src/hooks/use-live-clock.ts | added 2 condition(s) | ~281 |
+| 22:28 | Edited apps/web/src/hooks/use-game-socket.ts | added 4 condition(s) | ~516 |
+| 22:28 | Edited apps/web/src/hooks/use-game-socket.ts | 6→8 lines | ~72 |
+| 22:28 | Edited apps/web/test/play/use-game-socket.test.tsx | modified on() | ~195 |
+| 22:29 | Edited apps/web/test/play/use-game-socket.test.tsx | expanded (+79 lines) | ~929 |
+| 22:29 | Created apps/web/test/play/use-live-clock-visibility.test.tsx | — | ~872 |
+| 22:34 | Created ../../../../../../tmp/pc-reconnect-measure.mjs | — | ~1391 |
+| 22:34 | Created ../../../../../../tmp/pc-reconnect-measure.mjs | — | ~1097 |
+| 22:35 | Edited ../../../../../../tmp/pc-reconnect-measure.mjs | inline fix | ~18 |
+| 22:36 | Edited ../../../../../../tmp/pc-reconnect-measure.mjs | 5→4 lines | ~47 |
+| 22:39 | Created docs/roadmap/purechess-category-best/session-02-handoff.md | — | ~3343 |
+| 22:40 | S02 realtime resilience: socket reconnect tuning + online/visibility resync, clock visibility snap, gateway ping 10s/10s, Prisma Neon keepalive; live kill/restart 8/8 zero rewind, median ~640ms | use-game-socket.ts, use-live-clock.ts, realtime.gateway.ts, prisma.service.ts +specs | green, <2s budget met | ~46k |
+| 22:40 | Session end: 17 writes across 10 files (prisma.service.ts, prisma.service.spec.ts, realtime.gateway.ts, realtime.gateway.spec.ts, use-live-clock.ts) | 8 reads | ~19076 tok |
+
+## Session: 2026-06-11 06:08
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:09 | Created apps/web/src/lib/board/sr-announce.ts | — | ~557 |
+| 06:09 | Edited apps/web/src/components/board/hooks/use-keyboard.ts | 5→5 lines | ~54 |
+| 06:09 | Edited apps/web/src/components/game/board-control-bar.tsx | "flex shrink-0 items-cente" → "flex shrink-0 flex-wrap i" | ~24 |
+| 06:09 | Edited apps/web/src/components/board/hooks/use-keyboard.ts | modified useKeyboard() | ~113 |
+| 06:09 | Edited apps/web/src/components/board/hooks/use-keyboard.ts | 2→3 lines | ~21 |
+| 06:09 | Edited apps/web/src/components/board/square.tsx | CSS: true, boxShadow | ~285 |
+| 06:09 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~43 |
+| 06:09 | Edited apps/web/src/components/board/chessboard.tsx | added 2 condition(s) | ~168 |
+| 06:09 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+9 lines) | ~117 |
+| 06:10 | Edited apps/web/src/components/game/result-overlay.tsx | 6→7 lines | ~75 |
+| 06:10 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 2→1 lines | ~18 |
+| 06:10 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 4→3 lines | ~16 |
+| 06:10 | Edited apps/web/src/components/board/hooks/use-drag.ts | added error handling | ~171 |
+| 06:10 | Edited apps/web/src/components/game/player-strip.tsx | CSS: sm, sm, sm | ~103 |
+| 06:10 | Created apps/web/test/board/sr-announce.test.ts | — | ~734 |
+| 06:11 | Edited apps/web/test/board/keyboard.test.tsx | added 3 import(s) | ~102 |
+| 06:11 | Edited apps/web/test/board/keyboard.test.tsx | modified makeHookOpts() | ~1219 |
+| 06:12 | Created apps/web/test/board/chessboard-sr.test.tsx | — | ~981 |
+| 06:12 | Edited apps/web/test/board/sr-announce.test.ts | 9→9 lines | ~105 |
+| 06:12 | Edited apps/web/test/board/sr-announce.test.ts | 8→8 lines | ~106 |
+| 06:12 | Edited apps/web/test/board/chessboard-sr.test.tsx | 6→6 lines | ~65 |
+| 06:13 | Edited apps/web/test/board/sr-announce.test.ts | 9→9 lines | ~112 |
+| 06:13 | Edited apps/web/test/board/chessboard-sr.test.tsx | CSS: from, to | ~77 |
+| 06:14 | Edited apps/web/test/board/sr-announce.test.ts | 9→10 lines | ~123 |
+| 06:14 | designqc: captured 3 screenshots (93KB, ~7500 tok) | /play | ready for eval | ~0 |
+
+## Session: 2026-06-11 — S03 Board Feel A11y
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| — | Created sr-announce.ts (FEN-diff → human-readable SR text) | apps/web/src/lib/board/sr-announce.ts | done | ~557 |
+| — | Added role="status" live region to Chessboard | apps/web/src/components/board/chessboard.tsx | done | ~200 |
+| — | Added role="alert" to ResultOverlay card | apps/web/src/components/game/result-overlay.tsx | done | ~50 |
+| — | Removed LiveAnnouncer from computer-game-client | apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | done | ~100 |
+| — | use-keyboard: Space=Enter, orientation-aware initial focus | apps/web/src/components/board/hooks/use-keyboard.ts | done | ~300 |
+| — | square.tsx: aria-selected + boxShadow focus ring (AA both squares) | apps/web/src/components/board/square.tsx | done | ~200 |
+| — | use-drag: setPointerCapture after threshold | apps/web/src/components/board/hooks/use-drag.ts | done | ~100 |
+| — | board-control-bar: flex-wrap for 390px | apps/web/src/components/game/board-control-bar.tsx | done | ~50 |
+| — | player-strip: responsive clock chip text-base/sm:text-xl | apps/web/src/components/game/player-strip.tsx | done | ~80 |
+| — | Created sr-announce.test.ts (9 unit tests) | apps/web/test/board/sr-announce.test.ts | done | ~756 |
+| — | Created chessboard-sr.test.tsx (6 integration tests) | apps/web/test/board/chessboard-sr.test.tsx | done | ~999 |
+| — | Extended keyboard.test.tsx (+10 useKeyboard hook tests) | apps/web/test/board/keyboard.test.tsx | done | ~1672 |
+| — | 280/280 tests pass, tsc clean | apps/web | done | — |
+| — | Created session-03-handoff.md | docs/roadmap/purechess-category-best/session-03-handoff.md | done | ~3500 |
+| — | Updated cerebrum.md (SR narration, pointer capture, focus ring patterns) | .wolf/cerebrum.md | done | ~800 |
+| 06:20 | Session end: 1 writes across 1 files (session-03-handoff.md) | 1 reads | ~6919 tok |
+| 06:09 | Edited apps/web/src/components/posthog-provider.tsx | CSS: timeout | ~455 |
+| 06:09 | Edited apps/web/src/components/home/home-viewed-tracker.tsx | modified HomeViewedTracker() | ~67 |
+| 06:09 | Edited apps/web/src/components/home/hero-board.tsx | modified HeroBoard() | ~116 |
+| 06:09 | Edited apps/web/src/components/home/hero-board.tsx | "animate-rise-4 mx-auto w-" → "${mounted ? " | ~31 |
+| 06:19 | Edited apps/web/sentry.client.config.ts | added error handling | ~406 |
+| 06:20 | Edited apps/web/sentry.client.config.ts | ReplayIntegration() → replayIntegration() | ~143 |
+| 06:24 | Created docs/roadmap/purechess-category-best/session-04-handoff.md | — | ~2852 |
+| 06:25 | Created ../../../../../../tmp/s04-commit-msg.txt | — | ~218 |
+| 06:26 | Session end: 8 writes across 6 files (posthog-provider.tsx, home-viewed-tracker.tsx, hero-board.tsx, sentry.client.config.ts, session-04-handoff.md) | 11 reads | ~13452 tok |
+
+## Session: 2026-06-11 06:19
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:23 | Edited apps/web/src/components/board/chessboard.tsx | 8→9 lines | ~152 |
+| 06:23 | Edited apps/web/src/components/game/result-overlay.tsx | "absolute inset-0 z-20 fle" → "game-result" | ~50 |
+| 06:23 | Edited apps/web/src/components/profile/ratings-card.tsx | "rounded-lg border border-" → "user-rating" | ~34 |
+| 06:24 | Edited apps/web/src/components/profile/recent-games.tsx | inline fix | ~17 |
+| 06:24 | Edited apps/web/src/components/play/invite-create.tsx | 3→3 lines | ~48 |
+| 06:24 | Edited apps/web/src/components/games/game-history-row.tsx | 5→6 lines | ~36 |
+| 06:24 | Edited apps/api/src/testing/testing.service.ts | modified createGame() | ~221 |
+| 06:24 | Edited apps/api/src/testing/testing.controller.ts | 8→9 lines | ~55 |
+| 06:24 | Edited apps/web/e2e/helpers/test-api.ts | added 1 condition(s) | ~629 |
+| 06:24 | Edited apps/web/e2e/helpers/game-helpers.ts | modified waitForGameUrl() | ~101 |
+| 06:24 | Created apps/web/e2e/tests/friend-invite.spec.ts | — | ~333 |
+| 06:24 | Created apps/web/e2e/tests/reconnect.spec.ts | — | ~284 |
+| 06:24 | Created apps/web/e2e/tests/game-end.spec.ts | — | ~414 |
+| 06:24 | Created apps/web/e2e/tests/rated-game.spec.ts | — | ~138 |
+| 06:24 | Created apps/web/e2e/tests/anon-casual.spec.ts | — | ~118 |
+| 06:25 | Created apps/web/e2e/tests/promotion-keyboard.spec.ts | — | ~1206 |
+| 06:25 | Created apps/web/e2e/tests/premove.spec.ts | — | ~742 |
+| 06:25 | Created apps/web/e2e/tests/flag-fall.spec.ts | — | ~665 |
+| 06:25 | Created apps/web/e2e/tests/rated-finalization.spec.ts | — | ~667 |
+| 06:25 | Created apps/web/e2e/tests/ledger-navigation.spec.ts | — | ~645 |
+| 06:26 | Created apps/web/e2e/tests/analyze-flow.spec.ts | — | ~556 |
+| 06:26 | Created apps/web/e2e/tests/result-overlay.spec.ts | — | ~845 |
+| 06:27 | Edited apps/web/e2e/tests/ledger-navigation.spec.ts | 45→45 lines | ~398 |
+| 06:28 | Created docs/roadmap/purechess-category-best/session-05-handoff.md | — | ~1226 |
+
+## Session: 2026-06-11 (S05 — E2E Interactions)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:20 | Added data-testid to 6 source components | chessboard.tsx, result-overlay.tsx, ratings-card.tsx, recent-games.tsx, invite-create.tsx, game-history-row.tsx | done | ~600 |
+| 06:22 | Extended testing API with isRated param | testing.service.ts, testing.controller.ts | done | ~200 |
+| 06:22 | Added createTestComputerGame to test helpers, fixed URL patterns | test-api.ts, game-helpers.ts | done | ~400 |
+| 06:24 | Fixed 5 existing broken spec files | friend-invite, reconnect, game-end, rated-game, anon-casual specs | done | ~500 |
+| 06:26 | Wrote 7 new spec files | promotion-keyboard, premove, flag-fall, rated-finalization, ledger-navigation, analyze-flow, result-overlay | done | ~2500 |
+| 06:27 | Quality gates green | tsc noEmit (web+api), vitest 256/256 | ✅ | ~300 |
+| 06:28 | Handoff doc written | session-05-handoff.md | done | ~400 |
+| 06:29 | Session end: 24 writes across 23 files (chessboard.tsx, result-overlay.tsx, ratings-card.tsx, recent-games.tsx, invite-create.tsx) | 19 reads | ~30441 tok |
+| 06:15 | Created .session-06-plan.md | — | ~6205 |
+| 06:16 | Session end: 1 writes across 1 files (.session-06-plan.md) | 16 reads | ~32805 tok |
+
+## Session: 2026-06-11 06:16
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:18 | Edited apps/web/src/app/login/login-form.tsx | "font-medium text-brass un" → "font-medium text-brass-te" | ~51 |
+| 06:18 | Edited apps/web/src/app/register/register-form.tsx | "font-medium text-brass un" → "font-medium text-brass-te" | ~51 |
+| 06:18 | Edited apps/web/src/app/login/login-form.tsx | "h-4 w-4 animate-spin" → "h-4 w-4 animate-spin moti" | ~31 |
+| 06:18 | Edited apps/web/src/app/register/register-form.tsx | "h-4 w-4 animate-spin" → "h-4 w-4 animate-spin moti" | ~31 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | 6→7 lines | ~45 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | 4→5 lines | ~34 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | "text-[11px] font-medium u" → "text-[11px] font-medium u" | ~25 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | CSS: motion-reduce, motion-reduce | ~104 |
+| 06:18 | Edited apps/web/src/components/auth/auth-shell.tsx | 3→4 lines | ~49 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: undefined | ~86 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: undefined | ~90 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: true | ~242 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | inline fix | ~21 |
+| 06:19 | Edited apps/web/src/components/games/game-history-list.tsx | ", className: " → ", srLabel: " | ~16 |
+| 06:19 | Edited apps/web/src/components/games/game-history-row.tsx | inline fix | ~16 |
+| 06:19 | Edited apps/web/src/components/games/game-history-row.tsx | "h-3 w-3 transition-transf" → "true" | ~42 |
+| 06:19 | Edited apps/web/test/settings/settings-dialog.test.tsx | expanded (+9 lines) | ~408 |
+| 06:19 | Edited apps/web/test/games/game-history-page.test.tsx | CSS: name | ~385 |
+| 06:19 | Edited apps/web/test/games/game-history-page.test.tsx | 11→13 lines | ~140 |
+| 06:21 | Created docs/roadmap/purechess-category-best/session-06-handoff.md | — | ~2486 |
+| 06:21 | Session 06 a11y fixes — contrast/focus/SR/motion across auth,settings,games,AppShell | multiple | ✅ 259 tests pass, tsc clean | ~4k |
+| 06:21 | Session end: 20 writes across 10 files (login-form.tsx, register-form.tsx, AppShell.tsx, auth-shell.tsx, settings-form.tsx) | 9 reads | ~16280 tok |
+
+## Session: 2026-06-11 06:29
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:32 | Created .session-07-plan.md | — | ~3560 |
+| 06:32 | Session end: 1 writes across 1 files (.session-07-plan.md) | 2 reads | ~6403 tok |
+
+## Session: 2026-06-11 06:32
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:35 | Created apps/web/src/components/home/hero-heading.tsx | — | ~367 |
+| 06:35 | Edited apps/web/src/components/home/hero.tsx | added 1 import(s) | ~30 |
+| 06:35 | Edited apps/web/src/components/home/hero.tsx | removed 14 lines | ~7 |
+| 06:36 | Created apps/web/test/home/hero-heading.test.tsx | — | ~357 |
+| 06:43 | Created apps/web/src/components/home/hero-heading.tsx | — | ~456 |
+| 06:43 | Created apps/web/test/home/hero-heading.test.tsx | — | ~396 |
+| 06:45 | Edited apps/web/src/app/layout.tsx | expanded (+6 lines) | ~177 |
+| 06:47 | Edited apps/web/src/app/layout.tsx | removed 9 lines | ~15 |
+| 06:48 | Edited apps/web/src/components/home/hero.tsx | CSS: animation, opacity | ~140 |
+| 06:52 | Edited apps/web/src/app/layout.tsx | CSS: face, preload | ~109 |
+| 06:53 | Edited apps/web/src/app/layout.tsx | removed 8 lines | ~15 |
+| 06:58 | Edited apps/api/src/testing/testing.controller.ts | expanded (+38 lines) | ~355 |
+| 07:00 | Edited apps/web/next.config.mjs | 6→7 lines | ~89 |
+| 07:04 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+8 lines) | ~214 |
+| 07:04 | Edited apps/web/src/components/board/chessboard.tsx | 6→8 lines | ~37 |
+| 07:09 | Edited apps/web/src/components/game/game-loading-skeleton.tsx | CSS: On-brand | ~278 |
+| 07:10 | Edited apps/web/src/components/game/game-loading-skeleton.tsx | CSS: darkCells, x, y | ~273 |
+| 07:10 | Created apps/web/test/game/game-loading-skeleton.test.tsx | — | ~320 |
+| 07:12 | Edited apps/web/next.config.mjs | 7→6 lines | ~59 |
+| 07:21 | Edited apps/api/src/testing/testing.service.ts | modified constructor() | ~293 |
+| 07:21 | Edited apps/api/src/testing/testing.service.ts | inline fix | ~14 |
+| 07:22 | Edited apps/web/next.config.mjs | expanded (+10 lines) | ~211 |
+| 07:23 | Edited apps/web/e2e/tests/analyze-flow.spec.ts | 2→5 lines | ~102 |
+| 07:37 | Edited apps/web/src/components/game/move-panel.tsx | inline fix | ~28 |
+| 07:40 | Edited apps/web/e2e/tests/result-overlay.spec.ts | 5→8 lines | ~109 |
+| 07:41 | Edited apps/web/e2e/tests/game-end.spec.ts | 4→7 lines | ~148 |
+| 07:41 | Edited apps/web/e2e/tests/result-overlay.spec.ts | 6→9 lines | ~174 |
+| 07:43 | Edited apps/web/e2e/tests/admin-disable.spec.ts | 4→6 lines | ~90 |
+| 07:46 | Edited .gitignore | 4→6 lines | ~21 |
+
+## Session 07 — CI gate / integration / go-no-go (2026-06-11)
+| HH:MM | description | file(s) | outcome | ~tokens |
+| --- | --- | --- | --- | --- |
+| s07 | Bootstrap: install, shared build, db:generate, rebuild argon2 binding | — | ok | — |
+| s07 | Full Phase-B matrix B1-B7 green (lint, api tsc+jest 302 + engine 98.36/86.2/100, web tsc+vitest 287, root build) | — | all green | — |
+| s07 | Hero LCP fix: static HeroHeading + static subtitle (was animate-rise opacity:0) | hero.tsx, hero-heading.tsx(+test) | devtools / perf 99 LCP 1.7s | — |
+| s07 | Board a11y: role=row layer (display:contents) grid→row→gridcell | chessboard.tsx | CG a11y 89→100 | — |
+| s07 | Skeleton FCP: inline SVG board silhouette (bg-color doesn't fire FCP) | game-loading-skeleton.tsx(+test) | FCP 6.4s→1.7s | — |
+| s07 | TestingService session HMAC used hard-coded 'test-secret' ≠ configured SESSION_SECRET → all authed e2e 401 | testing.service.ts | fixed (ConfigService) | — |
+| s07 | Testing DTOs undecorated → ValidationPipe 400 | testing.controller.ts | fixed (class-validator) | — |
+| s07 | Dev CSP hard-coded :4000 → alt-port e2e blocked | next.config.mjs | env-driven dev origin | — |
+| s07 | e2e selector/flow fixes (data-move-number, alert scope, New scope, auth/me, resign timing) | move-panel.tsx, 4 e2e specs | e2e 7→22 passing | — |
+| s07 | Lighthouse: / perf99/a11y95 (devtools), CG a11y100/perf72; simulate is a localhost artifact | — | home GO | — |
+| s07 | Screenshot sweep → .wolf/design-audit/ (home dark/light/390, analyze, CG, login) | .wolf/design-audit | design.md-compliant | — |
+
+**Verdict: GO for home + reliability + a11y; CG-page perf (≥95) is the one unmet exit gate — blocked by S04-deferred route-bundle split. See session-07-handoff.md.**
+| 07:54 | Created docs/roadmap/purechess-category-best/session-07-handoff.md | — | ~4275 |
+| 07:55 | Session end: 30 writes across 17 files (hero-heading.tsx, hero.tsx, hero-heading.test.tsx, layout.tsx, testing.controller.ts) | 21 reads | ~33427 tok |
+
+## Session: 2026-06-11 07:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 07:57 | Created .session-08-plan.md | — | ~2572 |
+| 07:57 | Session end: 1 writes across 1 files (.session-08-plan.md) | 5 reads | ~7230 tok |
+
+## Session: 2026-06-11 07:57
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 07:58 | Edited apps/web/Dockerfile | 11→13 lines | ~121 |
+| 07:58 | Edited apps/web/fly.toml | 2→6 lines | ~102 |
+| 08:13 | Created ../../../../../../tmp/ws-proof.mjs | — | ~1377 |
+| 08:13 | Edited ../../../../../../tmp/ws-proof.mjs | 1→3 lines | ~61 |
+| 08:14 | Edited ../../../../../../tmp/ws-proof.mjs | added optional chaining | ~355 |
+| 08:15 | Edited ../../../../../../tmp/ws-proof.mjs | "PPPP" → "4P3" | ~36 |
+| 08:16 | Created ../../../../../../tmp/smoke.mjs | — | ~769 |
+| 08:17 | Created ../../../../../../tmp/ledger.mjs | — | ~869 |
+| 08:17 | designqc: captured 6 screenshots (194KB, ~15000 tok) | / | ready for eval | ~0 |
+| 08:22 | Created docs/roadmap/purechess-category-best/session-08-handoff.md | — | ~4145 |
+| 14:05 | S08 bake NEXT_PUBLIC_WS_URL build arg (prod WS) | apps/web/fly.toml, apps/web/Dockerfile | tsc+build clean, committed | ~3k |
+| 14:10 | Deploy api v8 then web v11 to Fly (-c --remote-only) | apps/api+web/fly.toml | health green, db/redis ok, ✓Ready 157ms | ~4k |
+| 14:18 | Prove prod WS: 2-client headless socket.io | /tmp/ws-proof.mjs | PASS: polling→websocket upgrade, peer push 864ms | ~3k |
+| 14:25 | Prod smoke + live ledger delta (rated game resign) | /tmp/smoke.mjs, /tmp/ledger.mjs | all 200; Glicko 1500→1662/1338, ledger 0→1 | ~3k |
+| 14:30 | Prod Lighthouse / + CG; designqc home | .wolf/designqc-captures | / 97/95 ✅; CG 80 (S07 debt); design compliant | ~4k |
+| 14:35 | Neon keepalive verified; warm first-move ~503ms | prisma.service.ts | cold unreproducible w/ keepalive (documented) | ~1k |
+| 14:40 | cerebrum+buglog(bug-324)+handoff written | .wolf/*, session-08-handoff.md | GO, exit criteria met | ~3k |
+| 08:23 | Session end: 9 writes across 6 files (Dockerfile, fly.toml, ws-proof.mjs, smoke.mjs, ledger.mjs) | 4 reads | ~11227 tok |

@@ -2,6 +2,16 @@
 
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:10:59.088Z
 > Files: 756 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T14:22:20.982Z
+> Files: 797 tracked | Anatomy hits: 0 | Misses: 0
+
+## ../../../../../../tmp/
+
+- `ledger.mjs` — API routes: GET (1 endpoints) (~869 tok)
+- `pc-reconnect-measure.mjs` — Live reconnect-to-correct-board measurement (Session 02). (~1074 tok)
+- `s04-commit-msg.txt` (~204 tok)
+- `smoke.mjs` — API routes: GET (1 endpoints) (~769 tok)
+- `ws-proof.mjs` — API routes: GET (1 endpoints) (~1579 tok)
 
 ## ../../../../tmp/
 
@@ -39,16 +49,17 @@
 - `.DS_Store` (~2186 tok)
 - `.editorconfig` — Editor configuration (~51 tok)
 - `.gitattributes` — Git attributes (~31 tok)
-- `.gitignore` — Git ignore rules (~69 tok)
+- `.gitignore` — Git ignore rules (~78 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
-- `.session-01-plan.md` — Session 01 — Implementation Plan: Rust Engine Contracts Charter (WP1) (~6112 tok)
-- `.session-02-plan.md` — Session 02 Implementation Plan — Rust Core Implementation (WP2) (~8784 tok)
+- `.session-01-plan.md` — Session 01 Implementation Plan — Charter + Baselines (~2935 tok)
+- `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
-- `.session-06-plan.md` — Session 06 — Implementation Plan: Engine Cutover (WP6) (~3069 tok)
-- `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
+- `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
+- `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
+- `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
@@ -727,7 +738,7 @@
 ## apps/api/src/database/
 
 - `database.module.ts` — Exports DatabaseModule (~61 tok)
-- `prisma.service.ts` — Exports PrismaService (~100 tok)
+- `prisma.service.ts` — Stay under Neon's default 5-min autosuspend window so the compute never sleeps. (~409 tok)
 
 ## apps/api/src/games/
 
@@ -772,7 +783,7 @@
 
 ## apps/api/src/realtime/
 
-- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1519 tok)
+- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1642 tok)
 - `realtime.module.ts` — Exports RealtimeModule (~100 tok)
 - `realtime.service.ts` — Emitter facade over the Socket.IO server. Domain services (GamesService) (~447 tok)
 
@@ -795,9 +806,9 @@
 
 ## apps/api/src/testing/
 
-- `testing.controller.ts` — Exports TestingController (~373 tok)
+- `testing.controller.ts` — Exports TestingController (~592 tok)
 - `testing.module.ts` — Exports TestingModule (~75 tok)
-- `testing.service.ts` — Zustand store (~801 tok)
+- `testing.service.ts` — Derive the session-row id exactly as SessionsService does. Previously this (~1011 tok)
 
 ## apps/api/src/types/
 
@@ -840,6 +851,10 @@
 - `computer-games.service.spec.ts` — Declares STARTING_FEN (~5519 tok)
 - `stockfish.service.spec.ts` — TestableStockfishService: makeEngine (~1038 tok)
 
+## apps/api/test/database/
+
+- `prisma.service.spec.ts` — The keepalive defeats Neon autosuspend so the first move after idle never (~920 tok)
+
 ## apps/api/test/e2e/
 
 - `admin.e2e-spec.ts` — API routes: GET, PATCH (5 endpoints) (~689 tok)
@@ -881,7 +896,7 @@
 
 ## apps/api/test/realtime/
 
-- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~2755 tok)
+- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~3645 tok)
 
 ## apps/api/test/reports/
 
@@ -892,14 +907,15 @@
 
 - `.eslintrc.json` — ESLint configuration (~12 tok)
 - `components.json` (~128 tok)
-- `Dockerfile` — Docker container definition (~410 tok)
-- `fly.toml` (~194 tok)
+- `Dockerfile` — Docker container definition (~427 tok)
+- `fly.toml` (~401 tok)
 - `next-env.d.ts` — / <reference types="next" /> (~58 tok)
 - `next.config.js` — Next.js configuration (~581 tok)
-- `next.config.mjs` — Declares isDev (~681 tok)
+- `next.config.mjs` — Declares isDev (~833 tok)
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
+- `sentry.client.config.ts` — Declares dsn (~406 tok)
 - `tailwind.config.ts` — /*.{ts,tsx}'], (~919 tok)
 
 ## apps/web/e2e/
@@ -914,12 +930,24 @@
 
 ## apps/web/e2e/helpers/
 
-- `game-helpers.ts` — Exports waitForGameUrl, extractGameId, clickSquare, makeMove + 3 more (~400 tok)
-- `test-api.ts` — Exports TestUser, TestGame, createTestUser, createTestGame + 2 more (~410 tok)
+- `game-helpers.ts` — Exports waitForGameUrl, extractGameId, clickSquare, makeMove + 3 more (~402 tok)
+- `test-api.ts` — Exports TestUser, TestGame, createTestUser, createTestGame + 3 more (~630 tok)
 
 ## apps/web/e2e/tests/
 
-- `admin-disable.spec.ts` — Declares API_URL (~453 tok)
+- `admin-disable.spec.ts` — Declares API_URL (~496 tok)
+- `analyze-flow.spec.ts` — Declares VALID_PGN (~614 tok)
+- `anon-casual.spec.ts` — Anonymous matchmaking is not implemented — requires auth for all game modes. (~118 tok)
+- `flag-fall.spec.ts` — Declares game (~665 tok)
+- `friend-invite.spec.ts` — Declares alicePage (~333 tok)
+- `game-end.spec.ts` — Declares game (~487 tok)
+- `ledger-navigation.spec.ts` — Declares page (~620 tok)
+- `premove.spec.ts` — Declares game (~742 tok)
+- `promotion-keyboard.spec.ts` — White pawn on a7, kings clear of a8 — one move from promotion. (~1206 tok)
+- `rated-finalization.spec.ts` — Fool's mate: 1. f3 e5 2. g4 Qh4# — shortest possible checkmate. (~667 tok)
+- `rated-game.spec.ts` — Matchmaking UI is not implemented — players currently start games via friend (~138 tok)
+- `reconnect.spec.ts` — Declares game (~284 tok)
+- `result-overlay.spec.ts` — Declares game (~959 tok)
 
 ## apps/web/public/pieces/
 
@@ -964,7 +992,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7209 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7160 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~64 tok)
 
 ## apps/web/src/app/games/
@@ -981,19 +1009,20 @@
 
 ## apps/web/src/app/login/
 
-- `login-form.tsx` — LoginForm — renders form (~1251 tok)
+- `login-form.tsx` — LoginForm — renders form (~1264 tok)
 - `page.tsx` — Suspense wrapper for LoginForm (~120 tok)
 
 ## apps/web/src/app/register/
 
 - `page.tsx` — Suspense wrapper for RegisterForm (~120 tok)
-- `register-form.tsx` — USERNAME_PATTERN — renders form (~1654 tok)
+- `register-form.tsx` — USERNAME_PATTERN — renders form (~1667 tok)
 
 ## apps/web/src/components/
 
 - `error-boundary.tsx` — eventId (~550 tok)
 - `error-state.tsx` — House-voice state surfaces: ErrorState (full-screen: mono eyebrow, Fraunces italic headline, brass hairline, eventId chip) + EmptyState (framed in-page card: italic headline, description, actions) (~847 tok)
 - `LoadingShell.tsx` — LoadingShell (~354 tok)
+- `posthog-provider.tsx` — fetchMe (~455 tok)
 
 ## apps/web/src/components/admin/
 
@@ -1003,21 +1032,23 @@
 
 ## apps/web/src/components/auth/
 
-- `auth-shell.tsx` — Full-viewport centered shell for the auth pages. Theme-aware ambient built (~666 tok)
+- `auth-shell.tsx` — Full-viewport centered shell for the auth pages. Theme-aware ambient built (~672 tok)
 
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
-- `chessboard.tsx` — FILES (~4128 tok)
+- `chessboard.tsx` — FILES (~4488 tok)
+- `chessboard.tsx` — FILES (~4137 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~216 tok)
-- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1478 tok)
+- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1518 tok)
 
 ## apps/web/src/components/board/hooks/
 
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
-- `use-drag.ts` — Exports useDrag (~855 tok)
+- `use-drag.ts` — Exports useDrag (~906 tok)
+- `use-keyboard.ts` — Exports useKeyboard (~883 tok)
 - `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~866 tok)
 
 ## apps/web/src/components/computer-game/
@@ -1027,52 +1058,59 @@
 ## apps/web/src/components/game/
 
 - `board-column.tsx` — The `<Chessboard/>` element. (~769 tok)
-- `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~378 tok)
+- `board-control-bar.tsx` — Page-specific controls (Resign / New game / replay seek group). (~381 tok)
 - `captured-material.tsx` — Captured pieces to display (already the color passed in `color`). (~634 tok)
 - `game-error-state.tsx` — Branded full-screen game error: eyebrow, Fraunces verdict, brass hairline, back/retry (~450 tok)
-- `game-loading-skeleton.tsx` — Shared board-shaped loading skeleton (GameShell 2-zone silhouette, continuous rounded-10 rail) used by route loading.tsx files + both game clients (~400 tok)
+- `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~1088 tok)
 - `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~663 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~454 tok)
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~1010 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~455 tok)
 - `index.ts` — Declares GameShellProps (~211 tok)
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
-- `move-panel.tsx` — 1-based ply index. (~1397 tok)
+- `move-panel.tsx` — 1-based ply index. (~1404 tok)
+- `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1506 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1497 tok)
-- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1879 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1885 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1886 tok)
 
 ## apps/web/src/components/games/
 
 - `game-history-filters.tsx` — CATEGORIES (~944 tok)
 - `game-history-list.tsx` — Ledger table + mono footer: shows API `total` when present (falls back to "N shown"), W-L-D tally labelled "latest N:" when partial (~1485 tok)
-- `game-history-row.tsx` — resultLabel (~1646 tok)
+- `game-history-list.tsx` — Total games matching the filters, from the API (ignores pagination). (~1491 tok)
+- `game-history-row.tsx` — resultLabel (~1655 tok)
+- `game-history-row.tsx` — resultLabel (~1656 tok)
 
 ## apps/web/src/components/home/
 
 - `cta-button.tsx` — VARIANT_CLASSES (~533 tok)
 - `footer.tsx` — GithubIcon (~933 tok)
 - `hero-auth-link.tsx` — Session-aware hero nav CTA. Renders the signed-out "Sign in" markup by (~281 tok)
-- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3364 tok)
-- `hero.tsx` — FEATURES (~1490 tok)
+- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3400 tok)
+- `hero-heading.tsx` — The hero's LCP heading. It deliberately carries NO entrance animation. (~456 tok)
+- `hero.tsx` — FEATURES (~1450 tok)
+- `home-viewed-tracker.tsx` — HomeViewedTracker (~68 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
 ## apps/web/src/components/layout/
 
-- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~915 tok)
+- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~950 tok)
 - `Logo.tsx` — SIZE (~624 tok)
 - `UserMenu.tsx` — Top-bar account chip — resolves the session itself via /api/auth/me. (~938 tok)
 
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
-- `invite-create.tsx` — TIME_CONTROLS (~2848 tok)
+- `invite-create.tsx` — TIME_CONTROLS (~2856 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
 
 ## apps/web/src/components/profile/
 
 - `profile-header.tsx` — ProfileHeader (~594 tok)
-- `recent-games.tsx` — ResultBadge (~1471 tok)
+- `ratings-card.tsx` — CATEGORIES (~550 tok)
+- `recent-games.tsx` — ResultBadge (~1480 tok)
 
 ## apps/web/src/components/review/
 
@@ -1082,7 +1120,7 @@
 
 ## apps/web/src/components/settings/
 
-- `settings-form.tsx` — APP_THEMES (~2253 tok)
+- `settings-form.tsx` — APP_THEMES (~2392 tok)
 
 ## apps/web/src/components/ui/
 
@@ -1098,9 +1136,9 @@
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
-- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~904 tok)
+- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1394 tok)
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
-- `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~578 tok)
+- `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-position-eval.ts` — Exports usePositionEval — debounced White-POV Stockfish eval of a FEN (~550 tok)
 
 ## apps/web/src/lib/
@@ -1119,6 +1157,7 @@
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~656 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~820 tok)
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
+- `sr-announce.ts` — Derives a human-readable SR announcement from consecutive FENs. (~557 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
 
 ## apps/web/src/services/
@@ -1141,31 +1180,40 @@
 ## apps/web/test/board/
 
 - `captured-material.test.tsx` — pieces (~613 tok)
+- `chessboard-sr.test.tsx` — START_FEN (~999 tok)
+- `keyboard.test.tsx` — START_FEN (~1672 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 - `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)
+- `sr-announce.test.ts` — START_FEN: fenAfterMoves (~756 tok)
 
 ## apps/web/test/computer-game/
 
 - `a11y.test.tsx` — --------------------------------------------------------------------------- (~2228 tok)
 
+## apps/web/test/game/
+
+- `game-loading-skeleton.test.tsx` — The skeleton must paint a real contentful element (an SVG board silhouette), (~320 tok)
+
 ## apps/web/test/games/
 
 - `game-history-filters.test.tsx` — defaultProps (~1031 tok)
-- `game-history-page.test.tsx` — mockGame (~1204 tok)
+- `game-history-page.test.tsx` — mockGame (~1472 tok)
 - `game-review.test.ts` — Declares makeComputerState (~942 tok)
 
 ## apps/web/test/home/
 
 - `hero-auth.test.tsx` — mockGetMe (~658 tok)
 - `hero-board.test.tsx` — The hero board's replay enhancement: static Immortal Game final position (~1767 tok)
+- `hero-heading.test.tsx` — LCP fix (S04 §5.1 / S07): the hero h1 is the page's LCP element (verified via (~396 tok)
 - `homepage.test.tsx` — Hero contains the session-aware HeroAuthLink — keep /api/auth/me off the (~958 tok)
 
 ## apps/web/test/play/
 
 - `computer-game-setup.test.tsx` — mockCreate (~1277 tok)
 - `invite-join.test.tsx` — mockUseGetInvite (~820 tok)
-- `use-game-socket.test.tsx` — sockets (~1160 tok)
+- `use-game-socket.test.tsx` — sockets (~2040 tok)
 - `use-live-clock-offset.test.tsx` — clock (~377 tok)
+- `use-live-clock-visibility.test.tsx` — A backgrounded tab throttles/suspends the 200ms interval, so the clock (~872 tok)
 
 ## apps/web/test/profile/
 
@@ -1178,7 +1226,7 @@
 
 ## apps/web/test/settings/
 
-- `settings-dialog.test.tsx` — monoBtn (~676 tok)
+- `settings-dialog.test.tsx` — monoButton (~821 tok)
 
 ## crates/purechess-engine/
 
@@ -1247,6 +1295,19 @@
 
 - `.epic-produces-overrides.json` (~111 tok)
 
+## docs/roadmap/purechess-category-best/
+
+- `budgets.md` — Purechess "Category Best" — Performance & Reliability Budgets (~2588 tok)
+- `ownership.md` — Purechess "Category Best" — File-Ownership Charter (Sessions 02–06) (~1901 tok)
+- `session-01-handoff.md` — Session 01 Handoff — Charter + Baselines (~2099 tok)
+- `session-02-handoff.md` — Session 02 Handoff — Realtime Resilience (~3134 tok)
+- `session-03-handoff.md` — Session 03 Handoff — Board Feel & Accessibility (~3312 tok)
+- `session-04-handoff.md` — Session 04 Handoff — Speed Shell (~2674 tok)
+- `session-05-handoff.md` — Session 05 Handoff — E2E Interactions (~1149 tok)
+- `session-06-handoff.md` — Session 06 Handoff — Surface A11y + Light Mode (~2330 tok)
+- `session-07-handoff.md` — Session 07 Handoff — CI Gate / Integration / GO·NO-GO (~4007 tok)
+- `session-08-handoff.md` — Session 08 Handoff — Prod Deploy + WebSocket Verify (~3886 tok)
+
 ## docs/roadmap/rust-engine-migration/
 
 - `session-01-handoff.md` — Session 01 Handoff — Rust Engine Contracts Charter (WP1) (~3179 tok)
@@ -1292,6 +1353,9 @@
 
 ## scripts/
 
+- `apps/web/src/components/home/hero-heading.tsx` — Static hero h1 ("The board is the product."). Deliberately NO animation: it is the LCP element, so animate-rise-* would block LCP. (~340 tok)
+- `apps/web/test/game/game-loading-skeleton.test.tsx` — Locks: GameLoadingSkeleton renders a contentful SVG (33 rects) so FCP can fire; keeps role=status loading label. (~260 tok)
+- `apps/web/test/home/hero-heading.test.tsx` — Locks: hero h1 carries no rise/fade entrance animation in SSR or post-mount (LCP guard). (~250 tok)
 - `build-engine.sh` — Build the purechess-engine native binary for the host platform. (~199 tok)
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)

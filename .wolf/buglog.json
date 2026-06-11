@@ -961,22 +961,6 @@
       "last_seen": "2026-06-09T01:32:37.750Z"
     },
     {
-      "id": "bug-059",
-      "timestamp": "2026-06-10T01:32:04.305Z",
-      "error_message": "Type error",
-      "file": "apps/web/src/app/layout.tsx",
-      "root_cause": "Missing or incorrect type annotation",
-      "fix": "Added type assertion/annotation",
-      "tags": [
-        "auto-detected",
-        "type-fix",
-        "tsx"
-      ],
-      "related_bugs": [],
-      "occurrences": 1,
-      "last_seen": "2026-06-10T01:32:04.305Z"
-    },
-    {
       "id": "bug-060",
       "timestamp": "2026-06-10T01:32:05.666Z",
       "error_message": "Incorrect value in code",
@@ -2056,7 +2040,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 2,
+      "occurrences": 6,
       "last_seen": "2026-06-11T01:26:31.259Z"
     },
     {
@@ -2072,7 +2056,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 2,
+      "occurrences": 6,
       "last_seen": "2026-06-11T01:26:53.891Z"
     },
     {
@@ -2088,7 +2072,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 2,
+      "occurrences": 6,
       "last_seen": "2026-06-11T01:28:19.803Z"
     },
     {
@@ -3212,59 +3196,6 @@
       "last_seen": "2026-06-11T02:16:06.051Z"
     },
     {
-      "id": "bug-125",
-      "timestamp": "2026-06-10T20:20:00-06:00",
-      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
-      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
-      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
-      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
-      "tags": [
-        "tailwind",
-        "css-specificity",
-        "box-shadow",
-        "dark-theme",
-        "design-tokens"
-      ],
-      "related_bugs": [],
-      "occurrences": 1,
-      "last_seen": "2026-06-10"
-    },
-    {
-      "id": "bug-126",
-      "timestamp": "2026-06-10T20:20:00-06:00",
-      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
-      "file": "apps/web/src/components/board/move-input.tsx",
-      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
-      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
-      "tags": [
-        "a11y",
-        "focus-trap",
-        "aria-modal",
-        "board",
-        "promotion"
-      ],
-      "related_bugs": [],
-      "occurrences": 1,
-      "last_seen": "2026-06-10"
-    },
-    {
-      "id": "bug-127",
-      "timestamp": "2026-06-10T20:20:00-06:00",
-      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
-      "file": "apps/web/src/components/review/review-controls.tsx",
-      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
-      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
-      "tags": [
-        "a11y",
-        "keyboard",
-        "disabled-state",
-        "review"
-      ],
-      "related_bugs": [],
-      "occurrences": 1,
-      "last_seen": "2026-06-10"
-    },
-    {
       "id": "bug-201",
       "timestamp": "2026-06-11T02:39:39.535Z",
       "error_message": "Type error",
@@ -4337,6 +4268,1189 @@
       ],
       "occurrences": 1,
       "last_seen": "2026-06-11"
+    },
+    {
+      "id": "bug-266",
+      "timestamp": "2026-06-11T04:28:19.176Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "apps/web/src/hooks/use-live-clock.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:28:19.176Z"
+    },
+    {
+      "id": "bug-267",
+      "timestamp": "2026-06-11T04:28:31.923Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "apps/web/src/hooks/use-game-socket.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:28:31.923Z"
+    },
+    {
+      "id": "bug-268",
+      "timestamp": "2026-06-11T04:29:08.848Z",
+      "error_message": "CSS fix: onState",
+      "file": "apps/web/test/play/use-game-socket.test.tsx",
+      "root_cause": "onState: vi.fn(), onResync: vi.fn() \u2192 vi.fn(), onResync",
+      "fix": "Changed onState: vi.fn(), onResync: vi.fn() \u2192 vi.fn(), onResync",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:29:08.848Z"
+    },
+    {
+      "id": "bug-269",
+      "timestamp": "2026-06-11T04:36:28.298Z",
+      "error_message": "Significant refactor of ",
+      "file": "../../../../../../tmp/pc-reconnect-measure.mjs",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5\u21924 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:36:28.298Z"
+    },
+    {
+      "id": "bug-271",
+      "timestamp": "2026-06-11T12:09:12.945Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/game/board-control-bar.tsx",
+      "root_cause": "Had 'flex shrink-0 items-center gap-2'",
+      "fix": "Changed to 'flex shrink-0 flex-wrap items-center gap-2'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:12.945Z"
+    },
+    {
+      "id": "bug-272",
+      "timestamp": "2026-06-11T12:09:40.565Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Had './board-context'",
+      "fix": "Changed to '@/lib/board/sr-announce'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:40.565Z"
+    },
+    {
+      "id": "bug-273",
+      "timestamp": "2026-06-11T12:09:48.862Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "No early return/throw for edge case: prev === position",
+      "fix": "Added guard clause: if (prev === position)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:48.862Z"
+    },
+    {
+      "id": "bug-274",
+      "timestamp": "2026-06-11T12:10:04.764Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "Had '@/components/computer-game/live-announcer'",
+      "fix": "Changed to '@/hooks/use-game-keyboard'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:10:04.764Z"
+    },
+    {
+      "id": "bug-275",
+      "timestamp": "2026-06-11T12:10:22.445Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "apps/web/src/components/board/hooks/use-drag.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:10:22.445Z"
+    },
+    {
+      "id": "bug-276",
+      "timestamp": "2026-06-11T12:11:46.834Z",
+      "error_message": "Type error",
+      "file": "apps/web/test/board/keyboard.test.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:11:46.834Z"
+    },
+    {
+      "id": "bug-277",
+      "timestamp": "2026-06-11T14:00:00.000Z",
+      "error_message": "Keyboard focus ring invisible on light (bone) chess squares",
+      "file": "apps/web/src/components/board/square.tsx",
+      "root_cause": "Tailwind ring-2 ring-[hsl(var(--brass))] composites brass ring against near-brass bone square fill (#dcd6c1), producing ~1.1:1 contrast \u2014 fails WCAG AA",
+      "fix": "Replaced ring utility with inline boxShadow sandwich: inset dark halo (rgba(0,0,0,0.45)) + inset brass outer (hsl(41 56% 62%)) \u2014 passes AA on both bone and mineral squares",
+      "tags": [
+        "a11y",
+        "focus-ring",
+        "contrast",
+        "board",
+        "keyboard"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:00:00.000Z"
+    },
+    {
+      "id": "bug-278",
+      "timestamp": "2026-06-11T14:00:00.000Z",
+      "error_message": "Drag ghost loses tracking when finger leaves board boundary on touch devices",
+      "file": "apps/web/src/components/board/hooks/use-drag.ts",
+      "root_cause": "No pointer capture \u2014 pointer events escape to parent scrollers or overlapping elements once the touch moves outside the board container",
+      "fix": "Added e.currentTarget.setPointerCapture(e.pointerId) after the drag threshold is crossed (inside !isDragging.current branch), wrapped in try/catch. NOT on pointerdown \u2014 that would steal click events and break tap-tap moves",
+      "tags": [
+        "touch",
+        "drag",
+        "pointer-capture",
+        "mobile",
+        "a11y"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:00:00.000Z"
+    },
+    {
+      "id": "bug-279",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-280",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
+      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
+      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
+      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
+      "tags": [
+        "tailwind",
+        "css-specificity",
+        "box-shadow",
+        "dark-theme",
+        "design-tokens"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-281",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
+      "file": "apps/web/src/components/board/move-input.tsx",
+      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
+      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
+      "tags": [
+        "a11y",
+        "focus-trap",
+        "aria-modal",
+        "board",
+        "promotion"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-282",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
+      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "disabled-state",
+        "review"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-283",
+      "timestamp": "2026-06-10T22:35:00.000Z",
+      "error_message": "Cannot find module .../argon2@0.31.2/.../lib/binding/napi-v3/argon2.node from argon2.js \u2014 apps/api auth.service.spec & auth.controller.spec fail to RUN",
+      "file": "node_modules/.pnpm/argon2@0.31.2/.../argon2 (native binding)",
+      "root_cause": "Fresh worktree: pnpm install ignored argon2 build script, so the prebuilt native binding was never fetched. Not a code bug \u2014 env bootstrap gap.",
+      "fix": "Ran node-pre-gyp install --fallback-to-build in the argon2 pkg dir (or pnpm rebuild argon2) to fetch the darwin-arm64 prebuilt argon2.node. Add to fresh-worktree bootstrap.",
+      "tags": [
+        "fresh-worktree",
+        "argon2",
+        "native-binding",
+        "jest",
+        "bootstrap"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T22:35:00.000Z"
+    },
+    {
+      "id": "bug-284",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-285",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
+      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
+      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
+      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
+      "tags": [
+        "tailwind",
+        "css-specificity",
+        "box-shadow",
+        "dark-theme",
+        "design-tokens"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-286",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
+      "file": "apps/web/src/components/board/move-input.tsx",
+      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
+      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
+      "tags": [
+        "a11y",
+        "focus-trap",
+        "aria-modal",
+        "board",
+        "promotion"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-287",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
+      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "disabled-state",
+        "review"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-288",
+      "timestamp": "2026-06-10T22:35:00.000Z",
+      "error_message": "Cannot find module .../argon2@0.31.2/.../lib/binding/napi-v3/argon2.node from argon2.js \u2014 apps/api auth.service.spec & auth.controller.spec fail to RUN",
+      "file": "node_modules/.pnpm/argon2@0.31.2/.../argon2 (native binding)",
+      "root_cause": "Fresh worktree: pnpm install ignored argon2 build script, so the prebuilt native binding was never fetched. Not a code bug \u2014 env bootstrap gap.",
+      "fix": "Ran node-pre-gyp install --fallback-to-build in the argon2 pkg dir (or pnpm rebuild argon2) to fetch the darwin-arm64 prebuilt argon2.node. Add to fresh-worktree bootstrap.",
+      "tags": [
+        "fresh-worktree",
+        "argon2",
+        "native-binding",
+        "jest",
+        "bootstrap"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T22:35:00.000Z"
+    },
+    {
+      "id": "bug-289",
+      "timestamp": "2026-06-11T12:09:21.470Z",
+      "error_message": "Missing import: @/lib/posthog",
+      "file": "apps/web/src/components/home/home-viewed-tracker.tsx",
+      "root_cause": "Module(s) not imported: @/lib/posthog",
+      "fix": "Added import(s) for @/lib/posthog",
+      "tags": [
+        "auto-detected",
+        "missing-import",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:21.470Z"
+    },
+    {
+      "id": "bug-290",
+      "timestamp": "2026-06-11T12:09:30.754Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/home/hero-board.tsx",
+      "root_cause": "Had \"animate-rise-4 mx-auto w-full max-w-[34rem]\"",
+      "fix": "Changed to `${mounted ? '",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:30.754Z"
+    },
+    {
+      "id": "bug-291",
+      "timestamp": "2026-06-11T12:19:40.853Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "apps/web/sentry.client.config.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:40.853Z"
+    },
+    {
+      "id": "bug-292",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-293",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
+      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
+      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
+      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
+      "tags": [
+        "tailwind",
+        "css-specificity",
+        "box-shadow",
+        "dark-theme",
+        "design-tokens"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-294",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
+      "file": "apps/web/src/components/board/move-input.tsx",
+      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
+      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
+      "tags": [
+        "a11y",
+        "focus-trap",
+        "aria-modal",
+        "board",
+        "promotion"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-295",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
+      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "disabled-state",
+        "review"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-296",
+      "timestamp": "2026-06-10T22:35:00.000Z",
+      "error_message": "Cannot find module .../argon2@0.31.2/.../lib/binding/napi-v3/argon2.node from argon2.js \u2014 apps/api auth.service.spec & auth.controller.spec fail to RUN",
+      "file": "node_modules/.pnpm/argon2@0.31.2/.../argon2 (native binding)",
+      "root_cause": "Fresh worktree: pnpm install ignored argon2 build script, so the prebuilt native binding was never fetched. Not a code bug \u2014 env bootstrap gap.",
+      "fix": "Ran node-pre-gyp install --fallback-to-build in the argon2 pkg dir (or pnpm rebuild argon2) to fetch the darwin-arm64 prebuilt argon2.node. Add to fresh-worktree bootstrap.",
+      "tags": [
+        "fresh-worktree",
+        "argon2",
+        "native-binding",
+        "jest",
+        "bootstrap"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T22:35:00.000Z"
+    },
+    {
+      "id": "bug-297",
+      "timestamp": "2026-06-11T12:23:56.653Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/game/result-overlay.tsx",
+      "root_cause": "Had \"absolute inset-0 z-20 flex items-center justify-c",
+      "fix": "Changed to \"game-result\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:23:56.653Z"
+    },
+    {
+      "id": "bug-298",
+      "timestamp": "2026-06-11T12:23:58.803Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/profile/ratings-card.tsx",
+      "root_cause": "Had \"rounded-lg border border-border/70 bg-surface/60 ",
+      "fix": "Changed to \"user-rating\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:23:58.803Z"
+    },
+    {
+      "id": "bug-299",
+      "timestamp": "2026-06-11T12:24:01.971Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/play/invite-create.tsx",
+      "root_cause": "Had \"block break-all font-mono text-xs leading-relaxed",
+      "fix": "Changed to \"invite-link\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:24:01.971Z"
+    },
+    {
+      "id": "bug-300",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-301",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
+      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
+      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
+      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
+      "tags": [
+        "tailwind",
+        "css-specificity",
+        "box-shadow",
+        "dark-theme",
+        "design-tokens"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-302",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
+      "file": "apps/web/src/components/board/move-input.tsx",
+      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
+      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
+      "tags": [
+        "a11y",
+        "focus-trap",
+        "aria-modal",
+        "board",
+        "promotion"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-303",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
+      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "disabled-state",
+        "review"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-304",
+      "timestamp": "2026-06-10T22:35:00.000Z",
+      "error_message": "Cannot find module .../argon2@0.31.2/.../lib/binding/napi-v3/argon2.node from argon2.js \u2014 apps/api auth.service.spec & auth.controller.spec fail to RUN",
+      "file": "node_modules/.pnpm/argon2@0.31.2/.../argon2 (native binding)",
+      "root_cause": "Fresh worktree: pnpm install ignored argon2 build script, so the prebuilt native binding was never fetched. Not a code bug \u2014 env bootstrap gap.",
+      "fix": "Ran node-pre-gyp install --fallback-to-build in the argon2 pkg dir (or pnpm rebuild argon2) to fetch the darwin-arm64 prebuilt argon2.node. Add to fresh-worktree bootstrap.",
+      "tags": [
+        "fresh-worktree",
+        "argon2",
+        "native-binding",
+        "jest",
+        "bootstrap"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T22:35:00.000Z"
+    },
+    {
+      "id": "bug-305",
+      "timestamp": "2026-06-11T12:18:03.179Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/login/login-form.tsx",
+      "root_cause": "Had \"font-medium text-brass underline decoration-brass",
+      "fix": "Changed to \"font-medium text-brass-text underline decoration-",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T12:18:08.516Z"
+    },
+    {
+      "id": "bug-306",
+      "timestamp": "2026-06-11T12:18:04.854Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/register/register-form.tsx",
+      "root_cause": "Had \"font-medium text-brass underline decoration-brass",
+      "fix": "Changed to \"font-medium text-brass-text underline decoration-",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T12:18:09.753Z"
+    },
+    {
+      "id": "bug-307",
+      "timestamp": "2026-06-11T12:18:23.189Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/layout/AppShell.tsx",
+      "root_cause": "Had 'text-[11px] font-medium uppercase tracking-[0.12e",
+      "fix": "Changed to 'text-[11px] font-medium uppercase tracking-[0.12e",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:18:23.189Z"
+    },
+    {
+      "id": "bug-308",
+      "timestamp": "2026-06-11T12:19:01.998Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/games/game-history-list.tsx",
+      "root_cause": "Had ', className: '",
+      "fix": "Changed to ', srLabel: '",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:01.998Z"
+    },
+    {
+      "id": "bug-309",
+      "timestamp": "2026-06-11T12:19:05.583Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/games/game-history-row.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:05.583Z"
+    },
+    {
+      "id": "bug-310",
+      "timestamp": "2026-06-11T12:19:09.301Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/games/game-history-row.tsx",
+      "root_cause": "Had \"h-3 w-3 transition-transform group-hover:-transla",
+      "fix": "Changed to \"true\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:09.301Z"
+    },
+    {
+      "id": "bug-311",
+      "timestamp": "2026-06-11T12:19:21.802Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/test/settings/settings-dialog.test.tsx",
+      "root_cause": "4 lines replaced/restructured",
+      "fix": "Rewrote 21\u219230 lines (4 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:21.802Z"
+    },
+    {
+      "id": "bug-312",
+      "timestamp": "2026-06-11T12:19:32.547Z",
+      "error_message": "Type error",
+      "file": "apps/web/test/games/game-history-page.test.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:32.547Z"
+    },
+    {
+      "id": "bug-313",
+      "timestamp": "2026-06-11T13:21:22.069Z",
+      "error_message": "Type error",
+      "file": "apps/api/src/testing/testing.service.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T13:21:22.069Z"
+    },
+    {
+      "id": "bug-314",
+      "timestamp": "2026-06-11T13:40:43.810Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/e2e/tests/result-overlay.spec.ts",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5\u21928 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T13:40:43.810Z"
+    },
+    {
+      "id": "bug-315",
+      "timestamp": "2026-06-11T14:04:00.000Z",
+      "error_message": "Home LCP element opacity:0 in SSR + re-fades on hydration (perf debt)",
+      "file": "apps/web/src/components/home/hero.tsx",
+      "root_cause": "Hero h1 + subtitle used animate-rise-* (fadeInUp ... both). The backwards 'both' fill paints them opacity:0 in SSR; applying the class only post-mount re-runs the fade from 0 on hydration, recording a late LCP. These are the two largest above-the-fold (LCP) elements.",
+      "fix": "Extracted the h1 into a static HeroHeading (no animation); made the subtitle <p> static. Both paint at FCP. Devtools-throttled perf 99, LCP 1.7s on /. Do NOT reapply animate-rise-* here \u2014 locked by test/home/hero-heading.test.tsx.",
+      "tags": [
+        "perf",
+        "lcp",
+        "lighthouse",
+        "hero",
+        "ssr",
+        "s07"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:04:00.000Z"
+    },
+    {
+      "id": "bug-316",
+      "timestamp": "2026-06-11T14:05:00.000Z",
+      "error_message": "Dev CSP blocks browser app from reaching API on an alt port",
+      "file": "apps/web/next.config.mjs",
+      "root_cause": "Dev connect-src hard-coded http://localhost:4000 ws://localhost:4000. When :4000 is taken and the API runs on :4100 (operator alt-port setup), the browser app's fetch/WS to :4100 was CSP-blocked.",
+      "fix": "Dev connect-src now includes the configured NEXT_PUBLIC_API_URL (http/ws) when it is a localhost origin, falling back to :4000. Prod CSP unchanged.",
+      "tags": [
+        "csp",
+        "dev",
+        "e2e",
+        "config",
+        "s07"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:05:00.000Z"
+    },
+    {
+      "id": "bug-317",
+      "timestamp": "2026-06-11T14:06:00.000Z",
+      "error_message": "S05 e2e specs use selectors with no source counterpart / ambiguous matches",
+      "file": "apps/web/e2e/tests",
+      "root_cause": "S05 specs referenced [data-move-number] (never added to source), an unscoped getByRole('alert') (also matches Next's empty route-announcer), an unscoped /new/i link, /api/users/me (404 \u2014 route is :username), and resigned before the opponent's WS subscription was ready.",
+      "fix": "Added data-move-number to move-panel rows; scoped the analyze alert + result-overlay New link; pointed admin-disable at /api/auth/me; gated resign tests on the opponent board being visible. e2e 7 -> 22 passing.",
+      "tags": [
+        "e2e",
+        "selectors",
+        "playwright",
+        "s07"
+      ],
+      "related_bugs": [
+        "bug-311",
+        "bug-312"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:06:00.000Z"
+    },
+    {
+      "id": "bug-322",
+      "timestamp": "2026-06-11T14:13:56.056Z",
+      "error_message": "Incorrect value in code",
+      "file": "../../../../../../tmp/ws-proof.mjs",
+      "root_cause": "Had '/Users/aramirez/Code/.epic-worktrees/purechess/ep",
+      "fix": "Changed to 'module'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T14:15:02.770Z"
+    },
+    {
+      "id": "bug-323",
+      "timestamp": "2026-06-11T14:14:34.192Z",
+      "error_message": "Null/undefined access in ",
+      "file": "../../../../../../tmp/ws-proof.mjs",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:14:34.192Z"
+    },
+    {
+      "id": "bug-324",
+      "timestamp": "2026-06-11T14:20:00Z",
+      "error_message": "Production live games fell back to slow REST polling instead of WebSocket push between two browsers.",
+      "file": "apps/web/fly.toml, apps/web/Dockerfile",
+      "root_cause": "Web build baked NEXT_PUBLIC_API_URL='' (same-origin /api proxy) and left NEXT_PUBLIC_WS_URL unset, so use-game-socket.ts WS_URL fell through to the NODE_ENV==='production' fallback branch. That branch is fragile: any build not inlining process.env.NODE_ENV in the client bundle collapses WS_URL to http://localhost:4000, the browser cannot reach it, the socket never connects, and the client stays on its slow REST heartbeat.",
+      "fix": "Bake NEXT_PUBLIC_WS_URL=https://purechess-api.fly.dev as an explicit build arg in apps/web/fly.toml [build.args] and plumb ARG NEXT_PUBLIC_WS_URL + ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL in the apps/web/Dockerfile builder stage (both required or the arg is dropped before next build). WS_URL is now deterministic regardless of the NODE_ENV branch. Verified baked into play/[gameId] chunk; live two-client proof shows engine.io polling->websocket upgrade + game:state push over websocket in ~0.9s.",
+      "tags": [
+        "fly",
+        "websocket",
+        "socket.io",
+        "prod",
+        "build-arg",
+        "next",
+        "polling-fallback",
+        "deploy"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:20:00Z"
+    },
+    {
+      "id": "bug-325",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-326",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
+      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
+      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
+      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
+      "tags": [
+        "tailwind",
+        "css-specificity",
+        "box-shadow",
+        "dark-theme",
+        "design-tokens"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-327",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
+      "file": "apps/web/src/components/board/move-input.tsx",
+      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
+      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
+      "tags": [
+        "a11y",
+        "focus-trap",
+        "aria-modal",
+        "board",
+        "promotion"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-328",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
+      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "disabled-state",
+        "review"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-329",
+      "timestamp": "2026-06-11T04:27:41.940Z",
+      "error_message": "Missing import: reflect-metadata",
+      "file": "apps/api/test/realtime/realtime.gateway.spec.ts",
+      "root_cause": "Module(s) not imported: reflect-metadata",
+      "fix": "Added import(s) for reflect-metadata",
+      "tags": [
+        "auto-detected",
+        "missing-import",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:27:41.940Z"
+    },
+    {
+      "id": "bug-330",
+      "timestamp": "2026-06-11T04:27:48.989Z",
+      "error_message": "Type error",
+      "file": "apps/api/test/realtime/realtime.gateway.spec.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:27:48.989Z"
+    },
+    {
+      "id": "bug-331",
+      "timestamp": "2026-06-11T04:28:04.534Z",
+      "error_message": "Missing await",
+      "file": "apps/api/test/realtime/realtime.gateway.spec.ts",
+      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T04:28:04.534Z"
+    },
+    {
+      "id": "bug-332",
+      "timestamp": "2026-06-11T12:45:14.696Z",
+      "error_message": "CSS fix: display",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "display: 'swap', \u2192 'optional',",
+      "fix": "Changed display: 'swap', \u2192 'optional',",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T12:47:48.155Z"
+    },
+    {
+      "id": "bug-333",
+      "timestamp": "2026-06-11T12:48:22.660Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/home/hero.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:48:22.660Z"
+    },
+    {
+      "id": "bug-334",
+      "timestamp": "2026-06-11T12:53:25.037Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "5 lines replaced/restructured",
+      "fix": "Rewrote 8\u21923 lines (5 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:53:25.037Z"
+    },
+    {
+      "id": "bug-335",
+      "timestamp": "2026-06-11T12:58:26.876Z",
+      "error_message": "Type error",
+      "file": "apps/api/src/testing/testing.controller.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:58:26.876Z"
+    },
+    {
+      "id": "bug-336",
+      "timestamp": "2026-06-11T13:09:54.225Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/game/game-loading-skeleton.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: /**; * A faint dark-square checker over the board placeholder. Re",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T13:10:03.020Z"
+    },
+    {
+      "id": "bug-337",
+      "timestamp": "2026-06-11T14:00:00.000Z",
+      "error_message": "All authenticated e2e flows 401 \u2014 test sessions never validate through SessionAuthGuard",
+      "file": "apps/api/src/testing/testing.service.ts",
+      "root_cause": "TestingService hard-coded the session HMAC secret as the literal 'test-secret', but SessionsService.lookupSession HMACs with the configured SESSION_SECRET (validated >=32 chars). The two could never match, so every test-created session was rejected (401) by SessionAuthGuard \u2014 live game board, review, reconnect, resign all failed to load.",
+      "fix": "TestingService injects ConfigService and derives the session id via createHmac('sha256', config.get('SESSION_SECRET')) \u2014 identical to SessionsService. Run the e2e API with a >=32-char SESSION_SECRET shared by both.",
+      "tags": [
+        "e2e",
+        "auth",
+        "session",
+        "hmac",
+        "testing-module",
+        "s07"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:00:00.000Z"
+    },
+    {
+      "id": "bug-338",
+      "timestamp": "2026-06-11T14:01:00.000Z",
+      "error_message": "POST /api/testing/* -> 400 'property X should not exist'",
+      "file": "apps/api/src/testing/testing.controller.ts",
+      "root_cause": "Global ValidationPipe runs whitelist:true + forbidNonWhitelisted:true. The testing DTOs had no class-validator decorators, so every property was non-whitelisted and rejected with 400. Test seeding could never succeed.",
+      "fix": "Decorated all testing DTO properties with @IsString/@IsInt/@IsBoolean/@IsOptional.",
+      "tags": [
+        "e2e",
+        "validation",
+        "nestjs",
+        "testing-module",
+        "s07"
+      ],
+      "related_bugs": [
+        "bug-311"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:01:00.000Z"
+    },
+    {
+      "id": "bug-339",
+      "timestamp": "2026-06-11T14:02:00.000Z",
+      "error_message": "axe aria-required-children / aria-required-parent on every board route (a11y 89 on /computer-game)",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "role=grid contained role=gridcell directly with no role=row layer. ARIA grid pattern requires grid -> row -> gridcell. S03 added grid/gridcell without rows; S06 a11y audit did not cover board routes, so it surfaced only in the S07 integration Lighthouse run.",
+      "fix": "Wrapped each rank's 8 cells in <div role=row style={display:'contents'}> \u2014 adds the ARIA row layer without disturbing the grid-cols-8 layout. CG a11y 89 -> 100.",
+      "tags": [
+        "a11y",
+        "aria",
+        "board",
+        "lighthouse",
+        "s07"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:02:00.000Z"
+    },
+    {
+      "id": "bug-340",
+      "timestamp": "2026-06-11T14:03:00.000Z",
+      "error_message": "Computer-game page FCP ~6.4s under throttle (perf 61)",
+      "file": "apps/web/src/components/game/game-loading-skeleton.tsx",
+      "root_cause": "The loading skeleton was background-coloured divs only. FCP/LCP ignore background-color (browser spec), so they waited for the real board's piece <img>s (~6s on simulated slow-4G) even though CSS was ready ~1.6s.",
+      "fix": "Added a faint inline SVG 8x8 board silhouette inside the board placeholder \u2014 a real contentful paint, so FCP fires when the skeleton lands (~1.7s). On-brand.",
+      "tags": [
+        "perf",
+        "lcp",
+        "fcp",
+        "lighthouse",
+        "skeleton",
+        "s07"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:03:00.000Z"
     }
   ]
 }

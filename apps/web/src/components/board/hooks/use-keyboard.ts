@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Square, MoveIntent } from '@purechess/shared';
 import type { Orientation } from '@/lib/board/types';
 
@@ -23,8 +23,14 @@ interface UseKeyboardOptions {
 }
 
 export function useKeyboard({ orientation, legalDestinations, onMove, isOwnPiece }: UseKeyboardOptions) {
-  const [focusSquare, setFocusSquare] = useState<Square>('e2');
+  const [focusSquare, setFocusSquare] = useState<Square>(() =>
+    orientation === 'white' ? 'e2' : 'e7',
+  );
   const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
+
+  useEffect(() => {
+    setFocusSquare(orientation === 'white' ? 'e2' : 'e7');
+  }, [orientation]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -58,7 +64,8 @@ export function useKeyboard({ orientation, legalDestinations, onMove, isOwnPiece
           if (next) setFocusSquare(next);
           break;
         }
-        case 'Enter': {
+        case 'Enter':
+        case ' ': {
           e.preventDefault();
           if (!selectedSquare) {
             if (isOwnPiece(focusSquare)) {

@@ -46,6 +46,11 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
 
       if (!isDragging.current && Math.sqrt(dx * dx + dy * dy) > DRAG_THRESHOLD) {
         isDragging.current = true;
+        try {
+          e.currentTarget.setPointerCapture(e.pointerId);
+        } catch {
+          // setPointerCapture unsupported (rare); drag still works without it
+        }
         onDragStart?.(fromSquare.current);
         setPointerType(e.pointerType || 'mouse');
         setDragState({

@@ -66,7 +66,7 @@ export function ResultOverlay({
     loss: 'via-destructive/60',
   };
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden rounded-[10px] bg-[#0b0d0b]/70 p-4 backdrop-blur-[4px]">
+    <div data-testid="game-result" className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden rounded-[10px] bg-[#0b0d0b]/70 p-4 backdrop-blur-[4px]">
       {tone === 'win' && (
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div
@@ -95,6 +95,7 @@ export function ResultOverlay({
         </div>
       )}
       <div
+        role="alert"
         className={cn(
           'animate-rise w-full max-w-[340px] rounded-[14px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-6 pb-7 pt-8 text-center',
           toneRing[tone],

@@ -16,7 +16,7 @@ export interface BoardControlBarProps {
  */
 export function BoardControlBar({ onFlip, children, className }: BoardControlBarProps) {
   return (
-    <div className={cn('flex shrink-0 items-center gap-2', className)}>
+    <div className={cn('flex shrink-0 flex-wrap items-center gap-2', className)}>
       <button
         type="button"
         onClick={onFlip}

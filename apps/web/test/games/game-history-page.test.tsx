@@ -140,4 +140,31 @@ describe('GamesClient', () => {
     expect(screen.getByText('1W–0L–0D')).toBeTruthy();
     expect(screen.queryByText(/latest/)).toBeNull();
   });
+
+  it('Review column header has an sr-only accessible label inside a th', () => {
+    mockHook({
+      data: { pages: [{ games: [mockGame], nextCursor: null }], pageParams: [undefined] },
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+    });
+
+    render(<GamesClient username="alice" />);
+    const srSpans = screen.getAllByText('Review');
+    const srOnly = srSpans.find((el) => el.className === 'sr-only');
+    expect(srOnly).toBeTruthy();
+  });
+
+  it('color swatch aria-label describes piece color as "Played as white"', () => {
+    mockHook({
+      data: { pages: [{ games: [mockGame], nextCursor: null }], pageParams: [undefined] },
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+    });
+
+    render(<GamesClient username="alice" />);
+    const swatch = screen.getByRole('img', { name: 'Played as white' });
+    expect(swatch).toBeTruthy();
+  });
 });

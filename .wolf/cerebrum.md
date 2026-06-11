@@ -36,6 +36,11 @@
 - **`/play` is a full-viewport `PlayShell` (2026-06-08).** Local wrapper in `play-page-client.tsx`: `flex min-h-[100dvh] items-center justify-center` + `.grain` + a **theme-aware** ambient bg built from tokens (`hsl(var(--brass)/0.10)` glow + `hsl(var(--shadow-rgb)/0.45)` vignette over `hsl(var(--background))`), so it adapts to light/dark — do NOT hardcode the game pages' bespoke hex here. Owns the single `#main-content` landmark (the root layout's skip-link needs it; `/play` previously had none). Hero stacks a Crown brass brand-mark + PURECHESS wordmark over the existing mode cards. The route has NO nav (only the root layout exists).
 - **Working tree was volatile this session.** `globals.css` (whole design-token system added) and `play-page-client.tsx` (my redesign discarded) were rewritten/reverted **externally** mid-session — the user is editing in parallel. After any interrupt, re-`grep` disk before assuming prior edits persisted; prefer an atomic `Write` for full-file changes over many small Edits.
 - **epic-toolkit deliverables gate matches `produces:` paths EXACTLY** (`validate-session-deliverables.py` → `_matches_declared`; custom glob compiled to regex where `*`→`.*` and **crosses `/`**, `?`→`.`, and `[ ]` are literal so Next.js `[id]` segments survive). Sonnet epic sessions are **non-deterministic about test file paths/names** across reruns (run 1 wrote `test/hooks/use-game-keyboard.test.ts`, run 2 wrote `test/computer-game/a11y.test.tsx` for the same session), so declaring an exact test deliverable is whack-a-mole — declare tests as a glob like `apps/web/test/*.test.ts*` and keep stable src files exact. Resuming a failed session also requires pruning its `epic/<branch>--sNN-*` worktree+branch first (it's ahead of trunk after a failed run, so the runner refuses to delete it and aborts at exit 1). (`bug-030`)
+- **E2E data-testid map (2026-06-11):** `[data-testid="chess-board"]` on outer Chessboard div; `[data-testid="game-result"]` on ResultOverlay outer div; `[data-testid="user-rating"]` on RatingsCard section; `[data-testid="game-history-item"]` on RecentGames `<li>`; `[data-testid="invite-link"]` on invite-create `<code>`; `[data-testid="game-row"]` on GameHistoryRow `<tr>`.
+- **Live PvP games are at `/play/[gameId]`**, NOT `/games/[gameId]`. Completed game review is at `/games/[gameId]`. The testing helpers and any `waitForURL` patterns must match `/play/` for active games.
+- **`/games` route** (history ledger) reads the logged-in user's username from the session server-side — it does NOT take a `?username=` query param. Filter params: `?category=bullet|blitz|rapid`, `?isRated=true|false`, `?vsComputer=true|false`.
+- **createTestComputerGame** calls the real `POST /api/computer-games/from-fen` endpoint (no dedicated testing endpoint needed) with a session cookie. Returns `{ gameId }` (not `{ id }`). TestGame helper maps `data.gameId → { id }`.
+- **Promotion dialog keyboard (2026-06-11):** Tab trap only (no arrow-key navigation). `autoFocus` on queen button; Tab → rook → bishop → knight → queen (wrap). Escape cancels and restores pawn position (no move submitted). Escape is handled by a document-level keydown listener, not the dialog itself.
 - **Resolving an epic PR's conflicts: do it in a throwaway git worktree, never the main checkout.** The user edits `main` in parallel (working tree is usually dirty), and epics branch off `main` at sprint start — if `main` advances during the run (it did: ResultOverlay on `computer-game-client.tsx`, social-links removed from `footer.tsx`), the PR conflicts. `git worktree add /tmp/<x> epic/<branch>`, `git merge origin/main` there, resolve, typecheck (needs `pnpm install` + `pnpm --filter @purechess/shared build` first since a fresh worktree has no deps), push, `git worktree remove --force`. `.wolf/*` conflicts → take `--ours` (branch) to keep valid JSON + the epic's anatomy/logs. Merging `origin/main` *into* the branch (one merge commit) is cleaner for an already-open PR than rebasing (no force-push).
 
 - **Board palette is now bespoke bone/mineral (2026-06-09 design pass):** `--board-sq-light: 46 30% 81%`, `--board-sq-dark: 138 14% 36%` (matches design.md, replaces the old lichess-green). Highlights are brass washes (`--board-highlight-last: 41 78% 55% / 0.4`) rendered as **overlay divs in `square.tsx` (z-[5], under pieces at z-20)** — NEVER as inline `backgroundColor` on the square (inline bg replaces the class bg entirely and composites against the frame, which looked muddy). Check = red radial-gradient overlay with `check-pulse` (now an opacity keyframe). Coordinates are in-square corner labels (`coordinates.tsx`), tinted with the opposite square colour; bottom-right square is always light so parity is `index % 2 === 1` on both axes. Pieces get `p-[4%]` padding + soft 2px shadows. `themes.ts` classic swatch = `#dcd6c1`/`#4f6959`.
@@ -184,6 +189,14 @@
 - **Moves render optimistically** in both game clients: handleMove applies the move with chess.js to the local fen before the POST (slide starts instantly), server response reconciles, error restores the pre-move state.
 - **Perceived prod latency is network-bound**: this connection pings Fly's nearest edge at ~220ms (fly-request-id showed `-fra` — routed via Frankfurt). Server-side is ~10ms internal; reads ≈ RTT, writes ≈ RTT + ~60ms Neon (us-east-2) transaction. Neon autosuspend adds a one-off ~0.5-2s wake after idle.
 
+## Key Learnings (added 2026-06-11 — S08 prod WS deploy)
+
+- **Prod WebSockets need an EXPLICIT `NEXT_PUBLIC_WS_URL` build arg.** WS cannot ride the Next `/api` same-origin rewrite (rewrites don't HTTP-upgrade), so the browser talks to the api origin directly. `use-game-socket.ts` resolves `WS_URL = NEXT_PUBLIC_WS_URL || NEXT_PUBLIC_API_URL || (NODE_ENV==='production' ? 'https://purechess-api.fly.dev' : 'http://localhost:4000')`. With `NEXT_PUBLIC_API_URL=''` (same-origin proxy) and `NEXT_PUBLIC_WS_URL` unset, WS_URL depended on the fragile NODE_ENV branch — any build not inlining NODE_ENV collapses it to localhost:4000 → socket never connects → client degrades to its slow REST heartbeat (the "prod polling" symptom). Fix: bake `NEXT_PUBLIC_WS_URL=https://purechess-api.fly.dev` in `apps/web/fly.toml [build.args]` AND plumb `ARG NEXT_PUBLIC_WS_URL` + `ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL` in `apps/web/Dockerfile` builder stage (both needed or the arg is dropped before `next build`). Verify it baked: `flyctl ssh console -a purechess-web -C "grep -rl purechess-api.fly.dev /app/apps/web/.next/static"` → hits `play/[gameId]/page-*.js`.
+- **Keep `NEXT_PUBLIC_API_URL=''`** — do NOT point it at the api origin to "fix" WS; that reintroduces CORS preflight on every REST call. WS is a separate channel; only it needs the explicit origin.
+- **engine.io upgrades polling→websocket in prod** (verified live). A headless node socket.io-client proof must inject the session cookie via `extraHeaders:{Cookie}` AND start `transports:['polling','websocket']` — engine.io only applies extraHeaders on the polling transport; a real browser auto-sends the SameSite=None cookie on the ws handshake so it can go websocket-first. Proof harness at /tmp/ws-proof.mjs pattern: register 2 users → rated invite + accept → both sockets join → A REST move → assert B gets `game:state` push over `transport==='websocket'` in <3s (measured ~0.9s iad↔home).
+- **flyctl (this version) has NO `releases rollback` subcommand.** Roll back with `flyctl deploy --image <prior-ref> -c apps/<x>/fly.toml -a purechess-<x> --remote-only`. Get prior image refs via `flyctl releases -a <app> --image`. `min_machines_running=1` keeps a warm machine; rollback is an image/config revert, not a destroy.
+- **Neon cold-start can't be reproduced in prod without disabling the keepalive** (`prisma.service.ts` `SELECT 1` every 4min, unref'd) — it defeats autosuspend by design (S02). Warm first-move REST round-trip measured ~503ms (incl. home↔iad RTT), steady-state ~447ms. Disabling keepalive to force a cold wake would regress S02 hardening; out of scope.
+
 ## Key Learnings (added 2026-06-10 — hero replay + auth-aware CTA)
 
 - **Hero board replay (`components/home/hero-board.tsx`) is a self-contained client component** — it does NOT import board machinery or chess.js. The 4 replay board-FENs (after 21...Kd8 → 23.Be7#) are hardcoded, verified offline with chess.js; the move feel (200ms `cubic-bezier(0.25, 0.9, 0.3, 1)` slide, 90ms capture fade, 60ms settle) is mirrored locally from `animation-layer.tsx`. Static final-position markup is the default state (SSR/no-JS), IntersectionObserver (threshold 0.6, one-shot, gated on reduced-motion + `[data-no-animations]`) is the only trigger. The Immortal Game's queen capture is **Nxf6 (knight), not gxf6** — the g7 pawn died at 21.Nxg7+.
@@ -245,3 +258,111 @@
 - **epic-toolkit on macOS**: `is_worktree_in_use()` uses BSD `fuser`, which exits 0 even when nothing holds the dir → resume always aborts with "worktree in use" once per-session worktree dirs exist. Fix: kill orphan session procs, `git worktree remove --force` the per-session worktrees, `git worktree prune`, re-run. (2026-06-11)
 - **Epic session failures with empty exec logs**: runner logs only stderr; real error lives in `~/.claude/projects/<worktree-slug>/*.jsonl` as `model: <synthetic>` assistant messages (e.g. usage-limit). Check there first. (2026-06-11)
 - **Parallel epic waves burn Claude session quota fast**: 5 concurrent sonnet sessions hit session limit mid-wave. Consider `--max-parallel 2` or off-peak runs for big epics. (2026-06-11)
+## Key Learnings (added 2026-06-11 — S04 speed shell)
+
+- **PostHog lazy init pattern:** `import('@/lib/posthog').then(({ initPostHog }) => initPostHog())` inside `useEffect` + `requestIdleCallback({ timeout: 2000 })` defers posthog-js (~63 kB) from route-specific bundles. `posthog-js` queues events before init — lazy loading is safe. Do NOT statically import `@/lib/posthog` from any component in the layout tree.
+- **Sentry Replay lazy via `lazyLoadIntegration`:** Removing `Sentry.replayIntegration()` from `Sentry.init()` and using `Sentry.lazyLoadIntegration('replayIntegration').then(fn => ...)` (without `new`, since the fn IS the integration factory) via `requestIdleCallback` removes the rrweb chunk (37.8 kB gzip) from shared-by-all. Core error monitoring is unaffected. Bundle effect: shared-by-all 204 → 166 kB.
+- **Hero board LCP:** `animate-rise-4` has `animation-fill-mode: both` → element is `opacity:0` in SSR HTML. Fix: `useState(false) + useEffect(() => setMounted(true), [])` in the Client Component; apply the animation class only when `mounted`. Same pattern needed for all LCP-candidate elements in `hero.tsx` (the `h1` with `animate-rise-2` is still opacity:0 in SSR — documented for S07).
+- **PostHog chunk preload behavior:** After making `posthog-provider.tsx` use dynamic import, Next.js still preloads `484fe0c7` (posthog-js, ~50 kB) as `<script async>` for `/play` and `/analyze` because they're in the React loadable manifest. The async attribute means it doesn't block LCP. Home page (`/`) does NOT have it as a preload (removed from eager bundle, saving 63 kB for that route).
+- **Sentry chunks composition:** `6420bbf7` (53.8 kB gzip) = Sentry core SDK; `f71b5fc5` (37.8 kB) = Sentry Replay (rrweb). Both start with `_sentryDebugIds` injection. Removing `replayIntegration()` from sync init kills `f71b5fc5` from shared. The `6420bbf7` core chunk cannot be easily removed without disabling Sentry's auto-injection (deferred to S07).
+- **LCP element = N/A:** When ALL hero elements have `animation-fill-mode: both`, they are `opacity:0` in SSR HTML. Lighthouse reports no LCP element. Fix: apply animation classes only post-mount (Client Component with `mounted` guard).
+
+## Do-Not-Repeat (added 2026-06-11 — S04)
+
+- [2026-06-11] Don't statically import `posthog-js` (or `@/lib/posthog`) from any component in the root layout tree — it ends up in route-specific or shared bundles and adds ~63 kB. Always dynamic-import inside `useEffect` + `requestIdleCallback`.
+- [2026-06-11] Don't call `new ReplayIntegration(...)` with `lazyLoadIntegration` — the function IS the integration factory, call it directly: `replayIntegration({ ... })` without `new`. TypeScript will error on `new` because there's no construct signature.
+- [2026-06-11] Don't use `animation-fill-mode: both` (or `backwards`) on LCP-candidate elements in SSR markup — it sets `opacity: 0` in the initial HTML, making the element invisible to Lighthouse and delaying LCP to after JS hydration.
+
+## Key Learnings (added 2026-06-10 — category-best epic session 01 baselines)
+- **No bundle analyzer wired.** `apps/web` has no `ANALYZE` flag / `@next/bundle-analyzer`.
+  Baseline bundle path = plain `cd apps/web && pnpm build`, read the "First Load JS" column.
+- **Baseline First Load JS (2026-06-10):** shared-by-all floor **204 kB**; `/` 348, `/play` 304,
+  `/games` 294, `/analyze` 356, `/play/[gameId]` 297, `/computer-game/[gameId]` 283. The 204 kB
+  shared floor (Sentry+PostHog+framework) caps every route — shrinking shared is top leverage.
+- **Lighthouse prod (PORT=3100 pnpm start):** `/` perf **78** / a11y **95** / LCP **6.3s**;
+  `/play` perf 78 / a11y 100 / LCP 6.0s. a11y already meets ≥95 floor; perf debt is entirely
+  **LCP ~6s** (TBT/CLS already excellent). Target LCP ≤ 2.5s.
+- **`/computer-game/[gameId]` Lighthouse = NO_FCP** for an unseeded/unauth id (renders nothing).
+  Must seed a game + pass `purechess_session` cookie via `--extra-headers` to capture it.
+- **Reconnect path:** `use-game-socket.ts` uses socket.io DEFAULTS (no explicit reconnection opts):
+  reconnectionDelay 1000ms jittered, attempts Infinity, timeout 20000ms. Gateway has NO ping opts
+  → defaults pingInterval 25000 / pingTimeout 20000 → server dead-peer detection up to ~45s (gap).
+- **Web `tsc --noEmit` is now GREEN** (was predicted red for lucide Github/Twitter + admin-table
+  children in an earlier cerebrum note — those are fixed). API tsc green after `db:generate`.
+- **Epic session files absent:** `docs/claude-sessions/purechess-category-best/` does not exist in
+  the worktree. Downstream session 02-06 plans (touches/produces frontmatter) could not be read;
+  ownership charter built best-effort from operator-rules hardening surfaces + Tier D backlog.
+- Charter deliverables live at `docs/roadmap/purechess-category-best/{budgets,ownership,session-01-handoff}.md`.
+
+## Key Learnings (added 2026-06-10 — S02 realtime resilience)
+
+- **socket.io reconnection opts live in `use-game-socket.ts`'s `io(...)` call** (now explicit: `reconnectionAttempts: Infinity`, `reconnectionDelay: 500`, `reconnectionDelayMax: 5000`, `randomizationFactor: 0.5`, `timeout: 10000`). Bounded exp backoff + jitter is socket.io's native model — we only made it explicit and lowered the warm floor.
+- **Tab sleep kills timers WITHOUT a socket `disconnect`** → the `connect`-driven resync never fires and the board sits stale. Fix pattern: `window 'online'` + `document 'visibilitychange'→visible` listeners that call a `resync()` (nudge half-open socket via `socket.connect()`, re-emit idempotent `GameJoin`, then the caller's guarded `onResync`). 250ms throttle collapses the online+visibility double-fire. ALL resync paths must reuse `onResync` (→ `refetchState` → `isStaleState` merge) — never add a 2nd merge path.
+- **Same tab-sleep problem hits `useLiveClock`**: the 200ms interval freezes when backgrounded, so the clock shows a frozen stale value and "drifts in" on wake. Fix: a `visibilitychange→visible`/`online` listener that forces ONE `setTick` so the next render recomputes against real `Date.now()` + offset. Formula unchanged (offset tests stay green).
+- **Gateway ping tuning = `@WebSocketGateway` decorator options** (`pingInterval`/`pingTimeout`). No `IoAdapter` in `main.ts`, and the decorator options DO reach the engine — verified via the engine.io handshake (`curl '.../socket.io/?EIO=4&transport=polling'` returns `pingInterval`/`pingTimeout` in the open packet). Set 10s/10s → dead-peer detection ≤~20s vs the ~45s default (25s/20s). The metadata key is `'websockets:gateway_options'` (`Reflect.getMetadata` on the gateway class) — usable to lock the values in a unit spec.
+- **Neon keepalive in `PrismaService`**: `SELECT 1` every 4 min (< Neon's 5-min autosuspend), gated on `NODE_ENV!=='test'`, `unref()`'d, `clearInterval` in `onModuleDestroy`. Defeats autosuspend (compute stays billed/warm) in exchange for never eating a 0.5–2s cold wake on the first move after idle. Local Postgres can't reproduce Neon autosuspend, so the benefit is argued, not locally measured.
+- **Live reconnect (kill+restart API mid-game): board NEVER rewinds** (8/8 trials, ply+fen preserved) because the socket only triggers a REST resync through `isStaleState` — it never writes board state. Reconnect latency from API-up is 7/8 < 800ms (median ~640ms) with a tail outlier (~2.3s) caused purely by socket.io backoff-window alignment during the outage, not resync logic.
+
+## Do-Not-Repeat (added 2026-06-10 — S02)
+
+- [2026-06-10] Fresh worktree: `pnpm install` does NOT fetch argon2's prebuilt native binding (build scripts ignored) → `apps/api` auth.*.spec fail to RUN with `Cannot find module '.../argon2.node'`. Fix: `pnpm rebuild argon2` or `node-pre-gyp install --fallback-to-build` in the argon2 pkg dir. Add to bootstrap. (`bug-263`)
+- [2026-06-10] `apps/api` ConfigModule.forRoot has NO `envFilePath`, so it reads `.env` from CWD (`apps/api`), NOT the repo root. A root `.env` won't be picked up — export DATABASE_URL/REDIS_URL/SESSION_SECRET inline (or put `.env` in `apps/api/`) when running the API standalone for measurement. Port 4000 is usually held by another checkout — use PORT=4100.
+
+## Key Learnings (added 2026-06-11 — S03 board feel a11y)
+
+- **SR narration: single Chessboard `role="status"` covers all game modes.** Every mode (PvP,
+  computer, review, analyze) drives the board via the `position` prop. A `useRef`/`useEffect` pair
+  diffs consecutive `position` values and calls `buildMoveAnnouncement` (lib/board/sr-announce.ts).
+  Adding per-mode announcers is wrong — they would double-announce and miss mode switches.
+- **`buildMoveAnnouncement` uses chess.js 4-field FEN prefix matching.** Enumerate moves from
+  prevFen, apply each via `new Chess(prevFen).move({from,to,promotion})`, compare first 4 FEN
+  fields against nextFen. Flags `k`/`q` = castling; `test.isCheckmate()`, `inCheck()`, etc. for
+  suffixes. Returns null for same FEN or try/catch (invalid FEN). Does NOT parse SAN strings.
+- **Pointer capture after drag threshold, not on pointerdown.** `e.currentTarget.setPointerCapture`
+  must be called inside the `if (!isDragging.current && sqrt > DRAG_THRESHOLD)` branch in
+  `use-drag.ts`. Capturing on pointerdown steals the click event and breaks tap-tap piece moves.
+  Wrapped in try/catch (setPointerCapture unsupported on some legacy devices).
+- **Focus ring on chessboard squares: use boxShadow sandwich, not Tailwind ring.** Tailwind
+  `ring-2 ring-[--brass]` is invisible on bone (light) squares where the brass ring composites
+  against near-identical fill. Instead: `boxShadow: 'inset 0 0 0 3px rgba(0,0,0,0.45), inset 0 0 0 2px hsl(41 56% 62%)'` (dark inner + brass outer) passes AA on both bone and mineral squares.
+- **`aria-selected` on `gridcell` for keyboard selection state.** Correct ARIA for "this cell is
+  chosen" inside a `role="grid"` widget. Set to `true` when `isSelected || isKeyboardFocus`, else
+  `undefined` (omitted from DOM). Do NOT use a live region to announce focus moves — that would
+  fire on every arrow key and be extremely chatty.
+- **`useKeyboard` Space key = Enter.** Add `case ' ':` as a fallthrough before `case 'Enter':`.
+  Space is the natural "activate" key for keyboard-only users; without it, a keyboard player who
+  doesn't know to press Enter cannot play. Also call `e.preventDefault()` on Space (prevents page
+  scroll).
+- **Orientation-aware initial focus in `useKeyboard`.** `useState<Square>(() => orientation ===
+  'white' ? 'e2' : 'e7')` + `useEffect(() => { setFocusSquare(…) }, [orientation])`. On mount,
+  the cursor starts at the side's active pawn rank (board-flip in review mode resets it).
+
+## Do-Not-Repeat (added 2026-06-11 — S03)
+
+- [2026-06-11] Don't move `setPointerCapture` to `onPointerDown` — it fires before the drag
+  threshold and swallows the `click` event needed for tap-tap moves in `use-drag.ts`.
+- [2026-06-11] Don't use a Tailwind `ring-*` utility for the keyboard focus ring on chess squares —
+  it's invisible on the light (bone) square because the brass ring composites against the near-brass
+  fill. Use the inline boxShadow sandwich (dark inner + brass outer).
+
+## Decision Log (added 2026-06-10 — S02)
+
+- **Skipped the in-Jest real-socket.io integration spec** (plan task 6): `apps/api` has no `socket.io-client` dev dep and a listening HTTP server in the unit Jest config risks destabilizing the fast suite. Locked presence/rejoin/disconnect via extended UNIT specs + verified the full authed-handshake→join→state path LIVE against a running Nest app instead. Stronger evidence, zero unit-suite risk.
+
+## Key Learnings (added 2026-06-11 — S07 CI gate / integration)
+
+- **Lighthouse `simulate` (Lantern) is unreliable on localhost for font-heavy pages.** On `/`, `simulate` reported LCP ~5s / perf ~82 while observed LCP was 88ms and server-response-time 0ms. Use `--throttling-method=devtools` (applied throttling) for localhost measurement — it gave perf 99 / LCP 1.7s, matching reality. Report both, but devtools is the truth on localhost.
+- **FCP/LCP ignore background-color paints (browser spec).** A skeleton built only from `bg-*` divs never fires FCP — the browser waits for the first text/image/SVG. `apps/web/src/components/game/game-loading-skeleton.tsx` now renders a faint inline SVG board silhouette so FCP fires when the skeleton lands. Any future skeleton must contain a real contentful element.
+- **Don't gate the LCP element's entrance animation on a post-mount flag.** The hero-board `mounted`-guard pattern is fine for below-fold elements, but for the LCP element it makes hydration re-run `fadeInUp` from opacity:0 → a late recorded LCP. LCP-critical above-the-fold text (hero h1 + subtitle) must be static (no `animate-rise-*`). Locked by `test/home/hero-heading.test.tsx`.
+- **ARIA grid needs the row layer.** `role="grid"` must contain `role="row"` wrapping `role="gridcell"` or axe flags aria-required-children/parent. Use `<div role="row" style={{display:'contents'}}>` to add the row to the a11y tree without breaking a CSS `grid grid-cols-8` layout. The board (`chessboard.tsx`) now does this.
+- **e2e local infra (fresh worktree, alt ports):** (1) Run the API with `NODE_ENV=test` (mounts TestingModule) AND a **>=32-char `SESSION_SECRET`** — TestingService now HMACs test sessions with that same secret, so it must match. (2) Set API `WEB_URL`/`NEXT_PUBLIC_APP_URL` to the web origin (e.g. `http://localhost:3100`) or CORS blocks the browser. (3) Web dev script is `next dev --port 3000` (hard-coded) — run `node_modules/.bin/next dev --port 3100` directly to use an alt port. (4) Dev CSP now allows the configured localhost API origin (was hard-coded :4000).
+- **Computer-game page perf under throttle is bound by route JS (~376 kB transferred incl Stockfish/chess.js) + the client-render→fetch waterfall.** FCP is now fixed (skeleton SVG) but devtools LCP ~7.6s persists. The lever is the S04-deferred bundle split (Sentry-core lazy, chess.js/Stockfish dynamic import), not anything S07 changed.
+- **`playwright test` needs `--config e2e/playwright.config.ts`** from `apps/web` — without it, it globs all `*.test.ts` (the vitest files) and crashes. The `pnpm e2e` script (`playwright test`) relies on cwd config discovery that doesn't exist at the web root.
+
+## Do-Not-Repeat (added 2026-06-11 — S07)
+
+- Do NOT trust Lighthouse `simulate` numbers measured against localhost as the gate — confirm with `--throttling-method=devtools`. The simulate LCP can be 3-5x the real (observed) value purely from Lantern's font/RTT model on a zero-RTT localhost.
+- Do NOT reapply `animate-rise-*` (or any opacity-0 entrance) to the hero h1/subtitle — it re-blocks LCP. They are static by design now.
+- Do NOT hard-code a session HMAC secret in TestingService — it must use the configured `SESSION_SECRET` or test sessions silently 401.
+- Do NOT leave a `role="grid"` without `role="row"` children — every board route fails axe.
+- The `LH_LOCAL_API` env hack for widening **prod** CSP to a localhost API (used transiently to Lighthouse the computer-game page) was reverted and must NOT be committed — prod CSP only allows self/wss/fly.dev. Re-add it locally only for a measurement build.

@@ -32,6 +32,7 @@ export async function createTestGame(opts: {
   timeControlSeconds?: number;
   incrementSeconds?: number;
   category?: string;
+  isRated?: boolean;
 }): Promise<TestGame> {
   const res = await fetch(`${API_URL}/api/testing/games`, {
     method: 'POST',
@@ -40,6 +41,31 @@ export async function createTestGame(opts: {
   });
   if (!res.ok) throw new Error(`createTestGame failed: ${res.status}`);
   return res.json() as Promise<TestGame>;
+}
+
+export async function createTestComputerGame(opts: {
+  sessionToken: string;
+  fen: string;
+  color: 'white' | 'black';
+  level?: number;
+  timeControlSeconds?: number;
+}): Promise<TestGame> {
+  const res = await fetch(`${API_URL}/api/computer-games/from-fen`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: `purechess_session=${opts.sessionToken}`,
+    },
+    body: JSON.stringify({
+      level: opts.level ?? 1,
+      color: opts.color,
+      timeControlSeconds: opts.timeControlSeconds ?? 0,
+      fen: opts.fen,
+    }),
+  });
+  if (!res.ok) throw new Error(`createTestComputerGame failed: ${res.status}`);
+  const data = (await res.json()) as { gameId: string };
+  return { id: data.gameId };
 }
 
 export async function resetTestDb(): Promise<void> {

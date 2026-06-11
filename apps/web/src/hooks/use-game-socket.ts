@@ -56,10 +56,43 @@ export function useGameSocket(
 
     let disposed = false;
     let hadConnected = false;
+    let lastResyncAt = 0;
     const socket: Socket = io(WS_URL, {
       withCredentials: true,
       transports: ['websocket', 'polling'],
+      // Bounded exponential backoff with jitter. Never give up on a live game,
+      // but lower the warm-reconnect floor to help the < 2s resync budget and
+      // keep jitter so a server restart doesn't get a synchronized reconnect
+      // storm across every client.
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 500,
+      reconnectionDelayMax: 5_000,
+      randomizationFactor: 0.5,
+      timeout: 10_000,
     });
+
+    // Tab sleep / laptop suspend freezes timers and can leave a half-open
+    // socket WITHOUT a `disconnect` — so the connect-driven resync never fires
+    // and the board sits stale until the next server push. The `online` and
+    // `visibilitychange`->visible events catch that wake. Resync routes through
+    // the SAME guarded path as reconnect (`onResync` -> REST refetch ->
+    // isStaleState merge); it never adds a second merge path, so no rewind.
+    const resync = () => {
+      if (disposed) return;
+      // online + visibilitychange both fire on wake — throttle to one REST GET.
+      const now = Date.now();
+      if (now - lastResyncAt < 250) return;
+      lastResyncAt = now;
+      if (!socket.connected) socket.connect(); // nudge a half-open socket
+      socket.emit(WsEvent.GameJoin, { gameId }); // idempotent: already-joined → no-op
+      handlersRef.current.onResync();
+    };
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') resync();
+    };
+    window.addEventListener('online', resync);
+    document.addEventListener('visibilitychange', onVisible);
 
     socket.on('connect', () => {
       if (disposed) return;
@@ -88,6 +121,8 @@ export function useGameSocket(
 
     return () => {
       disposed = true;
+      window.removeEventListener('online', resync);
+      document.removeEventListener('visibilitychange', onVisible);
       socket.disconnect();
       setConnected(false);
       setPresentUserIds(null);
