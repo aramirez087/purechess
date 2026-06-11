@@ -227,11 +227,17 @@ function resultChipFor(result: string | null, color: Color): string | undefined 
 
 interface Props {
   gameId: string;
+  /** Server-fetched state: the board SSRs instead of waiting for a client fetch. */
+  initialGame?: PvpGameStateDto | null;
 }
 
-export function LiveGameClient({ gameId }: Props) {
+export function LiveGameClient({ gameId, initialGame = null }: Props) {
   const router = useRouter();
-  const [state, setState] = useState<PageState>({ phase: 'loading' });
+  const [state, setState] = useState<PageState>(() =>
+    initialGame
+      ? { phase: 'playing', game: initialGame, submitting: false, moveError: null }
+      : { phase: 'loading' },
+  );
   const [flipped, setFlipped] = useState(false);
   const [currentPly, setCurrentPly] = useState(0);
   const [resultDismissed, setResultDismissed] = useState(false);
@@ -415,9 +421,15 @@ export function LiveGameClient({ gameId }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flagPending, gameId]);
 
-  // Initial load.
+  // Initial load. SSR'd state skips the client fetch entirely; retries
+  // (loadToken > 0) always re-fetch.
   useEffect(() => {
     disposedRef.current = false;
+    if (initialGame && loadToken === 0) {
+      return () => {
+        disposedRef.current = true;
+      };
+    }
     getPvpGame(gameId)
       .then((game) => {
         if (disposedRef.current) return;
@@ -427,6 +439,7 @@ export function LiveGameClient({ gameId }: Props) {
     return () => {
       disposedRef.current = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, loadToken]);
 
   function handleRetry() {
