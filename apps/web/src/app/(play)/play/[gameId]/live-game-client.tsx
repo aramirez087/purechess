@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Chess } from 'chess.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Flag, Loader2, Plus, User } from 'lucide-react';
@@ -221,14 +222,38 @@ export function LiveGameClient({ gameId }: Props) {
     if (state.phase !== 'playing') return;
     if (!intent.from || !intent.to) return;
     const uci = intent.from + intent.to + (intent.promotion ?? '');
-    setState((s) => (s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s));
+    const before = state.game;
+
+    // Optimistic render: the piece lands instantly; the server response (or
+    // an error rollback) reconciles afterwards.
+    let optimisticFen: string | null = null;
+    try {
+      const c = new Chess(before.fen);
+      const m = c.move({ from: intent.from, to: intent.to, promotion: intent.promotion });
+      if (m) optimisticFen = c.fen();
+    } catch {
+      // illegal locally — let the server be the judge
+    }
+
+    setState((s) =>
+      s.phase === 'playing'
+        ? {
+            ...s,
+            game: optimisticFen
+              ? { ...s.game, fen: optimisticFen, lastMove: uci }
+              : s.game,
+            submitting: true,
+            moveError: null,
+          }
+        : s,
+    );
     try {
       const next = await submitPvpMove(gameId, uci);
       setState({ phase: 'playing', game: next, submitting: false, moveError: null });
     } catch (err) {
       setState((s) =>
         s.phase === 'playing'
-          ? { ...s, submitting: false, moveError: (err as Error).message }
+          ? { ...s, game: before, submitting: false, moveError: (err as Error).message }
           : s,
       );
     }

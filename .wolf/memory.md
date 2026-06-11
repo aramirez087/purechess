@@ -772,3 +772,9 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:44 | Edited apps/api/src/main.ts | 6→7 lines | ~68 |
 | 17:53 | Edited apps/web/next.config.mjs | 3→5 lines | ~90 |
 | 00:00 | Fly.io prod fixed end-to-end: CI deployed without -c so http_service never applied (raw TCP :4000 exposed, 80/443 dead); dockerfile path doubling; CORS+SameSite=None for cross-site fly.dev auth; CSP 'wasm-unsafe-eval' for prod Stockfish; all URLs → purechess-web.fly.dev until domain bought | deploy.yml, fly.tomls, main.ts, auth.service.ts, next.config.mjs | verified live: register 201 + /me, computer game e4→e5 bot reply on prod | ~15k |
+| 18:00 | Session end: 113 writes across 38 files (use-move-animation.ts, animation-layer.tsx, chessboard.tsx, square.tsx, globals.css) | 45 reads | ~74849 tok |
+| 18:06 | Edited apps/web/next.config.mjs | modified rewrites() | ~151 |
+| 18:07 | Edited apps/web/Dockerfile | 6→8 lines | ~62 |
+| 18:17 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 condition(s) | ~425 |
+| 18:17 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 condition(s) | ~370 |
+| 00:35 | Prod latency pass: same-origin /api proxy (no CORS preflight) over Fly 6PN internal, SSR via API_INTERNAL_URL, optimistic move rendering both clients; fixed empty-build-arg localhost fallback (bug-116) | next.config.mjs, web Dockerfile+fly.toml, lib/api/*, both game clients | verified prod: move slide starts instantly, bot loop green, GET ~RTT | ~12k |

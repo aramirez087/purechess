@@ -8,7 +8,8 @@ async function getMe() {
   const sessionCookie = cookieStore.get('purechess_session');
   if (!sessionCookie) return null;
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+  const apiUrl =
+    process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
   try {
     const res = await fetch(`${apiUrl}/api/auth/me`, {
       headers: { Cookie: `purechess_session=${sessionCookie.value}` },

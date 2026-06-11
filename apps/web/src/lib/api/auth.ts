@@ -1,6 +1,9 @@
 import type { SafeUser } from '@purechess/shared';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+const API = // Production browsers call same-origin '' (the Next /api proxy);
+// dev talks to the API directly.
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000');
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API}/api${path}`, {

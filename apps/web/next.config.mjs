@@ -52,7 +52,12 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+    // Same-origin proxy for browser API calls: with NEXT_PUBLIC_API_URL=''
+    // clients fetch relative /api/* and this rewrite forwards to the API.
+    // No CORS preflight (1 round trip per call instead of 2) and the session
+    // cookie is first-party. Baked at build time — API_PROXY_URL is a build arg.
+    const apiUrl =
+      process.env.API_PROXY_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
     return [
       {
         source: '/api/:path*',

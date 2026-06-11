@@ -3,7 +3,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+const API_URL = // Production browsers call same-origin '' (the Next /api proxy);
+// dev talks to the API directly.
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000');
 
 export type InviteColor = 'white' | 'black' | 'random';
 export type TimeControlCategory = 'bullet' | 'blitz' | 'rapid';

@@ -1,6 +1,6 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-10T23:53:30.367Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T00:17:55.425Z
 > Files: 700 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
@@ -875,11 +875,11 @@
 
 - `.eslintrc.json` — ESLint configuration (~12 tok)
 - `components.json` (~128 tok)
-- `Dockerfile` — Docker container definition (~318 tok)
+- `Dockerfile` — Docker container definition (~410 tok)
 - `fly.toml` (~194 tok)
 - `next-env.d.ts` — / <reference types="next" /> (~58 tok)
 - `next.config.js` — Next.js configuration (~581 tok)
-- `next.config.mjs` — Declares isDev (~588 tok)
+- `next.config.mjs` — Declares isDev (~681 tok)
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
@@ -920,14 +920,14 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — POLL_MS (~4626 tok)
+- `live-game-client.tsx` — POLL_MS (~4816 tok)
 - `live-game-client.tsx` — Polling live PvP client: clocks, premove, resign, ResultOverlay (~3200 tok)
 - `page.tsx` — metadata (~100 tok)
 - `page.tsx` — Live PvP game page wrapper (~110 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~8345 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~6904 tok)
 
 ## apps/web/src/app/games/
 

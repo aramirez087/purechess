@@ -1895,6 +1895,71 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-10T23:59:00Z"
+    },
+    {
+      "id": "bug-116",
+      "timestamp": "2026-06-11T00:06:49.503Z",
+      "error_message": "Wrong operator: ?? should be ||",
+      "file": "apps/web/next.config.mjs",
+      "root_cause": "Used \"??\" instead of \"||\"",
+      "fix": "Changed operator ?? \u2192 ||",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T00:06:49.503Z"
+    },
+    {
+      "id": "bug-117",
+      "timestamp": "2026-06-11T00:17:38.524Z",
+      "error_message": "CSS fix: game, submitting",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "game: afterUser, \u2192 before, submitting: false, moveError: (err as Error).message; submitting: false, moveError: (err as Error).message \u2192 isComputerTurn(afterUser),",
+      "fix": "Changed game: afterUser, \u2192 before, submitting: false, moveError: (err as Error).message; submitting: false, moveError: (err as Error).message \u2192 isComputerTurn(afterUser),",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T00:17:38.524Z"
+    },
+    {
+      "id": "bug-118",
+      "timestamp": "2026-06-11T00:17:55.432Z",
+      "error_message": "CSS fix: submitting",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "submitting: false, moveError: (err as Error).message \u2192 true,",
+      "fix": "Changed submitting: false, moveError: (err as Error).message \u2192 true,",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T00:17:55.432Z"
+    },
+    {
+      "id": "bug-119",
+      "timestamp": "2026-06-11T00:30:00Z",
+      "error_message": "Prod 'Failed to fetch' after switching to same-origin proxy: browser called http://localhost:4000 (CSP-blocked)",
+      "file": "apps/web/src/lib/api/*.ts, apps/web/src/hooks/use-invite.ts",
+      "root_cause": "NEXT_PUBLIC_API_URL='' build arg did not survive to the inlined bundle (empty build args dropped / treated as unset), so `?? 'http://localhost:4000'` fallbacks fired in production.",
+      "fix": "Client API bases are now `process.env.NEXT_PUBLIC_API_URL || (NODE_ENV==='production' ? '' : 'http://localhost:4000')` \u2014 production browsers always use same-origin /api.",
+      "tags": [
+        "next",
+        "env-inline",
+        "build-args",
+        "proxy"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T00:30:00Z"
     }
   ]
 }

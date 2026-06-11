@@ -48,7 +48,7 @@
       "first_read": "2026-06-10T22:08:21.044Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": {
-      "count": 8,
+      "count": 9,
       "tokens": 8345,
       "first_read": "2026-06-10T22:10:29.853Z"
     },
@@ -226,6 +226,11 @@
       "count": 1,
       "tokens": 95,
       "first_read": "2026-06-10T23:53:19.235Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/Dockerfile": {
+      "count": 1,
+      "tokens": 318,
+      "first_read": "2026-06-11T00:06:58.736Z"
     }
   },
   "files_written": [
@@ -906,6 +911,30 @@
       "action": "edit",
       "tokens": 96,
       "at": "2026-06-10T23:53:30.374Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/next.config.mjs",
+      "action": "edit",
+      "tokens": 161,
+      "at": "2026-06-11T00:06:49.502Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/Dockerfile",
+      "action": "edit",
+      "tokens": 66,
+      "at": "2026-06-11T00:07:15.730Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "action": "edit",
+      "tokens": 425,
+      "at": "2026-06-11T00:17:38.523Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 370,
+      "at": "2026-06-11T00:17:55.431Z"
     }
   ],
   "edit_counts": {
@@ -916,7 +945,7 @@
     "apps/web/src/app/globals.css": 5,
     "apps/web/src/components/game/game-shell.tsx": 3,
     "apps/web/src/components/review/pgn-actions.tsx": 1,
-    "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": 24,
+    "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": 25,
     "apps/web/src/components/play/computer-game-setup.tsx": 4,
     "apps/api/src/computer-games/computer-games.helpers.ts": 4,
     "apps/api/src/computer-games/computer-games.service.ts": 4,
@@ -944,17 +973,18 @@
     "apps/web/src/components/game/result-overlay.tsx": 1,
     "apps/web/src/lib/api/pvp-games.ts": 1,
     "apps/web/src/app/(play)/play/[gameId]/page.tsx": 1,
-    "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx": 2,
+    "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx": 3,
     "apps/web/src/components/play/invite-create.tsx": 2,
     "apps/web/src/app/games/[gameId]/page.tsx": 1,
     ".github/workflows/deploy.yml": 3,
     "apps/api/src/auth/auth.service.ts": 1,
     "apps/api/src/main.ts": 1,
-    "apps/web/next.config.mjs": 1
+    "apps/web/next.config.mjs": 2,
+    "apps/web/Dockerfile": 1
   },
-  "anatomy_hits": 33,
+  "anatomy_hits": 34,
   "anatomy_misses": 12,
-  "repeated_reads_warned": 13,
+  "repeated_reads_warned": 14,
   "cerebrum_warnings": 0,
-  "stop_count": 4
+  "stop_count": 5
 }

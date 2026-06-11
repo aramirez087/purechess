@@ -171,3 +171,9 @@
 - **Cross-site auth on fly.dev needs SameSite=None**: *.fly.dev is on the Public Suffix List → web and api are different sites; session cookie is None+Secure in production, Lax in dev (auth.service.setCookie/clearCookie).
 - **Prod CSP needs `'wasm-unsafe-eval'`** in script-src for client Stockfish; dev masks this because dev CSP has full 'unsafe-eval'.
 - Note: next.config.mjs also REWRITES /api/* to the API — a same-origin path that could replace cross-site cookies later if NEXT_PUBLIC_API_URL were set to ''.
+
+## Key Learnings (added 2026-06-11 — prod latency)
+
+- **Browser API calls are same-origin in production** via the Next /api rewrite proxy: client bases resolve to '' when NODE_ENV=production (`lib/api/*`, use-invite) — never trust an empty NEXT_PUBLIC_* build arg to inline (it didn't; fell back to localhost, bug above). The rewrite target is the `API_PROXY_URL` build arg = `http://purechess-api.internal:4000` (Fly 6PN, ~1ms, no TLS/edge hop); SSR fetches use runtime `API_INTERNAL_URL` (same value). This kills CORS preflights (2 RTT → 1 per write) and makes the session cookie first-party.
+- **Moves render optimistically** in both game clients: handleMove applies the move with chess.js to the local fen before the POST (slide starts instantly), server response reconciles, error restores the pre-move state.
+- **Perceived prod latency is network-bound**: this connection pings Fly's nearest edge at ~220ms (fly-request-id showed `-fra` — routed via Frankfurt). Server-side is ~10ms internal; reads ≈ RTT, writes ≈ RTT + ~60ms Neon (us-east-2) transaction. Neon autosuspend adds a one-off ~0.5-2s wake after idle.

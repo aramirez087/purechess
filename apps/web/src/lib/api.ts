@@ -1,6 +1,9 @@
 import { cookies } from 'next/headers';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+// Server-side base: runtime env first — NEXT_PUBLIC_API_URL is inlined to ''
+// in production builds (browser uses the same-origin /api proxy instead).
+const API_BASE =
+  process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 type FetchOptions = {
   cache?: RequestCache;

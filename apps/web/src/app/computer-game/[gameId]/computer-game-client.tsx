@@ -310,8 +310,29 @@ export function ComputerGameClient({ gameId }: Props) {
     if (state.phase !== 'playing') return;
     if (!intent.from || !intent.to) return;
     const uci = intent.from + intent.to + (intent.promotion ?? '');
+    const before = state.game;
+
+    // Optimistic render: apply the move locally so the piece lands instantly
+    // instead of waiting a network round trip; the server response (or an
+    // error rollback) reconciles afterwards.
+    let optimisticFen: string | null = null;
+    try {
+      const c = new Chess(before.fen);
+      const m = c.move({ from: intent.from, to: intent.to, promotion: intent.promotion });
+      if (m) optimisticFen = c.fen();
+    } catch {
+      // illegal locally — let the server be the judge
+    }
+
     setState((s: PageState) =>
-      s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s,
+      s.phase === 'playing'
+        ? {
+            ...s,
+            game: optimisticFen ? { ...s.game, fen: optimisticFen } : s.game,
+            submitting: true,
+            moveError: null,
+          }
+        : s,
     );
     try {
       const afterUser = await submitComputerMove(gameId, uci);
@@ -324,7 +345,9 @@ export function ComputerGameClient({ gameId }: Props) {
       if (isComputerTurn(afterUser)) await driveBot(afterUser);
     } catch (err) {
       setState((s: PageState) =>
-        s.phase === 'playing' ? { ...s, submitting: false, moveError: (err as Error).message } : s,
+        s.phase === 'playing'
+          ? { ...s, game: before, submitting: false, moveError: (err as Error).message }
+          : s,
       );
     }
   }
