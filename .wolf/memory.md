@@ -3,6 +3,11 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
+| 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
+| 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
+| 06:23 | Session 04 handoff | docs/roadmap/purechess-category-best/session-04-handoff.md | full measurements documented | ~400 tok |
+
 ## Session: 2026-06-08 (WP5 — Shadow Mode CI Gate)
 
 | Time | Action | File(s) | Outcome | ~Tokens |
@@ -1326,3 +1331,12 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | — | Created session-03-handoff.md | docs/roadmap/purechess-category-best/session-03-handoff.md | done | ~3500 |
 | — | Updated cerebrum.md (SR narration, pointer capture, focus ring patterns) | .wolf/cerebrum.md | done | ~800 |
 | 06:20 | Session end: 1 writes across 1 files (session-03-handoff.md) | 1 reads | ~6919 tok |
+| 06:09 | Edited apps/web/src/components/posthog-provider.tsx | CSS: timeout | ~455 |
+| 06:09 | Edited apps/web/src/components/home/home-viewed-tracker.tsx | modified HomeViewedTracker() | ~67 |
+| 06:09 | Edited apps/web/src/components/home/hero-board.tsx | modified HeroBoard() | ~116 |
+| 06:09 | Edited apps/web/src/components/home/hero-board.tsx | "animate-rise-4 mx-auto w-" → "${mounted ? " | ~31 |
+| 06:19 | Edited apps/web/sentry.client.config.ts | added error handling | ~406 |
+| 06:20 | Edited apps/web/sentry.client.config.ts | ReplayIntegration() → replayIntegration() | ~143 |
+| 06:24 | Created docs/roadmap/purechess-category-best/session-04-handoff.md | — | ~2852 |
+| 06:25 | Created ../../../../../../tmp/s04-commit-msg.txt | — | ~218 |
+| 06:26 | Session end: 8 writes across 6 files (posthog-provider.tsx, home-viewed-tracker.tsx, hero-board.tsx, sentry.client.config.ts, session-04-handoff.md) | 11 reads | ~13452 tok |

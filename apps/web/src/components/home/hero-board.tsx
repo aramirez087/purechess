@@ -131,7 +131,12 @@ export function HeroBoard() {
    * 1..3 = ply N in flight, DONE_STEP = replay finished (static again).
    */
   const [step, setStep] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
   const figureRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Arm the one-shot replay trigger. Pure enhancement: bail on reduced
   // motion, the user's stored animations-off preference, or a missing
@@ -181,7 +186,7 @@ export function HeroBoard() {
   const squares = parseFenBoard(REPLAY_POSITIONS[posIdx]);
 
   return (
-    <figure ref={figureRef} className="animate-rise-4 mx-auto w-full max-w-[34rem]">
+    <figure ref={figureRef} className={`${mounted ? 'animate-rise-4 ' : ''}mx-auto w-full max-w-[34rem]`}>
       <div className="relative rounded-[14px] border border-[#2f372f] bg-gradient-to-b from-[#171b13] to-[#0e110c] p-2 shadow-[0_40px_100px_-28px_rgba(0,0,0,0.8),0_0_140px_-40px_rgba(214,181,99,0.2),inset_0_1px_0_rgba(255,255,255,0.05)] sm:p-2.5">
         <div className="relative overflow-hidden rounded-[7px] shadow-[0_0_0_1px_rgba(0,0,0,0.55)]">
           <div className="grid aspect-square grid-cols-8">
