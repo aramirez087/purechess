@@ -337,3 +337,21 @@
 ## Decision Log (added 2026-06-10 — S02)
 
 - **Skipped the in-Jest real-socket.io integration spec** (plan task 6): `apps/api` has no `socket.io-client` dev dep and a listening HTTP server in the unit Jest config risks destabilizing the fast suite. Locked presence/rejoin/disconnect via extended UNIT specs + verified the full authed-handshake→join→state path LIVE against a running Nest app instead. Stronger evidence, zero unit-suite risk.
+
+## Key Learnings (added 2026-06-11 — S07 CI gate / integration)
+
+- **Lighthouse `simulate` (Lantern) is unreliable on localhost for font-heavy pages.** On `/`, `simulate` reported LCP ~5s / perf ~82 while observed LCP was 88ms and server-response-time 0ms. Use `--throttling-method=devtools` (applied throttling) for localhost measurement — it gave perf 99 / LCP 1.7s, matching reality. Report both, but devtools is the truth on localhost.
+- **FCP/LCP ignore background-color paints (browser spec).** A skeleton built only from `bg-*` divs never fires FCP — the browser waits for the first text/image/SVG. `apps/web/src/components/game/game-loading-skeleton.tsx` now renders a faint inline SVG board silhouette so FCP fires when the skeleton lands. Any future skeleton must contain a real contentful element.
+- **Don't gate the LCP element's entrance animation on a post-mount flag.** The hero-board `mounted`-guard pattern is fine for below-fold elements, but for the LCP element it makes hydration re-run `fadeInUp` from opacity:0 → a late recorded LCP. LCP-critical above-the-fold text (hero h1 + subtitle) must be static (no `animate-rise-*`). Locked by `test/home/hero-heading.test.tsx`.
+- **ARIA grid needs the row layer.** `role="grid"` must contain `role="row"` wrapping `role="gridcell"` or axe flags aria-required-children/parent. Use `<div role="row" style={{display:'contents'}}>` to add the row to the a11y tree without breaking a CSS `grid grid-cols-8` layout. The board (`chessboard.tsx`) now does this.
+- **e2e local infra (fresh worktree, alt ports):** (1) Run the API with `NODE_ENV=test` (mounts TestingModule) AND a **>=32-char `SESSION_SECRET`** — TestingService now HMACs test sessions with that same secret, so it must match. (2) Set API `WEB_URL`/`NEXT_PUBLIC_APP_URL` to the web origin (e.g. `http://localhost:3100`) or CORS blocks the browser. (3) Web dev script is `next dev --port 3000` (hard-coded) — run `node_modules/.bin/next dev --port 3100` directly to use an alt port. (4) Dev CSP now allows the configured localhost API origin (was hard-coded :4000).
+- **Computer-game page perf under throttle is bound by route JS (~376 kB transferred incl Stockfish/chess.js) + the client-render→fetch waterfall.** FCP is now fixed (skeleton SVG) but devtools LCP ~7.6s persists. The lever is the S04-deferred bundle split (Sentry-core lazy, chess.js/Stockfish dynamic import), not anything S07 changed.
+- **`playwright test` needs `--config e2e/playwright.config.ts`** from `apps/web` — without it, it globs all `*.test.ts` (the vitest files) and crashes. The `pnpm e2e` script (`playwright test`) relies on cwd config discovery that doesn't exist at the web root.
+
+## Do-Not-Repeat (added 2026-06-11 — S07)
+
+- Do NOT trust Lighthouse `simulate` numbers measured against localhost as the gate — confirm with `--throttling-method=devtools`. The simulate LCP can be 3-5x the real (observed) value purely from Lantern's font/RTT model on a zero-RTT localhost.
+- Do NOT reapply `animate-rise-*` (or any opacity-0 entrance) to the hero h1/subtitle — it re-blocks LCP. They are static by design now.
+- Do NOT hard-code a session HMAC secret in TestingService — it must use the configured `SESSION_SECRET` or test sessions silently 401.
+- Do NOT leave a `role="grid"` without `role="row"` children — every board route fails axe.
+- The `LH_LOCAL_API` env hack for widening **prod** CSP to a localhost API (used transiently to Lighthouse the computer-game page) was reverted and must NOT be committed — prod CSP only allows self/wss/fly.dev. Re-add it locally only for a measurement build.

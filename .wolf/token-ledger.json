@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 1155558,
-    "total_reads": 889,
-    "total_writes": 1444,
-    "total_sessions": 46,
-    "anatomy_hits": 527,
-    "anatomy_misses": 356,
+    "total_tokens_estimated": 1161961,
+    "total_reads": 891,
+    "total_writes": 1445,
+    "total_sessions": 48,
+    "anatomy_hits": 528,
+    "anatomy_misses": 357,
     "repeated_reads_blocked": 832,
-    "estimated_savings_vs_bare_cli": 1515813
+    "estimated_savings_vs_bare_cli": 1516013
   },
   "sessions": [
     {
@@ -13388,6 +13388,40 @@
         "input_tokens_estimated": 3134,
         "output_tokens_estimated": 3785,
         "reads_count": 1,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-06-11-0629",
+      "started": "2026-06-11T12:29:42.798Z",
+      "ended": "2026-06-11T12:32:08.511Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s07-ci-gate/docs/roadmap/purechess-category-best/budgets.md",
+          "tokens_estimated": 2588,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s07-ci-gate/docs/claude-sessions/purechess-category-best/session-00-operator-rules.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s07-ci-gate/.session-07-plan.md",
+          "tokens_estimated": 3815,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 2588,
+        "output_tokens_estimated": 3815,
+        "reads_count": 2,
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 1

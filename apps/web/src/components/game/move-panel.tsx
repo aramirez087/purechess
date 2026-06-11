@@ -74,7 +74,7 @@ export function MovePanel({ moves, currentPly, onSeek, className }: MovePanelPro
               {pairs.map((p) => {
                 const rowActive = currentPly === p.white?.ply || currentPly === p.black?.ply;
                 return (
-                  <tr key={p.no} ref={rowActive ? activeRef : undefined}>
+                  <tr key={p.no} ref={rowActive ? activeRef : undefined} data-move-number={p.no}>
                     <td className="w-9 border-b border-transparent py-1 pl-2 pr-2.5 text-right font-mono text-[11px] tabular-nums text-[#8a958a]">
                       {p.no}.
                     </td>

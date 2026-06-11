@@ -1,10 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../database/prisma.service';
 import { randomBytes, createHmac } from 'crypto';
 
 @Injectable()
 export class TestingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigService,
+  ) {}
+
+  /**
+   * Derive the session-row id exactly as SessionsService does. Previously this
+   * hard-coded the literal secret 'test-secret', but SessionsService HMACs with
+   * the configured SESSION_SECRET (validated to be ≥32 chars) — the two could
+   * never match, so every test-created session 401'd through SessionAuthGuard
+   * and all authenticated e2e flows (live game, review, reconnect) failed to
+   * load the board. Use the configured secret so test sessions validate. (S07)
+   */
+  private hmac(token: string): string {
+    const secret = this.config.get<string>('SESSION_SECRET')!;
+    return createHmac('sha256', secret).update(token).digest('hex');
+  }
 
   async createUser(opts: {
     username: string;
@@ -21,7 +38,7 @@ export class TestingService {
     });
 
     const sessionToken = randomBytes(32).toString('base64url');
-    const sessionId = createHmac('sha256', 'test-secret').update(sessionToken).digest('hex');
+    const sessionId = this.hmac(sessionToken);
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     await this.prisma.session.create({
@@ -33,7 +50,7 @@ export class TestingService {
 
   async createSession(userId: string): Promise<{ sessionToken: string }> {
     const sessionToken = randomBytes(32).toString('base64url');
-    const sessionId = createHmac('sha256', 'test-secret').update(sessionToken).digest('hex');
+    const sessionId = this.hmac(sessionToken);
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     await this.prisma.session.create({

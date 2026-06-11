@@ -24,6 +24,9 @@ test.describe('Game ending paths', () => {
     await bobPage.goto(`/play/${game.id}`);
 
     await expect(alicePage.locator('[data-testid="chess-board"]')).toBeVisible({ timeout: 10000 });
+    // Wait for Bob's board too: the game-over is delivered over WS, so Bob must
+    // be subscribed to the room before Alice resigns or he misses the push.
+    await expect(bobPage.locator('[data-testid="chess-board"]')).toBeVisible({ timeout: 10000 });
 
     // Resign button triggers directly — no confirm dialog exists in this implementation
     await alicePage.getByRole('button', { name: /resign/i }).click();
