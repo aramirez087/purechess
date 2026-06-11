@@ -1244,3 +1244,34 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:30 | tsc gates: api green, web GREEN (predicted red now fixed) | apps/* | ok | ~1k |
 | 22:22 | Created docs/roadmap/purechess-category-best/session-01-handoff.md | — | ~2239 |
 | 22:23 | Session end: 3 writes across 3 files (budgets.md, ownership.md, session-01-handoff.md) | 3 reads | ~16800 tok |
+
+## Session: 2026-06-11 22:23
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:25 | Created .session-02-plan.md | — | ~4290 |
+| 22:25 | Session end: 1 writes across 1 files (.session-02-plan.md) | 10 reads | ~21871 tok |
+
+## Session: 2026-06-11 22:25
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:26 | Created apps/api/src/database/prisma.service.ts | — | ~409 |
+| 22:26 | Created apps/api/test/database/prisma.service.spec.ts | — | ~920 |
+| 22:27 | Edited apps/api/src/realtime/realtime.gateway.ts | expanded (+7 lines) | ~202 |
+| 22:27 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | added 1 import(s) | ~57 |
+| 22:27 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | expanded (+20 lines) | ~278 |
+| 22:28 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | expanded (+48 lines) | ~637 |
+| 22:28 | Edited apps/web/src/hooks/use-live-clock.ts | added 2 condition(s) | ~281 |
+| 22:28 | Edited apps/web/src/hooks/use-game-socket.ts | added 4 condition(s) | ~516 |
+| 22:28 | Edited apps/web/src/hooks/use-game-socket.ts | 6→8 lines | ~72 |
+| 22:28 | Edited apps/web/test/play/use-game-socket.test.tsx | modified on() | ~195 |
+| 22:29 | Edited apps/web/test/play/use-game-socket.test.tsx | expanded (+79 lines) | ~929 |
+| 22:29 | Created apps/web/test/play/use-live-clock-visibility.test.tsx | — | ~872 |
+| 22:34 | Created ../../../../../../tmp/pc-reconnect-measure.mjs | — | ~1391 |
+| 22:34 | Created ../../../../../../tmp/pc-reconnect-measure.mjs | — | ~1097 |
+| 22:35 | Edited ../../../../../../tmp/pc-reconnect-measure.mjs | inline fix | ~18 |
+| 22:36 | Edited ../../../../../../tmp/pc-reconnect-measure.mjs | 5→4 lines | ~47 |
+| 22:39 | Created docs/roadmap/purechess-category-best/session-02-handoff.md | — | ~3343 |
+| 22:40 | S02 realtime resilience: socket reconnect tuning + online/visibility resync, clock visibility snap, gateway ping 10s/10s, Prisma Neon keepalive; live kill/restart 8/8 zero rewind, median ~640ms | use-game-socket.ts, use-live-clock.ts, realtime.gateway.ts, prisma.service.ts +specs | green, <2s budget met | ~46k |
+| 22:40 | Session end: 17 writes across 10 files (prisma.service.ts, prisma.service.spec.ts, realtime.gateway.ts, realtime.gateway.spec.ts, use-live-clock.ts) | 8 reads | ~19076 tok |

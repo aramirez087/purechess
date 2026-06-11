@@ -262,3 +262,21 @@
   the worktree. Downstream session 02-06 plans (touches/produces frontmatter) could not be read;
   ownership charter built best-effort from operator-rules hardening surfaces + Tier D backlog.
 - Charter deliverables live at `docs/roadmap/purechess-category-best/{budgets,ownership,session-01-handoff}.md`.
+
+## Key Learnings (added 2026-06-10 — S02 realtime resilience)
+
+- **socket.io reconnection opts live in `use-game-socket.ts`'s `io(...)` call** (now explicit: `reconnectionAttempts: Infinity`, `reconnectionDelay: 500`, `reconnectionDelayMax: 5000`, `randomizationFactor: 0.5`, `timeout: 10000`). Bounded exp backoff + jitter is socket.io's native model — we only made it explicit and lowered the warm floor.
+- **Tab sleep kills timers WITHOUT a socket `disconnect`** → the `connect`-driven resync never fires and the board sits stale. Fix pattern: `window 'online'` + `document 'visibilitychange'→visible` listeners that call a `resync()` (nudge half-open socket via `socket.connect()`, re-emit idempotent `GameJoin`, then the caller's guarded `onResync`). 250ms throttle collapses the online+visibility double-fire. ALL resync paths must reuse `onResync` (→ `refetchState` → `isStaleState` merge) — never add a 2nd merge path.
+- **Same tab-sleep problem hits `useLiveClock`**: the 200ms interval freezes when backgrounded, so the clock shows a frozen stale value and "drifts in" on wake. Fix: a `visibilitychange→visible`/`online` listener that forces ONE `setTick` so the next render recomputes against real `Date.now()` + offset. Formula unchanged (offset tests stay green).
+- **Gateway ping tuning = `@WebSocketGateway` decorator options** (`pingInterval`/`pingTimeout`). No `IoAdapter` in `main.ts`, and the decorator options DO reach the engine — verified via the engine.io handshake (`curl '.../socket.io/?EIO=4&transport=polling'` returns `pingInterval`/`pingTimeout` in the open packet). Set 10s/10s → dead-peer detection ≤~20s vs the ~45s default (25s/20s). The metadata key is `'websockets:gateway_options'` (`Reflect.getMetadata` on the gateway class) — usable to lock the values in a unit spec.
+- **Neon keepalive in `PrismaService`**: `SELECT 1` every 4 min (< Neon's 5-min autosuspend), gated on `NODE_ENV!=='test'`, `unref()`'d, `clearInterval` in `onModuleDestroy`. Defeats autosuspend (compute stays billed/warm) in exchange for never eating a 0.5–2s cold wake on the first move after idle. Local Postgres can't reproduce Neon autosuspend, so the benefit is argued, not locally measured.
+- **Live reconnect (kill+restart API mid-game): board NEVER rewinds** (8/8 trials, ply+fen preserved) because the socket only triggers a REST resync through `isStaleState` — it never writes board state. Reconnect latency from API-up is 7/8 < 800ms (median ~640ms) with a tail outlier (~2.3s) caused purely by socket.io backoff-window alignment during the outage, not resync logic.
+
+## Do-Not-Repeat (added 2026-06-10 — S02)
+
+- [2026-06-10] Fresh worktree: `pnpm install` does NOT fetch argon2's prebuilt native binding (build scripts ignored) → `apps/api` auth.*.spec fail to RUN with `Cannot find module '.../argon2.node'`. Fix: `pnpm rebuild argon2` or `node-pre-gyp install --fallback-to-build` in the argon2 pkg dir. Add to bootstrap. (`bug-263`)
+- [2026-06-10] `apps/api` ConfigModule.forRoot has NO `envFilePath`, so it reads `.env` from CWD (`apps/api`), NOT the repo root. A root `.env` won't be picked up — export DATABASE_URL/REDIS_URL/SESSION_SECRET inline (or put `.env` in `apps/api/`) when running the API standalone for measurement. Port 4000 is usually held by another checkout — use PORT=4100.
+
+## Decision Log (added 2026-06-10 — S02)
+
+- **Skipped the in-Jest real-socket.io integration spec** (plan task 6): `apps/api` has no `socket.io-client` dev dep and a listening HTTP server in the unit Jest config risks destabilizing the fast suite. Locked presence/rejoin/disconnect via extended UNIT specs + verified the full authed-handshake→join→state path LIVE against a running Nest app instead. Stronger evidence, zero unit-suite risk.
