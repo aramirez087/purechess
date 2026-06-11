@@ -50,6 +50,7 @@ export class TestingService {
     timeControlSeconds?: number;
     incrementSeconds?: number;
     category?: string;
+    isRated?: boolean;
   }): Promise<{ id: string }> {
     const game = await this.prisma.game.create({
       data: {
@@ -59,6 +60,7 @@ export class TestingService {
         timeControlSeconds: opts.timeControlSeconds ?? 180,
         incrementSeconds: opts.incrementSeconds ?? 0,
         category: (opts.category ?? 'blitz') as never,
+        isRated: opts.isRated ?? true,
         pgn: '',
         startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       },

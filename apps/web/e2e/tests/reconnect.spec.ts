@@ -20,8 +20,8 @@ test.describe('Reconnect mid-game', () => {
     const alicePage = await aliceContext.newPage();
     const bobPage = await bobContext.newPage();
 
-    await alicePage.goto(`/games/${game.id}`);
-    await bobPage.goto(`/games/${game.id}`);
+    await alicePage.goto(`/play/${game.id}`);
+    await bobPage.goto(`/play/${game.id}`);
 
     await expect(alicePage.locator('[data-testid="chess-board"]')).toBeVisible({ timeout: 10000 });
 

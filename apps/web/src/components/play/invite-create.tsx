@@ -112,7 +112,7 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
             <p className="mb-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               Invite link
             </p>
-            <code className="block break-all font-mono text-xs leading-relaxed">
+            <code data-testid="invite-link" className="block break-all font-mono text-xs leading-relaxed">
               {inviteResult.inviteUrl}
             </code>
           </div>

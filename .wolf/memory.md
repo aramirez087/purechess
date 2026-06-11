@@ -1275,3 +1275,49 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 22:39 | Created docs/roadmap/purechess-category-best/session-02-handoff.md | — | ~3343 |
 | 22:40 | S02 realtime resilience: socket reconnect tuning + online/visibility resync, clock visibility snap, gateway ping 10s/10s, Prisma Neon keepalive; live kill/restart 8/8 zero rewind, median ~640ms | use-game-socket.ts, use-live-clock.ts, realtime.gateway.ts, prisma.service.ts +specs | green, <2s budget met | ~46k |
 | 22:40 | Session end: 17 writes across 10 files (prisma.service.ts, prisma.service.spec.ts, realtime.gateway.ts, realtime.gateway.spec.ts, use-live-clock.ts) | 8 reads | ~19076 tok |
+
+## Session: 2026-06-11 06:08
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-06-11 06:19
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:23 | Edited apps/web/src/components/board/chessboard.tsx | 8→9 lines | ~152 |
+| 06:23 | Edited apps/web/src/components/game/result-overlay.tsx | "absolute inset-0 z-20 fle" → "game-result" | ~50 |
+| 06:23 | Edited apps/web/src/components/profile/ratings-card.tsx | "rounded-lg border border-" → "user-rating" | ~34 |
+| 06:24 | Edited apps/web/src/components/profile/recent-games.tsx | inline fix | ~17 |
+| 06:24 | Edited apps/web/src/components/play/invite-create.tsx | 3→3 lines | ~48 |
+| 06:24 | Edited apps/web/src/components/games/game-history-row.tsx | 5→6 lines | ~36 |
+| 06:24 | Edited apps/api/src/testing/testing.service.ts | modified createGame() | ~221 |
+| 06:24 | Edited apps/api/src/testing/testing.controller.ts | 8→9 lines | ~55 |
+| 06:24 | Edited apps/web/e2e/helpers/test-api.ts | added 1 condition(s) | ~629 |
+| 06:24 | Edited apps/web/e2e/helpers/game-helpers.ts | modified waitForGameUrl() | ~101 |
+| 06:24 | Created apps/web/e2e/tests/friend-invite.spec.ts | — | ~333 |
+| 06:24 | Created apps/web/e2e/tests/reconnect.spec.ts | — | ~284 |
+| 06:24 | Created apps/web/e2e/tests/game-end.spec.ts | — | ~414 |
+| 06:24 | Created apps/web/e2e/tests/rated-game.spec.ts | — | ~138 |
+| 06:24 | Created apps/web/e2e/tests/anon-casual.spec.ts | — | ~118 |
+| 06:25 | Created apps/web/e2e/tests/promotion-keyboard.spec.ts | — | ~1206 |
+| 06:25 | Created apps/web/e2e/tests/premove.spec.ts | — | ~742 |
+| 06:25 | Created apps/web/e2e/tests/flag-fall.spec.ts | — | ~665 |
+| 06:25 | Created apps/web/e2e/tests/rated-finalization.spec.ts | — | ~667 |
+| 06:25 | Created apps/web/e2e/tests/ledger-navigation.spec.ts | — | ~645 |
+| 06:26 | Created apps/web/e2e/tests/analyze-flow.spec.ts | — | ~556 |
+| 06:26 | Created apps/web/e2e/tests/result-overlay.spec.ts | — | ~845 |
+| 06:27 | Edited apps/web/e2e/tests/ledger-navigation.spec.ts | 45→45 lines | ~398 |
+| 06:28 | Created docs/roadmap/purechess-category-best/session-05-handoff.md | — | ~1226 |
+
+## Session: 2026-06-11 (S05 — E2E Interactions)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:20 | Added data-testid to 6 source components | chessboard.tsx, result-overlay.tsx, ratings-card.tsx, recent-games.tsx, invite-create.tsx, game-history-row.tsx | done | ~600 |
+| 06:22 | Extended testing API with isRated param | testing.service.ts, testing.controller.ts | done | ~200 |
+| 06:22 | Added createTestComputerGame to test helpers, fixed URL patterns | test-api.ts, game-helpers.ts | done | ~400 |
+| 06:24 | Fixed 5 existing broken spec files | friend-invite, reconnect, game-end, rated-game, anon-casual specs | done | ~500 |
+| 06:26 | Wrote 7 new spec files | promotion-keyboard, premove, flag-fall, rated-finalization, ledger-navigation, analyze-flow, result-overlay | done | ~2500 |
+| 06:27 | Quality gates green | tsc noEmit (web+api), vitest 256/256 | ✅ | ~300 |
+| 06:28 | Handoff doc written | session-05-handoff.md | done | ~400 |

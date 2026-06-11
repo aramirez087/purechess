@@ -61,6 +61,7 @@ export const GameHistoryRow = forwardRef<HTMLTableRowElement, GameHistoryRowProp
         ref={ref}
         style={style}
         {...rest}
+        data-testid="game-row"
         onClick={(e) => {
           // Don't hijack modified clicks (open-in-new-tab etc.), non-primary
           // buttons, or clicks that are part of a text selection.
