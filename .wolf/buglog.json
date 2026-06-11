@@ -6044,6 +6044,138 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T12:05:00-06:00"
+    },
+    {
+      "id": "bug-368",
+      "timestamp": "2026-06-11T18:13:17.661Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "apps/api/src/matchmaking/matchmaking.service.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block | Also: try {; } catch (err) {",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T18:13:26.933Z"
+    },
+    {
+      "id": "bug-369",
+      "timestamp": "2026-06-11T18:13:28.991Z",
+      "error_message": "Missing await",
+      "file": "apps/api/src/matchmaking/matchmaking.service.ts",
+      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:13:28.991Z"
+    },
+    {
+      "id": "bug-370",
+      "timestamp": "2026-06-11T18:13:49.884Z",
+      "error_message": "Missing await",
+      "file": "apps/api/src/invites/invites.service.ts",
+      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:13:49.884Z"
+    },
+    {
+      "id": "bug-371",
+      "timestamp": "2026-06-11T18:17:17.476Z",
+      "error_message": "Function not marked async",
+      "file": "apps/api/test/matchmaking/matchmaking.service.spec.ts",
+      "root_cause": "Function uses await but wasn't declared async",
+      "fix": "Added async modifier",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:17:17.476Z"
+    },
+    {
+      "id": "bug-372",
+      "timestamp": "2026-06-11T18:20:01.532Z",
+      "error_message": "Missing error handling in function",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:20:01.532Z"
+    },
+    {
+      "id": "bug-373",
+      "timestamp": "2026-06-11T18:20:12.194Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:20:12.194Z"
+    },
+    {
+      "id": "bug-374",
+      "timestamp": "2026-06-11T12:32:00-06:00",
+      "error_message": "Queued player who entered a game via invite/rematch stayed claimable by matchmaking \u2014 indefinitely if their search tab kept polling (status heartbeat refreshes the entry TTL)",
+      "file": "apps/api/src/matchmaking/matchmaking.service.ts",
+      "root_cause": "No dequeue on game activation; the documented '<=30s TTL exposure' assumption ignored that the status poll itself refreshes the TTL, so an abandoned search tab keeps the entry alive forever",
+      "fix": "MatchmakingService.dequeue() called from acceptInvite + acceptRematch (both players); busy probe in createMatchedGame drops stale pairings (StaleCandidateError -> 'queued', client self-heals)",
+      "tags": [
+        "matchmaking",
+        "redis",
+        "race",
+        "queue"
+      ],
+      "related_bugs": [
+        "bug-339"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:32:00-06:00"
+    },
+    {
+      "id": "bug-375",
+      "timestamp": "2026-06-11T12:32:00-06:00",
+      "error_message": "computer-game-client treated only status 'completed' as terminal \u2014 an aborted game would render an interactive board with no overlay",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "Abort endpoint sets status 'aborted'; the client isGameOver checks were written before any UI could trigger abort",
+      "fix": "isGameOver = completed || aborted; aborted renders 'Aborted' overlay (draw tone, no reason), board read-only",
+      "tags": [
+        "computer-game",
+        "abort",
+        "terminal-state",
+        "ui"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:32:00-06:00"
     }
   ]
 }

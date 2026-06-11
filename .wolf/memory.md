@@ -1680,3 +1680,42 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:05 | SSR'd /play/[gameId] (server state fetch + piece preloads, initialGame skips mount fetch) | apps/web/src/app/(play)/play/[gameId]/ | commit 35a959e; SSR HTML carries full board; 19 PvP e2e green | ~8k |
 | 12:05 | chess.js split: fen.ts (pure, eager) / rules.ts (lazy) / rules-lazy.ts; shims keep position/premove/sr-announce imports compiling; chunk 1130-* out of both game routes | apps/web/src/lib/board/, components/board/ | commit 9117f20; tsc+304 vitest+34 e2e green | ~30k |
 | 12:06 | SESSION SUMMARY: Tier A complete — (1) 8 new Playwright tests + 5 stale specs fixed, suite 34/34 first time, real admin-gate bug found+fixed (bug-351); (2) PvP page SSR; (3) chess.js out of eager chunk. 3 local commits 32ab168/35a959e/9117f20. Gotcha relearned: never pnpm build while next dev runs (bug-002). | — | all verifications green | ~65k |
+| 12:05 | Session end: 49 writes across 28 files (draw-offer.spec.ts, abort.spec.ts, rematch.spec.ts, quick-match.spec.ts, game-end.spec.ts) | 32 reads | ~50413 tok |
+| 12:10 | Edited apps/api/src/invites/invites.service.ts | 1→2 lines | ~40 |
+| 12:10 | Created apps/api/src/games/games-janitor.service.ts | — | ~1442 |
+| 12:10 | Edited apps/api/src/games/games.module.ts | added 1 import(s) | ~104 |
+| 12:11 | Created apps/api/test/games/games-janitor.service.spec.ts | — | ~1213 |
+| 12:13 | Edited apps/api/src/matchmaking/matchmaking.service.ts | modified constructor() | ~152 |
+| 12:13 | Edited apps/api/src/matchmaking/matchmaking.service.ts | added error handling | ~144 |
+| 12:13 | Edited apps/api/src/matchmaking/matchmaking.service.ts | added error handling | ~386 |
+| 12:13 | Edited apps/api/src/matchmaking/matchmaking.service.ts | added 1 condition(s) | ~252 |
+| 12:13 | Edited apps/api/src/invites/invites.service.ts | added 1 import(s) | ~98 |
+| 12:13 | Edited apps/api/src/invites/invites.service.ts | modified constructor() | ~60 |
+| 12:13 | Edited apps/api/src/invites/invites.service.ts | modified if() | ~138 |
+| 12:14 | Created apps/api/src/invites/invites.module.ts | — | ~141 |
+| 12:14 | Edited apps/api/src/games/games.module.ts | added 1 import(s) | ~98 |
+| 12:14 | Edited apps/api/src/games/games.module.ts | inline fix | ~27 |
+| 12:14 | Edited apps/api/src/games/games.service.ts | added 1 import(s) | ~75 |
+| 12:14 | Edited apps/api/src/games/games.service.ts | modified constructor() | ~87 |
+| 12:14 | Edited apps/api/src/games/games.service.ts | modified if() | ~190 |
+| 12:14 | Edited apps/api/test/games/games.service.spec.ts | 5→6 lines | ~73 |
+| 12:15 | Edited apps/api/test/invites/invites.service.spec.ts | 4→5 lines | ~61 |
+| 12:15 | Edited apps/api/test/invites/invites.service.spec.ts | added 1 import(s) | ~43 |
+| 12:15 | Edited apps/api/test/invites/invites.service.spec.ts | 1→2 lines | ~50 |
+| 12:15 | Edited apps/api/test/games/games.service.spec.ts | 5→9 lines | ~54 |
+| 12:15 | Edited apps/api/test/games/games.service.spec.ts | added 1 import(s) | ~43 |
+| 12:16 | Edited apps/api/test/invites/invites.service.spec.ts | expanded (+19 lines) | ~301 |
+| 12:17 | Edited apps/api/test/matchmaking/matchmaking.service.spec.ts | expanded (+60 lines) | ~674 |
+| 12:17 | Edited apps/api/test/games/games.service.spec.ts | expanded (+14 lines) | ~239 |
+| 12:19 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: onDraw | ~48 |
+| 12:20 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added error handling | ~431 |
+| 12:20 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+8 lines) | ~181 |
+| 12:20 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+21 lines) | ~1167 |
+| 12:21 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | inline fix | ~23 |
+| 12:21 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 6→8 lines | ~50 |
+| 12:21 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 1→2 lines | ~32 |
+| 12:21 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 9→11 lines | ~161 |
+| 12:22 | Created apps/web/e2e/tests/computer-abort-draw.spec.ts | — | ~749 |
+| 12:30 | Stale-game janitor: rematch-offer/invite/never-fetched sweeps, guarded + unref'd | apps/api/src/games/games-janitor.service.ts | commit 9b8d8cb; 6 unit tests | ~12k |
+| 12:30 | Queue/game seams: dequeue on invite/rematch activation + busy probe in createMatchedGame | apps/api/src/matchmaking,invites,games | commit 905fa10; 353 unit + 21 e2e green | ~14k |
+| 12:31 | Computer-game abort + draw-claim UI wired (endpoints predated UI); aborted = terminal client state | apps/web .../computer-game-client.tsx | commit d087bff; web e2e 36/36 | ~10k |

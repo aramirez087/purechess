@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T17:44:31.023Z
-> Files: 833 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T18:22:26.218Z
+> Files: 836 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -745,16 +745,17 @@
 
 ## apps/api/src/games/
 
+- `games-janitor.service.ts` — First sweep shortly after boot so restarts clean up promptly. (~1442 tok)
 - `games.controller.ts` — Live PvP (friend-invite) games — players only, session required. (~563 tok)
-- `games.module.ts` — Exports GamesModule (~166 tok)
-- `games.service.ts` — Either player may abort while fewer than this many plies are on the board. (~7854 tok)
+- `games.module.ts` — Exports GamesModule (~216 tok)
+- `games.service.ts` — Either player may abort while fewer than this many plies are on the board. (~7807 tok)
 
 ## apps/api/src/invites/
 
 - `invite-gateway.ts` — Exports InviteGateway (~231 tok)
 - `invites.controller.ts` — Exports InvitesController (~468 tok)
-- `invites.module.ts` — Exports InvitesModule (~115 tok)
-- `invites.service.ts` — Exports InviteColor, InvitesService (~2027 tok)
+- `invites.module.ts` — Exports InvitesModule (~141 tok)
+- `invites.service.ts` — Friend invites expire lazily on preview/accept; the games janitor sweeps the rest. (~2172 tok)
 
 ## apps/api/src/invites/dto/
 
@@ -764,7 +765,7 @@
 
 - `matchmaking.controller.ts` — Quick-match queue — auth required for both rated and casual pools. (~348 tok)
 - `matchmaking.module.ts` — Exports MatchmakingModule (~136 tok)
-- `matchmaking.service.ts` — Queue-entry heartbeat: refreshed by the client's status poll. (~3024 tok)
+- `matchmaking.service.ts` — Queue-entry heartbeat: refreshed by the client's status poll. (~3681 tok)
 
 ## apps/api/src/matchmaking/dto/
 
@@ -881,7 +882,8 @@
 
 ## apps/api/test/games/
 
-- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~7963 tok)
+- `games-janitor.service.spec.ts` — Fn: buildPrismaMock, build (~1213 tok)
+- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~8148 tok)
 
 ## apps/api/test/health/
 
@@ -889,11 +891,11 @@
 
 ## apps/api/test/invites/
 
-- `invites.service.spec.ts` — CREATOR_ID: makeGame (~3862 tok)
+- `invites.service.spec.ts` — CREATOR_ID: makeGame (~4368 tok)
 
 ## apps/api/test/matchmaking/
 
-- `matchmaking.service.spec.ts` — Declares USER_ID (~2738 tok)
+- `matchmaking.service.spec.ts` — Declares USER_ID (~3335 tok)
 
 ## apps/api/test/observability/
 
@@ -950,6 +952,7 @@
 - `admin-disable.spec.ts` — Declares API_URL (~560 tok)
 - `analyze-flow.spec.ts` — Declares VALID_PGN (~614 tok)
 - `anon-casual.spec.ts` — Anonymous matchmaking is not implemented — requires auth for all game modes. (~118 tok)
+- `computer-abort-draw.spec.ts` — Computer-game abort + draw-claim controls (wired to the long-existing (~749 tok)
 - `draw-offer.spec.ts` — PvP draw offers. The Draw button only appears once the game has 2+ plies (~1130 tok)
 - `flag-fall.spec.ts` — Declares game (~665 tok)
 - `friend-invite.spec.ts` — Declares alicePage (~390 tok)
@@ -1011,7 +1014,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7332 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~8511 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~218 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
