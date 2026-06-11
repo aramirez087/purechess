@@ -1,5 +1,6 @@
 import { test, expect } from '../fixtures/auth.fixture';
 import { createTestGame } from '../helpers/test-api';
+import { playTwoPlies } from '../helpers/game-helpers';
 
 test.describe('Result overlay', () => {
   test('completed game shows overlay immediately on navigate', async ({
@@ -91,6 +92,9 @@ test.describe('Result overlay', () => {
     // Bob must be subscribed to the WS room before Alice resigns, or he misses
     // the game-over push (it is not replayed on late join).
     await expect(bobPage.locator('[data-testid="chess-board"]')).toBeVisible({ timeout: 10000 });
+
+    // Resign only exists past the abort window (ply >= 2).
+    await playTwoPlies(alicePage, bobPage);
 
     await alicePage.getByRole('button', { name: /resign/i }).click();
 

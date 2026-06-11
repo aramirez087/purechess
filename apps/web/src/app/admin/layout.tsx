@@ -16,7 +16,9 @@ async function getMe() {
       cache: 'no-store',
     });
     if (!res.ok) return null;
-    return res.json();
+    // /api/auth/me wraps the user in a {user} envelope (null when anonymous).
+    const body = (await res.json()) as { user: { isAdmin?: boolean } | null };
+    return body.user;
   } catch {
     return null;
   }

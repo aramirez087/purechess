@@ -9,7 +9,10 @@ test.describe('Friend invite flow', () => {
     const bobPage = await bobContext.newPage();
 
     await alicePage.goto('/play');
-    await alicePage.getByRole('button', { name: /play a friend|invite/i }).click();
+    await alicePage.getByRole('button', { name: /play a friend/i }).click();
+    // The setup card (time control / color / stakes pills) opens first; the
+    // link is only generated on explicit create.
+    await alicePage.getByRole('button', { name: /create invite link/i }).click();
 
     const inviteCodeEl = alicePage.locator('[data-testid="invite-link"]');
     await expect(inviteCodeEl).toBeVisible({ timeout: 10000 });

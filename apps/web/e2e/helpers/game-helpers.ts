@@ -20,6 +20,18 @@ export async function makeMove(page: Page, from: string, to: string): Promise<vo
   await clickSquare(page, to);
 }
 
+/**
+ * Plays 1. e4 e5 across two boards, waiting for each move to land on the
+ * opponent's board. Gets a fresh game past the abort window (ply < 2 shows
+ * Abort instead of Draw/Resign in the footer).
+ */
+export async function playTwoPlies(whitePage: Page, blackPage: Page): Promise<void> {
+  await makeMove(whitePage, 'e2', 'e4');
+  await blackPage.locator('[data-square="e4"] img').waitFor({ state: 'visible', timeout: 10000 });
+  await makeMove(blackPage, 'e7', 'e5');
+  await whitePage.locator('[data-square="e5"] img').waitFor({ state: 'visible', timeout: 10000 });
+}
+
 export async function waitForOpponentMove(page: Page, currentMoveCount: number): Promise<void> {
   await page.waitForFunction(
     (count) => {

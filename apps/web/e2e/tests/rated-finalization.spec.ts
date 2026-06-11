@@ -41,13 +41,12 @@ test.describe('Rated game finalization', () => {
       const page = i % 2 === 0 ? alicePage : bobPage;
       await page.locator(`[data-square="${mv.from}"]`).click();
       await page.locator(`[data-square="${mv.to}"]`).click();
-      // Wait for the move to appear in the ledger before the next one.
+      // Wait for the move to land before the next one — the rail header shows
+      // "N ply" ([data-move-number] rows are move PAIRS, not plies).
       const expectedPly = i + 1;
-      await alicePage.waitForFunction(
-        (ply) => document.querySelectorAll('[data-move-number]').length >= ply,
-        expectedPly,
-        { timeout: 8000 },
-      );
+      await expect(alicePage.getByText(`${expectedPly} ply`, { exact: true })).toBeVisible({
+        timeout: 8000,
+      });
     }
 
     // Game over — both overlays should appear.

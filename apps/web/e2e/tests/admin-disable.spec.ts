@@ -24,22 +24,24 @@ test.describe('Admin: disable user', () => {
     }, admin.sessionToken);
 
     await adminPage.goto(`/admin/users/${target.id}`);
-    const disableBtn = adminPage.getByRole('button', { name: /disable/i });
-    if (await disableBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await disableBtn.click();
-      const confirmBtn = adminPage.getByRole('button', { name: /confirm|yes/i });
-      if (await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await confirmBtn.click();
-      }
-      await adminPage.waitForTimeout(1000);
-    }
+    await adminPage.getByRole('button', { name: 'Disable account' }).click();
+    // The confirm button stays disabled until a reason is entered.
+    await adminPage.getByLabel(/reason/i).fill('e2e: disable flow test');
+    await adminPage.getByRole('button', { name: 'Disable', exact: true }).click();
+    // The page reflects the mutation once it lands.
+    await expect(adminPage.getByRole('button', { name: 'Enable account' })).toBeVisible({
+      timeout: 10000,
+    });
 
     // The authenticated identity endpoint is /api/auth/me (/api/users/me does
-    // not exist — that path resolves to the :username route and 404s).
+    // not exist — that path resolves to the :username route and 404s). It uses
+    // OptionalSessionAuthGuard, so a dead session is 200 {user: null}, not 401.
     const meRes = await fetch(`${API_URL}/api/auth/me`, {
       headers: { Cookie: sessionCookie(target.sessionToken) },
     });
-    expect(meRes.status).toBe(401);
+    expect(meRes.status).toBe(200);
+    const meBody = (await meRes.json()) as { user: unknown };
+    expect(meBody.user).toBeNull();
 
     await adminCtx.close();
   });
