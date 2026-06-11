@@ -39,9 +39,10 @@ export class InvitesService {
         timeControlSeconds: dto.timeControlSeconds,
         incrementSeconds: dto.incrementSeconds,
         category: dto.category,
-        isRated: false,
+        isRated: dto.rated ?? false,
         status: "invite_pending",
         inviteToken: token,
+        inviteColorChoice: color,
       },
     });
 
@@ -81,6 +82,7 @@ export class InvitesService {
         category: game.category,
         creator: game.whitePlayer ?? game.blackPlayer,
         creatorColor: game.whitePlayer ? "white" : "black",
+        rated: game.isRated,
         status: game.status,
       };
     }
@@ -95,6 +97,9 @@ export class InvitesService {
 
     const creator = game.whitePlayer ?? game.blackPlayer;
     const creatorColor = game.whitePlayer ? "white" : "black";
+    // Legacy rows (NULL inviteColorChoice) fall back to the concrete slot,
+    // which is what the preview showed before the column existed.
+    const colorChoice = (game.inviteColorChoice ?? creatorColor) as InviteColor;
 
     return {
       gameId: game.id,
@@ -103,6 +108,8 @@ export class InvitesService {
       category: game.category,
       creator,
       creatorColor,
+      colorChoice,
+      rated: game.isRated,
       status: game.status,
     };
   }
@@ -144,8 +151,11 @@ export class InvitesService {
       newWhiteUserId = acceptorId;
       newBlackUserId = creatorId!;
     } else {
-      const isRandom =
-        game.whiteUserId === creatorId && game.blackUserId === null;
+      // Prefer the explicit stored choice; legacy rows (NULL column) keep the
+      // old null-slot heuristic: creator-in-white-slot + empty black = random.
+      const isRandom = game.inviteColorChoice
+        ? game.inviteColorChoice === "random"
+        : game.whiteUserId === creatorId && game.blackUserId === null;
       if (isRandom && Math.random() < 0.5) {
         newWhiteUserId = acceptorId;
         newBlackUserId = creatorId!;

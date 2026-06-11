@@ -173,6 +173,7 @@ model Game {
   whiteRatingAfter    Int?
   blackRatingAfter    Int?
   inviteToken         String?             @unique
+  inviteColorChoice   String?
   startedAt           DateTime?
   endedAt             DateTime?
   createdAt           DateTime            @default(now())

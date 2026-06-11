@@ -75,7 +75,14 @@ export function InviteJoin({ token }: InviteJoinProps) {
 
   if (!invite) return null;
 
-  const opponentColor = invite.creatorColor === 'white' ? 'Black' : 'White';
+  // 'random' invites park the creator in the white slot until accept-time
+  // randomization — don't promise the acceptor a concrete color.
+  const isRandomColor = invite.colorChoice === 'random';
+  const yourColor = isRandomColor
+    ? 'Random'
+    : invite.creatorColor === 'white'
+      ? 'Black'
+      : 'White';
   const timeLabel = formatTimeControl(invite.timeControlSeconds, invite.incrementSeconds);
 
   return (
@@ -90,14 +97,19 @@ export function InviteJoin({ token }: InviteJoinProps) {
               {invite.creator?.username ?? 'Someone'} challenges you
             </CardTitle>
             <p className="mt-0.5 text-xs text-muted-foreground capitalize">
-              {invite.category} · {timeLabel}
+              {invite.category} · {timeLabel} · {invite.rated ? 'Rated' : 'Casual'}
             </p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-5 pt-6">
         <dl className="grid grid-cols-3 gap-2">
-          <Detail icon={User} label="You play" value={opponentColor} />
+          <Detail
+            icon={User}
+            label="You play"
+            value={yourColor}
+            hint={isRandomColor ? 'Decided when you join' : undefined}
+          />
           <Detail icon={Clock} label="Time" value={timeLabel} mono />
           <Detail
             icon={Swords}
@@ -134,11 +146,13 @@ function Detail({
   icon: Icon,
   label,
   value,
+  hint,
   mono = false,
 }: {
   icon: typeof Clock;
   label: string;
   value: string;
+  hint?: string;
   mono?: boolean;
 }) {
   return (
@@ -152,6 +166,7 @@ function Detail({
       >
         {value}
       </p>
+      {hint && <p className="mt-0.5 text-[10px] text-muted-foreground">{hint}</p>}
     </div>
   );
 }

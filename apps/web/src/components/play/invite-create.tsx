@@ -35,6 +35,7 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
   const router = useRouter();
   const [selectedTimeControl, setSelectedTimeControl] = useState(3);
   const [selectedColor, setSelectedColor] = useState<InviteColor>('random');
+  const [rated, setRated] = useState(true);
   const [inviteResult, setInviteResult] = useState<{ gameId: string; inviteUrl: string } | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -69,6 +70,7 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
       incrementSeconds: tc.increment,
       category: tc.category,
       color: selectedColor,
+      rated,
     });
     setInviteResult({ gameId: result.gameId, inviteUrl: result.inviteUrl });
   }
@@ -201,6 +203,33 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
                 )}
               >
                 {c.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+            Stakes
+          </Label>
+          <div className="grid grid-cols-2 gap-1.5">
+            {[
+              { label: 'Rated', value: true, sub: 'Counts toward your rating' },
+              { label: 'Casual', value: false, sub: 'Just for the game' },
+            ].map((opt) => (
+              <button
+                key={opt.label}
+                type="button"
+                onClick={() => setRated(opt.value)}
+                aria-pressed={rated === opt.value}
+                className={cn(
+                  PILL_BASE,
+                  'flex h-auto flex-col items-center justify-center gap-0.5 py-2',
+                  rated === opt.value ? PILL_ACTIVE : PILL_INACTIVE,
+                )}
+              >
+                <span className="text-sm leading-none">{opt.label}</span>
+                <span className="text-[11px] leading-none opacity-70">{opt.sub}</span>
               </button>
             ))}
           </div>

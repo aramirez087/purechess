@@ -1,7 +1,6 @@
 'use client';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
 
 const API_URL = // Production browsers call same-origin '' (the Next /api proxy);
 // dev talks to the API directly.
@@ -16,6 +15,8 @@ export interface CreateInviteParams {
   incrementSeconds: number;
   category: TimeControlCategory;
   color?: InviteColor;
+  /** Rated games feed Glicko-2 on completion. Omitted = casual. */
+  rated?: boolean;
 }
 
 export interface InvitePreview {
@@ -25,6 +26,9 @@ export interface InvitePreview {
   category: TimeControlCategory;
   creator: { id: string; username: string; avatarUrl: string | null } | null;
   creatorColor: 'white' | 'black';
+  /** Creator's original pick — 'random' means colors are decided at accept. Absent on legacy invites. */
+  colorChoice?: InviteColor;
+  rated?: boolean;
   status: string;
 }
 
@@ -49,11 +53,22 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 export function useCreateInvite() {
   return useMutation({
-    mutationFn: ({ timeControlSeconds, incrementSeconds, category, color }: CreateInviteParams) => {
+    mutationFn: ({
+      timeControlSeconds,
+      incrementSeconds,
+      category,
+      color,
+      rated,
+    }: CreateInviteParams) => {
       const colorParam = color ?? 'random';
       return apiFetch<CreateInviteResult>(`/invites?color=${colorParam}`, {
         method: 'POST',
-        body: JSON.stringify({ timeControlSeconds, incrementSeconds, category }),
+        body: JSON.stringify({
+          timeControlSeconds,
+          incrementSeconds,
+          category,
+          ...(rated !== undefined ? { rated } : {}),
+        }),
       });
     },
   });
@@ -87,34 +102,3 @@ export function useCancelInvite() {
   });
 }
 
-export function useInviteSocket(
-  gameId: string | null,
-  onAccepted: (gameId: string) => void,
-) {
-  const cbRef = useRef(onAccepted);
-  cbRef.current = onAccepted;
-
-  useEffect(() => {
-    if (!gameId) return;
-
-    const wsUrl = API_URL.replace(/^http/, 'ws');
-    const socket = new WebSocket(wsUrl);
-
-    const handler = (event: MessageEvent) => {
-      try {
-        const data = JSON.parse(event.data as string);
-        if (data.event === 'invite:accepted' && data.data?.gameId) {
-          cbRef.current(data.data.gameId as string);
-        }
-      } catch {
-        // ignore malformed messages
-      }
-    };
-
-    socket.addEventListener('message', handler);
-    return () => {
-      socket.removeEventListener('message', handler);
-      socket.close();
-    };
-  }, [gameId]);
-}

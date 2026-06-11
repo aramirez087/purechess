@@ -30,6 +30,7 @@ function makeGame(overrides: Record<string, unknown> = {}) {
     isRated: false,
     status: 'invite_pending',
     inviteToken: TOKEN,
+    inviteColorChoice: null,
     createdAt: NOW,
     ...overrides,
   };
@@ -83,6 +84,7 @@ describe('InvitesService', () => {
             blackUserId: null,
             status: 'invite_pending',
             isRated: false,
+            inviteColorChoice: 'white',
           }),
         }),
       );
@@ -106,6 +108,25 @@ describe('InvitesService', () => {
           data: expect.objectContaining({
             whiteUserId: null,
             blackUserId: CREATOR_ID,
+            inviteColorChoice: 'black',
+          }),
+        }),
+      );
+    });
+
+    it('stores inviteColorChoice=random and provisionally parks creator as white', async () => {
+      const game = makeGame({ inviteColorChoice: 'random' });
+      mockPrisma.game.create.mockResolvedValue(game);
+
+      const dto = { timeControlSeconds: 300, incrementSeconds: 0, category: 'blitz' as const };
+      await service.createInvite(CREATOR_ID, dto, 'random', APP_URL);
+
+      expect(mockPrisma.game.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            whiteUserId: CREATOR_ID,
+            blackUserId: null,
+            inviteColorChoice: 'random',
           }),
         }),
       );
@@ -123,6 +144,31 @@ describe('InvitesService', () => {
 
       expect(result.gameId).toBe(GAME_ID);
       expect(result.creator).not.toHaveProperty('email');
+    });
+
+    it('returns colorChoice=random when the creator picked random', async () => {
+      const game = makeGame({ inviteColorChoice: 'random' });
+      (game as Record<string, unknown>)['whitePlayer'] = { id: CREATOR_ID, username: 'alice', avatarUrl: null };
+      (game as Record<string, unknown>)['blackPlayer'] = null;
+      mockPrisma.game.findUnique.mockResolvedValue(game);
+
+      const result = await service.getInviteByToken(TOKEN);
+
+      expect(result.colorChoice).toBe('random');
+      // creatorColor stays the provisional slot for compat
+      expect(result.creatorColor).toBe('white');
+    });
+
+    it('falls back to the concrete slot color for legacy rows (NULL inviteColorChoice)', async () => {
+      const game = makeGame(); // inviteColorChoice: null, creator in white slot
+      (game as Record<string, unknown>)['whitePlayer'] = { id: CREATOR_ID, username: 'alice', avatarUrl: null };
+      (game as Record<string, unknown>)['blackPlayer'] = null;
+      mockPrisma.game.findUnique.mockResolvedValue(game);
+
+      const result = await service.getInviteByToken(TOKEN);
+
+      expect(result.colorChoice).toBe('white');
+      expect(result.creatorColor).toBe('white');
     });
 
     it('throws GoneException for expired invite', async () => {
@@ -184,6 +230,126 @@ describe('InvitesService', () => {
       mockPrisma.game.update.mockResolvedValue({ ...game, status: 'aborted' });
 
       await expect(service.acceptInvite(TOKEN, ACCEPTOR_ID)).rejects.toThrow(GoneException);
+    });
+
+    describe('color assignment', () => {
+      let randomSpy: jest.SpyInstance;
+
+      beforeEach(() => {
+        randomSpy = jest.spyOn(Math, 'random');
+        mockPrisma.game.updateMany.mockResolvedValue({ count: 1 });
+      });
+
+      afterEach(() => {
+        randomSpy.mockRestore();
+      });
+
+      it('colorChoice=random gives acceptor white when Math.random < 0.5', async () => {
+        mockPrisma.game.findUnique.mockResolvedValue(makeGame({ inviteColorChoice: 'random' }));
+        randomSpy.mockReturnValue(0.25);
+
+        await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+        expect(mockPrisma.game.updateMany).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              whiteUserId: ACCEPTOR_ID,
+              blackUserId: CREATOR_ID,
+            }),
+          }),
+        );
+      });
+
+      it('colorChoice=random gives acceptor black when Math.random >= 0.5', async () => {
+        mockPrisma.game.findUnique.mockResolvedValue(makeGame({ inviteColorChoice: 'random' }));
+        randomSpy.mockReturnValue(0.75);
+
+        await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+        expect(mockPrisma.game.updateMany).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              whiteUserId: CREATOR_ID,
+              blackUserId: ACCEPTOR_ID,
+            }),
+          }),
+        );
+      });
+
+      it('colorChoice=white keeps the creator white even when Math.random < 0.5', async () => {
+        mockPrisma.game.findUnique.mockResolvedValue(makeGame({ inviteColorChoice: 'white' }));
+        randomSpy.mockReturnValue(0.25);
+
+        await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+        expect(mockPrisma.game.updateMany).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              whiteUserId: CREATOR_ID,
+              blackUserId: ACCEPTOR_ID,
+            }),
+          }),
+        );
+      });
+
+      it('legacy NULL column still randomizes via the null-slot heuristic', async () => {
+        // creator in white slot, black slot empty, no stored choice → random (today's behavior)
+        mockPrisma.game.findUnique.mockResolvedValue(makeGame());
+        randomSpy.mockReturnValue(0.25);
+
+        await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+        expect(mockPrisma.game.updateMany).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              whiteUserId: ACCEPTOR_ID,
+              blackUserId: CREATOR_ID,
+            }),
+          }),
+        );
+      });
+
+      it('legacy NULL column keeps the creator white when Math.random >= 0.5', async () => {
+        mockPrisma.game.findUnique.mockResolvedValue(makeGame());
+        randomSpy.mockReturnValue(0.75);
+
+        await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+        expect(mockPrisma.game.updateMany).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              whiteUserId: CREATOR_ID,
+              blackUserId: ACCEPTOR_ID,
+            }),
+          }),
+        );
+      });
+
+      it('colorChoice=black puts the acceptor on white without consulting Math.random', async () => {
+        mockPrisma.game.findUnique.mockResolvedValue(
+          makeGame({ whiteUserId: null, blackUserId: CREATOR_ID, inviteColorChoice: 'black' }),
+        );
+
+        await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+        expect(randomSpy).not.toHaveBeenCalled();
+        expect(mockPrisma.game.updateMany).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              whiteUserId: ACCEPTOR_ID,
+              blackUserId: CREATOR_ID,
+            }),
+          }),
+        );
+      });
+
+      it('idempotency guard intact: count=0 still throws ConflictException for random invites', async () => {
+        mockPrisma.game.findUnique.mockResolvedValue(makeGame({ inviteColorChoice: 'random' }));
+        randomSpy.mockReturnValue(0.25);
+        mockPrisma.game.updateMany.mockResolvedValue({ count: 0 });
+
+        await expect(service.acceptInvite(TOKEN, ACCEPTOR_ID)).rejects.toThrow(ConflictException);
+      });
     });
   });
 
