@@ -4409,6 +4409,54 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-10T22:35:00.000Z"
+    },
+    {
+      "id": "bug-271",
+      "timestamp": "2026-06-11T12:09:21.470Z",
+      "error_message": "Missing import: @/lib/posthog",
+      "file": "apps/web/src/components/home/home-viewed-tracker.tsx",
+      "root_cause": "Module(s) not imported: @/lib/posthog",
+      "fix": "Added import(s) for @/lib/posthog",
+      "tags": [
+        "auto-detected",
+        "missing-import",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:21.470Z"
+    },
+    {
+      "id": "bug-272",
+      "timestamp": "2026-06-11T12:09:30.754Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/home/hero-board.tsx",
+      "root_cause": "Had \"animate-rise-4 mx-auto w-full max-w-[34rem]\"",
+      "fix": "Changed to `${mounted ? '",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:09:30.754Z"
+    },
+    {
+      "id": "bug-273",
+      "timestamp": "2026-06-11T12:19:40.853Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "apps/web/sentry.client.config.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:19:40.853Z"
     }
   ]
 }

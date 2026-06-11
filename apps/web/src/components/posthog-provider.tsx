@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { initPostHog, posthog } from '@/lib/posthog';
 import { useSettingsStore } from '@/stores/settings-store';
 
 interface AuthUser {
@@ -27,21 +26,30 @@ export function PostHogProvider({ children }: { children: ReactNode }) {
   const appTheme = useSettingsStore((s) => s.appTheme);
 
   useEffect(() => {
-    if (!initialized.current) {
-      initPostHog();
-      initialized.current = true;
+    if (initialized.current) return;
+    initialized.current = true;
+    const init = () =>
+      import('@/lib/posthog').then(({ initPostHog }) => {
+        initPostHog();
+      });
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(init, { timeout: 2000 });
+    } else {
+      setTimeout(init, 200);
     }
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      posthog.reset();
-      return;
-    }
-    posthog.identify(user.id, {
-      username: user.username,
-      isAdmin: user.isAdmin ?? false,
-      theme: appTheme,
+    import('@/lib/posthog').then(({ posthog }) => {
+      if (!user) {
+        posthog.reset();
+        return;
+      }
+      posthog.identify(user.id, {
+        username: user.username,
+        isAdmin: user.isAdmin ?? false,
+        theme: appTheme,
+      });
     });
   }, [user, appTheme]);
 

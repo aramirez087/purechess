@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:39:28.297Z
-> Files: 754 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:24:24.582Z
+> Files: 758 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -908,6 +908,7 @@
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
+- `sentry.client.config.ts` — Declares dsn (~406 tok)
 - `tailwind.config.ts` — /*.{ts,tsx}'], (~919 tok)
 
 ## apps/web/e2e/
@@ -1002,6 +1003,7 @@
 - `error-boundary.tsx` — eventId (~550 tok)
 - `error-state.tsx` — House-voice state surfaces: ErrorState (full-screen: mono eyebrow, Fraunces italic headline, brass hairline, eventId chip) + EmptyState (framed in-page card: italic headline, description, actions) (~847 tok)
 - `LoadingShell.tsx` — LoadingShell (~354 tok)
+- `posthog-provider.tsx` — fetchMe (~455 tok)
 
 ## apps/web/src/components/admin/
 
@@ -1060,8 +1062,9 @@
 - `cta-button.tsx` — VARIANT_CLASSES (~533 tok)
 - `footer.tsx` — GithubIcon (~933 tok)
 - `hero-auth-link.tsx` — Session-aware hero nav CTA. Renders the signed-out "Sign in" markup by (~281 tok)
-- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3364 tok)
+- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3400 tok)
 - `hero.tsx` — FEATURES (~1490 tok)
+- `home-viewed-tracker.tsx` — HomeViewedTracker (~68 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
 ## apps/web/src/components/layout/
@@ -1250,6 +1253,7 @@
 - `ownership.md` — Purechess "Category Best" — File-Ownership Charter (Sessions 02–06) (~1901 tok)
 - `session-01-handoff.md` — Session 01 Handoff — Charter + Baselines (~2099 tok)
 - `session-02-handoff.md` — Session 02 Handoff — Realtime Resilience (~3134 tok)
+- `session-04-handoff.md` — Session 04 Handoff — Speed Shell (~2674 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

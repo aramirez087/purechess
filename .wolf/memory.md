@@ -3,6 +3,11 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
+| 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
+| 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
+| 06:23 | Session 04 handoff | docs/roadmap/purechess-category-best/session-04-handoff.md | full measurements documented | ~400 tok |
+
 ## Session: 2026-06-08 (WP5 — Shadow Mode CI Gate)
 
 | Time | Action | File(s) | Outcome | ~Tokens |
@@ -1275,3 +1280,15 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 22:39 | Created docs/roadmap/purechess-category-best/session-02-handoff.md | — | ~3343 |
 | 22:40 | S02 realtime resilience: socket reconnect tuning + online/visibility resync, clock visibility snap, gateway ping 10s/10s, Prisma Neon keepalive; live kill/restart 8/8 zero rewind, median ~640ms | use-game-socket.ts, use-live-clock.ts, realtime.gateway.ts, prisma.service.ts +specs | green, <2s budget met | ~46k |
 | 22:40 | Session end: 17 writes across 10 files (prisma.service.ts, prisma.service.spec.ts, realtime.gateway.ts, realtime.gateway.spec.ts, use-live-clock.ts) | 8 reads | ~19076 tok |
+
+## Session: 2026-06-11 06:08
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:09 | Edited apps/web/src/components/posthog-provider.tsx | CSS: timeout | ~455 |
+| 06:09 | Edited apps/web/src/components/home/home-viewed-tracker.tsx | modified HomeViewedTracker() | ~67 |
+| 06:09 | Edited apps/web/src/components/home/hero-board.tsx | modified HeroBoard() | ~116 |
+| 06:09 | Edited apps/web/src/components/home/hero-board.tsx | "animate-rise-4 mx-auto w-" → "${mounted ? " | ~31 |
+| 06:19 | Edited apps/web/sentry.client.config.ts | added error handling | ~406 |
+| 06:20 | Edited apps/web/sentry.client.config.ts | ReplayIntegration() → replayIntegration() | ~143 |
+| 06:24 | Created docs/roadmap/purechess-category-best/session-04-handoff.md | — | ~2852 |

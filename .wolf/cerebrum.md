@@ -242,6 +242,21 @@
 - **`EmptyState` lives in `components/error-state.tsx`** (additive next to ErrorState): framed token-surface card (rounded-lg border-border/70 bg-surface/60, italic display headline, muted description, actions slot). Use for in-page "nothing here" moments; ErrorState stays full-screen.
 - **`GameHistoryResponseDto.total` is OPTIONAL** (filtered count, cursor excluded — counted on the filter `where`, not the paginated one). The /games ledger footer shows the API total when present and labels the loaded-rows W-L-D tally "latest N:" when partial. Prettier-check on `users.service.ts`/games-client/game-history-* was already failing at HEAD (API file is double-quoted vs root single-quote config) — don't whole-file format them in a feature change.
 
+## Key Learnings (added 2026-06-11 — S04 speed shell)
+
+- **PostHog lazy init pattern:** `import('@/lib/posthog').then(({ initPostHog }) => initPostHog())` inside `useEffect` + `requestIdleCallback({ timeout: 2000 })` defers posthog-js (~63 kB) from route-specific bundles. `posthog-js` queues events before init — lazy loading is safe. Do NOT statically import `@/lib/posthog` from any component in the layout tree.
+- **Sentry Replay lazy via `lazyLoadIntegration`:** Removing `Sentry.replayIntegration()` from `Sentry.init()` and using `Sentry.lazyLoadIntegration('replayIntegration').then(fn => ...)` (without `new`, since the fn IS the integration factory) via `requestIdleCallback` removes the rrweb chunk (37.8 kB gzip) from shared-by-all. Core error monitoring is unaffected. Bundle effect: shared-by-all 204 → 166 kB.
+- **Hero board LCP:** `animate-rise-4` has `animation-fill-mode: both` → element is `opacity:0` in SSR HTML. Fix: `useState(false) + useEffect(() => setMounted(true), [])` in the Client Component; apply the animation class only when `mounted`. Same pattern needed for all LCP-candidate elements in `hero.tsx` (the `h1` with `animate-rise-2` is still opacity:0 in SSR — documented for S07).
+- **PostHog chunk preload behavior:** After making `posthog-provider.tsx` use dynamic import, Next.js still preloads `484fe0c7` (posthog-js, ~50 kB) as `<script async>` for `/play` and `/analyze` because they're in the React loadable manifest. The async attribute means it doesn't block LCP. Home page (`/`) does NOT have it as a preload (removed from eager bundle, saving 63 kB for that route).
+- **Sentry chunks composition:** `6420bbf7` (53.8 kB gzip) = Sentry core SDK; `f71b5fc5` (37.8 kB) = Sentry Replay (rrweb). Both start with `_sentryDebugIds` injection. Removing `replayIntegration()` from sync init kills `f71b5fc5` from shared. The `6420bbf7` core chunk cannot be easily removed without disabling Sentry's auto-injection (deferred to S07).
+- **LCP element = N/A:** When ALL hero elements have `animation-fill-mode: both`, they are `opacity:0` in SSR HTML. Lighthouse reports no LCP element. Fix: apply animation classes only post-mount (Client Component with `mounted` guard).
+
+## Do-Not-Repeat (added 2026-06-11 — S04)
+
+- [2026-06-11] Don't statically import `posthog-js` (or `@/lib/posthog`) from any component in the root layout tree — it ends up in route-specific or shared bundles and adds ~63 kB. Always dynamic-import inside `useEffect` + `requestIdleCallback`.
+- [2026-06-11] Don't call `new ReplayIntegration(...)` with `lazyLoadIntegration` — the function IS the integration factory, call it directly: `replayIntegration({ ... })` without `new`. TypeScript will error on `new` because there's no construct signature.
+- [2026-06-11] Don't use `animation-fill-mode: both` (or `backwards`) on LCP-candidate elements in SSR markup — it sets `opacity: 0` in the initial HTML, making the element invisible to Lighthouse and delaying LCP to after JS hydration.
+
 ## Key Learnings (added 2026-06-10 — category-best epic session 01 baselines)
 - **No bundle analyzer wired.** `apps/web` has no `ANALYZE` flag / `@next/bundle-analyzer`.
   Baseline bundle path = plain `cd apps/web && pnpm build`, read the "First Load JS" column.
