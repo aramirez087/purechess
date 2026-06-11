@@ -1,12 +1,15 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T13:54:18.939Z
-> Files: 793 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T14:22:20.982Z
+> Files: 797 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
+- `ledger.mjs` — API routes: GET (1 endpoints) (~869 tok)
 - `pc-reconnect-measure.mjs` — Live reconnect-to-correct-board measurement (Session 02). (~1074 tok)
 - `s04-commit-msg.txt` (~204 tok)
+- `smoke.mjs` — API routes: GET (1 endpoints) (~769 tok)
+- `ws-proof.mjs` — API routes: GET (1 endpoints) (~1579 tok)
 
 ## ../../../../tmp/
 
@@ -54,7 +57,7 @@
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
 - `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
-- `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
+- `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
@@ -902,8 +905,8 @@
 
 - `.eslintrc.json` — ESLint configuration (~12 tok)
 - `components.json` (~128 tok)
-- `Dockerfile` — Docker container definition (~410 tok)
-- `fly.toml` (~194 tok)
+- `Dockerfile` — Docker container definition (~427 tok)
+- `fly.toml` (~401 tok)
 - `next-env.d.ts` — / <reference types="next" /> (~58 tok)
 - `next.config.js` — Next.js configuration (~581 tok)
 - `next.config.mjs` — Declares isDev (~833 tok)
@@ -1289,6 +1292,7 @@
 - `session-05-handoff.md` — Session 05 Handoff — E2E Interactions (~1149 tok)
 - `session-06-handoff.md` — Session 06 Handoff — Surface A11y + Light Mode (~2330 tok)
 - `session-07-handoff.md` — Session 07 Handoff — CI Gate / Integration / GO·NO-GO (~4007 tok)
+- `session-08-handoff.md` — Session 08 Handoff — Prod Deploy + WebSocket Verify (~3886 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
