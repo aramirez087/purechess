@@ -1477,3 +1477,33 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 **Verdict: GO for home + reliability + a11y; CG-page perf (≥95) is the one unmet exit gate — blocked by S04-deferred route-bundle split. See session-07-handoff.md.**
 | 07:54 | Created docs/roadmap/purechess-category-best/session-07-handoff.md | — | ~4275 |
 | 07:55 | Session end: 30 writes across 17 files (hero-heading.tsx, hero.tsx, hero-heading.test.tsx, layout.tsx, testing.controller.ts) | 21 reads | ~33427 tok |
+
+## Session: 2026-06-11 07:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 07:57 | Created .session-08-plan.md | — | ~2572 |
+| 07:57 | Session end: 1 writes across 1 files (.session-08-plan.md) | 5 reads | ~7230 tok |
+
+## Session: 2026-06-11 07:57
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 07:58 | Edited apps/web/Dockerfile | 11→13 lines | ~121 |
+| 07:58 | Edited apps/web/fly.toml | 2→6 lines | ~102 |
+| 08:13 | Created ../../../../../../tmp/ws-proof.mjs | — | ~1377 |
+| 08:13 | Edited ../../../../../../tmp/ws-proof.mjs | 1→3 lines | ~61 |
+| 08:14 | Edited ../../../../../../tmp/ws-proof.mjs | added optional chaining | ~355 |
+| 08:15 | Edited ../../../../../../tmp/ws-proof.mjs | "PPPP" → "4P3" | ~36 |
+| 08:16 | Created ../../../../../../tmp/smoke.mjs | — | ~769 |
+| 08:17 | Created ../../../../../../tmp/ledger.mjs | — | ~869 |
+| 08:17 | designqc: captured 6 screenshots (194KB, ~15000 tok) | / | ready for eval | ~0 |
+| 08:22 | Created docs/roadmap/purechess-category-best/session-08-handoff.md | — | ~4145 |
+| 14:05 | S08 bake NEXT_PUBLIC_WS_URL build arg (prod WS) | apps/web/fly.toml, apps/web/Dockerfile | tsc+build clean, committed | ~3k |
+| 14:10 | Deploy api v8 then web v11 to Fly (-c --remote-only) | apps/api+web/fly.toml | health green, db/redis ok, ✓Ready 157ms | ~4k |
+| 14:18 | Prove prod WS: 2-client headless socket.io | /tmp/ws-proof.mjs | PASS: polling→websocket upgrade, peer push 864ms | ~3k |
+| 14:25 | Prod smoke + live ledger delta (rated game resign) | /tmp/smoke.mjs, /tmp/ledger.mjs | all 200; Glicko 1500→1662/1338, ledger 0→1 | ~3k |
+| 14:30 | Prod Lighthouse / + CG; designqc home | .wolf/designqc-captures | / 97/95 ✅; CG 80 (S07 debt); design compliant | ~4k |
+| 14:35 | Neon keepalive verified; warm first-move ~503ms | prisma.service.ts | cold unreproducible w/ keepalive (documented) | ~1k |
+| 14:40 | cerebrum+buglog(bug-324)+handoff written | .wolf/*, session-08-handoff.md | GO, exit criteria met | ~3k |
+| 08:23 | Session end: 9 writes across 6 files (Dockerfile, fly.toml, ws-proof.mjs, smoke.mjs, ledger.mjs) | 4 reads | ~11227 tok |

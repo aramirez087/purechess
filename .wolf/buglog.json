@@ -5146,7 +5146,14 @@
       "file": "apps/api/src/testing/testing.service.ts",
       "root_cause": "TestingService hard-coded the session HMAC secret as the literal 'test-secret', but SessionsService.lookupSession HMACs with the configured SESSION_SECRET (validated >=32 chars). The two could never match, so every test-created session was rejected (401) by SessionAuthGuard — live game board, review, reconnect, resign all failed to load.",
       "fix": "TestingService injects ConfigService and derives the session id via createHmac('sha256', config.get('SESSION_SECRET')) — identical to SessionsService. Run the e2e API with a >=32-char SESSION_SECRET shared by both.",
-      "tags": ["e2e", "auth", "session", "hmac", "testing-module", "s07"],
+      "tags": [
+        "e2e",
+        "auth",
+        "session",
+        "hmac",
+        "testing-module",
+        "s07"
+      ],
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:00:00.000Z"
@@ -5158,8 +5165,16 @@
       "file": "apps/api/src/testing/testing.controller.ts",
       "root_cause": "Global ValidationPipe runs whitelist:true + forbidNonWhitelisted:true. The testing DTOs had no class-validator decorators, so every property was non-whitelisted and rejected with 400. Test seeding could never succeed.",
       "fix": "Decorated all testing DTO properties with @IsString/@IsInt/@IsBoolean/@IsOptional.",
-      "tags": ["e2e", "validation", "nestjs", "testing-module", "s07"],
-      "related_bugs": ["bug-311"],
+      "tags": [
+        "e2e",
+        "validation",
+        "nestjs",
+        "testing-module",
+        "s07"
+      ],
+      "related_bugs": [
+        "bug-311"
+      ],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:01:00.000Z"
     },
@@ -5170,7 +5185,13 @@
       "file": "apps/web/src/components/board/chessboard.tsx",
       "root_cause": "role=grid contained role=gridcell directly with no role=row layer. ARIA grid pattern requires grid -> row -> gridcell. S03 added grid/gridcell without rows; S06 a11y audit did not cover board routes, so it surfaced only in the S07 integration Lighthouse run.",
       "fix": "Wrapped each rank's 8 cells in <div role=row style={display:'contents'}> — adds the ARIA row layer without disturbing the grid-cols-8 layout. CG a11y 89 -> 100.",
-      "tags": ["a11y", "aria", "board", "lighthouse", "s07"],
+      "tags": [
+        "a11y",
+        "aria",
+        "board",
+        "lighthouse",
+        "s07"
+      ],
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:02:00.000Z"
@@ -5182,7 +5203,14 @@
       "file": "apps/web/src/components/game/game-loading-skeleton.tsx",
       "root_cause": "The loading skeleton was background-coloured divs only. FCP/LCP ignore background-color (browser spec), so they waited for the real board's piece <img>s (~6s on simulated slow-4G) even though CSS was ready ~1.6s.",
       "fix": "Added a faint inline SVG 8x8 board silhouette inside the board placeholder — a real contentful paint, so FCP fires when the skeleton lands (~1.7s). On-brand.",
-      "tags": ["perf", "lcp", "fcp", "lighthouse", "skeleton", "s07"],
+      "tags": [
+        "perf",
+        "lcp",
+        "fcp",
+        "lighthouse",
+        "skeleton",
+        "s07"
+      ],
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:03:00.000Z"
@@ -5194,7 +5222,14 @@
       "file": "apps/web/src/components/home/hero.tsx",
       "root_cause": "Hero h1 + subtitle used animate-rise-* (fadeInUp ... both). The backwards 'both' fill paints them opacity:0 in SSR; applying the class only post-mount re-runs the fade from 0 on hydration, recording a late LCP. These are the two largest above-the-fold (LCP) elements.",
       "fix": "Extracted the h1 into a static HeroHeading (no animation); made the subtitle <p> static. Both paint at FCP. Devtools-throttled perf 99, LCP 1.7s on /. Do NOT reapply animate-rise-* here — locked by test/home/hero-heading.test.tsx.",
-      "tags": ["perf", "lcp", "lighthouse", "hero", "ssr", "s07"],
+      "tags": [
+        "perf",
+        "lcp",
+        "lighthouse",
+        "hero",
+        "ssr",
+        "s07"
+      ],
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:04:00.000Z"
@@ -5206,7 +5241,13 @@
       "file": "apps/web/next.config.mjs",
       "root_cause": "Dev connect-src hard-coded http://localhost:4000 ws://localhost:4000. When :4000 is taken and the API runs on :4100 (operator alt-port setup), the browser app's fetch/WS to :4100 was CSP-blocked.",
       "fix": "Dev connect-src now includes the configured NEXT_PUBLIC_API_URL (http/ws) when it is a localhost origin, falling back to :4000. Prod CSP unchanged.",
-      "tags": ["csp", "dev", "e2e", "config", "s07"],
+      "tags": [
+        "csp",
+        "dev",
+        "e2e",
+        "config",
+        "s07"
+      ],
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:05:00.000Z"
@@ -5218,10 +5259,71 @@
       "file": "apps/web/e2e/tests",
       "root_cause": "S05 specs referenced [data-move-number] (never added to source), an unscoped getByRole('alert') (also matches Next's empty route-announcer), an unscoped /new/i link, /api/users/me (404 — route is :username), and resigned before the opponent's WS subscription was ready.",
       "fix": "Added data-move-number to move-panel rows; scoped the analyze alert + result-overlay New link; pointed admin-disable at /api/auth/me; gated resign tests on the opponent board being visible. e2e 7 -> 22 passing.",
-      "tags": ["e2e", "selectors", "playwright", "s07"],
-      "related_bugs": ["bug-311", "bug-312"],
+      "tags": [
+        "e2e",
+        "selectors",
+        "playwright",
+        "s07"
+      ],
+      "related_bugs": [
+        "bug-311",
+        "bug-312"
+      ],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:06:00.000Z"
+    },
+    {
+      "id": "bug-322",
+      "timestamp": "2026-06-11T14:13:56.056Z",
+      "error_message": "Incorrect value in code",
+      "file": "../../../../../../tmp/ws-proof.mjs",
+      "root_cause": "Had '/Users/aramirez/Code/.epic-worktrees/purechess/ep",
+      "fix": "Changed to 'module'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T14:15:02.770Z"
+    },
+    {
+      "id": "bug-323",
+      "timestamp": "2026-06-11T14:14:34.192Z",
+      "error_message": "Null/undefined access in ",
+      "file": "../../../../../../tmp/ws-proof.mjs",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:14:34.192Z"
+    },
+    {
+      "id": "bug-324",
+      "timestamp": "2026-06-11T14:20:00Z",
+      "error_message": "Production live games fell back to slow REST polling instead of WebSocket push between two browsers.",
+      "file": "apps/web/fly.toml, apps/web/Dockerfile",
+      "root_cause": "Web build baked NEXT_PUBLIC_API_URL='' (same-origin /api proxy) and left NEXT_PUBLIC_WS_URL unset, so use-game-socket.ts WS_URL fell through to the NODE_ENV==='production' fallback branch. That branch is fragile: any build not inlining process.env.NODE_ENV in the client bundle collapses WS_URL to http://localhost:4000, the browser cannot reach it, the socket never connects, and the client stays on its slow REST heartbeat.",
+      "fix": "Bake NEXT_PUBLIC_WS_URL=https://purechess-api.fly.dev as an explicit build arg in apps/web/fly.toml [build.args] and plumb ARG NEXT_PUBLIC_WS_URL + ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL in the apps/web/Dockerfile builder stage (both required or the arg is dropped before next build). WS_URL is now deterministic regardless of the NODE_ENV branch. Verified baked into play/[gameId] chunk; live two-client proof shows engine.io polling->websocket upgrade + game:state push over websocket in ~0.9s.",
+      "tags": [
+        "fly",
+        "websocket",
+        "socket.io",
+        "prod",
+        "build-arg",
+        "next",
+        "polling-fallback",
+        "deploy"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T14:20:00Z"
     }
   ]
 }
