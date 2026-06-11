@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Test, TestingModule } from '@nestjs/testing';
 import { WsEvent } from '@purechess/shared';
 import { RealtimeGateway } from '../../src/realtime/realtime.gateway';
@@ -39,6 +40,26 @@ describe('RealtimeGateway', () => {
     }).compile();
     gateway = module.get(RealtimeGateway);
     realtime = module.get(RealtimeService);
+  });
+
+  describe('transport tuning (decorator options)', () => {
+    // Mobile backgrounding needs dead-peer detection in seconds, not the
+    // socket.io ~45s default. These options must survive on the gateway's
+    // metadata so they reach the engine; a regression here silently restores
+    // the 45s ghost-presence window.
+    const GATEWAY_OPTIONS = 'websockets:gateway_options';
+
+    it('pins explicit ping interval and timeout for fast dead-peer detection', () => {
+      const options = Reflect.getMetadata(GATEWAY_OPTIONS, RealtimeGateway) as {
+        pingInterval?: number;
+        pingTimeout?: number;
+      };
+      expect(options.pingInterval).toBe(10_000);
+      expect(options.pingTimeout).toBe(10_000);
+      // Worst-case dead-peer detection (interval + timeout) stays well under
+      // the ~45s default.
+      expect(options.pingInterval! + options.pingTimeout!).toBeLessThanOrEqual(20_000);
+    });
   });
 
   describe('handshake auth middleware', () => {
@@ -161,6 +182,54 @@ describe('RealtimeGateway', () => {
       await gateway.onGameJoin(socket as never, { gameId: GAME_ID });
       expect(mockPrisma.game.findUnique).not.toHaveBeenCalled();
       expect(socket.join).not.toHaveBeenCalled();
+    });
+
+    it('re-broadcasts presence exactly once when a reconnected socket rejoins', async () => {
+      // A reconnect is a brand-new socket (fresh gameIds set) after the old
+      // one dropped. The rejoin must broadcast presence exactly once — not
+      // zero (stale dot) and not twice (presence spam).
+      mockPrisma.game.findUnique.mockResolvedValue({
+        whiteUserId: USER_ID,
+        blackUserId: OTHER_ID,
+        isVsComputer: false,
+      });
+      const presenceSpy = jest
+        .spyOn(realtime, 'emitGamePresence')
+        .mockImplementation(() => undefined);
+      jest.spyOn(realtime, 'roomUserIds').mockResolvedValue([USER_ID, OTHER_ID]);
+
+      const reconnected = authedSocket();
+      await gateway.onGameJoin(reconnected as never, { gameId: GAME_ID });
+
+      expect(reconnected.join).toHaveBeenCalledWith(gameRoom(GAME_ID));
+      expect(presenceSpy).toHaveBeenCalledTimes(1);
+
+      // A duplicate join on the SAME (now-joined) socket must not re-broadcast.
+      await gateway.onGameJoin(reconnected as never, { gameId: GAME_ID });
+      expect(presenceSpy).toHaveBeenCalledTimes(1);
+      expect(mockPrisma.game.findUnique).toHaveBeenCalledTimes(1);
+    });
+
+    it('join then leave then disconnect broadcasts presence exactly once total', async () => {
+      // The leave already drops the gameId, so the later disconnect must NOT
+      // re-emit presence for it — otherwise a tab-close double-counts.
+      mockPrisma.game.findUnique.mockResolvedValue({
+        whiteUserId: USER_ID,
+        blackUserId: OTHER_ID,
+        isVsComputer: false,
+      });
+      const presenceSpy = jest
+        .spyOn(realtime, 'emitGamePresence')
+        .mockImplementation(() => undefined);
+      jest.spyOn(realtime, 'roomUserIds').mockResolvedValue([OTHER_ID]);
+
+      const socket = authedSocket();
+      await gateway.onGameJoin(socket as never, { gameId: GAME_ID }); // +1 (join)
+      await gateway.onGameLeave(socket as never, { gameId: GAME_ID }); // +1 (leave)
+      presenceSpy.mockClear();
+
+      await gateway.handleDisconnect(socket as never); // gameId already gone → 0
+      expect(presenceSpy).not.toHaveBeenCalled();
     });
 
     it('rejects joins beyond the per-socket room cap', async () => {

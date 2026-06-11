@@ -1,7 +1,11 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:22:44.870Z
-> Files: 750 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:39:28.297Z
+> Files: 754 tracked | Anatomy hits: 0 | Misses: 0
+
+## ../../../../../../tmp/
+
+- `pc-reconnect-measure.mjs` — Live reconnect-to-correct-board measurement (Session 02). (~1074 tok)
 
 ## ../../../../tmp/
 
@@ -43,7 +47,7 @@
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 Implementation Plan — Charter + Baselines (~2935 tok)
-- `.session-02-plan.md` — Session 02 Implementation Plan — Rust Core Implementation (WP2) (~8784 tok)
+- `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
@@ -727,7 +731,7 @@
 ## apps/api/src/database/
 
 - `database.module.ts` — Exports DatabaseModule (~61 tok)
-- `prisma.service.ts` — Exports PrismaService (~100 tok)
+- `prisma.service.ts` — Stay under Neon's default 5-min autosuspend window so the compute never sleeps. (~409 tok)
 
 ## apps/api/src/games/
 
@@ -772,7 +776,7 @@
 
 ## apps/api/src/realtime/
 
-- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1519 tok)
+- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1642 tok)
 - `realtime.module.ts` — Exports RealtimeModule (~100 tok)
 - `realtime.service.ts` — Emitter facade over the Socket.IO server. Domain services (GamesService) (~447 tok)
 
@@ -840,6 +844,10 @@
 - `computer-games.service.spec.ts` — Declares STARTING_FEN (~5519 tok)
 - `stockfish.service.spec.ts` — TestableStockfishService: makeEngine (~1038 tok)
 
+## apps/api/test/database/
+
+- `prisma.service.spec.ts` — The keepalive defeats Neon autosuspend so the first move after idle never (~920 tok)
+
 ## apps/api/test/e2e/
 
 - `admin.e2e-spec.ts` — API routes: GET, PATCH (5 endpoints) (~689 tok)
@@ -881,7 +889,7 @@
 
 ## apps/api/test/realtime/
 
-- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~2755 tok)
+- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~3645 tok)
 
 ## apps/api/test/reports/
 
@@ -1098,9 +1106,9 @@
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
-- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~904 tok)
+- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1394 tok)
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
-- `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~578 tok)
+- `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-position-eval.ts` — Exports usePositionEval — debounced White-POV Stockfish eval of a FEN (~550 tok)
 
 ## apps/web/src/lib/
@@ -1164,8 +1172,9 @@
 
 - `computer-game-setup.test.tsx` — mockCreate (~1277 tok)
 - `invite-join.test.tsx` — mockUseGetInvite (~820 tok)
-- `use-game-socket.test.tsx` — sockets (~1160 tok)
+- `use-game-socket.test.tsx` — sockets (~2040 tok)
 - `use-live-clock-offset.test.tsx` — clock (~377 tok)
+- `use-live-clock-visibility.test.tsx` — A backgrounded tab throttles/suspends the 200ms interval, so the clock (~872 tok)
 
 ## apps/web/test/profile/
 
@@ -1240,6 +1249,7 @@
 - `budgets.md` — Purechess "Category Best" — Performance & Reliability Budgets (~2588 tok)
 - `ownership.md` — Purechess "Category Best" — File-Ownership Charter (Sessions 02–06) (~1901 tok)
 - `session-01-handoff.md` — Session 01 Handoff — Charter + Baselines (~2099 tok)
+- `session-02-handoff.md` — Session 02 Handoff — Realtime Resilience (~3134 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

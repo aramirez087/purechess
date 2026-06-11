@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 1107692,
-    "total_reads": 870,
-    "total_writes": 1425,
-    "total_sessions": 42,
-    "anatomy_hits": 509,
+    "total_tokens_estimated": 1129563,
+    "total_reads": 880,
+    "total_writes": 1426,
+    "total_sessions": 44,
+    "anatomy_hits": 519,
     "anatomy_misses": 355,
     "repeated_reads_blocked": 832,
-    "estimated_savings_vs_bare_cli": 1512213
+    "estimated_savings_vs_bare_cli": 1514213
   },
   "sessions": [
     {
@@ -13131,6 +13131,88 @@
         "writes_count": 3,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-06-11-2223",
+      "started": "2026-06-11T04:23:10.404Z",
+      "ended": "2026-06-11T04:25:42.412Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-game-socket.ts",
+          "tokens_estimated": 904,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/hooks/use-live-clock.ts",
+          "tokens_estimated": 578,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/realtime/realtime.gateway.ts",
+          "tokens_estimated": 1519,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/database/prisma.service.ts",
+          "tokens_estimated": 100,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/src/realtime/realtime.service.ts",
+          "tokens_estimated": 447,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/docs/roadmap/purechess-category-best/budgets.md",
+          "tokens_estimated": 2588,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-game-socket.test.tsx",
+          "tokens_estimated": 1160,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/test/play/use-live-clock-offset.test.tsx",
+          "tokens_estimated": 377,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/api/test/realtime/realtime.gateway.spec.ts",
+          "tokens_estimated": 2755,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 6847,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s02-realtime-resilience/.session-02-plan.md",
+          "tokens_estimated": 4596,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 17275,
+        "output_tokens_estimated": 4596,
+        "reads_count": 10,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 10
       }
     }
   ],

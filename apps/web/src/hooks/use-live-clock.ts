@@ -49,6 +49,24 @@ export function useLiveClock(
     return () => clearInterval(id);
   }, [hasClock, running]);
 
+  // A backgrounded/throttled tab freezes the interval above, so on wake the
+  // clock shows a stale value and visibly "drifts in" as the interval catches
+  // up. Forcing one tick on wake makes the next render recompute against real
+  // `Date.now()` + offset, snapping straight to true time. The drain formula
+  // is unchanged — this only re-renders.
+  useEffect(() => {
+    if (!hasClock) return;
+    const wake = () => {
+      if (document.visibilityState === 'visible') setTick((n) => n + 1);
+    };
+    document.addEventListener('visibilitychange', wake);
+    window.addEventListener('online', wake);
+    return () => {
+      document.removeEventListener('visibilitychange', wake);
+      window.removeEventListener('online', wake);
+    };
+  }, [hasClock]);
+
   if (!clock) return null;
 
   const elapsed = running
