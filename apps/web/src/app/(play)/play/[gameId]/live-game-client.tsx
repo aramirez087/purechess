@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Flag, Loader2, Plus } from 'lucide-react';
+import { Ban, Flag, Handshake, Loader2, Plus, Repeat2 } from 'lucide-react';
 import type { PvpGameStateDto, Square, WsGameStatePayload } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
 import { Chessboard } from '@/components/board/chessboard';
@@ -27,7 +27,14 @@ import { PgnIconActions } from '@/components/review/pgn-actions';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
-import { getPvpGame, submitPvpMove, resignPvpGame } from '@/lib/api/pvp-games';
+import {
+  getPvpGame,
+  submitPvpMove,
+  resignPvpGame,
+  drawPvpGame,
+  abortPvpGame,
+  rematchPvpGame,
+} from '@/lib/api/pvp-games';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 import { useGameSocket } from '@/hooks/use-game-socket';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
@@ -50,11 +57,15 @@ const SLOW_POLL_MS = 10_000;
  * to active. Applied to EVERY server-state merge — WS, poll, resync — so no
  * transport can rewind the board.
  */
+function isTerminal(status: string): boolean {
+  return status === 'completed' || status === 'aborted';
+}
+
 function isStaleState(
   cur: PvpGameStateDto,
   next: Pick<PvpGameStateDto, 'ply' | 'status'>,
 ): boolean {
-  if (cur.status === 'completed' && next.status !== 'completed') return true;
+  if (isTerminal(cur.status) && !isTerminal(next.status)) return true;
   if (next.ply < cur.ply && next.status === cur.status) return true;
   return false;
 }
@@ -71,6 +82,8 @@ function mergeWsState(game: PvpGameStateDto, p: WsGameStatePayload): PvpGameStat
     result: p.result,
     resultReason: p.resultReason,
     clock: p.clock,
+    drawOfferedBy: p.drawOfferedBy ?? null,
+    rematch: p.rematch ?? null,
   };
 }
 
@@ -227,10 +240,14 @@ export function LiveGameClient({ gameId }: Props) {
   const disposedRef = useRef(false);
 
   const _isPlaying = state.phase === 'playing';
-  const _isGameOver = _isPlaying && state.game.status === 'completed';
+  const _isGameOver = _isPlaying && isTerminal(state.game.status);
   const _sanCount = _isPlaying ? parsePgnMoves(state.game.pgn).length : 0;
   const statusLive = _isPlaying ? state.game.status : null;
-  const liveEnabled = statusLive === 'active' || statusLive === 'invite_pending';
+  // The socket (and slow heartbeat) stay up on finished games so rematch
+  // offers/accepts pushed to the room still land without a reload.
+  const liveEnabled = statusLive !== null;
+  const _ply = _isPlaying ? state.game.ply : 0;
+  const _canAbort = _isPlaying && state.game.status === 'active' && _ply < 2;
 
   useEffect(() => {
     setCurrentPly(_sanCount);
@@ -310,6 +327,43 @@ export function LiveGameClient({ gameId }: Props) {
     else setPresenceNote((p) => (p ? 'Opponent reconnected' : ''));
   }, [opponentOffline]);
 
+  // Draw-offer / rematch transitions, mirrored to one polite sr-only note so
+  // SR users hear offers arrive/resolve without the visuals.
+  const _yourColor = _isPlaying ? state.game.yourColor : null;
+  const _drawOfferedBy = _isPlaying ? (state.game.drawOfferedBy ?? null) : null;
+  const _rematch = _isPlaying ? (state.game.rematch ?? null) : null;
+  const [actionNote, setActionNote] = useState('');
+  const prevDrawRef = useRef<string | null>(null);
+  useEffect(() => {
+    const prev = prevDrawRef.current;
+    prevDrawRef.current = _drawOfferedBy;
+    if (_drawOfferedBy && _drawOfferedBy !== _yourColor) {
+      setActionNote('Opponent offers a draw');
+    } else if (!_drawOfferedBy && prev && prev === _yourColor) {
+      setActionNote('Draw offer declined');
+    }
+  }, [_drawOfferedBy, _yourColor]);
+
+  // Navigate both players into the rematch on the pending→accepted
+  // transition only; a page loaded already-accepted shows a Join button
+  // instead of yanking the user away on mount.
+  const prevRematchRef = useRef<string | null>(null);
+  useEffect(() => {
+    const prev = prevRematchRef.current;
+    const cur = _rematch?.status ?? null;
+    prevRematchRef.current = cur;
+    if (_rematch && cur === 'accepted' && prev === 'pending') {
+      router.push(`/play/${_rematch.gameId}`);
+      return;
+    }
+    if (_rematch && cur === 'pending' && prev !== 'pending' && _rematch.offeredBy !== _yourColor) {
+      setActionNote('Opponent offers a rematch');
+    } else if (!_rematch && prev === 'pending') {
+      setActionNote('Rematch declined');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_rematch?.status, _rematch?.gameId, _yourColor]);
+
   useGameKeyboard({
     isGameOver: _isGameOver,
     isComputerThinking: false,
@@ -317,7 +371,8 @@ export function LiveGameClient({ gameId }: Props) {
     totalPly: _sanCount,
     onHint: undefined,
     onTakeback: undefined,
-    onResign: _isGameOver ? undefined : handleResign,
+    onResign: _isGameOver ? undefined : _canAbort ? handleAbort : handleResign,
+    onDraw: _isGameOver || _canAbort ? undefined : handleDrawPrimary,
     onFlip: () => setFlipped((f) => !f),
     onNew: _isGameOver ? () => router.push('/play') : undefined,
     onSeek: setCurrentPly,
@@ -381,7 +436,8 @@ export function LiveGameClient({ gameId }: Props) {
 
   // Fallback polling: fast when the socket is down (sole transport), slow
   // safety-net heartbeat when pushes are flowing. The board animates the diff.
-  const pollMs = socket.connected ? SLOW_POLL_MS : POLL_MS;
+  // Finished games only need the heartbeat cadence (rematch linkage changes).
+  const pollMs = socket.connected || _isGameOver ? SLOW_POLL_MS : POLL_MS;
   useEffect(() => {
     if (!liveEnabled) return;
     const id = setInterval(async () => {
@@ -448,11 +504,16 @@ export function LiveGameClient({ gameId }: Props) {
     }
   }
 
-  async function handleResign() {
+  /**
+   * Shared template for non-move POST actions: optimistic-free — block merges
+   * while in flight, replace state from the response, refetch on error (the
+   * rejection may mean the game changed under us).
+   */
+  async function runAction(post: () => Promise<PvpGameStateDto>) {
     if (state.phase !== 'playing') return;
     setState((s) => (s.phase === 'playing' ? { ...s, submitting: true, moveError: null } : s));
     try {
-      const next = await resignPvpGame(gameId);
+      const next = await post();
       setState({ phase: 'playing', game: next, submitting: false, moveError: null });
     } catch (err) {
       setState((s) =>
@@ -460,7 +521,47 @@ export function LiveGameClient({ gameId }: Props) {
           ? { ...s, submitting: false, moveError: (err as Error).message }
           : s,
       );
+      refetchState();
     }
+  }
+
+  async function handleResign() {
+    await runAction(() => resignPvpGame(gameId));
+  }
+
+  async function handleAbort() {
+    await runAction(() => abortPvpGame(gameId));
+  }
+
+  async function handleDraw(action: 'offer' | 'accept' | 'decline') {
+    await runAction(() => drawPvpGame(gameId, action));
+  }
+
+  /** Keyboard/primary draw action: accept an incoming offer, else offer. */
+  function handleDrawPrimary() {
+    if (state.phase !== 'playing' || state.submitting) return;
+    const offeredBy = state.game.drawOfferedBy ?? null;
+    if (offeredBy === state.game.yourColor) return; // already offered — wait
+    void handleDraw(offeredBy ? 'accept' : 'offer');
+  }
+
+  /** Offer, accept, or join the rematch depending on the linkage state. */
+  function handleRematch() {
+    if (state.phase !== 'playing' || state.submitting) return;
+    const r = state.game.rematch ?? null;
+    if (r?.status === 'accepted') {
+      router.push(`/play/${r.gameId}`);
+      return;
+    }
+    if (r?.status === 'pending' && r.offeredBy === state.game.yourColor) return;
+    void runAction(() =>
+      rematchPvpGame(gameId, r?.status === 'pending' ? 'accept' : 'offer'),
+    );
+  }
+
+  function handleRematchDecline() {
+    if (state.phase !== 'playing' || state.submitting) return;
+    void runAction(() => rematchPvpGame(gameId, 'decline'));
   }
 
   if (state.phase === 'loading') {
@@ -480,18 +581,34 @@ export function LiveGameClient({ gameId }: Props) {
   const bottomColor = orientation;
   const topColor: Color = bottomColor === 'white' ? 'black' : 'white';
   const sideToMove = getSideToMove(game.fen);
-  const isGameOver = game.status === 'completed';
+  const isAborted = game.status === 'aborted';
+  const isGameOver = isTerminal(game.status);
   const yourTurn = !isGameOver && sideToMove === yourColor;
   // Not gated on turn: the board's own premove flow handles out-of-turn input
   // and the server rejects anything illegal.
   const readOnly = isGameOver || submitting;
   const lastMove = parseLastMove(game.lastMove);
-  const resultLabel = getResultLabel(game.result, yourColor);
-  const reasonLabel = game.resultReason
-    ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
-    : null;
+  const resultLabel = isAborted ? 'Aborted' : getResultLabel(game.result, yourColor);
+  const reasonLabel =
+    !isAborted && game.resultReason
+      ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
+      : null;
   const resultTone: ResultTone =
-    resultLabel === 'You won' ? 'win' : resultLabel === 'Draw' ? 'draw' : 'loss';
+    resultLabel === 'You won' ? 'win' : resultLabel === 'You lost' ? 'loss' : 'draw';
+  const drawOfferedBy = game.drawOfferedBy ?? null;
+  const incomingDrawOffer = !isGameOver && drawOfferedBy != null && drawOfferedBy !== yourColor;
+  const yourDrawOfferPending = !isGameOver && drawOfferedBy === yourColor;
+  const rematch = game.rematch ?? null;
+  const rematchIncoming = rematch?.status === 'pending' && rematch.offeredBy !== yourColor;
+  const rematchMinePending = rematch?.status === 'pending' && rematch.offeredBy === yourColor;
+  const rematchAccepted = rematch?.status === 'accepted';
+  const rematchLabel = rematchAccepted
+    ? 'Join rematch'
+    : rematchIncoming
+      ? 'Accept rematch'
+      : rematchMinePending
+        ? 'Rematch offered'
+        : 'Rematch';
   const material = computeMaterial(game.fen);
   const opponent = yourColor === 'white' ? game.black : game.white;
   const opponentName = opponent?.username ?? 'Opponent';
@@ -555,6 +672,7 @@ export function LiveGameClient({ gameId }: Props) {
                   resultLabel={resultLabel}
                   reasonLabel={reasonLabel}
                   onDismiss={() => setResultDismissed(true)}
+                  onRematch={rematchMinePending ? undefined : handleRematch}
                 />
               ) : undefined
             }
@@ -604,30 +722,107 @@ export function LiveGameClient({ gameId }: Props) {
                   opponentOffline={opponentOffline}
                   presenceNote={presenceNote}
                 />
+                {/* Draw/rematch transitions for SR users (visuals live in the
+                    banner + footer); separate from the turn announcement. */}
+                <span aria-live="polite" className="sr-only">
+                  {actionNote}
+                </span>
+                {incomingDrawOffer && (
+                  <div className="border-t border-[#2b332c] bg-[#d6b563]/[0.07] px-4 py-3">
+                    <p className="flex items-center gap-2 text-sm font-medium text-[#f4efe2]">
+                      <Handshake className="h-4 w-4 text-[#d6b563]" aria-hidden="true" />
+                      {opponentName} offers a draw
+                    </p>
+                    <div className="mt-2.5 flex gap-2">
+                      <button
+                        onClick={() => handleDraw('accept')}
+                        disabled={submitting}
+                        className="inline-flex h-8 flex-1 items-center justify-center rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-xs font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Accept draw
+                      </button>
+                      <button
+                        onClick={() => handleDraw('decline')}
+                        disabled={submitting}
+                        className="inline-flex h-8 flex-1 items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-xs font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                )}
               </>
             }
             footer={
               <BoardControlBar onFlip={() => setFlipped((f) => !f)} className="p-2">
                 {isGameOver ? (
-                  <Link
-                    href="/play"
-                    className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                  >
-                    <Plus className="h-4 w-4" aria-hidden="true" />
-                    New game
-                  </Link>
-                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (rematchMinePending || submitting) return;
+                        handleRematch();
+                      }}
+                      aria-disabled={rematchMinePending || submitting}
+                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+                    >
+                      <Repeat2 className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+                      {rematchLabel}
+                    </button>
+                    {rematchIncoming ? (
+                      <button
+                        onClick={handleRematchDecline}
+                        disabled={submitting}
+                        className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Decline
+                      </button>
+                    ) : (
+                      <Link
+                        href="/play"
+                        className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                      >
+                        <Plus className="h-4 w-4" aria-hidden="true" />
+                        New game
+                      </Link>
+                    )}
+                  </>
+                ) : _canAbort ? (
                   <button
-                    onClick={handleResign}
+                    onClick={handleAbort}
                     disabled={submitting}
                     className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <Flag
+                    <Ban
                       className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
                       aria-hidden="true"
                     />
-                    Resign
+                    Abort
                   </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (yourDrawOfferPending || submitting) return;
+                        handleDrawPrimary();
+                      }}
+                      aria-disabled={yourDrawOfferPending || submitting}
+                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+                    >
+                      <Handshake className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+                      {yourDrawOfferPending ? 'Draw offered' : 'Draw'}
+                    </button>
+                    <button
+                      onClick={handleResign}
+                      disabled={submitting}
+                      className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Flag
+                        className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
+                        aria-hidden="true"
+                      />
+                      Resign
+                    </button>
+                  </>
                 )}
               </BoardControlBar>
             }

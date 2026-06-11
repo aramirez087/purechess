@@ -174,6 +174,8 @@ model Game {
   blackRatingAfter    Int?
   inviteToken         String?             @unique
   inviteColorChoice   String?
+  rematchGameId       String?             @unique
+  rematchOfferedBy    String?
   startedAt           DateTime?
   endedAt             DateTime?
   createdAt           DateTime            @default(now())

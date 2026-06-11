@@ -1527,3 +1527,38 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:35 | Neon keepalive verified; warm first-move ~503ms | prisma.service.ts | cold unreproducible w/ keepalive (documented) | ~1k |
 | 14:40 | cerebrum+buglog(bug-324)+handoff written | .wolf/*, session-08-handoff.md | GO, exit criteria met | ~3k |
 | 08:23 | Session end: 9 writes across 6 files (Dockerfile, fly.toml, ws-proof.mjs, smoke.mjs, ledger.mjs) | 4 reads | ~11227 tok |
+| 09:05 | merged epic/purechess-category-best into main (d12b147), deleted all epic branches (category-best + rust-engine-migration, all merged), removed all .epic-worktrees | main | clean: 1 branch, 1 worktree | ~1k |
+
+## Session: 2026-06-11 09:05
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 09:26 | Created ../../.claude/plans/continue-improving-purechess-the-iridescent-liskov.md | — | ~4536 |
+| 09:56 | Edited packages/shared/src/dto/pvp-game.dto.ts | expanded (+22 lines) | ~216 |
+| 09:56 | Edited packages/shared/src/dto/pvp-game.dto.ts | 5→9 lines | ~108 |
+| 09:56 | Edited packages/shared/src/ws-events.ts | expanded (+8 lines) | ~120 |
+| 09:56 | Edited apps/api/prisma/schema.prisma | 3→5 lines | ~51 |
+| 09:56 | Created apps/api/prisma/migrations/20260611190000_add_rematch_link/migration.sql | — | ~54 |
+| 09:59 | Created apps/api/src/games/games.service.ts | — | ~7854 |
+| 09:59 | Edited apps/api/src/games/games.controller.ts | 2→7 lines | ~45 |
+| 09:59 | Edited apps/api/src/games/games.controller.ts | expanded (+29 lines) | ~250 |
+| 10:00 | Edited apps/web/src/lib/api/pvp-games.ts | modified resignPvpGame() | ~218 |
+| 10:00 | Edited apps/web/src/hooks/use-game-keyboard.ts | 3→4 lines | ~28 |
+| 10:00 | Edited apps/web/src/hooks/use-game-keyboard.ts | added 1 condition(s) | ~60 |
+| 10:01 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | inline fix | ~22 |
+| 10:01 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | expanded (+7 lines) | ~39 |
+| 10:01 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: status | ~107 |
+| 10:01 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added nullish coalescing | ~125 |
+| 10:01 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: ply | ~160 |
+| 10:01 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added optional chaining | ~534 |
+| 10:02 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: handleAbort, onDraw | ~73 |
+| 10:02 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added optional chaining | ~599 |
+| 10:02 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added optional chaining | ~415 |
+| 10:02 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 1→2 lines | ~44 |
+| 10:02 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: undefined | ~122 |
+| 10:03 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | expanded (+29 lines) | ~796 |
+| 10:03 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 2 condition(s) | ~1733 |
+| 10:06 | Created apps/api/test/games/games.service.spec.ts | — | ~7963 |
+| 10:07 | Created apps/web/test/api/pvp-games.test.ts | — | ~640 |
+| 10:07 | Created apps/web/test/play/use-game-keyboard-draw.test.tsx | — | ~286 |
+| 10:35 | PvP parity pack: draw offer/accept/decline/claim + abort(<2 plies) + rematch (linked invite_pending game, colors swap) + finalize PGN-tag fix (bug-336) | games.service/controller, pvp-game.dto, ws-events, live-game-client, pvp-games.ts, use-game-keyboard, migration add_rematch_link | api 324 + web 293 tests green; live-verified 2-player via curl+browser (WS banner, rematch nav) | ~60k |

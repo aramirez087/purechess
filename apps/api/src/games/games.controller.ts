@@ -1,14 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, UseGuards } from '@nestjs/common';
 import type { User } from '@prisma/client';
-import { PvpGameStateDto, PvpMoveDto } from '@purechess/shared';
+import {
+  PvpDrawActionDto,
+  PvpGameStateDto,
+  PvpMoveDto,
+  PvpRematchActionDto,
+} from '@purechess/shared';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GamesService } from './games.service';
@@ -20,10 +17,7 @@ export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
   @Get(':id/state')
-  getState(
-    @Param('id') id: string,
-    @CurrentUser() user: User,
-  ): Promise<PvpGameStateDto> {
+  getState(@Param('id') id: string, @CurrentUser() user: User): Promise<PvpGameStateDto> {
     return this.gamesService.getState(id, user.id);
   }
 
@@ -39,10 +33,33 @@ export class GamesController {
 
   @Post(':id/resign')
   @HttpCode(200)
-  resign(
+  resign(@Param('id') id: string, @CurrentUser() user: User): Promise<PvpGameStateDto> {
+    return this.gamesService.resign(id, user.id);
+  }
+
+  @Post(':id/draw')
+  @HttpCode(200)
+  draw(
     @Param('id') id: string,
+    @Body() dto: PvpDrawActionDto,
     @CurrentUser() user: User,
   ): Promise<PvpGameStateDto> {
-    return this.gamesService.resign(id, user.id);
+    return this.gamesService.draw(id, user.id, dto.action);
+  }
+
+  @Post(':id/abort')
+  @HttpCode(200)
+  abort(@Param('id') id: string, @CurrentUser() user: User): Promise<PvpGameStateDto> {
+    return this.gamesService.abort(id, user.id);
+  }
+
+  @Post(':id/rematch')
+  @HttpCode(200)
+  rematch(
+    @Param('id') id: string,
+    @Body() dto: PvpRematchActionDto,
+    @CurrentUser() user: User,
+  ): Promise<PvpGameStateDto> {
+    return this.gamesService.rematch(id, user.id, dto.action);
   }
 }

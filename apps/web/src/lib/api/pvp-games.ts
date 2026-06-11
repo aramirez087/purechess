@@ -1,7 +1,7 @@
 import type { PvpGameStateDto } from '@purechess/shared';
 
 const API = // Production browsers call same-origin '' (the Next /api proxy);
-// dev talks to the API directly.
+  // dev talks to the API directly.
   process.env.NEXT_PUBLIC_API_URL ||
   (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000');
 
@@ -13,10 +13,9 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw Object.assign(
-      new Error((body as { message?: string }).message ?? res.statusText),
-      { status: res.status },
-    );
+    throw Object.assign(new Error((body as { message?: string }).message ?? res.statusText), {
+      status: res.status,
+    });
   }
   return res.json() as Promise<T>;
 }
@@ -34,4 +33,28 @@ export function submitPvpMove(gameId: string, move: string): Promise<PvpGameStat
 
 export function resignPvpGame(gameId: string): Promise<PvpGameStateDto> {
   return apiFetch(`/games/${gameId}/resign`, { method: 'POST' });
+}
+
+export function drawPvpGame(
+  gameId: string,
+  action: 'offer' | 'accept' | 'decline' | 'claim',
+): Promise<PvpGameStateDto> {
+  return apiFetch(`/games/${gameId}/draw`, {
+    method: 'POST',
+    body: JSON.stringify({ action }),
+  });
+}
+
+export function abortPvpGame(gameId: string): Promise<PvpGameStateDto> {
+  return apiFetch(`/games/${gameId}/abort`, { method: 'POST' });
+}
+
+export function rematchPvpGame(
+  gameId: string,
+  action: 'offer' | 'accept' | 'decline',
+): Promise<PvpGameStateDto> {
+  return apiFetch(`/games/${gameId}/rematch`, {
+    method: 'POST',
+    body: JSON.stringify({ action }),
+  });
 }

@@ -81,6 +81,14 @@ export interface WsGameStatePayload {
     lastTickAt: number;
     incrementMs?: number;
   } | null;
+  /** Color with a pending draw offer; null/absent when none. */
+  drawOfferedBy?: 'white' | 'black' | null;
+  /** Pending/accepted rematch linked to this game; null/absent when none. */
+  rematch?: {
+    gameId: string;
+    offeredBy: 'white' | 'black';
+    status: 'pending' | 'accepted';
+  } | null;
 }
 
 /** User ids currently connected to the game room. */

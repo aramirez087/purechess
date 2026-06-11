@@ -5451,6 +5451,87 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T14:03:00.000Z"
+    },
+    {
+      "id": "bug-332",
+      "timestamp": "2026-06-11T16:01:26.521Z",
+      "error_message": "Wrong operator: !== should be ||",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Used \"!==\" instead of \"||\"",
+      "fix": "Changed operator !== \u2192 ||",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:01:26.521Z"
+    },
+    {
+      "id": "bug-333",
+      "timestamp": "2026-06-11T16:01:29.978Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: const _isGameOver = _isPlaying && isTerminal(state.game.stat; // The socket (and slow heartbeat) stay up on finished games | Also: // Draw-offer / rematch transitions, mirrored to one polite ; // SR users hear offers arrive/resolve without the visuals. | Also: /**; * Shared template for non-move POST actions: optimistic-free | Also: const isAborted = game.status === 'aborted';; const isGameOver = isTerminal(game.status);",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 5,
+      "last_seen": "2026-06-11T16:02:44.020Z"
+    },
+    {
+      "id": "bug-334",
+      "timestamp": "2026-06-11T16:02:12.256Z",
+      "error_message": "CSS fix: onResign",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "onResign: _isGameOver ? undefined : handleResign, \u2192 _isGameOver ? undefined : _canAbort ? handleAbort : handleResign,",
+      "fix": "Changed onResign: _isGameOver ? undefined : handleResign, \u2192 _isGameOver ? undefined : _canAbort ? handleAbort : handleResign,",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:02:12.256Z"
+    },
+    {
+      "id": "bug-335",
+      "timestamp": "2026-06-11T16:03:51.520Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "No early return/throw for edge case: rematchMinePending || submitting",
+      "fix": "Added guard clause: if (rematchMinePending || submitting)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:03:51.520Z"
+    },
+    {
+      "id": "bug-336",
+      "timestamp": "2026-06-11T10:30:00-06:00",
+      "error_message": "PvP games ending by resign/timeout/draw-agreement exported a PGN with a stale '*' result tag",
+      "file": "apps/api/src/games/games.service.ts",
+      "root_cause": "GamesService.finalize() persisted status/result but never rebuilt the PGN \u2014 only submitMove rebuilt it, so any non-move completion path left the last move's '*' tag",
+      "fix": "finalize() now rebuilds the PGN with the real result tag (1-0/0-1/1/2-1/2) via engine.buildPgn and persists it in the same guarded updateMany; emitted WS payload carries the new pgn",
+      "tags": [
+        "pvp",
+        "pgn",
+        "finalize",
+        "games-service"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T10:30:00-06:00"
     }
   ]
 }

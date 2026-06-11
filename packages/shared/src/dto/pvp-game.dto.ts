@@ -11,6 +11,28 @@ export interface PvpMoveDto {
   move: string;
 }
 
+/** Draw offer lifecycle action for a live PvP game. */
+export interface PvpDrawActionDto {
+  action: 'offer' | 'accept' | 'decline' | 'claim';
+}
+
+/** Rematch offer lifecycle action for a finished PvP game. */
+export interface PvpRematchActionDto {
+  action: 'offer' | 'accept' | 'decline';
+}
+
+/**
+ * Rematch linkage on a finished game: the new game is created
+ * `invite_pending` at offer time and activated on accept.
+ */
+export interface PvpRematchStateDto {
+  /** Id of the linked rematch game. */
+  gameId: string;
+  /** Color (in THIS game) of the player who offered. */
+  offeredBy: 'white' | 'black';
+  status: 'pending' | 'accepted';
+}
+
 /**
  * Live PvP (friend-invite) game state, scoped to the requesting player.
  * Served by GET /api/games/:id/state and returned by the move/resign actions.
@@ -37,4 +59,8 @@ export interface PvpGameStateDto {
   incrementSeconds: number;
   /** Rated games feed Glicko-2 on completion. Optional for compat. */
   rated?: boolean;
+  /** Color with a pending draw offer; null/absent when none. */
+  drawOfferedBy?: 'white' | 'black' | null;
+  /** Pending/accepted rematch linked to this game; null/absent when none. */
+  rematch?: PvpRematchStateDto | null;
 }

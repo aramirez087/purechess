@@ -8,6 +8,7 @@ export interface UseGameKeyboardOptions {
   onHint?: () => void;
   onTakeback?: () => void;
   onResign?: () => void;
+  onDraw?: () => void;
   onFlip?: () => void;
   onNew?: () => void;
   onSeek?: (ply: number) => void;
@@ -26,10 +27,12 @@ export function useGameKeyboard(opts: UseGameKeyboardOptions): void {
         t instanceof HTMLInputElement ||
         t instanceof HTMLTextAreaElement ||
         (t instanceof HTMLElement && t.isContentEditable)
-      ) return;
+      )
+        return;
 
       const o = optsRef.current;
-      const isArrow = e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Home' || e.key === 'End';
+      const isArrow =
+        e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Home' || e.key === 'End';
 
       // Let the board handle its own arrow navigation when a board square has focus
       if (isArrow && t?.closest('[role="grid"]')) return;
@@ -43,6 +46,9 @@ export function useGameKeyboard(opts: UseGameKeyboardOptions): void {
           break;
         case 'r':
           if (!o.isGameOver && !o.isComputerThinking) o.onResign?.();
+          break;
+        case 'd':
+          if (!o.isGameOver && !o.isComputerThinking) o.onDraw?.();
           break;
         case 'f':
           o.onFlip?.();

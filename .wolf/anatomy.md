@@ -1,9 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:10:59.088Z
-> Files: 756 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T14:22:20.982Z
-> Files: 797 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T16:07:40.070Z
+> Files: 810 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -33,6 +31,7 @@
 
 ## ../../.claude/plans/
 
+- `continue-improving-purechess-the-iridescent-liskov.md` — PureChess — Next Iteration: PvP Parity + Matchmaking + Computer-Game LCP (~4253 tok)
 - `your-goal-is-to-squishy-platypus.md` — PureChess — Game Page Redesign: Full-Bleed Dual-Rail Shell (~3766 tok)
 
 ## ../.epic-worktrees/purechess/epic--rust-engine-migration/crates/purechess-engine/src/
@@ -622,7 +621,7 @@
 
 ## apps/api/prisma/
 
-- `schema.prisma` — Declares GameResult (~1880 tok)
+- `schema.prisma` — Declares GameResult (~1902 tok)
 - `seed.ts` — prisma: main (~2205 tok)
 
 ## apps/api/prisma/migrations/
@@ -644,6 +643,10 @@
 ## apps/api/prisma/migrations/20260607140000_computer_game_engine_state/
 
 - `migration.sql` — AddColumn: engine state snapshot for vs-computer games (~103 tok)
+
+## apps/api/prisma/migrations/20260611190000_add_rematch_link/
+
+- `migration.sql` — AlterTable (~54 tok)
 
 ## apps/api/src/
 
@@ -742,9 +745,9 @@
 
 ## apps/api/src/games/
 
-- `games.controller.ts` — Live PvP (friend-invite) games — players only, session required. (~355 tok)
+- `games.controller.ts` — Live PvP (friend-invite) games — players only, session required. (~563 tok)
 - `games.module.ts` — Exports GamesModule (~166 tok)
-- `games.service.ts` — Live PvP (friend-invite) games. Mirrors the clock/persistence semantics of (~3788 tok)
+- `games.service.ts` — Either player may abort while fewer than this many plies are on the board. (~7854 tok)
 
 ## apps/api/src/invites/
 
@@ -874,7 +877,7 @@
 
 ## apps/api/test/games/
 
-- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~2949 tok)
+- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~7963 tok)
 
 ## apps/api/test/health/
 
@@ -969,7 +972,7 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~6847 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10047 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~60 tok)
 - `page.tsx` — metadata (~100 tok)
 
@@ -1134,7 +1137,7 @@
 ## apps/web/src/hooks/
 
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
-- `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
+- `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~660 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
 - `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1394 tok)
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
@@ -1150,7 +1153,7 @@
 
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
-- `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame (~280 tok)
+- `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
 
@@ -1176,6 +1179,7 @@
 ## apps/web/test/api/
 
 - `computer-games.test.ts` — BASE: mockOkFetch (~1090 tok)
+- `pvp-games.test.ts` — BASE: mockOkFetch (~640 tok)
 
 ## apps/web/test/board/
 
@@ -1211,6 +1215,7 @@
 
 - `computer-game-setup.test.tsx` — mockCreate (~1277 tok)
 - `invite-join.test.tsx` — mockUseGetInvite (~820 tok)
+- `use-game-keyboard-draw.test.tsx` — press (~286 tok)
 - `use-game-socket.test.tsx` — sockets (~2040 tok)
 - `use-live-clock-offset.test.tsx` — clock (~377 tok)
 - `use-live-clock-visibility.test.tsx` — A backgrounded tab throttles/suspends the 200ms interval, so the clock (~872 tok)
@@ -1343,13 +1348,13 @@
 
 - `index.ts` (~136 tok)
 - `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto, GameHistoryResponseDto (optional `total` = filtered count ignoring cursor), UpdateMeDto (~319 tok)
-- `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~708 tok)
+- `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
 
 ## packages/shared/src/dto/
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
-- `pvp-game.dto.ts` — Move submission for a live PvP game. (~314 tok)
+- `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
 
 ## scripts/
 
