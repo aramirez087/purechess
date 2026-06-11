@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Chess } from 'chess.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Ban, Flag, Handshake, Loader2, Plus, Repeat2 } from 'lucide-react';
@@ -26,6 +25,7 @@ import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { PgnIconActions } from '@/components/review/pgn-actions';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
+import { loadRules } from '@/lib/board/rules-lazy';
 import { cn } from '@/lib/utils';
 import {
   getPvpGame,
@@ -478,15 +478,11 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
     const before = state.game;
 
     // Optimistic render: the piece lands instantly; the server response (or
-    // an error rollback) reconciles afterwards.
-    let optimisticFen: string | null = null;
-    try {
-      const c = new Chess(before.fen);
-      const m = c.move({ from: intent.from, to: intent.to, promotion: intent.promotion });
-      if (m) optimisticFen = c.fen();
-    } catch {
-      // illegal locally — let the server be the judge
-    }
+    // an error rollback) reconciles afterwards. The rules module is lazy but
+    // warm here — the board loaded it on mount; null = illegal locally, let
+    // the server be the judge.
+    const rules = await loadRules();
+    const optimisticFen: string | null = rules.applyMoveToFen(before.fen, intent);
 
     setState((s) =>
       s.phase === 'playing'

@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Piece, Square } from '@purechess/shared';
-import { getAnimationSquares, animationsDisabled, MOVE_DURATION_MS } from '@/lib/board/animations';
-import { getPieceAt } from '@/lib/board/position';
+import { animationsDisabled, MOVE_DURATION_MS } from '@/lib/board/animations';
+import { getPieceAt } from '@/lib/board/fen';
+import { loadRules, peekRules } from '@/lib/board/rules-lazy';
 
 export interface AnimatedPieceSpec {
   piece: Piece;
@@ -43,6 +44,14 @@ export function useMoveAnimation(
   const keyRef = useRef(0);
   const [anim, setAnim] = useState<MoveAnimation | null>(null);
 
+  // Warm the rules module so the synchronous diff below can use it from the
+  // first opponent move on. A position change that lands before the (lazy)
+  // chess.js chunk resolves simply doesn't animate — same fallback as the
+  // reduced-motion path.
+  useEffect(() => {
+    void loadRules();
+  }, []);
+
   useEffect(() => {
     const prev = prevRef.current;
     if (prev === position) return;
@@ -53,7 +62,10 @@ export function useMoveAnimation(
 
     if (!enabled || animationsDisabled()) return;
 
-    const squares = getAnimationSquares(prev, position);
+    const rules = peekRules();
+    if (!rules) return;
+
+    const squares = rules.getAnimationSquares(prev, position);
     if (!squares) {
       setAnim(null);
       return;

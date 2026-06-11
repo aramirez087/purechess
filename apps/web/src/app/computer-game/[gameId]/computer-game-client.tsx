@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Chess } from 'chess.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Flag, Loader2, Plus, RotateCcw } from 'lucide-react';
@@ -25,6 +24,7 @@ import { Logo } from '@/components/layout/Logo';
 import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
+import { loadRules } from '@/lib/board/rules-lazy';
 import { cn } from '@/lib/utils';
 import {
   getComputerGame,
@@ -276,14 +276,10 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     const ms = stm === 'white' ? liveClock.whiteMs : liveClock.blackMs;
     if (ms > 0) return;
     flagClaimedRef.current = true;
-    let uci = 'resign';
-    try {
-      const m = new Chess(state.game.fen).moves({ verbose: true })[0];
-      if (m) uci = m.from + m.to + (m.promotion ?? '');
-    } catch {
-      // unparseable FEN — resign fallback still ends the game
-    }
-    submitComputerMove(gameId, uci)
+    const fen = state.game.fen;
+    loadRules()
+      // unparseable FEN → null → the resign fallback still ends the game
+      .then((r) => submitComputerMove(gameId, r.firstLegalUci(fen) ?? 'resign'))
       .then((next) => {
         if (!disposedRef.current) {
           setState({ phase: 'playing', game: next, submitting: false, moveError: null });
@@ -356,15 +352,11 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
 
     // Optimistic render: apply the move locally so the piece lands instantly
     // instead of waiting a network round trip; the server response (or an
-    // error rollback) reconciles afterwards.
-    let optimisticFen: string | null = null;
-    try {
-      const c = new Chess(before.fen);
-      const m = c.move({ from: intent.from, to: intent.to, promotion: intent.promotion });
-      if (m) optimisticFen = c.fen();
-    } catch {
-      // illegal locally — let the server be the judge
-    }
+    // error rollback) reconciles afterwards. The rules module is lazy but
+    // warm here (the board loads it on mount); null = illegal locally, let
+    // the server be the judge.
+    const rules = await loadRules();
+    const optimisticFen: string | null = rules.applyMoveToFen(before.fen, intent);
 
     setState((s: PageState) =>
       s.phase === 'playing'

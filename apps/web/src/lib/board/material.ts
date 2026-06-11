@@ -1,5 +1,5 @@
-import { Chess } from 'chess.js';
 import type { PieceType, Color } from '@purechess/shared';
+import { parseFenBoard } from './fen';
 
 /** Captured pieces of one color, sorted by value (queen first), with their total point value. */
 export interface CapturedSummary {
@@ -51,15 +51,10 @@ export function computeMaterial(fen: string): MaterialState {
     b: { p: 0, n: 0, b: 0, r: 0, q: 0, k: 0 },
   };
 
-  try {
-    const board = new Chess(fen).board();
-    for (const row of board) {
-      for (const sq of row) {
-        if (sq) onBoard[sq.color as Color][sq.type as PieceType]++;
-      }
-    }
-  } catch {
-    return emptyMaterial();
+  const board = parseFenBoard(fen);
+  if (!board) return emptyMaterial();
+  for (const piece of board.values()) {
+    onBoard[piece.color][piece.type]++;
   }
 
   const capturedFrom = (color: Color): CapturedSummary => {

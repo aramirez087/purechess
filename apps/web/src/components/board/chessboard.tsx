@@ -1,22 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Chess } from 'chess.js';
 import type { Square as SquareType, Piece, MoveIntent, PieceType, Color } from '@purechess/shared';
 import type { ChessboardProps, Premove, PromotionState } from '@/lib/board/types';
-import {
-  getLegalMovesForSquare,
-  getLegalCapturesForSquare,
-  getPieceAt,
-  fenToColorToMove,
-  isPromotion,
-  getCheckSquare,
-} from '@/lib/board/position';
-import { validatePremove } from '@/lib/board/premove';
-import { getAnimationSquares, animationsDisabled } from '@/lib/board/animations';
+import { getPieceAt, fenToColorToMove, isPromotion } from '@/lib/board/fen';
+import { loadRules, peekRules, type RulesModule } from '@/lib/board/rules-lazy';
+import { animationsDisabled } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
 import { cn } from '@/lib/utils';
-import { buildMoveAnnouncement } from '@/lib/board/sr-announce';
 import { useBoardSettings } from './board-context';
 import { useBoardResize } from './hooks/use-board-resize';
 import { useDrag } from './hooks/use-drag';
@@ -82,13 +73,29 @@ export function Chessboard({
 
   const anim = useMoveAnimation(position, lastDragMoveRef, settings.animationMs > 0);
 
+  // chess.js (the rules module) loads lazily so it stays out of the eager
+  // route chunk. Until it resolves (~one microtask once cached, one chunk
+  // fetch cold) legal-move hints and check highlights are empty — input
+  // still works, and the server validates every move anyway.
+  const [rules, setRules] = useState<RulesModule | null>(peekRules);
+  useEffect(() => {
+    if (rules) return;
+    let disposed = false;
+    void loadRules().then((m) => {
+      if (!disposed) setRules(m);
+    });
+    return () => {
+      disposed = true;
+    };
+  }, [rules]);
+
   const colorToMove = useMemo(() => fenToColorToMove(position), [position]);
   const playerColor: Color = orientation === 'white' ? 'w' : 'b';
   const isPlayerTurn = colorToMove === playerColor;
 
   const checkSquare = useMemo(
-    () => checkSquareProp ?? getCheckSquare(position),
-    [checkSquareProp, position],
+    () => checkSquareProp ?? rules?.getCheckSquare(position),
+    [checkSquareProp, rules, position],
   );
 
   const [srAnnouncement, setSrAnnouncement] = useState('');
@@ -98,8 +105,15 @@ export function Chessboard({
     const prev = prevSrRef.current;
     if (prev === position) return;
     prevSrRef.current = position;
-    const msg = buildMoveAnnouncement(prev, position);
-    if (msg) setSrAnnouncement(msg);
+    let disposed = false;
+    void loadRules().then((r) => {
+      if (disposed) return;
+      const msg = r.buildMoveAnnouncement(prev, position);
+      if (msg) setSrAnnouncement(msg);
+    });
+    return () => {
+      disposed = true;
+    };
   }, [position]);
 
   // One sound per confirmed position change, typed by what happened — covers
@@ -112,33 +126,33 @@ export function Chessboard({
     prevSoundPosRef.current = position;
     if (!settings.sound) return;
 
-    const squares = getAnimationSquares(prev, position);
-    if (!squares) return;
-    try {
-      const next = new Chess(position);
-      if (next.isCheckmate()) {
-        soundEngine.play('mate');
-        return;
-      }
-      if (next.inCheck()) {
-        soundEngine.play('check');
-        return;
-      }
-    } catch {
-      // unparseable FEN — fall through to the generic sound
-    }
-    soundEngine.play(squares.capturedAt ? 'capture' : 'move');
+    let disposed = false;
+    void loadRules().then((r) => {
+      if (disposed) return;
+      const sound = r.classifyMoveSound(prev, position);
+      if (sound) soundEngine.play(sound);
+    });
+    return () => {
+      disposed = true;
+    };
   }, [position, settings.sound]);
 
   useEffect(() => {
     if (!premove) return;
     if (!isPlayerTurn) return;
 
-    const result = validatePremove(position, premove);
-    setPremove(null);
-    if (result && onMove) {
-      onMove({ from: result.from, to: result.to, promotion: result.promotion });
-    }
+    let disposed = false;
+    void loadRules().then((r) => {
+      if (disposed) return;
+      const result = r.validatePremove(position, premove);
+      setPremove(null);
+      if (result && onMove) {
+        onMove({ from: result.from, to: result.to, promotion: result.promotion });
+      }
+    });
+    return () => {
+      disposed = true;
+    };
   }, [position, isPlayerTurn, premove, onMove]);
 
   const getPieceAtMemo = useCallback((sq: SquareType) => getPieceAt(position, sq), [position]);
@@ -169,17 +183,17 @@ export function Chessboard({
       if (legalMoves) {
         return legalDestsFromServer.get(sq) ?? [];
       }
-      return getLegalMovesForSquare(position, sq);
+      return rules ? rules.getLegalMovesForSquare(position, sq) : [];
     },
-    [isPlayerTurn, readOnly, legalMoves, legalDestsFromServer, position],
+    [isPlayerTurn, readOnly, legalMoves, legalDestsFromServer, rules, position],
   );
 
   const getLegalCaptures = useCallback(
     (sq: SquareType): SquareType[] => {
       if (!isPlayerTurn || readOnly) return [];
-      return getLegalCapturesForSquare(position, sq);
+      return rules ? rules.getLegalCapturesForSquare(position, sq) : [];
     },
-    [isPlayerTurn, readOnly, position],
+    [isPlayerTurn, readOnly, rules, position],
   );
 
   const handleMove = useCallback(
