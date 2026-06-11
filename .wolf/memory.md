@@ -1243,3 +1243,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:25 | wrote budgets.md + ownership.md (best-effort, session files absent) | docs/roadmap/purechess-category-best | ok | ~3k |
 | 14:30 | tsc gates: api green, web GREEN (predicted red now fixed) | apps/* | ok | ~1k |
 | 22:22 | Created docs/roadmap/purechess-category-best/session-01-handoff.md | — | ~2239 |
+| 22:23 | Session end: 3 writes across 3 files (budgets.md, ownership.md, session-01-handoff.md) | 3 reads | ~16800 tok |
