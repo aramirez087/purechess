@@ -6,13 +6,958 @@
       "count": 1,
       "tokens": 1900,
       "first_read": "2026-06-11T02:31:26.296Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/ws-events.ts": {
+      "count": 3,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:32:54.945Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app//(play/)/play//[gameId/]/live-game-client.tsx": {
+      "count": 2,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:32:55.029Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.gateway.ts": {
+      "count": 3,
+      "tokens": 74,
+      "first_read": "2026-06-11T02:32:55.221Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/games/games.controller.ts": {
+      "count": 2,
+      "tokens": 355,
+      "first_read": "2026-06-11T02:32:55.271Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.module.ts": {
+      "count": 2,
+      "tokens": 78,
+      "first_read": "2026-06-11T02:32:55.427Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/prisma/schema.prisma": {
+      "count": 3,
+      "tokens": 1872,
+      "first_read": "2026-06-11T02:32:55.496Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.service.ts": {
+      "count": 3,
+      "tokens": 27,
+      "first_read": "2026-06-11T02:32:55.626Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.service.ts": {
+      "count": 2,
+      "tokens": 26,
+      "first_read": "2026-06-11T02:32:55.923Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.controller.ts": {
+      "count": 1,
+      "tokens": 64,
+      "first_read": "2026-06-11T02:32:55.983Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts": {
+      "count": 4,
+      "tokens": 1940,
+      "first_read": "2026-06-11T02:32:56.432Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts": {
+      "count": 2,
+      "tokens": 781,
+      "first_read": "2026-06-11T02:32:57.924Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts": {
+      "count": 6,
+      "tokens": 3120,
+      "first_read": "2026-06-11T02:32:57.931Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/auth/guards/session-auth.guard.ts": {
+      "count": 1,
+      "tokens": 225,
+      "first_read": "2026-06-11T02:32:58.369Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-panel.tsx": {
+      "count": 1,
+      "tokens": 1038,
+      "first_read": "2026-06-11T02:32:58.394Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/auth/strategies": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:32:58.494Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-position-eval.ts": {
+      "count": 2,
+      "tokens": 550,
+      "first_read": "2026-06-11T02:32:58.554Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts": {
+      "count": 4,
+      "tokens": 1021,
+      "first_read": "2026-06-11T02:33:00.112Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/invite/[token]/invite-accept.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:33:00.519Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-create.tsx": {
+      "count": 3,
+      "tokens": 2518,
+      "first_read": "2026-06-11T02:33:00.543Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/api/pvp-games.ts": {
+      "count": 3,
+      "tokens": 280,
+      "first_read": "2026-06-11T02:33:00.654Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-live-clock.ts": {
+      "count": 2,
+      "tokens": 500,
+      "first_read": "2026-06-11T02:33:00.838Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/engine/stockfish-client.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:33:01.277Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/home/hero.tsx": {
+      "count": 2,
+      "tokens": 1710,
+      "first_read": "2026-06-11T02:33:01.485Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx": {
+      "count": 2,
+      "tokens": 3217,
+      "first_read": "2026-06-11T02:33:01.795Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-join.tsx": {
+      "count": 3,
+      "tokens": 1741,
+      "first_read": "2026-06-11T02:33:02.935Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/invites/invite-gateway.ts": {
+      "count": 1,
+      "tokens": 231,
+      "first_read": "2026-06-11T02:33:04.415Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/package.json": {
+      "count": 1,
+      "tokens": 366,
+      "first_read": "2026-06-11T02:33:04.693Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/services/game-review.service.ts": {
+      "count": 2,
+      "tokens": 1975,
+      "first_read": "2026-06-11T02:33:04.722Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-game-review.ts": {
+      "count": 2,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:33:04.931Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/types/game-review.ts": {
+      "count": 2,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:33:05.139Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.controller.ts": {
+      "count": 3,
+      "tokens": 468,
+      "first_read": "2026-06-11T02:33:05.983Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx": {
+      "count": 2,
+      "tokens": 5064,
+      "first_read": "2026-06-11T02:33:07.189Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/move-panel.tsx": {
+      "count": 2,
+      "tokens": 1397,
+      "first_read": "2026-06-11T02:33:07.884Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/game-shell.tsx": {
+      "count": 1,
+      "tokens": 962,
+      "first_read": "2026-06-11T02:33:07.954Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/users/users.service.ts": {
+      "count": 1,
+      "tokens": 2280,
+      "first_read": "2026-06-11T02:33:10.432Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/board-column.tsx": {
+      "count": 1,
+      "tokens": 769,
+      "first_read": "2026-06-11T02:33:10.747Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/users.ts": {
+      "count": 1,
+      "tokens": 275,
+      "first_read": "2026-06-11T02:33:12.888Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/game-rail.tsx": {
+      "count": 1,
+      "tokens": 454,
+      "first_read": "2026-06-11T02:33:13.497Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/dto/pvp-game.dto.ts": {
+      "count": 2,
+      "tokens": 330,
+      "first_read": "2026-06-11T02:33:14.089Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/index.ts": {
+      "count": 1,
+      "tokens": 136,
+      "first_read": "2026-06-11T02:33:14.128Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/games/games-client.tsx": {
+      "count": 1,
+      "tokens": 1198,
+      "first_read": "2026-06-11T02:33:14.925Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/replay.ts": {
+      "count": 2,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:33:15.658Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/dto/computer-game.dto.ts": {
+      "count": 1,
+      "tokens": 666,
+      "first_read": "2026-06-11T02:33:16.369Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/games/game-history-row.tsx": {
+      "count": 1,
+      "tokens": 1646,
+      "first_read": "2026-06-11T02:33:19.606Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/games/game-history-list.tsx": {
+      "count": 1,
+      "tokens": 1327,
+      "first_read": "2026-06-11T02:33:19.837Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/games/game-history-filters.tsx": {
+      "count": 1,
+      "tokens": 1013,
+      "first_read": "2026-06-11T02:33:19.946Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/chess/engine.service.ts": {
+      "count": 2,
+      "tokens": 1661,
+      "first_read": "2026-06-11T02:33:20.546Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/chess/engine/adapter.ts": {
+      "count": 1,
+      "tokens": 483,
+      "first_read": "2026-06-11T02:33:20.966Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/chess/engine/game-state.ts": {
+      "count": 1,
+      "tokens": 1416,
+      "first_read": "2026-06-11T02:33:23.951Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/auth/sessions.service.ts": {
+      "count": 1,
+      "tokens": 633,
+      "first_read": "2026-06-11T02:33:26.816Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts": {
+      "count": 1,
+      "tokens": 4147,
+      "first_read": "2026-06-11T02:33:28.340Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.module.ts": {
+      "count": 1,
+      "tokens": 84,
+      "first_read": "2026-06-11T02:33:51.115Z"
+    },
+    "/Users/aramirez/Code/purechess/design.md": {
+      "count": 1,
+      "tokens": 1373,
+      "first_read": "2026-06-11T02:37:04.826Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/test/invites/invites.service.spec.ts": {
+      "count": 1,
+      "tokens": 2089,
+      "first_read": "2026-06-11T02:37:50.498Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/game/game-top-bar.tsx": {
+      "count": 1,
+      "tokens": 455,
+      "first_read": "2026-06-11T02:38:45.636Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/test/play/computer-game-setup.test.tsx": {
+      "count": 1,
+      "tokens": 1277,
+      "first_read": "2026-06-11T02:38:49.586Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/vitest.config.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-11T02:38:49.943Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/test/review/review-page.test.tsx": {
+      "count": 1,
+      "tokens": 2196,
+      "first_read": "2026-06-11T02:38:54.087Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/page.tsx": {
+      "count": 1,
+      "tokens": 717,
+      "first_read": "2026-06-11T02:38:54.182Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/games/games.module.ts": {
+      "count": 1,
+      "tokens": 123,
+      "first_read": "2026-06-11T02:41:29.961Z"
     }
   },
-  "files_written": [],
-  "edit_counts": {},
-  "anatomy_hits": 1,
-  "anatomy_misses": 0,
-  "repeated_reads_warned": 0,
+  "files_written": [
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/prisma/schema.prisma",
+      "action": "edit",
+      "tokens": 32,
+      "at": "2026-06-11T02:38:55.979Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/ws-events.ts",
+      "action": "edit",
+      "tokens": 26,
+      "at": "2026-06-11T02:39:12.490Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/ws-events.ts",
+      "action": "edit",
+      "tokens": 272,
+      "at": "2026-06-11T02:39:17.437Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts",
+      "action": "edit",
+      "tokens": 37,
+      "at": "2026-06-11T02:39:31.148Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts",
+      "action": "edit",
+      "tokens": 171,
+      "at": "2026-06-11T02:39:39.535Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.service.ts",
+      "action": "create",
+      "tokens": 447,
+      "at": "2026-06-11T02:39:44.866Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts",
+      "action": "edit",
+      "tokens": 109,
+      "at": "2026-06-11T02:39:48.908Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts",
+      "action": "edit",
+      "tokens": 76,
+      "at": "2026-06-11T02:39:58.600Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-join.tsx",
+      "action": "edit",
+      "tokens": 117,
+      "at": "2026-06-11T02:40:05.999Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-join.tsx",
+      "action": "edit",
+      "tokens": 53,
+      "at": "2026-06-11T02:40:12.331Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.gateway.ts",
+      "action": "create",
+      "tokens": 1243,
+      "at": "2026-06-11T02:40:19.757Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-join.tsx",
+      "action": "edit",
+      "tokens": 192,
+      "at": "2026-06-11T02:40:21.076Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.module.ts",
+      "action": "create",
+      "tokens": 100,
+      "at": "2026-06-11T02:40:21.174Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 101,
+      "at": "2026-06-11T02:40:32.556Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 45,
+      "at": "2026-06-11T02:40:33.555Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/invites/invites.service.spec.ts",
+      "action": "edit",
+      "tokens": 98,
+      "at": "2026-06-11T02:40:39.355Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/invites/invites.service.spec.ts",
+      "action": "edit",
+      "tokens": 275,
+      "at": "2026-06-11T02:40:47.946Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/invites/invites.service.spec.ts",
+      "action": "edit",
+      "tokens": 390,
+      "at": "2026-06-11T02:40:58.392Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 534,
+      "at": "2026-06-11T02:41:06.651Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 68,
+      "at": "2026-06-11T02:41:14.730Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 93,
+      "at": "2026-06-11T02:41:17.595Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 49,
+      "at": "2026-06-11T02:41:19.407Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/invites/invites.service.spec.ts",
+      "action": "edit",
+      "tokens": 1314,
+      "at": "2026-06-11T02:41:21.768Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 215,
+      "at": "2026-06-11T02:41:24.051Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.module.ts",
+      "action": "create",
+      "tokens": 145,
+      "at": "2026-06-11T02:41:36.317Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/play/invite-join.test.tsx",
+      "action": "create",
+      "tokens": 820,
+      "at": "2026-06-11T02:41:39.191Z"
+    },
+    {
+      "file": "/tmp/append-bug-a4.cjs",
+      "action": "create",
+      "tokens": 407,
+      "at": "2026-06-11T02:42:56.310Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-game-socket.ts",
+      "action": "create",
+      "tokens": 904,
+      "at": "2026-06-11T02:43:00.895Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-live-clock.ts",
+      "action": "edit",
+      "tokens": 118,
+      "at": "2026-06-11T02:43:05.086Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-live-clock.ts",
+      "action": "edit",
+      "tokens": 29,
+      "at": "2026-06-11T02:43:07.105Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 40,
+      "at": "2026-06-11T02:43:41.562Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 53,
+      "at": "2026-06-11T02:43:43.835Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 157,
+      "at": "2026-06-11T02:43:47.288Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/types/game-review.ts",
+      "action": "edit",
+      "tokens": 185,
+      "at": "2026-06-11T02:44:01.210Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 355,
+      "at": "2026-06-11T02:44:02.862Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/replay.ts",
+      "action": "edit",
+      "tokens": 88,
+      "at": "2026-06-11T02:44:03.481Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/replay.ts",
+      "action": "edit",
+      "tokens": 46,
+      "at": "2026-06-11T02:44:05.096Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 295,
+      "at": "2026-06-11T02:44:08.484Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-game-review.ts",
+      "action": "edit",
+      "tokens": 111,
+      "at": "2026-06-11T02:44:11.759Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 204,
+      "at": "2026-06-11T02:44:14.175Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/services/game-review.service.ts",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-06-11T02:44:19.036Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 28,
+      "at": "2026-06-11T02:44:24.970Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 39,
+      "at": "2026-06-11T02:44:27.273Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 67,
+      "at": "2026-06-11T02:44:29.586Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/services/game-review.service.ts",
+      "action": "edit",
+      "tokens": 1101,
+      "at": "2026-06-11T02:44:34.575Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 102,
+      "at": "2026-06-11T02:44:37.713Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 113,
+      "at": "2026-06-11T02:44:40.549Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 162,
+      "at": "2026-06-11T02:44:46.072Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 100,
+      "at": "2026-06-11T02:44:52.776Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-06-11T02:44:54.081Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 119,
+      "at": "2026-06-11T02:45:11.144Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 56,
+      "at": "2026-06-11T02:45:14.012Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 136,
+      "at": "2026-06-11T02:45:17.278Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 38,
+      "at": "2026-06-11T02:45:19.241Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+      "action": "edit",
+      "tokens": 23,
+      "at": "2026-06-11T02:45:20.391Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/home/hero.tsx",
+      "action": "edit",
+      "tokens": 21,
+      "at": "2026-06-11T02:45:31.834Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/home/hero.tsx",
+      "action": "edit",
+      "tokens": 31,
+      "at": "2026-06-11T02:45:34.806Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/realtime/realtime.gateway.spec.ts",
+      "action": "create",
+      "tokens": 1976,
+      "at": "2026-06-11T02:45:50.580Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/page.tsx",
+      "action": "create",
+      "tokens": 122,
+      "at": "2026-06-11T02:46:14.894Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/games/games.service.spec.ts",
+      "action": "create",
+      "tokens": 2211,
+      "at": "2026-06-11T02:46:25.487Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/analyze-client.tsx",
+      "action": "create",
+      "tokens": 1866,
+      "at": "2026-06-11T02:46:44.765Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/play/use-game-socket.test.tsx",
+      "action": "create",
+      "tokens": 1160,
+      "at": "2026-06-11T02:46:59.597Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/play/use-live-clock-offset.test.tsx",
+      "action": "create",
+      "tokens": 377,
+      "at": "2026-06-11T02:47:05.679Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/analyze/analyze-client.test.tsx",
+      "action": "create",
+      "tokens": 1022,
+      "at": "2026-06-11T02:47:32.211Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/analyze/hero-cta.test.tsx",
+      "action": "create",
+      "tokens": 135,
+      "at": "2026-06-11T02:47:34.183Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/home/homepage.test.tsx",
+      "action": "edit",
+      "tokens": 58,
+      "at": "2026-06-11T02:47:43.007Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/realtime/realtime.gateway.ts",
+      "action": "edit",
+      "tokens": 273,
+      "at": "2026-06-11T02:52:06.794Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/realtime/realtime.gateway.spec.ts",
+      "action": "edit",
+      "tokens": 537,
+      "at": "2026-06-11T02:52:28.111Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/ratings/glicko2.ts",
+      "action": "create",
+      "tokens": 935,
+      "at": "2026-06-11T02:56:17.470Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/ratings/glicko2.spec.ts",
+      "action": "create",
+      "tokens": 734,
+      "at": "2026-06-11T02:56:27.844Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.service.ts",
+      "action": "create",
+      "tokens": 1291,
+      "at": "2026-06-11T02:57:34.636Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 36,
+      "at": "2026-06-11T02:57:48.113Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 36,
+      "at": "2026-06-11T02:57:50.231Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 180,
+      "at": "2026-06-11T02:57:55.801Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 51,
+      "at": "2026-06-11T02:58:05.105Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 62,
+      "at": "2026-06-11T02:58:07.353Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.module.ts",
+      "action": "edit",
+      "tokens": 35,
+      "at": "2026-06-11T02:58:09.292Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.module.ts",
+      "action": "edit",
+      "tokens": 22,
+      "at": "2026-06-11T02:58:10.624Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts",
+      "action": "edit",
+      "tokens": 30,
+      "at": "2026-06-11T02:58:23.947Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts",
+      "action": "edit",
+      "tokens": 104,
+      "at": "2026-06-11T02:58:27.321Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/invites/invites.service.ts",
+      "action": "edit",
+      "tokens": 81,
+      "at": "2026-06-11T02:58:29.580Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/dto/pvp-game.dto.ts",
+      "action": "edit",
+      "tokens": 70,
+      "at": "2026-06-11T02:59:06.606Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/games/games.service.ts",
+      "action": "edit",
+      "tokens": 44,
+      "at": "2026-06-11T02:59:08.586Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts",
+      "action": "edit",
+      "tokens": 18,
+      "at": "2026-06-11T02:59:17.299Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts",
+      "action": "edit",
+      "tokens": 69,
+      "at": "2026-06-11T02:59:19.648Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts",
+      "action": "edit",
+      "tokens": 50,
+      "at": "2026-06-11T02:59:21.975Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts",
+      "action": "edit",
+      "tokens": 156,
+      "at": "2026-06-11T02:59:25.751Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-invite.ts",
+      "action": "edit",
+      "tokens": 0,
+      "at": "2026-06-11T02:59:29.286Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-create.tsx",
+      "action": "edit",
+      "tokens": 54,
+      "at": "2026-06-11T02:59:38.296Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-create.tsx",
+      "action": "edit",
+      "tokens": 59,
+      "at": "2026-06-11T02:59:40.646Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-create.tsx",
+      "action": "edit",
+      "tokens": 341,
+      "at": "2026-06-11T02:59:45.366Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/invite-join.tsx",
+      "action": "edit",
+      "tokens": 51,
+      "at": "2026-06-11T02:59:47.722Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 33,
+      "at": "2026-06-11T02:59:49.379Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 41,
+      "at": "2026-06-11T02:59:57.972Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 77,
+      "at": "2026-06-11T03:00:01.221Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 68,
+      "at": "2026-06-11T03:00:03.532Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/games/games.service.spec.ts",
+      "action": "edit",
+      "tokens": 40,
+      "at": "2026-06-11T03:00:20.784Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/games/games.service.spec.ts",
+      "action": "edit",
+      "tokens": 57,
+      "at": "2026-06-11T03:00:23.163Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/games/games.service.spec.ts",
+      "action": "edit",
+      "tokens": 43,
+      "at": "2026-06-11T03:00:25.105Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/games/games.service.spec.ts",
+      "action": "edit",
+      "tokens": 185,
+      "at": "2026-06-11T03:00:28.805Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/ratings/ratings.service.spec.ts",
+      "action": "create",
+      "tokens": 1427,
+      "at": "2026-06-11T03:00:57.339Z"
+    }
+  ],
+  "edit_counts": {
+    "apps/api/prisma/schema.prisma": 1,
+    "packages/shared/src/ws-events.ts": 2,
+    "apps/api/src/invites/invites.service.ts": 6,
+    "apps/api/src/realtime/realtime.service.ts": 1,
+    "apps/web/src/hooks/use-invite.ts": 6,
+    "apps/web/src/components/play/invite-join.tsx": 4,
+    "apps/api/src/realtime/realtime.gateway.ts": 2,
+    "apps/api/src/realtime/realtime.module.ts": 1,
+    "apps/api/src/games/games.service.ts": 13,
+    "apps/api/test/invites/invites.service.spec.ts": 4,
+    "apps/api/src/games/games.module.ts": 3,
+    "apps/web/test/play/invite-join.test.tsx": 1,
+    "../../../../tmp/append-bug-a4.cjs": 1,
+    "apps/web/src/hooks/use-game-socket.ts": 1,
+    "apps/web/src/hooks/use-live-clock.ts": 2,
+    "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx": 15,
+    "apps/web/src/types/game-review.ts": 1,
+    "apps/web/src/lib/replay.ts": 2,
+    "apps/web/src/hooks/use-game-review.ts": 1,
+    "apps/web/src/services/game-review.service.ts": 2,
+    "apps/web/src/app/games/[gameId]/review-client.tsx": 8,
+    "apps/web/src/components/home/hero.tsx": 2,
+    "apps/api/test/realtime/realtime.gateway.spec.ts": 2,
+    "apps/web/src/app/analyze/page.tsx": 1,
+    "apps/api/test/games/games.service.spec.ts": 5,
+    "apps/web/src/app/analyze/analyze-client.tsx": 1,
+    "apps/web/test/play/use-game-socket.test.tsx": 1,
+    "apps/web/test/play/use-live-clock-offset.test.tsx": 1,
+    "apps/web/test/analyze/analyze-client.test.tsx": 1,
+    "apps/web/test/analyze/hero-cta.test.tsx": 1,
+    "apps/web/test/home/homepage.test.tsx": 1,
+    "apps/api/src/ratings/glicko2.ts": 1,
+    "apps/api/test/ratings/glicko2.spec.ts": 1,
+    "apps/api/src/ratings/ratings.service.ts": 1,
+    "packages/shared/src/dto/pvp-game.dto.ts": 1,
+    "apps/web/src/components/play/invite-create.tsx": 3,
+    "apps/api/test/ratings/ratings.service.spec.ts": 1
+  },
+  "anatomy_hits": 51,
+  "anatomy_misses": 10,
+  "repeated_reads_warned": 44,
   "cerebrum_warnings": 0,
   "stop_count": 0
 }

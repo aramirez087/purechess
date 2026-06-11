@@ -1036,3 +1036,109 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 20:38 | Edited apps/api/prisma/schema.prisma | 2→3 lines | ~30 |
+| 20:39 | Edited packages/shared/src/ws-events.ts | 2→3 lines | ~26 |
+| 20:39 | Edited packages/shared/src/ws-events.ts | expanded (+31 lines) | ~272 |
+| 20:39 | Edited apps/api/src/invites/invites.service.ts | 4→5 lines | ~37 |
+| 20:39 | Edited apps/api/src/invites/invites.service.ts | 12→16 lines | ~171 |
+| 20:39 | Created apps/api/src/realtime/realtime.service.ts | — | ~447 |
+| 20:39 | Edited apps/api/src/invites/invites.service.ts | 4→7 lines | ~109 |
+| 20:39 | Edited apps/web/src/hooks/use-invite.ts | 3→5 lines | ~76 |
+| 20:40 | Edited apps/web/src/components/play/invite-join.tsx | expanded (+7 lines) | ~117 |
+| 20:40 | Edited apps/web/src/components/play/invite-join.tsx | 1→6 lines | ~53 |
+| 20:40 | Created apps/api/src/realtime/realtime.gateway.ts | — | ~1243 |
+| 20:40 | Edited apps/web/src/components/play/invite-join.tsx | modified Detail() | ~192 |
+| 20:40 | Created apps/api/src/realtime/realtime.module.ts | — | ~100 |
+| 20:40 | Edited apps/api/test/invites/invites.service.spec.ts | 5→6 lines | ~40 |
+| 20:40 | Edited apps/api/src/games/games.service.ts | added 1 import(s) | ~101 |
+| 20:40 | Edited apps/api/src/games/games.service.ts | modified constructor() | ~45 |
+| 20:40 | Edited apps/api/test/invites/invites.service.spec.ts | 10→11 lines | ~98 |
+| 20:40 | Edited apps/api/test/invites/invites.service.spec.ts | expanded (+19 lines) | ~275 |
+| 20:40 | Edited apps/api/test/invites/invites.service.spec.ts | expanded (+25 lines) | ~390 |
+| 20:41 | Edited apps/api/src/games/games.service.ts | added nullish coalescing | ~534 |
+| 20:41 | Edited apps/api/src/games/games.service.ts | modified if() | ~68 |
+| 20:41 | Edited apps/api/src/games/games.service.ts | modified if() | ~93 |
+| 20:41 | Edited apps/api/src/games/games.service.ts | 8→8 lines | ~49 |
+| 20:41 | Edited apps/api/test/invites/invites.service.spec.ts | expanded (+120 lines) | ~1314 |
+| 20:41 | Edited apps/api/src/games/games.service.ts | added 1 condition(s) | ~215 |
+| 20:41 | Created apps/api/src/games/games.module.ts | — | ~145 |
+| 20:41 | Created apps/web/test/play/invite-join.test.tsx | — | ~820 |
+| 20:42 | Created ../../../../tmp/append-bug-a4.cjs | — | ~380 |
+| 20:43 | Created apps/web/src/hooks/use-game-socket.ts | — | ~904 |
+| 20:43 | A4: fixed invite random-color quirk — Game.inviteColorChoice column + migration, preview colorChoice, accept prefers column, invite-join shows Random | apps/api/prisma/schema.prisma, apps/api/src/invites/invites.service.ts, apps/web/src/hooks/use-invite.ts, apps/web/src/components/play/invite-join.tsx, apps/api/test/invites/invites.service.spec.ts, apps/web/test/play/invite-join.test.tsx | jest 21/21 + vitest 4/4 pass | ~3000 |
+| 20:43 | Edited apps/web/src/hooks/use-live-clock.ts | modified useLiveClock() | ~118 |
+| 20:43 | Edited apps/web/src/hooks/use-live-clock.ts | 1→3 lines | ~29 |
+| 20:43 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 2→2 lines | ~40 |
+| 20:43 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 import(s) | ~53 |
+| 20:43 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified mergeWsState() | ~157 |
+| 20:44 | Edited apps/web/src/types/game-review.ts | expanded (+9 lines) | ~185 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 3 condition(s) | ~355 |
+| 20:44 | Edited apps/web/src/lib/replay.ts | added error handling | ~88 |
+| 20:44 | Edited apps/web/src/lib/replay.ts | modified validateReplay() | ~46 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: once, game | ~295 |
+| 20:44 | Edited apps/web/src/hooks/use-game-review.ts | modified useGameReview() | ~111 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: polling, SLOW_POLL_MS | ~204 |
+| 20:44 | Edited apps/web/src/services/game-review.service.ts | inline fix | ~20 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 4→5 lines | ~28 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified StatusHero() | ~39 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 3→6 lines | ~67 |
+| 20:44 | Edited apps/web/src/services/game-review.service.ts | added error handling | ~1101 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | expanded (+6 lines) | ~102 |
+| 20:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 9→10 lines | ~113 |
+| 20:44 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 11→14 lines | ~162 |
+| 20:44 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 condition(s) | ~100 |
+| 20:44 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~25 |
+| 20:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: outcome | ~119 |
+| 20:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 3→3 lines | ~56 |
+| 20:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 6→10 lines | ~136 |
+| 20:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 2→2 lines | ~38 |
+| 20:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 2→3 lines | ~23 |
+| 20:45 | Edited apps/web/src/components/home/hero.tsx | 3→2 lines | ~21 |
+| 20:45 | Edited apps/web/src/components/home/hero.tsx | removed 15 lines | ~31 |
+| 20:45 | Created apps/api/test/realtime/realtime.gateway.spec.ts | — | ~1976 |
+| 20:46 | Created apps/web/src/app/analyze/page.tsx | — | ~122 |
+| 20:46 | Created apps/api/test/games/games.service.spec.ts | — | ~2211 |
+| 20:46 | Created apps/web/src/app/analyze/analyze-client.tsx | — | ~1866 |
+| 20:46 | Created apps/web/test/play/use-game-socket.test.tsx | — | ~1160 |
+| 20:47 | Created apps/web/test/play/use-live-clock-offset.test.tsx | — | ~377 |
+| 20:47 | Created apps/web/test/analyze/analyze-client.test.tsx | — | ~1022 |
+| 20:47 | Created apps/web/test/analyze/hero-cta.test.tsx | — | ~135 |
+| 20:47 | Edited apps/web/test/home/homepage.test.tsx | 5→5 lines | ~58 |
+| 20:50 | A3 shipped: /analyze (PGN/FEN paste -> review shell + client eval), hero CTA live; AnalysisReview widening + startFen threading; tsc clean, 8 new + 46 existing tests pass | app/analyze/*, review-client, game-review.service, replay, use-game-review, types/game-review, hero | ok | ~28k |
+| 20:52 | Edited apps/api/src/realtime/realtime.gateway.ts | modified afterInit() | ~273 |
+| 20:52 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | modified captureMiddleware() | ~537 |
+| 20:56 | Created apps/api/src/ratings/glicko2.ts | — | ~935 |
+| 20:56 | Created apps/api/test/ratings/glicko2.spec.ts | — | ~734 |
+| 20:57 | Created apps/api/src/ratings/ratings.service.ts | — | ~1291 |
+| 20:57 | Edited apps/api/src/games/games.service.ts | 6→7 lines | ~36 |
+| 20:57 | Edited apps/api/src/games/games.service.ts | added 1 import(s) | ~36 |
+| 20:57 | Edited apps/api/src/games/games.service.ts | added error handling | ~180 |
+| 20:58 | Edited apps/api/src/games/games.service.ts | 7→8 lines | ~51 |
+| 20:58 | Edited apps/api/src/games/games.service.ts | modified if() | ~62 |
+| 20:58 | Edited apps/api/src/games/games.module.ts | added 1 import(s) | ~35 |
+| 20:58 | Edited apps/api/src/games/games.module.ts | inline fix | ~22 |
+| 20:58 | Edited apps/api/src/invites/invites.service.ts | added nullish coalescing | ~30 |
+| 20:58 | Edited apps/api/src/invites/invites.service.ts | 10→11 lines | ~104 |
+| 20:58 | Edited apps/api/src/invites/invites.service.ts | 11→12 lines | ~81 |
+| 20:59 | Edited packages/shared/src/dto/pvp-game.dto.ts | 5→7 lines | ~70 |
+| 20:59 | Edited apps/api/src/games/games.service.ts | 5→6 lines | ~44 |
+| 20:59 | Edited apps/web/src/hooks/use-invite.ts | 2→1 lines | ~18 |
+| 20:59 | Edited apps/web/src/hooks/use-invite.ts | 6→8 lines | ~69 |
+| 20:59 | Edited apps/web/src/hooks/use-invite.ts | 4→5 lines | ~50 |
+| 20:59 | Edited apps/web/src/hooks/use-invite.ts | modified useCreateInvite() | ~156 |
+| 20:59 | Edited apps/web/src/hooks/use-invite.ts | — | ~0 |
+| 20:59 | Edited apps/web/src/components/play/invite-create.tsx | 2→3 lines | ~54 |
+| 20:59 | Edited apps/web/src/components/play/invite-create.tsx | 6→7 lines | ~59 |
+| 20:59 | Edited apps/web/src/components/play/invite-create.tsx | expanded (+27 lines) | ~341 |
+| 20:59 | Edited apps/web/src/components/play/invite-join.tsx | 3→3 lines | ~51 |
+| 20:59 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 5→6 lines | ~33 |
+| 20:59 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified StatusHero() | ~41 |
+| 21:00 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 6→7 lines | ~77 |
+| 21:00 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 5→6 lines | ~68 |
+| 21:00 | Edited apps/api/test/games/games.service.spec.ts | added 1 import(s) | ~40 |
+| 21:00 | Edited apps/api/test/games/games.service.spec.ts | 5→9 lines | ~57 |
+| 21:00 | Edited apps/api/test/games/games.service.spec.ts | 3→4 lines | ~43 |
+| 21:00 | Edited apps/api/test/games/games.service.spec.ts | expanded (+11 lines) | ~185 |
+| 21:00 | Created apps/api/test/ratings/ratings.service.spec.ts | — | ~1427 |
+| 21:05 | A1 realtime PvP: WS gateway (handshake auth, game rooms, presence), GamesService emits, web use-game-socket + slow-poll fallback + clock skew; verified live (push ~11ms) | apps/api/src/realtime/*, games/*, apps/web hooks+live-game-client | done, 27 unit tests | ~40k |
+| 21:10 | A2 Glicko-2: glicko2.ts (paper-exact), RatingsService idempotent processGameResult, rated invites + UI pill, ledger delta live (-162 verified in browser) | apps/api/src/ratings/*, invites, apps/web invite-*, use-invite | done, 15 tests | ~25k |

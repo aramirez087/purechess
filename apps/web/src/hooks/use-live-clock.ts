@@ -33,6 +33,12 @@ export function useLiveClock(
   clock: ComputerClockDto | null | undefined,
   sideToMove: 'white' | 'black',
   running: boolean,
+  /**
+   * Estimated server-minus-client clock skew (ms). `lastTickAt` is a server
+   * timestamp; draining it against a skewed local clock drifts by exactly
+   * the skew. Callers with a server time signal (WS pushes) pass it here.
+   */
+  serverOffsetMs = 0,
 ): LiveClock | null {
   const [, setTick] = useState(0);
 
@@ -45,7 +51,9 @@ export function useLiveClock(
 
   if (!clock) return null;
 
-  const elapsed = running ? Math.max(0, Date.now() - clock.lastTickAt) : 0;
+  const elapsed = running
+    ? Math.max(0, Date.now() + serverOffsetMs - clock.lastTickAt)
+    : 0;
   return {
     whiteMs: Math.max(0, clock.whiteMs - (sideToMove === 'white' ? elapsed : 0)),
     blackMs: Math.max(0, clock.blackMs - (sideToMove === 'black' ? elapsed : 0)),

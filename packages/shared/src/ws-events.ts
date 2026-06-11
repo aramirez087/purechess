@@ -18,6 +18,7 @@ export enum WsEvent {
   GameResign = 'game:resign',
   GameAbort = 'game:abort',
   GameClock = 'game:clock',
+  GamePresence = 'game:presence',
 
   MatchFound = 'match:found',
   MatchmakingJoin = 'matchmaking:join',
@@ -55,6 +56,37 @@ export interface WsGameOverPayload {
   gameId: string;
   result: GameResult;
   termination: GameTermination;
+}
+
+/**
+ * Color-neutral live game state pushed to the `game:{id}` room whenever the
+ * server persists a change (move, resignation, flag fall). Carries no
+ * `yourColor`/player identities — clients merge it into the state they
+ * fetched over REST. `serverNow` lets clients correct local clock skew when
+ * draining the side-to-move's clock from `lastTickAt`.
+ */
+export interface WsGameStatePayload {
+  gameId: string;
+  serverNow: number;
+  fen: string;
+  pgn: string;
+  status: string;
+  lastMove: string | null;
+  ply: number;
+  result: string | null;
+  resultReason: string | null;
+  clock: {
+    whiteMs: number;
+    blackMs: number;
+    lastTickAt: number;
+    incrementMs?: number;
+  } | null;
+}
+
+/** User ids currently connected to the game room. */
+export interface WsGamePresencePayload {
+  gameId: string;
+  userIds: string[];
 }
 
 export interface WsMatchFoundPayload {

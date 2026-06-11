@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import {
@@ -14,9 +15,12 @@ import {
   PvpGameStateDto,
   PvpPlayerDto,
   SerializableEngineState,
+  WsGameStatePayload,
 } from "@purechess/shared";
 import { PrismaService } from "../database/prisma.service";
 import { EngineService, InvalidMoveError } from "../chess/engine.service";
+import { RealtimeService } from "../realtime/realtime.service";
+import { RatingsService } from "../ratings/ratings.service";
 import {
   STARTING_FEN,
   engineTimeMs,
@@ -38,10 +42,26 @@ type LoadedGame = NonNullable<
  */
 @Injectable()
 export class GamesService {
+  private readonly logger = new Logger(GamesService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly engine: EngineService,
+    private readonly realtime: RealtimeService,
+    private readonly ratings: RatingsService,
   ) {}
+
+  /** Rating failures must never break a game-over response. */
+  private async settleRatings(gameId: string): Promise<void> {
+    try {
+      await this.ratings.processGameResult(gameId);
+    } catch (err) {
+      this.logger.error(
+        `Rating processing failed for game ${gameId}`,
+        err instanceof Error ? err.stack : String(err),
+      );
+    }
+  }
 
   /** Public only so LoadedGame can be derived from its return type. */
   findGameWithPlayers(gameId: string) {
@@ -139,11 +159,37 @@ export class GamesService {
       clock,
       timeControlSeconds: game.timeControlSeconds,
       incrementSeconds: game.incrementSeconds ?? 0,
+      rated: game.isRated,
+    };
+  }
+
+  /**
+   * Color-neutral push payload for the game room. Reuses buildDto for the
+   * clock/lastMove serialization; the identity fields are discarded so one
+   * emit serves both players.
+   */
+  private buildWsState(
+    game: LoadedGame,
+    serialized: SerializableEngineState | null,
+    overrides?: Parameters<GamesService["buildDto"]>[3],
+  ): WsGameStatePayload {
+    const dto = this.buildDto(game, game.whiteUserId ?? "", serialized, overrides);
+    return {
+      gameId: dto.gameId,
+      serverNow: Date.now(),
+      fen: dto.fen,
+      pgn: dto.pgn,
+      status: dto.status,
+      lastMove: dto.lastMove,
+      ply: dto.ply,
+      result: dto.result,
+      resultReason: dto.resultReason,
+      clock: dto.clock,
     };
   }
 
   private async finalize(
-    gameId: string,
+    game: LoadedGame,
     serialized: SerializableEngineState,
     result: GameResult,
     reason: GameTermination,
@@ -156,7 +202,7 @@ export class GamesService {
       resultReason: reason as SerializableEngineState["resultReason"],
     };
     await this.prisma.game.update({
-      where: { id: gameId },
+      where: { id: game.id },
       data: {
         engineState: completed as object,
         status: "completed",
@@ -165,6 +211,21 @@ export class GamesService {
         endedAt: new Date(nowMs),
       },
     });
+    const overrides = {
+      status: "completed",
+      result: result as string,
+      resultReason: reason as string,
+    };
+    this.realtime.emitGameState(
+      game.id,
+      this.buildWsState(game, completed, overrides),
+    );
+    this.realtime.emitGameOver(game.id, {
+      gameId: game.id,
+      result,
+      termination: reason,
+    });
+    await this.settleRatings(game.id);
     return completed;
   }
 
@@ -188,7 +249,7 @@ export class GamesService {
       const detected = await this.engine.detectResult(state, nowMs);
       if (detected && detected.reason === GameTermination.Timeout) {
         const completed = await this.finalize(
-          gameId,
+          game,
           serialized,
           detected.result,
           detected.reason,
@@ -243,7 +304,7 @@ export class GamesService {
       const result = state.result as GameResult;
       const reason = state.resultReason as GameTermination;
       const completed = await this.finalize(
-        gameId,
+        game,
         this.engine.toSerializable(state),
         result,
         reason,
@@ -308,11 +369,28 @@ export class GamesService {
       });
     });
 
-    return this.buildDto({ ...game, pgn, finalFen }, userId, serializedNext, {
+    const overrides = {
       status: finalResult ? "completed" : "active",
       result: finalResult ? (finalResult.result as string) : null,
       resultReason: finalResult ? (finalResult.reason as string) : null,
-    });
+    };
+
+    // Push the persisted state to the game room so the opponent sees the
+    // move instantly instead of on the next poll.
+    this.realtime.emitGameState(
+      gameId,
+      this.buildWsState({ ...game, pgn, finalFen }, serializedNext, overrides),
+    );
+    if (finalResult) {
+      this.realtime.emitGameOver(gameId, {
+        gameId,
+        result: finalResult.result,
+        termination: finalResult.reason,
+      });
+      await this.settleRatings(gameId);
+    }
+
+    return this.buildDto({ ...game, pgn, finalFen }, userId, serializedNext, overrides);
   }
 
   async resign(gameId: string, userId: string): Promise<PvpGameStateDto> {
@@ -327,7 +405,7 @@ export class GamesService {
       : GameResult.WhiteWins;
     const nowMs = Date.now();
     const completed = await this.finalize(
-      gameId,
+      game,
       serialized,
       result,
       GameTermination.Resignation,

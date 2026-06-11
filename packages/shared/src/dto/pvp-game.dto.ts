@@ -35,4 +35,6 @@ export interface PvpGameStateDto {
   clock: ComputerClockDto | null;
   timeControlSeconds: number;
   incrementSeconds: number;
+  /** Rated games feed Glicko-2 on completion. Optional for compat. */
+  rated?: boolean;
 }

@@ -1,10 +1,11 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T02:27:25.697Z
-> Files: 720 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:00:57.333Z
+> Files: 740 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
+- `append-bug-a4.cjs` — Declares fs (~380 tok)
 - `commit-msg.txt` — Declares in (~304 tok)
 - `contrast-check.mjs` — hslToRgb: lum, contrast (~356 tok)
 - `contrast.mjs` — hslToRgb: lum, contrast, blend (~659 tok)
@@ -610,7 +611,7 @@
 
 ## apps/api/prisma/
 
-- `schema.prisma` — Prisma database schema (~1872 tok)
+- `schema.prisma` — Declares GameResult (~1880 tok)
 - `seed.ts` — prisma: main (~2205 tok)
 
 ## apps/api/prisma/migrations/
@@ -731,15 +732,15 @@
 ## apps/api/src/games/
 
 - `games.controller.ts` — Live PvP (friend-invite) games — players only, session required. (~355 tok)
-- `games.module.ts` — Exports GamesModule (~123 tok)
-- `games.service.ts` — Live PvP (friend-invite) games. Mirrors the clock/persistence semantics of (~3120 tok)
+- `games.module.ts` — Exports GamesModule (~166 tok)
+- `games.service.ts` — Live PvP (friend-invite) games. Mirrors the clock/persistence semantics of (~3788 tok)
 
 ## apps/api/src/invites/
 
 - `invite-gateway.ts` — Exports InviteGateway (~231 tok)
 - `invites.controller.ts` — Exports InvitesController (~468 tok)
 - `invites.module.ts` — Exports InvitesModule (~115 tok)
-- `invites.service.ts` — Exports InviteColor, InvitesService (~1795 tok)
+- `invites.service.ts` — Exports InviteColor, InvitesService (~1960 tok)
 
 ## apps/api/src/invites/dto/
 
@@ -764,15 +765,16 @@
 
 ## apps/api/src/ratings/
 
+- `glicko2.ts` — Glicko-2 rating system (Glickman, http://www.glicko.net/glicko/glicko2.pdf). (~935 tok)
 - `ratings.controller.ts` — Exports RatingsController (~64 tok)
 - `ratings.module.ts` — Exports RatingsModule (~84 tok)
-- `ratings.service.ts` — Exports RatingsService (~26 tok)
+- `ratings.service.ts` — Glicko-2 rating processing. Runs once per completed rated PvP game; (~1291 tok)
 
 ## apps/api/src/realtime/
 
-- `realtime.gateway.ts` — Exports RealtimeGateway (~74 tok)
-- `realtime.module.ts` — Exports RealtimeModule (~78 tok)
-- `realtime.service.ts` — Exports RealtimeService (~27 tok)
+- `realtime.gateway.ts` — Live game push channel. Sockets authenticate with the same session cookie (~1378 tok)
+- `realtime.module.ts` — Exports RealtimeModule (~100 tok)
+- `realtime.service.ts` — Emitter facade over the Socket.IO server. Domain services (GamesService) (~447 tok)
 
 ## apps/api/src/redis/
 
@@ -855,18 +857,31 @@
 - `shadow-adapter.spec.ts` — STARTPOS: mockAdapter (~2628 tok)
 - `ts-adapter.spec.ts` — Declares STARTPOS (~2172 tok)
 
+## apps/api/test/games/
+
+- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~2410 tok)
+
 ## apps/api/test/health/
 
 - `health.spec.ts` — Declares mockAppService (~1100 tok)
 
 ## apps/api/test/invites/
 
-- `invites.service.spec.ts` — CREATOR_ID: makeGame (~2089 tok)
+- `invites.service.spec.ts` — CREATOR_ID: makeGame (~3862 tok)
 
 ## apps/api/test/observability/
 
 - `logging.spec.ts` — Declares SENSITIVE_FIELDS (~346 tok)
 - `sentry.spec.ts` — Declares err (~889 tok)
+
+## apps/api/test/ratings/
+
+- `glicko2.spec.ts` — Declares GlickoRating (~734 tok)
+- `ratings.service.spec.ts` — GAME_ID: makeGame, makeRatingRow (~1427 tok)
+
+## apps/api/test/realtime/
+
+- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~2182 tok)
 
 ## apps/api/test/reports/
 
@@ -926,7 +941,7 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — Slim status zone docked inside the unified rail (not a floating card). (~5064 tok)
+- `live-game-client.tsx` — Merge a color-neutral WS push into the REST-fetched game state. (~5888 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~60 tok)
 - `page.tsx` — metadata (~100 tok)
 
@@ -941,6 +956,11 @@
 ## apps/web/src/app/admin/users/[id]/
 
 - `page.tsx` — AdminUserDetailPage (~1474 tok)
+
+## apps/web/src/app/analyze/
+
+- `analyze-client.tsx` — /analyze client: token-surface centered input card (auto-detects PGN vs FEN via 7-slash first token), branded error alert; on parse swaps to ReviewClient (dark review shell) with a "New analysis" exitAction that returns to the form with the paste intact. (~1866 tok)
+- `page.tsx` — /analyze server page: buildMetadata title "Analyze — Purechess", renders AnalyzeClient. (~122 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
 
@@ -957,7 +977,7 @@
 
 - `error.tsx` — GameError (~134 tok)
 - `page.tsx` — formatResult (~717 tok)
-- `review-client.tsx` — Per-player score-sheet chip: "1" / "0" / "½". (~3217 tok)
+- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~3414 tok)
 
 ## apps/web/src/app/login/
 
@@ -1032,7 +1052,7 @@
 - `cta-button.tsx` — VARIANT_CLASSES (~533 tok)
 - `footer.tsx` — GithubIcon (~933 tok)
 - `hero-board.tsx` — Static board art for the home hero — "the board is the product", so the (~1333 tok)
-- `hero.tsx` — FEATURES (~1710 tok)
+- `hero.tsx` — FEATURES (~1521 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
 ## apps/web/src/components/layout/
@@ -1044,8 +1064,8 @@
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
-- `invite-create.tsx` — TIME_CONTROLS (~2518 tok)
-- `invite-join.tsx` — formatTimeControl (~1609 tok)
+- `invite-create.tsx` — TIME_CONTROLS (~2852 tok)
+- `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Shared recipes for the selectable pills in the play setup pickers (~194 tok)
 
 ## apps/web/src/components/review/
@@ -1071,11 +1091,15 @@
 
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~624 tok)
-- `use-live-clock.ts` — Exports formatClock, useLiveClock — live per-side countdown from serialized server clock (~500 tok)
+- `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
+- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~904 tok)
+- `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
+- `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~578 tok)
 - `use-position-eval.ts` — Exports usePositionEval — debounced White-POV Stockfish eval of a FEN (~550 tok)
 
 ## apps/web/src/lib/
 
+- `replay.ts` — Exports replayToFen, validateReplay (~337 tok)
 - `utils.ts` — Exports cn, formatDuration, formatRelativeTime, clampRatingDelta, formatTimeControl (~369 tok)
 
 ## apps/web/src/lib/api/
@@ -1093,7 +1117,16 @@
 
 ## apps/web/src/services/
 
-- `game-review.service.ts` — PvP state is player-scoped — forward the viewer's session cookie. (~1975 tok)
+- `game-review.service.ts` — PvP state is player-scoped — forward the viewer's session cookie. (~3071 tok)
+
+## apps/web/src/types/
+
+- `game-review.ts` — Custom starting position (FEN). Omitted = standard initial position. (~260 tok)
+
+## apps/web/test/analyze/
+
+- `analyze-client.test.tsx` — AnalyzeClient: PGN→moves render, honest "Analysis." verdict (no bogus result), mate PGN→Checkmate/0–1, FEN→board-only review, invalid input→alert, New-analysis round-trip. Mocks board, sonner, stockfish-client. (~1022 tok)
+- `hero-cta.test.tsx` — Hero "Analyze a game" CTA is a live link to /analyze, no "Soon" badge. (~135 tok)
 
 ## apps/web/test/api/
 
@@ -1116,11 +1149,14 @@
 
 ## apps/web/test/home/
 
-- `homepage.test.tsx` — link (~724 tok)
+- `homepage.test.tsx` — link (~718 tok)
 
 ## apps/web/test/play/
 
 - `computer-game-setup.test.tsx` — mockCreate (~1277 tok)
+- `invite-join.test.tsx` — mockUseGetInvite (~820 tok)
+- `use-game-socket.test.tsx` — sockets (~1160 tok)
+- `use-live-clock-offset.test.tsx` — clock (~377 tok)
 
 ## apps/web/test/profile/
 
@@ -1224,12 +1260,13 @@
 
 - `index.ts` (~136 tok)
 - `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto + 2 more (~275 tok)
+- `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~708 tok)
 
 ## packages/shared/src/dto/
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
-- `pvp-game.dto.ts` — PvpGameStateDto/PvpPlayerDto/PvpMoveDto for live friend games (~330 tok)
+- `pvp-game.dto.ts` — Move submission for a live PvP game. (~314 tok)
 
 ## scripts/
 

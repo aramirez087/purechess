@@ -5,7 +5,7 @@ import { Chess } from 'chess.js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Flag, Loader2, Plus } from 'lucide-react';
-import type { PvpGameStateDto, Square } from '@purechess/shared';
+import type { PvpGameStateDto, Square, WsGameStatePayload } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
 import { Chessboard } from '@/components/board/chessboard';
 import { BoardSettingsProvider } from '@/components/board/board-context';
@@ -29,6 +29,7 @@ import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
 import { getPvpGame, submitPvpMove, resignPvpGame } from '@/lib/api/pvp-games';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
+import { useGameSocket } from '@/hooks/use-game-socket';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
 
 type Color = 'white' | 'black';
@@ -38,7 +39,25 @@ type PageState =
   | { phase: 'error'; message: string }
   | { phase: 'playing'; game: PvpGameStateDto; submitting: boolean; moveError: string | null };
 
+// Polling is the fallback transport: fast cadence when the socket is down,
+// slow safety-net heartbeat when live pushes are flowing.
 const POLL_MS = 1500;
+const SLOW_POLL_MS = 10_000;
+
+/** Merge a color-neutral WS push into the REST-fetched game state. */
+function mergeWsState(game: PvpGameStateDto, p: WsGameStatePayload): PvpGameStateDto {
+  return {
+    ...game,
+    fen: p.fen,
+    pgn: p.pgn,
+    status: p.status,
+    lastMove: p.lastMove,
+    ply: p.ply,
+    result: p.result,
+    resultReason: p.resultReason,
+    clock: p.clock,
+  };
+}
 
 const REASON_LABELS: Record<string, string> = {
   checkmate: 'Checkmate',
@@ -93,6 +112,8 @@ function StatusHero({
   yourTurn,
   opponentName,
   timed,
+  rated,
+  opponentOffline,
 }: {
   isGameOver: boolean;
   tone: ResultTone;
@@ -101,6 +122,8 @@ function StatusHero({
   yourTurn: boolean;
   opponentName: string;
   timed: boolean;
+  rated?: boolean;
+  opponentOffline?: boolean;
 }) {
   if (isGameOver) {
     const toneClasses: Record<ResultTone, string> = {
@@ -150,6 +173,10 @@ function StatusHero({
       </div>
       <p className="mt-1 text-xs text-[#9da79c]">
         Friend game · {timed ? 'Timed' : 'Untimed'}
+        {rated ? ' · Rated' : ''}
+        {opponentOffline && (
+          <span className="text-[#b9b19d]"> · {opponentName} disconnected</span>
+        )}
       </p>
     </div>
   );
@@ -179,10 +206,34 @@ export function LiveGameClient({ gameId }: Props) {
   const _isPlaying = state.phase === 'playing';
   const _isGameOver = _isPlaying && state.game.status === 'completed';
   const _sanCount = _isPlaying ? parsePgnMoves(state.game.pgn).length : 0;
+  const statusLive = _isPlaying ? state.game.status : null;
+  const liveEnabled = statusLive === 'active' || statusLive === 'invite_pending';
 
   useEffect(() => {
     setCurrentPly(_sanCount);
   }, [_sanCount]);
+
+  // Live push channel. Server emits authoritative state on every persisted
+  // change; REST stays the source of truth for initial load and reconnects.
+  const socket = useGameSocket(gameId, liveEnabled, {
+    onState: (p) =>
+      setState((s) => {
+        if (s.phase !== 'playing' || s.submitting) return s;
+        // Drop stale pushes (an older ply with no status change).
+        if (p.ply < s.game.ply && p.status === s.game.status) return s;
+        return { ...s, game: mergeWsState(s.game, p) };
+      }),
+    onResync: () => {
+      getPvpGame(gameId)
+        .then((game) => {
+          if (disposedRef.current) return;
+          setState((s) => (s.phase === 'playing' && !s.submitting ? { ...s, game } : s));
+        })
+        .catch(() => {
+          // transient — fallback polling covers it
+        });
+    },
+  });
 
   useGameKeyboard({
     isGameOver: _isGameOver,
@@ -201,7 +252,33 @@ export function LiveGameClient({ gameId }: Props) {
     _isPlaying ? state.game.clock : null,
     _isPlaying ? getSideToMove(state.game.fen) : 'white',
     _isPlaying && state.game.status === 'active',
+    socket.clockOffsetMs,
   );
+
+  // When the side to move flags locally, ask the server once: getState runs
+  // detectResult, finalizes the timeout and pushes game:over to both players.
+  const flagPending =
+    _isPlaying &&
+    state.game.status === 'active' &&
+    liveClock != null &&
+    (liveClock.whiteMs <= 0 || liveClock.blackMs <= 0);
+  const flagClaimedRef = useRef(false);
+  useEffect(() => {
+    if (!flagPending) {
+      flagClaimedRef.current = false;
+      return;
+    }
+    if (flagClaimedRef.current) return;
+    flagClaimedRef.current = true;
+    getPvpGame(gameId)
+      .then((game) => {
+        if (disposedRef.current) return;
+        setState((s) => (s.phase === 'playing' && !s.submitting ? { ...s, game } : s));
+      })
+      .catch(() => {
+        flagClaimedRef.current = false;
+      });
+  }, [flagPending, gameId]);
 
   // Initial load.
   useEffect(() => {
@@ -222,11 +299,11 @@ export function LiveGameClient({ gameId }: Props) {
     setLoadToken((t) => t + 1);
   }
 
-  // Poll while the game is live: opponent moves, resignations and server-side
-  // flag falls all arrive through here. The board animates the diff.
-  const statusForPoll = _isPlaying ? state.game.status : null;
+  // Fallback polling: fast when the socket is down (sole transport), slow
+  // safety-net heartbeat when pushes are flowing. The board animates the diff.
+  const pollMs = socket.connected ? SLOW_POLL_MS : POLL_MS;
   useEffect(() => {
-    if (statusForPoll !== 'active' && statusForPoll !== 'invite_pending') return;
+    if (!liveEnabled) return;
     const id = setInterval(async () => {
       try {
         const next = await getPvpGame(gameId);
@@ -239,9 +316,9 @@ export function LiveGameClient({ gameId }: Props) {
       } catch {
         // transient poll error — keep the last good state
       }
-    }, POLL_MS);
+    }, pollMs);
     return () => clearInterval(id);
-  }, [gameId, statusForPoll]);
+  }, [gameId, liveEnabled, pollMs]);
 
   async function handleMove(intent: MoveIntent) {
     if (state.phase !== 'playing') return;
@@ -331,6 +408,12 @@ export function LiveGameClient({ gameId }: Props) {
   const material = computeMaterial(game.fen);
   const opponent = yourColor === 'white' ? game.black : game.white;
   const opponentName = opponent?.username ?? 'Opponent';
+  const opponentOffline =
+    !isGameOver &&
+    socket.connected &&
+    socket.presentUserIds !== null &&
+    opponent?.id != null &&
+    !socket.presentUserIds.includes(opponent.id);
   const flaggedColor: Color | null =
     isGameOver && game.resultReason === 'timeout'
       ? game.result === 'white_wins'
@@ -436,6 +519,8 @@ export function LiveGameClient({ gameId }: Props) {
                   yourTurn={yourTurn}
                   opponentName={opponentName}
                   timed={game.clock != null}
+                  rated={game.rated}
+                  opponentOffline={opponentOffline}
                 />
               </>
             }
