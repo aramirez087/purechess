@@ -55,3 +55,37 @@ export function ErrorState({
     </div>
   );
 }
+
+export interface EmptyStateProps {
+  /** Italic display headline in the house voice, e.g. "No games recorded." */
+  headline: string;
+  description?: string;
+  /** Action slot, rendered below the description. */
+  actions?: ReactNode;
+  className?: string;
+}
+
+/**
+ * House-voice framed empty state for in-page "nothing here" moments — the
+ * same token surfaces as ErrorState, but a bordered card that sits inside a
+ * page instead of owning the whole screen. No client hooks — safe in both
+ * server and client components.
+ */
+export function EmptyState({ headline, description, actions, className }: EmptyStateProps) {
+  return (
+    <div
+      className={cn(
+        'rounded-lg border border-border/70 bg-surface/60 px-6 py-14 text-center',
+        className,
+      )}
+    >
+      <p className="font-display text-2xl italic">{headline}</p>
+      {description && (
+        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">{description}</p>
+      )}
+      {actions && (
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">{actions}</div>
+      )}
+    </div>
+  );
+}

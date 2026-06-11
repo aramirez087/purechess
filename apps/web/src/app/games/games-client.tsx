@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
+import { EmptyState } from '@/components/error-state';
 import { GameHistoryFilters } from '@/components/games/game-history-filters';
 import { GameHistoryList } from '@/components/games/game-history-list';
 import { Button } from '@/components/ui/button';
@@ -74,31 +75,33 @@ export function GamesClient({ username, initialCategory, initialIsRated, initial
       </div>
 
       {noGamesAtAll && !hasFilters && (
-        <div className="animate-rise-2 rounded-lg border border-border/70 bg-surface/60 px-6 py-14 text-center">
-          <p className="font-display text-2xl italic">No games recorded.</p>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-            Your finished games will be archived here, ready for review.
-          </p>
-          <Button
-            asChild
-            variant="outline"
-            className="mt-6 border-brass/50 text-brass-text hover:border-brass/70 hover:bg-brass/10 hover:text-brass-text"
-          >
-            <Link href="/play">Play your first game</Link>
-          </Button>
-        </div>
+        <EmptyState
+          className="animate-rise-2"
+          headline="No games recorded."
+          description="Your finished games will be archived here, ready for review."
+          actions={
+            <Button
+              asChild
+              variant="outline"
+              className="border-brass/50 text-brass-text hover:border-brass/70 hover:bg-brass/10 hover:text-brass-text"
+            >
+              <Link href="/play">Play your first game</Link>
+            </Button>
+          }
+        />
       )}
 
       {noGamesAtAll && hasFilters && (
-        <div className="animate-rise-2 rounded-lg border border-border/70 bg-surface/60 px-6 py-14 text-center">
-          <p className="font-display text-2xl italic">Nothing matches this filter.</p>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-            Adjust the filters above, or clear them to see every game.
-          </p>
-          <Button variant="ghost" className="mt-6" onClick={() => router.push('/games')}>
-            Clear filters
-          </Button>
-        </div>
+        <EmptyState
+          className="animate-rise-2"
+          headline="Nothing matches this filter."
+          description="Adjust the filters above, or clear them to see every game."
+          actions={
+            <Button variant="ghost" onClick={() => router.push('/games')}>
+              Clear filters
+            </Button>
+          }
+        />
       )}
 
       {allGames.length > 0 && (
@@ -108,6 +111,7 @@ export function GamesClient({ username, initialCategory, initialIsRated, initial
             onLoadMore={fetchNextPage}
             hasMore={hasNextPage}
             isLoadingMore={isFetchingNextPage}
+            total={data?.pages[0]?.total}
           />
         </div>
       )}

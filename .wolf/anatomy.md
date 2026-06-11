@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:00:57.333Z
-> Files: 740 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:20:27.134Z
+> Files: 747 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -53,7 +53,7 @@
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~1148 tok)
-- `design.md` — Purechess Design Direction (~1373 tok)
+- `design.md` — Purechess Design Direction (~1616 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
@@ -807,7 +807,7 @@
 
 - `users.controller.ts` — Exports UsersController (~510 tok)
 - `users.module.ts` — Exports UsersModule (~100 tok)
-- `users.service.ts` — Exports UsersService (~2280 tok)
+- `users.service.ts` — Exports UsersService (~2354 tok)
 
 ## apps/api/src/users/dto/
 
@@ -970,7 +970,7 @@
 ## apps/web/src/app/games/
 
 - `error.tsx` — GamesError (~232 tok)
-- `games-client.tsx` — GamesClient (~1198 tok)
+- `games-client.tsx` — GamesClient (~1142 tok)
 - `page.tsx` — dynamic (~595 tok)
 
 ## apps/web/src/app/games/[gameId]/
@@ -992,7 +992,7 @@
 ## apps/web/src/components/
 
 - `error-boundary.tsx` — eventId (~550 tok)
-- `error-state.tsx` — House-voice StateScreen: mono eyebrow, Fraunces italic headline, brass hairline, actions, eventId chip (~500 tok)
+- `error-state.tsx` — House-voice state surfaces: ErrorState (full-screen: mono eyebrow, Fraunces italic headline, brass hairline, eventId chip) + EmptyState (framed in-page card: italic headline, description, actions) (~847 tok)
 - `LoadingShell.tsx` — LoadingShell (~354 tok)
 
 ## apps/web/src/components/admin/
@@ -1008,7 +1008,7 @@
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
-- `chessboard.tsx` — FILES (~4008 tok)
+- `chessboard.tsx` — FILES (~4128 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~216 tok)
@@ -1043,16 +1043,17 @@
 
 ## apps/web/src/components/games/
 
-- `game-history-filters.tsx` — CATEGORIES (~1013 tok)
-- `game-history-list.tsx` — TABLE_HEADERS — renders table (~1327 tok)
+- `game-history-filters.tsx` — CATEGORIES (~944 tok)
+- `game-history-list.tsx` — Ledger table + mono footer: shows API `total` when present (falls back to "N shown"), W-L-D tally labelled "latest N:" when partial (~1485 tok)
 - `game-history-row.tsx` — resultLabel (~1646 tok)
 
 ## apps/web/src/components/home/
 
 - `cta-button.tsx` — VARIANT_CLASSES (~533 tok)
 - `footer.tsx` — GithubIcon (~933 tok)
-- `hero-board.tsx` — Static board art for the home hero — "the board is the product", so the (~1333 tok)
-- `hero.tsx` — FEATURES (~1521 tok)
+- `hero-auth-link.tsx` — Session-aware hero nav CTA. Renders the signed-out "Sign in" markup by (~281 tok)
+- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3184 tok)
+- `hero.tsx` — FEATURES (~1490 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
 ## apps/web/src/components/layout/
@@ -1066,11 +1067,16 @@
 - `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
 - `invite-create.tsx` — TIME_CONTROLS (~2852 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
-- `pill-styles.ts` — Shared recipes for the selectable pills in the play setup pickers (~194 tok)
+- `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
+
+## apps/web/src/components/profile/
+
+- `profile-header.tsx` — ProfileHeader (~594 tok)
+- `recent-games.tsx` — ResultBadge (~1471 tok)
 
 ## apps/web/src/components/review/
 
-- `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1038 tok)
+- `eval-panel.tsx` — EvalBar (w-3, bone fill, brass mid-tick, 9px mono score cap pinned to winning edge) + EvalReadout; whiteShare/formatScore helpers. (~1385 tok)
 - `pgn-actions.tsx` — Full-button variant, sized to dock as a panel footer: each action splits (~890 tok)
 - `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1079 tok)
 
@@ -1126,7 +1132,7 @@
 ## apps/web/test/analyze/
 
 - `analyze-client.test.tsx` — AnalyzeClient: PGN→moves render, honest "Analysis." verdict (no bogus result), mate PGN→Checkmate/0–1, FEN→board-only review, invalid input→alert, New-analysis round-trip. Mocks board, sonner, stockfish-client. (~1022 tok)
-- `hero-cta.test.tsx` — Hero "Analyze a game" CTA is a live link to /analyze, no "Soon" badge. (~135 tok)
+- `hero-cta.test.tsx` — Hero contains HeroAuthLink (useQuery) — give it a client and a quiet getMe. (~270 tok)
 
 ## apps/web/test/api/
 
@@ -1136,6 +1142,7 @@
 
 - `captured-material.test.tsx` — pieces (~613 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
+- `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)
 
 ## apps/web/test/computer-game/
 
@@ -1144,12 +1151,14 @@
 ## apps/web/test/games/
 
 - `game-history-filters.test.tsx` — defaultProps (~1031 tok)
-- `game-history-page.test.tsx` — mockGame (~786 tok)
+- `game-history-page.test.tsx` — mockGame (~1204 tok)
 - `game-review.test.ts` — Declares makeComputerState (~942 tok)
 
 ## apps/web/test/home/
 
-- `homepage.test.tsx` — link (~718 tok)
+- `hero-auth.test.tsx` — mockGetMe (~658 tok)
+- `hero-board.test.tsx` — The hero board's replay enhancement: static Immortal Game final position (~1596 tok)
+- `homepage.test.tsx` — Hero contains the session-aware HeroAuthLink — keep /api/auth/me off the (~958 tok)
 
 ## apps/web/test/play/
 
@@ -1164,6 +1173,7 @@
 
 ## apps/web/test/review/
 
+- `eval-panel.test.tsx` — formatScore/whiteShare units + EvalBar score-cap placement (winning edge × orientation, ink/bone tone, aria, hidden pre-eval). (~923 tok)
 - `review-page.test.tsx` — MOCK_MOVES (~2196 tok)
 
 ## apps/web/test/settings/
@@ -1259,7 +1269,7 @@
 ## packages/shared/src/
 
 - `index.ts` (~136 tok)
-- `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto + 2 more (~275 tok)
+- `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto, GameHistoryResponseDto (optional `total` = filtered count ignoring cursor), UpdateMeDto (~319 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~708 tok)
 
 ## packages/shared/src/dto/

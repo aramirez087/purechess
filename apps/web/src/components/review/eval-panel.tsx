@@ -48,7 +48,8 @@ function shareFor(evaluation: PositionEval | null): number {
 /**
  * Vertical evaluation bar for BoardColumn's `evalBar` slot: a bone fill
  * (White's share) anchored to White's side of the board, over a dark well,
- * with a brass tick at the 50% line. Self-stretching — the slot sizes it.
+ * with a brass tick at the 50% line and a tiny mono score cap pinned to the
+ * winning side's edge. Self-stretching — the slot sizes it.
  */
 export function EvalBar({
   evaluation,
@@ -61,27 +62,47 @@ export function EvalBar({
   className?: string;
 }) {
   const share = shareFor(evaluation);
+  const hasScore = evaluation?.cp !== undefined || evaluation?.mate !== undefined;
+  const whiteWinning =
+    evaluation?.mate !== undefined ? evaluation.mate > 0 : (evaluation?.cp ?? 0) >= 0;
+  // The cap pins to the winning side's edge — never tracks the fill boundary,
+  // so it can't jiggle. White's edge is the bottom on a White-oriented board.
+  const capAtBottom = whiteWinning === (orientation === 'white');
 
   return (
     <div
       role="img"
       aria-label={`Evaluation ${formatScore(evaluation?.cp, evaluation?.mate)}`}
-      className={cn(
-        'relative w-2.5 shrink-0 self-stretch overflow-hidden rounded-full border border-[#2b332c] bg-[#10140f]',
-        className,
-      )}
+      className={cn('relative w-3 shrink-0 self-stretch', className)}
     >
-      <div
-        className={cn(
-          'absolute inset-x-0 bg-gradient-to-b from-[#f6f2e6] to-[#e9e4d4] transition-[height] duration-500 ease-out',
-          orientation === 'white' ? 'bottom-0' : 'top-0',
-        )}
-        style={{ height: `${share}%` }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#d6b563]/70"
-      />
+      <div className="absolute inset-0 overflow-hidden rounded-full border border-[#2b332c] bg-[#10140f]">
+        <div
+          className={cn(
+            'absolute inset-x-0 bg-gradient-to-b from-[#f6f2e6] to-[#e9e4d4] transition-[height] duration-500 ease-out',
+            orientation === 'white' ? 'bottom-0' : 'top-0',
+          )}
+          style={{ height: `${share}%` }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#d6b563]/70"
+        />
+      </div>
+      {/* Quiet chrome: ink-on-bone over the fill, bone-on-well otherwise — no
+          brass (the accent budget is spent on the 50% tick). Hidden until the
+          first eval lands; the score is already in the aria-label. */}
+      {hasScore && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            'pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] font-semibold leading-none tabular-nums',
+            capAtBottom ? 'bottom-1' : 'top-1',
+            whiteWinning ? 'text-[#10140f]' : 'text-[#e9e4d4]',
+          )}
+        >
+          {formatScore(evaluation?.cp, evaluation?.mate)}
+        </span>
+      )}
     </div>
   );
 }

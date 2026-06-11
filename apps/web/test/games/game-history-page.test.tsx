@@ -92,4 +92,52 @@ describe('GamesClient', () => {
     render(<GamesClient username="alice" />);
     expect(screen.getByText('bob')).toBeTruthy();
   });
+
+  it('footer shows the API total and labels the tally as partial when more pages remain', () => {
+    mockHook({
+      data: {
+        pages: [{ games: [mockGame], nextCursor: 'cursor-abc', total: 42 }],
+        pageParams: [undefined],
+      },
+      fetchNextPage: vi.fn(),
+      hasNextPage: true,
+      isFetchingNextPage: false,
+    });
+
+    render(<GamesClient username="alice" />);
+    expect(screen.getByText('42 games')).toBeTruthy();
+    expect(screen.getByText(/latest 1: 1W–0L–0D/)).toBeTruthy();
+  });
+
+  it('footer falls back to loaded count when the API total is absent', () => {
+    mockHook({
+      data: {
+        pages: [{ games: [mockGame], nextCursor: 'cursor-abc' }],
+        pageParams: [undefined],
+      },
+      fetchNextPage: vi.fn(),
+      hasNextPage: true,
+      isFetchingNextPage: false,
+    });
+
+    render(<GamesClient username="alice" />);
+    expect(screen.getByText('1 game shown')).toBeTruthy();
+  });
+
+  it('footer tally is unlabelled when all games are loaded', () => {
+    mockHook({
+      data: {
+        pages: [{ games: [mockGame], nextCursor: null, total: 1 }],
+        pageParams: [undefined],
+      },
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+    });
+
+    render(<GamesClient username="alice" />);
+    expect(screen.getByText('1 game')).toBeTruthy();
+    expect(screen.getByText('1W–0L–0D')).toBeTruthy();
+    expect(screen.queryByText(/latest/)).toBeNull();
+  });
 });

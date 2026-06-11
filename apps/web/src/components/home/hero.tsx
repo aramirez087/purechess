@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Logo } from '@/components/layout/Logo';
 import { CtaButton } from './cta-button';
+import { HeroAuthLink } from './hero-auth-link';
 import { HeroBoard } from './hero-board';
 
 const FEATURES = [
@@ -32,12 +33,7 @@ export function Hero() {
           <Link href="/" aria-label="PureChess home">
             <Logo size="sm" />
           </Link>
-          <Link
-            href="/login"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Sign in
-          </Link>
+          <HeroAuthLink />
         </div>
       </div>
 

@@ -129,7 +129,8 @@ export function AnalyzeClient() {
 
               <Button
                 type="submit"
-                className="mt-1 h-11 w-full bg-brass font-semibold text-accent-foreground shadow-elevated transition-all duration-150 hover:bg-brass/90 hover:shadow-brass-glow active:translate-y-px"
+                // In-app primary stays bone — solid brass is reserved for the auth door (design.md).
+                className="mt-1 h-11 w-full bg-foreground font-semibold text-background shadow-elevated transition-all duration-150 hover:bg-foreground/90 active:translate-y-px"
               >
                 Analyze
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

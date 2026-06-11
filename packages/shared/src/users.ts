@@ -38,6 +38,11 @@ export type ProfileDto = {
 export type GameHistoryResponseDto = {
   games: GameHistorySummaryDto[];
   nextCursor: string | null;
+  /**
+   * Total number of games matching the filters (ignores cursor/limit).
+   * Optional so older API responses remain valid.
+   */
+  total?: number;
 };
 
 export type UpdateMeDto = {

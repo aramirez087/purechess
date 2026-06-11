@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  SEGMENT_ACTIVE,
+  SEGMENT_BASE,
+  SEGMENT_GROUP,
+  SEGMENT_INACTIVE,
+} from '@/components/play/pill-styles';
 import { cn } from '@/lib/utils';
 
 type Category = 'bullet' | 'blitz' | 'rapid';
@@ -39,13 +45,7 @@ function FilterPill({
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={cn(
-        'rounded-[4px] px-2.5 py-1 text-xs font-medium transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        active
-          ? 'bg-brass/15 text-foreground ring-1 ring-inset ring-brass/40'
-          : 'text-muted-foreground hover:bg-raised hover:text-foreground',
-      )}
+      className={cn(SEGMENT_BASE, active ? SEGMENT_ACTIVE : SEGMENT_INACTIVE)}
     >
       {label}
     </button>
@@ -127,9 +127,7 @@ function FilterGroup({
       <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
-      <div className="inline-flex items-center gap-0.5 rounded-md border border-border/70 bg-raised/40 p-0.5">
-        {children}
-      </div>
+      <div className={SEGMENT_GROUP}>{children}</div>
     </div>
   );
 }

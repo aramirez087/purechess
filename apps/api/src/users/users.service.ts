@@ -201,24 +201,30 @@ export class UsersService {
       }
     }
 
-    const games = await this.prisma.game.findMany({
-      where: {
-        OR: [{ whiteUserId: userId }, { blackUserId: userId }],
-        status: GameStatus.completed,
-        ...(query.category && { category: query.category }),
-        ...(query.isRated !== undefined && { isRated: query.isRated }),
-        ...(query.isVsComputer !== undefined && {
-          isVsComputer: query.isVsComputer,
-        }),
-        ...cursorCondition,
-      },
-      include: {
-        whitePlayer: { select: { username: true } },
-        blackPlayer: { select: { username: true } },
-      },
-      orderBy: { endedAt: "desc" },
-      take: limit + 1,
-    });
+    // Filter conditions only — the cursor is pagination, not a filter, so
+    // the total count must not include it.
+    const filterWhere = {
+      OR: [{ whiteUserId: userId }, { blackUserId: userId }],
+      status: GameStatus.completed,
+      ...(query.category && { category: query.category }),
+      ...(query.isRated !== undefined && { isRated: query.isRated }),
+      ...(query.isVsComputer !== undefined && {
+        isVsComputer: query.isVsComputer,
+      }),
+    };
+
+    const [games, total] = await Promise.all([
+      this.prisma.game.findMany({
+        where: { ...filterWhere, ...cursorCondition },
+        include: {
+          whitePlayer: { select: { username: true } },
+          blackPlayer: { select: { username: true } },
+        },
+        orderBy: { endedAt: "desc" },
+        take: limit + 1,
+      }),
+      this.prisma.game.count({ where: filterWhere }),
+    ]);
 
     const hasMore = games.length > limit;
     const slice = hasMore ? games.slice(0, limit) : games;
@@ -276,6 +282,7 @@ export class UsersService {
     return {
       games: summaries,
       nextCursor: hasMore ? slice[slice.length - 1].id : null,
+      total,
     };
   }
 }

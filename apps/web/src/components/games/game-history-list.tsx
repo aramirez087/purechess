@@ -11,6 +11,8 @@ type GameHistoryListProps = {
   onLoadMore?: () => void;
   hasMore: boolean;
   isLoadingMore: boolean;
+  /** Total games matching the filters, from the API (ignores pagination). */
+  total?: number;
 };
 
 const TABLE_HEADERS = [
@@ -109,7 +111,13 @@ function FlatBody({ games }: { games: GameHistorySummaryDto[] }) {
   );
 }
 
-export function GameHistoryList({ games, onLoadMore, hasMore, isLoadingMore }: GameHistoryListProps) {
+export function GameHistoryList({
+  games,
+  onLoadMore,
+  hasMore,
+  isLoadingMore,
+  total,
+}: GameHistoryListProps) {
   if (games.length === 0) {
     return null;
   }
@@ -118,20 +126,27 @@ export function GameHistoryList({ games, onLoadMore, hasMore, isLoadingMore }: G
   const losses = games.filter((g) => g.result === 'loss').length;
   const draws = games.filter((g) => g.result === 'draw').length;
 
+  // The W-L-D tally is computed from the loaded rows; when more pages remain
+  // it only covers the latest games, so it is labelled as such.
+  const isPartial = hasMore || (total !== undefined && games.length < total);
+
   return (
     <div className="overflow-hidden rounded-lg border border-border/70 bg-surface shadow-elevated">
       {games.length > 100 ? <VirtualizedBody games={games} /> : <FlatBody games={games} />}
 
       <div className="flex items-center justify-between border-t border-border/60 bg-raised/30 px-4 py-2 font-mono text-xs tabular-nums text-muted-foreground">
         <span>
-          {games.length} {games.length === 1 ? 'game' : 'games'}
-          {hasMore ? ' shown' : ''}
+          {total !== undefined
+            ? `${total} ${total === 1 ? 'game' : 'games'}`
+            : `${games.length} ${games.length === 1 ? 'game' : 'games'}${hasMore ? ' shown' : ''}`}
         </span>
         <span>
           <span aria-hidden="true">
+            {isPartial ? `latest ${games.length}: ` : ''}
             {wins}W–{losses}L–{draws}D
           </span>
           <span className="sr-only">
+            {isPartial ? `Of the latest ${games.length} games: ` : ''}
             {wins} {wins === 1 ? 'win' : 'wins'}, {losses} {losses === 1 ? 'loss' : 'losses'},{' '}
             {draws} {draws === 1 ? 'draw' : 'draws'}
           </span>

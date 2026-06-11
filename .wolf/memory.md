@@ -1142,3 +1142,47 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:00 | Created apps/api/test/ratings/ratings.service.spec.ts | — | ~1427 |
 | 21:05 | A1 realtime PvP: WS gateway (handshake auth, game rooms, presence), GamesService emits, web use-game-socket + slow-poll fallback + clock skew; verified live (push ~11ms) | apps/api/src/realtime/*, games/*, apps/web hooks+live-game-client | done, 27 unit tests | ~40k |
 | 21:10 | A2 Glicko-2: glicko2.ts (paper-exact), RatingsService idempotent processGameResult, rated invites + UI pill, ledger delta live (-162 verified in browser) | apps/api/src/ratings/*, invites, apps/web invite-*, use-invite | done, 15 tests | ~25k |
+| 21:08 | Edited design.md | expanded (+19 lines) | ~310 |
+| 21:10 | Edited apps/web/src/components/profile/recent-games.tsx | 17→17 lines | ~121 |
+| 21:10 | Edited apps/web/src/components/play/pill-styles.ts | expanded (+20 lines) | ~337 |
+| 21:10 | Edited apps/web/src/components/profile/recent-games.tsx | 7→7 lines | ~49 |
+| 21:10 | Edited apps/web/src/components/games/game-history-filters.tsx | expanded (+6 lines) | ~44 |
+| 21:10 | Edited apps/web/src/components/profile/recent-games.tsx | 11→12 lines | ~158 |
+| 21:10 | Edited apps/web/src/components/games/game-history-filters.tsx | CSS: SEGMENT_ACTIVE | ~23 |
+| 21:10 | Edited apps/web/src/components/games/game-history-filters.tsx | 3→1 lines | ~16 |
+| 21:10 | Edited apps/web/src/components/profile/recent-games.tsx | CSS: p | ~165 |
+| 21:10 | Edited apps/web/src/components/error-state.tsx | CSS: headline | ~359 |
+| 21:10 | Edited apps/web/src/app/games/games-client.tsx | added 1 import(s) | ~73 |
+| 21:10 | Edited apps/web/src/app/games/games-client.tsx | 27→29 lines | ~278 |
+| 21:10 | Edited packages/shared/src/users.ts | 4→9 lines | ~74 |
+| 21:10 | Edited apps/api/src/users/users.service.ts | expanded (+6 lines) | ~255 |
+| 21:10 | Edited apps/api/src/users/users.service.ts | 4→5 lines | ~34 |
+| 21:11 | Edited apps/web/src/components/games/game-history-list.tsx | 6→8 lines | ~68 |
+| 21:11 | Edited apps/web/src/components/games/game-history-list.tsx | CSS: games | ~471 |
+| 21:11 | Edited apps/web/src/app/games/games-client.tsx | added optional chaining | ~66 |
+| 21:11 | Edited apps/web/test/games/game-history-page.test.tsx | CSS: total, 1, total | ~516 |
+| 21:11 | Edited apps/web/src/components/profile/profile-header.tsx | 3→3 lines | ~37 |
+| 21:11 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+6 lines) | ~150 |
+| 21:12 | Edited apps/web/src/components/review/eval-panel.tsx | added nullish coalescing | ~698 |
+| 21:12 | Created apps/web/test/board/no-animations.test.tsx | — | ~583 |
+| 21:12 | Created apps/web/test/review/eval-panel.test.tsx | — | ~923 |
+| 21:13 | Wired data-no-animations kill switch: Chessboard container sets it when settings.animationMs===0 (toggle off OR reduced motion) | apps/web/src/components/board/chessboard.tsx, test/board/no-animations.test.tsx | tsc clean, 84/84 board+review tests pass | ~28k |
+| 21:13 | EvalBar w-2.5→w-3 + 9px mono score cap pinned to winning edge (ink-on-bone / bone-on-well, no brass, aria-hidden, hidden pre-eval) | apps/web/src/components/review/eval-panel.tsx, test/review/eval-panel.test.tsx | 13 new tests pass | ~10k |
+| 21:13 | Created apps/web/src/components/home/hero-board.tsx | — | ~3184 |
+| 21:15 | Tier-B /games ledger pass (1/3): formalized segmented control — exported SEGMENT_GROUP/BASE/ACTIVE/INACTIVE from pill-styles.ts (additive) with pills-vs-segments usage note; game-history-filters.tsx now consumes them (no duplicated class strings, rendered look unchanged) | apps/web/src/components/play/pill-styles.ts, apps/web/src/components/games/game-history-filters.tsx | ok | ~600 |
+| 21:15 | Tier-B /games ledger pass (2/3): extracted EmptyState (framed token-surface card) into error-state.tsx (additive); games-client.tsx replaced both inline empty-state duplicates with it (same DOM/classes) | apps/web/src/components/error-state.tsx, apps/web/src/app/games/games-client.tsx | ok | ~700 |
+| 21:15 | Tier-B /games ledger pass (3/3): games-history API now returns optional `total` (count on filter where, cursor excluded, Promise.all with findMany); footer shows "N games" from total + W-L-D tally labelled "latest N:" when partial; shared rebuilt | packages/shared/src/users.ts, apps/api/src/users/users.service.ts, apps/web/src/components/games/game-history-list.tsx, apps/web/test/games/game-history-page.test.tsx | ok — web tsc clean, api tsc clean, vitest test/games 19/19 pass | ~1200 |
+| 21:14 | Created apps/web/src/components/home/hero-auth-link.tsx | — | ~281 |
+| 21:14 | Edited apps/web/src/components/home/hero.tsx | added 1 import(s) | ~73 |
+| 21:14 | Edited apps/web/src/components/home/hero.tsx | removed 6 lines | ~8 |
+| 21:14 | Created apps/web/test/home/homepage.test.tsx | — | ~958 |
+| 21:15 | Created apps/web/test/home/hero-board.test.tsx | — | ~1498 |
+| 21:15 | Created apps/web/test/home/hero-auth.test.tsx | — | ~658 |
+| 21:16 | Edited apps/web/test/home/hero-board.test.tsx | 8→8 lines | ~123 |
+| 21:17 | Edited apps/web/test/home/hero-board.test.tsx | 5→5 lines | ~60 |
+| 21:17 | Edited apps/web/test/home/hero-board.test.tsx | 4→4 lines | ~54 |
+| 21:17 | Edited apps/web/test/home/hero-board.test.tsx | modified pieceImgs() | ~184 |
+| 21:17 | Edited apps/web/test/home/hero-board.test.tsx | 11→9 lines | ~98 |
+| 21:17 | Edited apps/web/test/home/hero-board.test.tsx | advanceTimersByTime() → runReplayToEnd() | ~131 |
+| 21:19 | Hero board scroll-replay (22.Qf6+ Nxf6 23.Be7#, product move feel, IO one-shot, reduced-motion/no-JS static) + session-aware hero CTA (HeroAuthLink, ['auth','me']) | apps/web/src/components/home/{hero-board,hero,hero-auth-link}.tsx, apps/web/test/home/* | tsc clean, 20/20 vitest pass | ~28k |
+| 21:20 | Created apps/web/test/analyze/hero-cta.test.tsx | — | ~270 |
