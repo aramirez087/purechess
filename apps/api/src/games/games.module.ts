@@ -5,11 +5,12 @@ import { RatingsModule } from '../ratings/ratings.module';
 import { RealtimeModule } from '../realtime/realtime.module';
 import { GamesController } from './games.controller';
 import { GamesService } from './games.service';
+import { GamesJanitorService } from './games-janitor.service';
 
 @Module({
   imports: [ChessEngineModule, AuthModule, RealtimeModule, RatingsModule],
   controllers: [GamesController],
-  providers: [GamesService],
+  providers: [GamesService, GamesJanitorService],
   exports: [GamesService],
 })
 export class GamesModule {}

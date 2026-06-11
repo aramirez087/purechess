@@ -11,7 +11,8 @@ import { CreateInviteDto } from "./dto/create-invite.dto";
 import { InviteGateway } from "./invite-gateway";
 import { PosthogService } from "../analytics/posthog.service";
 
-const INVITE_TTL_MS = 24 * 60 * 60 * 1000;
+/** Friend invites expire lazily on preview/accept; the games janitor sweeps the rest. */
+export const INVITE_TTL_MS = 24 * 60 * 60 * 1000;
 
 export type InviteColor = "white" | "black" | "random";
 
