@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:39:28.297Z
-> Files: 754 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:28:23.087Z
+> Files: 768 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -799,9 +799,9 @@
 
 ## apps/api/src/testing/
 
-- `testing.controller.ts` — Exports TestingController (~373 tok)
+- `testing.controller.ts` — Exports TestingController (~379 tok)
 - `testing.module.ts` — Exports TestingModule (~75 tok)
-- `testing.service.ts` — Zustand store (~801 tok)
+- `testing.service.ts` — Exports TestingService (~819 tok)
 
 ## apps/api/src/types/
 
@@ -922,12 +922,24 @@
 
 ## apps/web/e2e/helpers/
 
-- `game-helpers.ts` — Exports waitForGameUrl, extractGameId, clickSquare, makeMove + 3 more (~400 tok)
-- `test-api.ts` — Exports TestUser, TestGame, createTestUser, createTestGame + 2 more (~410 tok)
+- `game-helpers.ts` — Exports waitForGameUrl, extractGameId, clickSquare, makeMove + 3 more (~402 tok)
+- `test-api.ts` — Exports TestUser, TestGame, createTestUser, createTestGame + 3 more (~630 tok)
 
 ## apps/web/e2e/tests/
 
 - `admin-disable.spec.ts` — Declares API_URL (~453 tok)
+- `analyze-flow.spec.ts` — Declares VALID_PGN (~556 tok)
+- `anon-casual.spec.ts` — Anonymous matchmaking is not implemented — requires auth for all game modes. (~118 tok)
+- `flag-fall.spec.ts` — Declares game (~665 tok)
+- `friend-invite.spec.ts` — Declares alicePage (~333 tok)
+- `game-end.spec.ts` — Declares game (~414 tok)
+- `ledger-navigation.spec.ts` — Declares page (~620 tok)
+- `premove.spec.ts` — Declares game (~742 tok)
+- `promotion-keyboard.spec.ts` — White pawn on a7, kings clear of a8 — one move from promotion. (~1206 tok)
+- `rated-finalization.spec.ts` — Fool's mate: 1. f3 e5 2. g4 Qh4# — shortest possible checkmate. (~667 tok)
+- `rated-game.spec.ts` — Matchmaking UI is not implemented — players currently start games via friend (~138 tok)
+- `reconnect.spec.ts` — Declares game (~284 tok)
+- `result-overlay.spec.ts` — Declares game (~845 tok)
 
 ## apps/web/public/pieces/
 
@@ -1016,7 +1028,7 @@
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
-- `chessboard.tsx` — FILES (~4128 tok)
+- `chessboard.tsx` — FILES (~4137 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~216 tok)
@@ -1047,13 +1059,13 @@
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
 - `move-panel.tsx` — 1-based ply index. (~1397 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1497 tok)
-- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1879 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1886 tok)
 
 ## apps/web/src/components/games/
 
 - `game-history-filters.tsx` — CATEGORIES (~944 tok)
 - `game-history-list.tsx` — Ledger table + mono footer: shows API `total` when present (falls back to "N shown"), W-L-D tally labelled "latest N:" when partial (~1485 tok)
-- `game-history-row.tsx` — resultLabel (~1646 tok)
+- `game-history-row.tsx` — resultLabel (~1655 tok)
 
 ## apps/web/src/components/home/
 
@@ -1073,14 +1085,15 @@
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
-- `invite-create.tsx` — TIME_CONTROLS (~2848 tok)
+- `invite-create.tsx` — TIME_CONTROLS (~2856 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
 
 ## apps/web/src/components/profile/
 
 - `profile-header.tsx` — ProfileHeader (~594 tok)
-- `recent-games.tsx` — ResultBadge (~1471 tok)
+- `ratings-card.tsx` — CATEGORIES (~550 tok)
+- `recent-games.tsx` — ResultBadge (~1480 tok)
 
 ## apps/web/src/components/review/
 
@@ -1250,6 +1263,7 @@
 - `ownership.md` — Purechess "Category Best" — File-Ownership Charter (Sessions 02–06) (~1901 tok)
 - `session-01-handoff.md` — Session 01 Handoff — Charter + Baselines (~2099 tok)
 - `session-02-handoff.md` — Session 02 Handoff — Realtime Resilience (~3134 tok)
+- `session-05-handoff.md` — Session 05 Handoff — E2E Interactions (~1149 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

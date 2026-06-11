@@ -1321,3 +1321,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 06:26 | Wrote 7 new spec files | promotion-keyboard, premove, flag-fall, rated-finalization, ledger-navigation, analyze-flow, result-overlay | done | ~2500 |
 | 06:27 | Quality gates green | tsc noEmit (web+api), vitest 256/256 | ✅ | ~300 |
 | 06:28 | Handoff doc written | session-05-handoff.md | done | ~400 |
+| 06:29 | Session end: 24 writes across 23 files (chessboard.tsx, result-overlay.tsx, ratings-card.tsx, recent-games.tsx, invite-create.tsx) | 19 reads | ~30441 tok |
