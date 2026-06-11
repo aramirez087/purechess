@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T16:47:20.266Z
-> Files: 819 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T16:57:20.105Z
+> Files: 822 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -926,7 +926,7 @@
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
-- `sentry.client.config.ts` — Declares dsn (~406 tok)
+- `sentry.client.config.ts` — Client Sentry bootstrap — a tiny shim, NOT the SDK. withSentryConfig (~588 tok)
 - `tailwind.config.ts` — /*.{ts,tsx}'], (~919 tok)
 
 ## apps/web/e2e/
@@ -966,8 +966,8 @@
 
 ## apps/web/src/app/
 
-- `error.tsx` — Error (~288 tok)
-- `global-error.tsx` — GlobalError (~1011 tok)
+- `error.tsx` — Error (~362 tok)
+- `global-error.tsx` — GlobalError (~1085 tok)
 - `globals.css` — Styles: 29 rules, 108 vars (~2907 tok)
 - `layout.tsx` — fraunces (~335 tok)
 - `not-found.tsx` — NotFound (~196 tok)
@@ -1003,8 +1003,9 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7160 tok)
-- `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~64 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7364 tok)
+- `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~218 tok)
+- `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
 ## apps/web/src/app/games/
 
@@ -1030,7 +1031,7 @@
 
 ## apps/web/src/components/
 
-- `error-boundary.tsx` — eventId (~550 tok)
+- `error-boundary.tsx` — text (~559 tok)
 - `error-state.tsx` — House-voice state surfaces: ErrorState (full-screen: mono eyebrow, Fraunces italic headline, brass hairline, eventId chip) + EmptyState (framed in-page card: italic headline, description, actions) (~847 tok)
 - `LoadingShell.tsx` — LoadingShell (~354 tok)
 - `posthog-provider.tsx` — fetchMe (~455 tok)
@@ -1048,12 +1049,13 @@
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
-- `chessboard.tsx` — FILES (~4488 tok)
+- `board-context.tsx` — BoardSettingsContext (~704 tok)
+- `chessboard.tsx` — FILES (~4700 tok)
 - `chessboard.tsx` — FILES (~4137 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~216 tok)
-- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1518 tok)
+- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1570 tok)
 
 ## apps/web/src/components/board/hooks/
 
@@ -1080,7 +1082,7 @@
 - `index.ts` — Declares GameShellProps (~211 tok)
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
 - `move-panel.tsx` — 1-based ply index. (~1404 tok)
-- `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1506 tok)
+- `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1562 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1497 tok)
 - `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1885 tok)
 - `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1886 tok)
@@ -1157,6 +1159,7 @@
 ## apps/web/src/lib/
 
 - `replay.ts` — Exports replayToFen, validateReplay (~337 tok)
+- `sentry-lazy.ts` — Lazy Sentry loader. NOTHING in the eager bundle may import '@sentry/nextjs' (~794 tok)
 - `utils.ts` — Exports cn, formatDuration, formatRelativeTime, clampRatingDelta, formatTimeControl (~369 tok)
 - `ws-url.ts` — WS cannot ride the Next /api rewrite proxy (rewrites don't upgrade), so the (~121 tok)
 

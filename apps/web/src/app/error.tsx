@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import * as Sentry from '@sentry/nextjs';
+import { lazyCaptureException } from '@/lib/sentry-lazy';
 import { Button } from '@/components/ui/button';
 import { ErrorState } from '@/components/error-state';
 
@@ -13,11 +13,17 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // The capture forces the lazy SDK load, so even a pre-idle crash reports.
+  const [eventId, setEventId] = useState<string | undefined>(undefined);
   useEffect(() => {
-    Sentry.captureException(error);
+    let live = true;
+    void lazyCaptureException(error).then((id) => {
+      if (live) setEventId(id);
+    });
+    return () => {
+      live = false;
+    };
   }, [error]);
-
-  const eventId = Sentry.lastEventId();
 
   return (
     <ErrorState

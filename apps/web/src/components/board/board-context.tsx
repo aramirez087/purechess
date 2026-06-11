@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useSettingsStore } from '@/stores/settings-store';
 import { applyBoardTheme } from '@/lib/board/themes';
 import { soundEngine } from '@/lib/board/sound';
@@ -29,7 +29,16 @@ export function BoardSettingsProvider({ children }: { children: React.ReactNode 
     soundEngine.setEnabled(storeSettings.sound);
   }, [storeSettings.sound]);
 
-  const effectiveAnimations = storeSettings.animations && !prefersReducedMotion();
+  // Reduced-motion is read post-mount only: the server can't know it, and
+  // checking during the first client render would mismatch the SSR'd
+  // `data-no-animations` attribute. (Attribute-only — never gate an
+  // LCP element's visibility on `mounted`, per the S07 rule.)
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const effectiveAnimations = storeSettings.animations && !(mounted && prefersReducedMotion());
   const animationMs = effectiveAnimations ? 200 : 0;
 
   const settings: BoardSettings = {

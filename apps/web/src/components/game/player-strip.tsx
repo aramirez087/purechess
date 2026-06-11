@@ -82,15 +82,15 @@ export function PlayerStrip({
                 aria-label={side === 'white' ? 'Plays white' : 'Plays black'}
                 className={cn(
                   'h-2.5 w-2.5 shrink-0 rounded-[2px] ring-1 ring-inset',
-                  side === 'white'
-                    ? 'bg-[#e9e4d4] ring-black/30'
-                    : 'bg-[#3d4a40] ring-[#2b332c]',
+                  side === 'white' ? 'bg-[#e9e4d4] ring-black/30' : 'bg-[#3d4a40] ring-[#2b332c]',
                 )}
               />
             )}
             <p className="truncate text-sm font-semibold leading-tight">{name}</p>
           </div>
-          {detail && <p className="mt-0.5 truncate text-xs leading-tight text-[#9da79c]">{detail}</p>}
+          {detail && (
+            <p className="mt-0.5 truncate text-xs leading-tight text-[#9da79c]">{detail}</p>
+          )}
         </div>
       </div>
 
@@ -98,7 +98,11 @@ export function PlayerStrip({
           status/result/clock anchor the strip's right edge. */}
       <div className="ml-auto flex shrink-0 items-center gap-3">
         {showCaptured && (
-          <CapturedMaterial pieces={captured!.pieces} advantage={advantage} color={capturedColor!} />
+          <CapturedMaterial
+            pieces={captured!.pieces}
+            advantage={advantage}
+            color={capturedColor!}
+          />
         )}
         {status && (
           <span
@@ -131,6 +135,9 @@ export function PlayerStrip({
                 ? 'border-[#d6b563]/45 bg-[#0b0d0b] text-[#f8f1de]'
                 : 'border-[#2b332c] bg-[#0b0d0b]/60 text-[#c7cfc4]',
             )}
+            // SSR'd pages render the server-time clock; the client recomputes
+            // from Date.now() on hydration, so the text can differ by a tick.
+            suppressHydrationWarning
           >
             {clock}
           </div>

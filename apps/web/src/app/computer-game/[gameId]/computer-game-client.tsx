@@ -104,7 +104,6 @@ function parsePgnMoves(pgn: string): string[] {
   return tokens;
 }
 
-
 /**
  * Slim status zone docked inside the unified rail (not a floating card).
  * Owns the turn state + game settings line; the player strips stay quiet.
@@ -186,14 +185,24 @@ function resultChipFor(result: string | null, color: Color): string | undefined 
   return (result === 'white_wins') === (color === 'white') ? '1' : '0';
 }
 
-
 interface Props {
   gameId: string;
+  /** Server-fetched state: the board SSRs instead of waiting for a client fetch. */
+  initialGame?: ComputerGameStateDto | null;
 }
 
-export function ComputerGameClient({ gameId }: Props) {
+export function ComputerGameClient({ gameId, initialGame = null }: Props) {
   const router = useRouter();
-  const [state, setState] = useState<PageState>({ phase: 'loading' });
+  const [state, setState] = useState<PageState>(() =>
+    initialGame
+      ? {
+          phase: 'playing',
+          game: initialGame,
+          submitting: isComputerTurn(initialGame),
+          moveError: null,
+        }
+      : { phase: 'loading' },
+  );
   const [flipped, setFlipped] = useState(false);
   const [currentPly, setCurrentPly] = useState(0);
   const [resultDismissed, setResultDismissed] = useState(false);
@@ -312,6 +321,15 @@ export function ComputerGameClient({ gameId }: Props) {
 
   useEffect(() => {
     disposedRef.current = false;
+    // SSR'd state skips the client fetch entirely; the bot still has to be
+    // driven from an effect (the server only rendered, never moved). Retries
+    // (loadToken > 0) always re-fetch.
+    if (initialGame && loadToken === 0) {
+      if (isComputerTurn(initialGame)) void driveBot(initialGame);
+      return () => {
+        disposedRef.current = true;
+      };
+    }
     getComputerGame(gameId)
       .then((game) => {
         if (disposedRef.current) return;
@@ -410,9 +428,7 @@ export function ComputerGameClient({ gameId }: Props) {
   // Same opponent and settings, colours swapped — navigates to the new game.
   async function handleRematch() {
     if (state.phase !== 'playing') return;
-    setState((s: PageState) =>
-      s.phase === 'playing' ? { ...s, moveError: null } : s,
-    );
+    setState((s: PageState) => (s.phase === 'playing' ? { ...s, moveError: null } : s));
     try {
       const next = await rematchComputerGame(gameId, true);
       router.push(`/computer-game/${next.gameId}`);

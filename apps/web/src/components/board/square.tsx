@@ -61,8 +61,15 @@ export const Square = memo(function Square({
       role="gridcell"
       className={cn(
         'relative flex items-center justify-center',
-        cursor === 'grab' ? 'cursor-grab' : cursor === 'pointer' ? 'cursor-pointer' : 'cursor-default',
-        'w-[var(--board-sq-size)] h-[var(--board-sq-size)]',
+        cursor === 'grab'
+          ? 'cursor-grab'
+          : cursor === 'pointer'
+            ? 'cursor-pointer'
+            : 'cursor-default',
+        // Pure-CSS sizing (grid tracks own the geometry) so the SSR'd board
+        // paints full-size before any JS runs. --board-sq-size still exists
+        // for the drag ghost / coordinates / legal-ring calc.
+        'h-full w-full',
         isLight ? 'bg-[hsl(var(--board-sq-light))]' : 'bg-[hsl(var(--board-sq-dark))]',
         isLastMoveFrom && 'sq-last-from',
         isLastMoveTo && 'sq-last-to',
@@ -70,9 +77,13 @@ export const Square = memo(function Square({
         isPremoveFrom && 'sq-premove-from',
         isPreMoveTo && 'sq-premove-to',
       )}
-      style={isKeyboardFocus ? {
-        boxShadow: 'inset 0 0 0 3px rgba(0,0,0,0.45), inset 0 0 0 2px hsl(41 56% 62%)',
-      } : undefined}
+      style={
+        isKeyboardFocus
+          ? {
+              boxShadow: 'inset 0 0 0 3px rgba(0,0,0,0.45), inset 0 0 0 2px hsl(41 56% 62%)',
+            }
+          : undefined
+      }
       onPointerDown={onPointerDown ? (e) => onPointerDown(e, square) : undefined}
       onClick={onClick ? () => onClick(square) : undefined}
     >

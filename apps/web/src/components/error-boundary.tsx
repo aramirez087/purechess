@@ -1,7 +1,7 @@
 'use client';
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import * as Sentry from '@sentry/nextjs';
+import { lazyCaptureException } from '@/lib/sentry-lazy';
 import { Button } from '@/components/ui/button';
 import { ErrorState } from '@/components/error-state';
 
@@ -31,10 +31,11 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    const eventId = Sentry.captureException(error, {
+    void lazyCaptureException(error, {
       extra: { componentStack: info.componentStack },
+    }).then((eventId) => {
+      this.setState({ eventId: eventId ?? null });
     });
-    this.setState({ eventId: eventId ?? null });
   }
 
   handleCopy = (): void => {

@@ -316,7 +316,11 @@ export function Chessboard({
         aria-label="Chess board"
         tabIndex={0}
         className={cn(
-          'grid grid-cols-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          // aspect-square + grid-rows-8 size the cells from CSS alone, so the
+          // server-rendered board paints at its final geometry pre-hydration
+          // (no 512px default flash, and the piece <img>s are LCP-eligible
+          // straight from the streamed HTML).
+          'grid aspect-square w-full grid-cols-8 grid-rows-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           // Squares set their own cursor; override them all while a drag is live.
           dragState.active && 'cursor-grabbing [&_[data-square]]:!cursor-grabbing',
         )}

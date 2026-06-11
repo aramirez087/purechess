@@ -1603,3 +1603,19 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 10:47 | Edited apps/api/test/matchmaking/matchmaking.service.spec.ts | 12→13 lines | ~99 |
 | 10:47 | Edited apps/api/test/matchmaking/matchmaking.service.spec.ts | expanded (+22 lines) | ~270 |
 | 11:10 | Matchmaking quick-pair: Lua claim-or-enqueue queue, MatchFound user-room push, /play Quick Match mode; un-broke e2e harness (bug-337/338) + ghost-race fix (bug-339) | matchmaking module, realtime gateway/service, shared matchmaking.dto, use-matchmaking, quick-match-setup, e2e specs | api 339 + e2e 21/21 (first ever green) + web 304; live 2-user pair verified in browser | ~55k |
+| 10:52 | Edited apps/web/src/components/board/square.tsx | 1→4 lines | ~69 |
+| 10:52 | Edited apps/web/src/components/board/chessboard.tsx | 5→9 lines | ~176 |
+| 10:52 | Edited apps/web/src/components/game/player-strip.tsx | 12→15 lines | ~178 |
+| 10:52 | Edited apps/web/src/components/board/board-context.tsx | inline fix | ~21 |
+| 10:52 | Edited apps/web/src/components/board/board-context.tsx | CSS: only | ~151 |
+| 10:53 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified ComputerGameClient() | ~153 |
+| 10:53 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 2 condition(s) | ~260 |
+| 10:53 | Created apps/web/src/app/computer-game/[gameId]/page.tsx | — | ~421 |
+| 10:54 | Created apps/web/src/app/computer-game/[gameId]/loading.tsx | — | ~218 |
+| 10:55 | Created apps/web/src/lib/sentry-lazy.ts | — | ~794 |
+| 10:56 | Created apps/web/sentry.client.config.ts | — | ~588 |
+| 10:56 | Edited apps/web/src/components/error-boundary.tsx | 4→4 lines | ~63 |
+| 10:56 | Edited apps/web/src/components/error-boundary.tsx | modified componentDidCatch() | ~69 |
+| 10:57 | Edited apps/web/src/app/error.tsx | added 1 condition(s) | ~200 |
+| 10:57 | Edited apps/web/src/app/global-error.tsx | added 1 condition(s) | ~164 |
+| 12:05 | LCP cut /computer-game: SSR board (server state fetch + piece preloads + CSS-only square geometry) + Sentry-core lazy shim. Throttled LCP 7.6s → 2.0s (Slow 4G + 4x CPU), CLS 0, shared JS 166 → 89.6 kB, route 283 → 174 kB. Deferred: chess.js eager-split (chunk 527, ~18 kB) | computer-game page/client/loading, chessboard/square/board-context/player-strip, sentry-lazy.ts, sentry.client.config, error pages | web 304 + api 339 green; home LCP 674ms no regression; boards visually verified on computer + analyze shells | ~45k |
