@@ -3,6 +3,13 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+## Session: 2026-06-11 (S06 — Surface A11y + Light Mode)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 04:40 | Read wolf files, design.md, buglog; inspected all owned component files | .wolf/*, design.md, apps/web/src/... | planning only | ~12k |
+| 04:55 | Wrote .session-06-plan.md — 9-phase a11y implementation plan | .session-06-plan.md | done | ~5k |
+
 ## Session: 2026-06-08 (WP5 — Shadow Mode CI Gate)
 
 | Time | Action | File(s) | Outcome | ~Tokens |
@@ -1275,3 +1282,36 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 22:39 | Created docs/roadmap/purechess-category-best/session-02-handoff.md | — | ~3343 |
 | 22:40 | S02 realtime resilience: socket reconnect tuning + online/visibility resync, clock visibility snap, gateway ping 10s/10s, Prisma Neon keepalive; live kill/restart 8/8 zero rewind, median ~640ms | use-game-socket.ts, use-live-clock.ts, realtime.gateway.ts, prisma.service.ts +specs | green, <2s budget met | ~46k |
 | 22:40 | Session end: 17 writes across 10 files (prisma.service.ts, prisma.service.spec.ts, realtime.gateway.ts, realtime.gateway.spec.ts, use-live-clock.ts) | 8 reads | ~19076 tok |
+
+## Session: 2026-06-11 06:08
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:15 | Created .session-06-plan.md | — | ~6205 |
+| 06:16 | Session end: 1 writes across 1 files (.session-06-plan.md) | 16 reads | ~32805 tok |
+
+## Session: 2026-06-11 06:16
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:18 | Edited apps/web/src/app/login/login-form.tsx | "font-medium text-brass un" → "font-medium text-brass-te" | ~51 |
+| 06:18 | Edited apps/web/src/app/register/register-form.tsx | "font-medium text-brass un" → "font-medium text-brass-te" | ~51 |
+| 06:18 | Edited apps/web/src/app/login/login-form.tsx | "h-4 w-4 animate-spin" → "h-4 w-4 animate-spin moti" | ~31 |
+| 06:18 | Edited apps/web/src/app/register/register-form.tsx | "h-4 w-4 animate-spin" → "h-4 w-4 animate-spin moti" | ~31 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | 6→7 lines | ~45 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | 4→5 lines | ~34 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | "text-[11px] font-medium u" → "text-[11px] font-medium u" | ~25 |
+| 06:18 | Edited apps/web/src/components/layout/AppShell.tsx | CSS: motion-reduce, motion-reduce | ~104 |
+| 06:18 | Edited apps/web/src/components/auth/auth-shell.tsx | 3→4 lines | ~49 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: undefined | ~86 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: undefined | ~90 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: true | ~242 |
+| 06:18 | Edited apps/web/src/components/settings/settings-form.tsx | inline fix | ~21 |
+| 06:19 | Edited apps/web/src/components/games/game-history-list.tsx | ", className: " → ", srLabel: " | ~16 |
+| 06:19 | Edited apps/web/src/components/games/game-history-row.tsx | inline fix | ~16 |
+| 06:19 | Edited apps/web/src/components/games/game-history-row.tsx | "h-3 w-3 transition-transf" → "true" | ~42 |
+| 06:19 | Edited apps/web/test/settings/settings-dialog.test.tsx | expanded (+9 lines) | ~408 |
+| 06:19 | Edited apps/web/test/games/game-history-page.test.tsx | CSS: name | ~385 |
+| 06:19 | Edited apps/web/test/games/game-history-page.test.tsx | 11→13 lines | ~140 |
+| 06:21 | Created docs/roadmap/purechess-category-best/session-06-handoff.md | — | ~2486 |
+| 06:21 | Session 06 a11y fixes — contrast/focus/SR/motion across auth,settings,games,AppShell | multiple | ✅ 259 tests pass, tsc clean | ~4k |

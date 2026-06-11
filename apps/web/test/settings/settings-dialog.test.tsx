@@ -40,11 +40,12 @@ describe('SettingsForm', () => {
     expect(useSettingsStore.getState().boardThemeId).toBe('mono');
   });
 
-  it('lowTimeSound switch disabled when sound is off', () => {
+  it('lowTimeSound switch uses aria-disabled (not natively disabled) when sound is off', () => {
     useSettingsStore.setState({ ...SETTINGS_DEFAULTS, sound: false });
     render(<SettingsForm />);
     const lowTimeSwitch = screen.getByRole('switch', { name: /low-time tick/i });
-    expect(lowTimeSwitch).toBeDisabled();
+    expect(lowTimeSwitch).not.toBeDisabled();
+    expect(lowTimeSwitch.getAttribute('aria-disabled')).toBe('true');
   });
 
   it('animations toggle updates store', () => {
@@ -54,11 +55,19 @@ describe('SettingsForm', () => {
     expect(useSettingsStore.getState().animations).toBe(false);
   });
 
-  it('prefers-reduced-motion disables animations switch and shows note', () => {
+  it('animations switch uses aria-disabled (not natively disabled) when OS reduced-motion is on', () => {
     vi.mocked(prefersReducedMotion).mockReturnValue(true);
     render(<SettingsForm />);
     const animSwitch = screen.getByRole('switch', { name: /animations/i });
-    expect(animSwitch).toBeDisabled();
+    expect(animSwitch).not.toBeDisabled();
+    expect(animSwitch.getAttribute('aria-disabled')).toBe('true');
     expect(screen.getByText(/reduced-motion/i)).toBeTruthy();
+  });
+
+  it('animations switch remains in tab order when OS reduced-motion is on', () => {
+    vi.mocked(prefersReducedMotion).mockReturnValue(true);
+    render(<SettingsForm />);
+    const animSwitch = screen.getByRole('switch', { name: /animations/i });
+    expect(animSwitch.hasAttribute('disabled')).toBe(false);
   });
 });
