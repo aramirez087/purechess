@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 1087538,
-    "total_reads": 866,
-    "total_writes": 1421,
-    "total_sessions": 40,
-    "anatomy_hits": 507,
-    "anatomy_misses": 354,
+    "total_tokens_estimated": 1107692,
+    "total_reads": 870,
+    "total_writes": 1425,
+    "total_sessions": 42,
+    "anatomy_hits": 509,
+    "anatomy_misses": 355,
     "repeated_reads_blocked": 832,
-    "estimated_savings_vs_bare_cli": 1511813
+    "estimated_savings_vs_bare_cli": 1512213
   },
   "sessions": [
     {
@@ -13053,6 +13053,84 @@
         "writes_count": 169,
         "repeated_reads_blocked": 139,
         "anatomy_lookups": 76
+      }
+    },
+    {
+      "id": "session-2026-06-11-2213",
+      "started": "2026-06-11T04:13:35.745Z",
+      "ended": "2026-06-11T04:15:43.623Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/docs/claude-sessions/purechess-category-best/session-00-operator-rules.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/.session-01-plan.md",
+          "tokens_estimated": 3354,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 0,
+        "output_tokens_estimated": 3354,
+        "reads_count": 1,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-06-11-2215",
+      "started": "2026-06-11T04:15:44.484Z",
+      "ended": "2026-06-11T04:23:03.939Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/apps/web/src/hooks/use-game-socket.ts",
+          "tokens_estimated": 904,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/apps/api/src/realtime/realtime.gateway.ts",
+          "tokens_estimated": 1519,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 6847,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/docs/roadmap/purechess-category-best/budgets.md",
+          "tokens_estimated": 2958,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/docs/roadmap/purechess-category-best/ownership.md",
+          "tokens_estimated": 2173,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s01-charter-baselines/docs/roadmap/purechess-category-best/session-01-handoff.md",
+          "tokens_estimated": 2399,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 9270,
+        "output_tokens_estimated": 7530,
+        "reads_count": 3,
+        "writes_count": 3,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
       }
     }
   ],

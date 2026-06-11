@@ -1220,3 +1220,27 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:55 | Adversarial review (27 agents): 17 confirmed findings fixed — ratings lost-update race (FOR UPDATE locks), client merge staleness guards + drop-recovery, AA fixes, hero kill-switch rewire, legacy invite preview honesty, spec hardening (mutation-proof) | api ratings/realtime/invites, web live-game-client/hero-board/eval-panel/analyze | web 247/247, api 295/295 | ~80k |
 | 21:58 | SESSION SUMMARY: Tier A shipped (realtime WS PvP ~11ms push, Glicko-2 + rated invites, /analyze, invite color fix), Tier B swept (hero replay + 7 minors), Tier C audited (profile hydration bug fixed, settings voiced). 8 commits on main. | repo-wide | done | ~400k |
 | 21:51 | Session end: 169 writes across 58 files (schema.prisma, ws-events.ts, invites.service.ts, realtime.service.ts, use-invite.ts) | 95 reads | ~148558 tok |
+
+## Session: 2026-06-11 22:13
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:15 | Created .session-01-plan.md | — | ~3130 |
+| 22:15 | Session end: 1 writes across 1 files (.session-01-plan.md) | 1 reads | ~3354 tok |
+
+## Session: 2026-06-11 22:15
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:20 | Created docs/roadmap/purechess-category-best/budgets.md | — | ~2761 |
+| 22:21 | Created docs/roadmap/purechess-category-best/ownership.md | — | ~2028 |
+
+## Session — category-best epic S01 (charter + baselines) 2026-06-10
+| 14:00 | bootstrap worktree: install + shared build + db:generate | (root) | ok | ~1k |
+| 14:05 | bundle baseline `pnpm build` web, captured route First Load JS | apps/web | ok, no analyzer | ~2k |
+| 14:10 | lighthouse / + /play prod (PORT=3100), CG=NO_FCP | apps/web | perf 78 a11y 95-100 LCP ~6s | ~3k |
+| 14:15 | read use-game-socket + realtime.gateway: socket.io defaults, no ping opts | apps/{web,api} | reliability gaps noted | ~2k |
+| 14:25 | wrote budgets.md + ownership.md (best-effort, session files absent) | docs/roadmap/purechess-category-best | ok | ~3k |
+| 14:30 | tsc gates: api green, web GREEN (predicted red now fixed) | apps/* | ok | ~1k |
+| 22:22 | Created docs/roadmap/purechess-category-best/session-01-handoff.md | — | ~2239 |
+| 22:23 | Session end: 3 writes across 3 files (budgets.md, ownership.md, session-01-handoff.md) | 3 reads | ~16800 tok |
