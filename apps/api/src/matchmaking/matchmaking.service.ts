@@ -27,6 +27,18 @@ const matchKey = (userId: string) => `mm:match:${userId}`;
 const CLAIMED_SENTINEL = '__claimed__';
 
 /**
+ * A claimed candidate (or the caller) turned out to already be in an active
+ * game — the pairing is void. Both entries are already out of the queue; the
+ * non-busy player's client self-heals (next poll sees no entry → 'idle' →
+ * auto re-join), the busy one is correctly gone.
+ */
+class StaleCandidateError extends Error {
+  constructor() {
+    super('Claimed candidate already in an active game');
+  }
+}
+
+/**
  * Claim-or-enqueue in ONE script so two concurrent joins can neither
  * double-pair nor both see an empty pool and miss each other: of two
  * simultaneous joins, Redis's single-threaded execution guarantees exactly
@@ -178,8 +190,13 @@ export class MatchmakingService {
       return { status: 'queued' };
     }
 
-    const gameId = await this.createMatchedGame(userId, opponentId, preset, rated);
-    return { status: 'matched', gameId };
+    try {
+      const gameId = await this.createMatchedGame(userId, opponentId, preset, rated);
+      return { status: 'matched', gameId };
+    } catch (err) {
+      if (err instanceof StaleCandidateError) return { status: 'queued' };
+      throw err;
+    }
   }
 
   async leave(userId: string): Promise<{ ok: true }> {
@@ -238,12 +255,39 @@ export class MatchmakingService {
           p.increment === Number(entry['incrementSeconds']),
       );
       if (preset) {
-        const gameId = await this.createMatchedGame(userId, opponentId, preset, rated);
-        return { status: 'matched', gameId, waitSeconds };
+        try {
+          const gameId = await this.createMatchedGame(userId, opponentId, preset, rated);
+          return { status: 'matched', gameId, waitSeconds };
+        } catch (err) {
+          if (!(err instanceof StaleCandidateError)) throw err;
+          // Fall through to 'queued' — the next poll self-heals via re-join.
+        }
       }
     }
 
     return { status: 'queued', waitSeconds };
+  }
+
+  /**
+   * Best-effort queue removal for players who enter a game through a
+   * non-matchmaking path (invite accept, rematch accept). Without this a
+   * queued player stays claimable while already playing — and if their
+   * search tab keeps polling, the status heartbeat refreshes the entry TTL
+   * indefinitely. Never throws: queue hygiene must not fail game activation.
+   */
+  async dequeue(...userIds: Array<string | null>): Promise<void> {
+    for (const userId of userIds) {
+      if (!userId) continue;
+      try {
+        const pool = await this.redis.hget(userKey(userId), 'pool');
+        if (!pool) continue;
+        await this.redis.zrem(pool, userId);
+        await this.redis.del(userKey(userId));
+        this.posthog.captureEvent(userId, 'matchmaking_dequeued', { reason: 'entered_game' });
+      } catch {
+        // Redis hiccup — TTL expiry plus the in-scan reaper cover the residue.
+      }
+    }
   }
 
   /**
@@ -258,6 +302,25 @@ export class MatchmakingService {
     preset: MatchmakingTimeControl,
     rated: boolean,
   ): Promise<string> {
+    // Defense in depth behind dequeue-on-activation: a player who entered a
+    // game through an invite/rematch in the ms before their queue entry was
+    // removed must not be paired into a second game.
+    const busy = await this.prisma.game.findFirst({
+      where: {
+        status: 'active',
+        isVsComputer: false,
+        OR: [
+          { whiteUserId: { in: [userId, opponentId] } },
+          { blackUserId: { in: [userId, opponentId] } },
+        ],
+      },
+      select: { id: true },
+    });
+    if (busy) {
+      this.logger.warn(`Stale pairing dropped: ${userId} vs ${opponentId} (active game ${busy.id})`);
+      throw new StaleCandidateError();
+    }
+
     const callerIsWhite = Math.random() < 0.5;
     const whiteUserId = callerIsWhite ? userId : opponentId;
     const blackUserId = callerIsWhite ? opponentId : userId;

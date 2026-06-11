@@ -24,6 +24,7 @@ import { EngineService, InvalidMoveError } from '../chess/engine.service';
 import { RealtimeService } from '../realtime/realtime.service';
 import { RatingsService } from '../ratings/ratings.service';
 import { PosthogService } from '../analytics/posthog.service';
+import { MatchmakingService } from '../matchmaking/matchmaking.service';
 import { STARTING_FEN, engineTimeMs, isUntimed } from '../computer-games/computer-games.helpers';
 
 const PLAYER_SELECT = { select: { id: true, username: true } } as const;
@@ -60,6 +61,7 @@ export class GamesService {
     private readonly realtime: RealtimeService,
     private readonly ratings: RatingsService,
     private readonly posthog: PosthogService,
+    private readonly matchmaking: MatchmakingService,
   ) {}
 
   /** Rating failures must never break a game-over response. */
@@ -685,6 +687,10 @@ export class GamesService {
       // Already activated (double accept) is idempotent success.
       if (linked?.status !== 'active') throw new ConflictException('Rematch no longer available');
     }
+
+    // Either player may be sitting in the quick-match queue — remove them so
+    // matchmaking cannot claim them into a second game. Best-effort.
+    await this.matchmaking.dequeue(game.whiteUserId, game.blackUserId);
 
     const serialized = (game.engineState as unknown as SerializableEngineState | null) ?? null;
     const rematch = this.mapRematch(game, 'active');

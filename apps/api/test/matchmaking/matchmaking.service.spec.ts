@@ -290,4 +290,64 @@ describe('MatchmakingService', () => {
       expect(mockRealtime.emitMatchFound).toHaveBeenCalledTimes(2);
     });
   });
+
+  describe('dequeue', () => {
+    it('removes the queue entry and user key for queued players', async () => {
+      mockRedis.hget.mockResolvedValue(POOL);
+
+      await service.dequeue(USER_ID);
+
+      expect(mockRedis.zrem).toHaveBeenCalledWith(POOL, USER_ID);
+      expect(mockRedis.del).toHaveBeenCalledWith(`mm:u:${USER_ID}`);
+    });
+
+    it('no-ops for users not in the queue and skips nulls', async () => {
+      mockRedis.hget.mockResolvedValue(null);
+
+      await service.dequeue(USER_ID, null);
+
+      expect(mockRedis.zrem).not.toHaveBeenCalled();
+      expect(mockRedis.del).not.toHaveBeenCalled();
+    });
+
+    it('never throws on a redis failure (queue hygiene must not fail activation)', async () => {
+      mockRedis.hget.mockRejectedValue(new Error('redis down'));
+
+      await expect(service.dequeue(USER_ID)).resolves.toBeUndefined();
+    });
+  });
+
+  describe('stale claimed candidate', () => {
+    it('join drops the pairing and reports queued when the claimed opponent is mid-game', async () => {
+      mockRedis.mmJoin.mockResolvedValue(OPP_ID);
+      mockPrisma.game.findFirst
+        .mockResolvedValueOnce(null) // caller's own in-game guard
+        .mockResolvedValueOnce({ id: 'game-x' }); // pairing busy probe
+
+      const res = await service.join(USER_ID, JOIN_DTO);
+
+      expect(res).toEqual({ status: 'queued' });
+      expect(mockPrisma.game.create).not.toHaveBeenCalled();
+      expect(mockRealtime.emitMatchFound).not.toHaveBeenCalled();
+    });
+
+    it('status drops a stale pairing and stays queued', async () => {
+      mockRedis.hgetall.mockResolvedValue({
+        pool: POOL,
+        rating: '1500',
+        joinedAt: String(Date.now()),
+        timeControlSeconds: '180',
+        incrementSeconds: '0',
+        category: 'blitz',
+        rated: '1',
+      });
+      mockRedis.mmJoin.mockResolvedValue(OPP_ID);
+      mockPrisma.game.findFirst.mockResolvedValue({ id: 'game-x' });
+
+      const res = await service.status(USER_ID);
+
+      expect(res.status).toBe('queued');
+      expect(mockPrisma.game.create).not.toHaveBeenCalled();
+    });
+  });
 });

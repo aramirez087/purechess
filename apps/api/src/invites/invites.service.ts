@@ -7,6 +7,7 @@ import {
 } from "@nestjs/common";
 import { randomBytes } from "crypto";
 import { PrismaService } from "../database/prisma.service";
+import { MatchmakingService } from "../matchmaking/matchmaking.service";
 import { CreateInviteDto } from "./dto/create-invite.dto";
 import { InviteGateway } from "./invite-gateway";
 import { PosthogService } from "../analytics/posthog.service";
@@ -22,6 +23,7 @@ export class InvitesService {
     private readonly prisma: PrismaService,
     private readonly gateway: InviteGateway,
     private readonly posthog: PosthogService,
+    private readonly matchmaking: MatchmakingService,
   ) {}
 
   async createInvite(
@@ -182,6 +184,11 @@ export class InvitesService {
     if (result.count === 0) {
       throw new ConflictException("Invite was already accepted");
     }
+
+    // Either player may have been sitting in the quick-match queue — leave
+    // them there and matchmaking can claim them into a second, conflicting
+    // game (their status poll would keep the entry alive). Best-effort.
+    await this.matchmaking.dequeue(creatorId, acceptorId);
 
     this.gateway.emitInviteAccepted(creatorId!, acceptorId, {
       gameId: game.id,

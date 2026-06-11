@@ -6,6 +6,7 @@ import { EngineService } from '../../src/chess/engine.service';
 import { RealtimeService } from '../../src/realtime/realtime.service';
 import { RatingsService } from '../../src/ratings/ratings.service';
 import { PosthogService } from '../../src/analytics/posthog.service';
+import { MatchmakingService } from '../../src/matchmaking/matchmaking.service';
 
 const GAME_ID = 'game-1';
 const REMATCH_ID = 'game-2';
@@ -115,6 +116,10 @@ const mockPosthog = {
   identify: jest.fn(),
 };
 
+const mockMatchmaking = {
+  dequeue: jest.fn().mockResolvedValue(undefined),
+};
+
 describe('GamesService', () => {
   let service: GamesService;
 
@@ -128,6 +133,7 @@ describe('GamesService', () => {
         { provide: RealtimeService, useValue: mockRealtime },
         { provide: RatingsService, useValue: mockRatings },
         { provide: PosthogService, useValue: mockPosthog },
+        { provide: MatchmakingService, useValue: mockMatchmaking },
       ],
     }).compile();
     service = module.get(GamesService);
@@ -680,6 +686,20 @@ describe('GamesService', () => {
         }),
       );
       expect(dto.rematch).toMatchObject({ gameId: REMATCH_ID, status: 'accepted' });
+    });
+
+    it('accept dequeues both players from matchmaking', async () => {
+      mockPrisma.game.findUnique.mockResolvedValue(
+        makeGame({
+          status: 'completed',
+          rematchGameId: REMATCH_ID,
+          rematchOfferedBy: WHITE_ID,
+        }),
+      );
+
+      await service.rematch(GAME_ID, BLACK_ID, 'accept');
+
+      expect(mockMatchmaking.dequeue).toHaveBeenCalledWith(WHITE_ID, BLACK_ID);
     });
 
     it('accept activates the linked game; the offerer cannot accept', async () => {

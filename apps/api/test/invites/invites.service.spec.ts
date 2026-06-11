@@ -9,6 +9,7 @@ import { InvitesService } from '../../src/invites/invites.service';
 import { PrismaService } from '../../src/database/prisma.service';
 import { InviteGateway } from '../../src/invites/invite-gateway';
 import { PosthogService } from '../../src/analytics/posthog.service';
+import { MatchmakingService } from '../../src/matchmaking/matchmaking.service';
 
 const CREATOR_ID = 'user-creator';
 const ACCEPTOR_ID = 'user-acceptor';
@@ -51,6 +52,7 @@ const mockGateway = {
 };
 
 const mockPosthog = { captureEvent: jest.fn(), captureException: jest.fn(), identify: jest.fn() };
+const mockMatchmaking = { dequeue: jest.fn().mockResolvedValue(undefined) };
 
 describe('InvitesService', () => {
   let service: InvitesService;
@@ -63,6 +65,7 @@ describe('InvitesService', () => {
         { provide: PrismaService, useValue: mockPrisma },
         { provide: InviteGateway, useValue: mockGateway },
         { provide: PosthogService, useValue: mockPosthog },
+        { provide: MatchmakingService, useValue: mockMatchmaking },
       ],
     }).compile();
 
@@ -222,6 +225,25 @@ describe('InvitesService', () => {
         expect.objectContaining({ gameId: GAME_ID }),
       );
       expect(result.gameId).toBe(GAME_ID);
+    });
+
+    it('dequeues both players from matchmaking on activation', async () => {
+      const game = makeGame();
+      mockPrisma.game.findUnique.mockResolvedValue(game);
+      mockPrisma.game.updateMany.mockResolvedValue({ count: 1 });
+
+      await service.acceptInvite(TOKEN, ACCEPTOR_ID);
+
+      expect(mockMatchmaking.dequeue).toHaveBeenCalledWith(CREATOR_ID, ACCEPTOR_ID);
+    });
+
+    it('does not dequeue when the accept loses the race', async () => {
+      const game = makeGame();
+      mockPrisma.game.findUnique.mockResolvedValue(game);
+      mockPrisma.game.updateMany.mockResolvedValue({ count: 0 });
+
+      await expect(service.acceptInvite(TOKEN, ACCEPTOR_ID)).rejects.toThrow(ConflictException);
+      expect(mockMatchmaking.dequeue).not.toHaveBeenCalled();
     });
 
     it('throws ForbiddenException when creator tries to accept', async () => {
