@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 1202618,
-    "total_reads": 917,
-    "total_writes": 1476,
+    "total_tokens_estimated": 1213845,
+    "total_reads": 921,
+    "total_writes": 1485,
     "total_sessions": 50,
-    "anatomy_hits": 552,
+    "anatomy_hits": 556,
     "anatomy_misses": 358,
     "repeated_reads_blocked": 836,
-    "estimated_savings_vs_bare_cli": 1530240
+    "estimated_savings_vs_bare_cli": 1531040
   },
   "sessions": [
     {
@@ -13768,6 +13768,92 @@
         "output_tokens_estimated": 2756,
         "reads_count": 5,
         "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-06-11-0757",
+      "started": "2026-06-11T13:57:45.929Z",
+      "ended": "2026-06-11T14:23:26.920Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/apps/web/Dockerfile",
+          "tokens_estimated": 410,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/apps/web/fly.toml",
+          "tokens_estimated": 194,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/apps/web/src/hooks/use-game-socket.ts",
+          "tokens_estimated": 1394,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/apps/web/next.config.mjs",
+          "tokens_estimated": 833,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/apps/web/Dockerfile",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/apps/web/fly.toml",
+          "tokens_estimated": 110,
+          "action": "edit"
+        },
+        {
+          "file": "/tmp/ws-proof.mjs",
+          "tokens_estimated": 1475,
+          "action": "create"
+        },
+        {
+          "file": "/tmp/ws-proof.mjs",
+          "tokens_estimated": 66,
+          "action": "edit"
+        },
+        {
+          "file": "/tmp/ws-proof.mjs",
+          "tokens_estimated": 380,
+          "action": "edit"
+        },
+        {
+          "file": "/tmp/ws-proof.mjs",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "/tmp/smoke.mjs",
+          "tokens_estimated": 824,
+          "action": "create"
+        },
+        {
+          "file": "/tmp/ledger.mjs",
+          "tokens_estimated": 931,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--purechess-category-best--s08-prod-deploy-verify/docs/roadmap/purechess-category-best/session-08-handoff.md",
+          "tokens_estimated": 4441,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 2831,
+        "output_tokens_estimated": 8396,
+        "reads_count": 4,
+        "writes_count": 9,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 4
       }

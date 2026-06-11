@@ -1506,3 +1506,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:30 | Prod Lighthouse / + CG; designqc home | .wolf/designqc-captures | / 97/95 ✅; CG 80 (S07 debt); design compliant | ~4k |
 | 14:35 | Neon keepalive verified; warm first-move ~503ms | prisma.service.ts | cold unreproducible w/ keepalive (documented) | ~1k |
 | 14:40 | cerebrum+buglog(bug-324)+handoff written | .wolf/*, session-08-handoff.md | GO, exit criteria met | ~3k |
+| 08:23 | Session end: 9 writes across 6 files (Dockerfile, fly.toml, ws-proof.mjs, smoke.mjs, ledger.mjs) | 4 reads | ~11227 tok |
