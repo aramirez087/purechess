@@ -22,7 +22,7 @@ const TABLE_HEADERS = [
   { label: 'Result', className: 'w-20' },
   { label: 'Δ', srLabel: 'Rating change', className: 'w-16 text-right' },
   { label: 'Time', className: 'w-20' },
-  { label: '', className: 'w-16' },
+  { label: '', srLabel: 'Review', className: 'w-16' },
 ];
 
 function LedgerHead({ sticky = false }: { sticky?: boolean }) {

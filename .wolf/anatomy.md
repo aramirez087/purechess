@@ -6,6 +6,8 @@
 > Files: 759 tracked | Anatomy hits: 0 | Misses: 0
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:28:23.087Z
 > Files: 768 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T12:21:18.545Z
+> Files: 755 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -56,7 +58,7 @@
 - `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
-- `.session-06-plan.md` — Session 06 — Implementation Plan: Engine Cutover (WP6) (~3069 tok)
+- `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
 - `.session-08-plan.md` — Session 08 — Implementation Plan (~4572 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
@@ -1007,13 +1009,13 @@
 
 ## apps/web/src/app/login/
 
-- `login-form.tsx` — LoginForm — renders form (~1251 tok)
+- `login-form.tsx` — LoginForm — renders form (~1264 tok)
 - `page.tsx` — Suspense wrapper for LoginForm (~120 tok)
 
 ## apps/web/src/app/register/
 
 - `page.tsx` — Suspense wrapper for RegisterForm (~120 tok)
-- `register-form.tsx` — USERNAME_PATTERN — renders form (~1654 tok)
+- `register-form.tsx` — USERNAME_PATTERN — renders form (~1667 tok)
 
 ## apps/web/src/components/
 
@@ -1030,7 +1032,7 @@
 
 ## apps/web/src/components/auth/
 
-- `auth-shell.tsx` — Full-viewport centered shell for the auth pages. Theme-aware ambient built (~666 tok)
+- `auth-shell.tsx` — Full-viewport centered shell for the auth pages. Theme-aware ambient built (~672 tok)
 
 ## apps/web/src/components/board/
 
@@ -1077,6 +1079,8 @@
 - `game-history-filters.tsx` — CATEGORIES (~944 tok)
 - `game-history-list.tsx` — Ledger table + mono footer: shows API `total` when present (falls back to "N shown"), W-L-D tally labelled "latest N:" when partial (~1485 tok)
 - `game-history-row.tsx` — resultLabel (~1655 tok)
+- `game-history-list.tsx` — Total games matching the filters, from the API (ignores pagination). (~1491 tok)
+- `game-history-row.tsx` — resultLabel (~1656 tok)
 
 ## apps/web/src/components/home/
 
@@ -1090,7 +1094,7 @@
 
 ## apps/web/src/components/layout/
 
-- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~915 tok)
+- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~950 tok)
 - `Logo.tsx` — SIZE (~624 tok)
 - `UserMenu.tsx` — Top-bar account chip — resolves the session itself via /api/auth/me. (~938 tok)
 
@@ -1115,7 +1119,7 @@
 
 ## apps/web/src/components/settings/
 
-- `settings-form.tsx` — APP_THEMES (~2253 tok)
+- `settings-form.tsx` — APP_THEMES (~2392 tok)
 
 ## apps/web/src/components/ui/
 
@@ -1188,7 +1192,7 @@
 ## apps/web/test/games/
 
 - `game-history-filters.test.tsx` — defaultProps (~1031 tok)
-- `game-history-page.test.tsx` — mockGame (~1204 tok)
+- `game-history-page.test.tsx` — mockGame (~1472 tok)
 - `game-review.test.ts` — Declares makeComputerState (~942 tok)
 
 ## apps/web/test/home/
@@ -1216,7 +1220,7 @@
 
 ## apps/web/test/settings/
 
-- `settings-dialog.test.tsx` — monoBtn (~676 tok)
+- `settings-dialog.test.tsx` — monoButton (~821 tok)
 
 ## crates/purechess-engine/
 
@@ -1282,6 +1286,7 @@
 - `session-03-handoff.md` — Session 03 Handoff — Board Feel & Accessibility (~3312 tok)
 - `session-04-handoff.md` — Session 04 Handoff — Speed Shell (~2674 tok)
 - `session-05-handoff.md` — Session 05 Handoff — E2E Interactions (~1149 tok)
+- `session-06-handoff.md` — Session 06 Handoff — Surface A11y + Light Mode (~2330 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

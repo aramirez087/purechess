@@ -110,8 +110,8 @@ export function SettingsForm() {
             id="animations"
             aria-label="Animations"
             checked={settings.animations}
-            onCheckedChange={(v) => settings.update({ animations: v })}
-            disabled={reducedMotion}
+            onCheckedChange={reducedMotion ? undefined : (v) => settings.update({ animations: v })}
+            aria-disabled={reducedMotion ? 'true' : undefined}
           />
         </SettingRow>
       </Section>
@@ -136,8 +136,8 @@ export function SettingsForm() {
             id="lowTimeSound"
             aria-label="Low-time tick"
             checked={settings.lowTimeSound}
-            onCheckedChange={(v) => settings.update({ lowTimeSound: v })}
-            disabled={!settings.sound}
+            onCheckedChange={!settings.sound ? undefined : (v) => settings.update({ lowTimeSound: v })}
+            aria-disabled={!settings.sound ? 'true' : undefined}
           />
         </SettingRow>
       </Section>
@@ -188,25 +188,23 @@ function SettingRow({
 }) {
   return (
     <div
-      className={cn(
-        'flex items-center justify-between gap-4 p-4',
-        disabled && 'opacity-60',
-      )}
+      aria-disabled={disabled ? true : undefined}
+      className="flex items-center justify-between gap-4 p-4"
     >
       <div className="flex items-start gap-3">
         {Icon && (
-          <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-muted-foreground">
+          <span aria-hidden="true" className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-raised ring-1 ring-inset ring-border text-muted-foreground">
             <Icon className="h-3.5 w-3.5" />
           </span>
         )}
         <div>
-          <Label htmlFor={htmlFor} className="text-sm font-medium">
+          <Label htmlFor={htmlFor} className={cn('text-sm font-medium', disabled && 'text-muted-foreground')}>
             {label}
           </Label>
           {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
         </div>
       </div>
-      <div className="shrink-0">{children}</div>
+      <div className={cn('shrink-0', disabled && 'opacity-40 pointer-events-none')}>{children}</div>
     </div>
   );
 }
@@ -239,7 +237,7 @@ function SegmentedControl<T extends string>({
                 : 'text-muted-foreground hover:text-foreground',
             )}
           >
-            {Icon && <Icon className="h-3.5 w-3.5" />}
+            {Icon && <Icon className="h-3.5 w-3.5" aria-hidden="true" />}
             {opt.label}
           </button>
         );

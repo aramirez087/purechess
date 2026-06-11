@@ -24,6 +24,7 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
       <div className="min-h-screen flex flex-col bg-stage">
         <main
           id="main-content"
+          tabIndex={-1}
           className="flex-1 flex flex-col"
         >
           {children}
@@ -54,11 +55,11 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
               className={cn(
                 'hidden sm:inline-flex items-center gap-1.5 rounded-full',
                 'border border-brass/40 bg-brass-soft/40 px-2.5 py-0.5',
-                'text-[11px] font-medium uppercase tracking-[0.12em] text-brass',
+                'text-[11px] font-medium uppercase tracking-[0.12em] text-brass-text',
               )}
             >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brass opacity-60" />
+              <span aria-hidden="true" className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping motion-reduce:animate-none rounded-full bg-brass opacity-60 motion-reduce:opacity-100" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brass" />
               </span>
               {contextBadge}
@@ -90,6 +91,7 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
       </header>
       <main
         id="main-content"
+        tabIndex={-1}
         className="flex-1 flex flex-col min-h-0"
       >
         {children}

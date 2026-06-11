@@ -63,7 +63,7 @@ export function RegisterForm() {
           Already have an account?{' '}
           <Link
             href={`/login?return=${encodeURIComponent(returnTo)}`}
-            className="font-medium text-brass underline decoration-brass/30 underline-offset-4 transition-colors hover:text-brass/90 hover:decoration-brass"
+            className="font-medium text-brass-text underline decoration-brass-text/30 underline-offset-4 transition-colors hover:text-brass-text/80 hover:decoration-brass-text"
           >
             Sign in
           </Link>
@@ -143,7 +143,7 @@ export function RegisterForm() {
               className="mt-1 h-11 w-full bg-brass font-semibold text-accent-foreground shadow-elevated transition-all duration-150 hover:bg-brass/90 hover:shadow-brass-glow active:translate-y-px disabled:opacity-70"
             >
               {pending ? (
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
               ) : (
                 <UserPlus className="h-4 w-4" aria-hidden="true" />
               )}
