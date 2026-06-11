@@ -1,12 +1,12 @@
 import { Page } from '@playwright/test';
 
 export async function waitForGameUrl(page: Page): Promise<string> {
-  await page.waitForURL(/\/games\/[a-z0-9]+/i, { timeout: 15000 });
+  await page.waitForURL(/\/play\/[a-z0-9]+/i, { timeout: 15000 });
   return page.url();
 }
 
 export function extractGameId(url: string): string {
-  const match = /\/games\/([a-z0-9]+)/i.exec(url);
+  const match = /\/(?:play|games)\/([a-z0-9]+)/i.exec(url);
   if (!match) throw new Error(`No game ID in URL: ${url}`);
   return match[1]!;
 }

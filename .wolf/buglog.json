@@ -2040,7 +2040,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 3,
+      "occurrences": 4,
       "last_seen": "2026-06-11T01:26:31.259Z"
     },
     {
@@ -2056,7 +2056,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 3,
+      "occurrences": 4,
       "last_seen": "2026-06-11T01:26:53.891Z"
     },
     {
@@ -2072,7 +2072,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 3,
+      "occurrences": 4,
       "last_seen": "2026-06-11T01:28:19.803Z"
     },
     {
@@ -4676,6 +4676,141 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T12:19:40.853Z"
+    },
+    {
+      "id": "bug-292",
+      "timestamp": "2026-06-10T01:32:04.305Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/layout.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T01:32:04.305Z"
+    },
+    {
+      "id": "bug-293",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Dark-theme .shadow-elevated override (literal box-shadow at [data-theme=dark] specificity) silently killed hover:shadow-brass-glow, active:shadow-none and ring-* utilities on any element also carrying shadow-elevated \u2014 the diff removed the very affordances it was adding, in the default theme",
+      "file": "apps/web/src/app/globals.css + apps/web/tailwind.config.ts",
+      "root_cause": "A literal box-shadow rule outside @layer with (0,2,0)/(0,3,0) specificity after @tailwind utilities bypasses the --tw-shadow/--tw-ring-shadow composition pipeline and beats every shadow/ring utility on the element",
+      "fix": "Theme the VALUE not the rule: per-theme --shadow-elevated CSS var consumed by tailwind boxShadow.elevated = var(--shadow-elevated); deleted the two override rules so utilities compose again",
+      "tags": [
+        "tailwind",
+        "css-specificity",
+        "box-shadow",
+        "dark-theme",
+        "design-tokens"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-294",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "Promotion picker declared aria-modal=true with no focus trap: Tab escaped into aria-inert page content, Escape died once focus left the overlay, and closing stranded focus on body",
+      "file": "apps/web/src/components/board/move-input.tsx",
+      "root_cause": "aria-modal asserts modality but raw divs provide none of it; React onKeyDown only sees events from focused descendants",
+      "fix": "Tab/Shift+Tab loop across the four piece buttons, document-level capture-phase Escape listener, pre-dialog activeElement captured via lazy ref init (before commit-time autoFocus) and restored on unmount with [role=grid] fallback",
+      "tags": [
+        "a11y",
+        "focus-trap",
+        "aria-modal",
+        "board",
+        "promotion"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-295",
+      "timestamp": "2026-06-10T20:20:00-06:00",
+      "error_message": "disabled + disabled:pointer-events-none on review seek buttons dropped keyboard focus to body whenever the focused button became disabled at the start/end ply",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "Natively disabling a focused element ejects focus; pointer-events-none additionally hides it from pointer users",
+      "fix": "aria-disabled pattern: buttons stay enabled+focusable, onClick guards no-op at boundaries, styled via aria-disabled:opacity-40 with neutralized hover/active variants",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "disabled-state",
+        "review"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10"
+    },
+    {
+      "id": "bug-296",
+      "timestamp": "2026-06-10T22:35:00.000Z",
+      "error_message": "Cannot find module .../argon2@0.31.2/.../lib/binding/napi-v3/argon2.node from argon2.js \u2014 apps/api auth.service.spec & auth.controller.spec fail to RUN",
+      "file": "node_modules/.pnpm/argon2@0.31.2/.../argon2 (native binding)",
+      "root_cause": "Fresh worktree: pnpm install ignored argon2 build script, so the prebuilt native binding was never fetched. Not a code bug \u2014 env bootstrap gap.",
+      "fix": "Ran node-pre-gyp install --fallback-to-build in the argon2 pkg dir (or pnpm rebuild argon2) to fetch the darwin-arm64 prebuilt argon2.node. Add to fresh-worktree bootstrap.",
+      "tags": [
+        "fresh-worktree",
+        "argon2",
+        "native-binding",
+        "jest",
+        "bootstrap"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-10T22:35:00.000Z"
+    },
+    {
+      "id": "bug-297",
+      "timestamp": "2026-06-11T12:23:56.653Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/game/result-overlay.tsx",
+      "root_cause": "Had \"absolute inset-0 z-20 flex items-center justify-c",
+      "fix": "Changed to \"game-result\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:23:56.653Z"
+    },
+    {
+      "id": "bug-298",
+      "timestamp": "2026-06-11T12:23:58.803Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/profile/ratings-card.tsx",
+      "root_cause": "Had \"rounded-lg border border-border/70 bg-surface/60 ",
+      "fix": "Changed to \"user-rating\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:23:58.803Z"
+    },
+    {
+      "id": "bug-299",
+      "timestamp": "2026-06-11T12:24:01.971Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/play/invite-create.tsx",
+      "root_cause": "Had \"block break-all font-mono text-xs leading-relaxed",
+      "fix": "Changed to \"invite-link\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T12:24:01.971Z"
     }
   ]
 }

@@ -98,7 +98,7 @@ export function RecentGames({ games }: RecentGamesProps) {
               })
             : '—';
           return (
-            <li key={g.id}>
+            <li key={g.id} data-testid="game-history-item">
               <Link
                 href={`/games/${g.id}`}
                 className="group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-raised/60"

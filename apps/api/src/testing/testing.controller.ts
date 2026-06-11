@@ -26,6 +26,7 @@ class CreateGameDto {
   timeControlSeconds?: number;
   incrementSeconds?: number;
   category?: string;
+  isRated?: boolean;
 }
 
 @Controller('testing')

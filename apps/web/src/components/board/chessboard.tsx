@@ -289,6 +289,7 @@ export function Chessboard({
     <div
       className={cn('relative w-full', className)}
       ref={containerRef}
+      data-testid="chess-board"
       // Board-settings kill switch. animationMs is 0 when the user turns
       // animations off OR prefers reduced motion (board-context), so this
       // engages BOTH the globals.css `[data-no-animations] …` rules and the
