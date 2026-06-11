@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T16:57:20.105Z
-> Files: 822 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T17:44:31.023Z
+> Files: 833 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -941,24 +941,28 @@
 
 ## apps/web/e2e/helpers/
 
-- `game-helpers.ts` — Exports waitForGameUrl, extractGameId, clickSquare, makeMove + 3 more (~402 tok)
+- `game-helpers.ts` — Plays 1. e4 e5 across two boards, waiting for each move to land on the (~566 tok)
 - `test-api.ts` — Exports TestUser, TestGame, createTestUser, createTestGame + 3 more (~630 tok)
 
 ## apps/web/e2e/tests/
 
-- `admin-disable.spec.ts` — Declares API_URL (~496 tok)
+- `abort.spec.ts` — PvP abort: available to either player while the game has fewer than 2 (~839 tok)
+- `admin-disable.spec.ts` — Declares API_URL (~560 tok)
 - `analyze-flow.spec.ts` — Declares VALID_PGN (~614 tok)
 - `anon-casual.spec.ts` — Anonymous matchmaking is not implemented — requires auth for all game modes. (~118 tok)
+- `draw-offer.spec.ts` — PvP draw offers. The Draw button only appears once the game has 2+ plies (~1130 tok)
 - `flag-fall.spec.ts` — Declares game (~665 tok)
-- `friend-invite.spec.ts` — Declares alicePage (~333 tok)
-- `game-end.spec.ts` — Declares game (~487 tok)
+- `friend-invite.spec.ts` — Declares alicePage (~390 tok)
+- `game-end.spec.ts` — Declares game (~466 tok)
 - `ledger-navigation.spec.ts` — Declares page (~620 tok)
 - `premove.spec.ts` — Declares game (~742 tok)
 - `promotion-keyboard.spec.ts` — White pawn on a7, kings clear of a8 — one move from promotion. (~1206 tok)
-- `rated-finalization.spec.ts` — Fool's mate: 1. f3 e5 2. g4 Qh4# — shortest possible checkmate. (~667 tok)
-- `rated-game.spec.ts` — Matchmaking UI is not implemented — players currently start games via friend (~138 tok)
+- `quick-match.spec.ts` — Quick Match: two players queue the default pool (3+0 rated) and are paired (~615 tok)
+- `rated-finalization.spec.ts` — Fool's mate: 1. f3 e5 2. g4 Qh4# — shortest possible checkmate. (~675 tok)
+- `rated-game.spec.ts` — Matchmaking pairing itself is covered in quick-match.spec.ts; rated (~152 tok)
 - `reconnect.spec.ts` — Declares game (~284 tok)
-- `result-overlay.spec.ts` — Declares game (~959 tok)
+- `rematch.spec.ts` — PvP rematch: after a finished game, the offer creates a linked (~1296 tok)
+- `result-overlay.spec.ts` — Declares game (~1005 tok)
 
 ## apps/web/public/pieces/
 
@@ -980,9 +984,13 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10046 tok)
-- `loading.tsx` — Route-level loading UI for /play/[gameId]. (~60 tok)
-- `page.tsx` — metadata (~100 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10191 tok)
+- `loading.tsx` — Route-level loading UI for /play/[gameId]. (~214 tok)
+- `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~420 tok)
+
+## apps/web/src/app/admin/
+
+- `layout.tsx` — getMe (~307 tok)
 
 ## apps/web/src/app/admin/games/[gameId]/
 
@@ -1003,7 +1011,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7364 tok)
+- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~7332 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~218 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
@@ -1050,7 +1058,7 @@
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — FILES (~4700 tok)
+- `chessboard.tsx` — FILES (~4858 tok)
 - `chessboard.tsx` — FILES (~4137 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
@@ -1062,7 +1070,7 @@
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
 - `use-drag.ts` — Exports useDrag (~906 tok)
 - `use-keyboard.ts` — Exports useKeyboard (~883 tok)
-- `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~866 tok)
+- `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~982 tok)
 
 ## apps/web/src/components/computer-game/
 
@@ -1172,10 +1180,15 @@
 
 ## apps/web/src/lib/board/
 
-- `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~656 tok)
-- `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~820 tok)
+- `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~304 tok)
+- `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
+- `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
 - `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
-- `sr-announce.ts` — Derives a human-readable SR announcement from consecutive FENs. (~557 tok)
+- `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
+- `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
+- `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
+- `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2077 tok)
+- `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
 
 ## apps/web/src/services/
@@ -1198,8 +1211,9 @@
 
 ## apps/web/test/board/
 
+- `animations.test.ts` — START_FEN: fenAfterMove (~485 tok)
 - `captured-material.test.tsx` — pieces (~613 tok)
-- `chessboard-sr.test.tsx` — START_FEN (~999 tok)
+- `chessboard-sr.test.tsx` — START_FEN (~1096 tok)
 - `keyboard.test.tsx` — START_FEN (~1672 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 - `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)

@@ -1619,3 +1619,64 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 10:57 | Edited apps/web/src/app/error.tsx | added 1 condition(s) | ~200 |
 | 10:57 | Edited apps/web/src/app/global-error.tsx | added 1 condition(s) | ~164 |
 | 12:05 | LCP cut /computer-game: SSR board (server state fetch + piece preloads + CSS-only square geometry) + Sentry-core lazy shim. Throttled LCP 7.6s → 2.0s (Slow 4G + 4x CPU), CLS 0, shared JS 166 → 89.6 kB, route 283 → 174 kB. Deferred: chess.js eager-split (chunk 527, ~18 kB) | computer-game page/client/loading, chessboard/square/board-context/player-strip, sentry-lazy.ts, sentry.client.config, error pages | web 304 + api 339 green; home LCP 674ms no regression; boards visually verified on computer + analyze shells | ~45k |
+| 11:07 | Session end: 83 writes across 47 files (continue-improving-purechess-the-iridescent-liskov.md, pvp-game.dto.ts, ws-events.ts, schema.prisma, migration.sql) | 80 reads | ~130176 tok |
+| 11:10 | Session end: 83 writes across 47 files (continue-improving-purechess-the-iridescent-liskov.md, pvp-game.dto.ts, ws-events.ts, schema.prisma, migration.sql) | 80 reads | ~130176 tok |
+
+## Session: 2026-06-11 11:12
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 11:16 | Created apps/web/e2e/tests/draw-offer.spec.ts | — | ~1097 |
+| 11:16 | Created apps/web/e2e/tests/abort.spec.ts | — | ~839 |
+| 11:17 | Created apps/web/e2e/tests/rematch.spec.ts | — | ~1203 |
+| 11:17 | Created apps/web/e2e/tests/quick-match.spec.ts | — | ~615 |
+| 11:17 | Edited apps/web/e2e/tests/game-end.spec.ts | removed 6 lines | ~16 |
+| 11:17 | Created apps/web/e2e/tests/rated-game.spec.ts | — | ~152 |
+| 11:21 | Edited apps/web/e2e/tests/draw-offer.spec.ts | 3→4 lines | ~81 |
+| 11:21 | Edited apps/web/e2e/tests/draw-offer.spec.ts | 7→11 lines | ~132 |
+| 11:22 | Created apps/web/e2e/tests/rematch.spec.ts | — | ~1296 |
+| 11:26 | Edited apps/web/e2e/helpers/game-helpers.ts | modified playTwoPlies() | ~192 |
+| 11:26 | Edited apps/web/e2e/tests/game-end.spec.ts | 7→10 lines | ~178 |
+| 11:26 | Edited apps/web/e2e/tests/game-end.spec.ts | added 1 import(s) | ~32 |
+| 11:26 | Edited apps/web/e2e/tests/result-overlay.spec.ts | 5→8 lines | ~119 |
+| 11:26 | Edited apps/web/e2e/tests/result-overlay.spec.ts | added 1 import(s) | ~48 |
+| 11:26 | Edited apps/web/e2e/tests/friend-invite.spec.ts | 4→7 lines | ~114 |
+| 11:26 | Edited apps/web/e2e/tests/admin-disable.spec.ts | 6→9 lines | ~144 |
+| 11:26 | Edited apps/web/e2e/tests/rated-finalization.spec.ts | 7→6 lines | ~88 |
+| 11:27 | Edited apps/web/e2e/tests/admin-disable.spec.ts | 10→9 lines | ~152 |
+| 11:29 | Edited apps/web/src/app/admin/layout.tsx | CSS: user | ~113 |
+| 11:36 | Playwright e2e for PvP flows: draw-offer/abort/rematch/quick-match specs (8 tests) + fixed 5 stale specs (abort-window resign, invite create step, admin-disable flow, rated-finalization ply wait) | apps/web/e2e/ | full web suite green 34/34 first time | ~25k |
+| 11:36 | Fixed real bug: admin section always redirected — AdminLayout read isAdmin off the /api/auth/me envelope (bug-351) | apps/web/src/app/admin/layout.tsx | admin reachable again, e2e covers it | ~2k |
+| 11:33 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified LiveGameClient() | ~130 |
+| 11:33 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 condition(s) | ~86 |
+| 11:33 | Created apps/web/src/app/(play)/play/[gameId]/page.tsx | — | ~420 |
+| 11:33 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified handleRetry() | ~74 |
+| 11:34 | Created apps/web/src/app/(play)/play/[gameId]/loading.tsx | — | ~214 |
+| 11:39 | Created apps/web/src/lib/board/fen.ts | — | ~578 |
+| 11:40 | Created apps/web/src/lib/board/rules.ts | — | ~2136 |
+| 11:40 | Edited apps/web/src/lib/board/rules.ts | 4→4 lines | ~57 |
+| 11:40 | Edited apps/web/src/lib/board/rules.ts | — | ~0 |
+| 11:40 | Created apps/web/src/lib/board/rules-lazy.ts | — | ~221 |
+| 11:40 | Created apps/web/src/lib/board/position.ts | — | ~197 |
+| 11:40 | Created apps/web/src/lib/board/premove.ts | — | ~73 |
+| 11:40 | Created apps/web/src/lib/board/sr-announce.ts | — | ~57 |
+| 11:41 | Created apps/web/src/lib/board/animations.ts | — | ~304 |
+| 11:41 | Edited apps/web/src/lib/board/material.ts | 2→2 lines | ~28 |
+| 11:41 | Edited apps/web/src/lib/board/material.ts | 10→5 lines | ~45 |
+| 11:41 | Edited apps/web/test/board/animations.test.ts | "@/lib/board/animations" → "@/lib/board/rules" | ~16 |
+| 11:41 | Edited apps/web/src/components/board/chessboard.tsx | reduced (-9 lines) | ~165 |
+| 11:42 | Edited apps/web/src/components/board/chessboard.tsx | added optional chaining | ~752 |
+| 11:42 | Edited apps/web/src/components/board/chessboard.tsx | modified useCallback() | ~181 |
+| 11:42 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | added 1 import(s) | ~85 |
+| 11:42 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | added 1 condition(s) | ~232 |
+| 11:42 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 3→2 lines | ~24 |
+| 11:42 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 import(s) | ~46 |
+| 11:42 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 10→6 lines | ~110 |
+| 11:43 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 3→2 lines | ~24 |
+| 11:43 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 1 import(s) | ~56 |
+| 11:43 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 10→6 lines | ~75 |
+| 11:43 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 11→7 lines | ~130 |
+| 11:44 | Created apps/web/test/board/chessboard-sr.test.tsx | — | ~1096 |
+| 12:05 | SSR'd /play/[gameId] (server state fetch + piece preloads, initialGame skips mount fetch) | apps/web/src/app/(play)/play/[gameId]/ | commit 35a959e; SSR HTML carries full board; 19 PvP e2e green | ~8k |
+| 12:05 | chess.js split: fen.ts (pure, eager) / rules.ts (lazy) / rules-lazy.ts; shims keep position/premove/sr-announce imports compiling; chunk 1130-* out of both game routes | apps/web/src/lib/board/, components/board/ | commit 9117f20; tsc+304 vitest+34 e2e green | ~30k |
+| 12:06 | SESSION SUMMARY: Tier A complete — (1) 8 new Playwright tests + 5 stale specs fixed, suite 34/34 first time, real admin-gate bug found+fixed (bug-351); (2) PvP page SSR; (3) chess.js out of eager chunk. 3 local commits 32ab168/35a959e/9117f20. Gotcha relearned: never pnpm build while next dev runs (bug-002). | — | all verifications green | ~65k |
