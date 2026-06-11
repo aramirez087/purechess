@@ -27,10 +27,10 @@ describe('Hero', () => {
     expect(link).toHaveAttribute('href', '/register');
   });
 
-  it('Analyze CTA is marked disabled for assistive tech', () => {
+  it('Analyze a game links to /analyze', () => {
     render(<Hero />);
-    const btn = screen.getByRole('button', { name: /analyze a game/i });
-    expect(btn).toHaveAttribute('aria-disabled', 'true');
+    const link = screen.getByRole('link', { name: /analyze a game/i });
+    expect(link).toHaveAttribute('href', '/analyze');
   });
 });
 

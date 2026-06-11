@@ -22,15 +22,18 @@ import { usePositionEval } from '@/hooks/use-position-eval';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
 import { GameResult, GameTermination } from '@purechess/shared';
-import type { GameReview, ReviewPlayer } from '@/types/game-review';
+import type { AnalysisReview, ReviewPlayer } from '@/types/game-review';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 type Color = 'white' | 'black';
 
 interface ReviewClientProps {
-  game: GameReview;
+  /** Completed game or pasted analysis — result/termination may be unknown. */
+  game: AnalysisReview;
   reportTarget?: { opponentId: string; opponentUsername: string } | null;
+  /** Optional left-rail action (e.g. /analyze's "New analysis"). */
+  exitAction?: React.ReactNode;
 }
 
 function formatResult(result: GameResult): string {
@@ -73,8 +76,9 @@ function ratingLabel(player: ReviewPlayer): string {
   return player.rating > 0 ? String(player.rating) : 'Unrated';
 }
 
-/** Per-player score-sheet chip: "1" / "0" / "½". */
-function chipFor(color: Color, result: GameResult): string {
+/** Per-player score-sheet chip: "1" / "0" / "½" — hidden when the outcome is unknown. */
+function chipFor(color: Color, result: GameResult | undefined): string | undefined {
+  if (result === undefined) return undefined;
   if (result === GameResult.Draw) return '½';
   return (color === 'white') === (result === GameResult.WhiteWins) ? '1' : '0';
 }
@@ -124,7 +128,7 @@ function MatchupRow({
   );
 }
 
-export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
+export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientProps) {
   const { ply, fen, lastMove, isCorrupt, goTo, goNext, goPrev, goStart, goEnd } = useGameReview(game);
   const [flipped, setFlipped] = useState(false);
   const displayFen = fen ?? STARTING_FEN;
@@ -152,6 +156,9 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
       : game.result === GameResult.BlackWins
         ? 'black'
         : null;
+  // Pasted analyses may have no honest outcome: no score, no verdict, no chips.
+  const resultLabel = game.result !== undefined ? formatResult(game.result) : null;
+  const typeLabel = game.result === undefined ? 'Analysis' : game.rated ? 'Rated' : 'Casual';
   // Computer-game reviews carry no start date (startedAt: '') — omit the row.
   const startedAtMs = game.startedAt ? new Date(game.startedAt).getTime() : 0;
   const date =
@@ -196,8 +203,8 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
             center={
               <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#9da79c]">
                 {game.white.username} <span className="text-[#8a958a]">vs</span>{' '}
-                {game.black.username} · {formatResult(game.result)} ·{' '}
-                {game.rated ? 'Rated' : 'Casual'}
+                {game.black.username} · {resultLabel ? `${resultLabel} · ` : ''}
+                {typeLabel}
               </span>
             }
           />
@@ -208,11 +215,15 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
             <GameRail>
               <div className="px-4 pb-4 pt-5">
                 <p className="font-display text-[26px] italic leading-[1.1] text-[#f1eee6]">
-                  {formatTermination(game.termination)}.
+                  {game.termination !== undefined
+                    ? `${formatTermination(game.termination)}.`
+                    : 'Analysis.'}
                 </p>
-                <p className="mt-1.5 font-mono text-lg font-semibold tabular-nums text-[#d6b563]">
-                  {formatResult(game.result)}
-                </p>
+                {resultLabel && (
+                  <p className="mt-1.5 font-mono text-lg font-semibold tabular-nums text-[#d6b563]">
+                    {resultLabel}
+                  </p>
+                )}
               </div>
               <div
                 aria-hidden="true"
@@ -232,13 +243,14 @@ export function ReviewClient({ game, reportTarget }: ReviewClientProps) {
               <div aria-hidden="true" className="mx-4 h-px bg-[#2b332c]" />
               <dl className="divide-y divide-[#232a24]/70 py-1 text-sm">
                 <InfoRow label="Time" value={game.timeControl.label} />
-                <InfoRow label="Type" value={game.rated ? 'Rated' : 'Casual'} />
+                <InfoRow label="Type" value={typeLabel} />
                 {date && <InfoRow label="Date" value={date} />}
               </dl>
               <div className="border-t border-[#2b332c] p-2.5">
                 <PgnActions pgn={game.pgn} gameId={game.id} />
               </div>
             </GameRail>
+            {exitAction}
             {reportTarget && (
               <ReportButton
                 gameId={game.id}

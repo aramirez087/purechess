@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import { GameResult, GameTermination, TimeCategory } from '@purechess/shared';
 import type { ComputerGameStateDto, PvpGameStateDto } from '@purechess/shared';
-import type { GameReview } from '@/types/game-review';
+import type { AnalysisReview, GameReview } from '@/types/game-review';
 import type { WireMove } from '@purechess/shared';
 
 const MOCK_GAME_ID = 'demo-game-001';
@@ -172,6 +172,127 @@ async function getPvpGameReview(
   } catch {
     return null;
   }
+}
+
+// --- /analyze: synthesize a review from pasted PGN / FEN ----------------
+
+const PGN_RESULT_MAP: Record<string, GameResult> = {
+  '1-0': GameResult.WhiteWins,
+  '0-1': GameResult.BlackWins,
+  '1/2-1/2': GameResult.Draw,
+};
+
+const ANALYSIS_TIME_CONTROL = {
+  initialSeconds: 0,
+  incrementSeconds: 0,
+  category: TimeCategory.Rapid,
+  label: 'Analysis',
+};
+
+/** Verdict derivable from the position alone — anything else stays unknown. */
+function detectVerdict(chess: Chess): {
+  result?: GameResult;
+  termination?: GameTermination;
+} {
+  if (chess.isCheckmate()) {
+    return {
+      result: chess.turn() === 'w' ? GameResult.BlackWins : GameResult.WhiteWins,
+      termination: GameTermination.Checkmate,
+    };
+  }
+  if (chess.isStalemate()) {
+    return { result: GameResult.Draw, termination: GameTermination.Stalemate };
+  }
+  if (chess.isInsufficientMaterial()) {
+    return { result: GameResult.Draw, termination: GameTermination.InsufficientMaterial };
+  }
+  return {};
+}
+
+/** chess.js fills unknown headers with "?" — treat those as absent. */
+function headerName(value: string | undefined, fallback: string): string {
+  return value && value !== '?' ? value : fallback;
+}
+
+/** PGN `[Date "2026.06.01"]` → ISO string; unknown/partial dates → '' (no date row). */
+function parsePgnDate(value: string | undefined): string {
+  if (!value || !/^\d{4}\.\d{2}\.\d{2}$/.test(value)) return '';
+  const iso = `${value.replaceAll('.', '-')}T00:00:00.000Z`;
+  return Number.isNaN(new Date(iso).getTime()) ? '' : iso;
+}
+
+/**
+ * Builds a reviewable analysis from a pasted PGN (custom `[FEN]` start
+ * positions supported). Returns null when the PGN cannot be parsed.
+ * The result/termination are only what the record honestly supports: a
+ * terminal final position, else the PGN Result header, else unknown.
+ */
+export function buildReviewFromPgn(pgn: string): AnalysisReview | null {
+  const text = pgn.trim();
+  if (!text) return null;
+  const chess = new Chess();
+  try {
+    chess.loadPgn(text);
+  } catch {
+    return null;
+  }
+  const headers = chess.getHeaders();
+  const history = chess.history({ verbose: true });
+  const verdict = detectVerdict(chess);
+  return {
+    id: 'analysis',
+    white: { id: 'white', username: headerName(headers.White, 'White'), rating: 0 },
+    black: { id: 'black', username: headerName(headers.Black, 'Black'), rating: 0 },
+    moves: history.map((m, i) => ({
+      ply: i + 1,
+      san: m.san,
+      uci: m.from + m.to + (m.promotion ?? ''),
+      fenAfter: m.after,
+      clockAfterMs: 0,
+      moveTimeMs: 0,
+      by: m.color as 'w' | 'b',
+    })),
+    startFen: history[0]?.before ?? chess.fen(),
+    finalFen: chess.fen(),
+    pgn: chess.pgn(),
+    result: verdict.result ?? PGN_RESULT_MAP[headers.Result ?? ''],
+    termination: verdict.termination,
+    timeControl: ANALYSIS_TIME_CONTROL,
+    rated: false,
+    startedAt: parsePgnDate(headers.Date),
+  };
+}
+
+/**
+ * Builds a single-position analysis from a pasted FEN (board shows the
+ * position, move sheet stays empty). Returns null when the FEN is invalid.
+ */
+export function buildReviewFromFen(fen: string): AnalysisReview | null {
+  const text = fen.trim();
+  if (!text) return null;
+  let chess: Chess;
+  try {
+    chess = new Chess(text);
+  } catch {
+    return null;
+  }
+  const normalized = chess.fen();
+  const verdict = detectVerdict(chess);
+  return {
+    id: 'analysis',
+    white: { id: 'white', username: 'White', rating: 0 },
+    black: { id: 'black', username: 'Black', rating: 0 },
+    moves: [],
+    startFen: normalized,
+    finalFen: normalized,
+    // chess.js emits SetUp/FEN headers, so Copy PGN round-trips the position.
+    pgn: chess.pgn(),
+    result: verdict.result,
+    termination: verdict.termination,
+    timeControl: ANALYSIS_TIME_CONTROL,
+    rated: false,
+    startedAt: '',
+  };
 }
 
 export async function getReview(

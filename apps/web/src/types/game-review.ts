@@ -20,4 +20,13 @@ export interface GameReview {
   timeControl: TimeControl;
   rated: boolean;
   startedAt: string;
+  /** Custom starting position (FEN). Omitted = standard initial position. */
+  startFen?: string;
 }
+
+/**
+ * A review whose outcome may be unknown — pasted PGN/FEN analysis on
+ * /analyze. Every completed `GameReview` is assignable to this shape.
+ */
+export type AnalysisReview = Omit<GameReview, 'result' | 'termination'> &
+  Partial<Pick<GameReview, 'result' | 'termination'>>;

@@ -1,9 +1,15 @@
 import { Chess } from 'chess.js';
 import type { WireMove } from '@purechess/shared';
 
-export function replayToFen(moves: WireMove[], ply: number): string | null {
+export function replayToFen(moves: WireMove[], ply: number, startFen?: string): string | null {
   if (ply < 0 || ply > moves.length) return null;
-  const chess = new Chess();
+  let chess: Chess;
+  try {
+    // No startFen = standard initial position (chess.js default).
+    chess = new Chess(startFen);
+  } catch {
+    return null;
+  }
   for (let i = 0; i < ply; i++) {
     const m = moves[i];
     const from = m.uci.slice(0, 2) as Parameters<typeof chess.move>[0] extends string ? never : never;
@@ -18,8 +24,8 @@ export function replayToFen(moves: WireMove[], ply: number): string | null {
   return chess.fen();
 }
 
-export function validateReplay(moves: WireMove[], finalFen: string): boolean {
-  const replayed = replayToFen(moves, moves.length);
+export function validateReplay(moves: WireMove[], finalFen: string, startFen?: string): boolean {
+  const replayed = replayToFen(moves, moves.length, startFen);
   if (!replayed) return false;
   return normalizeFen(replayed) === normalizeFen(finalFen);
 }

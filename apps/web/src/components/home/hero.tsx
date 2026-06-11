@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ArrowRight } from 'lucide-react';
 import { Logo } from '@/components/layout/Logo';
 import { CtaButton } from './cta-button';
@@ -80,21 +79,9 @@ export function Hero() {
           <CtaButton variant="secondary" href="/register">
             Create account
           </CtaButton>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span tabIndex={0} className="inline-flex w-full justify-center sm:w-auto">
-                  <CtaButton variant="tertiary" disabled>
-                    Analyze a game
-                    <span className="rounded-full border border-brass/30 bg-brass/10 px-1.5 font-mono text-[10px] uppercase text-brass-text">
-                      Soon
-                    </span>
-                  </CtaButton>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>Coming soon</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CtaButton variant="tertiary" href="/analyze">
+            Analyze a game
+          </CtaButton>
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground/80">

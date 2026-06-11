@@ -17,11 +17,19 @@ export interface GameReviewState {
   goEnd: () => void;
 }
 
-export function useGameReview(game: GameReview): GameReviewState {
-  const isCorrupt = useMemo(() => !validateReplay(game.moves, game.finalFen), [game]);
+export function useGameReview(
+  game: Pick<GameReview, 'moves' | 'finalFen' | 'startFen'>,
+): GameReviewState {
+  const isCorrupt = useMemo(
+    () => !validateReplay(game.moves, game.finalFen, game.startFen),
+    [game],
+  );
   const [ply, setPly] = useState(0);
 
-  const fen = useMemo(() => replayToFen(game.moves, ply), [game.moves, ply]);
+  const fen = useMemo(
+    () => replayToFen(game.moves, ply, game.startFen),
+    [game.moves, game.startFen, ply],
+  );
 
   const lastMove = useMemo((): { from: Square; to: Square } | null => {
     if (ply === 0) return null;
