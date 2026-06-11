@@ -4279,6 +4279,64 @@
       ],
       "occurrences": 1,
       "last_seen": "2026-06-11"
+    },
+    {
+      "id": "bug-263",
+      "timestamp": "2026-06-11T06:10:00-06:00",
+      "error_message": "Epic wave 2 sessions 03-06 all exit 1; exec logs empty. Transcript synthetic msg: \"You've hit your session limit - resets 12am (America/Costa_Rica)\"",
+      "file": "docs/claude-sessions/purechess-category-best/",
+      "root_cause": "Claude CLI usage/session limit hit mid-epic (5 parallel sonnet sessions burned quota). claude -p exits 1 silently; epic runner logs only stderr which is empty.",
+      "fix": "Wait for limit reset, resume with run-sessions.sh --start 3 --branch epic/purechess-category-best --base main. Diagnose via ~/.claude/projects/<worktree-slug>/*.jsonl synthetic assistant messages.",
+      "tags": [
+        "epic-toolkit",
+        "usage-limit",
+        "claude-cli",
+        "parallel-sessions"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11"
+    },
+    {
+      "id": "bug-264",
+      "timestamp": "2026-06-11T06:15:00-06:00",
+      "error_message": "worktree for session 3 is in use by another process ... refusing to delete; aborting",
+      "file": "epic-toolkit lib/epic-session.sh is_worktree_in_use()",
+      "root_cause": "Two causes: (1) orphan nest --watch dev servers from failed sessions still held worktree dirs; (2) macOS BSD fuser exits 0 with no PIDs even when dir unused, so is_worktree_in_use() always true once dir exists.",
+      "fix": "Kill orphan processes (ps -axo pid,command | grep epic--<name>), then git worktree remove --force each per-session worktree + git worktree prune, then resume runner.",
+      "tags": [
+        "epic-toolkit",
+        "macos",
+        "fuser",
+        "worktree",
+        "orphan-process"
+      ],
+      "related_bugs": [
+        "bug-263"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11"
+    },
+    {
+      "id": "bug-265",
+      "timestamp": "2026-06-11T08:45:00-06:00",
+      "error_message": "thread 'main' panicked at src/pipeline/collapse.rs:291:30: end byte index 57 is not a char boundary; it is inside '\\u{80}'",
+      "file": "/opt/homebrew/bin/omni (exec wrapper)",
+      "root_cause": "omni output-collapse pipeline slices UTF-8 string at non-char boundary on multibyte output (epic runner spinner/ANSI stream). Exit 134 AFTER epic completed successfully \u2014 result JSON said success.",
+      "fix": "None needed for epic (succeeded). Trust result.json over wrapper exit code when omni wraps long-running commands. Upstream omni bug.",
+      "tags": [
+        "omni",
+        "rust-panic",
+        "utf8",
+        "exit-134",
+        "false-failure"
+      ],
+      "related_bugs": [
+        "bug-263",
+        "bug-264"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11"
     }
   ]
 }

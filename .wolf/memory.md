@@ -1220,3 +1220,23 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:55 | Adversarial review (27 agents): 17 confirmed findings fixed — ratings lost-update race (FOR UPDATE locks), client merge staleness guards + drop-recovery, AA fixes, hero kill-switch rewire, legacy invite preview honesty, spec hardening (mutation-proof) | api ratings/realtime/invites, web live-game-client/hero-board/eval-panel/analyze | web 247/247, api 295/295 | ~80k |
 | 21:58 | SESSION SUMMARY: Tier A shipped (realtime WS PvP ~11ms push, Glicko-2 + rated invites, /analyze, invite color fix), Tier B swept (hero replay + 7 minors), Tier C audited (profile hydration bug fixed, settings voiced). 8 commits on main. | repo-wide | done | ~400k |
 | 21:51 | Session end: 169 writes across 58 files (schema.prisma, ws-events.ts, invites.service.ts, realtime.service.ts, use-invite.ts) | 95 reads | ~148558 tok |
+| 22:07 | Created docs/claude-sessions/purechess-category-best/session-00-operator-rules.md | — | ~1043 |
+| 22:07 | Created docs/claude-sessions/purechess-category-best/session-01-charter-baselines.md | — | ~961 |
+| 22:08 | Created docs/claude-sessions/purechess-category-best/session-02-realtime-resilience.md | — | ~956 |
+| 22:08 | Created docs/claude-sessions/purechess-category-best/session-03-board-feel-a11y.md | — | ~974 |
+| 22:09 | Created docs/claude-sessions/purechess-category-best/session-04-speed-shell.md | — | ~900 |
+| 22:09 | Created docs/claude-sessions/purechess-category-best/session-05-e2e-interactions.md | — | ~976 |
+| 22:09 | Created docs/claude-sessions/purechess-category-best/session-06-surface-a11y-light.md | — | ~974 |
+| 22:10 | Created docs/claude-sessions/purechess-category-best/session-07-ci-gate.md | — | ~819 |
+| 22:10 | Created docs/claude-sessions/purechess-category-best/session-08-prod-deploy-verify.md | — | ~951 |
+| 22:10 | Edited docs/claude-sessions/purechess-category-best/session-04-speed-shell.md | 10→10 lines | ~80 |
+| 22:11 | Session end: 179 writes across 67 files (schema.prisma, ws-events.ts, invites.service.ts, realtime.service.ts, use-invite.ts) | 95 reads | ~157810 tok |
+
+## Session: 2026-06-11 22:12
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:15 | launch epic purechess-category-best (9 sessions, bg task bqc0s04pn) | docs/claude-sessions/purechess-category-best/ | running | ~0 |
+| 06:05 | epic purechess-category-best wave2 failed: s03-06 hit Claude session limit (resets 12am CR) | docs/claude-sessions/purechess-category-best/ | s01,s02 merged; diagnosed via transcript synthetic msgs | ~3k |
+| 06:15 | killed orphan nest-watch procs, removed s02-s06 worktrees (macOS fuser false positive), resumed epic --start 3 (bg b228lbkzi) | .epic-worktrees | running | ~2k |
+| 08:45 | epic purechess-category-best COMPLETE: 8/8 sessions merged to epic/purechess-category-best (95 files, +4563/-2304). exit 134 was omni wrapper UTF-8 panic post-success. No git remote -> no PR | epic branch | success | ~2k |

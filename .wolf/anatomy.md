@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:49:43.156Z
-> Files: 747 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T04:10:59.088Z
+> Files: 756 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
@@ -1230,6 +1230,18 @@
 
 - `HANDOFF-next-level.md` — Next-session handoff: app state, conventions, ranked backlog (realtime PvP, rating deltas, /analyze, design leftovers), verification loop (~1900 tok)
 - `HANDOFF-next-level.md` — Handoff — Purechess "Next Level" Session (~1830 tok)
+
+## docs/claude-sessions/purechess-category-best/
+
+- `session-00-operator-rules.md` — Session 00: Operator Rules — purechess-category-best (~978 tok)
+- `session-01-charter-baselines.md` — Session 01: Charter — audit, baselines, budgets, ownership map (~901 tok)
+- `session-02-realtime-resilience.md` — Session 02: Realtime resilience — reconnect, clocks, cold starts (~896 tok)
+- `session-03-board-feel-a11y.md` — Session 03: Board feel — SR narration, keyboard play, touch, mobile (~913 tok)
+- `session-04-speed-shell.md` — Session 04: Speed shell — bundles, LCP, engine lazy-load, fonts (~843 tok)
+- `session-05-e2e-interactions.md` — Session 05: Playwright e2e — the interactions that define the product (~915 tok)
+- `session-06-surface-a11y-light.md` — Session 06: App surfaces — axe pass, light-mode AA, focus order (~913 tok)
+- `session-07-ci-gate.md` — Session 07: CI gate — full verification, integration fixes, go/no-go (~768 tok)
+- `session-08-prod-deploy-verify.md` — Session 08: Production — deploy with real WS, smoke, prove the bar (~891 tok)
 
 ## docs/claude-sessions/vs-computer-foundations/
 
