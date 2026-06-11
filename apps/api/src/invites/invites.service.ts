@@ -97,9 +97,12 @@ export class InvitesService {
 
     const creator = game.whitePlayer ?? game.blackPlayer;
     const creatorColor = game.whitePlayer ? "white" : "black";
-    // Legacy rows (NULL inviteColorChoice) fall back to the concrete slot,
-    // which is what the preview showed before the column existed.
-    const colorChoice = (game.inviteColorChoice ?? creatorColor) as InviteColor;
+    // Legacy rows (NULL inviteColorChoice) must mirror acceptInvite's
+    // heuristic: a white-slot creator with an empty black slot meant white OR
+    // random, and accept-time randomizes it — so the only honest preview is
+    // 'random'. A black-slot creator was always an explicit black pick.
+    const legacyChoice: InviteColor = game.whitePlayer ? "random" : "black";
+    const colorChoice = (game.inviteColorChoice ?? legacyChoice) as InviteColor;
 
     return {
       gameId: game.id,

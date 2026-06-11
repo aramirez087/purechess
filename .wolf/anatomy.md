@@ -1,13 +1,13 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:20:27.134Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T03:49:43.156Z
 > Files: 747 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../tmp/
 
 - `append-bug-a4.cjs` — Declares fs (~380 tok)
 - `commit-msg.txt` — Declares in (~304 tok)
-- `contrast-check.mjs` — hslToRgb: lum, contrast (~356 tok)
+- `contrast-check.mjs` — hslToRgb: lum, cr (~372 tok)
 - `contrast.mjs` — hslToRgb: lum, contrast, blend (~659 tok)
 - `epic-issue-body.md` — Bug 1 — the printed resume command aborts on the failed session's own branch (~1278 tok)
 - `inspect.cjs` — Declares p (~262 tok)
@@ -740,7 +740,7 @@
 - `invite-gateway.ts` — Exports InviteGateway (~231 tok)
 - `invites.controller.ts` — Exports InvitesController (~468 tok)
 - `invites.module.ts` — Exports InvitesModule (~115 tok)
-- `invites.service.ts` — Exports InviteColor, InvitesService (~1960 tok)
+- `invites.service.ts` — Exports InviteColor, InvitesService (~2027 tok)
 
 ## apps/api/src/invites/dto/
 
@@ -768,11 +768,11 @@
 - `glicko2.ts` — Glicko-2 rating system (Glickman, http://www.glicko.net/glicko/glicko2.pdf). (~935 tok)
 - `ratings.controller.ts` — Exports RatingsController (~64 tok)
 - `ratings.module.ts` — Exports RatingsModule (~84 tok)
-- `ratings.service.ts` — Glicko-2 rating processing. Runs once per completed rated PvP game; (~1291 tok)
+- `ratings.service.ts` — Glicko-2 rating processing. Runs once per completed rated PvP game; (~1593 tok)
 
 ## apps/api/src/realtime/
 
-- `realtime.gateway.ts` — Live game push channel. Sockets authenticate with the same session cookie (~1378 tok)
+- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1519 tok)
 - `realtime.module.ts` — Exports RealtimeModule (~100 tok)
 - `realtime.service.ts` — Emitter facade over the Socket.IO server. Domain services (GamesService) (~447 tok)
 
@@ -859,7 +859,7 @@
 
 ## apps/api/test/games/
 
-- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~2410 tok)
+- `games.service.spec.ts` — GAME_ID: makeGame, makeSerialized, makeEngineState (~2949 tok)
 
 ## apps/api/test/health/
 
@@ -877,11 +877,11 @@
 ## apps/api/test/ratings/
 
 - `glicko2.spec.ts` — Declares GlickoRating (~734 tok)
-- `ratings.service.spec.ts` — GAME_ID: makeGame, makeRatingRow (~1427 tok)
+- `ratings.service.spec.ts` — Wires upsert (pre-tx ensure) and the in-tx locked re-read to the same rows. (~1883 tok)
 
 ## apps/api/test/realtime/
 
-- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~2182 tok)
+- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~2755 tok)
 
 ## apps/api/test/reports/
 
@@ -941,7 +941,7 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — Merge a color-neutral WS push into the REST-fetched game state. (~5888 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~6847 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~60 tok)
 - `page.tsx` — metadata (~100 tok)
 
@@ -959,7 +959,7 @@
 
 ## apps/web/src/app/analyze/
 
-- `analyze-client.tsx` — /analyze client: token-surface centered input card (auto-detects PGN vs FEN via 7-slash first token), branded error alert; on parse swaps to ReviewClient (dark review shell) with a "New analysis" exitAction that returns to the form with the paste intact. (~1866 tok)
+- `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~1981 tok)
 - `page.tsx` — /analyze server page: buildMetadata title "Analyze — Purechess", renders AnalyzeClient. (~122 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
@@ -1033,7 +1033,7 @@
 - `game-loading-skeleton.tsx` — Shared board-shaped loading skeleton (GameShell 2-zone silhouette, continuous rounded-10 rail) used by route loading.tsx files + both game clients (~400 tok)
 - `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~663 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~454 tok)
-- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~962 tok)
+- `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~1010 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~455 tok)
 - `index.ts` — Declares GameShellProps (~211 tok)
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
@@ -1052,7 +1052,7 @@
 - `cta-button.tsx` — VARIANT_CLASSES (~533 tok)
 - `footer.tsx` — GithubIcon (~933 tok)
 - `hero-auth-link.tsx` — Session-aware hero nav CTA. Renders the signed-out "Sign in" markup by (~281 tok)
-- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3184 tok)
+- `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3364 tok)
 - `hero.tsx` — FEATURES (~1490 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
@@ -1065,7 +1065,7 @@
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
-- `invite-create.tsx` — TIME_CONTROLS (~2852 tok)
+- `invite-create.tsx` — TIME_CONTROLS (~2848 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
 
@@ -1076,7 +1076,7 @@
 
 ## apps/web/src/components/review/
 
-- `eval-panel.tsx` — EvalBar (w-3, bone fill, brass mid-tick, 9px mono score cap pinned to winning edge) + EvalReadout; whiteShare/formatScore helpers. (~1385 tok)
+- `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1465 tok)
 - `pgn-actions.tsx` — Full-button variant, sized to dock as a panel footer: each action splits (~890 tok)
 - `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1079 tok)
 
@@ -1157,7 +1157,7 @@
 ## apps/web/test/home/
 
 - `hero-auth.test.tsx` — mockGetMe (~658 tok)
-- `hero-board.test.tsx` — The hero board's replay enhancement: static Immortal Game final position (~1596 tok)
+- `hero-board.test.tsx` — The hero board's replay enhancement: static Immortal Game final position (~1767 tok)
 - `homepage.test.tsx` — Hero contains the session-aware HeroAuthLink — keep /api/auth/me off the (~958 tok)
 
 ## apps/web/test/play/

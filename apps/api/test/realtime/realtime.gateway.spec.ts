@@ -154,6 +154,55 @@ describe('RealtimeGateway', () => {
       expect(mockPrisma.game.findUnique).not.toHaveBeenCalled();
       expect(socket.join).not.toHaveBeenCalled();
     });
+
+    it('skips DB lookup and re-broadcast for an already-joined game', async () => {
+      const socket = authedSocket();
+      (socket.data['gameIds'] as Set<string>).add(GAME_ID);
+      await gateway.onGameJoin(socket as never, { gameId: GAME_ID });
+      expect(mockPrisma.game.findUnique).not.toHaveBeenCalled();
+      expect(socket.join).not.toHaveBeenCalled();
+    });
+
+    it('rejects joins beyond the per-socket room cap', async () => {
+      const socket = authedSocket();
+      const rooms = socket.data['gameIds'] as Set<string>;
+      for (let i = 0; i < 8; i += 1) rooms.add(`game-cap-${i}`);
+      await gateway.onGameJoin(socket as never, { gameId: GAME_ID });
+      expect(mockPrisma.game.findUnique).not.toHaveBeenCalled();
+      expect(socket.emit).toHaveBeenCalledWith(
+        WsEvent.Error,
+        expect.objectContaining({ code: 'game_join_limit' }),
+      );
+    });
+  });
+
+  describe('onGameLeave', () => {
+    it('leaves the room, forgets the game and re-broadcasts presence', async () => {
+      const presenceSpy = jest
+        .spyOn(realtime, 'emitGamePresence')
+        .mockImplementation(() => undefined);
+      jest.spyOn(realtime, 'roomUserIds').mockResolvedValue([OTHER_ID]);
+
+      const socket = makeSocket();
+      socket.data['userId'] = USER_ID;
+      socket.data['gameIds'] = new Set([GAME_ID, 'game-2']);
+
+      await gateway.onGameLeave(socket as never, { gameId: GAME_ID });
+
+      expect(socket.leave).toHaveBeenCalledWith(gameRoom(GAME_ID));
+      expect(socket.data['gameIds']).toEqual(new Set(['game-2']));
+      expect(presenceSpy).toHaveBeenCalledTimes(1);
+      expect(presenceSpy).toHaveBeenCalledWith(GAME_ID, {
+        gameId: GAME_ID,
+        userIds: [OTHER_ID],
+      });
+
+      // A later disconnect only re-broadcasts the game still joined.
+      presenceSpy.mockClear();
+      await gateway.handleDisconnect(socket as never);
+      expect(presenceSpy).toHaveBeenCalledTimes(1);
+      expect(presenceSpy.mock.calls[0][0]).toBe('game-2');
+    });
   });
 
   describe('handleDisconnect', () => {

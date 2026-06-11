@@ -19,6 +19,8 @@ import { PrismaService } from '../database/prisma.service';
 import { RealtimeService, gameRoom } from './realtime.service';
 
 const SESSION_COOKIE = 'purechess_session';
+/** A client plays a handful of games at once at most; caps join-spam DB hits. */
+const MAX_GAME_ROOMS_PER_SOCKET = 8;
 
 function readCookie(header: string | undefined, name: string): string | null {
   if (!header) return null;
@@ -110,6 +112,16 @@ export class RealtimeGateway
     const userId = data.userId;
     const gameId = payload?.gameId;
     if (!userId || !gameId) return;
+    // Already joined — don't hit the DB or re-broadcast presence.
+    if (data.gameIds?.has(gameId)) return;
+    if ((data.gameIds?.size ?? 0) >= MAX_GAME_ROOMS_PER_SOCKET) {
+      const error: WsErrorPayload = {
+        code: 'game_join_limit',
+        message: 'Too many game rooms on this connection',
+      };
+      socket.emit(WsEvent.Error, error);
+      return;
+    }
 
     const game = await this.prisma.game.findUnique({
       where: { id: gameId },

@@ -159,7 +159,10 @@ describe('InvitesService', () => {
       expect(result.creatorColor).toBe('white');
     });
 
-    it('falls back to the concrete slot color for legacy rows (NULL inviteColorChoice)', async () => {
+    it('legacy NULL rows preview as random when the creator sits in the white slot', async () => {
+      // Mirrors acceptInvite's legacy heuristic: white-slot creator + empty
+      // black slot is randomized at accept, so the preview must not promise
+      // the acceptor a concrete color.
       const game = makeGame(); // inviteColorChoice: null, creator in white slot
       (game as Record<string, unknown>)['whitePlayer'] = { id: CREATOR_ID, username: 'alice', avatarUrl: null };
       (game as Record<string, unknown>)['blackPlayer'] = null;
@@ -167,8 +170,20 @@ describe('InvitesService', () => {
 
       const result = await service.getInviteByToken(TOKEN);
 
-      expect(result.colorChoice).toBe('white');
+      expect(result.colorChoice).toBe('random');
       expect(result.creatorColor).toBe('white');
+    });
+
+    it('legacy NULL rows preview as black when the creator sits in the black slot', async () => {
+      const game = makeGame({ whiteUserId: null, blackUserId: CREATOR_ID });
+      (game as Record<string, unknown>)['whitePlayer'] = null;
+      (game as Record<string, unknown>)['blackPlayer'] = { id: CREATOR_ID, username: 'alice', avatarUrl: null };
+      mockPrisma.game.findUnique.mockResolvedValue(game);
+
+      const result = await service.getInviteByToken(TOKEN);
+
+      expect(result.colorChoice).toBe('black');
+      expect(result.creatorColor).toBe('black');
     });
 
     it('throws GoneException for expired invite', async () => {

@@ -43,7 +43,9 @@ export function GameShell({ topBar, leftRail, board, rightRail, className }: Gam
       }}
     >
       {topBar === undefined ? <GameTopBar /> : topBar}
-      <main id="main-content" className="min-h-0 flex-1 overflow-hidden">
+      {/* tabIndex=-1 lets client-side view swaps (e.g. /analyze input → shell)
+          move keyboard/SR focus here programmatically. */}
+      <main id="main-content" tabIndex={-1} className="min-h-0 flex-1 overflow-hidden outline-none">
         <div
           className={cn(
             'mx-auto grid h-full min-h-0 w-full grid-cols-1 gap-4 overflow-y-auto px-3 py-3 lg:gap-6 lg:overflow-hidden lg:px-6 lg:py-5',

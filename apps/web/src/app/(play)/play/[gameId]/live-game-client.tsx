@@ -44,6 +44,21 @@ type PageState =
 const POLL_MS = 1500;
 const SLOW_POLL_MS = 10_000;
 
+/**
+ * True when `next` would take the UI backwards relative to `cur`: an older
+ * snapshot (REST response raced by a WS push) or a finished game regressing
+ * to active. Applied to EVERY server-state merge — WS, poll, resync — so no
+ * transport can rewind the board.
+ */
+function isStaleState(
+  cur: PvpGameStateDto,
+  next: Pick<PvpGameStateDto, 'ply' | 'status'>,
+): boolean {
+  if (cur.status === 'completed' && next.status !== 'completed') return true;
+  if (next.ply < cur.ply && next.status === cur.status) return true;
+  return false;
+}
+
 /** Merge a color-neutral WS push into the REST-fetched game state. */
 function mergeWsState(game: PvpGameStateDto, p: WsGameStatePayload): PvpGameStateDto {
   return {
@@ -114,6 +129,7 @@ function StatusHero({
   timed,
   rated,
   opponentOffline,
+  presenceNote,
 }: {
   isGameOver: boolean;
   tone: ResultTone;
@@ -124,6 +140,8 @@ function StatusHero({
   timed: boolean;
   rated?: boolean;
   opponentOffline?: boolean;
+  /** SR-only presence transition text ('… disconnected' / '… reconnected'). */
+  presenceNote?: string;
 }) {
   if (isGameOver) {
     const toneClasses: Record<ResultTone, string> = {
@@ -178,6 +196,11 @@ function StatusHero({
           <span className="text-[#b9b19d]"> · {opponentName} disconnected</span>
         )}
       </p>
+      {/* The visible note sits in static text (presence flapping must not
+          spam the turn announcement); this mirror announces transitions. */}
+      <span aria-live="polite" className="sr-only">
+        {presenceNote}
+      </span>
     </div>
   );
 }
@@ -213,27 +236,79 @@ export function LiveGameClient({ gameId }: Props) {
     setCurrentPly(_sanCount);
   }, [_sanCount]);
 
+  // A push that arrives while our own move POST is in flight is dropped to
+  // protect the optimistic render — this flag schedules a refetch as soon as
+  // the POST settles, so a resignation/flag-fall pushed in that window (the
+  // POST itself will 400 on the completed game) is never lost.
+  const pendingResyncRef = useRef(false);
+
+  /** Guarded REST refetch — every merge goes through isStaleState. */
+  function refetchState() {
+    getPvpGame(gameId)
+      .then((next) => {
+        if (disposedRef.current) return;
+        setState((s) => {
+          if (s.phase !== 'playing' || s.submitting) return s;
+          if (isStaleState(s.game, next)) return s;
+          return { ...s, game: next };
+        });
+      })
+      .catch(() => {
+        // transient — fallback polling covers it
+      });
+  }
+
   // Live push channel. Server emits authoritative state on every persisted
   // change; REST stays the source of truth for initial load and reconnects.
   const socket = useGameSocket(gameId, liveEnabled, {
     onState: (p) =>
       setState((s) => {
-        if (s.phase !== 'playing' || s.submitting) return s;
-        // Drop stale pushes (an older ply with no status change).
-        if (p.ply < s.game.ply && p.status === s.game.status) return s;
+        if (s.phase !== 'playing') return s;
+        if (s.submitting) {
+          pendingResyncRef.current = true;
+          return s;
+        }
+        if (isStaleState(s.game, p)) return s;
         return { ...s, game: mergeWsState(s.game, p) };
       }),
-    onResync: () => {
-      getPvpGame(gameId)
-        .then((game) => {
-          if (disposedRef.current) return;
-          setState((s) => (s.phase === 'playing' && !s.submitting ? { ...s, game } : s));
-        })
-        .catch(() => {
-          // transient — fallback polling covers it
-        });
-    },
+    onResync: refetchState,
   });
+
+  // Recover pushes dropped during the submitting window.
+  const _submitting = state.phase === 'playing' && state.submitting;
+  useEffect(() => {
+    if (_submitting || !pendingResyncRef.current) return;
+    pendingResyncRef.current = false;
+    refetchState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_submitting]);
+
+  // Opponent presence, debounced: a page reload or transient blip should not
+  // flash 'disconnected' through the meta line.
+  const _opponentId = _isPlaying
+    ? ((state.game.yourColor === 'white' ? state.game.black?.id : state.game.white?.id) ?? null)
+    : null;
+  const opponentOfflineRaw =
+    _isPlaying &&
+    state.game.status === 'active' &&
+    socket.connected &&
+    socket.presentUserIds !== null &&
+    _opponentId != null &&
+    !socket.presentUserIds.includes(_opponentId);
+  const [opponentOffline, setOpponentOffline] = useState(false);
+  const [presenceNote, setPresenceNote] = useState('');
+  useEffect(() => {
+    if (!opponentOfflineRaw) {
+      setOpponentOffline(false);
+      return;
+    }
+    const id = setTimeout(() => setOpponentOffline(true), 2500);
+    return () => clearTimeout(id);
+  }, [opponentOfflineRaw]);
+  useEffect(() => {
+    if (opponentOffline) setPresenceNote('Opponent disconnected');
+    else setPresenceNote((p) => (p ? 'Opponent reconnected' : ''));
+  }, [opponentOffline]);
 
   useGameKeyboard({
     isGameOver: _isGameOver,
@@ -271,13 +346,18 @@ export function LiveGameClient({ gameId }: Props) {
     if (flagClaimedRef.current) return;
     flagClaimedRef.current = true;
     getPvpGame(gameId)
-      .then((game) => {
+      .then((next) => {
         if (disposedRef.current) return;
-        setState((s) => (s.phase === 'playing' && !s.submitting ? { ...s, game } : s));
+        setState((s) => {
+          if (s.phase !== 'playing' || s.submitting) return s;
+          if (isStaleState(s.game, next)) return s;
+          return { ...s, game: next };
+        });
       })
       .catch(() => {
         flagClaimedRef.current = false;
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flagPending, gameId]);
 
   // Initial load.
@@ -308,11 +388,13 @@ export function LiveGameClient({ gameId }: Props) {
       try {
         const next = await getPvpGame(gameId);
         if (disposedRef.current) return;
-        setState((s) =>
-          s.phase === 'playing' && !s.submitting
-            ? { ...s, game: next }
-            : s,
-        );
+        setState((s) => {
+          if (s.phase !== 'playing' || s.submitting) return s;
+          // A poll fetched before a WS push can resolve after it — never let
+          // the older snapshot rewind the board or un-finish the game.
+          if (isStaleState(s.game, next)) return s;
+          return { ...s, game: next };
+        });
       } catch {
         // transient poll error — keep the last good state
       }
@@ -358,6 +440,11 @@ export function LiveGameClient({ gameId }: Props) {
           ? { ...s, game: before, submitting: false, moveError: (err as Error).message }
           : s,
       );
+      // The rejection may mean the game ended while our move was in flight
+      // (resign/flag-fall pushed during the submitting window) — the rollback
+      // state is then stale 'active'. Ask the server once; the guarded merge
+      // applies a completed result and ignores anything older.
+      refetchState();
     }
   }
 
@@ -408,12 +495,6 @@ export function LiveGameClient({ gameId }: Props) {
   const material = computeMaterial(game.fen);
   const opponent = yourColor === 'white' ? game.black : game.white;
   const opponentName = opponent?.username ?? 'Opponent';
-  const opponentOffline =
-    !isGameOver &&
-    socket.connected &&
-    socket.presentUserIds !== null &&
-    opponent?.id != null &&
-    !socket.presentUserIds.includes(opponent.id);
   const flaggedColor: Color | null =
     isGameOver && game.resultReason === 'timeout'
       ? game.result === 'white_wins'
@@ -521,6 +602,7 @@ export function LiveGameClient({ gameId }: Props) {
                   timed={game.clock != null}
                   rated={game.rated}
                   opponentOffline={opponentOffline}
+                  presenceNote={presenceNote}
                 />
               </>
             }

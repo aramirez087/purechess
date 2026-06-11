@@ -107,6 +107,24 @@ function coordTint(isLight: boolean): string {
     : 'hsl(var(--board-sq-light) / 0.85)';
 }
 
+/**
+ * The persisted board-settings animations toggle, read straight from
+ * localStorage (zustand persist envelope): the settings provider that
+ * normally hydrates the store does not mount on marketing surfaces, and the
+ * data-no-animations attribute is only ever emitted by a mounted Chessboard —
+ * which the hero is not.
+ */
+function boardAnimationsDisabled(): boolean {
+  try {
+    const raw = window.localStorage.getItem('purechess-settings');
+    if (!raw) return false;
+    const parsed = JSON.parse(raw) as { state?: { animations?: boolean } };
+    return parsed.state?.animations === false;
+  } catch {
+    return false;
+  }
+}
+
 export function HeroBoard() {
   /**
    * null = static final position (SSR default). 0 = pre-sac position held,
@@ -116,11 +134,12 @@ export function HeroBoard() {
   const figureRef = useRef<HTMLElement | null>(null);
 
   // Arm the one-shot replay trigger. Pure enhancement: bail on reduced
-  // motion, the data-no-animations kill switch, or a missing observer.
+  // motion, the user's stored animations-off preference, or a missing
+  // observer.
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-    if (document.querySelector('[data-no-animations]')) return;
+    if (boardAnimationsDisabled()) return;
     const el = figureRef.current;
     if (!el) return;
     let fired = false;

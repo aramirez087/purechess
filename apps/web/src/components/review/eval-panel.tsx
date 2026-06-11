@@ -89,15 +89,19 @@ export function EvalBar({
         />
       </div>
       {/* Quiet chrome: ink-on-bone over the fill, bone-on-well otherwise — no
-          brass (the accent budget is spent on the 50% tick). Hidden until the
-          first eval lands; the score is already in the aria-label. */}
+          brass (the accent budget is spent on the 50% tick). The chip carries
+          its own backing because the text is wider than the 12px bar and the
+          spill would otherwise sit illegibly on the near-black stage. Hidden
+          until the first eval lands; the score is already in the aria-label. */}
       {hasScore && (
         <span
           aria-hidden="true"
           className={cn(
-            'pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] font-semibold leading-none tabular-nums',
+            'pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded-[3px] px-0.5 py-px font-mono text-[9px] font-semibold leading-none tabular-nums',
             capAtBottom ? 'bottom-1' : 'top-1',
-            whiteWinning ? 'text-[#10140f]' : 'text-[#e9e4d4]',
+            whiteWinning
+              ? 'bg-[#e9e4d4] text-[#10140f]'
+              : 'bg-[#10140f] text-[#e9e4d4] ring-1 ring-inset ring-[#2b332c]',
           )}
         >
           {formatScore(evaluation?.cp, evaluation?.mate)}

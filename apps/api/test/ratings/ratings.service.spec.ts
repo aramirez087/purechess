@@ -37,9 +37,10 @@ function makeRatingRow(id: string, userId: string, rating = 1500) {
 }
 
 const txMock = {
-  game: { updateMany: jest.fn() },
-  rating: { update: jest.fn() },
+  game: { updateMany: jest.fn(), update: jest.fn() },
+  rating: { update: jest.fn(), findUniqueOrThrow: jest.fn() },
   ratingHistory: { create: jest.fn() },
+  $queryRaw: jest.fn().mockResolvedValue([]),
 };
 
 const mockPrisma = {
@@ -48,12 +49,21 @@ const mockPrisma = {
   $transaction: jest.fn(async (fn: (tx: typeof txMock) => Promise<void>) => fn(txMock)),
 };
 
+/** Wires upsert (pre-tx ensure) and the in-tx locked re-read to the same rows. */
+function primeRatings(white: ReturnType<typeof makeRatingRow>, black: ReturnType<typeof makeRatingRow>) {
+  mockPrisma.rating.upsert.mockResolvedValueOnce(white).mockResolvedValueOnce(black);
+  txMock.rating.findUniqueOrThrow.mockImplementation(({ where }: { where: { id: string } }) =>
+    Promise.resolve(where.id === white.id ? white : black),
+  );
+}
+
 describe('RatingsService', () => {
   let service: RatingsService;
 
   beforeEach(async () => {
     jest.clearAllMocks();
     txMock.game.updateMany.mockResolvedValue({ count: 1 });
+    txMock.$queryRaw.mockResolvedValue([]);
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         RatingsService,
@@ -63,25 +73,31 @@ describe('RatingsService', () => {
     service = module.get(RatingsService);
   });
 
-  it('processes a rated win: game snapshot, rating rows, history rows', async () => {
+  it('processes a rated win: locked re-read, game snapshot, rating rows, history rows', async () => {
     mockPrisma.game.findUnique.mockResolvedValue(makeGame());
-    mockPrisma.rating.upsert
-      .mockResolvedValueOnce(makeRatingRow('r-w', WHITE_ID))
-      .mockResolvedValueOnce(makeRatingRow('r-b', BLACK_ID));
+    primeRatings(makeRatingRow('r-w', WHITE_ID), makeRatingRow('r-b', BLACK_ID));
 
     await service.processGameResult(GAME_ID);
 
-    // Game gets before/after snapshots, gated on whiteRatingAfter IS NULL.
-    expect(txMock.game.updateMany).toHaveBeenCalledTimes(1);
-    const gameUpdate = txMock.game.updateMany.mock.calls[0][0];
-    expect(gameUpdate.where).toEqual({ id: GAME_ID, whiteRatingAfter: null });
-    expect(gameUpdate.data.whiteRatingBefore).toBe(1500);
-    expect(gameUpdate.data.whiteRatingAfter).toBeGreaterThan(1500);
-    expect(gameUpdate.data.blackRatingAfter).toBeLessThan(1500);
+    // Idempotency gate runs first, on whiteRatingAfter IS NULL.
+    expect(txMock.game.updateMany).toHaveBeenCalledWith({
+      where: { id: GAME_ID, whiteRatingAfter: null },
+      data: { whiteRatingAfter: 0 },
+    });
+
+    // Ratings are locked and re-read INSIDE the transaction (lost-update guard
+    // for two different games sharing a player).
+    expect(txMock.$queryRaw).toHaveBeenCalledTimes(1);
+    expect(txMock.rating.findUniqueOrThrow).toHaveBeenCalledTimes(2);
+
+    // Snapshots written from the locked reads.
+    expect(txMock.game.update).toHaveBeenCalledTimes(1);
+    const data = txMock.game.update.mock.calls[0][0].data;
+    expect(data.whiteRatingBefore).toBe(1500);
+    expect(data.whiteRatingAfter).toBeGreaterThan(1500);
+    expect(data.blackRatingAfter).toBeLessThan(1500);
     // Symmetric for fresh equal players.
-    expect(gameUpdate.data.whiteRatingAfter - 1500).toBe(
-      1500 - gameUpdate.data.blackRatingAfter,
-    );
+    expect(data.whiteRatingAfter - 1500).toBe(1500 - data.blackRatingAfter);
 
     // Both Rating rows updated with incremented games counter.
     expect(txMock.rating.update).toHaveBeenCalledTimes(2);
@@ -97,6 +113,27 @@ describe('RatingsService', () => {
     expect(whiteHist.ratingDelta).toBeGreaterThan(0);
     expect(blackHist.ratingDelta).toBeLessThan(0);
     expect(whiteHist.gameId).toBe(GAME_ID);
+  });
+
+  it('computes from the values read under the lock, not the pre-transaction read', async () => {
+    mockPrisma.game.findUnique.mockResolvedValue(makeGame());
+    // Pre-tx upsert sees a stale 1500; the locked in-tx read sees 1600
+    // (another game's commit landed in between).
+    mockPrisma.rating.upsert
+      .mockResolvedValueOnce(makeRatingRow('r-w', WHITE_ID, 1500))
+      .mockResolvedValueOnce(makeRatingRow('r-b', BLACK_ID, 1500));
+    txMock.rating.findUniqueOrThrow.mockImplementation(({ where }: { where: { id: string } }) =>
+      Promise.resolve(
+        where.id === 'r-w'
+          ? makeRatingRow('r-w', WHITE_ID, 1600)
+          : makeRatingRow('r-b', BLACK_ID, 1500),
+      ),
+    );
+
+    await service.processGameResult(GAME_ID);
+
+    const data = txMock.game.update.mock.calls[0][0].data;
+    expect(data.whiteRatingBefore).toBe(1600);
   });
 
   it.each([
@@ -115,25 +152,22 @@ describe('RatingsService', () => {
 
   it('a draw between unequal players moves both toward each other', async () => {
     mockPrisma.game.findUnique.mockResolvedValue(makeGame({ result: 'draw' }));
-    mockPrisma.rating.upsert
-      .mockResolvedValueOnce(makeRatingRow('r-w', WHITE_ID, 1700))
-      .mockResolvedValueOnce(makeRatingRow('r-b', BLACK_ID, 1300));
+    primeRatings(makeRatingRow('r-w', WHITE_ID, 1700), makeRatingRow('r-b', BLACK_ID, 1300));
 
     await service.processGameResult(GAME_ID);
 
-    const data = txMock.game.updateMany.mock.calls[0][0].data;
+    const data = txMock.game.update.mock.calls[0][0].data;
     expect(data.whiteRatingAfter).toBeLessThan(1700);
     expect(data.blackRatingAfter).toBeGreaterThan(1300);
   });
 
   it('loses the idempotency race quietly', async () => {
     mockPrisma.game.findUnique.mockResolvedValue(makeGame());
-    mockPrisma.rating.upsert
-      .mockResolvedValueOnce(makeRatingRow('r-w', WHITE_ID))
-      .mockResolvedValueOnce(makeRatingRow('r-b', BLACK_ID));
+    primeRatings(makeRatingRow('r-w', WHITE_ID), makeRatingRow('r-b', BLACK_ID));
     txMock.game.updateMany.mockResolvedValue({ count: 0 });
 
     await expect(service.processGameResult(GAME_ID)).resolves.toBeUndefined();
+    expect(txMock.game.update).not.toHaveBeenCalled();
     expect(txMock.ratingHistory.create).not.toHaveBeenCalled();
   });
 });

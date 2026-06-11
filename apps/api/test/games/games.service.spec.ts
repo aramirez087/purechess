@@ -137,6 +137,32 @@ describe('GamesService realtime emits', () => {
     expect(payload).not.toHaveProperty('yourColor');
     expect(payload).not.toHaveProperty('white');
     expect(mockRealtime.emitGameOver).not.toHaveBeenCalled();
+    // Emit-after-persist: clients must never receive state the DB rolled back.
+    expect(mockRealtime.emitGameState.mock.invocationCallOrder[0]).toBeGreaterThan(
+      mockPrisma.$transaction.mock.invocationCallOrder[0],
+    );
+  });
+
+  it('does not push state when the move transaction fails', async () => {
+    mockPrisma.game.findUnique.mockResolvedValue(makeGame());
+    mockEngine.fromSerializable.mockReturnValue(makeEngineState());
+    mockEngine.applyMove.mockResolvedValue(makeEngineState([APPLIED_MOVE], FEN_AFTER));
+    mockEngine.detectResult.mockResolvedValue(null);
+    mockEngine.toSerializable.mockReturnValue(
+      makeSerialized({ fen: FEN_AFTER, moves: [APPLIED_MOVE] }),
+    );
+    // Simulate a commit failure: the callback runs, the transaction rejects.
+    mockPrisma.$transaction.mockImplementationOnce(
+      async (fn: (tx: typeof txMock) => Promise<void>) => {
+        await fn(txMock);
+        throw new Error('commit failed');
+      },
+    );
+
+    await expect(service.submitMove(GAME_ID, WHITE_ID, 'e2e4')).rejects.toThrow(
+      'commit failed',
+    );
+    expect(mockRealtime.emitGameState).not.toHaveBeenCalled();
   });
 
   it('emits game over alongside state when the move ends the game', async () => {
@@ -192,6 +218,18 @@ describe('GamesService realtime emits', () => {
     expect(dto.result).toBe('black_wins');
     expect(txMock.move.create).not.toHaveBeenCalled();
     expect(mockPrisma.$transaction).not.toHaveBeenCalled();
+    // The timeout must actually be PERSISTED — bug-005's contract is that the
+    // flagged game is written completed without a Move row, not just reported.
+    expect(mockPrisma.game.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: GAME_ID },
+        data: expect.objectContaining({
+          status: 'completed',
+          result: 'black_wins',
+          resultReason: 'timeout',
+        }),
+      }),
+    );
     expect(mockRealtime.emitGameState).toHaveBeenCalledTimes(1);
     expect(mockRealtime.emitGameOver).toHaveBeenCalledWith(GAME_ID, {
       gameId: GAME_ID,
@@ -231,6 +269,16 @@ describe('GamesService realtime emits', () => {
     const dto = await service.getState(GAME_ID, WHITE_ID);
 
     expect(dto.status).toBe('completed');
+    expect(mockPrisma.game.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: GAME_ID },
+        data: expect.objectContaining({
+          status: 'completed',
+          result: 'black_wins',
+          resultReason: 'timeout',
+        }),
+      }),
+    );
     expect(mockRealtime.emitGameOver).toHaveBeenCalledWith(GAME_ID, {
       gameId: GAME_ID,
       result: 'black_wins',

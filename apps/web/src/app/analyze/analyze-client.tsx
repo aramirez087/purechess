@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,13 @@ export function AnalyzeClient() {
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [review, setReview] = useState<AnalysisReview | null>(null);
+
+  // The submit unmounts the focused button and mounts the review shell —
+  // hand keyboard/SR focus to the shell so the swap is not a dead end.
+  // (The reverse path is covered by the textarea's autoFocus.)
+  useEffect(() => {
+    if (review) document.getElementById('main-content')?.focus();
+  }, [review]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -114,7 +121,7 @@ export function AnalyzeClient() {
                   placeholder={
                     '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 …\n\nr1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4'
                   }
-                  className="flex w-full resize-y rounded-md border border-input bg-background px-3 py-2 font-mono text-[13px] leading-relaxed shadow-[inset_0_1px_2px_hsl(var(--shadow-rgb)/0.25)] transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground/70 hover:border-muted-foreground/40 focus-visible:border-brass/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/40"
+                  className="flex w-full resize-y rounded-md border border-input bg-background px-3 py-2 font-mono text-[13px] leading-relaxed shadow-[inset_0_1px_2px_hsl(var(--shadow-rgb)/0.25)] transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground hover:border-muted-foreground/40 focus-visible:border-brass/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/40"
                 />
               </div>
 

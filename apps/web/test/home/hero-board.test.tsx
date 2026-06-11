@@ -99,13 +99,31 @@ describe('HeroBoard', () => {
     expect(pieceImgs(container).length).toBe(23);
   });
 
-  it('data-no-animations kill switch also skips the replay', () => {
-    document.body.setAttribute('data-no-animations', '');
+  it('the stored animations-off preference also skips the replay', () => {
+    // The persisted settings envelope is the real production signal — no
+    // Chessboard (the data-no-animations emitter) mounts on the home page.
+    window.localStorage.setItem(
+      'purechess-settings',
+      JSON.stringify({ state: { animations: false }, version: 0 }),
+    );
     try {
       render(<HeroBoard />);
       expect(ioCallbacks.length).toBe(0);
     } finally {
-      document.body.removeAttribute('data-no-animations');
+      window.localStorage.removeItem('purechess-settings');
+    }
+  });
+
+  it('animations left on (default) arms the replay', () => {
+    window.localStorage.setItem(
+      'purechess-settings',
+      JSON.stringify({ state: { animations: true }, version: 0 }),
+    );
+    try {
+      render(<HeroBoard />);
+      expect(ioCallbacks.length).toBe(1);
+    } finally {
+      window.localStorage.removeItem('purechess-settings');
     }
   });
 

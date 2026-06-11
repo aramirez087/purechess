@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import type { TimeControlCategory } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { DEFAULT_RATING, updateRating, type GlickoRating } from './glicko2';
@@ -35,23 +36,43 @@ export class RatingsService {
     ) as 0 | 0.5 | 1;
     const blackScore = (1 - whiteScore) as 0 | 0.5 | 1;
 
-    const [white, black] = await Promise.all([
+    // Ensure both rows exist before the transaction (idempotent upserts).
+    const [whiteRow, blackRow] = await Promise.all([
       this.getOrCreateRating(game.whiteUserId, game.category),
       this.getOrCreateRating(game.blackUserId, game.category),
     ]);
 
-    const whiteNext = updateRating(toGlicko(white), [
-      { opponent: toGlicko(black), score: whiteScore },
-    ]);
-    const blackNext = updateRating(toGlicko(black), [
-      { opponent: toGlicko(white), score: blackScore },
-    ]);
-
+    let summary = '';
     try {
       await this.prisma.$transaction(async (tx) => {
-        // Idempotency gate: first writer wins, racers roll back.
+        // Per-game idempotency gate: first writer wins, racers roll back.
+        // (Snapshot values are written after the locked re-read below.)
         const claimed = await tx.game.updateMany({
           where: { id: gameId, whiteRatingAfter: null },
+          data: { whiteRatingAfter: 0 },
+        });
+        if (claimed.count === 0) throw new AlreadyProcessedError();
+
+        // Lock both rating rows (ordered, to avoid deadlocks) and re-read
+        // inside the transaction: two different games sharing a player would
+        // otherwise both compute from the same stale base and the second
+        // commit would silently erase the first game's rating effect.
+        const ids = [whiteRow.id, blackRow.id].sort();
+        await tx.$queryRaw`SELECT id FROM "Rating" WHERE id IN (${Prisma.join(ids)}) ORDER BY id FOR UPDATE`;
+        const [white, black] = await Promise.all([
+          tx.rating.findUniqueOrThrow({ where: { id: whiteRow.id } }),
+          tx.rating.findUniqueOrThrow({ where: { id: blackRow.id } }),
+        ]);
+
+        const whiteNext = updateRating(toGlicko(white), [
+          { opponent: toGlicko(black), score: whiteScore },
+        ]);
+        const blackNext = updateRating(toGlicko(black), [
+          { opponent: toGlicko(white), score: blackScore },
+        ]);
+
+        await tx.game.update({
+          where: { id: gameId },
           data: {
             whiteRatingBefore: white.rating,
             whiteRatingAfter: Math.round(whiteNext.rating),
@@ -59,8 +80,6 @@ export class RatingsService {
             blackRatingAfter: Math.round(blackNext.rating),
           },
         });
-        if (claimed.count === 0) throw new AlreadyProcessedError();
-
         await this.persistRating(tx, white.id, whiteNext);
         await this.persistRating(tx, black.id, blackNext);
         await tx.ratingHistory.create({
@@ -83,15 +102,14 @@ export class RatingsService {
             gameId,
           },
         });
+        summary = `white ${white.rating} -> ${Math.round(whiteNext.rating)}, black ${black.rating} -> ${Math.round(blackNext.rating)}`;
       });
     } catch (err) {
       if (err instanceof AlreadyProcessedError) return;
       throw err;
     }
 
-    this.logger.log(
-      `Rated game ${gameId}: white ${white.rating} -> ${Math.round(whiteNext.rating)}, black ${black.rating} -> ${Math.round(blackNext.rating)} (${game.category})`,
-    );
+    this.logger.log(`Rated game ${gameId}: ${summary} (${game.category})`);
   }
 
   private async getOrCreateRating(userId: string, category: TimeControlCategory) {

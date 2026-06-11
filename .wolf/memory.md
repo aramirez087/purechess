@@ -1186,3 +1186,36 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:17 | Edited apps/web/test/home/hero-board.test.tsx | advanceTimersByTime() → runReplayToEnd() | ~131 |
 | 21:19 | Hero board scroll-replay (22.Qf6+ Nxf6 23.Be7#, product move feel, IO one-shot, reduced-motion/no-JS static) + session-aware hero CTA (HeroAuthLink, ['auth','me']) | apps/web/src/components/home/{hero-board,hero,hero-auth-link}.tsx, apps/web/test/home/* | tsc clean, 20/20 vitest pass | ~28k |
 | 21:20 | Created apps/web/test/analyze/hero-cta.test.tsx | — | ~270 |
+| 21:37 | Verified review finding re: use-game-socket FakeSocket multiplexing — refuted via socket.io-client@4.8.3 lookup() sameNamespace check | apps/web/test/play/use-game-socket.test.tsx, apps/web/src/hooks/use-game-socket.ts | refuted | ~6k |
+| 21:40 | Created ../../../../tmp/contrast-check.mjs | — | ~372 |
+| 21:42 | Edited apps/api/src/ratings/ratings.service.ts | added 1 import(s) | ~44 |
+| 21:42 | Edited apps/api/src/ratings/ratings.service.ts | modified catch() | ~940 |
+| 21:43 | Created apps/api/test/ratings/ratings.service.spec.ts | — | ~1883 |
+| 21:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: cur, next | ~202 |
+| 21:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 4 condition(s) | ~486 |
+| 21:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: game | ~150 |
+| 21:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 2 condition(s) | ~187 |
+| 21:44 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified catch() | ~190 |
+| 21:44 | Edited apps/web/src/components/play/invite-create.tsx | 2→2 lines | ~43 |
+| 21:44 | Edited apps/web/src/app/analyze/analyze-client.tsx | inline fix | ~10 |
+| 21:45 | Edited apps/web/src/components/review/eval-panel.tsx | 15→19 lines | ~276 |
+| 21:45 | Edited apps/web/src/components/home/hero-board.tsx | added error handling | ~373 |
+| 21:46 | Edited apps/web/test/home/hero-board.test.tsx | expanded (+18 lines) | ~256 |
+| 21:46 | Edited apps/api/src/invites/invites.service.ts | 5→8 lines | ~166 |
+| 21:47 | Edited apps/api/src/realtime/realtime.gateway.ts | 1→3 lines | ~47 |
+| 21:47 | Edited apps/api/src/realtime/realtime.gateway.ts | added nullish coalescing | ~165 |
+| 21:47 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | expanded (+49 lines) | ~659 |
+| 21:47 | Edited apps/api/test/games/games.service.spec.ts | expanded (+26 lines) | ~407 |
+| 21:48 | Edited apps/api/test/games/games.service.spec.ts | expanded (+12 lines) | ~251 |
+| 21:48 | Edited apps/api/test/games/games.service.spec.ts | expanded (+10 lines) | ~159 |
+| 21:48 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 6→8 lines | ~63 |
+| 21:48 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified StatusHero() | ~46 |
+| 21:48 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 7→12 lines | ~146 |
+| 21:49 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added optional chaining | ~392 |
+| 21:49 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | reduced (-6 lines) | ~36 |
+| 21:49 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 4→5 lines | ~57 |
+| 21:49 | Edited apps/web/src/components/game/game-shell.tsx | 1→3 lines | ~69 |
+| 21:49 | Edited apps/web/src/app/analyze/analyze-client.tsx | inline fix | ~13 |
+| 21:49 | Edited apps/web/src/app/analyze/analyze-client.tsx | added optional chaining | ~148 |
+| 21:55 | Adversarial review (27 agents): 17 confirmed findings fixed — ratings lost-update race (FOR UPDATE locks), client merge staleness guards + drop-recovery, AA fixes, hero kill-switch rewire, legacy invite preview honesty, spec hardening (mutation-proof) | api ratings/realtime/invites, web live-game-client/hero-board/eval-panel/analyze | web 247/247, api 295/295 | ~80k |
+| 21:58 | SESSION SUMMARY: Tier A shipped (realtime WS PvP ~11ms push, Glicko-2 + rated invites, /analyze, invite color fix), Tier B swept (hero replay + 7 minors), Tier C audited (profile hydration bug fixed, settings voiced). 8 commits on main. | repo-wide | done | ~400k |

@@ -229,7 +229,7 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
                 )}
               >
                 <span className="text-sm leading-none">{opt.label}</span>
-                <span className="text-[11px] leading-none opacity-70">{opt.sub}</span>
+                <span className="text-[11px] leading-none">{opt.sub}</span>
               </button>
             ))}
           </div>
