@@ -5,9 +5,12 @@ import {
   type WsGameOverPayload,
   type WsGamePresencePayload,
   type WsGameStatePayload,
+  type WsMatchFoundPayload,
 } from '@purechess/shared';
 
 export const gameRoom = (gameId: string) => `game:${gameId}`;
+/** Per-user room; every authenticated socket joins it on handshake. */
+export const userRoom = (userId: string) => `user:${userId}`;
 
 /**
  * Emitter facade over the Socket.IO server. Domain services (GamesService)
@@ -33,6 +36,11 @@ export class RealtimeService {
 
   emitGamePresence(gameId: string, payload: WsGamePresencePayload): void {
     this.server?.to(gameRoom(gameId)).emit(WsEvent.GamePresence, payload);
+  }
+
+  /** Push a matchmaking pairing to a player who is not in any game room yet. */
+  emitMatchFound(userId: string, payload: WsMatchFoundPayload): void {
+    this.server?.to(userRoom(userId)).emit(WsEvent.MatchFound, payload);
   }
 
   /** Distinct user ids currently connected to a game room. */

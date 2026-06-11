@@ -109,6 +109,21 @@ describe('RealtimeGateway', () => {
       expect(next).toHaveBeenCalledWith();
       expect(socket.data['userId']).toBe(USER_ID);
     });
+
+    it('joins the per-user room during the handshake', async () => {
+      // User-targeted pushes (match:found, invite events) must never race the
+      // client's connect — the room join happens in the middleware itself.
+      mockSessions.lookupSession.mockResolvedValue({
+        session: {},
+        user: { id: USER_ID },
+      });
+      const middleware = captureMiddleware();
+      const next = jest.fn();
+      const socket = makeSocket('purechess_session=good-token');
+      await middleware(socket, next);
+      expect(socket.join).toHaveBeenCalledWith(`user:${USER_ID}`);
+      expect(next).toHaveBeenCalledWith();
+    });
   });
 
   describe('onGameJoin', () => {

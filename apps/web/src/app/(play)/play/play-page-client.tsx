@@ -4,9 +4,10 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Cpu, Crown, Users } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Cpu, Crown, Users, Zap } from 'lucide-react';
 import { InviteCreate } from '@/components/play/invite-create';
 import { ComputerGameSetup } from '@/components/play/computer-game-setup';
+import { QuickMatchSetup } from '@/components/play/quick-match-setup';
 import { HeroBoard } from '@/components/home/hero-board';
 import { posthog } from '@/lib/posthog';
 import { cn } from '@/lib/utils';
@@ -42,7 +43,7 @@ function PlayShell({ children, narrow = false }: { children: ReactNode; narrow?:
   );
 }
 
-type PlayMode = 'select' | 'friend' | 'computer';
+type PlayMode = 'select' | 'friend' | 'computer' | 'quick';
 
 const MODES: Array<{
   id: Exclude<PlayMode, 'select'>;
@@ -53,11 +54,12 @@ const MODES: Array<{
   recommended?: boolean;
 }> = [
   {
-    id: 'computer',
-    title: 'Play vs Computer',
-    description: 'Untimed games against eight levels of Stockfish. Practice openings or play endgames on demand.',
-    meta: 'Untimed · 8 levels',
-    icon: Cpu,
+    id: 'quick',
+    title: 'Quick Match',
+    description: 'Queue up and get paired with the closest-rated player waiting on your time control.',
+    meta: 'Rated · Bullet · Blitz · Rapid',
+    icon: Zap,
+    recommended: true,
   },
   {
     id: 'friend',
@@ -65,7 +67,13 @@ const MODES: Array<{
     description: 'Generate a link, share it, choose your time control. Game starts when they accept.',
     meta: 'Bullet · Blitz · Rapid',
     icon: Users,
-    recommended: true,
+  },
+  {
+    id: 'computer',
+    title: 'Play vs Computer',
+    description: 'Untimed games against eight levels of Stockfish. Practice openings or play endgames on demand.',
+    meta: 'Untimed · 8 levels',
+    icon: Cpu,
   },
 ];
 
@@ -105,6 +113,23 @@ export function PlayPageClient() {
             Back
           </button>
           <InviteCreate onCancel={() => setMode('select')} />
+        </div>
+      </PlayShell>
+    );
+  }
+
+  if (mode === 'quick') {
+    return (
+      <PlayShell narrow>
+        <div className="animate-rise">
+          <button
+            onClick={() => setMode('select')}
+            className="mb-6 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Back
+          </button>
+          <QuickMatchSetup />
         </div>
       </PlayShell>
     );
@@ -156,7 +181,7 @@ export function PlayPageClient() {
         </p>
       </div>
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2">
+      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {MODES.map(({ id, title, description, meta, icon: Icon, recommended }, i) => (
           <button
             key={id}

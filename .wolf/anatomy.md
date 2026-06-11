@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T16:07:40.070Z
-> Files: 810 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T16:47:20.266Z
+> Files: 819 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -762,9 +762,13 @@
 
 ## apps/api/src/matchmaking/
 
-- `matchmaking.controller.ts` — Exports MatchmakingController (~71 tok)
-- `matchmaking.module.ts` — Exports MatchmakingModule (~93 tok)
-- `matchmaking.service.ts` — Exports MatchmakingService (~28 tok)
+- `matchmaking.controller.ts` — Quick-match queue — auth required for both rated and casual pools. (~348 tok)
+- `matchmaking.module.ts` — Exports MatchmakingModule (~136 tok)
+- `matchmaking.service.ts` — Queue-entry heartbeat: refreshed by the client's status poll. (~3024 tok)
+
+## apps/api/src/matchmaking/dto/
+
+- `join-matchmaking.dto.ts` — Quick match is a ladder feature — omitted means rated. (~143 tok)
 
 ## apps/api/src/metrics/
 
@@ -786,9 +790,9 @@
 
 ## apps/api/src/realtime/
 
-- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1642 tok)
+- `realtime.gateway.ts` — A client plays a handful of games at once at most; caps join-spam DB hits. (~1735 tok)
 - `realtime.module.ts` — Exports RealtimeModule (~100 tok)
-- `realtime.service.ts` — Emitter facade over the Socket.IO server. Domain services (GamesService) (~447 tok)
+- `realtime.service.ts` — Per-user room; every authenticated socket joins it on handshake. (~559 tok)
 
 ## apps/api/src/redis/
 
@@ -860,12 +864,12 @@
 
 ## apps/api/test/e2e/
 
-- `admin.e2e-spec.ts` — API routes: GET, PATCH (5 endpoints) (~689 tok)
-- `games.e2e-spec.ts` — API routes: GET, POST (6 endpoints) (~787 tok)
-- `invites.e2e-spec.ts` — API routes: POST, GET (4 endpoints) (~538 tok)
-- `matchmaking.e2e-spec.ts` — API routes: DELETE, POST (5 endpoints) (~565 tok)
+- `admin.e2e-spec.ts` — API routes: GET, POST (5 endpoints) (~701 tok)
+- `games.e2e-spec.ts` — API routes: GET, POST (7 endpoints) (~840 tok)
+- `invites.e2e-spec.ts` — API routes: POST, GET (4 endpoints) (~567 tok)
+- `matchmaking.e2e-spec.ts` — API routes: POST, DELETE, GET (6 endpoints) (~1684 tok)
 - `ratings.e2e-spec.ts` — API routes: GET, POST (2 endpoints) (~448 tok)
-- `setup.ts` — API routes: POST (1 endpoints) (~458 tok)
+- `setup.ts` — API routes: POST (1 endpoints) (~519 tok)
 
 ## apps/api/test/engine/
 
@@ -887,6 +891,10 @@
 
 - `invites.service.spec.ts` — CREATOR_ID: makeGame (~3862 tok)
 
+## apps/api/test/matchmaking/
+
+- `matchmaking.service.spec.ts` — Declares USER_ID (~2738 tok)
+
 ## apps/api/test/observability/
 
 - `logging.spec.ts` — Declares SENSITIVE_FIELDS (~346 tok)
@@ -899,7 +907,7 @@
 
 ## apps/api/test/realtime/
 
-- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~3645 tok)
+- `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~3827 tok)
 
 ## apps/api/test/reports/
 
@@ -968,11 +976,11 @@
 ## apps/web/src/app/(play)/play/
 
 - `error.tsx` — PlayError (~265 tok)
-- `play-page-client.tsx` — Full-viewport, vertically-centered play shell with a theme-aware ambient (~2636 tok)
+- `play-page-client.tsx` — Full-viewport, vertically-centered play shell with a theme-aware ambient (~2875 tok)
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10047 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10046 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~60 tok)
 - `page.tsx` — metadata (~100 tok)
 
@@ -1108,6 +1116,7 @@
 - `invite-create.tsx` — TIME_CONTROLS (~2856 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
+- `quick-match-setup.tsx` — formatElapsed (~2175 tok)
 
 ## apps/web/src/components/profile/
 
@@ -1139,20 +1148,23 @@
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~660 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
-- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1394 tok)
+- `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1287 tok)
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
+- `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
 - `use-position-eval.ts` — Exports usePositionEval — debounced White-POV Stockfish eval of a FEN (~550 tok)
 
 ## apps/web/src/lib/
 
 - `replay.ts` — Exports replayToFen, validateReplay (~337 tok)
 - `utils.ts` — Exports cn, formatDuration, formatRelativeTime, clampRatingDelta, formatTimeControl (~369 tok)
+- `ws-url.ts` — WS cannot ride the Next /api rewrite proxy (rewrites don't upgrade), so the (~121 tok)
 
 ## apps/web/src/lib/api/
 
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
+- `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
@@ -1215,10 +1227,12 @@
 
 - `computer-game-setup.test.tsx` — mockCreate (~1277 tok)
 - `invite-join.test.tsx` — mockUseGetInvite (~820 tok)
+- `quick-match-setup.test.tsx` — push (~675 tok)
 - `use-game-keyboard-draw.test.tsx` — press (~286 tok)
 - `use-game-socket.test.tsx` — sockets (~2040 tok)
 - `use-live-clock-offset.test.tsx` — clock (~377 tok)
 - `use-live-clock-visibility.test.tsx` — A backgrounded tab throttles/suspends the 200ms interval, so the clock (~872 tok)
+- `use-matchmaking.test.tsx` — sockets (~1458 tok)
 
 ## apps/web/test/profile/
 
@@ -1354,6 +1368,7 @@
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
+- `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
 
 ## scripts/

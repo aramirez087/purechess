@@ -203,7 +203,7 @@ function StatusHero({
         )}
       </div>
       <p className="mt-1 text-xs text-[#9da79c]">
-        Friend game · {timed ? 'Timed' : 'Untimed'}
+        Live game · {timed ? 'Timed' : 'Untimed'}
         {rated ? ' · Rated' : ''}
         {opponentOffline && (
           <span className="text-[#b9b19d]"> · {opponentName} disconnected</span>

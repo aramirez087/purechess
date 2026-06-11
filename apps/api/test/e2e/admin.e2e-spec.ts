@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { createApp, truncateAll, seedUser } from './setup';
 
 describe('Admin (e2e)', () => {
@@ -42,7 +42,7 @@ describe('Admin (e2e)', () => {
       });
   });
 
-  it('PATCH /api/admin/users/:id/disable sets isDisabled and creates audit log', async () => {
+  it('POST /api/admin/users/:id/disable sets isDisabled and creates audit log', async () => {
     const admin = await seedUser(app, {
       username: 'admin-adm2',
       email: 'admin-adm2@test.com',
@@ -50,23 +50,22 @@ describe('Admin (e2e)', () => {
     });
     const target = await seedUser(app, { username: 'target-adm2', email: 'target-adm2@test.com' });
 
-    const res = await request(app.getHttpServer())
-      .patch(`/api/admin/users/${target.id}/disable`)
+    await request(app.getHttpServer())
+      .post(`/api/admin/users/${target.id}/disable`)
       .set('Cookie', `purechess_session=${admin.sessionToken}`)
       .send({ reason: 'e2e test disable' })
       .expect((r) => {
         expect([200, 201, 204]).toContain(r.status);
       });
 
+    // A disabled account's session must stop working on guarded routes.
     await request(app.getHttpServer())
-      .get('/api/users/me')
+      .get('/api/matchmaking/status')
       .set('Cookie', `purechess_session=${target.sessionToken}`)
       .expect(401);
-
-    void res;
   });
 
-  it('GET /api/admin/audit-log returns entries', async () => {
+  it('GET /api/admin/audit returns entries', async () => {
     const admin = await seedUser(app, {
       username: 'admin-adm3',
       email: 'admin-adm3@test.com',
@@ -74,7 +73,7 @@ describe('Admin (e2e)', () => {
     });
 
     await request(app.getHttpServer())
-      .get('/api/admin/audit-log')
+      .get('/api/admin/audit')
       .set('Cookie', `purechess_session=${admin.sessionToken}`)
       .expect((res) => {
         expect([200, 201]).toContain(res.status);

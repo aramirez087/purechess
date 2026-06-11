@@ -1562,3 +1562,44 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 10:07 | Created apps/web/test/api/pvp-games.test.ts | — | ~640 |
 | 10:07 | Created apps/web/test/play/use-game-keyboard-draw.test.tsx | — | ~286 |
 | 10:35 | PvP parity pack: draw offer/accept/decline/claim + abort(<2 plies) + rematch (linked invite_pending game, colors swap) + finalize PGN-tag fix (bug-336) | games.service/controller, pvp-game.dto, ws-events, live-game-client, pvp-games.ts, use-game-keyboard, migration add_rematch_link | api 324 + web 293 tests green; live-verified 2-player via curl+browser (WS banner, rematch nav) | ~60k |
+| 10:19 | Created packages/shared/src/dto/matchmaking.dto.ts | — | ~488 |
+| 10:20 | Edited apps/api/src/realtime/realtime.service.ts | 10→13 lines | ~126 |
+| 10:20 | Edited apps/api/src/realtime/realtime.service.ts | modified emitGamePresence() | ~110 |
+| 10:20 | Edited apps/api/src/realtime/realtime.gateway.ts | inline fix | ~21 |
+| 10:20 | Edited apps/api/src/realtime/realtime.gateway.ts | 3→8 lines | ~127 |
+| 10:20 | Created apps/api/src/matchmaking/dto/join-matchmaking.dto.ts | — | ~143 |
+| 10:22 | Created apps/api/src/matchmaking/matchmaking.service.ts | — | ~2781 |
+| 10:22 | Created apps/api/src/matchmaking/matchmaking.controller.ts | — | ~348 |
+| 10:22 | Created apps/api/src/matchmaking/matchmaking.module.ts | — | ~136 |
+| 10:22 | Created apps/web/src/lib/ws-url.ts | — | ~121 |
+| 10:22 | Edited apps/web/src/hooks/use-game-socket.ts | removed 9 lines | ~11 |
+| 10:22 | Created apps/web/src/lib/api/matchmaking.ts | — | ~367 |
+| 10:23 | Created apps/web/src/hooks/use-matchmaking.ts | — | ~1404 |
+| 10:23 | Created apps/web/src/components/play/quick-match-setup.tsx | — | ~2202 |
+| 10:23 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | added 1 import(s) | ~82 |
+| 10:23 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | expanded (+7 lines) | ~257 |
+| 10:23 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | added 1 condition(s) | ~317 |
+| 10:24 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | CSS: lg | ~45 |
+| 10:24 | Edited apps/web/src/components/play/quick-match-setup.tsx | modified QuickMatchSetup() | ~10 |
+| 10:24 | Edited apps/web/src/app/(play)/play/play-page-client.tsx | inline fix | ~9 |
+| 10:24 | Edited apps/api/test/realtime/realtime.gateway.spec.ts | expanded (+15 lines) | ~325 |
+| 10:25 | Created apps/api/test/matchmaking/matchmaking.service.spec.ts | — | ~2480 |
+| 10:26 | Created apps/web/test/play/use-matchmaking.test.tsx | — | ~1458 |
+| 10:26 | Created apps/web/test/play/quick-match-setup.test.tsx | — | ~674 |
+| 10:27 | Edited apps/web/test/play/quick-match-setup.test.tsx | 2→2 lines | ~41 |
+| 10:28 | Created apps/api/test/e2e/matchmaking.e2e-spec.ts | — | ~1684 |
+| 10:39 | Edited apps/api/test/e2e/setup.ts | modified createApp() | ~246 |
+| 10:41 | Edited apps/api/test/e2e/invites.e2e-spec.ts | 20→20 lines | ~246 |
+| 10:41 | Edited apps/api/test/e2e/admin.e2e-spec.ts | patch() → post() | ~342 |
+| 10:41 | Edited apps/api/test/e2e/games.e2e-spec.ts | 7→7 lines | ~98 |
+| 10:42 | Edited apps/api/test/e2e/games.e2e-spec.ts | toContain() → toMatchObject() | ~450 |
+| 10:42 | Edited apps/api/test/e2e/admin.e2e-spec.ts | 5→6 lines | ~69 |
+| 10:45 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 2→2 lines | ~29 |
+| 10:46 | Edited apps/api/src/matchmaking/matchmaking.service.ts | expanded (+12 lines) | ~286 |
+| 10:46 | Edited apps/api/src/matchmaking/matchmaking.service.ts | modified mmJoin() | ~88 |
+| 10:46 | Edited apps/api/src/matchmaking/matchmaking.service.ts | 13→14 lines | ~94 |
+| 10:46 | Edited apps/api/src/matchmaking/matchmaking.service.ts | added 1 condition(s) | ~189 |
+| 10:47 | Edited apps/api/test/matchmaking/matchmaking.service.spec.ts | 12→13 lines | ~65 |
+| 10:47 | Edited apps/api/test/matchmaking/matchmaking.service.spec.ts | 12→13 lines | ~99 |
+| 10:47 | Edited apps/api/test/matchmaking/matchmaking.service.spec.ts | expanded (+22 lines) | ~270 |
+| 11:10 | Matchmaking quick-pair: Lua claim-or-enqueue queue, MatchFound user-room push, /play Quick Match mode; un-broke e2e harness (bug-337/338) + ghost-race fix (bug-339) | matchmaking module, realtime gateway/service, shared matchmaking.dto, use-matchmaking, quick-match-setup, e2e specs | api 339 + e2e 21/21 (first ever green) + web 304; live 2-user pair verified in browser | ~55k |

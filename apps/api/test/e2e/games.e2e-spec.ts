@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { createApp, truncateAll, seedUser } from './setup';
 
 describe('Games (e2e)', () => {
@@ -18,10 +18,10 @@ describe('Games (e2e)', () => {
     await truncateAll(app);
   });
 
-  it('GET /api/games/:id returns 404 for unknown game', async () => {
+  it('GET /api/games/:id/state returns 404 for unknown game', async () => {
     const alice = await seedUser(app, { username: 'alice-g', email: 'alice-g@test.com' });
     await request(app.getHttpServer())
-      .get('/api/games/nonexistent-id')
+      .get('/api/games/nonexistent-id/state')
       .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .expect(404);
   });
@@ -45,7 +45,7 @@ describe('Games (e2e)', () => {
     expect(res.body).toHaveProperty('id');
   });
 
-  it('GET /api/games/:id returns game data', async () => {
+  it('GET /api/games/:id/state returns game data to a player', async () => {
     const alice = await seedUser(app, { username: 'alice-g3', email: 'alice-g3@test.com' });
     const bob = await seedUser(app, { username: 'bob-g3', email: 'bob-g3@test.com' });
 
@@ -56,17 +56,17 @@ describe('Games (e2e)', () => {
 
     const { id } = gameRes.body as { id: string };
 
-    await request(app.getHttpServer())
-      .get(`/api/games/${id}`)
+    const res = await request(app.getHttpServer())
+      .get(`/api/games/${id}/state`)
       .set('Cookie', `purechess_session=${alice.sessionToken}`)
-      .expect((res) => {
-        expect([200, 401, 403]).toContain(res.status);
-      });
+      .expect(200);
+    expect(res.body).toMatchObject({ gameId: id, yourColor: 'white' });
   });
 
-  it('GET /api/games/:id/review returns review data for completed game', async () => {
+  it('GET /api/games/:id/state rejects non-players', async () => {
     const alice = await seedUser(app, { username: 'alice-g4', email: 'alice-g4@test.com' });
     const bob = await seedUser(app, { username: 'bob-g4', email: 'bob-g4@test.com' });
+    const eve = await seedUser(app, { username: 'eve-g4', email: 'eve-g4@test.com' });
 
     const gameRes = await request(app.getHttpServer())
       .post('/api/testing/games')
@@ -75,10 +75,10 @@ describe('Games (e2e)', () => {
 
     const { id } = gameRes.body as { id: string };
 
+    await request(app.getHttpServer()).get(`/api/games/${id}/state`).expect(401);
     await request(app.getHttpServer())
-      .get(`/api/games/${id}`)
-      .expect((res) => {
-        expect([200, 401, 403, 404]).toContain(res.status);
-      });
+      .get(`/api/games/${id}/state`)
+      .set('Cookie', `purechess_session=${eve.sessionToken}`)
+      .expect(403);
   });
 });

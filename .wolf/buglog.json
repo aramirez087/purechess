@@ -5532,6 +5532,141 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T10:30:00-06:00"
+    },
+    {
+      "id": "bug-337",
+      "timestamp": "2026-06-11T16:20:14.974Z",
+      "error_message": "Missing await",
+      "file": "apps/api/src/realtime/realtime.gateway.ts",
+      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:20:14.974Z"
+    },
+    {
+      "id": "bug-338",
+      "timestamp": "2026-06-11T16:24:01.483Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/(play)/play/play-page-client.tsx",
+      "root_cause": "Had \"mt-12 grid gap-5 sm:grid-cols-2\"",
+      "fix": "Changed to \"mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:24:01.483Z"
+    },
+    {
+      "id": "bug-339",
+      "timestamp": "2026-06-11T16:27:09.930Z",
+      "error_message": "CSS fix: name",
+      "file": "apps/web/test/play/quick-match-setup.test.tsx",
+      "root_cause": "name: 'Casual' \u2192 /^Casual/",
+      "fix": "Changed name: 'Casual' \u2192 /^Casual/",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:27:09.930Z"
+    },
+    {
+      "id": "bug-340",
+      "timestamp": "2026-06-11T16:45:29.021Z",
+      "error_message": "Wrong reference: Friend should be Live",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Used \"Friend\" instead of \"Live\"",
+      "fix": "Changed Friend \u2192 Live",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:45:29.021Z"
+    },
+    {
+      "id": "bug-341",
+      "timestamp": "2026-06-11T16:47:20.273Z",
+      "error_message": "Missing await",
+      "file": "apps/api/test/matchmaking/matchmaking.service.spec.ts",
+      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:47:20.273Z"
+    },
+    {
+      "id": "bug-337",
+      "timestamp": "2026-06-11T11:10:00-06:00",
+      "error_message": "TypeError: request is not a function (every API e2e suite)",
+      "file": "apps/api/test/e2e/*.ts",
+      "root_cause": "import * as request from 'supertest' with esModuleInterop:true produces a non-callable namespace object \u2014 the e2e suite could never have passed locally",
+      "fix": "changed to default import `import request from 'supertest'` across test/e2e/",
+      "tags": [
+        "e2e",
+        "supertest",
+        "esModuleInterop",
+        "jest"
+      ],
+      "related_bugs": [
+        "bug-338"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T11:10:00-06:00"
+    },
+    {
+      "id": "bug-338",
+      "timestamp": "2026-06-11T11:10:00-06:00",
+      "error_message": "500 Internal Server Error on every authed e2e route: Cannot read properties of undefined (reading 'purechess_session')",
+      "file": "apps/api/test/e2e/setup.ts",
+      "root_cause": "createApp (TestingModule) never registered cookie-parser, which main.ts does \u2014 guards read req.cookies and crashed",
+      "fix": "app.use(cookieParser()) in createApp, mirroring main.ts; also fixed stale endpoint expectations (invites `code`->inviteToken, admin PATCH->POST disable + audit-log->audit, games /:id -> /:id/state). Full e2e suite green (21/21) for the first time",
+      "tags": [
+        "e2e",
+        "cookie-parser",
+        "nestjs",
+        "harness"
+      ],
+      "related_bugs": [
+        "bug-337"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T11:10:00-06:00"
+    },
+    {
+      "id": "bug-339",
+      "timestamp": "2026-06-11T11:10:00-06:00",
+      "error_message": "Matchmaking queue retained a ghost ZSET entry for a player already paired into a game",
+      "file": "apps/api/src/matchmaking/matchmaking.service.ts",
+      "root_cause": "status() read the queue-entry hash, then an opponent's join claimed+deleted it, then status()'s mmJoin re-scan re-enqueued the stale snapshot \u2014 a third joiner could claim a player already in a game",
+      "fix": "mmJoin Lua takes a mustExist flag ('1' on status re-scans): if mm:u:{self} is gone, return '__claimed__' and do NOT re-enqueue; the pairing arrives via the mm:match mailbox on the next poll",
+      "tags": [
+        "matchmaking",
+        "redis",
+        "lua",
+        "race"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T11:10:00-06:00"
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { createApp, truncateAll, seedUser } from './setup';
 
 describe('Invites (e2e)', () => {
@@ -36,10 +36,12 @@ describe('Invites (e2e)', () => {
         expect([200, 201]).toContain(r.status);
       });
 
-    expect(res.body).toHaveProperty('code');
+    expect(res.body).toHaveProperty('inviteToken');
+    expect(res.body).toHaveProperty('inviteUrl');
+    expect(res.body).toHaveProperty('gameId');
   });
 
-  it('GET /api/invites/:code returns invite info', async () => {
+  it('GET /api/invites/:token returns invite info', async () => {
     const alice = await seedUser(app, { username: 'alice-inv2', email: 'alice-inv2@test.com' });
 
     const createRes = await request(app.getHttpServer())
@@ -47,13 +49,9 @@ describe('Invites (e2e)', () => {
       .set('Cookie', `purechess_session=${alice.sessionToken}`)
       .send({ timeControlSeconds: 300, incrementSeconds: 0, category: 'blitz' });
 
-    if (createRes.status === 201 || createRes.status === 200) {
-      const { code } = createRes.body as { code: string };
-      await request(app.getHttpServer())
-        .get(`/api/invites/${code}`)
-        .expect((r) => {
-          expect([200, 401, 404]).toContain(r.status);
-        });
-    }
+    expect([200, 201]).toContain(createRes.status);
+    const { inviteToken } = createRes.body as { inviteToken: string };
+    const res = await request(app.getHttpServer()).get(`/api/invites/${inviteToken}`).expect(200);
+    expect(res.body).toMatchObject({ status: 'invite_pending' });
   });
 });

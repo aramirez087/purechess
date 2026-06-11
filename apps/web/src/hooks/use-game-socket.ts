@@ -8,15 +8,7 @@ import {
   type WsGameStatePayload,
 } from '@purechess/shared';
 
-// WS cannot ride the Next /api rewrite proxy (rewrites don't upgrade), so the
-// browser talks to the API origin directly. CORS + SameSite=None cookies are
-// already configured for cross-site fly.dev in production.
-const WS_URL =
-  process.env.NEXT_PUBLIC_WS_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  (process.env.NODE_ENV === 'production'
-    ? 'https://purechess-api.fly.dev'
-    : 'http://localhost:4000');
+import { WS_URL } from '@/lib/ws-url';
 
 export interface GameSocketState {
   /** Live push channel up — polling can relax to a slow heartbeat. */

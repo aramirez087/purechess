@@ -9,14 +9,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import type { Server, Socket } from 'socket.io';
-import {
-  WsEvent,
-  type WsErrorPayload,
-  type WsGameJoinPayload,
-} from '@purechess/shared';
+import { WsEvent, type WsErrorPayload, type WsGameJoinPayload } from '@purechess/shared';
 import { SessionsService } from '../auth/sessions.service';
 import { PrismaService } from '../database/prisma.service';
-import { RealtimeService, gameRoom } from './realtime.service';
+import { RealtimeService, gameRoom, userRoom } from './realtime.service';
 
 const SESSION_COOKIE = 'purechess_session';
 /** A client plays a handful of games at once at most; caps join-spam DB hits. */
@@ -65,9 +61,7 @@ interface SocketData {
   pingInterval: 10_000,
   pingTimeout: 10_000,
 })
-export class RealtimeGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server!: Server;
 
   constructor(
@@ -92,6 +86,11 @@ export class RealtimeGateway
       }
       (socket.data as SocketData).userId = result.user.id;
       (socket.data as SocketData).gameIds = new Set();
+      // The per-user room exists before the client's `connect` fires, so
+      // user-targeted pushes (match found, invite accepted) can never race
+      // the handshake. Joining here also keeps bug-223's lesson: no async
+      // auth work in handleConnection.
+      await socket.join(userRoom(result.user.id));
       next();
     });
   }
