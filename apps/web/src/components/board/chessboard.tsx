@@ -4,6 +4,13 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { Square as SquareType, Piece, MoveIntent, PieceType, Color } from '@purechess/shared';
 import type { ChessboardProps, Premove, PromotionState } from '@/lib/board/types';
 import { getPieceAt, fenToColorToMove, isPromotion } from '@/lib/board/fen';
+import {
+  getSquareAt,
+  pointToSquare,
+  snapToNearestDest,
+  DROP_MARGIN_SQUARES,
+  TOUCH_SNAP_RADIUS_SQUARES,
+} from '@/lib/board/coords';
 import { loadRules, peekRules, type RulesModule } from '@/lib/board/rules-lazy';
 import { animationsDisabled } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
@@ -19,15 +26,6 @@ import { AnimationLayer } from './animation-layer';
 import { Square } from './square';
 import { Coordinates } from './coordinates';
 import { MoveInput } from './move-input';
-
-const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
-const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'] as const;
-
-function getSquareAt(orientation: 'white' | 'black', fileIdx: number, rankIdx: number): SquareType {
-  const file = orientation === 'white' ? FILES[fileIdx] : FILES[7 - fileIdx];
-  const rank = orientation === 'white' ? RANKS[rankIdx] : RANKS[7 - rankIdx];
-  return `${file}${rank}` as SquareType;
-}
 
 function isLightSquare(file: number, rank: number): boolean {
   return (file + rank) % 2 === 0;
@@ -224,12 +222,22 @@ export function Chessboard({
     isOwnPiece,
   });
 
-  const getSquareFromPoint = useCallback((x: number, y: number): SquareType | null => {
-    const el = document.elementFromPoint(x, y);
-    const sq = el?.closest('[data-square]');
-    if (!sq) return null;
-    return sq.getAttribute('data-square') as SquareType | null;
-  }, []);
+  // Square detection is pure coordinate math against the board rect
+  // (chessground-style) — document.elementFromPoint hit the grain overlay /
+  // animation layer / drag ghost instead of the square on mobile, making
+  // drops miss. The container's only in-flow child is the aspect-square
+  // grid, so its rect IS the grid rect.
+  const getSquareFromPoint = useCallback(
+    (x: number, y: number): SquareType | null =>
+      pointToSquare(
+        containerRef.current?.getBoundingClientRect(),
+        orientation,
+        x,
+        y,
+        DROP_MARGIN_SQUARES,
+      ),
+    [orientation],
+  );
 
   const { dragState, pointerType, onPointerDown, onPointerMove, onPointerUp, onPointerCancel } =
     useDrag({
@@ -237,7 +245,27 @@ export function Chessboard({
         if (!isOwnPiece(sq) && isPlayerTurn) return;
         deselect();
       },
-      onDragEnd: (from, to) => {
+      onDragEnd: (from, to, drop) => {
+        // Fat-finger forgiveness on touch: snap to the nearest legal dest
+        // within range. Never snaps when the raw square is the origin, so
+        // dropping the piece back still cancels. Dests are computed fresh
+        // here (not from the dragDests memo): a pointerup in the same frame
+        // as the drag-starting pointermove runs against a render where
+        // dragState is still inactive and the memo is empty.
+        if (to && from !== to && drop?.pointerType === 'touch') {
+          const rect = containerRef.current?.getBoundingClientRect();
+          if (rect && rect.width > 0) {
+            to = snapToNearestDest(
+              rect,
+              orientation,
+              getLegalDests(from),
+              to,
+              drop.x,
+              drop.y,
+              TOUCH_SNAP_RADIUS_SQUARES,
+            );
+          }
+        }
         if (!to || from === to) return;
         lastDragMoveRef.current = { from, to };
         handleMove({ from, to });
@@ -245,10 +273,42 @@ export function Chessboard({
       getSquareFromPoint,
     });
 
-  const dragOverSquare = useMemo(
-    () => (dragState.active ? getSquareFromPoint(dragState.x, dragState.y) : null),
-    [dragState.active, dragState.x, dragState.y, getSquareFromPoint],
+  // Legal dests of the drag origin, computed once per drag (not per
+  // pointermove — the chess.js fallback path runs a full movegen).
+  const dragDests = useMemo(
+    () => (dragState.active && dragState.from ? getLegalDests(dragState.from) : []),
+    [dragState.active, dragState.from, getLegalDests],
   );
+
+  const dragOverSquare = useMemo(() => {
+    if (!dragState.active) return null;
+    const raw = getSquareFromPoint(dragState.x, dragState.y);
+    // On touch the ring previews the square the drop will actually snap to.
+    if (pointerType === 'touch' && raw && dragState.from && raw !== dragState.from) {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (rect && rect.width > 0) {
+        return snapToNearestDest(
+          rect,
+          orientation,
+          dragDests,
+          raw,
+          dragState.x,
+          dragState.y,
+          TOUCH_SNAP_RADIUS_SQUARES,
+        );
+      }
+    }
+    return raw;
+  }, [
+    dragState.active,
+    dragState.x,
+    dragState.y,
+    dragState.from,
+    getSquareFromPoint,
+    pointerType,
+    dragDests,
+    orientation,
+  ]);
 
   const {
     focusSquare,

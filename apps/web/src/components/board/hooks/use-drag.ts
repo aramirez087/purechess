@@ -8,7 +8,11 @@ const DRAG_THRESHOLD = 4;
 
 interface UseDragOptions {
   onDragStart?: (square: Square) => void;
-  onDragEnd?: (from: Square, to: Square | null) => void;
+  onDragEnd?: (
+    from: Square,
+    to: Square | null,
+    drop?: { x: number; y: number; pointerType: string },
+  ) => void;
   getSquareFromPoint?: (x: number, y: number) => Square | null;
 }
 
@@ -16,12 +20,11 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
   const [dragState, setDragState] = useState<DragState>({
     active: false,
     from: null,
-    piece: null,
     x: 0,
     y: 0,
     pointerId: null,
   });
-  // Drives the touch-vs-mouse ghost offset; kept outside DragState (shared type).
+  // Drives the touch-vs-mouse ghost offset.
   const [pointerType, setPointerType] = useState<string>('mouse');
 
   const startPos = useRef<{ x: number; y: number } | null>(null);
@@ -56,7 +59,6 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
         setDragState({
           active: true,
           from: fromSquare.current,
-          piece: null,
           x: e.clientX,
           y: e.clientY,
           pointerId: e.pointerId,
@@ -76,13 +78,17 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
 
       if (isDragging.current) {
         const to = getSquareFromPoint?.(e.clientX, e.clientY) ?? null;
-        onDragEnd?.(fromSquare.current, to);
+        onDragEnd?.(fromSquare.current, to, {
+          x: e.clientX,
+          y: e.clientY,
+          pointerType: e.pointerType || 'mouse',
+        });
       }
 
       isDragging.current = false;
       startPos.current = null;
       fromSquare.current = null;
-      setDragState({ active: false, from: null, piece: null, x: 0, y: 0, pointerId: null });
+      setDragState({ active: false, from: null, x: 0, y: 0, pointerId: null });
     },
     [onDragEnd, getSquareFromPoint],
   );
@@ -94,7 +100,7 @@ export function useDrag({ onDragStart, onDragEnd, getSquareFromPoint }: UseDragO
     isDragging.current = false;
     startPos.current = null;
     fromSquare.current = null;
-    setDragState({ active: false, from: null, piece: null, x: 0, y: 0, pointerId: null });
+    setDragState({ active: false, from: null, x: 0, y: 0, pointerId: null });
   }, [onDragEnd]);
 
   return {

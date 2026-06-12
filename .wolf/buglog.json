@@ -6561,6 +6561,113 @@
       ],
       "occurrences": 1,
       "last_seen": "2026-06-11T18:35:00Z"
+    },
+    {
+      "id": "bug-399",
+      "timestamp": "2026-06-12T01:01:54.330Z",
+      "error_message": "Significant refactor of ",
+      "file": ".github/workflows/deploy.yml",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 12\u219237 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "yml"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T01:01:54.330Z"
+    },
+    {
+      "id": "bug-395",
+      "timestamp": "2026-06-12T01:05:00Z",
+      "error_message": "Deploy CI 'Verify Production' failed: curl -sf api/health hung ~53s at the Fly edge then 5xx'd, 'API health failed post-deploy' \u2014 while the app itself was healthy seconds later",
+      "file": ".github/workflows/deploy.yml",
+      "root_cause": "Single un-retried curl raced the post-rolling-deploy window: with auto_stop_machines=true + 30s check grace_period, the Fly proxy can briefly have no passing machine to route to right after machine replacement; curl -sf treats the resulting held-then-5xx response as hard failure",
+      "fix": "Verify steps now retry up to 10x with 10s backoff and --max-time 15, echoing the response body per attempt so a real failure is diagnosable; also bumped actions/checkout v4->v5 in deploy.yml+ci.yml (Node 20 actions force-switched to Node 24 on 2026-06-16)",
+      "tags": [
+        "ci",
+        "deploy",
+        "fly",
+        "health-check",
+        "flaky",
+        "rolling-deploy"
+      ],
+      "related_bugs": [
+        "bug-113"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T01:05:00Z"
+    },
+    {
+      "id": "bug-401",
+      "timestamp": "2026-06-12T02:01:22.423Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/test/board/coords.test.ts",
+      "root_cause": "Had 'white'",
+      "fix": "Changed to 'e4'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:01:22.423Z"
+    },
+    {
+      "id": "bug-402",
+      "timestamp": "2026-06-12T02:02:20.953Z",
+      "error_message": "CSS fix: x, onDragEnd",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "x: number, y: number): SquareType | null => { \u2192 number, y: number): SquareType | null =>; onDragEnd: (from, to) => { \u2192 (from, to, drop) => {",
+      "fix": "Changed x: number, y: number): SquareType | null => { \u2192 number, y: number): SquareType | null =>; onDragEnd: (from, to) => { \u2192 (from, to, drop) => {",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:02:20.953Z"
+    },
+    {
+      "id": "bug-403",
+      "timestamp": "2026-06-12T02:08:28.572Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:08:28.572Z"
+    },
+    {
+      "id": "bug-404",
+      "timestamp": "2026-06-11T20:10:00Z",
+      "error_message": "Mobile drag drops 'miss' valid squares \u2014 board ignores the drop or plays the wrong square",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "getSquareFromPoint used document.elementFromPoint(x,y).closest('[data-square]'); the grain overlay (z-[1]), AnimationLayer (z-30) or DragGhost (z-50) sat under the pointer and swallowed the hit-test, so the square was never found. Discovered secondary bug while verifying: the touch-snap drop path originally read the dragDests render memo, which is stale [] when pointerup lands in the same frame as the drag-starting pointermove (React continuous-event batching) \u2014 snap silently skipped, raw illegal square submitted.",
+      "fix": "Replaced DOM hit-testing with pure rect math (lib/board/coords.ts pointToSquare, chessground-style) \u2014 overlays can no longer intercept; clamps 0.5 sq off-board then null (cancel). Touch drops snap to nearest legal dest within 2 sq (snapToNearestDest), computing dests fresh via getLegalDests(from) inside onDragEnd instead of the dragDests memo. Verified live in Chrome with synthetic touch PointerEvents in one synchronous task (worst-case timing).",
+      "tags": [
+        "board",
+        "drag",
+        "touch",
+        "mobile",
+        "elementFromPoint",
+        "z-index",
+        "stale-closure",
+        "react-batching",
+        "chessground"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T20:10:00Z"
     }
   ]
 }

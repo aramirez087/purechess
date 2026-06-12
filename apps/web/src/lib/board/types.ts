@@ -16,7 +16,6 @@ export interface HighlightSet {
 export interface DragState {
   active: boolean;
   from: Square | null;
-  piece: string | null;
   x: number;
   y: number;
   pointerId: number | null;

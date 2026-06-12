@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
@@ -51,10 +51,35 @@ jobs:
     runs-on: ubuntu-latest
     needs: [deploy-api, deploy-web]
     steps:
+      # Right after a rolling deploy (with auto_stop_machines + 30s check
+      # grace) the Fly edge can briefly have no passing machine to route to —
+      # a single curl held ~53s and 5xx'd on an app that was healthy seconds
+      # later. Retry with backoff and echo the body so a REAL failure is
+      # diagnosable from the log.
       - name: Health check API
         run: |
-          STATUS=$(curl -sf https://purechess-api.fly.dev/api/health | jq -r '.status')
-          [ "$STATUS" = "ok" ] || (echo "API health failed post-deploy" && exit 1)
+          for i in $(seq 1 10); do
+            BODY=$(curl -s --max-time 15 https://purechess-api.fly.dev/api/health || true)
+            STATUS=$(echo "$BODY" | jq -r '.status' 2>/dev/null || true)
+            if [ "$STATUS" = "ok" ]; then
+              echo "API healthy on attempt $i: $BODY"
+              exit 0
+            fi
+            echo "Attempt $i/10: API not healthy yet (body: ${BODY:-<no response>}); retrying in 10s"
+            sleep 10
+          done
+          echo "API health failed post-deploy"
+          exit 1
 
       - name: Health check Web
-        run: curl -sf https://purechess-web.fly.dev/api/health
+        run: |
+          for i in $(seq 1 10); do
+            if curl -sf --max-time 15 -o /dev/null https://purechess-web.fly.dev/api/health; then
+              echo "Web healthy on attempt $i"
+              exit 0
+            fi
+            echo "Attempt $i/10: web not healthy yet; retrying in 10s"
+            sleep 10
+          done
+          echo "Web health failed post-deploy"
+          exit 1

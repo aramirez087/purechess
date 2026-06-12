@@ -1813,3 +1813,46 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:35 | Sculpted-set review round (8 agents): 4 confirmed fixed — queen crown-panel spec floated in V-notch (re-seated to central spike), bQ orb glints rescaled to r=2.75, bN speculars moved to lit ridges, persist merge normalizes legacy pieceSet 'standard'; 1 claim rejected (SSR flash = inherent FOUC tradeoff) | build-sculpted-pieces.mjs, settings-store.ts, public/pieces/sculpted/* | bug-392..394; 304/304, lint+typecheck clean, flipped-board live-verified | ~80k |
 | 18:40 | Session end: 18 writes across 8 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 56 reads | ~20685 tok |
 | 18:43 | Session end: 18 writes across 8 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 56 reads | ~20685 tok |
+| 19:01 | Edited .github/workflows/deploy.yml | expanded (+25 lines) | ~418 |
+| 01:05 | Diagnosed red 'Verify Production' CI: Jun 10 v2 deploy verify curl hung 53s at Fly edge post-rolling-deploy (auto_stop + check grace window) while app was fine; prod currently healthy (v8, 11h uptime, all later deploys were local flyctl). Hardened verify steps with 10x10s retry + body echo; checkout v4->v5 both workflows | .github/workflows/deploy.yml, ci.yml | YAML validated; bug-395 | ~25k |
+| 19:03 | Session end: 19 writes across 9 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 56 reads | ~21103 tok |
+
+## Session: 2026-06-12 19:07
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:09 | Edited CLAUDE.md | 2→3 lines | ~66 |
+| 19:09 | Edited CLAUDE.md | 5→10 lines | ~258 |
+| 19:09 | Edited CLAUDE.md | inline fix | ~28 |
+| 19:09 | Edited CLAUDE.md | modified core() | ~472 |
+| 19:09 | Edited CLAUDE.md | 1→3 lines | ~131 |
+| 19:09 | /init: updated CLAUDE.md — added Rust engine (crates/, engine-native, adapter layer, ENGINE_BACKEND), engine:shadow + cargo commands, Fly.io deploy section | CLAUDE.md | done | ~3k |
+| 19:09 | Session end: 5 writes across 1 files (CLAUDE.md) | 1 reads | ~2170 tok |
+
+## Session: 2026-06-12 19:10
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:33 | Created ../../.claude/plans/you-are-improving-the-shimmering-canyon.md | — | ~2708 |
+| 20:00 | Edited apps/web/src/lib/board/types.ts | 8→7 lines | ~36 |
+| 20:00 | Edited apps/web/src/components/board/hooks/use-drag.ts | 9→8 lines | ~53 |
+| 20:00 | Edited apps/web/src/components/board/hooks/use-drag.ts | 8→7 lines | ~51 |
+| 20:00 | Edited apps/web/src/components/board/hooks/use-drag.ts | 7→7 lines | ~65 |
+| 20:00 | Edited apps/web/src/components/board/hooks/use-drag.ts | 5→5 lines | ~54 |
+| 20:00 | Created apps/web/src/lib/board/coords.ts | — | ~1082 |
+| 20:01 | Created apps/web/test/board/coords.test.ts | — | ~1469 |
+| 20:01 | Edited apps/web/test/board/coords.test.ts | 3→2 lines | ~26 |
+| 20:01 | Edited apps/web/src/components/board/hooks/use-drag.ts | 5→9 lines | ~75 |
+| 20:01 | Edited apps/web/src/components/board/hooks/use-drag.ts | modified if() | ~76 |
+| 20:02 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+7 lines) | ~63 |
+| 20:02 | Edited apps/web/src/components/board/chessboard.tsx | removed 10 lines | ~18 |
+| 20:02 | Edited apps/web/src/components/board/chessboard.tsx | CSS: touch | ~792 |
+| 20:04 | Created apps/web/test/board/drag.test.tsx | — | ~1260 |
+| 20:08 | Edited apps/web/src/components/board/chessboard.tsx | modified here() | ~260 |
+| 20:01 | Removed dead DragState.piece field | apps/web/src/lib/board/types.ts, components/board/hooks/use-drag.ts | typecheck+304 tests pass | ~1k |
+| 20:02 | New pure board coord math module (pointToSquare, snapToNearestDest, 0.5sq margin, 2sq snap cap) | apps/web/src/lib/board/coords.ts (+13 unit tests in test/board/coords.test.ts) | 13/13 pass | ~3k |
+| 20:03 | Replaced elementFromPoint square detection with rect math; touch snap + snapped drag-over ring; onDragEnd drop info | apps/web/src/components/board/chessboard.tsx, hooks/use-drag.ts | typecheck+lint+323 tests pass | ~4k |
+| 20:04 | Component drag tests (PointerEvent polyfill, mouse-vs-touch snap pairs, margin cancel) | apps/web/test/board/drag.test.tsx | 6/6 pass | ~2k |
+| 20:09 | Live Chrome verify found stale-dragDests drop bug (same-frame pointerup); fixed: onDragEnd computes getLegalDests(from) fresh | apps/web/src/components/board/chessboard.tsx | live snap e5→e4 + off-board cancel verified, worst-case sync timing | ~5k |
+| 20:11 | Session: board drag coords+snap done; bug-404 logged; anatomy+cerebrum updated | .wolf/* | all green (323 unit, lint, typecheck) | ~1k |
+| 20:12 | Session end: 16 writes across 7 files (you-are-improving-the-shimmering-canyon.md, types.ts, use-drag.ts, coords.ts, coords.test.ts) | 17 reads | ~24157 tok |
