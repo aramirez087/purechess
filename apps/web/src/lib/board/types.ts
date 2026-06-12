@@ -1,4 +1,5 @@
 import type { Square, Move, MoveIntent, PieceType } from '@purechess/shared';
+import type { BoardShape } from './annotations';
 
 export type Orientation = 'white' | 'black';
 
@@ -36,6 +37,10 @@ export interface ChessboardProps {
   checkSquare?: Square;
   className?: string;
   readOnly?: boolean;
+  /** Externally driven annotations (engine arrows) — never cleared by input. */
+  autoShapes?: BoardShape[];
+  /** Observe user-drawn shapes (drawing stays uncontrolled). */
+  onShapesChange?: (shapes: BoardShape[]) => void;
 }
 
 export interface PromotionState {

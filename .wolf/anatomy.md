@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T02:08:28.564Z
-> Files: 859 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T02:56:01.978Z
+> Files: 867 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -49,6 +49,7 @@
 ## ../../.claude/plans/
 
 - `continue-improving-purechess-the-iridescent-liskov.md` — PureChess — Next Iteration: PvP Parity + Matchmaking + Computer-Game LCP (~4253 tok)
+- `you-are-improving-purechess-cheeky-fog.md` — Board UX: FEN-diff animation + geometric premove hints (~2029 tok)
 - `you-are-improving-the-shimmering-canyon.md` — Board drag: coordinate-math square detection + touch snap (chessground patterns) (~2538 tok)
 - `your-goal-is-to-squishy-platypus.md` — PureChess — Game Page Redesign: Full-Bleed Dual-Rail Shell (~3766 tok)
 
@@ -998,7 +999,7 @@
 
 - `error.tsx` — Error (~362 tok)
 - `global-error.tsx` — GlobalError (~1085 tok)
-- `globals.css` — Styles: 29 rules, 131 vars (~3388 tok)
+- `globals.css` — Styles: 29 rules, 135 vars (~3466 tok)
 - `layout.tsx` — fraunces (~335 tok)
 - `not-found.tsx` — NotFound (~196 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
@@ -1051,7 +1052,7 @@
 
 - `error.tsx` — GameError (~134 tok)
 - `page.tsx` — formatResult (~717 tok)
-- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~3414 tok)
+- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~3592 tok)
 
 ## apps/web/src/app/login/
 
@@ -1083,19 +1084,21 @@
 ## apps/web/src/components/board/
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
+- `annotation-layer.tsx` — Pull the line back from the dest center so the marker tip lands ~center. (~1527 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — Full interactive board. Square detection = pure rect math via lib/board/coords (pointToSquare, FILES/RANKS moved there); touch drops snap to nearest legal dest (snapToNearestDest, fresh getLegalDests(from) in onDragEnd — not the dragDests memo, which only feeds the touch drag-over ring) (~5900 tok)
+- `chessboard.tsx` — isLightSquare (~6898 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~288 tok)
-- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1868 tok)
+- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1941 tok)
 
 ## apps/web/src/components/board/hooks/
 
 - `use-board-resize.ts` — Exports useBoardResize (~326 tok)
 - `use-drag.ts` — Exports useDrag. onDragEnd gets optional drop {x,y,pointerType} (exact pointerup coords for touch snap); DragState has no piece field (~940 tok)
+- `use-draw.ts` — Square under the pointer right now; null while off-board. (~1109 tok)
 - `use-keyboard.ts` — Exports useKeyboard (~883 tok)
-- `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~982 tok)
+- `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~873 tok)
 
 ## apps/web/src/components/computer-game/
 
@@ -1205,19 +1208,22 @@
 
 ## apps/web/src/lib/board/
 
+- `anim-diff.ts` — Pure-FEN move plan for the animation layer: diffs the piece placement of (~1035 tok)
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~304 tok)
+- `annotations.ts` — Drawing an identical shape removes it (toggle); anything else appends. (~521 tok)
 - `coords.ts` — Pure board coordinate math (no DOM): pointToSquare (rect→square, 0.5-sq off-board margin then null), snapToNearestDest (touch snap, 2-sq cap), squareToIndices/getSquareAt, FILES/RANKS (~1082 tok)
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
 - `piece-sets.ts` — Registry of the available piece sets. Server-safe (no React, no stores) so (~392 tok)
 - `piece-svgs.tsx` — Pieces are served from the set the user picked in settings (`pieceSet`, (~845 tok)
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
+- `premove-geometry.ts` — Geometric premove destinations (chessground-style): every square the piece (~909 tok)
 - `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
 - `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2077 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
-- `types.ts` — Exports Orientation, HighlightSet, DragState, BoardSettings + 5 more (~368 tok)
+- `types.ts` — Externally driven annotations (engine arrows) — never cleared by input. (~446 tok)
 
 ## apps/web/src/services/
 
@@ -1243,7 +1249,9 @@
 
 ## apps/web/test/board/
 
+- `anim-diff.test.ts` — START_FEN: fenAfterMove (~1244 tok)
 - `animations.test.ts` — START_FEN: fenAfterMove (~485 tok)
+- `annotations.test.ts` — Declares ArrowShape (~951 tok)
 - `captured-material.test.tsx` — pieces (~613 tok)
 - `chessboard-sr.test.tsx` — START_FEN (~1096 tok)
 - `coords.test.ts` — Pixel center of a square for the given orientation. (~1461 tok)
@@ -1251,6 +1259,7 @@
 - `keyboard.test.tsx` — START_FEN (~1672 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 - `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)
+- `premove-geometry.test.ts` — White to move everywhere below, so BLACK pieces are the premovable side. (~997 tok)
 - `sr-announce.test.ts` — START_FEN: fenAfterMoves (~756 tok)
 
 ## apps/web/test/computer-game/

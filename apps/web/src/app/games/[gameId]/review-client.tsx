@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Bot, FlipVertical2, User } from 'lucide-react';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
@@ -19,6 +19,7 @@ import { PgnActions } from '@/components/review/pgn-actions';
 import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
 import { usePositionEval } from '@/hooks/use-position-eval';
+import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
 import { GameResult, GameTermination } from '@purechess/shared';
@@ -129,11 +130,20 @@ function MatchupRow({
 }
 
 export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientProps) {
-  const { ply, fen, lastMove, isCorrupt, goTo, goNext, goPrev, goStart, goEnd } = useGameReview(game);
+  const { ply, fen, lastMove, isCorrupt, goTo, goNext, goPrev, goStart, goEnd } =
+    useGameReview(game);
   const [flipped, setFlipped] = useState(false);
   const displayFen = fen ?? STARTING_FEN;
   // Single engine search per position feeds both the eval bar and the readout.
   const { evaluation, thinking } = usePositionEval(displayFen, !isCorrupt);
+  // Engine best move as a board arrow; user-drawn shapes live in the board.
+  // Hidden while thinking — the held evaluation belongs to the previous
+  // position, so its bestmove would draw a wrong arrow on the new one (the
+  // eval BAR holding its value is fine; a held arrow is misleading geometry).
+  const autoShapes = useMemo<BoardShape[]>(() => {
+    const arrow = thinking ? null : bestMoveArrow(evaluation?.bestmove);
+    return arrow ? [arrow] : [];
+  }, [thinking, evaluation?.bestmove]);
 
   if (isCorrupt) {
     return (
@@ -270,6 +280,7 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
               position={displayFen}
               orientation={orientation}
               readOnly
+              autoShapes={autoShapes}
               lastMove={lastMove ?? undefined}
               className="[&_[role=grid]]:overflow-hidden [&_[role=grid]]:rounded-[3px] [&_[role=grid]]:shadow-[inset_0_0_0_1px_rgba(11,13,11,0.28)]"
             />

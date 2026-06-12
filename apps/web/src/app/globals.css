@@ -208,6 +208,12 @@
      without recolouring the board. Defaults = the opposite square colour. */
   --board-coord-on-light: var(--board-sq-dark);
   --board-coord-on-dark: var(--board-sq-light);
+  /* Annotation brushes (right-click arrows/circles). Hex, not HSL triplets —
+     consumed directly as SVG stroke/fill; board themes may override. */
+  --annotation-green: #15781b;
+  --annotation-red: #882020;
+  --annotation-blue: #003088;
+  --annotation-yellow: #e68f00;
 }
 
 [data-theme='dark'] {

@@ -1856,3 +1856,67 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 20:09 | Live Chrome verify found stale-dragDests drop bug (same-frame pointerup); fixed: onDragEnd computes getLegalDests(from) fresh | apps/web/src/components/board/chessboard.tsx | live snap e5→e4 + off-board cancel verified, worst-case sync timing | ~5k |
 | 20:11 | Session: board drag coords+snap done; bug-404 logged; anatomy+cerebrum updated | .wolf/* | all green (323 unit, lint, typecheck) | ~1k |
 | 20:12 | Session end: 16 writes across 7 files (you-are-improving-the-shimmering-canyon.md, types.ts, use-drag.ts, coords.ts, coords.test.ts) | 17 reads | ~24157 tok |
+| 20:16 | Session end: 16 writes across 7 files (you-are-improving-the-shimmering-canyon.md, types.ts, use-drag.ts, coords.ts, coords.test.ts) | 20 reads | ~25139 tok |
+
+## Session: 2026-06-12 20:25
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:31 | Created ../../.claude/plans/you-are-improving-purechess-cheeky-fog.md | — | ~2164 |
+| 20:39 | Created apps/web/src/lib/board/anim-diff.ts | — | ~1035 |
+| 20:39 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | 3→3 lines | ~52 |
+| 20:39 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | reduced (-8 lines) | ~43 |
+| 20:39 | Edited apps/web/src/components/board/hooks/use-move-animation.ts | 6→3 lines | ~29 |
+| 20:39 | Created apps/web/test/board/anim-diff.test.ts | — | ~1244 |
+| 20:40 | Created apps/web/src/lib/board/premove-geometry.ts | — | ~909 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~44 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | CSS: paths | ~357 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | 5→5 lines | ~44 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | getLegalDests() → getDests() | ~66 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | getLegalDests() → getDests() | ~47 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | getLegalDests() → getDests() | ~115 |
+| 20:40 | Edited apps/web/src/components/board/chessboard.tsx | modified includes() | ~153 |
+| 20:41 | Edited apps/web/src/components/board/chessboard.tsx | 2→3 lines | ~48 |
+| 20:41 | Edited apps/web/src/components/board/square.tsx | 3→5 lines | ~59 |
+| 20:41 | Edited apps/web/src/components/board/square.tsx | 3→4 lines | ~18 |
+| 20:41 | Edited apps/web/src/components/board/square.tsx | CSS: opacity, 7 | ~80 |
+| 20:41 | Edited apps/web/src/components/board/square.tsx | CSS: opacity, 7 | ~83 |
+| 20:41 | Created apps/web/test/board/premove-geometry.test.ts | — | ~997 |
+| 20:42 | Session end: 20 writes across 8 files (you-are-improving-purechess-cheeky-fog.md, anim-diff.ts, use-move-animation.ts, anim-diff.test.ts, premove-geometry.ts) | 18 reads | ~23266 tok |
+| 20:43 | Session end: 20 writes across 8 files (you-are-improving-purechess-cheeky-fog.md, anim-diff.ts, use-move-animation.ts, anim-diff.test.ts, premove-geometry.ts) | 18 reads | ~23266 tok |
+
+## Session: 2026-06-12 20:45
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:49 | Created apps/web/src/lib/board/annotations.ts | — | ~521 |
+| 20:49 | Created apps/web/src/components/board/hooks/use-draw.ts | — | ~967 |
+| 20:49 | Created apps/web/src/components/board/annotation-layer.tsx | — | ~1527 |
+| 20:50 | Edited apps/web/src/lib/board/types.ts | added 1 import(s) | ~36 |
+| 20:50 | Edited apps/web/src/lib/board/types.ts | 3→7 lines | ~78 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~58 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~41 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~40 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | 3→5 lines | ~25 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | added optional chaining | ~260 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | 6→8 lines | ~55 |
+| 20:50 | Edited apps/web/src/components/board/chessboard.tsx | 4→4 lines | ~40 |
+| 20:51 | Edited apps/web/src/components/board/chessboard.tsx | CSS: onShapeComplete | ~160 |
+| 20:51 | Edited apps/web/src/components/board/chessboard.tsx | added 2 condition(s) | ~218 |
+| 20:51 | Edited apps/web/src/components/board/chessboard.tsx | added 1 condition(s) | ~144 |
+| 20:51 | Edited apps/web/src/components/board/chessboard.tsx | CSS: from, to, color | ~86 |
+| 20:51 | Edited apps/web/src/app/globals.css | expanded (+6 lines) | ~92 |
+| 20:51 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~12 |
+| 20:51 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~37 |
+| 20:51 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added optional chaining | ~115 |
+| 20:51 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 4→5 lines | ~53 |
+| 20:52 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: null | ~144 |
+| 20:52 | Created apps/web/test/board/annotations.test.ts | — | ~951 |
+| 20:56 | Created apps/web/src/components/board/hooks/use-draw.ts | — | ~1109 |
+| 21:00 | Board annotations (right-click arrows/circles + engine autoShapes): new annotations.ts/use-draw.ts/annotation-layer.tsx, wired chessboard + review-client (covers /analyze), --annotation-* vars in globals.css, 14 unit tests | apps/web/src/lib/board/annotations.ts, components/board/{annotation-layer.tsx,hooks/use-draw.ts,chessboard.tsx}, lib/board/types.ts, app/globals.css, app/games/[gameId]/review-client.tsx, test/board/annotations.test.ts | 359 tests green, tsc green, live Chrome smoke verified all 4 brushes + toggle + clear-on-left-click; bug-418 (state-race) found+fixed via smoke | ~55k |
+| 20:59 | Session end: 24 writes across 8 files (annotations.ts, use-draw.ts, annotation-layer.tsx, types.ts, chessboard.tsx) | 12 reads | ~21753 tok |
+
+## Session: 2026-06-12 21:00
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|

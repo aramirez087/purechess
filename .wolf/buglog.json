@@ -6668,6 +6668,237 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T20:10:00Z"
+    },
+    {
+      "id": "bug-405",
+      "timestamp": "2026-06-12T02:39:12.606Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/board/hooks/use-move-animation.ts",
+      "root_cause": "Had '@/lib/board/fen'",
+      "fix": "Changed to '@/lib/board/anim-diff'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:39:12.606Z"
+    },
+    {
+      "id": "bug-406",
+      "timestamp": "2026-06-12T02:39:20.788Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/board/hooks/use-move-animation.ts",
+      "root_cause": "6 lines replaced/restructured",
+      "fix": "Rewrote 13\u21925 lines (6 removed) | Also: const rules = peekRules();; if (!rules) return;",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-12T02:39:26.468Z"
+    },
+    {
+      "id": "bug-407",
+      "timestamp": "2026-06-12T02:40:37.442Z",
+      "error_message": "CSS fix: sq",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "sq: SquareType): SquareType[] => { \u2192 SquareType): SquareType[] => (isPlayerTurn ? getLegalDests(sq) : getPremoveDests(sq)),",
+      "fix": "Changed sq: SquareType): SquareType[] => { \u2192 SquareType): SquareType[] => (isPlayerTurn ? getLegalDests(sq) : getPremoveDests(sq)),",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-06-12T02:40:52.676Z"
+    },
+    {
+      "id": "bug-408",
+      "timestamp": "2026-06-12T02:40:59.916Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:40:59.916Z"
+    },
+    {
+      "id": "bug-409",
+      "timestamp": "2026-06-11T20:45:00Z",
+      "error_message": "Move animation silently skips on cold start: useMoveAnimation calls peekRules() synchronously and bails with null until the lazy chess.js chunk resolves, so the first move(s) never animate",
+      "file": "apps/web/src/components/board/hooks/use-move-animation.ts",
+      "root_cause": "Animation plan was computed by rules.ts getAnimationSquares (chess.js legal-move enumeration) behind the rules-lazy peekRules() sync accessor; position changes landing before the chunk resolved produced no plan",
+      "fix": "Replaced with pure FEN placement diff (lib/board/anim-diff.ts diffPositions) \u2014 zero lazy-load dependency, animates from first render; removed loadRules/peekRules from the hook (chessboard.tsx still warms rules itself)",
+      "tags": [
+        "board",
+        "animation",
+        "lazy-load",
+        "chess.js",
+        "race-condition",
+        "fen"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T20:45:00Z"
+    },
+    {
+      "id": "bug-410",
+      "timestamp": "2026-06-12T02:50:35.199Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Had '@/lib/board/animations'",
+      "fix": "Changed to '@/lib/board/annotations'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-06-12T02:50:38.989Z"
+    },
+    {
+      "id": "bug-411",
+      "timestamp": "2026-06-12T02:50:50.999Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:50:50.999Z"
+    },
+    {
+      "id": "bug-412",
+      "timestamp": "2026-06-12T02:51:08.585Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: <AnnotationLayer; shapes={shapes}",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-12T02:51:26.434Z"
+    },
+    {
+      "id": "bug-413",
+      "timestamp": "2026-06-12T02:51:12.840Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 7\u219225 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:51:12.840Z"
+    },
+    {
+      "id": "bug-414",
+      "timestamp": "2026-06-12T02:51:25.994Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "No early return/throw for edge case: e.button !== 0",
+      "fix": "Added guard clause: if (e.button !== 0)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:51:25.994Z"
+    },
+    {
+      "id": "bug-415",
+      "timestamp": "2026-06-12T02:51:51.280Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/games/[gameId]/review-client.tsx",
+      "root_cause": "Had '@/lib/board/material'",
+      "fix": "Changed to '@/lib/board/annotations'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:51:51.280Z"
+    },
+    {
+      "id": "bug-416",
+      "timestamp": "2026-06-12T02:51:54.503Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/app/games/[gameId]/review-client.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:51:54.503Z"
+    },
+    {
+      "id": "bug-417",
+      "timestamp": "2026-06-12T02:52:11.057Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/games/[gameId]/review-client.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5\u21928 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T02:52:11.057Z"
+    },
+    {
+      "id": "bug-418",
+      "timestamp": "2026-06-12T03:00:00.000Z",
+      "error_message": "Right-click annotation draw: pointerup in the same frame as pointerdown no-oped (no shape emitted, preview stuck on board) during synchronous PointerEvent dispatch smoke test",
+      "file": "apps/web/src/components/board/hooks/use-draw.ts",
+      "root_cause": "First implementation gated pointer handlers on React state (drawing/pointerId via useState); a pointerup arriving before the pointerdown's state flush read drawing===null and returned early \u2014 same frame-race class as bug-404's drag memo issue",
+      "fix": "Event logic reads/writes a drawRef (useRef); useState kept only to drive the in-progress preview render. Handlers are now stable and frame-race free.",
+      "tags": [
+        "board",
+        "annotations",
+        "use-draw",
+        "react-state-race",
+        "pointer-events"
+      ],
+      "related_bugs": [
+        "bug-404"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:00:00.000Z"
     }
   ]
 }

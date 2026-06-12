@@ -14,6 +14,8 @@ interface SquareProps {
   isSelected: boolean;
   isLegalMove: boolean;
   isLegalCapture: boolean;
+  /** The hint marks a premove target (opponent's turn) — rendered softer than a confirmed-legal hint. */
+  isPremoveDest?: boolean;
   isLastMoveFrom: boolean;
   isLastMoveTo: boolean;
   isInCheck: boolean;
@@ -39,6 +41,7 @@ export const Square = memo(function Square({
   isSelected,
   isLegalMove,
   isLegalCapture,
+  isPremoveDest,
   isLastMoveFrom,
   isLastMoveTo,
   isInCheck,
@@ -154,6 +157,7 @@ export const Square = memo(function Square({
             backgroundColor: isLight
               ? `hsl(var(--board-legal-dot-light))`
               : `hsl(var(--board-legal-dot-dark))`,
+            opacity: isPremoveDest ? 0.7 : undefined,
           }}
         />
       )}
@@ -165,6 +169,7 @@ export const Square = memo(function Square({
             border: `calc(var(--board-sq-size) * 0.085) solid ${
               isLight ? 'hsl(var(--board-legal-ring-light))' : 'hsl(var(--board-legal-ring-dark))'
             }`,
+            opacity: isPremoveDest ? 0.7 : undefined,
           }}
         />
       )}

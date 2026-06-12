@@ -12,17 +12,21 @@ import {
   TOUCH_SNAP_RADIUS_SQUARES,
 } from '@/lib/board/coords';
 import { loadRules, peekRules, type RulesModule } from '@/lib/board/rules-lazy';
+import { getPremoveDestinations } from '@/lib/board/premove-geometry';
+import { toggleShape, type BoardShape } from '@/lib/board/annotations';
 import { animationsDisabled } from '@/lib/board/animations';
 import { soundEngine } from '@/lib/board/sound';
 import { cn } from '@/lib/utils';
 import { useBoardSettings } from './board-context';
 import { useBoardResize } from './hooks/use-board-resize';
 import { useDrag } from './hooks/use-drag';
+import { useDraw } from './hooks/use-draw';
 import { useClickMove } from './hooks/use-click-move';
 import { useKeyboard } from './hooks/use-keyboard';
 import { useMoveAnimation, type DragMoveRef } from './hooks/use-move-animation';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { AnimationLayer } from './animation-layer';
+import { AnnotationLayer } from './annotation-layer';
 import { Square } from './square';
 import { Coordinates } from './coordinates';
 import { MoveInput } from './move-input';
@@ -55,6 +59,8 @@ export function Chessboard({
   checkSquare: checkSquareProp,
   className,
   readOnly = false,
+  autoShapes,
+  onShapesChange,
 }: ChessboardProps) {
   const { settings } = useBoardSettings();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,6 +74,29 @@ export function Chessboard({
   });
   const [showKeyboardFocus, setShowKeyboardFocus] = useState(false);
   const lastDragMoveRef = useRef<DragMoveRef | null>(null);
+
+  // User-drawn annotations (right-click arrows/circles). The ref mirrors the
+  // state so pointer handlers read the latest list without re-binding; every
+  // mutation goes through these two helpers so onShapesChange always fires.
+  const [shapes, setShapes] = useState<BoardShape[]>([]);
+  const shapesRef = useRef<BoardShape[]>(shapes);
+
+  const handleShapeComplete = useCallback(
+    (shape: BoardShape) => {
+      const next = toggleShape(shapesRef.current, shape);
+      shapesRef.current = next;
+      setShapes(next);
+      onShapesChange?.(next);
+    },
+    [onShapesChange],
+  );
+
+  const clearShapes = useCallback(() => {
+    if (shapesRef.current.length === 0) return;
+    shapesRef.current = [];
+    setShapes([]);
+    onShapesChange?.([]);
+  }, [onShapesChange]);
 
   const anim = useMoveAnimation(position, lastDragMoveRef, settings.animationMs > 0);
 
@@ -194,12 +223,36 @@ export function Chessboard({
     [isPlayerTurn, readOnly, rules, position],
   );
 
+  // Geometric premove destinations (no chess.js): squares the piece could
+  // reach by its movement pattern, blockers and check ignored — the position
+  // will change before the premove fires. validatePremove still gates the
+  // queued move when the turn arrives.
+  const getPremoveDests = useCallback(
+    (sq: SquareType): SquareType[] => {
+      if (isPlayerTurn || readOnly) return [];
+      const p = getPieceAt(position, sq);
+      if (!p || p.color !== playerColor) return [];
+      return getPremoveDestinations(position, sq);
+    },
+    [isPlayerTurn, readOnly, position, playerColor],
+  );
+
+  // One destination source for the click/keyboard/drag paths: legal moves on
+  // the player's turn, geometric premove targets off it — so premove hint
+  // dots are clickable, not just decoration.
+  const getDests = useCallback(
+    (sq: SquareType): SquareType[] => (isPlayerTurn ? getLegalDests(sq) : getPremoveDests(sq)),
+    [isPlayerTurn, getLegalDests, getPremoveDests],
+  );
+
   const handleMove = useCallback(
     (intent: MoveIntent) => {
       if (!onMove || readOnly) return;
 
       const { from, to } = intent;
       if (!from || !to) return;
+
+      clearShapes();
 
       if (isPromotion(from, to, position)) {
         setPromotion({ active: true, from, to });
@@ -213,11 +266,11 @@ export function Chessboard({
 
       onMove(intent);
     },
-    [onMove, readOnly, position, isPlayerTurn],
+    [onMove, readOnly, position, isPlayerTurn, clearShapes],
   );
 
   const { selectedSquare, handleSquareClick, deselect } = useClickMove({
-    legalDestinations: getLegalDests,
+    legalDestinations: getDests,
     onMove: handleMove,
     isOwnPiece,
   });
@@ -239,6 +292,21 @@ export function Chessboard({
     [orientation],
   );
 
+  // Right-click drawing rides the same grid pointer handlers as the drag
+  // system; both key off button/pointerId so they never cross. Drawing works
+  // on readOnly boards too — annotating a review is the main use case.
+  const {
+    drawing,
+    onDrawPointerDown,
+    onDrawPointerMove,
+    onDrawPointerUp,
+    onDrawPointerCancel,
+    onContextMenu,
+  } = useDraw({
+    getSquareFromPoint,
+    onShapeComplete: handleShapeComplete,
+  });
+
   const { dragState, pointerType, onPointerDown, onPointerMove, onPointerUp, onPointerCancel } =
     useDrag({
       onDragStart: (sq) => {
@@ -258,7 +326,7 @@ export function Chessboard({
             to = snapToNearestDest(
               rect,
               orientation,
-              getLegalDests(from),
+              getDests(from),
               to,
               drop.x,
               drop.y,
@@ -276,8 +344,8 @@ export function Chessboard({
   // Legal dests of the drag origin, computed once per drag (not per
   // pointermove — the chess.js fallback path runs a full movegen).
   const dragDests = useMemo(
-    () => (dragState.active && dragState.from ? getLegalDests(dragState.from) : []),
-    [dragState.active, dragState.from, getLegalDests],
+    () => (dragState.active && dragState.from ? getDests(dragState.from) : []),
+    [dragState.active, dragState.from, getDests],
   );
 
   const dragOverSquare = useMemo(() => {
@@ -316,16 +384,17 @@ export function Chessboard({
     handleKeyDown,
   } = useKeyboard({
     orientation,
-    legalDestinations: getLegalDests,
+    legalDestinations: getDests,
     onMove: handleMove,
     isOwnPiece,
   });
 
   const effectiveSelected = selectedSquare ?? keyboardSelected;
 
+  // Legal destinations on the player's turn, geometric premove targets off it.
   const selectedDests = useMemo(
-    () => (effectiveSelected ? getLegalDests(effectiveSelected) : []),
-    [effectiveSelected, getLegalDests],
+    () => (effectiveSelected ? getDests(effectiveSelected) : []),
+    [effectiveSelected, getDests],
   );
 
   const selectedCaptures = useMemo(
@@ -401,9 +470,27 @@ export function Chessboard({
         style={{ touchAction: 'none' }}
         onFocus={() => setShowKeyboardFocus(true)}
         onBlur={() => setShowKeyboardFocus(false)}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerCancel}
+        onPointerDown={(e) => {
+          if (e.button === 2) {
+            onDrawPointerDown(e);
+          } else if (e.button === 0) {
+            // Any left press sweeps user annotations (chessground erase-on-click).
+            clearShapes();
+          }
+        }}
+        onPointerMove={(e) => {
+          onPointerMove(e);
+          onDrawPointerMove(e);
+        }}
+        onPointerUp={(e) => {
+          onPointerUp(e);
+          onDrawPointerUp(e);
+        }}
+        onPointerCancel={(e) => {
+          onPointerCancel();
+          onDrawPointerCancel(e);
+        }}
+        onContextMenu={onContextMenu}
         onKeyDown={handleKeyDown}
       >
         {/* role="grid" requires role="row" children wrapping the gridcells
@@ -417,7 +504,12 @@ export function Chessboard({
             {squares.slice(rowIdx * 8, rowIdx * 8 + 8).map(({ square, piece, isLight }) => {
               const legalDests = effectiveSelected ? selectedDests : [];
               const isLegalDest = legalDests.includes(square);
-              const isCapture = selectedCaptures.includes(square);
+              // Off-turn the dests are geometric premoves; a hint square is a
+              // "capture" simply when an enemy piece sits on it right now.
+              const isCapture = isPlayerTurn
+                ? selectedCaptures.includes(square)
+                : isLegalDest && piece !== null && piece.color !== playerColor;
+              const isPremoveDest = !isPlayerTurn && isLegalDest;
               const isAnimTarget = anim?.pieces.some((p) => p.to === square) ?? false;
               const cursor = readOnly
                 ? 'default'
@@ -437,6 +529,7 @@ export function Chessboard({
                   isSelected={effectiveSelected === square}
                   isLegalMove={isLegalDest && !isCapture}
                   isLegalCapture={isLegalDest && isCapture}
+                  isPremoveDest={isPremoveDest}
                   isLastMoveFrom={lastMove?.from === square}
                   isLastMoveTo={lastMove?.to === square}
                   isInCheck={checkSquare === square}
@@ -458,6 +551,9 @@ export function Chessboard({
                     readOnly
                       ? undefined
                       : (e, sq) => {
+                          // Left button only — right button belongs to the
+                          // annotation draw layer.
+                          if (e.button !== 0) return;
                           if (isOwnPiece(sq) || !isPlayerTurn) {
                             onPointerDown(e, sq);
                           }
@@ -497,6 +593,15 @@ export function Chessboard({
       )}
 
       {anim && <AnimationLayer anim={anim} orientation={orientation} />}
+
+      <AnnotationLayer
+        shapes={shapes}
+        autoShapes={autoShapes}
+        inProgress={
+          drawing ? { from: drawing.from, to: drawing.current, color: drawing.color } : null
+        }
+        orientation={orientation}
+      />
 
       {dragState.active &&
         dragState.from &&
