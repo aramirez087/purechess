@@ -18,9 +18,11 @@ export const Piece = memo(function Piece({ type, color, ghost, className }: Piec
     <SvgComponent
       className={cn(
         'block h-full w-full select-none pointer-events-none',
+        // Two-layer shadow: tight contact dark + soft ambient falloff, so the
+        // piece reads as sitting ON the board instead of floating over it.
         color === 'b'
-          ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.38)]'
-          : 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.25)]',
+          ? '[filter:drop-shadow(0_1px_1px_rgba(8,7,4,0.5))_drop-shadow(0_4px_5px_rgba(8,7,4,0.24))]'
+          : '[filter:drop-shadow(0_1px_1px_rgba(8,7,4,0.38))_drop-shadow(0_4px_5px_rgba(8,7,4,0.18))]',
         ghost && 'opacity-40',
         className,
       )}

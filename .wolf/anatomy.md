@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-11T18:22:26.218Z
-> Files: 836 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T00:38:29.378Z
+> Files: 854 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -13,12 +13,29 @@
 
 ## ../../../../tmp/
 
+- `a11y-focus-ring-verify-9314.mjs` — hslToRgb: lum, contrast (~801 tok)
 - `append-bug-a4.cjs` — Declares fs (~380 tok)
+- `bn-geom.mjs` — cubic: solveY (~712 tok)
+- `colorcheck.mjs` — hsl: grad, sheen, lum (~583 tok)
 - `commit-msg.txt` — Declares in (~304 tok)
-- `contrast-check.mjs` — hslToRgb: lum, cr (~372 tok)
-- `contrast.mjs` — hslToRgb: lum, contrast, blend (~659 tok)
+- `contrast-check.mjs` — hslToRgb: lum, contrast, blend (~644 tok)
+- `contrast.mjs` — hslToRgb: lum, cr, over (~1090 tok)
+- `contrast2.mjs` — hslToRgb: lum, cr, over (~412 tok)
+- `coord-contrast.mjs` — hslToRgb: lum, contrast, blend (~648 tok)
 - `epic-issue-body.md` — Bug 1 — the printed resume command aborts on the failed session's own branch (~1278 tok)
 - `inspect.cjs` — Declares p (~262 tok)
+- `qnotch.mjs` — wQ crown: M9 26 c8.5-1.5 21-1.5 27 0 l2-12 l-7 11 V11 l-5.5 13.5 l-3-15 l-3 15 l-5.5-14 V25 L7 14 z (~612 tok)
+- `sheen-math.mjs` — CSS gradient: 166deg, stops: 0% white a=0.06, 34% white a=0, 70% black a=0.04, 100% black a=0.11 (~638 tok)
+- `stacking-repro.html` — Declares html (~476 tok)
+- `walnut-contrast.mjs` — hsl: over, lum, cr (~414 tok)
+
+## ../../../../tmp/bq-render/
+
+- `page.html` — Declares html (~286 tok)
+- `page64.html` — Declares html (~230 tok)
+- `sample.mjs` — pureBQ: sample (~490 tok)
+- `shot.mjs` — Declares browser (~429 tok)
+- `shot64.mjs` — Declares browser (~124 tok)
 
 ## ../../../../tmp/purechess-pr3/.github/workflows/
 
@@ -969,13 +986,18 @@
 
 ## apps/web/public/pieces/
 
-- `ATTRIBUTION.md` — Chess piece set attribution (~128 tok)
+- `ATTRIBUTION.md` — Chess piece set attribution: cburnett original + pure + sculpted derivatives, all CC-BY-SA 3.0 (~280 tok)
+
+## apps/web/scripts/
+
+- `build-pure-pieces.mjs` — Generates the "pure" piece set in public/pieces/pure/ from the vendored (~963 tok)
+- `build-sculpted-pieces.mjs` — Generates the "sculpted" piece set in public/pieces/sculpted/ from the (~1880 tok)
 
 ## apps/web/src/app/
 
 - `error.tsx` — Error (~362 tok)
 - `global-error.tsx` — GlobalError (~1085 tok)
-- `globals.css` — Styles: 29 rules, 108 vars (~2907 tok)
+- `globals.css` — Styles: 29 rules, 131 vars (~3388 tok)
 - `layout.tsx` — fraunces (~335 tok)
 - `not-found.tsx` — NotFound (~196 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
@@ -988,7 +1010,7 @@
 ## apps/web/src/app/(play)/play/[gameId]/
 
 - `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10191 tok)
-- `loading.tsx` — Route-level loading UI for /play/[gameId]. (~214 tok)
+- `loading.tsx` — Route-level loading UI for /play/[gameId]. (~288 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~420 tok)
 
 ## apps/web/src/app/admin/
@@ -1015,7 +1037,7 @@
 ## apps/web/src/app/computer-game/[gameId]/
 
 - `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~8511 tok)
-- `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~218 tok)
+- `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~292 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
 ## apps/web/src/app/games/
@@ -1061,12 +1083,12 @@
 
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — FILES (~4858 tok)
+- `chessboard.tsx` — FILES (~5271 tok)
 - `chessboard.tsx` — FILES (~4137 tok)
-- `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~635 tok)
+- `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
-- `piece.tsx` — Piece (~216 tok)
-- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1570 tok)
+- `piece.tsx` — Piece (~288 tok)
+- `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1868 tok)
 
 ## apps/web/src/components/board/hooks/
 
@@ -1145,7 +1167,7 @@
 
 ## apps/web/src/components/settings/
 
-- `settings-form.tsx` — APP_THEMES (~2392 tok)
+- `settings-form.tsx` — APP_THEMES (~2904 tok)
 
 ## apps/web/src/components/ui/
 
@@ -1186,17 +1208,22 @@
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~304 tok)
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
-- `piece-svgs.tsx` — Pieces are served from the vendored cburnett set (lichess default, by (~639 tok)
+- `piece-sets.ts` — Registry of the available piece sets. Server-safe (no React, no stores) so (~392 tok)
+- `piece-svgs.tsx` — Pieces are served from the set the user picked in settings (`pieceSet`, (~845 tok)
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
 - `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
 - `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2077 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
-- `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~161 tok)
+- `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
 
 ## apps/web/src/services/
 
 - `game-review.service.ts` — PvP state is player-scoped — forward the viewer's session cookie. (~3071 tok)
+
+## apps/web/src/stores/
+
+- `settings-store.ts` — Exports Settings, useSettingsStore (~479 tok)
 
 ## apps/web/src/types/
 

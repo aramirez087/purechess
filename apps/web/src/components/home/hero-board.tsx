@@ -18,6 +18,10 @@
  */
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { DEFAULT_PIECE_SET, pieceSetBase } from '@/lib/board/piece-sets';
+
+// Marketing surface: no settings store here, always the default set.
+const HERO_PIECE_BASE = pieceSetBase(DEFAULT_PIECE_SET);
 
 const IMMORTAL_FEN_BOARD = 'r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1';
 
@@ -209,7 +213,7 @@ export function HeroBoard() {
                 )}
                 {piece && square !== anim?.to && (
                   <img
-                    src={`/pieces/cburnett/${piece}.svg`}
+                    src={`${HERO_PIECE_BASE}/${piece}.svg`}
                     alt=""
                     className="absolute inset-0 h-full w-full p-[4%] drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
                     draggable={false}
@@ -321,7 +325,7 @@ function ReplaySlide({ ply }: { ply: ReplayPly }) {
 function ReplayPieceImg({ piece }: { piece: string }) {
   return (
     <img
-      src={`/pieces/cburnett/${piece}.svg`}
+      src={`${HERO_PIECE_BASE}/${piece}.svg`}
       alt=""
       className="h-full w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
       draggable={false}

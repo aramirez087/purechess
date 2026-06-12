@@ -14,7 +14,7 @@ describe('settings store', () => {
     expect(s.sound).toBe(true);
     expect(s.lowTimeSound).toBe(false);
     expect(s.animations).toBe(true);
-    expect(s.pieceSet).toBe('standard');
+    expect(s.pieceSet).toBe('sculpted');
   });
 
   it('mutation updates store', () => {

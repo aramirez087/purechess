@@ -1,19 +1,27 @@
+'use client';
+
 import type { FC } from 'react';
 import type { PieceType, Color } from '@purechess/shared';
+import { useSettingsStore } from '@/stores/settings-store';
+import { pieceSetBase } from './piece-sets';
 
 interface SvgProps {
   className?: string;
 }
 
 /**
- * Pieces are served from the vendored cburnett set (lichess default, by
- * Colin M.L. Burnett, CC-BY-SA 3.0) in `public/pieces/cburnett/`. The public
- * API here is unchanged — `getPieceSvg(type, color)` returns a component that
- * accepts a `className` — so the board, the floating drag layer, and the
- * captured-material strip all keep working untouched. Each component renders an
- * `<img>`; the `className` it receives carries `h-full w-full` sizing and the
- * `drop-shadow-[…]` filter (which applies to the SVG's alpha just like an inline
- * `<svg>`), so piece shadows survive.
+ * Pieces are served from the set the user picked in settings (`pieceSet`,
+ * registry in `lib/board/piece-sets.ts`): "sculpted" (default) or "pure" —
+ * both generated derivatives of the vendored cburnett geometry (Colin M.L.
+ * Burnett, CC-BY-SA 3.0; originals stay in `public/pieces/cburnett/`). The
+ * SVGs are built by `scripts/build-*-pieces.mjs` — edit the recipe there and
+ * rerun, never the generated files. The public API here is unchanged —
+ * `getPieceSvg(type, color)` returns a component that accepts a `className` —
+ * so the board, the floating drag layer, and the captured-material strip all
+ * keep working untouched. Each component renders an `<img>` and re-renders
+ * when the piece-set setting changes; the `className` it receives carries
+ * `h-full w-full` sizing and the drop-shadow filter (which applies to the
+ * SVG's alpha just like an inline `<svg>`), so piece shadows survive.
  */
 
 const PIECE_LETTER: Record<PieceType, string> = {
@@ -26,11 +34,22 @@ const PIECE_LETTER: Record<PieceType, string> = {
 };
 
 function makePiece(color: Color, type: PieceType): FC<SvgProps> {
-  const src = `/pieces/cburnett/${color}${PIECE_LETTER[type]}.svg`;
-  const PieceImg: FC<SvgProps> = ({ className }) => (
-    // eslint-disable-next-line @next/next/no-img-element -- tiny static same-origin SVG; next/image is overkill and CSP img-src 'self' already covers it
-    <img src={src} alt="" aria-hidden="true" draggable={false} className={className} />
-  );
+  const file = `${color}${PIECE_LETTER[type]}.svg`;
+  const PieceImg: FC<SvgProps> = ({ className }) => {
+    // pieceSetBase falls back to the default set for unknown persisted ids
+    // (the pre-picker envelope stored the placeholder 'standard').
+    const base = useSettingsStore((s) => pieceSetBase(s.pieceSet));
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- tiny static same-origin SVG; next/image is overkill and CSP img-src 'self' already covers it
+      <img
+        src={`${base}/${file}`}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        className={className}
+      />
+    );
+  };
   PieceImg.displayName = `Piece_${color}${type}`;
   return PieceImg;
 }

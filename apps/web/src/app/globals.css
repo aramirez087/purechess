@@ -197,8 +197,17 @@
   --board-highlight-selected-dark: 41 85% 56% / 0.58;
   --board-highlight-check: 0 72% 51%;
   --board-highlight-premove: 138 32% 52% / 0.45;
-  --board-legal-dot: 44 45% 10% / 0.55;
-  --board-legal-ring: 44 45% 10% / 0.5;
+  /* Legal-move hints split by square tone: an ink dot dies on every dark
+     square (1.8-2:1), so dark squares get a bone dot instead. */
+  --board-legal-dot-light: 44 45% 10% / 0.55;
+  --board-legal-dot-dark: 42 35% 90% / 0.6;
+  --board-legal-ring-light: 44 45% 10% / 0.5;
+  --board-legal-ring-dark: 42 35% 90% / 0.55;
+  /* Coordinate label colours, decoupled from the square palette so themes
+     whose light/dark pair sits under 4.5:1 can deepen/lighten the labels
+     without recolouring the board. Defaults = the opposite square colour. */
+  --board-coord-on-light: var(--board-sq-dark);
+  --board-coord-on-dark: var(--board-sq-light);
 }
 
 [data-theme='dark'] {
@@ -345,6 +354,37 @@
 :root[data-board-theme='mono'] {
   --board-sq-light: 0 0% 90%;
   --board-sq-dark: 0 0% 25%;
+}
+
+:root[data-board-theme='walnut'] {
+  --board-sq-light: 35 42% 75%;
+  --board-sq-dark: 25 32% 40%;
+  /* Brass washes vanish into warm brown — last-move/selected need more alpha
+     here. The base --board-highlight-last is what the home hero board reads. */
+  --board-highlight-last: 41 85% 53% / 0.5;
+  --board-highlight-last-light: 41 85% 52% / 0.44;
+  --board-highlight-last-dark: 41 85% 55% / 0.55;
+  --board-highlight-selected-light: 41 90% 54% / 0.5;
+  --board-highlight-selected-dark: 41 90% 56% / 0.62;
+  --board-coord-on-light: 25 45% 24%;
+  --board-coord-on-dark: 35 55% 93%;
+}
+
+:root[data-board-theme='tournament'] {
+  --board-sq-light: 62 42% 87%;
+  --board-sq-dark: 90 26% 46%;
+  /* The cream/olive pair is only 2.84:1 — labels need their own colours. */
+  --board-coord-on-light: 90 35% 26%;
+  --board-coord-on-dark: 62 60% 96%;
+}
+
+:root[data-board-theme='ocean'] {
+  --board-sq-light: 205 28% 82%;
+  --board-sq-dark: 207 26% 43%;
+  --board-legal-dot-light: 210 45% 12% / 0.55;
+  --board-legal-ring-light: 210 45% 12% / 0.5;
+  --board-coord-on-light: 207 35% 24%;
+  --board-coord-on-dark: 205 45% 94%;
 }
 
 [data-no-animations] [data-animating],

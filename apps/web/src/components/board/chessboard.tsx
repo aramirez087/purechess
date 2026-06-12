@@ -334,7 +334,7 @@ export function Chessboard({
           // server-rendered board paints at its final geometry pre-hydration
           // (no 512px default flash, and the piece <img>s are LCP-eligible
           // straight from the streamed HTML).
-          'grid aspect-square w-full grid-cols-8 grid-rows-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          'grid aspect-square w-full grid-cols-8 grid-rows-8 overflow-hidden rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           // Squares set their own cursor; override them all while a drag is live.
           dragState.active && 'cursor-grabbing [&_[data-square]]:!cursor-grabbing',
         )}
@@ -410,6 +410,25 @@ export function Chessboard({
           </div>
         ))}
       </div>
+
+      {/* Board surface material: top-light sheen + fine grain + a recessed
+          inner lip against the frame. z-[1] sits above the square background
+          colours but below the in-square highlight washes (z-[5]), hint dots
+          (z-10) and pieces (z-20) — the squares' positioned children escape
+          their unpositioned parents into this stacking context — so the grain
+          tints the wood, never the pieces. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[1] rounded-[4px]"
+        style={{
+          // Sheen dark end is capped at 5% — beyond that the cross-board
+          // luminance ramp reads as rank-dependent tinting (grubby home
+          // ranks), not lighting.
+          background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(166deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 34%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.05) 100%)`,
+          boxShadow:
+            'inset 0 1px 3px rgba(0,0,0,0.32), inset 0 0 0 1px rgba(0,0,0,0.18), inset 0 -1px 1px rgba(255,255,255,0.04)',
+        }}
+      />
 
       {settings.coordinates && (
         <div className="pointer-events-none absolute inset-0 z-10">

@@ -12,8 +12,10 @@ const COORD_FONT_SIZE = 'max(9px, calc(var(--board-sq-size) * 0.14))';
 /**
  * In-square corner coordinates (lichess-style): rank numbers in the top-right
  * corner of the rightmost file, file letters in the bottom-left corner of the
- * bottom rank. Each label is tinted with the opposite square colour so it
- * reads on both light and dark squares without a gutter.
+ * bottom rank. Labels use the --board-coord-on-light/-dark vars — which
+ * default to the opposite square colour but are overridden by themes whose
+ * square pair lacks text contrast — so they read on both square tones without
+ * a gutter.
  *
  * The bottom-right square of the board is always light regardless of
  * orientation, so square colour alternates from `index % 2 === 1` (light) on
@@ -33,8 +35,8 @@ export function Coordinates({ orientation }: CoordinatesProps) {
                 height: 'var(--board-sq-size)',
                 fontSize: COORD_FONT_SIZE,
                 color: onLight
-                  ? 'hsl(var(--board-sq-dark))'
-                  : 'hsl(var(--board-sq-light))',
+                  ? 'hsl(var(--board-coord-on-light))'
+                  : 'hsl(var(--board-coord-on-dark))',
               }}
             >
               {rankLabel(i, orientation)}
@@ -53,8 +55,8 @@ export function Coordinates({ orientation }: CoordinatesProps) {
                 width: 'var(--board-sq-size)',
                 fontSize: COORD_FONT_SIZE,
                 color: onLight
-                  ? 'hsl(var(--board-sq-dark))'
-                  : 'hsl(var(--board-sq-light))',
+                  ? 'hsl(var(--board-coord-on-light))'
+                  : 'hsl(var(--board-coord-on-dark))',
               }}
             >
               {fileLabel(i, orientation)}

@@ -77,13 +77,6 @@ export const Square = memo(function Square({
         isPremoveFrom && 'sq-premove-from',
         isPreMoveTo && 'sq-premove-to',
       )}
-      style={
-        isKeyboardFocus
-          ? {
-              boxShadow: 'inset 0 0 0 3px rgba(0,0,0,0.45), inset 0 0 0 2px hsl(41 56% 62%)',
-            }
-          : undefined
-      }
       onPointerDown={onPointerDown ? (e) => onPointerDown(e, square) : undefined}
       onClick={onClick ? () => onClick(square) : undefined}
     >
@@ -124,12 +117,30 @@ export const Square = memo(function Square({
           className="absolute inset-0 z-[6] pointer-events-none ring-inset ring-[3px] ring-[hsl(var(--brass)/0.75)]"
         />
       )}
+      {isKeyboardFocus && (
+        <div
+          aria-hidden
+          className="absolute inset-0 z-[6] pointer-events-none"
+          // First inset shadow paints ON TOP: a dark edge hairline, then a
+          // bright gold band under it. The light band carries 3:1+ on dark
+          // squares, the dark hairline carries it on light squares — the pair
+          // clears the focus-indicator floor on every theme without per-theme
+          // overrides. Rendered as a z-lifted child (like every other
+          // indicator) so the surface overlay can't wash it out.
+          style={{
+            boxShadow: 'inset 0 0 0 2px rgba(0,0,0,0.6), inset 0 0 0 5px hsl(42 85% 76%)',
+          }}
+        />
+      )}
       {isInCheck && (
         <div
           aria-hidden
           className="sq-check absolute inset-0 z-[5] pointer-events-none"
+          // Light-hot core (lichess-style): keeps the check readable as a
+          // luminance event, not a hue-only red wash — red-on-warm-brown
+          // (walnut) and red-on-green (classic) are both CVD-hostile pairs.
           style={{
-            background: `radial-gradient(circle at 50% 50%, hsl(var(--board-highlight-check) / 0.65) 0%, hsl(var(--board-highlight-check) / 0.35) 55%, transparent 78%)`,
+            background: `radial-gradient(circle at 50% 50%, hsl(0 90% 96% / 0.85) 0%, hsl(var(--board-highlight-check) / 0.65) 30%, hsl(var(--board-highlight-check) / 0.35) 60%, transparent 80%)`,
             animation: 'check-pulse 1.4s ease-in-out 2',
           }}
         />
@@ -140,7 +151,9 @@ export const Square = memo(function Square({
           style={{
             width: '30%',
             height: '30%',
-            backgroundColor: `hsl(var(--board-legal-dot))`,
+            backgroundColor: isLight
+              ? `hsl(var(--board-legal-dot-light))`
+              : `hsl(var(--board-legal-dot-dark))`,
           }}
         />
       )}
@@ -149,7 +162,9 @@ export const Square = memo(function Square({
           className="sq-legal-ring absolute pointer-events-none z-10 rounded-full"
           style={{
             inset: '3%',
-            border: `calc(var(--board-sq-size) * 0.085) solid hsl(var(--board-legal-ring))`,
+            border: `calc(var(--board-sq-size) * 0.085) solid ${
+              isLight ? 'hsl(var(--board-legal-ring-light))' : 'hsl(var(--board-legal-ring-dark))'
+            }`,
           }}
         />
       )}

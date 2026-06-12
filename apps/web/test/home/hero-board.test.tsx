@@ -42,8 +42,8 @@ function stubMatchMedia(reduced: boolean) {
 
 function pieceImgs(container: HTMLElement, piece?: string) {
   const selector = piece
-    ? `img[src="/pieces/cburnett/${piece}.svg"]`
-    : 'img[src^="/pieces/cburnett/"]';
+    ? `img[src="/pieces/sculpted/${piece}.svg"]`
+    : 'img[src^="/pieces/sculpted/"]';
   return container.querySelectorAll(selector);
 }
 

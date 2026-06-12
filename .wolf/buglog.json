@@ -6176,6 +6176,391 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-11T12:32:00-06:00"
+    },
+    {
+      "id": "bug-376",
+      "timestamp": "2026-06-11T23:24:14.086Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/lib/board/piece-svgs.tsx",
+      "root_cause": "8 lines replaced/restructured",
+      "fix": "Rewrote 10\u219213 lines (8 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:24:14.086Z"
+    },
+    {
+      "id": "bug-377",
+      "timestamp": "2026-06-11T23:24:15.467Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/lib/board/piece-svgs.tsx",
+      "root_cause": "Had `/pieces/cburnett/${color}${PIECE_LETTER[type]}.sv",
+      "fix": "Changed to `/pieces/pure/${color}${PIECE_LETTER[type]}.svg`",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:24:15.467Z"
+    },
+    {
+      "id": "bug-378",
+      "timestamp": "2026-06-11T23:24:19.658Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/board/piece.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:24:19.658Z"
+    },
+    {
+      "id": "bug-379",
+      "timestamp": "2026-06-11T23:24:27.390Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Had 'grid aspect-square w-full grid-cols-8 grid-rows-8",
+      "fix": "Changed to 'grid aspect-square w-full grid-cols-8 grid-rows-8",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:24:27.390Z"
+    },
+    {
+      "id": "bug-380",
+      "timestamp": "2026-06-11T23:24:46.027Z",
+      "error_message": "CSS fix: --board-sq-light, --board-sq-dark",
+      "file": "apps/web/src/app/globals.css",
+      "root_cause": "--board-sq-light: 0 0% 90% \u2192 205 28% 82%; --board-sq-dark: 0 0% 25% \u2192 207 26% 43%",
+      "fix": "Changed --board-sq-light: 0 0% 90% \u2192 205 28% 82%; --board-sq-dark: 0 0% 25% \u2192 207 26% 43%",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:24:46.027Z"
+    },
+    {
+      "id": "bug-381",
+      "timestamp": "2026-06-11T23:25:04.092Z",
+      "error_message": "CSS fix: boardThemeId",
+      "file": "apps/web/src/components/settings/settings-form.tsx",
+      "root_cause": "boardThemeId: theme.id as 'classic' | 'mono' \u2192 theme.id",
+      "fix": "Changed boardThemeId: theme.id as 'classic' | 'mono' \u2192 theme.id",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:25:04.092Z"
+    },
+    {
+      "id": "bug-382",
+      "timestamp": "2026-06-11T23:48:11.555Z",
+      "error_message": "Incorrect value in code",
+      "file": "../../../../tmp/bq-render/shot.mjs",
+      "root_cause": "Had 'playwright'",
+      "fix": "Changed to '/Users/aramirez/Code/purechess/apps/web/node_modu",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:48:11.555Z"
+    },
+    {
+      "id": "bug-383",
+      "timestamp": "2026-06-11T23:56:06.366Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/lib/board/piece-svgs.tsx",
+      "root_cause": "Had `/pieces/pure/${color}${PIECE_LETTER[type]}.svg`",
+      "fix": "Changed to `${PIECE_SET_BASE}/${color}${PIECE_LETTER[type]}.s",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T23:56:06.366Z"
+    },
+    {
+      "id": "bug-384",
+      "timestamp": "2026-06-11T23:57:42.408Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/board/square.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: // Light-hot core (lichess-style): keeps the check readable ; // luminance event, not a hue-only red wash \u2014 red-on-warm-br",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-11T23:57:51.505Z"
+    },
+    {
+      "id": "bug-385",
+      "timestamp": "2026-06-12T00:00:32.041Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/globals.css",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 3\u219212 lines (2 removed) | Also: /* Brass washes vanish into warm brown \u2014 last-move; --board-legal-dot: 210 45% 12% / 0.55;",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-12T00:00:32.133Z"
+    },
+    {
+      "id": "bug-386",
+      "timestamp": "2026-06-12T00:00:47.185Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T00:00:47.185Z"
+    },
+    {
+      "id": "bug-387",
+      "timestamp": "2026-06-12T00:00:50.400Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/board/coordinates.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 4\u21926 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T00:00:50.400Z"
+    },
+    {
+      "id": "bug-388",
+      "timestamp": "2026-06-11T18:05:00Z",
+      "error_message": "Game-route loading shells preloaded /pieces/cburnett/*.svg while the board rendered /pieces/pure/*.svg \u2014 48kB wasted per cold game navigation, unused-preload warnings, and the LCP preload head start lost for the actually rendered sprites",
+      "file": "apps/web/src/app/(play)/play/[gameId]/loading.tsx, apps/web/src/app/computer-game/[gameId]/loading.tsx",
+      "root_cause": "Piece-set path swap (cburnett -> pure) updated piece-svgs.tsx and hero-board.tsx but missed the two loading.tsx files that hardcoded the sprite base path for react-dom preload()",
+      "fix": "Exported PIECE_SET_BASE from lib/board/piece-svgs.tsx and built both the <img> src and both PIECE_SPRITES preload lists from it so they cannot drift",
+      "tags": [
+        "preload",
+        "lcp",
+        "piece-set",
+        "loading-shell",
+        "drift"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:05:00Z"
+    },
+    {
+      "id": "bug-389",
+      "timestamp": "2026-06-11T18:05:00Z",
+      "error_message": "Generated pure bQ crown orbs rendered as ghosted gray dots (~1.3:1 vs dark squares) \u2014 orbs are the set's only unstroked shapes and sit at the top (lightest band) of the userSpaceOnUse body gradient",
+      "file": "apps/web/scripts/build-pure-pieces.mjs",
+      "root_cause": "Blanket fill=url(#pb) injection on bQ's outer <g> made the inner <g stroke=\"none\"> crown circles inherit the gradient's lightest stop with no ink outline",
+      "fix": "Script special-cases the inner group: <g stroke=\"none\"> becomes <g fill=\"#26231e\" stroke=\"none\"> (fixed near-ink fill), set regenerated",
+      "tags": [
+        "svg",
+        "piece-set",
+        "gradient",
+        "build-script"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:05:00Z"
+    },
+    {
+      "id": "bug-390",
+      "timestamp": "2026-06-11T18:05:00Z",
+      "error_message": "Keyboard focus ring painted black-over-gold (first inset shadow renders on top, hiding the brass layer) and computed under 3:1 on every theme's dark squares; new z-[1] board surface overlay additionally painted over it (element-level box-shadow, below positioned z-[5] children)",
+      "file": "apps/web/src/components/board/square.tsx",
+      "root_cause": "Inset box-shadow stacking order misunderstood (first shadow = topmost) + indicator lived on the unpositioned square element instead of a z-lifted child like every other indicator",
+      "fix": "Moved indicator to a dedicated absolute z-[6] child div with 'inset 0 0 0 2px rgba(0,0,0,0.6), inset 0 0 0 5px hsl(42 85% 76%)' \u2014 dark hairline on top, bright gold band beneath, clears 3:1 on light and dark squares of all 5 themes",
+      "tags": [
+        "a11y",
+        "focus-indicator",
+        "box-shadow",
+        "stacking-context",
+        "board"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:05:00Z"
+    },
+    {
+      "id": "bug-391",
+      "timestamp": "2026-06-11T18:05:00Z",
+      "error_message": "Coordinate labels and legal-move dots failed contrast floors on new board themes (tournament coords 2.84:1; walnut/ocean coords 3.26/3.39:1 vs 4.5:1 AA for 9px text; ink legal dot 1.87:1 on walnut dark squares)",
+      "file": "apps/web/src/app/globals.css, apps/web/src/components/board/coordinates.tsx, apps/web/src/components/board/square.tsx",
+      "root_cause": "Coordinate color was hard-coupled to the opposite square colour (label contrast == square-pair contrast) and the single ink legal-dot/ring var dies on all dark squares; new themes widened the failing surface",
+      "fix": "Introduced --board-coord-on-light/-dark (default = opposite square colour, per-theme deepened/lightened overrides for walnut/tournament/ocean) and split --board-legal-dot/-ring into -light/-dark pairs with a bone dot/ring on dark squares; walnut also got a base --board-highlight-last override for the hero board",
+      "tags": [
+        "a11y",
+        "contrast",
+        "board-themes",
+        "coordinates",
+        "css-vars"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:05:00Z"
+    },
+    {
+      "id": "bug-392",
+      "timestamp": "2026-06-12T00:12:30.561Z",
+      "error_message": "Wrong reference: standard should be DEFAULT_PIECE_SET",
+      "file": "apps/web/src/stores/settings-store.ts",
+      "root_cause": "Used \"standard\" instead of \"DEFAULT_PIECE_SET\"",
+      "fix": "Changed standard \u2192 DEFAULT_PIECE_SET",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T00:12:30.561Z"
+    },
+    {
+      "id": "bug-393",
+      "timestamp": "2026-06-12T00:12:55.449Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/app/computer-game/[gameId]/loading.tsx",
+      "root_cause": "4 lines replaced/restructured",
+      "fix": "Rewrote 10\u219212 lines (4 removed) | Also: import { PIECE_SET_BASE } from '@/lib/board/piece-; // piece <img> paints as soon as the markup lands.",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-12T00:13:00.089Z"
+    },
+    {
+      "id": "bug-394",
+      "timestamp": "2026-06-12T00:38:24.198Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/scripts/build-sculpted-pieces.mjs",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 8\u219213 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "mjs"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T00:38:24.198Z"
+    },
+    {
+      "id": "bug-395",
+      "timestamp": "2026-06-12T00:38:29.385Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/stores/settings-store.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T00:38:29.385Z"
+    },
+    {
+      "id": "bug-392",
+      "timestamp": "2026-06-11T18:35:00Z",
+      "error_message": "Sculpted queen 'crown panel' specular ellipse straddled the open V-notch between crown spikes \u2014 painted a ~10-13% white glaze on bare board pixels between the spikes (both wQ/bQ) and fed the CSS drop-shadow",
+      "file": "apps/web/scripts/build-sculpted-pieces.mjs",
+      "root_cause": "Overlay ellipses paint on the raw SVG canvas, not clipped to the piece silhouette; the panel center (18.5,20.5) sat in the gap between crown spikes",
+      "fix": "Re-seated the highlight onto the central spike face E(22.3,19,1.5,3.4,rot -8), verified extents against the spike flank lines, regenerated the set",
+      "tags": [
+        "svg",
+        "piece-set",
+        "sculpted",
+        "overlay-bleed",
+        "geometry"
+      ],
+      "related_bugs": [
+        "bug-389"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:35:00Z"
+    },
+    {
+      "id": "bug-393",
+      "timestamp": "2026-06-11T18:35:00Z",
+      "error_message": "Legacy persisted pieceSet 'standard' merged into the store unmodified forever \u2014 field typed PieceSetId held an out-of-union value; future `s.pieceSet === 'sculpted'` comparisons would silently misbehave for legacy users",
+      "file": "apps/web/src/stores/settings-store.ts",
+      "root_cause": "zustand persist shallow-merges the old envelope with no version/migrate/merge; only read-site fallbacks (pieceSetBase) masked it",
+      "fix": "Added a persist `merge` that coerces unrecognized pieceSet ids to DEFAULT_PIECE_SET at the boundary; pieceSetBase fallback kept as defense-in-depth",
+      "tags": [
+        "zustand",
+        "persist",
+        "migration",
+        "type-soundness",
+        "settings"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:35:00Z"
+    },
+    {
+      "id": "bug-394",
+      "timestamp": "2026-06-11T18:35:00Z",
+      "error_message": "bQ orb glints invisible at game size (sized for wQ's r=2.0 orbs, not bQ's r=2.75) and bN speculars sat low-right against the key light / too faint to register \u2014 bN and bQ orbs were the flattest black elements",
+      "file": "apps/web/scripts/build-sculpted-pieces.mjs",
+      "root_cause": "Glint scaled to the wrong orb radius; knight neck sheen placed on the mane side instead of the lit chest ridge; crest alpha 0.13 contributed nothing",
+      "fix": "Glints up to E(cx-0.9,cy-1.0,1.4,1.2,b:0.62) (max extent 2.745 <= orb r 2.75); knight overlays moved to mane-top ridge E(26.5,11.4,b:0.22) + chest ridge E(26,20.5,b:0.2,rot 16); regenerated",
+      "tags": [
+        "svg",
+        "piece-set",
+        "sculpted",
+        "specular",
+        "design"
+      ],
+      "related_bugs": [
+        "bug-392"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:35:00Z"
     }
   ]
 }

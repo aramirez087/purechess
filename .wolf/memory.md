@@ -1719,3 +1719,97 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:30 | Stale-game janitor: rematch-offer/invite/never-fetched sweeps, guarded + unref'd | apps/api/src/games/games-janitor.service.ts | commit 9b8d8cb; 6 unit tests | ~12k |
 | 12:30 | Queue/game seams: dequeue on invite/rematch activation + busy probe in createMatchedGame | apps/api/src/matchmaking,invites,games | commit 905fa10; 353 unit + 21 e2e green | ~14k |
 | 12:31 | Computer-game abort + draw-claim UI wired (endpoints predated UI); aborted = terminal client state | apps/web .../computer-game-client.tsx | commit d087bff; web e2e 36/36 | ~10k |
+| 12:25 | Session end: 84 writes across 39 files (draw-offer.spec.ts, abort.spec.ts, rematch.spec.ts, quick-match.spec.ts, game-end.spec.ts) | 41 reads | ~91084 tok |
+
+## Session: 2026-06-11 17:16
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:23 | Created apps/web/scripts/build-pure-pieces.mjs | — | ~823 |
+| 17:24 | Edited apps/web/src/lib/board/piece-svgs.tsx | 10→13 lines | ~240 |
+| 17:24 | Edited apps/web/src/lib/board/piece-svgs.tsx | "/pieces/cburnett/${color}" → "/pieces/pure/${color}${PI" | ~18 |
+| 17:24 | Edited apps/web/src/components/board/piece.tsx | CSS: shadow, filter, filter | ~128 |
+| 17:24 | Edited apps/web/src/components/board/chessboard.tsx | "grid aspect-square w-full" → "grid aspect-square w-full" | ~47 |
+| 17:24 | Edited apps/web/src/components/board/chessboard.tsx | expanded (+16 lines) | ~403 |
+| 17:24 | Edited apps/web/src/app/globals.css | expanded (+22 lines) | ~223 |
+| 17:24 | Edited apps/web/src/lib/board/themes.ts | expanded (+20 lines) | ~236 |
+| 17:25 | Edited apps/web/src/components/settings/settings-form.tsx | inline fix | ~22 |
+| 17:32 | Board/piece premium polish: generated "pure" piece set (cburnett + material gradients via build-pure-pieces.mjs), 2-layer piece shadows, board grain/sheen/lip overlay, rounded board corners, 3 new board themes (walnut/tournament/ocean) | apps/web/public/pieces/pure/*, apps/web/scripts/build-pure-pieces.mjs, piece-svgs.tsx, piece.tsx, chessboard.tsx, globals.css, themes.ts, settings-form.tsx, hero-board.tsx(+test), ATTRIBUTION.md | typecheck+lint clean, 304/304 vitest, live-verified all 5 themes + move flow | ~60k |
+| 17:34 | Created ../../../../tmp/contrast.mjs | — | ~1090 |
+| 17:37 | Created ../../../../tmp/contrast2.mjs | — | ~412 |
+| 17:37 | perf review of board polish diff: verified Tailwind arbitrary filter rules in built CSS, CSP data:/inline-style OK, composited anim OK; found stale /pieces/cburnett preloads in both game loading.tsx | apps/web/src/app/*/loading.tsx | 1 major finding | ~9k |
+| 17:37 | a11y review of board polish diff: computed WCAG ratios for 5 themes (coords, legal dot, focus ring, check) | apps/web globals.css, coordinates.tsx, square.tsx, chessboard.tsx | findings: tournament coords 2.84:1, walnut dot-on-dark 1.87:1, focus ring <3:1 on dark sqs | ~9k |
+| 17:39 | Created ../../../../tmp/contrast-check.mjs | — | ~482 |
+| 17:39 | review: board polish diff — found stale cburnett preloads in 2 loading.tsx, walnut base highlight var gap (hero-board), kbd-focus under z-[1] overlay | apps/web loading.tsx, globals.css, square.tsx | 3 findings | ~30k |
+| 17:40 | Created ../../../../tmp/contrast-check.mjs | — | ~693 |
+| 17:40 | Created ../../../../tmp/a11y-focus-ring-verify-9314.mjs | — | ~801 |
+| 17:40 | Created ../../../../tmp/coord-contrast.mjs | — | ~648 |
+| 17:40 | Created ../../../../tmp/contrast-check.mjs | — | ~644 |
+| 17:45 | a11y verify: walnut/ocean coord contrast claim — recomputed ratios (3.26/3.39 base confirmed; overlay z-order part of claim wrong, coords are z-10) | apps/web/src/app/globals.css, coordinates.tsx, chessboard.tsx | claim substantiated w/ caveat | ~9k |
+| 17:43 | Created ../../../../tmp/stacking-repro.html | — | ~476 |
+| 17:43 | Created ../../../../tmp/walnut-contrast.mjs | — | ~414 |
+| 17:43 | Verified reviewer claim: walnut theme misses base --board-highlight-last used by hero board — confirmed real (minor) | apps/web/src/app/globals.css, hero-board.tsx, themes.ts | claim verified, isReal=true | ~12k |
+| 17:45 | Verified reviewer claim: kb-focus boxShadow (square.tsx:83) paints below new z-[1] surface overlay (chessboard.tsx) — repro in browser confirmed; all other indicators escape via positive-z children | square.tsx, chessboard.tsx | claim real (minor) | ~9k |
+| 17:47 | Created ../../../../tmp/bq-render/page.html | — | ~286 |
+| 17:47 | Created ../../../../tmp/bq-render/shot.mjs | — | ~412 |
+| 17:48 | Edited ../../../../tmp/bq-render/shot.mjs | "playwright" → "/Users/aramirez/Code/pure" | ~27 |
+| 17:48 | Created ../../../../tmp/colorcheck.mjs | — | ~583 |
+| 17:50 | Created ../../../../tmp/bq-render/sample.mjs | — | ~490 |
+| 17:50 | Created ../../../../tmp/bq-render/page64.html | — | ~230 |
+| 17:50 | Created ../../../../tmp/bq-render/shot64.mjs | — | ~124 |
+| 17:50 | Created ../../../../tmp/sheen-math.mjs | — | ~638 |
+| 17:51 | verify(design): confirmed bQ orb ghosting — line-49 blanket fill="url(#pb)" puts unstroked orbs in lightest gradient band, measured 1.27:1 vs classic dark sq | apps/web/scripts/build-pure-pieces.mjs, public/pieces/pure/bQ.svg | claim isReal=true | ~12k |
+| 18:05 | Verified design claim: board sheen bottom-rank darkening (chessboard.tsx:424) — math + ffmpeg pixel sampling confirm 5% rank2 / ~12% corner darkening; judged real-minor | chessboard.tsx, board-classic-detail.png | verified | ~8k |
+| 17:55 | Edited apps/web/scripts/build-pure-pieces.mjs | 1→4 lines | ~186 |
+| 17:55 | Edited apps/web/scripts/build-pure-pieces.mjs | 5→9 lines | ~200 |
+| 17:56 | Edited apps/web/src/lib/board/piece-svgs.tsx | expanded (+7 lines) | ~86 |
+| 17:56 | Edited apps/web/src/lib/board/piece-svgs.tsx | "/pieces/pure/${color}${PI" → "${PIECE_SET_BASE}/${color" | ~20 |
+| 17:56 | Edited apps/web/src/app/computer-game/[gameId]/loading.tsx | added 1 import(s) | ~171 |
+| 17:56 | Edited apps/web/src/app/(play)/play/[gameId]/loading.tsx | added 1 import(s) | ~171 |
+| 17:57 | Edited apps/web/src/components/board/square.tsx | modified onPointerDown() | ~24 |
+| 17:57 | Edited apps/web/src/components/board/square.tsx | CSS: TOP, 3, boxShadow | ~261 |
+| 17:57 | Edited apps/web/src/components/board/square.tsx | modified core() | ~408 |
+| 18:00 | Edited apps/web/src/app/globals.css | expanded (+9 lines) | ~185 |
+| 18:00 | Edited apps/web/src/app/globals.css | expanded (+9 lines) | ~319 |
+| 18:00 | Edited apps/web/src/components/board/coordinates.tsx | 6→6 lines | ~61 |
+| 18:00 | Edited apps/web/src/components/board/coordinates.tsx | 6→6 lines | ~61 |
+| 18:00 | Edited apps/web/src/components/board/chessboard.tsx | 1→4 lines | ~197 |
+| 18:00 | Edited apps/web/src/components/board/coordinates.tsx | modified coordinates() | ~114 |
+| 18:05 | Ultracode review workflow (17 agents) confirmed 12 findings, all fixed: stale cburnett preloads in both game loading shells (PIECE_SET_BASE export), bQ ghost orbs (script fix + regen), white-piece foot tone, sheen ramp cap 0.11->0.05, keyboard focus ring (z-lifted child, gold-over-dark order), coord contrast vars (--board-coord-on-light/-dark + theme overrides), legal dot/ring light/dark split, check radial light core, walnut base highlight-last | square.tsx, coordinates.tsx, chessboard.tsx, globals.css, piece-svgs.tsx, both loading.tsx, build-pure-pieces.mjs | bug-388..391 logged; typecheck+lint clean, 304/304, all fixes live-verified | ~120k |
+| 18:04 | Session end: 41 writes across 24 files (build-pure-pieces.mjs, piece-svgs.tsx, piece.tsx, chessboard.tsx, globals.css) | 36 reads | ~35578 tok |
+| 18:08 | Session end: 41 writes across 24 files (build-pure-pieces.mjs, piece-svgs.tsx, piece.tsx, chessboard.tsx, globals.css) | 36 reads | ~35578 tok |
+
+## Session: 2026-06-12 18:11
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:12 | Created apps/web/src/lib/board/piece-sets.ts | — | ~392 |
+| 18:12 | Edited apps/web/src/stores/settings-store.ts | added 1 import(s) | ~123 |
+| 18:12 | Edited apps/web/src/stores/settings-store.ts | 3→3 lines | ~16 |
+| 18:12 | Created apps/web/src/lib/board/piece-svgs.tsx | — | ~845 |
+| 18:12 | Edited apps/web/src/app/computer-game/[gameId]/loading.tsx | 10→12 lines | ~195 |
+| 18:13 | Edited apps/web/src/app/(play)/play/[gameId]/loading.tsx | 10→12 lines | ~195 |
+| 18:13 | Edited apps/web/src/components/settings/settings-form.tsx | added 1 import(s) | ~51 |
+| 18:14 | Edited apps/web/src/components/settings/settings-form.tsx | expanded (+34 lines) | ~542 |
+| 18:15 | Created apps/web/scripts/build-sculpted-pieces.mjs | — | ~1765 |
+| 18:15 | Session end: 9 writes across 6 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 2 reads | ~6636 tok |
+| 18:15 | Session end: 9 writes across 6 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 2 reads | ~6636 tok |
+| 18:15 | Session end: 9 writes across 6 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 2 reads | ~6636 tok |
+| 18:16 | Edited apps/web/scripts/build-sculpted-pieces.mjs | inline fix | ~23 |
+| 18:16 | Edited apps/web/scripts/build-sculpted-pieces.mjs | modified AO() | ~36 |
+| 18:17 | Edited apps/web/scripts/build-sculpted-pieces.mjs | inline fix | ~38 |
+| 18:20 | Sculpted piece set + piece-set switch: new lib/board/piece-sets.ts registry (sculpted default, pure fallback), build-sculpted-pieces.mjs (diagonal gradients, per-piece speculars, white-base AO, bQ orb pin), piece-svgs.tsx store-aware ('use client', pieceSetBase fallback for legacy 'standard'), settings picker row w/ wN+bN previews, loading shells preload default set, hero uses default | piece-sets.ts, build-sculpted-pieces.mjs, public/pieces/sculpted/*, piece-svgs.tsx, settings-store.ts, settings-form.tsx, hero-board.tsx, 2x loading.tsx, 2 tests | typecheck+lint clean, 304/304, live-verified switch both ways + legacy fallback | ~70k |
+| 18:23 | Session end: 12 writes across 6 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 26 reads | ~18386 tok |
+| 12:06 | Reviewed piece-set switch wiring (subagent): importers, SSR/rehydrate, reset, aria-pressed, e2e — 2 minor findings (post-paint set swap; legacy standard never normalized) | apps/web piece-set change set | reviewed | ~30k |
+| 18:45 | design-judge review of sculpted set capture (board-sculpted-detail.png) | apps/web/scripts/build-sculpted-pieces.mjs | 2 minor findings: bN neck sheen placement, bQ orb glints subscale; light coherence + material balance pass | ~25k |
+| 18:33 | Created ../../../../tmp/qnotch.mjs | — | ~612 |
+| 18:38 | verified svg-review claim: wQ/bQ crown-panel spec ellipse E(18.5,20.5,3,3.8) paints 10-13% white wash on bare background in crown notch (raster-confirmed vs control) | apps/web/scripts/build-sculpted-pieces.mjs, public/pieces/sculpted/{w,b}Q.svg | CONFIRMED real | ~9k |
+| 18:36 | Created ../../../../tmp/bn-geom.mjs | — | ~712 |
+| 12:05 | adversarial verify: bQ orb glint subscale claim — confirmed via Playwright pixel measurement (1px >lum90 at 102px) | apps/web/scripts/build-sculpted-pieces.mjs | isReal=true | ~9k |
+| 18:38 | Edited apps/web/scripts/build-sculpted-pieces.mjs | 2→2 lines | ~73 |
+| 18:38 | Edited apps/web/scripts/build-sculpted-pieces.mjs | modified AO() | ~167 |
+| 18:38 | Edited apps/web/src/stores/settings-store.ts | inline fix | ~26 |
+| 18:38 | Edited apps/web/src/stores/settings-store.ts | added 1 condition(s) | ~177 |
+| 18:35 | Sculpted-set review round (8 agents): 4 confirmed fixed — queen crown-panel spec floated in V-notch (re-seated to central spike), bQ orb glints rescaled to r=2.75, bN speculars moved to lit ridges, persist merge normalizes legacy pieceSet 'standard'; 1 claim rejected (SSR flash = inherent FOUC tradeoff) | build-sculpted-pieces.mjs, settings-store.ts, public/pieces/sculpted/* | bug-392..394; 304/304, lint+typecheck clean, flipped-board live-verified | ~80k |
+| 18:40 | Session end: 18 writes across 8 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 56 reads | ~20685 tok |
+| 18:43 | Session end: 18 writes across 8 files (piece-sets.ts, settings-store.ts, piece-svgs.tsx, loading.tsx, settings-form.tsx) | 56 reads | ~20685 tok |

@@ -1,4 +1,4 @@
-export type BoardThemeId = 'classic' | 'mono';
+export type BoardThemeId = 'classic' | 'walnut' | 'tournament' | 'ocean' | 'mono';
 
 export interface BoardTheme {
   id: BoardThemeId;
@@ -7,12 +7,32 @@ export interface BoardTheme {
   dark: string;
 }
 
+// Swatches mirror the `:root[data-board-theme='…']` HSL vars in globals.css —
+// keep both in sync when adding or tuning a theme.
 export const BOARD_THEMES: BoardTheme[] = [
   {
     id: 'classic',
     label: 'Classic',
     light: '#dcd6c1',
     dark: '#4f6959',
+  },
+  {
+    id: 'walnut',
+    label: 'Walnut',
+    light: '#dac4a4',
+    dark: '#876145',
+  },
+  {
+    id: 'tournament',
+    label: 'Tournament',
+    light: '#ebecd0',
+    dark: '#759457',
+  },
+  {
+    id: 'ocean',
+    label: 'Ocean',
+    light: '#c4d3de',
+    dark: '#51708a',
   },
   {
     id: 'mono',

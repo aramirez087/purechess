@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useSettingsStore } from '@/stores/settings-store';
 import { BOARD_THEMES } from '@/lib/board/themes';
+import { PIECE_SETS, pieceSetBase } from '@/lib/board/piece-sets';
 import { prefersReducedMotion } from '@/lib/board/animations';
 import { Monitor, Moon, Sun, Volume2, Move3D, Hash, Square } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -58,7 +59,7 @@ export function SettingsForm() {
               <button
                 key={theme.id}
                 type="button"
-                onClick={() => settings.update({ boardThemeId: theme.id as 'classic' | 'mono' })}
+                onClick={() => settings.update({ boardThemeId: theme.id })}
                 aria-pressed={settings.boardThemeId === theme.id}
                 className={cn(
                   'group flex items-center gap-2.5 rounded-md border px-3 py-2 text-sm transition-all',
@@ -76,6 +77,40 @@ export function SettingsForm() {
                   <span className="flex-1" style={{ background: theme.dark }} />
                 </span>
                 <span className="font-medium">{theme.label}</span>
+              </button>
+            ))}
+          </div>
+        </SettingRow>
+
+        <Separator className="bg-border/60" />
+
+        <SettingRow label="Piece set" hint="How the pieces are drawn.">
+          <div className="flex flex-wrap gap-2">
+            {PIECE_SETS.map((set) => (
+              <button
+                key={set.id}
+                type="button"
+                onClick={() => settings.update({ pieceSet: set.id })}
+                aria-pressed={pieceSetBase(settings.pieceSet) === set.base}
+                title={set.description}
+                className={cn(
+                  'group flex items-center gap-2.5 rounded-md border px-3 py-2 text-sm transition-all',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  pieceSetBase(settings.pieceSet) === set.base
+                    ? 'border-brass/60 bg-brass/10 shadow-inner-hairline'
+                    : 'border-border/70 hover:border-foreground/40',
+                )}
+              >
+                <span
+                  className="inline-flex h-8 w-14 items-center justify-center gap-0.5 rounded border border-border/80 bg-[hsl(var(--board-sq-light))]"
+                  aria-hidden
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- tiny static preview sprite */}
+                  <img src={`${set.base}/wN.svg`} alt="" className="h-7 w-7" draggable={false} />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- tiny static preview sprite */}
+                  <img src={`${set.base}/bN.svg`} alt="" className="h-7 w-7" draggable={false} />
+                </span>
+                <span className="font-medium">{set.label}</span>
               </button>
             ))}
           </div>
