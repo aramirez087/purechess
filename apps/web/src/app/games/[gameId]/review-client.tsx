@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Bot, FlipVertical2, User } from 'lucide-react';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
@@ -18,6 +18,7 @@ import { EvalBar, EvalReadout } from '@/components/review/eval-panel';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
+import { useOpeningName } from '@/hooks/use-opening-name';
 import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { computeMaterial } from '@/lib/board/material';
@@ -37,7 +38,7 @@ interface ReviewClientProps {
   exitAction?: React.ReactNode;
 }
 
-function formatResult(result: GameResult): string {
+export function formatResult(result: GameResult): string {
   switch (result) {
     case GameResult.WhiteWins:
       return '1 – 0';
@@ -48,7 +49,7 @@ function formatResult(result: GameResult): string {
   }
 }
 
-function formatTermination(t: GameTermination): string {
+export function formatTermination(t: GameTermination): string {
   switch (t) {
     case GameTermination.Checkmate:
       return 'Checkmate';
@@ -136,6 +137,13 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
   const displayFen = fen ?? STARTING_FEN;
   // Single engine search per position feeds both the eval bar and the readout.
   const { evaluation, thinking } = usePositionEval(displayFen, !isCorrupt);
+  // Opening name for the top-bar center slot — display only, crossfades with
+  // the matchup line while the seek position is still in book.
+  const opening = useOpeningName(displayFen);
+  const [heldOpening, setHeldOpening] = useState<string | null>(null);
+  useEffect(() => {
+    if (opening) setHeldOpening(opening);
+  }, [opening]);
   // Engine best move as a board arrow; user-drawn shapes live in the board.
   // Hidden while thinking — the held evaluation belongs to the previous
   // position, so its bestmove would draw a wrong arrow on the new one (the
@@ -211,10 +219,27 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
         topBar={
           <GameTopBar
             center={
-              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#9da79c]">
-                {game.white.username} <span className="text-[#8a958a]">vs</span>{' '}
-                {game.black.username} · {resultLabel ? `${resultLabel} · ` : ''}
-                {typeLabel}
+              <span className="grid font-mono text-[11px] uppercase tracking-[0.18em] text-[#9da79c]">
+                <span
+                  className={cn(
+                    'col-start-1 row-start-1 text-center transition-opacity duration-300',
+                    opening ? 'opacity-0' : 'opacity-100',
+                  )}
+                  aria-hidden={Boolean(opening)}
+                >
+                  {game.white.username} <span className="text-[#8a958a]">vs</span>{' '}
+                  {game.black.username} · {resultLabel ? `${resultLabel} · ` : ''}
+                  {typeLabel}
+                </span>
+                <span
+                  className={cn(
+                    'col-start-1 row-start-1 text-center text-[#d8d2c3] transition-opacity duration-300',
+                    opening ? 'opacity-100' : 'opacity-0',
+                  )}
+                  aria-hidden={!opening}
+                >
+                  {heldOpening}
+                </span>
               </span>
             }
           />

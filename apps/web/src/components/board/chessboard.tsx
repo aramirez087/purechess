@@ -59,6 +59,7 @@ export function Chessboard({
   checkSquare: checkSquareProp,
   className,
   readOnly = false,
+  freePlay = false,
   autoShapes,
   onShapesChange,
 }: ChessboardProps) {
@@ -117,7 +118,9 @@ export function Chessboard({
   }, [rules]);
 
   const colorToMove = useMemo(() => fenToColorToMove(position), [position]);
-  const playerColor: Color = orientation === 'white' ? 'w' : 'b';
+  // freePlay (analysis): the side to move is always "the player", so both
+  // colors take input and the premove path never engages.
+  const playerColor: Color = freePlay ? colorToMove : orientation === 'white' ? 'w' : 'b';
   const isPlayerTurn = colorToMove === playerColor;
 
   const checkSquare = useMemo(

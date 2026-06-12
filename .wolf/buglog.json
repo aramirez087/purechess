@@ -6899,6 +6899,151 @@
       ],
       "occurrences": 1,
       "last_seen": "2026-06-12T03:00:00.000Z"
+    },
+    {
+      "id": "bug-419",
+      "timestamp": "2026-06-12T03:04:18.339Z",
+      "error_message": "Missing error handling in makeMove",
+      "file": "apps/web/src/lib/board/rules.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:04:18.339Z"
+    },
+    {
+      "id": "bug-420",
+      "timestamp": "2026-06-12T03:05:01.884Z",
+      "error_message": "CSS fix: playerColor",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "playerColor: Color = orientation === 'white' ? 'w' : 'b' \u2192 Color = freePlay ? colorToMove : orientation === 'white' ? 'w' : 'b'",
+      "fix": "Changed playerColor: Color = orientation === 'white' ? 'w' : 'b' \u2192 Color = freePlay ? colorToMove : orientation === 'white' ? 'w' : 'b'",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:05:01.884Z"
+    },
+    {
+      "id": "bug-421",
+      "timestamp": "2026-06-12T03:06:31.455Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/components/review/analysis-move-panel.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:06:31.455Z"
+    },
+    {
+      "id": "bug-422",
+      "timestamp": "2026-06-12T03:07:38.890Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/analyze/analyze-client.tsx",
+      "root_cause": "Had '@/app/games/[gameId]/review-client'",
+      "fix": "Changed to '@/app/analyze/analyze-board'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:07:38.890Z"
+    },
+    {
+      "id": "bug-423",
+      "timestamp": "2026-06-12T03:08:01.549Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/games/[gameId]/review-client.tsx",
+      "root_cause": "Had '@/hooks/use-position-eval'",
+      "fix": "Changed to '@/hooks/use-opening-name'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:08:01.549Z"
+    },
+    {
+      "id": "bug-424",
+      "timestamp": "2026-06-12T03:10:53.040Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/analyze/analyze-board.tsx",
+      "root_cause": "Had '@/components/review/analysis-move-panel'",
+      "fix": "Changed to '@/app/games/[gameId]/review-client'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:10:53.040Z"
+    },
+    {
+      "id": "bug-425",
+      "timestamp": "2026-06-12T03:11:00.358Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/app/analyze/analyze-board.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T03:11:00.358Z"
+    },
+    {
+      "id": "bug-426",
+      "timestamp": "2026-06-11T21:10:00Z",
+      "error_message": "TS2322: Type 'VitestUtils' is not assignable to type 'Awaitable<void>' in use-opening-name.test.ts afterEach",
+      "file": "apps/web/test/hooks/use-opening-name.test.ts",
+      "root_cause": "afterEach(() => vi.unstubAllGlobals()) \u2014 concise arrow returns VitestUtils (vi.unstubAllGlobals returns vi for chaining), which fails Awaitable<void>",
+      "fix": "wrap in braces: afterEach(() => { vi.unstubAllGlobals(); })",
+      "tags": [
+        "vitest",
+        "typescript",
+        "test-hooks"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T21:10:00Z"
+    },
+    {
+      "id": "bug-427",
+      "timestamp": "2026-06-11T21:11:00Z",
+      "error_message": "analyze-client tests failed: 'Checkmate.' verdict and 'No moves yet.' missing after swapping ReviewClient for AnalyzeBoard on /analyze",
+      "file": "apps/web/src/app/analyze/analyze-board.tsx",
+      "root_cause": "first AnalyzeBoard cut hardcoded the 'Analysis.' verdict, dropping the honest outcome (Checkmate. + 0 \u2013 1) ReviewClient showed for decisive pasted PGNs; empty-state copy also changed",
+      "fix": "exported formatResult/formatTermination from review-client and reused in AnalyzeBoard (verdict = termination ?? 'Analysis.', result line when known); updated test to /no moves yet/i",
+      "tags": [
+        "analyze",
+        "regression",
+        "verdict",
+        "tests"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T21:11:00Z"
     }
   ]
 }

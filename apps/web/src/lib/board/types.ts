@@ -37,6 +37,11 @@ export interface ChessboardProps {
   checkSquare?: Square;
   className?: string;
   readOnly?: boolean;
+  /**
+   * Analysis boards: input follows the side to move instead of `orientation`,
+   * so both colors are playable and premoves never engage.
+   */
+  freePlay?: boolean;
   /** Externally driven annotations (engine arrows) — never cleared by input. */
   autoShapes?: BoardShape[];
   /** Observe user-drawn shapes (drawing stays uncontrolled). */

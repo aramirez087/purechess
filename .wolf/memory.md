@@ -1920,3 +1920,36 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 21:03 | Created apps/web/src/lib/board/analysis-tree.ts | — | ~870 |
+| 21:04 | Created apps/web/test/board/analysis-tree.test.ts | — | ~1117 |
+| 21:04 | Edited apps/web/src/lib/board/rules.ts | added error handling | ~193 |
+| 21:04 | Created apps/web/src/hooks/use-analysis-tree.ts | — | ~1177 |
+| 21:04 | Edited apps/web/src/lib/board/types.ts | 2→7 lines | ~62 |
+| 21:04 | Edited apps/web/src/components/board/chessboard.tsx | 4→5 lines | ~27 |
+| 21:05 | Edited apps/web/src/components/board/chessboard.tsx | CSS: colorToMove | ~101 |
+| 21:06 | Created apps/web/src/components/review/analysis-move-panel.tsx | — | ~2526 |
+| 21:06 | Edited apps/web/src/components/review/analysis-move-panel.tsx | CSS: idx | ~44 |
+| 21:06 | Edited apps/web/src/components/review/analysis-move-panel.tsx | modified while() | ~78 |
+| 21:06 | Edited apps/web/src/components/review/analysis-move-panel.tsx | modified variationsAt() | ~42 |
+| 21:06 | Edited apps/web/src/components/review/analysis-move-panel.tsx | CSS: idx | ~20 |
+| 21:06 | Created apps/web/src/hooks/use-opening-name.ts | — | ~698 |
+| 21:07 | Created apps/web/src/app/analyze/analyze-board.tsx | — | ~2650 |
+| 21:07 | Edited apps/web/src/app/analyze/analyze-client.tsx | 2→2 lines | ~43 |
+| 21:07 | Edited apps/web/src/app/analyze/analyze-client.tsx | 5→5 lines | ~60 |
+| 21:07 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~16 |
+| 21:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~51 |
+| 21:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 condition(s) | ~118 |
+| 21:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | expanded (+17 lines) | ~296 |
+| 21:08 | Created scripts/build-openings.mjs | — | ~588 |
+| 21:09 | Session end: 21 writes across 12 files (analysis-tree.ts, analysis-tree.test.ts, rules.ts, use-analysis-tree.ts, types.ts) | 14 reads | ~31022 tok |
+| 21:09 | Edited package.json | 1→2 lines | ~27 |
+| 21:09 | Created apps/web/test/hooks/use-opening-name.test.ts | — | ~770 |
+| 21:09 | Edited apps/web/test/hooks/use-opening-name.test.ts | 1→3 lines | ~15 |
+| 21:10 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~17 |
+| 21:10 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~18 |
+| 21:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | added 1 import(s) | ~47 |
+| 21:11 | Edited apps/web/src/app/analyze/analyze-board.tsx | modified formatResult() | ~126 |
+| 21:11 | Edited apps/web/src/app/analyze/analyze-board.tsx | 8→13 lines | ~168 |
+| 21:11 | Edited apps/web/test/analyze/analyze-client.test.tsx | 2→2 lines | ~42 |
+| 21:15 | Session: /analyze upgraded tape player → interactive analysis board (tree + free moves + opening names) | analysis-tree.ts, use-analysis-tree.ts, analyze-board.tsx, analysis-move-panel.tsx, use-opening-name.ts, build-openings.mjs, openings.json, chessboard freePlay, review-client opening wire | 381 web tests pass, typecheck+lint clean, verified live in browser | ~95k |
+| 21:14 | Session end: 30 writes across 15 files (analysis-tree.ts, analysis-tree.test.ts, rules.ts, use-analysis-tree.ts, types.ts) | 15 reads | ~33274 tok |

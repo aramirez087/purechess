@@ -104,6 +104,25 @@ export function applyMoveToFen(fen: string, intent: MoveIntent): string | null {
   }
 }
 
+/**
+ * Applies a move and returns everything the analysis tree needs (SAN, UCI,
+ * resulting FEN), or null when illegal/unparseable.
+ */
+export function makeMove(
+  fen: string,
+  intent: MoveIntent,
+): { san: string; uci: string; fenAfter: string } | null {
+  if (!intent.from || !intent.to) return null;
+  try {
+    const chess = new Chess(fen);
+    const m = chess.move({ from: intent.from, to: intent.to, promotion: intent.promotion });
+    if (!m) return null;
+    return { san: m.san, uci: m.from + m.to + (m.promotion ?? ''), fenAfter: chess.fen() };
+  } catch {
+    return null;
+  }
+}
+
 /** First legal move as UCI — used to claim a flag fall with any legal move. */
 export function firstLegalUci(fen: string): string | null {
   try {

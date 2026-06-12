@@ -62,7 +62,7 @@ describe('AnalyzeClient', () => {
     const board = screen.getByTestId('chessboard');
     expect(board.getAttribute('data-position')).toContain('r1bqkbnr/1ppp1ppp/p1n5/1B2p3');
     // No moves: the score sheet shows its empty state, verdict stays honest.
-    expect(screen.getByText('No moves yet.')).toBeInTheDocument();
+    expect(screen.getByText(/no moves yet/i)).toBeInTheDocument();
     expect(screen.getByText('Analysis.')).toBeInTheDocument();
   });
 

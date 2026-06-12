@@ -20,6 +20,7 @@
     "e2e": "pnpm --filter @purechess/web e2e",
     "e2e:setup": "pnpm --filter @purechess/web e2e:setup",
     "smoke": "bash scripts/smoke.sh",
+    "build:openings": "node scripts/build-openings.mjs",
     "engine:shadow": "tsx --tsconfig tsconfig.scripts.json scripts/shadow-runner.ts"
   },
   "devDependencies": {

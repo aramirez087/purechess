@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T02:56:01.978Z
-> Files: 867 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T03:11:15.134Z
+> Files: 875 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -86,7 +86,7 @@
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
 - `LICENSE` — Project license (~290 tok)
-- `package.json` — Node.js package manifest (~366 tok)
+- `package.json` — Node.js package manifest (~382 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~125801 tok)
 - `pnpm-workspace.yaml` (~72 tok)
 - `posthog-setup-report.md` — PostHog post-wizard report (~821 tok)
@@ -1033,7 +1033,8 @@
 
 ## apps/web/src/app/analyze/
 
-- `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~1981 tok)
+- `analyze-board.tsx` — Left-rail action (the "New analysis" button). (~2833 tok)
+- `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~1980 tok)
 - `page.tsx` — /analyze server page: buildMetadata title "Analyze — Purechess", renders AnalyzeClient. (~122 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
@@ -1052,7 +1053,7 @@
 
 - `error.tsx` — GameError (~134 tok)
 - `page.tsx` — formatResult (~717 tok)
-- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~3592 tok)
+- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~3910 tok)
 
 ## apps/web/src/app/login/
 
@@ -1086,7 +1087,7 @@
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
 - `annotation-layer.tsx` — Pull the line back from the dest center so the marker tip lands ~center. (~1527 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — isLightSquare (~6898 tok)
+- `chessboard.tsx` — isLightSquare (~6955 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~288 tok)
@@ -1164,6 +1165,7 @@
 
 ## apps/web/src/components/review/
 
+- `analysis-move-panel.tsx` — Plies played before the root position (custom-FEN starts). (~2553 tok)
 - `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1465 tok)
 - `pgn-actions.tsx` — Full-button variant, sized to dock as a panel footer: each action splits (~890 tok)
 - `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1079 tok)
@@ -1183,6 +1185,7 @@
 
 ## apps/web/src/hooks/
 
+- `use-analysis-tree.ts` — All legal moves at the current position; empty while chess.js loads. (~1177 tok)
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~660 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
@@ -1190,6 +1193,7 @@
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
+- `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — Exports usePositionEval — debounced White-POV Stockfish eval of a FEN (~550 tok)
 
 ## apps/web/src/lib/
@@ -1208,6 +1212,7 @@
 
 ## apps/web/src/lib/board/
 
+- `analysis-tree.ts` — Branching analysis tree for the /analyze board. Pure TS — no React, no (~870 tok)
 - `anim-diff.ts` — Pure-FEN move plan for the animation layer: diffs the piece placement of (~1035 tok)
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~304 tok)
 - `annotations.ts` — Drawing an identical shape removes it (toggle); anything else appends. (~521 tok)
@@ -1220,10 +1225,10 @@
 - `premove-geometry.ts` — Geometric premove destinations (chessground-style): every square the piece (~909 tok)
 - `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
-- `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2077 tok)
+- `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2246 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
-- `types.ts` — Externally driven annotations (engine arrows) — never cleared by input. (~446 tok)
+- `types.ts` — Analysis boards: input follows the side to move instead of `orientation`, (~496 tok)
 
 ## apps/web/src/services/
 
@@ -1239,7 +1244,7 @@
 
 ## apps/web/test/analyze/
 
-- `analyze-client.test.tsx` — AnalyzeClient: PGN→moves render, honest "Analysis." verdict (no bogus result), mate PGN→Checkmate/0–1, FEN→board-only review, invalid input→alert, New-analysis round-trip. Mocks board, sonner, stockfish-client. (~1022 tok)
+- `analyze-client.test.tsx` — PGN (~1022 tok)
 - `hero-cta.test.tsx` — Hero contains HeroAuthLink (useQuery) — give it a client and a quiet getMe. (~270 tok)
 
 ## apps/web/test/api/
@@ -1249,6 +1254,7 @@
 
 ## apps/web/test/board/
 
+- `analysis-tree.test.ts` — Declares START (~1117 tok)
 - `anim-diff.test.ts` — START_FEN: fenAfterMove (~1244 tok)
 - `animations.test.ts` — START_FEN: fenAfterMove (~485 tok)
 - `annotations.test.ts` — Declares ArrowShape (~951 tok)
@@ -1282,6 +1288,10 @@
 - `hero-board.test.tsx` — The hero board's replay enhancement: static Immortal Game final position (~1767 tok)
 - `hero-heading.test.tsx` — LCP fix (S04 §5.1 / S07): the hero h1 is the page's LCP element (verified via (~396 tok)
 - `homepage.test.tsx` — Hero contains the session-aware HeroAuthLink — keep /api/auth/me off the (~958 tok)
+
+## apps/web/test/hooks/
+
+- `use-opening-name.test.ts` — SICILIAN_EPD: mockFetch (~774 tok)
 
 ## apps/web/test/play/
 
@@ -1437,5 +1447,6 @@
 - `apps/web/test/game/game-loading-skeleton.test.tsx` — Locks: GameLoadingSkeleton renders a contentful SVG (33 rects) so FCP can fire; keeps role=status loading label. (~260 tok)
 - `apps/web/test/home/hero-heading.test.tsx` — Locks: hero h1 carries no rise/fade entrance animation in SSR or post-mount (LCP guard). (~250 tok)
 - `build-engine.sh` — Build the purechess-engine native binary for the host platform. (~199 tok)
+- `build-openings.mjs` — Bakes the lichess opening book to apps/web/public/openings.json as a (~588 tok)
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)

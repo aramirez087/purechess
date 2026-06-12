@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/layout/Logo';
-import { ReviewClient } from '@/app/games/[gameId]/review-client';
+import { AnalyzeBoard } from '@/app/analyze/analyze-board';
 import { buildReviewFromFen, buildReviewFromPgn } from '@/services/game-review.service';
 import type { AnalysisReview } from '@/types/game-review';
 
@@ -50,10 +50,10 @@ export function AnalyzeClient() {
   }
 
   if (review) {
-    // The bespoke dark review shell takes over the page; the input (and the
+    // The bespoke dark analysis shell takes over the page; the input (and the
     // pasted text) stays in state so "New analysis" returns to it intact.
     return (
-      <ReviewClient
+      <AnalyzeBoard
         game={review}
         exitAction={
           <button
