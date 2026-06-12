@@ -26,11 +26,23 @@ export type GameHistorySummaryDto = {
   endedAt: string | null;
 };
 
+export type RatingHistoryPoint = {
+  ratingAfter: number;
+  /** positive = likely win, negative = likely loss, 0 = draw */
+  ratingDelta: number;
+  /** for deep linking to /games/:id */
+  gameId: string | null;
+  /** ISO datetime from createdAt */
+  playedAt: string;
+  category: 'bullet' | 'blitz' | 'rapid';
+};
+
 export type ProfileDto = {
   username: string;
   avatarUrl: string | null;
   createdAt: string;
   ratings: RatingDto[];
+  ratingHistory: RatingHistoryPoint[];
   stats: StatsDto;
   recentGames: GameHistorySummaryDto[];
 };

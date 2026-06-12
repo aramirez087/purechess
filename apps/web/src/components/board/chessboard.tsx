@@ -23,6 +23,7 @@ import { useDrag } from './hooks/use-drag';
 import { useDraw } from './hooks/use-draw';
 import { useClickMove } from './hooks/use-click-move';
 import { useKeyboard } from './hooks/use-keyboard';
+import { useMoveInput } from './hooks/use-move-input';
 import { useMoveAnimation, type DragMoveRef } from './hooks/use-move-animation';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { AnimationLayer } from './animation-layer';
@@ -30,6 +31,7 @@ import { AnnotationLayer } from './annotation-layer';
 import { Square } from './square';
 import { Coordinates } from './coordinates';
 import { MoveInput } from './move-input';
+import { MoveInputOverlay } from './move-input-overlay';
 
 function isLightSquare(file: number, rank: number): boolean {
   return (file + rank) % 2 === 0;
@@ -392,6 +394,40 @@ export function Chessboard({
     isOwnPiece,
   });
 
+  // Typed moves carry their promotion piece in the intent (the match list
+  // shows all four), so they bypass handleMove's promotion dialog; the
+  // overlay only opens on the player's turn, so the premove branch never
+  // applies either.
+  const handleTypedMove = useCallback(
+    (intent: MoveIntent) => {
+      if (!onMove || readOnly) return;
+      clearShapes();
+      onMove(intent);
+    },
+    [onMove, readOnly, clearShapes],
+  );
+
+  const canTextInput = !readOnly && !!onMove && isPlayerTurn;
+  const moveInput = useMoveInput({
+    fen: position,
+    onMove: handleTypedMove,
+    enabled: canTextInput,
+  });
+
+  // Board feedback while typing (2+ chars): every match's destination gets a
+  // legal-move dot/ring; a partial-UCI query ("e2") also marks the origin.
+  const inputDests = useMemo(() => {
+    if (!moveInput.open || moveInput.query.trim().length < 2) return null;
+    return new Set(moveInput.matches.map((m) => m.to));
+  }, [moveInput.open, moveInput.query, moveInput.matches]);
+
+  const inputOrigin = useMemo(() => {
+    if (!moveInput.open || moveInput.query.trim().length < 2) return null;
+    const sq = moveInput.query.trim().slice(0, 2).toLowerCase();
+    if (!/^[a-h][1-8]$/.test(sq)) return null;
+    return moveInput.matches.some((m) => m.from === sq) ? (sq as SquareType) : null;
+  }, [moveInput.open, moveInput.query, moveInput.matches]);
+
   const effectiveSelected = selectedSquare ?? keyboardSelected;
 
   // Legal destinations on the player's turn, geometric premove targets off it.
@@ -494,7 +530,31 @@ export function Chessboard({
           onDrawPointerCancel(e);
         }}
         onContextMenu={onContextMenu}
-        onKeyDown={handleKeyDown}
+        onKeyDown={(e) => {
+          if (moveInput.open) {
+            // Safety net — the overlay's own handler consumes keys (and stops
+            // propagation) before they bubble here.
+            moveInput.handleKeyDown(e);
+            return;
+          }
+          if (
+            canTextInput &&
+            e.key.length === 1 &&
+            /^[a-hnbrqko]$/i.test(e.key) &&
+            !e.ctrlKey &&
+            !e.metaKey &&
+            !e.altKey
+          ) {
+            e.preventDefault();
+            // While the board has focus, typed move chars win over the
+            // page-level h/r/d/f/n shortcuts (use-game-keyboard); the
+            // shortcuts still fire when focus is anywhere else.
+            e.stopPropagation();
+            moveInput.openWith(e.key);
+            return;
+          }
+          handleKeyDown(e);
+        }}
       >
         {/* role="grid" requires role="row" children wrapping the gridcells
             (ARIA grid pattern: grid → row → gridcell). `display: contents`
@@ -513,6 +573,8 @@ export function Chessboard({
                 ? selectedCaptures.includes(square)
                 : isLegalDest && piece !== null && piece.color !== playerColor;
               const isPremoveDest = !isPlayerTurn && isLegalDest;
+              const isInputDest = inputDests?.has(square) ?? false;
+              const isInputCapture = isInputDest && piece !== null && piece.color !== playerColor;
               const isAnimTarget = anim?.pieces.some((p) => p.to === square) ?? false;
               const cursor = readOnly
                 ? 'default'
@@ -530,15 +592,17 @@ export function Chessboard({
                   hidePiece={isAnimTarget}
                   isLight={isLight}
                   isSelected={effectiveSelected === square}
-                  isLegalMove={isLegalDest && !isCapture}
-                  isLegalCapture={isLegalDest && isCapture}
+                  isLegalMove={(isLegalDest && !isCapture) || (isInputDest && !isInputCapture)}
+                  isLegalCapture={(isLegalDest && isCapture) || isInputCapture}
                   isPremoveDest={isPremoveDest}
                   isLastMoveFrom={lastMove?.from === square}
                   isLastMoveTo={lastMove?.to === square}
                   isInCheck={checkSquare === square}
                   isPremoveFrom={premove?.from === square}
                   isPreMoveTo={premove?.to === square}
-                  isKeyboardFocus={showKeyboardFocus && focusSquare === square}
+                  isKeyboardFocus={
+                    (showKeyboardFocus && focusSquare === square) || inputOrigin === square
+                  }
                   isDragSource={dragState.active && dragState.from === square}
                   isDragOver={
                     dragState.active && dragOverSquare === square && dragState.from !== square
@@ -613,6 +677,8 @@ export function Chessboard({
           if (!p) return null;
           return <DragGhost piece={p} x={dragState.x} y={dragState.y} pointerType={pointerType} />;
         })()}
+
+      <MoveInputOverlay {...moveInput} />
 
       {promotion.active && promotion.to && (
         <MoveInput

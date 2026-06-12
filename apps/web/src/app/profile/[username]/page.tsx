@@ -52,7 +52,7 @@ export default async function ProfilePage({ params }: Props) {
           createdAt={profile.createdAt}
           isOwnProfile={isOwnProfile}
         />
-        <RatingsCard ratings={profile.ratings} />
+        <RatingsCard ratings={profile.ratings} ratingHistory={profile.ratingHistory} />
         <StatsCard stats={profile.stats} />
         <RecentGames games={profile.recentGames} />
       </div>

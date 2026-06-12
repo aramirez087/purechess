@@ -1,8 +1,10 @@
 import { cn } from '@/lib/utils';
-import type { RatingDto } from '@purechess/shared';
+import type { RatingDto, RatingHistoryPoint } from '@purechess/shared';
+import { RatingChart } from './rating-chart';
 
 type RatingsCardProps = {
   ratings: RatingDto[];
+  ratingHistory?: RatingHistoryPoint[];
 };
 
 const CATEGORIES: { value: 'bullet' | 'blitz' | 'rapid'; label: string }[] = [
@@ -11,7 +13,7 @@ const CATEGORIES: { value: 'bullet' | 'blitz' | 'rapid'; label: string }[] = [
   { value: 'rapid', label: 'Rapid' },
 ];
 
-export function RatingsCard({ ratings }: RatingsCardProps) {
+export function RatingsCard({ ratings, ratingHistory }: RatingsCardProps) {
   return (
     <section data-testid="user-rating" className="rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
       <header className="flex items-center justify-between border-b border-border/60 px-5 py-3.5">
@@ -47,6 +49,9 @@ export function RatingsCard({ ratings }: RatingsCardProps) {
           );
         })}
       </div>
+      {ratingHistory && ratingHistory.length > 0 && (
+        <RatingChart history={ratingHistory} className="border-t border-border/60 px-5 pb-5 pt-4" />
+      )}
     </section>
   );
 }

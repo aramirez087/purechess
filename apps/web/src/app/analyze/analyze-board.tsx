@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlipVertical2, User } from 'lucide-react';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
@@ -13,6 +13,7 @@ import {
 } from '@/components/game';
 import { formatResult, formatTermination } from '@/app/games/[gameId]/review-client';
 import { AnalysisMovePanel } from '@/components/review/analysis-move-panel';
+import { OpeningExplorer } from '@/components/review/opening-explorer';
 import { ReviewControls } from '@/components/review/review-controls';
 import { EvalBar, EngineLines } from '@/components/review/eval-panel';
 import { PgnActions } from '@/components/review/pgn-actions';
@@ -22,7 +23,7 @@ import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
-import type { MoveIntent } from '@purechess/shared';
+import type { MoveIntent, PieceType, Square } from '@purechess/shared';
 import type { AnalysisReview, ReviewPlayer } from '@/types/game-review';
 
 type Color = 'white' | 'black';
@@ -90,6 +91,19 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
   function handleMove(intent: MoveIntent) {
     if (intent.from && intent.to) tree.playMove(intent.from, intent.to, intent.promotion);
   }
+
+  // Explorer rows carry UCI; tree.playMove is transposition-aware (addMove
+  // re-enters an existing branch), so a clicked book move never duplicates.
+  const handleExplorerMove = useCallback(
+    (uci: string) => {
+      if (uci.length < 4) return;
+      const from = uci.slice(0, 2) as Square;
+      const to = uci.slice(2, 4) as Square;
+      const promotion = uci.length === 5 ? (uci[4] as PieceType) : undefined;
+      tree.playMove(from, to, promotion);
+    },
+    [tree],
+  );
 
   function stripFor(color: Color): PlayerStripProps {
     const player = color === 'white' ? game.white : game.black;
@@ -206,47 +220,51 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
           </BoardColumn>
         }
         rightRail={
-          <GameRail
-            title="Moves"
-            aside={
-              <EngineLines
-                fen={tree.fen}
-                evaluation={evaluation}
-                thinking={thinking}
-                lines={lines}
-              />
-            }
-            className="min-h-0 flex-1"
-            bodyClassName="flex min-h-0 flex-1 flex-col"
-          >
-            <div className="min-h-0 flex-1">
-              <AnalysisMovePanel
-                root={tree.root}
-                currentPath={tree.path}
-                onSelect={tree.goToPath}
-                startPly={startPly}
-              />
-            </div>
-            <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[#2b332c] p-2">
-              <button
-                type="button"
-                onClick={() => setFlipped((f) => !f)}
-                aria-label="Flip board"
-                className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-              >
-                <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
-                Flip
-              </button>
-              <ReviewControls
-                onStart={tree.goStart}
-                onPrev={tree.goPrev}
-                onNext={tree.goNext}
-                onEnd={tree.goEnd}
-                atStart={!tree.canGoPrev}
-                atEnd={!tree.canGoNext}
-              />
-            </div>
-          </GameRail>
+          <>
+            {/* Self-hides (renders null) when the position is out of book. */}
+            <OpeningExplorer fen={tree.fen} onMove={handleExplorerMove} className="mb-3 shrink-0" />
+            <GameRail
+              title="Moves"
+              aside={
+                <EngineLines
+                  fen={tree.fen}
+                  evaluation={evaluation}
+                  thinking={thinking}
+                  lines={lines}
+                />
+              }
+              className="min-h-0 flex-1"
+              bodyClassName="flex min-h-0 flex-1 flex-col"
+            >
+              <div className="min-h-0 flex-1">
+                <AnalysisMovePanel
+                  root={tree.root}
+                  currentPath={tree.path}
+                  onSelect={tree.goToPath}
+                  startPly={startPly}
+                />
+              </div>
+              <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[#2b332c] p-2">
+                <button
+                  type="button"
+                  onClick={() => setFlipped((f) => !f)}
+                  aria-label="Flip board"
+                  className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                >
+                  <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
+                  Flip
+                </button>
+                <ReviewControls
+                  onStart={tree.goStart}
+                  onPrev={tree.goPrev}
+                  onNext={tree.goNext}
+                  onEnd={tree.goEnd}
+                  atStart={!tree.canGoPrev}
+                  atEnd={!tree.canGoNext}
+                />
+              </div>
+            </GameRail>
+          </>
         }
       />
     </BoardSettingsProvider>

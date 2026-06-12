@@ -3,6 +3,8 @@ import { GameResult, GameTermination, TimeCategory } from '@purechess/shared';
 import type { ComputerGameStateDto, PvpGameStateDto } from '@purechess/shared';
 import type { AnalysisReview, GameReview } from '@/types/game-review';
 import type { WireMove } from '@purechess/shared';
+import { parsePgnToTree } from '@/lib/board/pgn-parser';
+import type { AnalysisNode } from '@/lib/board/analysis-tree';
 
 const MOCK_GAME_ID = 'demo-game-001';
 
@@ -222,12 +224,64 @@ function parsePgnDate(value: string | undefined): string {
 }
 
 /**
+ * Builds a variation-preserving analysis from a pasted PGN: the movetext is
+ * parsed into an `AnalysisNode` tree, keeping `(...)` variations, `{...}`
+ * comments and NAGs that `chess.loadPgn()` silently drops. `moves` stays
+ * empty — the tree takes precedence. Returns null when the PGN yields no
+ * tree (zero valid moves and no `[FEN]` header).
+ */
+export function buildAnalysisFromPgn(pgn: string): AnalysisReview | null {
+  const text = pgn.trim();
+  if (!text) return null;
+  let root: AnalysisNode;
+  let headers: Map<string, string>;
+  try {
+    ({ root, headers } = parsePgnToTree(text, Chess));
+  } catch {
+    return null;
+  }
+  if (root.children.length === 0 && !headers.get('FEN')) return null;
+
+  // Mainline end = children[0] chain; its position carries the verdict.
+  let end = root;
+  while (end.children[0]) end = end.children[0];
+  let verdict: { result?: GameResult; termination?: GameTermination } = {};
+  try {
+    verdict = detectVerdict(new Chess(end.fen));
+  } catch {
+    verdict = {};
+  }
+
+  return {
+    id: 'analysis',
+    white: { id: 'white', username: headerName(headers.get('White'), 'White'), rating: 0 },
+    black: { id: 'black', username: headerName(headers.get('Black'), 'Black'), rating: 0 },
+    moves: [],
+    tree: root,
+    startFen: root.fen,
+    finalFen: end.fen,
+    // Keep the user's text — a chess.js round-trip would drop the variations.
+    pgn: text,
+    result: verdict.result ?? PGN_RESULT_MAP[headers.get('Result') ?? ''],
+    termination: verdict.termination,
+    timeControl: ANALYSIS_TIME_CONTROL,
+    rated: false,
+    startedAt: parsePgnDate(headers.get('Date')),
+  };
+}
+
+/**
  * Builds a reviewable analysis from a pasted PGN (custom `[FEN]` start
- * positions supported). Returns null when the PGN cannot be parsed.
- * The result/termination are only what the record honestly supports: a
- * terminal final position, else the PGN Result header, else unknown.
+ * positions supported). Variations/comments/NAGs are preserved via
+ * `buildAnalysisFromPgn`; the legacy `chess.loadPgn()` path only runs when
+ * the tree parser finds zero valid moves. Returns null when the PGN cannot
+ * be parsed at all. The result/termination are only what the record honestly
+ * supports: a terminal final position, else the PGN Result header, else
+ * unknown.
  */
 export function buildReviewFromPgn(pgn: string): AnalysisReview | null {
+  const fromTree = buildAnalysisFromPgn(pgn);
+  if (fromTree) return fromTree;
   const text = pgn.trim();
   if (!text) return null;
   const chess = new Chess();

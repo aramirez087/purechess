@@ -42,10 +42,17 @@ export interface AnalysisTreeState {
  * also moves `path`, which is what triggers re-render.
  */
 export function useAnalysisTree(
-  game: Pick<{ moves: WireMove[]; startFen?: string }, 'moves' | 'startFen'>,
+  game: Pick<
+    { moves: WireMove[]; startFen?: string; tree?: AnalysisNode },
+    'moves' | 'startFen' | 'tree'
+  >,
 ): AnalysisTreeState {
   const startFen = game.startFen ?? STARTING_FEN;
-  const root = useMemo(() => buildTree(startFen, game.moves), [startFen, game.moves]);
+  // An imported PGN tree (variations preserved) wins over the flat move list.
+  const root = useMemo(
+    () => game.tree ?? buildTree(startFen, game.moves),
+    [game.tree, startFen, game.moves],
+  );
   const [path, setPath] = useState<TreePath>([]);
   // A new tree (new pasted game) invalidates any old path.
   useEffect(() => setPath([]), [root]);

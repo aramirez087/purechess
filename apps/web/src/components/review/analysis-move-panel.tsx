@@ -1,7 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { MessageSquare } from 'lucide-react';
 import { countMoves, type AnalysisNode, type TreePath } from '@/lib/board/analysis-tree';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 export interface AnalysisMovePanelProps {
@@ -15,6 +22,43 @@ export interface AnalysisMovePanelProps {
 
 function samePath(a: TreePath, b: TreePath): boolean {
   return a.length === b.length && a.every((v, i) => v === b[i]);
+}
+
+/** Imported-PGN annotation glyphs. NAG display beats computed classification. */
+const NAG_SYMBOLS: Record<number, { symbol: string; color: string }> = {
+  1: { symbol: '!', color: 'text-green-400' },
+  2: { symbol: '?', color: 'text-orange-400' },
+  3: { symbol: '!!', color: 'text-emerald-400' },
+  4: { symbol: '??', color: 'text-red-500' },
+  5: { symbol: '!?', color: 'text-yellow-400' },
+  6: { symbol: '?!', color: 'text-yellow-400' },
+};
+
+function NagBadge({ nag }: { nag: number }) {
+  const entry = NAG_SYMBOLS[nag];
+  if (!entry) return null;
+  return (
+    <span className={cn('ml-0.5 font-mono text-[11px] font-semibold', entry.color)}>
+      {entry.symbol}
+    </span>
+  );
+}
+
+function CommentIcon({ comment }: { comment: string }) {
+  const text = comment.length > 200 ? `${comment.slice(0, 200)}…` : comment;
+  return (
+    <TooltipProvider delayDuration={200}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="ml-1 inline-flex shrink-0 align-middle text-[#8a958a]">
+            <MessageSquare className="h-3 w-3" aria-hidden="true" />
+            <span className="sr-only">Comment: {text}</span>
+          </span>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-[260px] whitespace-normal">{text}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
 }
 
 function moveNo(ply: number): number {
@@ -187,6 +231,8 @@ function MainlineCell({
       )}
     >
       {token.node.san}
+      {token.node.nag !== undefined && <NagBadge nag={token.node.nag} />}
+      {token.node.comment && <CommentIcon comment={token.node.comment} />}
     </button>
   );
 }
@@ -252,6 +298,8 @@ function VariationLine({
             >
               {prefix && <span className="mr-0.5 text-[10px] text-[#6f7a70]">{prefix}</span>}
               {token.node.san}
+              {token.node.nag !== undefined && <NagBadge nag={token.node.nag} />}
+              {token.node.comment && <CommentIcon comment={token.node.comment} />}
             </button>
           );
         })}

@@ -19,6 +19,14 @@ export interface AnalysisNode {
   /** UCI that led to this node; '' for root. */
   uci: string;
   children: AnalysisNode[];
+  /** PGN comment text from { } blocks. */
+  comment?: string;
+  /**
+   * Standard PGN NAG: 1=!, 2=?, 3=!!, 4=??, 5=!?, 6=?!
+   * Coexists with the computed move classification — one is imported, the
+   * other is derived. Both can render; NAG takes display priority.
+   */
+  nag?: number;
 }
 
 /**

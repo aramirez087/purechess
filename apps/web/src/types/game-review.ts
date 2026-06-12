@@ -1,6 +1,7 @@
 import type { GameResult, GameTermination } from '@purechess/shared';
 import type { TimeControl } from '@purechess/shared';
 import type { WireMove } from '@purechess/shared';
+import type { AnalysisNode } from '@/lib/board/analysis-tree';
 
 export interface ReviewPlayer {
   id: string;
@@ -29,4 +30,11 @@ export interface GameReview {
  * /analyze. Every completed `GameReview` is assignable to this shape.
  */
 export type AnalysisReview = Omit<GameReview, 'result' | 'termination'> &
-  Partial<Pick<GameReview, 'result' | 'termination'>>;
+  Partial<Pick<GameReview, 'result' | 'termination'>> & {
+    /**
+     * Variation-preserving move tree from PGN import. When present it takes
+     * precedence over `moves` (which stays `[]` so flat consumers don't
+     * crash); the mainline is each node's `children[0]`.
+     */
+    tree?: AnalysisNode;
+  };

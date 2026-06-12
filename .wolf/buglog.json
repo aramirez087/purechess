@@ -7350,6 +7350,182 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-12T03:45:33.543Z"
+    },
+    {
+      "id": "bug-447",
+      "timestamp": "2026-06-12T04:04:55.808Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Had './hooks/use-move-animation'",
+      "fix": "Changed to './hooks/use-move-input'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:04:55.808Z"
+    },
+    {
+      "id": "bug-448",
+      "timestamp": "2026-06-12T04:05:10.721Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "No early return/throw for edge case: !onMove || readOnly",
+      "fix": "Added guard clause: if (!onMove || readOnly)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:05:10.721Z"
+    },
+    {
+      "id": "bug-449",
+      "timestamp": "2026-06-12T04:05:21.792Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:05:21.792Z"
+    },
+    {
+      "id": "bug-450",
+      "timestamp": "2026-06-12T04:34:30.455Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/types/game-review.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:34:30.455Z"
+    },
+    {
+      "id": "bug-451",
+      "timestamp": "2026-06-12T04:34:54.830Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/services/game-review.service.ts",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:34:54.830Z"
+    },
+    {
+      "id": "bug-452",
+      "timestamp": "2026-06-12T04:35:03.687Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/hooks/use-analysis-tree.ts",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5→12 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:35:03.687Z"
+    },
+    {
+      "id": "bug-453",
+      "timestamp": "2026-06-12T04:35:20.936Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/components/review/analysis-move-panel.tsx",
+      "root_cause": "No early return/throw for edge case: !entry",
+      "fix": "Added guard clause: if (!entry)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:35:20.936Z"
+    },
+    {
+      "id": "bug-454",
+      "timestamp": "2026-06-12T04:35:27.019Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/components/review/analysis-move-panel.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: {token.node.nag !== undefined && <NagBadge nag={token.node.n; {token.node.comment && <CommentIcon comment={token.node.comm",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-12T04:35:34.804Z"
+    },
+    {
+      "id": "bug-455",
+      "timestamp": "2026-06-12T04:52:53.175Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/app/analyze/analyze-board.tsx",
+      "root_cause": "No early return/throw for edge case: intent.from && intent.to",
+      "fix": "Added guard clause: if (intent.from && intent.to)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T04:52:53.175Z"
+    },
+    {
+      "id": "bug-456",
+      "timestamp": "2026-06-12T12:55:09.462Z",
+      "error_message": "Type error",
+      "file": "apps/api/src/users/users.service.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T12:55:09.462Z"
+    },
+    {
+      "id": "bug-457",
+      "timestamp": "2026-06-12T12:56:04.226Z",
+      "error_message": "Wrong reference: RatingsCardProps should be ratingHistory",
+      "file": "apps/web/src/components/profile/ratings-card.tsx",
+      "root_cause": "Used \"RatingsCardProps\" instead of \"ratingHistory\"",
+      "fix": "Changed RatingsCardProps → ratingHistory",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T12:56:04.226Z"
     }
   ]
 }

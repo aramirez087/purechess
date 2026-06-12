@@ -2037,3 +2037,82 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:47 | Edited apps/web/src/hooks/use-move-classifier.ts | 5→6 lines | ~29 |
 | 21:50 | Game review: move classification + eval graph (client Stockfish) — new use-move-classifier hook, EvalGraph, ClassificationBadge; badges in MovePanel (badge slot) + ReviewMoveList; Analyze-game button/progress/ACPL row in review-client right rail | apps/web src/hooks/use-move-classifier.ts, components/review/{eval-graph,classification-badge,review-move-list}.tsx, components/game/move-panel.tsx, app/games/[gameId]/review-client.tsx + 2 test files | 432/432 web unit tests pass, tsc clean, lint clean | ~55k |
 | 21:49 | Session end: 16 writes across 8 files (use-move-classifier.ts, eval-graph.tsx, classification-badge.tsx, review-move-list.tsx, move-panel.tsx) | 7 reads | ~18905 tok |
+| 21:54 | Session end: 16 writes across 8 files (use-move-classifier.ts, eval-graph.tsx, classification-badge.tsx, review-move-list.tsx, move-panel.tsx) | 7 reads | ~18905 tok |
+
+## Session: 2026-06-12 21:59
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:03 | Created apps/web/src/lib/board/legal-sans.ts | — | ~536 |
+| 22:04 | Created apps/web/src/components/board/hooks/use-move-input.ts | — | ~1471 |
+| 22:04 | Created apps/web/src/components/board/move-input-overlay.tsx | — | ~1272 |
+| 22:04 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~54 |
+| 22:04 | Edited apps/web/src/components/board/chessboard.tsx | added 1 import(s) | ~51 |
+| 22:05 | Edited apps/web/src/components/board/chessboard.tsx | CSS: intent, fen, enabled | ~450 |
+| 22:05 | Edited apps/web/src/components/board/chessboard.tsx | added 2 condition(s) | ~258 |
+| 22:05 | Edited apps/web/src/components/board/chessboard.tsx | 2→5 lines | ~96 |
+| 22:05 | Edited apps/web/src/components/board/chessboard.tsx | 2→2 lines | ~50 |
+| 22:05 | Edited apps/web/src/components/board/chessboard.tsx | 1→3 lines | ~42 |
+| 22:05 | Edited apps/web/src/components/board/chessboard.tsx | 7→9 lines | ~79 |
+| 22:06 | Created apps/web/test/board/legal-sans.test.ts | — | ~876 |
+| 22:06 | Created apps/web/test/hooks/use-move-input.test.ts | — | ~1562 |
+| 22:09 | Session 8 complete: SAN/UCI text move input (legal-sans.ts, use-move-input.ts, move-input-overlay.tsx, chessboard wiring + square highlights) | 4 src + 2 test files | 22 new tests, full suite 454 pass, tsc clean, prettier clean | ~9000 |
+| 22:08 | Session end: 13 writes across 6 files (legal-sans.ts, use-move-input.ts, move-input-overlay.tsx, chessboard.tsx, legal-sans.test.ts) | 5 reads | ~18195 tok |
+
+## Session: 2026-06-12 22:29
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:33 | Edited apps/web/src/lib/board/analysis-tree.ts | expanded (+8 lines) | ~162 |
+| 22:34 | Created apps/web/src/lib/board/pgn-parser.ts | — | ~1803 |
+| 22:34 | Edited apps/web/src/types/game-review.ts | added 1 import(s) | ~68 |
+| 22:34 | Edited apps/web/src/types/game-review.ts | expanded (+7 lines) | ~110 |
+| 22:34 | Edited apps/web/src/services/game-review.service.ts | added 2 import(s) | ~124 |
+| 22:34 | Edited apps/web/src/services/game-review.service.ts | added nullish coalescing | ~686 |
+| 22:35 | Edited apps/web/src/hooks/use-analysis-tree.ts | modified useAnalysisTree() | ~123 |
+| 22:35 | Edited apps/web/src/components/review/analysis-move-panel.tsx | expanded (+7 lines) | ~95 |
+| 22:35 | Edited apps/web/src/components/review/analysis-move-panel.tsx | added 1 condition(s) | ~414 |
+| 22:35 | Edited apps/web/src/components/review/analysis-move-panel.tsx | modified VariationLine() | ~64 |
+| 22:35 | Edited apps/web/src/components/review/analysis-move-panel.tsx | 3→5 lines | ~89 |
+| 22:36 | Created apps/web/test/board/pgn-parser.test.ts | — | ~1250 |
+| 22:38 | PGN import preserves variations/comments/NAGs: new lib/board/pgn-parser.ts (tokenizer+recursive variation parser, Chess injected), AnalysisNode +comment/+nag, buildAnalysisFromPgn in game-review.service (tree wins, moves:[]), useAnalysisTree prefers game.tree, panel renders NagBadge + comment tooltip | pgn-parser.ts, analysis-tree.ts, game-review.service.ts, use-analysis-tree.ts, analysis-move-panel.tsx, game-review.ts, test/board/pgn-parser.test.ts | 466 tests pass, tsc+lint clean | ~30k |
+| 22:37 | Session end: 12 writes across 7 files (analysis-tree.ts, pgn-parser.ts, game-review.ts, game-review.service.ts, use-analysis-tree.ts) | 8 reads | ~16070 tok |
+| 22:45 | Session end: 12 writes across 7 files (analysis-tree.ts, pgn-parser.ts, game-review.ts, game-review.service.ts, use-analysis-tree.ts) | 8 reads | ~16070 tok |
+
+## Session: 2026-06-12 22:47
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:52 | Created apps/web/src/hooks/use-opening-explorer.ts | — | ~1199 |
+| 22:52 | Created apps/web/src/components/review/opening-explorer.tsx | — | ~1141 |
+| 22:52 | Edited apps/web/src/app/analyze/analyze-board.tsx | inline fix | ~19 |
+| 22:52 | Edited apps/web/src/app/analyze/analyze-board.tsx | added 1 import(s) | ~43 |
+| 22:52 | Edited apps/web/src/app/analyze/analyze-board.tsx | inline fix | ~21 |
+| 22:52 | Edited apps/web/src/app/analyze/analyze-board.tsx | CSS: uci | ~179 |
+| 22:52 | Edited apps/web/src/app/analyze/analyze-board.tsx | expanded (+7 lines) | ~91 |
+| 22:53 | Edited apps/web/src/app/analyze/analyze-board.tsx | 2→3 lines | ~13 |
+| 22:53 | Created apps/web/test/hooks/use-opening-explorer.test.ts | — | ~2140 |
+| 22:53 | Created apps/web/test/review/opening-explorer.test.tsx | — | ~1182 |
+| 22:56 | Session: inline opening explorer on /analyze — useOpeningExplorer hook (lichess.ovh, 300ms debounce, module cache, abort) + OpeningExplorer panel above Moves rail; 16 new tests, 482/482 pass, lint+tsc clean | use-opening-explorer.ts, opening-explorer.tsx, analyze-board.tsx | done | ~35000 |
+| 22:55 | Session end: 10 writes across 5 files (use-opening-explorer.ts, opening-explorer.tsx, analyze-board.tsx, use-opening-explorer.test.ts, opening-explorer.test.tsx) | 9 reads | ~17504 tok |
+| 06:26 | Session end: 10 writes across 5 files (use-opening-explorer.ts, opening-explorer.tsx, analyze-board.tsx, use-opening-explorer.test.ts, opening-explorer.test.tsx) | 9 reads | ~17504 tok |
+
+## Session: 2026-06-12 06:52
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 06:54 | Edited packages/shared/src/users.ts | expanded (+12 lines) | ~153 |
+| 06:54 | Edited apps/api/src/users/users.service.ts | 7→8 lines | ~44 |
+| 06:55 | Edited apps/api/src/users/users.service.ts | expanded (+26 lines) | ~326 |
+| 06:55 | Created apps/web/src/components/profile/rating-chart.tsx | — | ~2777 |
+| 06:55 | Edited apps/web/src/components/profile/ratings-card.tsx | added 1 import(s) | ~70 |
+| 06:56 | Edited apps/web/src/components/profile/ratings-card.tsx | inline fix | ~22 |
+| 06:56 | Edited apps/web/src/components/profile/ratings-card.tsx | 6→9 lines | ~64 |
+| 06:56 | Edited apps/web/src/app/profile/[username]/page.tsx | inline fix | ~25 |
+| 06:56 | Created apps/web/test/profile/rating-chart.test.tsx | — | ~1147 |
+| 06:58 | Session end: 9 writes across 6 files (users.ts, users.service.ts, rating-chart.tsx, ratings-card.tsx, page.tsx) | 5 reads | ~9027 tok |
+
+## Session: 2026-06-12 08:35
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|

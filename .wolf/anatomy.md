@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T03:47:49.951Z
-> Files: 890 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T12:56:35.785Z
+> Files: 904 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -845,7 +845,7 @@
 
 - `users.controller.ts` — Exports UsersController (~510 tok)
 - `users.module.ts` — Exports UsersModule (~100 tok)
-- `users.service.ts` — Exports UsersService (~2354 tok)
+- `users.service.ts` — Exports UsersService (~2590 tok)
 
 ## apps/api/src/users/dto/
 
@@ -1033,7 +1033,7 @@
 
 ## apps/web/src/app/analyze/
 
-- `analyze-board.tsx` — Left-rail action (the "New analysis" button). (~2930 tok)
+- `analyze-board.tsx` — Left-rail action (the "New analysis" button). (~3205 tok)
 - `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~1980 tok)
 - `page.tsx` — /analyze server page: buildMetadata title "Analyze — Purechess", renders AnalyzeClient. (~122 tok)
 
@@ -1059,6 +1059,10 @@
 
 - `login-form.tsx` — LoginForm — renders form (~1264 tok)
 - `page.tsx` — Suspense wrapper for LoginForm (~120 tok)
+
+## apps/web/src/app/profile/[username]/
+
+- `page.tsx` — dynamic (~603 tok)
 
 ## apps/web/src/app/register/
 
@@ -1087,8 +1091,9 @@
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
 - `annotation-layer.tsx` — Pull the line back from the dest center so the marker tip lands ~center. (~1527 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — isLightSquare (~6955 tok)
+- `chessboard.tsx` — isLightSquare (~7715 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
+- `move-input-overlay.tsx` — Floating command-palette over the board for typed moves. Renders only (~1272 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~288 tok)
 - `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1941 tok)
@@ -1100,6 +1105,7 @@
 - `use-draw.ts` — Square under the pointer right now; null while off-board. (~1109 tok)
 - `use-keyboard.ts` — Exports useKeyboard (~883 tok)
 - `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~873 tok)
+- `use-move-input.ts` — false in read-only / off-turn contexts — openWith becomes a no-op. (~1471 tok)
 
 ## apps/web/src/components/computer-game/
 
@@ -1160,15 +1166,17 @@
 ## apps/web/src/components/profile/
 
 - `profile-header.tsx` — ProfileHeader (~594 tok)
-- `ratings-card.tsx` — CATEGORIES (~550 tok)
+- `rating-chart.tsx` — Pure-SVG interactive rating history chart (category tabs, 1m/3m/1y/all range, W/D/L dots, hover tooltip + game deep link). No chart deps. (~2777 tok)
+- `ratings-card.tsx` — Current-rating 3-col grid + RatingChart below (when ratingHistory non-empty) (~700 tok)
 - `recent-games.tsx` — ResultBadge (~1480 tok)
 
 ## apps/web/src/components/review/
 
-- `analysis-move-panel.tsx` — Plies played before the root position (custom-FEN starts). (~2553 tok)
+- `analysis-move-panel.tsx` — Plies played before the root position (custom-FEN starts). (~3066 tok)
 - `classification-badge.tsx` — Tiny colored glyph after a move's SAN. Renders nothing for good/forced. (~260 tok)
 - `eval-graph.tsx` — Interactive SVG eval-history chart (48px, viewBox 0 0 100 100 non-uniform scale): white/black territory fills via half-height clipPaths, dashed center, current-ply marker, click-to-seek, hover title. (~1069 tok)
 - `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1892 tok)
+- `opening-explorer.tsx` — Called with the row's UCI move — caller enters it into the analysis tree. (~1141 tok)
 - `pgn-actions.tsx` — Full-button variant, sized to dock as a panel footer: each action splits (~890 tok)
 - `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1079 tok)
 - `review-move-list.tsx` — Undefined = classification hasn't run yet — no badges shown. (~785 tok)
@@ -1188,7 +1196,7 @@
 
 ## apps/web/src/hooks/
 
-- `use-analysis-tree.ts` — All legal moves at the current position; empty while chess.js loads. (~1177 tok)
+- `use-analysis-tree.ts` — All legal moves at the current position; empty while chess.js loads. (~1222 tok)
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~660 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
@@ -1197,6 +1205,7 @@
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
 - `use-move-classifier.ts` — Client-side full-game move classification: run() analyzes every ply with Stockfish worker (500ms ea), White-POV evals, CPL, brilliant..blunder/forced classes, per-player ACPL. Exports classify/normalizeEval pure fns. (~1737 tok)
+- `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
 
@@ -1216,14 +1225,16 @@
 
 ## apps/web/src/lib/board/
 
-- `analysis-tree.ts` — Branching analysis tree for the /analyze board. Pure TS — no React, no (~870 tok)
+- `analysis-tree.ts` — Branching analysis tree for the /analyze board. Pure TS — no React, no (~953 tok)
 - `anim-diff.ts` — Pure-FEN move plan for the animation layer: diffs the piece placement of (~1035 tok)
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~304 tok)
 - `annotations.ts` — Drawing an identical shape removes it (toggle); anything else appends. (~521 tok)
 - `clock-tier.ts` — Urgency tier for a live clock chip, derived from remaining time. (~151 tok)
 - `coords.ts` — Pure board coordinate math (no DOM): pointToSquare (rect→square, 0.5-sq off-board margin then null), snapToNearestDest (touch snap, 2-sq cap), squareToIndices/getSquareAt, FILES/RANKS (~1082 tok)
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
+- `legal-sans.ts` — Legal-move enumeration + query matching for the text move input overlay. (~536 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
+- `pgn-parser.ts` — Variation-preserving PGN parser for the /analyze board. chess.js's (~1803 tok)
 - `piece-sets.ts` — Registry of the available piece sets. Server-safe (no React, no stores) so (~392 tok)
 - `piece-svgs.tsx` — Pieces are served from the set the user picked in settings (`pieceSet`, (~845 tok)
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
@@ -1243,7 +1254,7 @@
 
 ## apps/web/src/services/
 
-- `game-review.service.ts` — PvP state is player-scoped — forward the viewer's session cookie. (~3071 tok)
+- `game-review.service.ts` — PvP state is player-scoped — forward the viewer's session cookie. (~3645 tok)
 
 ## apps/web/src/stores/
 
@@ -1251,7 +1262,7 @@
 
 ## apps/web/src/types/
 
-- `game-review.ts` — Custom starting position (FEN). Omitted = standard initial position. (~260 tok)
+- `game-review.ts` — Custom starting position (FEN). Omitted = standard initial position. (~352 tok)
 
 ## apps/web/test/analyze/
 
@@ -1275,8 +1286,10 @@
 - `coords.test.ts` — Pixel center of a square for the given orientation. (~1461 tok)
 - `drag.test.tsx` — jsdom has no PointerEvent — without this, fireEvent falls back to a plain (~1260 tok)
 - `keyboard.test.tsx` — START_FEN (~1672 tok)
+- `legal-sans.test.ts` — Declares START (~876 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 - `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)
+- `pgn-parser.test.ts` — API routes: GET (3 endpoints) (~1250 tok)
 - `premove-geometry.test.ts` — White to move everywhere below, so BLACK pieces are the premovable side. (~997 tok)
 - `pv-to-san.test.ts` — Declares START (~388 tok)
 - `sound-classify.test.ts` — Declares fensAround (~530 tok)
@@ -1307,6 +1320,8 @@
 ## apps/web/test/hooks/
 
 - `use-move-classifier.test.ts` — Mocks analyze(); verifies CPL math, ACPL, mate normalization, forced detection, cancel via reset(). (~1876 tok)
+- `use-move-input.test.ts` — START: keyEvent, openHook (~1562 tok)
+- `use-opening-explorer.test.ts` — Fetch mock whose responses resolve only when the test says so. (~2140 tok)
 - `use-opening-name.test.ts` — SICILIAN_EPD: mockFetch (~774 tok)
 - `use-position-eval.test.ts` — Declares START (~751 tok)
 
@@ -1324,11 +1339,13 @@
 ## apps/web/test/profile/
 
 - `profile-page.test.tsx` — mockRatings (~1176 tok)
+- `rating-chart.test.tsx` — DAY_MS (~1147 tok)
 
 ## apps/web/test/review/
 
 - `eval-graph.test.tsx` — Empty evals, ±600cp clamp (no NaN), click-to-seek with mocked getBoundingClientRect, zero-width guard. (~585 tok)
 - `eval-panel.test.tsx` — START (~1577 tok)
+- `opening-explorer.test.tsx` — useOpeningExplorerMock (~1182 tok)
 - `review-page.test.tsx` — MOCK_MOVES (~2196 tok)
 
 ## apps/web/test/settings/
@@ -1449,7 +1466,7 @@
 ## packages/shared/src/
 
 - `index.ts` (~136 tok)
-- `users.ts` — Exports RatingDto, StatsDto, GameHistorySummaryDto, ProfileDto, GameHistoryResponseDto (optional `total` = filtered count ignoring cursor), UpdateMeDto (~319 tok)
+- `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
 
 ## packages/shared/src/dto/

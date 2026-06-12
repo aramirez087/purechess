@@ -11,6 +11,7 @@ import type {
   GameHistorySummaryDto,
   ProfileDto,
   RatingDto,
+  RatingHistoryPoint,
   StatsDto,
 } from "@purechess/shared";
 import { PrismaService } from "../database/prisma.service";
@@ -84,11 +85,37 @@ export class UsersService {
 
     const recentGames = await this.fetchGames(user.id, user.username, {});
 
+    // Newest 500 entries (~1.5 years of daily play), returned oldest-first
+    // for the chart. Ascending take-500 would drop the most recent games.
+    const historyRows = await this.prisma.ratingHistory.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      take: 500,
+      select: {
+        ratingAfter: true,
+        ratingDelta: true,
+        gameId: true,
+        createdAt: true,
+        category: true,
+      },
+    });
+
+    const ratingHistory: RatingHistoryPoint[] = historyRows
+      .reverse()
+      .map((h) => ({
+        ratingAfter: h.ratingAfter,
+        ratingDelta: h.ratingDelta,
+        gameId: h.gameId,
+        playedAt: h.createdAt.toISOString(),
+        category: h.category as "bullet" | "blitz" | "rapid",
+      }));
+
     return {
       username: user.username,
       avatarUrl: user.avatarUrl,
       createdAt: user.createdAt.toISOString(),
       ratings,
+      ratingHistory,
       stats,
       recentGames: recentGames.games.slice(0, 10),
     };
