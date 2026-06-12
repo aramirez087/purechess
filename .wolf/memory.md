@@ -1953,3 +1953,87 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:11 | Edited apps/web/test/analyze/analyze-client.test.tsx | 2→2 lines | ~42 |
 | 21:15 | Session: /analyze upgraded tape player → interactive analysis board (tree + free moves + opening names) | analysis-tree.ts, use-analysis-tree.ts, analyze-board.tsx, analysis-move-panel.tsx, use-opening-name.ts, build-openings.mjs, openings.json, chessboard freePlay, review-client opening wire | 381 web tests pass, typecheck+lint clean, verified live in browser | ~95k |
 | 21:14 | Session end: 30 writes across 15 files (analysis-tree.ts, analysis-tree.test.ts, rules.ts, use-analysis-tree.ts, types.ts) | 15 reads | ~33274 tok |
+
+## Session: 2026-06-12 21:15
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:19 | Edited apps/web/src/lib/board/types.ts | expanded (+8 lines) | ~37 |
+| 21:19 | Created apps/web/src/lib/board/clock-tier.ts | — | ~151 |
+| 21:19 | Edited apps/web/src/lib/board/sound.ts | expanded (+66 lines) | ~523 |
+| 21:19 | Edited apps/web/src/lib/board/rules.ts | added optional chaining | ~264 |
+| 21:19 | Edited apps/web/src/components/game/player-strip.tsx | added 2 import(s) | ~96 |
+| 21:19 | Edited apps/web/src/components/game/player-strip.tsx | 2→7 lines | ~73 |
+| 21:20 | Edited apps/web/src/components/game/player-strip.tsx | added 2 condition(s) | ~433 |
+| 21:20 | Edited apps/web/src/components/game/player-strip.tsx | 6→10 lines | ~165 |
+| 21:20 | Edited apps/web/src/app/globals.css | CSS: transform, transform | ~60 |
+| 21:20 | Edited apps/web/src/app/globals.css | 9→13 lines | ~68 |
+| 21:20 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 2 import(s) | ~78 |
+| 21:20 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: tick, whiteMs | ~336 |
+| 21:20 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: timeMs, 0, blackMs | ~125 |
+| 21:20 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: timeMs, 0, blackMs | ~107 |
+| 21:20 | Created apps/web/test/board/clock-tier.test.ts | — | ~271 |
+| 21:21 | Created apps/web/test/game/player-strip.test.tsx | — | ~1106 |
+| 21:21 | Created apps/web/test/board/sound-classify.test.ts | — | ~530 |
+| 21:25 | Time-pressure UX: clock urgency tiers + increment flash (PlayerStrip), clock-pulse keyframes, castle/promote sounds + classify, low-time tick in live-game-client, timeMs plumbed both clients | player-strip.tsx, clock-tier.ts, sound.ts, rules.ts, types.ts, globals.css, live-game-client.tsx, computer-game-client.tsx, 3 test files | 403 web tests pass, typecheck+lint clean | ~60k |
+| 21:23 | Session end: 17 writes across 11 files (types.ts, clock-tier.ts, sound.ts, rules.ts, player-strip.tsx) | 13 reads | ~35150 tok |
+
+## Session: 2026-06-12 21:23
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:26 | Edited apps/web/src/lib/engine/stockfish-client.ts | modified analyzeLines() | ~31 |
+| 21:27 | Created apps/web/src/hooks/use-position-eval.ts | — | ~953 |
+| 21:27 | Created apps/web/src/lib/board/pv-to-san.ts | — | ~295 |
+| 21:27 | Edited apps/web/src/components/review/eval-panel.tsx | 6→6 lines | ~59 |
+| 21:27 | Edited apps/web/src/components/review/eval-panel.tsx | reduced (-14 lines) | ~23 |
+| 21:27 | Edited apps/web/src/components/review/eval-panel.tsx | modified EvalBar() | ~103 |
+| 21:28 | Edited apps/web/src/components/review/eval-panel.tsx | CSS: heartbeat | ~154 |
+| 21:28 | Edited apps/web/src/components/review/eval-panel.tsx | added nullish coalescing | ~679 |
+| 21:28 | Edited apps/web/src/app/globals.css | CSS: top, top, animation | ~114 |
+| 21:28 | Edited apps/web/src/app/globals.css | CSS: display | ~60 |
+| 21:28 | Edited apps/web/src/app/analyze/analyze-board.tsx | inline fix | ~20 |
+| 21:28 | Edited apps/web/src/app/analyze/analyze-board.tsx | inline fix | ~26 |
+| 21:28 | Edited apps/web/src/app/analyze/analyze-board.tsx | added nullish coalescing | ~172 |
+| 21:29 | Edited apps/web/src/app/analyze/analyze-board.tsx | inline fix | ~30 |
+| 21:29 | Edited apps/web/src/app/analyze/analyze-board.tsx | 1→3 lines | ~39 |
+| 21:29 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~20 |
+| 21:29 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: multiPv | ~51 |
+| 21:29 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | inline fix | ~30 |
+| 21:29 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 1→3 lines | ~40 |
+| 21:29 | Created apps/web/test/board/pv-to-san.test.ts | — | ~388 |
+| 21:30 | Created apps/web/test/hooks/use-position-eval.test.ts | — | ~751 |
+| 21:30 | Edited apps/web/test/review/eval-panel.test.tsx | CSS: pv | ~139 |
+| 21:30 | Edited apps/web/test/review/eval-panel.test.tsx | expanded (+62 lines) | ~673 |
+| 21:30 | Edited apps/web/test/review/eval-panel.test.tsx | 1→3 lines | ~51 |
+| 21:35 | Engine multipv lines surfaced: usePositionEval({multiPv}) + lines, pvToSan, EngineLines panel (EvalReadout alias), EvalBar thinking scan-line, 2nd blue arrow on /analyze | use-position-eval.ts, pv-to-san.ts, eval-panel.tsx, analyze-board.tsx, review-client.tsx, globals.css, stockfish-client.ts (export only) | 418 web tests + tsc green | ~55k |
+| 21:32 | Session end: 24 writes across 10 files (stockfish-client.ts, use-position-eval.ts, pv-to-san.ts, eval-panel.tsx, globals.css) | 9 reads | ~20987 tok |
+
+## Session: 2026-06-12 21:36
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:40 | Diagnosed missing deploys: checkout lost origin remote ~2d ago, deploy.yml fires on push to main, 57 commits unpushed. Re-added origin (aramirez087/purechess), ff-push safe. Push left to user (triggers prod). | .git/config, .wolf/buglog.json | bug-441 | ~3k |
+
+## Session: 2026-06-12 21:39
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:43 | Created apps/web/src/hooks/use-move-classifier.ts | — | ~1731 |
+| 21:43 | Created apps/web/src/components/review/eval-graph.tsx | — | ~1069 |
+| 21:43 | Created apps/web/src/components/review/classification-badge.tsx | — | ~260 |
+| 21:43 | Edited apps/web/src/components/review/review-move-list.tsx | modified ReviewMoveList() | ~341 |
+| 21:44 | Edited apps/web/src/components/review/review-move-list.tsx | added optional chaining | ~48 |
+| 21:44 | Edited apps/web/src/components/review/review-move-list.tsx | added optional chaining | ~50 |
+| 21:44 | Edited apps/web/src/components/game/move-panel.tsx | 5→7 lines | ~57 |
+| 21:44 | Edited apps/web/src/components/game/move-panel.tsx | 8→9 lines | ~41 |
+| 21:44 | Edited apps/web/src/components/game/move-panel.tsx | 7→8 lines | ~28 |
+| 21:44 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 3 import(s) | ~186 |
+| 21:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: acpl | ~85 |
+| 21:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | CSS: result, running, run | ~93 |
+| 21:45 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added optional chaining | ~871 |
+| 21:46 | Created apps/web/test/hooks/use-move-classifier.test.ts | — | ~1876 |
+| 21:46 | Created apps/web/test/review/eval-graph.test.tsx | — | ~585 |
+| 21:47 | Edited apps/web/src/hooks/use-move-classifier.ts | 5→6 lines | ~29 |
+| 21:50 | Game review: move classification + eval graph (client Stockfish) — new use-move-classifier hook, EvalGraph, ClassificationBadge; badges in MovePanel (badge slot) + ReviewMoveList; Analyze-game button/progress/ACPL row in review-client right rail | apps/web src/hooks/use-move-classifier.ts, components/review/{eval-graph,classification-badge,review-move-list}.tsx, components/game/move-panel.tsx, app/games/[gameId]/review-client.tsx + 2 test files | 432/432 web unit tests pass, tsc clean, lint clean | ~55k |
+| 21:49 | Session end: 16 writes across 8 files (use-move-classifier.ts, eval-graph.tsx, classification-badge.tsx, review-move-list.tsx, move-panel.tsx) | 7 reads | ~18905 tok |

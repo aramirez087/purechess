@@ -324,7 +324,7 @@ function runGo(req: GoRequest): Promise<EngineEval[]> {
 }
 
 /** Resolve top-N eval lines for a position (multipv 1..N, sorted). */
-async function analyzeLines(
+export async function analyzeLines(
   fen: string,
   options: EngineAnalysisOptions = {},
 ): Promise<EngineEval[]> {

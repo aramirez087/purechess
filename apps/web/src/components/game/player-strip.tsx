@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CapturedMaterial } from './captured-material';
+import { clockTier, type ClockTier } from '@/lib/board/clock-tier';
 import type { CapturedSummary } from '@/lib/board/material';
 import type { Color } from '@purechess/shared';
 
@@ -21,6 +23,11 @@ export interface PlayerStripProps {
   status?: string;
   /** Pre-formatted clock string, e.g. "10:00". */
   clock?: string;
+  /**
+   * Raw remaining ms — drives the clock chip's urgency tier (amber under 30s,
+   * red + pulse under 10s) and the brief brass flash when increment lands.
+   */
+  timeMs?: number;
   /** Score-sheet result chip for finished games: "1", "0" or "½". */
   resultChip?: string;
   /** Pieces this player has captured (opponent's color). */
@@ -33,6 +40,17 @@ export interface PlayerStripProps {
   avatar?: React.ReactNode;
 }
 
+/** Urgency styling applied to the clock chip only — the strip keeps its own
+ * gold active treatment. `clock-pulse` keyframes live in globals.css. */
+const CLOCK_TIER_STYLES: Record<Exclude<ClockTier, 'normal'>, string> = {
+  caution: 'border-[#c47f2a]/50 bg-[#0b0d0b]/70 text-[#e8a84a]',
+  critical:
+    'border-red-700/60 bg-[#0b0d0b]/80 text-red-400 animate-[clock-pulse_1s_ease-in-out_infinite]',
+  dying:
+    'border-red-600/80 bg-red-950/40 font-bold text-red-300 animate-[clock-pulse_0.4s_ease-in-out_infinite]',
+  out: 'border-red-500 bg-red-950/60 text-red-200',
+};
+
 export function PlayerStrip({
   name,
   detail,
@@ -41,6 +59,7 @@ export function PlayerStrip({
   subtle = false,
   status,
   clock,
+  timeMs,
   resultChip,
   captured,
   capturedColor,
@@ -48,6 +67,22 @@ export function PlayerStrip({
   avatar,
 }: PlayerStripProps) {
   const showCaptured = !!captured && captured.pieces.length > 0 && !!capturedColor;
+  const tier = clockTier(timeMs);
+
+  // Increment flash: remaining time jumping UP on a running clock means the
+  // increment landed. Skipped above 30s where a bonus second isn't news.
+  const prevTimeMsRef = useRef<number | undefined>(undefined);
+  const [bonusFlash, setBonusFlash] = useState(false);
+  useEffect(() => {
+    const prev = prevTimeMsRef.current;
+    prevTimeMsRef.current = timeMs;
+    if (timeMs == null || prev == null) return;
+    if (timeMs > prev && timeMs < 30_000) {
+      setBonusFlash(true);
+      const id = setTimeout(() => setBonusFlash(false), 400);
+      return () => clearTimeout(id);
+    }
+  }, [timeMs]);
 
   return (
     <div
@@ -131,9 +166,13 @@ export function PlayerStrip({
           <div
             className={cn(
               'shrink-0 rounded-[7px] border px-2 py-0.5 sm:px-3 sm:py-1 font-mono text-base sm:text-xl font-semibold tabular-nums',
-              active
-                ? 'border-[#d6b563]/45 bg-[#0b0d0b] text-[#f8f1de]'
-                : 'border-[#2b332c] bg-[#0b0d0b]/60 text-[#c7cfc4]',
+              'transition-[color,border-color,background-color,box-shadow] duration-300',
+              tier === 'normal'
+                ? active
+                  ? 'border-[#d6b563]/45 bg-[#0b0d0b] text-[#f8f1de]'
+                  : 'border-[#2b332c] bg-[#0b0d0b]/60 text-[#c7cfc4]'
+                : CLOCK_TIER_STYLES[tier],
+              bonusFlash && 'shadow-[0_0_0_2px_rgba(214,181,99,0.7)]',
             )}
             // SSR'd pages render the server-time clock; the client recomputes
             // from Date.now() on hydration, so the text can differ by a tick.

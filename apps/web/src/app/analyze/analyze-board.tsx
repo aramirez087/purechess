@@ -14,7 +14,7 @@ import {
 import { formatResult, formatTermination } from '@/app/games/[gameId]/review-client';
 import { AnalysisMovePanel } from '@/components/review/analysis-move-panel';
 import { ReviewControls } from '@/components/review/review-controls';
-import { EvalBar, EvalReadout } from '@/components/review/eval-panel';
+import { EvalBar, EngineLines } from '@/components/review/eval-panel';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { useAnalysisTree } from '@/hooks/use-analysis-tree';
 import { useOpeningName } from '@/hooks/use-opening-name';
@@ -53,7 +53,7 @@ function pliesBefore(startFen?: string): number {
 export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
   const tree = useAnalysisTree(game);
   const [flipped, setFlipped] = useState(false);
-  const { evaluation, thinking } = usePositionEval(tree.fen, true);
+  const { evaluation, thinking, lines } = usePositionEval(tree.fen, true, { multiPv: 3 });
   const opening = useOpeningName(tree.fen);
   // Hold the last book name so leaving book fades the text out instead of
   // snapping it blank mid-transition.
@@ -62,12 +62,18 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
     if (opening) setHeldOpening(opening);
   }, [opening]);
 
-  // Engine best move as an arrow; hidden while thinking — a held evaluation
-  // belongs to the previous position (same rationale as ReviewClient).
+  // Engine lines as arrows: best move green, second line blue. Hidden while
+  // thinking — a held evaluation belongs to the previous position (same
+  // rationale as ReviewClient). User-drawn shapes render above these.
   const autoShapes = useMemo<BoardShape[]>(() => {
-    const arrow = thinking ? null : bestMoveArrow(evaluation?.bestmove);
-    return arrow ? [arrow] : [];
-  }, [thinking, evaluation?.bestmove]);
+    if (thinking) return [];
+    const shapes: BoardShape[] = [];
+    const best = bestMoveArrow(evaluation?.pv[0] ?? evaluation?.bestmove);
+    if (best) shapes.push(best);
+    const second = bestMoveArrow(lines?.[1]?.pv[0], 'blue');
+    if (second) shapes.push(second);
+    return shapes;
+  }, [thinking, evaluation, lines]);
 
   const orientation: Color = flipped ? 'black' : 'white';
   const bottomColor = orientation;
@@ -183,7 +189,9 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
           <BoardColumn
             topPlayer={stripFor(topColor)}
             bottomPlayer={stripFor(bottomColor)}
-            evalBar={<EvalBar evaluation={evaluation} orientation={orientation} />}
+            evalBar={
+              <EvalBar evaluation={evaluation} orientation={orientation} thinking={thinking} />
+            }
           >
             <Chessboard
               position={tree.fen}
@@ -200,7 +208,14 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
         rightRail={
           <GameRail
             title="Moves"
-            aside={<EvalReadout fen={tree.fen} evaluation={evaluation} thinking={thinking} />}
+            aside={
+              <EngineLines
+                fen={tree.fen}
+                evaluation={evaluation}
+                thinking={thinking}
+                lines={lines}
+              />
+            }
             className="min-h-0 flex-1"
             bodyClassName="flex min-h-0 flex-1 flex-col"
           >

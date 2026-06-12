@@ -112,6 +112,72 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
       jitter: 0.05,
     },
   ],
+  // Two pieces land: the king's knock, then the rook's lighter one.
+  castle: [
+    {
+      delay: 0,
+      baseFreq: 200,
+      modes: [
+        { ratio: 1, q: 11, gain: 1.0 },
+        { ratio: 2.3, q: 7, gain: 0.42 },
+        { ratio: 4.5, q: 4, gain: 0.11 },
+      ],
+      attack: { duration: 0.003, filterHz: 2050, q: 0.9, gain: 0.05 },
+      exciter: { duration: 0.12, filterHz: 1950 },
+      thud: { freq: 88, duration: 0.1, gain: 0.28 },
+      voices: 2,
+      detune: 6,
+      volume: 0.65,
+      jitter: 0.05,
+    },
+    {
+      delay: 0.1,
+      baseFreq: 280,
+      modes: [
+        { ratio: 1, q: 11, gain: 1.0 },
+        { ratio: 2.3, q: 7, gain: 0.42 },
+      ],
+      attack: { duration: 0.003, filterHz: 2050, q: 0.9, gain: 0.04 },
+      exciter: { duration: 0.09, filterHz: 1950 },
+      thud: { freq: 96, duration: 0.08, gain: 0.2 },
+      voices: 1,
+      detune: 0,
+      volume: 0.45,
+      jitter: 0.05,
+    },
+  ],
+  // High, bright, no thud — a small celebration with a shimmer on top.
+  promote: [
+    {
+      delay: 0,
+      baseFreq: 520,
+      modes: [
+        { ratio: 1, q: 14, gain: 1.0 },
+        { ratio: 2.0, q: 9, gain: 0.4 },
+        { ratio: 3.2, q: 6, gain: 0.15 },
+      ],
+      attack: { duration: 0.002, filterHz: 3200, q: 1.2, gain: 0.04 },
+      exciter: { duration: 0.06, filterHz: 3200 },
+      voices: 2,
+      detune: 5,
+      volume: 0.55,
+      jitter: 0.03,
+    },
+    {
+      delay: 0.07,
+      baseFreq: 780,
+      modes: [
+        { ratio: 1, q: 14, gain: 1.0 },
+        { ratio: 2.0, q: 8, gain: 0.3 },
+      ],
+      attack: { duration: 0.002, filterHz: 3600, q: 1.2, gain: 0.03 },
+      exciter: { duration: 0.05, filterHz: 3600 },
+      voices: 1,
+      detune: 0,
+      volume: 0.35,
+      jitter: 0.03,
+    },
+  ],
   check: [
     {
       delay: 0,

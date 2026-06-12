@@ -546,6 +546,13 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
           ? formatClock(0)
           : formatClock(color === 'white' ? liveClock.whiteMs : liveClock.blackMs)
         : undefined,
+      timeMs: liveClock
+        ? color === flaggedColor
+          ? 0
+          : color === 'white'
+            ? liveClock.whiteMs
+            : liveClock.blackMs
+        : undefined,
       avatar: (
         <KingGlyph
           className={cn(

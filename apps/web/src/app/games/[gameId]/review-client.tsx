@@ -14,10 +14,13 @@ import {
   type PlayerStripProps,
 } from '@/components/game';
 import { ReviewControls } from '@/components/review/review-controls';
-import { EvalBar, EvalReadout } from '@/components/review/eval-panel';
+import { EvalBar, EngineLines } from '@/components/review/eval-panel';
+import { EvalGraph } from '@/components/review/eval-graph';
+import { ClassificationBadge } from '@/components/review/classification-badge';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
+import { useMoveClassifier } from '@/hooks/use-move-classifier';
 import { useOpeningName } from '@/hooks/use-opening-name';
 import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
@@ -85,6 +88,13 @@ function chipFor(color: Color, result: GameResult | undefined): string | undefin
   return (color === 'white') === (result === GameResult.WhiteWins) ? '1' : '0';
 }
 
+/** ACPL readability tint — same thresholds as inaccuracy/mistake. */
+function acplColor(acpl: number): string {
+  if (acpl < 20) return 'text-green-400';
+  if (acpl < 50) return 'text-yellow-400';
+  return 'text-red-500';
+}
+
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between px-4 py-2">
@@ -134,9 +144,16 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
   const { ply, fen, lastMove, isCorrupt, goTo, goNext, goPrev, goStart, goEnd } =
     useGameReview(game);
   const [flipped, setFlipped] = useState(false);
+  // Full-game classification — user-triggered, runs on the same client worker.
+  const {
+    result: classification,
+    progress,
+    running: classifying,
+    run: runClassifier,
+  } = useMoveClassifier(game.moves, game.startFen);
   const displayFen = fen ?? STARTING_FEN;
   // Single engine search per position feeds both the eval bar and the readout.
-  const { evaluation, thinking } = usePositionEval(displayFen, !isCorrupt);
+  const { evaluation, thinking, lines } = usePositionEval(displayFen, !isCorrupt, { multiPv: 3 });
   // Opening name for the top-bar center slot — display only, crossfades with
   // the matchup line while the seek position is still in book.
   const opening = useOpeningName(displayFen);
@@ -299,7 +316,9 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
           <BoardColumn
             topPlayer={stripFor(topColor)}
             bottomPlayer={stripFor(bottomColor)}
-            evalBar={<EvalBar evaluation={evaluation} orientation={orientation} />}
+            evalBar={
+              <EvalBar evaluation={evaluation} orientation={orientation} thinking={thinking} />
+            }
           >
             <Chessboard
               position={displayFen}
@@ -314,13 +333,74 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
         rightRail={
           <GameRail
             title="Moves"
-            aside={<EvalReadout fen={displayFen} evaluation={evaluation} thinking={thinking} />}
+            aside={
+              <EngineLines
+                fen={displayFen}
+                evaluation={evaluation}
+                thinking={thinking}
+                lines={lines}
+              />
+            }
             className="min-h-0 flex-1"
             bodyClassName="flex min-h-0 flex-1 flex-col"
           >
+            {/* Game analysis: button → progress → eval graph + ACPL summary. */}
+            <div className="shrink-0 border-b border-[#2b332c] px-2.5 py-2">
+              {!classification && !classifying && (
+                <button
+                  type="button"
+                  onClick={runClassifier}
+                  className="inline-flex h-8 w-full items-center justify-center whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-[13px] font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                >
+                  Analyze game
+                </button>
+              )}
+              {classifying && (
+                <div aria-live="polite">
+                  <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-[#9da79c]">
+                    <span>Analyzing…</span>
+                    <span className="tabular-nums">{Math.round(progress * 100)}%</span>
+                  </div>
+                  <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-[#2b332c]">
+                    <div
+                      className="h-full rounded-full bg-[#d6b563] transition-[width] duration-300"
+                      style={{ width: `${Math.round(progress * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {classification && (
+                <>
+                  <EvalGraph
+                    evals={classification.evals}
+                    currentPly={ply}
+                    onSeek={goTo}
+                    className="rounded-[4px]"
+                  />
+                  <div className="mt-1.5 flex items-center justify-between font-mono text-[11px] tabular-nums text-[#9da79c]">
+                    <span>
+                      White&ensp;ACPL:{' '}
+                      <span className={acplColor(classification.whiteAcpl)}>
+                        {Math.round(classification.whiteAcpl)}
+                      </span>
+                    </span>
+                    <span>
+                      Black&ensp;ACPL:{' '}
+                      <span className={acplColor(classification.blackAcpl)}>
+                        {Math.round(classification.blackAcpl)}
+                      </span>
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
             <div className="min-h-0 flex-1">
               <MovePanel
-                moves={game.moves.map((m, i) => ({ san: m.san, ply: i + 1 }))}
+                moves={game.moves.map((m, i) => ({
+                  san: m.san,
+                  ply: i + 1,
+                  badge: <ClassificationBadge class={classification?.moves[i]?.class} />,
+                }))}
                 currentPly={ply}
                 onSeek={goTo}
               />

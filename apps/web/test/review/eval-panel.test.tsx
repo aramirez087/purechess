@@ -1,10 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { EvalBar, whiteShare, formatScore } from '@/components/review/eval-panel';
+import {
+  EvalBar,
+  EngineLines,
+  EvalReadout,
+  whiteShare,
+  formatScore,
+} from '@/components/review/eval-panel';
 import type { PositionEval } from '@/hooks/use-position-eval';
 
+const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
 function evalOf(partial: Partial<PositionEval>): PositionEval {
-  return { depth: 18, bestmove: 'e2e4', ...partial };
+  return { depth: 18, bestmove: 'e2e4', pv: ['e2e4'], ...partial };
 }
 
 describe('formatScore', () => {
@@ -84,5 +92,65 @@ describe('EvalBar score cap', () => {
     render(<EvalBar evaluation={evalOf({ cp: 140 })} />);
     expect(screen.getByText('+1.4').getAttribute('aria-hidden')).toBe('true');
     expect(screen.getByRole('img').getAttribute('aria-label')).toBe('Evaluation +1.4');
+  });
+
+  it('shows the scan-line only while thinking', () => {
+    const { container, rerender } = render(<EvalBar evaluation={evalOf({ cp: 0 })} thinking />);
+    expect(container.querySelector('.eval-scan')).not.toBeNull();
+    rerender(<EvalBar evaluation={evalOf({ cp: 0 })} thinking={false} />);
+    expect(container.querySelector('.eval-scan')).toBeNull();
+  });
+});
+
+describe('EngineLines', () => {
+  const lines = [
+    { depth: 18, pv: ['e2e4', 'e7e5', 'g1f3'], cp: 230 },
+    { depth: 17, pv: ['d2d4', 'd7d5'], cp: 190 },
+    { depth: 17, pv: ['c2c4', 'e7e5'], cp: 110 },
+  ];
+
+  it('renders one row per line with PV in SAN', () => {
+    render(
+      <EngineLines
+        fen={START}
+        evaluation={evalOf({ cp: 230, pv: ['e2e4', 'e7e5', 'g1f3'] })}
+        thinking={false}
+        lines={lines}
+      />,
+    );
+    expect(screen.getByText('+2.3')).toBeTruthy();
+    expect(screen.getByText('e4 e5 Nf3')).toBeTruthy();
+    expect(screen.getByText('+1.9')).toBeTruthy();
+    expect(screen.getByText('d4 d5')).toBeTruthy();
+    expect(screen.getByText('+1.1')).toBeTruthy();
+  });
+
+  it('shows depth only on the primary line', () => {
+    render(
+      <EngineLines
+        fen={START}
+        evaluation={evalOf({ cp: 230, pv: ['e2e4'] })}
+        thinking={false}
+        lines={lines}
+      />,
+    );
+    expect(screen.getAllByText('d18')).toHaveLength(1);
+    expect(screen.queryByText('d17')).toBeNull();
+  });
+
+  it('renders a single row without lines (EvalReadout back-compat)', () => {
+    render(<EvalReadout fen={START} evaluation={evalOf({ cp: 30 })} thinking={false} />);
+    expect(screen.getByText('+0.3')).toBeTruthy();
+    expect(screen.getByText('e4')).toBeTruthy();
+  });
+
+  it('truncates PVs longer than six moves with an ellipsis', () => {
+    const longPv = ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5', 'a7a6', 'b5a4'];
+    render(
+      <EngineLines fen={START} evaluation={evalOf({ cp: 30, pv: longPv })} thinking={false} />,
+    );
+    // Six moves render, the 7th is cut and replaced by the ellipsis.
+    expect(screen.getByText(/Bb5 a6\s*…/)).toBeTruthy();
+    expect(screen.queryByText(/Ba4/)).toBeNull();
   });
 });

@@ -1,22 +1,32 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import type { WireMove } from '@purechess/shared';
+import type { ClassifiedMove } from '@/hooks/use-move-classifier';
+import { ClassificationBadge } from '@/components/review/classification-badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ReviewMoveListProps {
   moves: WireMove[];
   currentPly: number;
   onSeek: (ply: number) => void;
+  /** Undefined = classification hasn't run yet — no badges shown. */
+  classifications?: ClassifiedMove[];
 }
 
-export function ReviewMoveList({ moves, currentPly, onSeek }: ReviewMoveListProps) {
+export function ReviewMoveList({ moves, currentPly, onSeek, classifications }: ReviewMoveListProps) {
   const activeRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     activeRef.current?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
   }, [currentPly]);
+
+  const byPly = useMemo(() => {
+    const map = new Map<number, ClassifiedMove>();
+    for (const c of classifications ?? []) map.set(c.ply, c);
+    return map;
+  }, [classifications]);
 
   const pairs: Array<[WireMove, WireMove | null]> = [];
   for (let i = 0; i < moves.length; i += 2) {
@@ -42,6 +52,7 @@ export function ReviewMoveList({ moves, currentPly, onSeek }: ReviewMoveListProp
               >
                 {white.san}
               </button>
+              <ClassificationBadge class={byPly.get(whitePly)?.class} />
               {black && (
                 <button
                   ref={currentPly === blackPly ? activeRef : null}
@@ -54,6 +65,7 @@ export function ReviewMoveList({ moves, currentPly, onSeek }: ReviewMoveListProp
                   {black.san}
                 </button>
               )}
+              {black && <ClassificationBadge class={byPly.get(blackPly)?.class} />}
             </div>
           );
         })}

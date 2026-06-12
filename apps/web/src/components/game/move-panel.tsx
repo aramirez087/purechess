@@ -7,6 +7,8 @@ export interface MovePanelMove {
   san: string;
   /** 1-based ply index. */
   ply: number;
+  /** Optional glyph rendered after the SAN (e.g. a classification badge). */
+  badge?: React.ReactNode;
 }
 
 export interface MovePanelProps {
@@ -122,6 +124,7 @@ function MoveCell({
           )}
         >
           {move.san}
+          {move.badge}
         </button>
       </td>
     );
@@ -138,6 +141,7 @@ function MoveCell({
       )}
     >
       {move.san}
+      {move.badge}
     </td>
   );
 }

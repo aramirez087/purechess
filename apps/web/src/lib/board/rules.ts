@@ -135,7 +135,9 @@ export function firstLegalUci(fen: string): string | null {
 
 /**
  * Sound for a confirmed position change, by what happened:
- * mate > check > capture > move. Null when the diff is not a single move.
+ * mate > check > promote > capture > castle > move. Null when the diff is
+ * not a single move. (A capture-promotion sounds the promotion — the more
+ * distinctive event; castling can never capture.)
  */
 export function classifyMoveSound(prevFen: string, nextFen: string): SoundType | null {
   const squares = getAnimationSquares(prevFen, nextFen);
@@ -144,10 +146,14 @@ export function classifyMoveSound(prevFen: string, nextFen: string): SoundType |
     const next = new Chess(nextFen);
     if (next.isCheckmate()) return 'mate';
     if (next.inCheck()) return 'check';
+    const moved = new Chess(prevFen).get(squares.from);
+    const landed = next.get(squares.to);
+    if (moved?.type === 'p' && landed != null && landed.type !== 'p') return 'promote';
   } catch {
     // unparseable FEN — fall through to the generic sound
   }
-  return squares.capturedAt ? 'capture' : 'move';
+  if (squares.capturedAt) return 'capture';
+  return squares.rookFrom ? 'castle' : 'move';
 }
 
 export function getAnimationSquares(prevFen: string, nextFen: string): AnimationSquares | null {

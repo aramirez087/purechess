@@ -26,6 +26,8 @@ import { PgnIconActions } from '@/components/review/pgn-actions';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
 import { loadRules } from '@/lib/board/rules-lazy';
+import { soundEngine } from '@/lib/board/sound';
+import { useSettingsStore } from '@/stores/settings-store';
 import { cn } from '@/lib/utils';
 import {
   getPvpGame,
@@ -391,6 +393,26 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
     socket.clockOffsetMs,
   );
 
+  // Low-time tick: one per second while YOUR clock runs under 10s. Keyed to
+  // the side to move, so after a premove (opponent's clock draining) it
+  // stays silent.
+  const lowTimeSound = useSettingsStore((s) => s.lowTimeSound);
+  const lastTickSecondRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!_isPlaying || !liveClock || state.game.status !== 'active') return;
+    const yourTurn = getSideToMove(state.game.fen) === state.game.yourColor;
+    const ms = state.game.yourColor === 'white' ? liveClock.whiteMs : liveClock.blackMs;
+    if (!yourTurn || ms <= 0 || ms >= 10_000) {
+      lastTickSecondRef.current = null;
+      return;
+    }
+    const sec = Math.ceil(ms / 1000);
+    if (lastTickSecondRef.current !== sec) {
+      lastTickSecondRef.current = sec;
+      soundEngine.playTick(lowTimeSound);
+    }
+  }, [_isPlaying, liveClock, state, lowTimeSound]);
+
   // When the side to move flags locally, ask the server once: getState runs
   // detectResult, finalizes the timeout and pushes game:over to both players.
   const flagPending =
@@ -658,6 +680,13 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
         ? color === flaggedColor
           ? formatClock(0)
           : formatClock(color === 'white' ? liveClock.whiteMs : liveClock.blackMs)
+        : undefined,
+      timeMs: liveClock
+        ? color === flaggedColor
+          ? 0
+          : color === 'white'
+            ? liveClock.whiteMs
+            : liveClock.blackMs
         : undefined,
       captured,
       capturedColor,

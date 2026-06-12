@@ -1,9 +1,9 @@
 'use client';
 
-import { Chess } from 'chess.js';
 import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import type { PositionEval } from '@/hooks/use-position-eval';
+import { pvToSan } from '@/lib/board/pv-to-san';
+import type { EngineLine, PositionEval } from '@/hooks/use-position-eval';
 
 /** Win-probability-ish share of the bar for White, from a White-POV cp. */
 export function whiteShare(cp: number): number {
@@ -16,20 +16,6 @@ export function formatScore(cp?: number, mate?: number): string {
   if (cp === undefined) return '…';
   const pawns = cp / 100;
   return `${pawns > 0 ? '+' : ''}${pawns.toFixed(1)}`;
-}
-
-function uciToSan(fen: string, uci: string): string | null {
-  try {
-    const chess = new Chess(fen);
-    const move = chess.move({
-      from: uci.slice(0, 2),
-      to: uci.slice(2, 4),
-      promotion: uci.length > 4 ? uci[4] : undefined,
-    });
-    return move?.san ?? null;
-  } catch {
-    return null;
-  }
 }
 
 /** White's bar share for an eval, clamped so the losing side never vanishes. */
@@ -54,11 +40,14 @@ function shareFor(evaluation: PositionEval | null): number {
 export function EvalBar({
   evaluation,
   orientation = 'white',
+  thinking = false,
   className,
 }: {
   evaluation: PositionEval | null;
   /** Board orientation — the White fill anchors to White's edge. */
   orientation?: 'white' | 'black';
+  /** Sweeps a scan-line over the fill while the engine searches. */
+  thinking?: boolean;
   className?: string;
 }) {
   const share = shareFor(evaluation);
@@ -87,6 +76,14 @@ export function EvalBar({
           aria-hidden="true"
           className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#d6b563]/70"
         />
+        {/* Search heartbeat: unmounts (no exit transition) the instant the
+            search completes, so the final score snap stays crisp. */}
+        {thinking && (
+          <div
+            aria-hidden="true"
+            className="eval-scan pointer-events-none absolute inset-x-0 h-[14%] bg-gradient-to-b from-transparent via-[#f6f2e6]/25 to-transparent"
+          />
+        )}
       </div>
       {/* Quiet chrome: ink-on-bone over the fill, bone-on-well otherwise — no
           brass (the accent budget is spent on the 50% tick). The chip carries
@@ -111,46 +108,94 @@ export function EvalBar({
   );
 }
 
+/** Moves shown per PV row — keeps the rail-header readout one line per pv. */
+const PV_MAX_MOVES = 6;
+
+function LineRow({
+  fen,
+  cp,
+  mate,
+  depth,
+  pv,
+  primary,
+  thinking,
+}: {
+  fen: string;
+  cp?: number;
+  mate?: number;
+  /** Shown only on the primary row — the authoritative search depth. */
+  depth?: number;
+  pv: string[];
+  primary: boolean;
+  thinking: boolean;
+}) {
+  const san = useMemo(() => pvToSan(fen, pv, PV_MAX_MOVES), [fen, pv]);
+
+  return (
+    <span className="flex min-w-0 items-baseline gap-2">
+      <span
+        className={cn(
+          'w-9 shrink-0 text-right font-mono text-[13px] font-semibold tabular-nums',
+          primary ? 'text-[#d6b563]' : 'text-[#8a948a]',
+          thinking && 'animate-pulse opacity-60',
+        )}
+      >
+        {formatScore(cp, mate)}
+      </span>
+      <span className="w-7 shrink-0 font-mono text-[10px] tabular-nums text-[#8a948a]">
+        {primary && depth !== undefined ? `d${depth}` : ''}
+      </span>
+      <span className="min-w-0 truncate font-mono text-[11px] text-[#9da79c]">
+        {san.join(' ')}
+        {pv.length > PV_MAX_MOVES && ' …'}
+      </span>
+    </span>
+  );
+}
+
 /**
- * Compact engine readout for a rail header: mono score plus
- * "depth N · best SAN". Shares the parent's single usePositionEval search
- * with <EvalBar/> — never runs the engine itself.
+ * Engine readout for a rail header: one row per multipv line — mono score
+ * (brass for the best line), depth on line 1 only, PV continuation in SAN.
+ * Shares the parent's single usePositionEval search with <EvalBar/> — never
+ * runs the engine itself. Lines 2-3 render only when `lines` carries them.
  */
-export function EvalReadout({
+export function EngineLines({
   fen,
   evaluation,
   thinking,
+  lines,
 }: {
   fen: string;
   evaluation: PositionEval | null;
   thinking: boolean;
+  /** Multipv array (index 0 = best); omit for the single-line readout. */
+  lines?: EngineLine[];
 }) {
-  const bestSan = useMemo(
-    () => (evaluation ? uciToSan(fen, evaluation.bestmove) : null),
-    [fen, evaluation],
-  );
-
   return (
-    <span className="flex items-baseline gap-2">
-      <span
-        className={cn(
-          'font-mono text-sm font-semibold tabular-nums text-[#f1eee6] transition-opacity',
-          thinking && 'opacity-50',
-        )}
-      >
-        {formatScore(evaluation?.cp, evaluation?.mate)}
-      </span>
-      {evaluation && (
-        <span className="text-[11px] text-[#8a948a]">
-          depth {evaluation.depth}
-          {bestSan && (
-            <>
-              {' · '}
-              <span className="text-[#9da79c]">best {bestSan}</span>
-            </>
-          )}
-        </span>
-      )}
+    <span className="flex min-w-0 flex-col gap-0.5">
+      <LineRow
+        fen={fen}
+        cp={evaluation?.cp}
+        mate={evaluation?.mate}
+        depth={evaluation?.depth}
+        pv={evaluation?.pv ?? []}
+        primary
+        thinking={thinking}
+      />
+      {lines?.slice(1, 3).map((line, i) => (
+        <LineRow
+          key={i}
+          fen={fen}
+          cp={line.cp}
+          mate={line.mate}
+          pv={line.pv}
+          primary={false}
+          thinking={thinking}
+        />
+      ))}
     </span>
   );
 }
+
+/** Back-compat alias — same props, same rail-header slot. */
+export const EvalReadout = EngineLines;

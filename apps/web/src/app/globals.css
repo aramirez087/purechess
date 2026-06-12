@@ -349,8 +349,18 @@
     animation: none !important;
   }
 
+  [class*='clock-pulse'] {
+    animation: none !important;
+  }
+
   .skeleton-shimmer::after {
     animation: none !important;
+  }
+
+  /* Without the sweep the scan-line is just a stray band — hide it. */
+  .eval-scan {
+    animation: none !important;
+    display: none;
   }
 }
 
@@ -436,6 +446,32 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Eval-bar search heartbeat — thin scan-line sweeping while Stockfish thinks.
+   The element unmounts when the search completes, so there is no exit fade. */
+@keyframes eval-scan {
+  from {
+    top: -14%;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.eval-scan {
+  animation: eval-scan 1.2s linear infinite;
+}
+
+/* Low-time clock chip heartbeat (PlayerStrip critical/dying tiers). */
+@keyframes clock-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
   }
 }
 
