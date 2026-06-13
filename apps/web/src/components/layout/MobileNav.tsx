@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
+  { href: '/puzzles', label: 'Puzzles' },
   { href: '/games', label: 'Games' },
   { href: '/profile', label: 'Profile' },
   { href: '/settings', label: 'Settings' },

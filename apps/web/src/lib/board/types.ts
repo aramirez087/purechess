@@ -83,7 +83,9 @@ export type SoundType =
   | 'check'
   | 'mate'
   | 'game-start'
-  | 'tick';
+  | 'tick'
+  | 'success'
+  | 'error';
 
 export interface Premove {
   from: Square;

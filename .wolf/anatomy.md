@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T14:24:43.075Z
-> Files: 940 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T15:51:57.642Z
+> Files: 955 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -51,6 +51,7 @@
 
 ## ../../.claude/plans/
 
+- `add-a-daily-fuzzy-haven.md` — Daily Puzzle Page (`/puzzles`) (~2995 tok)
 - `add-coaching-features-to-encapsulated-gem.md` — Coaching features (computer games) + move-time chart (review) (~2586 tok)
 - `add-practice-from-here-immutable-parrot.md` — Add "Practice from here" to analyze board + review (~1713 tok)
 - `analyze-page-uses-textarea-majestic-shore.md` — Board Position Editor (`/editor`) (~2408 tok)
@@ -677,7 +678,7 @@
 ## apps/api/src/
 
 - `app.controller.ts` — Exports AppController (~157 tok)
-- `app.module.ts` — API routes: GET (2 endpoints) (~781 tok)
+- `app.module.ts` — API routes: GET (2 endpoints) (~803 tok)
 - `app.service.ts` — Exports HealthStatus, AppService (~337 tok)
 - `main.ts` — Declares bootstrap (~481 tok)
 
@@ -808,6 +809,13 @@
 - `all-exceptions.filter.ts` — Exports AllExceptionsFilter (~526 tok)
 - `sentry.ts` — Exports initSentry (~137 tok)
 
+## apps/api/src/puzzles/
+
+- `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~75 tok)
+- `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
+- `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
+
 ## apps/api/src/ratings/
 
 - `glicko2.ts` — Glicko-2 rating system (Glickman, http://www.glicko.net/glicko/glicko2.pdf). (~935 tok)
@@ -927,6 +935,10 @@
 
 - `logging.spec.ts` — Declares SENSITIVE_FIELDS (~346 tok)
 - `sentry.spec.ts` — Declares err (~889 tok)
+
+## apps/api/test/puzzles/
+
+- `puzzles.service.spec.ts` — Declares mockRedis (~646 tok)
 
 ## apps/api/test/ratings/
 
@@ -1080,6 +1092,11 @@
 
 - `page.tsx` — dynamic (~603 tok)
 
+## apps/web/src/app/puzzles/
+
+- `page.tsx` — metadata (~139 tok)
+- `puzzle-client.tsx` — formatPlays (~1162 tok)
+
 ## apps/web/src/app/register/
 
 - `page.tsx` — Suspense wrapper for RegisterForm (~120 tok)
@@ -1166,14 +1183,15 @@
 - `hero-auth-link.tsx` — Session-aware hero nav CTA. Renders the signed-out "Sign in" markup by (~281 tok)
 - `hero-board.tsx` — Board art for the home hero — "the board is the product", so the hero (~3400 tok)
 - `hero-heading.tsx` — The hero's LCP heading. It deliberately carries NO entrance animation. (~456 tok)
-- `hero.tsx` — FEATURES (~1450 tok)
+- `hero.tsx` — FEATURES (~1431 tok)
 - `home-viewed-tracker.tsx` — HomeViewedTracker (~68 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
 ## apps/web/src/components/layout/
 
-- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~950 tok)
+- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~962 tok)
 - `Logo.tsx` — SIZE (~624 tok)
+- `MobileNav.tsx` — navLinks (~731 tok)
 - `UserMenu.tsx` — Top-bar account chip — resolves the session itself via /api/auth/me. (~938 tok)
 
 ## apps/web/src/components/play/
@@ -1193,6 +1211,10 @@
 - `rating-chart.tsx` — Pure-SVG interactive rating history chart (category tabs, 1m/3m/1y/all range, W/D/L dots, hover tooltip + game deep link). No chart deps. (~2777 tok)
 - `ratings-card.tsx` — Current-rating 3-col grid + RatingChart below (when ratingHistory non-empty) (~700 tok)
 - `recent-games.tsx` — ResultBadge (~1480 tok)
+
+## apps/web/src/components/puzzle/
+
+- `puzzle-board.tsx` — humanizeTheme (~1176 tok)
 
 ## apps/web/src/components/review/
 
@@ -1236,6 +1258,7 @@
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
+- `use-puzzle.ts` — Static derivation from a loaded puzzle — never changes once set. (~2445 tok)
 - `use-replay-san.ts` — FEN after each ply; `fens[0]` is the start, `fens[k]` follows ply k. (~418 tok)
 - `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~166 tok)
 
@@ -1251,6 +1274,7 @@
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
+- `puzzles.ts` — Client for our puzzles API, which proxies + caches Lichess's daily puzzle. (~318 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
@@ -1275,14 +1299,15 @@
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
 - `premove-geometry.ts` — Geometric premove destinations (chessground-style): every square the piece (~909 tok)
 - `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
+- `puzzle-utils.ts` — Pure helpers for the daily-puzzle flow: replaying the puzzle game's PGN to (~717 tok)
 - `pv-to-san.ts` — Converts a UCI PV sequence into SAN notation. (~295 tok)
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
 - `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2647 tok)
 - `sacrifice.ts` — Sacrifice detection for the "brilliant" classification. Pure (chess.js only). (~658 tok)
-- `sound.ts` — Declares ModalSpec (~3527 tok)
+- `sound.ts` — Declares ModalSpec (~4046 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
-- `types.ts` — Analysis boards: input follows the side to move instead of `orientation`, (~639 tok)
+- `types.ts` — Analysis boards: input follows the side to move instead of `orientation`, (~646 tok)
 
 ## apps/web/src/lib/engine/
 
@@ -1331,6 +1356,7 @@
 - `pgn-export.test.ts` — exportTreeToPgn unit + round-trip tests (mainline/variation/NAG/shape/comment). (~700 tok)
 - `pgn-parser.test.ts` — API routes: GET (3 endpoints) (~1619 tok)
 - `premove-geometry.test.ts` — White to move everywhere below, so BLACK pieces are the premovable side. (~997 tok)
+- `puzzle-utils.test.ts` — Declares expected (~633 tok)
 - `pv-to-san.test.ts` — Declares START (~388 tok)
 - `replay-san.test.ts` — Declares START_FEN (~497 tok)
 - `sacrifice.test.ts` — Declares START (~452 tok)
@@ -1374,6 +1400,7 @@
 - `use-opening-explorer.test.ts` — Fetch mock whose responses resolve only when the test says so. (~2140 tok)
 - `use-opening-name.test.ts` — SICILIAN_EPD: mockFetch (~774 tok)
 - `use-position-eval.test.ts` — Declares START (~751 tok)
+- `use-puzzle.test.ts` — RenderHookResult: mountAtPlayer (~1141 tok)
 
 ## apps/web/test/play/
 
@@ -1536,3 +1563,19 @@
 - `build-openings.mjs` — Bakes the lichess opening book to apps/web/public/openings.json as a (~588 tok)
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)
+
+## Daily Puzzle feature (added 2026-06-13)
+- `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
+- `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
+- `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
+- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). (~60 tok)
+- `apps/api/test/puzzles/puzzles.service.spec.ts` — Jest: cache hit (no fetch), miss (fetch+setex), error throws. (~480 tok)
+- `apps/web/src/lib/board/puzzle-utils.ts` — replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch. chess.js. (~430 tok)
+- `apps/web/src/lib/api/puzzles.ts` — getDailyPuzzle() client + web-side LichessPuzzleData type. Fetches `${API}/api/puzzles/daily`. (~230 tok)
+- `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
+- `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
+- `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
+- `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
+- `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
+- `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
+- (also: `lib/board/types.ts` SoundType + `lib/board/sound.ts` IMPACTS gained `success`/`error` tones; nav links in AppShell.tsx + MobileNav.tsx gained `/puzzles`.)

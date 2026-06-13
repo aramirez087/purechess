@@ -49,8 +49,8 @@ export function Hero() {
             paint and pushes LCP out to ~5s in Lighthouse. Static = LCP at FCP.
             (S07 — Lighthouse gate; same reason HeroHeading is static.) */}
         <p className="mt-6 max-w-xl text-balance text-base sm:text-lg text-muted-foreground">
-          Purechess is a single, quiet place to play chess online. No puzzles, no lessons, no
-          streams — just you, the clock, and a board that respects your time.
+          Purechess is a single, quiet place to play chess online. No lessons, no streams —
+          just you, the clock, and a board that respects your time.
         </p>
 
         <div className="animate-rise-4 mt-10 flex w-full max-w-sm flex-col items-center gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:justify-center">

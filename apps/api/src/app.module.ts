@@ -22,6 +22,7 @@ import { MetricsModule } from './metrics/metrics.module';
 import { RedisModule } from './redis/redis.module';
 import { TestingModule } from './testing/testing.module';
 import { ComputerGamesModule } from './computer-games/computer-games.module';
+import { PuzzlesModule } from './puzzles/puzzles.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { ComputerGamesModule } from './computer-games/computer-games.module';
     MetricsModule,
     RedisModule,
     ComputerGamesModule,
+    PuzzlesModule,
     ...(process.env['NODE_ENV'] === 'test' ? [TestingModule] : []),
   ],
   controllers: [AppController],

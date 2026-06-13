@@ -265,6 +265,73 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
       jitter: 0.02,
     },
   ],
+  // Puzzle solved: a bright three-note rise — celebratory, no thud, a shimmer
+  // that resolves upward.
+  success: [
+    {
+      delay: 0,
+      baseFreq: 392,
+      modes: [
+        { ratio: 1, q: 12, gain: 1.0 },
+        { ratio: 2.0, q: 8, gain: 0.32 },
+        { ratio: 3.0, q: 5, gain: 0.12 },
+      ],
+      attack: { duration: 0.002, filterHz: 3000, q: 1.1, gain: 0.04 },
+      exciter: { duration: 0.07, filterHz: 3000 },
+      voices: 1,
+      detune: 0,
+      volume: 0.5,
+      jitter: 0.02,
+    },
+    {
+      delay: 0.1,
+      baseFreq: 523,
+      modes: [
+        { ratio: 1, q: 12, gain: 1.0 },
+        { ratio: 2.0, q: 8, gain: 0.32 },
+        { ratio: 3.0, q: 5, gain: 0.12 },
+      ],
+      attack: { duration: 0.002, filterHz: 3200, q: 1.1, gain: 0.04 },
+      exciter: { duration: 0.07, filterHz: 3200 },
+      voices: 1,
+      detune: 0,
+      volume: 0.52,
+      jitter: 0.02,
+    },
+    {
+      delay: 0.22,
+      baseFreq: 784,
+      modes: [
+        { ratio: 1, q: 14, gain: 1.0 },
+        { ratio: 2.0, q: 9, gain: 0.28 },
+      ],
+      attack: { duration: 0.002, filterHz: 3600, q: 1.2, gain: 0.03 },
+      exciter: { duration: 0.09, filterHz: 3600 },
+      voices: 2,
+      detune: 5,
+      volume: 0.5,
+      jitter: 0.02,
+    },
+  ],
+  // Wrong move: a single low, detuned thud that droops in pitch — a flat "no".
+  error: [
+    {
+      delay: 0,
+      baseFreq: 150,
+      modes: [
+        { ratio: 1, q: 8, gain: 1.0 },
+        { ratio: 1.9, q: 5, gain: 0.3 },
+      ],
+      attack: { duration: 0.004, filterHz: 1200, q: 0.7, gain: 0.08 },
+      exciter: { duration: 0.16, filterHz: 1200 },
+      thud: { freq: 70, duration: 0.18, gain: 0.4 },
+      pitchDroop: { amount: 0.18, time: 0.12 },
+      voices: 2,
+      detune: 14,
+      volume: 0.7,
+      jitter: 0.03,
+    },
+  ],
 };
 
 class SoundEngine {

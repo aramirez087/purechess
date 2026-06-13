@@ -8275,6 +8275,110 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-13T14:23:41.405Z"
+    },
+    {
+      "id": "bug-503",
+      "timestamp": "2026-06-13T15:45:56.406Z",
+      "error_message": "CSS fix: from",
+      "file": "apps/web/src/components/puzzle/puzzle-board.tsx",
+      "root_cause": "from: state.lastMove[0] as never, to: state.lastMove[1] as never → state.lastMove[0] as Square, to: state.lastMove[1] as Square",
+      "fix": "Changed from: state.lastMove[0] as never, to: state.lastMove[1] as never → state.lastMove[0] as Square, to: state.lastMove[1] as Square",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:45:56.406Z"
+    },
+    {
+      "id": "bug-504",
+      "timestamp": "2026-06-13T15:48:33.881Z",
+      "error_message": "Missing await",
+      "file": "apps/web/test/hooks/use-puzzle.test.ts",
+      "root_cause": "Async call without await — returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:48:33.881Z"
+    },
+    {
+      "id": "bug-505",
+      "timestamp": "2026-06-13T15:48:51.724Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/components/puzzle/puzzle-board.tsx",
+      "root_cause": "No early return/throw for edge case: !m.from || !m.to",
+      "fix": "Added guard clause: if (!m.from || !m.to)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:48:51.724Z"
+    },
+    {
+      "id": "bug-506",
+      "timestamp": "2026-06-13T15:51:48.356Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/hooks/use-puzzle.ts",
+      "root_cause": "10 lines replaced/restructured",
+      "fix": "Rewrote 15→4 lines (10 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:51:48.356Z"
+    },
+    {
+      "id": "bug-507",
+      "timestamp": "2026-06-13T15:51:57.649Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/test/hooks/use-puzzle.test.ts",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 11→13 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:51:57.649Z"
+    },
+    {
+      "id": "bug-508",
+      "timestamp": "2026-06-13T15:52:00.000Z",
+      "error_message": "Invalid move: {\"from\":\"e3\",\"to\":\"e5\"} — puzzle solution[0] illegal from computed start position (wrong side to move)",
+      "file": "apps/web/src/hooks/use-puzzle.ts",
+      "root_cause": "Misread Lichess puzzle `initialPly`. It is the 0-based index of the game's LAST move (the setup move); the puzzle position is the FEN AFTER that move. buildContext used plies[initialPly-1].fenAfter, landing the board one ply early with the opponent (not the solver) to move, so solution[0] was unplayable.",
+      "fix": "puzzleFen = plies[initialPly].fenAfter; setupMove = plies[initialPly]; preSetupFen = plies[initialPly-1].fenAfter (or START_FEN when initialPly===0). Guard plies.length > initialPly. Verified against live /api/puzzles/daily: full 9-move solution legal from the corrected FEN.",
+      "tags": ["puzzles", "lichess", "chess.js", "off-by-one", "fen", "initialPly"],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:52:00.000Z"
+    },
+    {
+      "id": "bug-509",
+      "timestamp": "2026-06-13T15:52:30.000Z",
+      "error_message": "chess.js@1.4.0 Chess.move() THROWS `Error: Invalid move` on an illegal move instead of returning null",
+      "file": "apps/web/src/lib/board/puzzle-utils.ts",
+      "root_cause": "chess.js v1.x changed move() to throw on illegal input (v0.x returned null). Verification scripts and any consumer that assumes a null return will crash.",
+      "fix": "Always wrap move() in try/catch. rules.ts applyMoveToFen/makeMove already do; puzzle-utils replayPgnVerbose uses history()-sourced (always-legal) moves. Documented so future callers don't assume null.",
+      "tags": ["chess.js", "dependency-quirk", "error-handling", "v1-migration"],
+      "related_bugs": ["bug-508"],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T15:52:30.000Z"
     }
   ]
 }

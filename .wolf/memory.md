@@ -2373,3 +2373,34 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 09:39 | Created ../../.claude/plans/add-a-daily-fuzzy-haven.md | — | ~3194 |
+| 09:41 | Created apps/api/src/puzzles/puzzles.types.ts | — | ~202 |
+| 09:41 | Created apps/api/src/puzzles/puzzles.service.ts | — | ~367 |
+| 09:42 | Created apps/api/src/puzzles/puzzles.controller.ts | — | ~128 |
+| 09:42 | Created apps/api/src/puzzles/puzzles.module.ts | — | ~75 |
+| 09:42 | Edited apps/api/src/app.module.ts | added 1 import(s) | ~39 |
+| 09:42 | Edited apps/api/src/app.module.ts | 2→3 lines | ~18 |
+| 09:42 | Edited apps/web/src/lib/board/types.ts | 9→11 lines | ~44 |
+| 09:42 | Edited apps/web/src/lib/board/sound.ts | expanded (+67 lines) | ~544 |
+| 09:42 | Created apps/web/src/lib/board/puzzle-utils.ts | — | ~717 |
+| 09:43 | Created apps/web/src/lib/api/puzzles.ts | — | ~318 |
+| 09:45 | Created apps/web/src/hooks/use-puzzle.ts | — | ~2526 |
+| 09:45 | Created apps/web/src/components/puzzle/puzzle-board.tsx | — | ~1136 |
+| 09:45 | Edited apps/web/src/components/puzzle/puzzle-board.tsx | added 1 import(s) | ~57 |
+| 09:45 | Edited apps/web/src/components/puzzle/puzzle-board.tsx | 3→5 lines | ~47 |
+| 09:46 | Created apps/web/src/app/puzzles/page.tsx | — | ~139 |
+| 09:46 | Created apps/web/src/app/puzzles/puzzle-client.tsx | — | ~1162 |
+| 09:46 | Edited apps/web/src/components/home/hero.tsx | 2→2 lines | ~46 |
+| 09:46 | Edited apps/web/src/components/layout/AppShell.tsx | 4→5 lines | ~40 |
+| 09:46 | Edited apps/web/src/components/layout/MobileNav.tsx | 6→7 lines | ~64 |
+| 09:47 | Created apps/web/test/board/puzzle-utils.test.ts | — | ~633 |
+| 09:48 | Created apps/web/test/hooks/use-puzzle.test.ts | — | ~1060 |
+| 09:48 | Created apps/api/test/puzzles/puzzles.service.spec.ts | — | ~646 |
+| 09:48 | Edited apps/web/test/hooks/use-puzzle.test.ts | 4→8 lines | ~90 |
+| 09:48 | Edited apps/web/src/components/puzzle/puzzle-board.tsx | added 1 condition(s) | ~38 |
+| 09:51 | Edited apps/web/src/hooks/use-puzzle.ts | 11→11 lines | ~114 |
+| 09:51 | Edited apps/web/src/hooks/use-puzzle.ts | start() → move() | ~249 |
+| 09:51 | Edited apps/web/src/hooks/use-puzzle.ts | reduced (-11 lines) | ~26 |
+| 09:51 | Edited apps/web/test/hooks/use-puzzle.test.ts | 11→13 lines | ~120 |
+| 09:53 | Daily puzzle feature: API proxy module + use-puzzle state machine + /puzzles page; fixed lichess initialPly off-by-one (bug-508), verified full solution legal vs live API | apps/api/src/puzzles/*, apps/web/{hooks/use-puzzle,components/puzzle/puzzle-board,app/puzzles/*,lib/board/puzzle-utils,lib/api/puzzles}, sound+nav+hero edits | 19 web tests + 3 api specs green, typecheck+lint clean, /puzzles HTTP 200 | ~12000 |
+| 09:54 | Session end: 29 writes across 20 files (add-a-daily-fuzzy-haven.md, puzzles.types.ts, puzzles.service.ts, puzzles.controller.ts, puzzles.module.ts) | 35 reads | ~51952 tok |

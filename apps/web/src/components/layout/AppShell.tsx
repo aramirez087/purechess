@@ -8,6 +8,7 @@ import { SettingsDialog } from '@/components/settings/settings-dialog';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
+  { href: '/puzzles', label: 'Puzzles' },
   { href: '/games', label: 'Games' },
 ];
 

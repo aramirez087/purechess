@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 3010554,
-    "total_reads": 2057,
-    "total_writes": 2620,
+    "total_tokens_estimated": 3062506,
+    "total_reads": 2092,
+    "total_writes": 2649,
     "total_sessions": 70,
-    "anatomy_hits": 1296,
-    "anatomy_misses": 725,
-    "repeated_reads_blocked": 1437,
-    "estimated_savings_vs_bare_cli": 3282216
+    "anatomy_hits": 1326,
+    "anatomy_misses": 729,
+    "repeated_reads_blocked": 1454,
+    "estimated_savings_vs_bare_cli": 3328594
   },
   "sessions": [
     {
@@ -27155,6 +27155,378 @@
         "writes_count": 11,
         "repeated_reads_blocked": 8,
         "anatomy_lookups": 24
+      }
+    },
+    {
+      "id": "session-2026-06-13-0933",
+      "started": "2026-06-13T15:33:32.811Z",
+      "ended": "2026-06-13T15:54:51.689Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.controller.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.module.ts",
+          "tokens_estimated": 84,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/ratings/ratings.service.ts",
+          "tokens_estimated": 1593,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/reports/reports.module.ts",
+          "tokens_estimated": 150,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/reports/reports.controller.ts",
+          "tokens_estimated": 224,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+          "tokens_estimated": 7899,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/sound.ts",
+          "tokens_estimated": 3527,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/redis/redis.module.ts",
+          "tokens_estimated": 115,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts",
+          "tokens_estimated": 781,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/matchmaking/matchmaking.service.ts",
+          "tokens_estimated": 3681,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/board-context.tsx",
+          "tokens_estimated": 704,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/types.ts",
+          "tokens_estimated": 639,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/auth/guards/session-auth.guard.ts",
+          "tokens_estimated": 225,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-game-review.ts",
+          "tokens_estimated": 430,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/auth/guards/optional-session-auth.guard.ts",
+          "tokens_estimated": 202,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/app.controller.ts",
+          "tokens_estimated": 157,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-move-classifier.test.ts",
+          "tokens_estimated": 2766,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/tsconfig.json",
+          "tokens_estimated": 128,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/tsconfig.base.json",
+          "tokens_estimated": 121,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/eslint.config.mjs",
+          "tokens_estimated": 119,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/rules.ts",
+          "tokens_estimated": 2647,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/seo.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/board/legal-sans.test.ts",
+          "tokens_estimated": 876,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/auth/auth.controller.ts",
+          "tokens_estimated": 1430,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/page.tsx",
+          "tokens_estimated": 160,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/analyze-client.tsx",
+          "tokens_estimated": 2099,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/packages/shared/src/chess.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/admin/admin.service.ts",
+          "tokens_estimated": 1969,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 950,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/home/hero.tsx",
+          "tokens_estimated": 1450,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/utils.ts",
+          "tokens_estimated": 369,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/computer-games.ts",
+          "tokens_estimated": 772,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/ui/card.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/layout/MobileNav.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/test/admin/admin.service.spec.ts",
+          "tokens_estimated": 1618,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/.claude/plans/add-a-daily-fuzzy-haven.md",
+          "tokens_estimated": 3422,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.types.ts",
+          "tokens_estimated": 202,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.service.ts",
+          "tokens_estimated": 367,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.controller.ts",
+          "tokens_estimated": 128,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.module.ts",
+          "tokens_estimated": 75,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/types.ts",
+          "tokens_estimated": 44,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/sound.ts",
+          "tokens_estimated": 544,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/puzzle-utils.ts",
+          "tokens_estimated": 717,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/puzzles.ts",
+          "tokens_estimated": 318,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-puzzle.ts",
+          "tokens_estimated": 2526,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/puzzle-board.tsx",
+          "tokens_estimated": 1136,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/puzzle-board.tsx",
+          "tokens_estimated": 57,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/puzzle-board.tsx",
+          "tokens_estimated": 47,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/page.tsx",
+          "tokens_estimated": 139,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/puzzle-client.tsx",
+          "tokens_estimated": 1162,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/home/hero.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/layout/AppShell.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/layout/MobileNav.tsx",
+          "tokens_estimated": 64,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/board/puzzle-utils.test.ts",
+          "tokens_estimated": 633,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-puzzle.test.ts",
+          "tokens_estimated": 1060,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/test/puzzles/puzzles.service.spec.ts",
+          "tokens_estimated": 646,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-puzzle.test.ts",
+          "tokens_estimated": 90,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/puzzle-board.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-puzzle.ts",
+          "tokens_estimated": 114,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-puzzle.ts",
+          "tokens_estimated": 249,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-puzzle.ts",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-puzzle.test.ts",
+          "tokens_estimated": 120,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 37885,
+        "output_tokens_estimated": 14067,
+        "reads_count": 35,
+        "writes_count": 29,
+        "repeated_reads_blocked": 17,
+        "anatomy_lookups": 30
       }
     }
   ],
