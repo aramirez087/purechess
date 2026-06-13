@@ -2316,3 +2316,8 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 00:19 | Edited apps/web/src/hooks/use-move-classifier.ts | expanded (+6 lines) | ~174 |
 | 00:19 | Edited apps/web/src/hooks/use-move-classifier.ts | modified isSacrifice() | ~265 |
 | 00:19 | Edited apps/web/test/hooks/use-move-classifier.test.ts | Black() → toBe() | ~213 |
+
+## Session: 2026-06-13 07:05
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
