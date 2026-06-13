@@ -168,4 +168,4 @@ existing `tsconfig.seed.json` (`rootDir: "."`, `noEmit`). I extended that config
 - Selection queries should filter on `rating` (B-tree) and/or `themes`
   (`{ has }` / `@> ARRAY[...]` → GIN); re-run EXPLAIN after the 50k seed.
 
-**Commit:** `e231331` on `epic/purechess-improve`.
+**Commit:** `7c78a0b` on `epic/purechess-improve`.
