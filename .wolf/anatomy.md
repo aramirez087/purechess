@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:08:20.549Z
-> Files: 1203 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:49:00.246Z
+> Files: 1204 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -80,7 +80,7 @@
 - `.gitignore` — Git ignore rules (~122 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
-- `.session-01-plan.md` — Session 01 Implementation Plan — Charter + Baselines (~2935 tok)
+- `.session-01-plan.md` — Session 01 — Implementation Plan: Charter + jscpd Baseline (~4430 tok)
 - `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
@@ -1829,6 +1829,10 @@
 ## docs/epics/
 
 - `purechess-improve.md` — Epic: Purechess Improve (~3536 tok)
+
+## docs/roadmap/dedup-cleanup/
+
+- `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
 
 ## docs/roadmap/purechess-category-best/
 
