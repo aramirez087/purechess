@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:59:51.556Z
-> Files: 1054 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:09:57.337Z
+> Files: 1069 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -634,15 +634,19 @@
 
 ## Daily Puzzle feature (added 2026-06-13)
 
+- `apps/api/src/puzzles/dto/grade-review.dto.ts` — S06 class-validator body for review grade: solved:boolean, msToSolve?:int≥0. (~90 tok)
 - `apps/api/src/puzzles/dto/record-attempt.dto.ts` — S03 RecordAttemptDto (class-validator): solved bool, msToSolve? int≥0, source? enum(theme|daily|rush|review|mistake). (~120 tok)
 - `apps/api/src/puzzles/puzzle-catalog.service.ts` — S02 read-only catalog over seeded Puzzle bank: listThemes() (raw `unnest(themes)` GROUP BY, count bigint→number, Redis-cached 1h key `puzzle:catalog:themes`), count(), ratingRange() ({0,0} on empty). DI: PrismaService + REDIS_CLIENT. (~360 tok)
 - `apps/api/src/puzzles/puzzle-rating.service.ts` — S03 per-user puzzle Glicko. applyResult(userId,puzzleRating,rd,solved): REUSES `updateRating` from ratings/glicko2.ts (puzzle = one opponent, score 1/0), upserts PuzzleRating Float cols (unrounded), defaults 1500/350/0.06, clamps zero-RD opponent to 60. get(): snapshot or defaults. DI: PrismaService. (~420 tok)
-- `apps/api/src/puzzles/puzzle-serving.service.ts` — S03 serving engine. getNext(userId,{theme?,rating?}): target=arg→PuzzleRating.rating→1500, window ladder ±150/±300/±600 then drop unseen+window (keeps theme), NOT EXISTS exclusion of attempted ids, `themes @> ARRAY[$theme]` GIN, `ORDER BY random() LIMIT 1` via parameterized Prisma.sql. recordAttempt(): inserts PuzzleAttempt (before/after captured), drives PuzzleRatingService, bumps plays, returns delta DTO. getStats(): per-theme accuracy, weakest-first (acc ASC). DI: PrismaService + PuzzleRatingService. (~700 tok)
+- `apps/api/src/puzzles/puzzle-review.controller.ts` — S06 `@Controller('puzzles/review')` additive: GET due (→getDuePayload) + POST :id/grade (GradeReviewDto). SessionAuthGuard + @CurrentUser. (~230 tok)
+- `apps/api/src/puzzles/puzzle-review.service.ts` — S06 spaced-repetition queue over PuzzleReview. enqueueOnFail (upsert due ~tomorrow, idempotent on (userId,puzzleId)); getDue(userId,limit=20) due `dueAt<=now` oldest-first via (userId,dueAt) idx → PuzzleDto[]; dueCount(userId):Promise<number> (S13 badge); nextDueAt; grade(userId,puzzleId,solved,msToSolve?) maps→schedule, updates-or-deletes (GRADUATION_INTERVAL_DAYS=30 → delete); getDuePayload bundles {puzzles,dueCount,nextDueAt}. DI: PrismaService. (~760 tok)
+- `apps/api/src/puzzles/puzzle-serving.service.ts` — S03 serving engine. getNext(userId,{theme?,rating?}): target=arg→PuzzleRating.rating→1500, window ladder ±150/±300/±600 then drop unseen+window (keeps theme), NOT EXISTS exclusion of attempted ids, `themes @> ARRAY[$theme]` GIN, `ORDER BY random() LIMIT 1` via parameterized Prisma.sql. recordAttempt(): inserts PuzzleAttempt (before/after captured), drives PuzzleRatingService, bumps plays, returns delta DTO. **S06: on solved=false also calls `reviewService.enqueueOnFail` (best-effort, `@Optional()`-injected — skipped/safe in serving-only unit tests).** getStats(): per-theme accuracy, weakest-first (acc ASC). DI: PrismaService + PuzzleRatingService + @Optional PuzzleReviewService. (~750 tok)
 - `apps/api/src/puzzles/puzzle-training.controller.ts` — S03 `@Controller('puzzles')` additive trainer routes: GET themes (public→catalog), GET next + POST :id/attempt + GET stats + GET rating (all SessionAuthGuard + @CurrentUser). Sibling to the daily PuzzlesController. (~360 tok)
 - `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
-- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). imports AuthModule (for SessionAuthGuard). controllers: PuzzlesController + PuzzleTrainingController (S03). providers/exports: PuzzleCatalogService (S02) + PuzzleServingService + PuzzleRatingService (S03). (~110 tok)
+- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). imports AuthModule (for SessionAuthGuard). controllers: PuzzlesController + PuzzleTrainingController (S03) + PuzzleRushController (S05) + PuzzleReviewController (S06). providers/exports: PuzzleCatalogService (S02) + PuzzleServingService + PuzzleRatingService (S03) + PuzzleRushService (S05) + PuzzleReviewService (S06). (~140 tok)
 - `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
 - `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
+- `apps/api/src/puzzles/spaced-repetition.ts` — S06 PURE SM-2 scheduler (no DB). `schedule(prev:{intervalDays,easeFactor,reps,lapses}, grade:'again'|'good'|'easy') → {…state, nextDueOffsetDays}`. Constants exported: DEFAULT_EASE 2.5, MIN_EASE 1.3, FIRST/SECOND_INTERVAL 1/6, AGAIN_EASE_PENALTY 0.2, EASY_EASE_BONUS 0.15, EASY_BONUS ×1.3. Deterministic, never mutates input. (~520 tok)
 - `apps/api/test/puzzles/puzzle-catalog.service.spec.ts` — Jest: mock Prisma+Redis. listThemes shape (bigint→number) + caching (2nd call no DB), count delegate, ratingRange min/max + empty {0,0}. (~600 tok)
 - `apps/api/test/puzzles/puzzle-rating.service.spec.ts` — S03 Jest (mock Prisma). applyResult: new-user 1500/350/0.06, solved↑/failed↓, reuses updateRating verbatim (equals direct call), zero-RD clamp. get() snapshot/defaults. PINS Glicko paper vector (game-rating non-regression). (~620 tok)
 - `apps/api/test/puzzles/puzzle-serving.service.spec.ts` — S03 Jest (mock Prisma + PuzzleRatingService). Asserts on the Prisma.Sql `.sql`/`.values`: target-rating resolution (arg/user/1500), NOT EXISTS exclusion, themes @> ARRAY, random()/LIMIT 1, fallback ladder ±150→±300→±600→drop. recordAttempt writes+bumps+returns delta, defaults, NotFound. getStats 3/5=60%, weakest-first, empty, cap-1000. (~900 tok)
@@ -650,6 +654,8 @@
 - `apps/api/test/puzzles/seed-puzzles.spec.ts` — Jest: pure parse/select logic (no DB). validateHeader, parseRow (split moves/themes/openingTags, int coercion, skip empty FEN/Moves/id), PopularityHeap top-N + tie-by-plays + O(cap) memory, parseArgs. (~900 tok)
 - `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
 - `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
+- `apps/web/src/app/puzzles/review/page.tsx` — S06 server page: auth(me.user) → fetch /api/puzzles/review/due → ReviewClient. Signed-out & empty handled in client. force-dynamic. (~250 tok)
+- `apps/web/src/app/puzzles/review/review-client.tsx` — S06 'use client' spaced-repetition loop. NOT TrainingSession (fixed pre-fetched queue, grades via gradeReview not recordAttempt). 3 states: signed-out prompt / AllCaughtUp empty state (next-due date + link to /puzzles/train) / ReviewRun (useLocalPuzzle over initialDue.puzzles, header "N due", 1.2s auto-advance, end-of-queue ReviewSummary solved/total + next review). formatDue → today/tomorrow/in N days. (~1400 tok)
 - `apps/web/src/app/puzzles/train/page.tsx` — Server page: auth (me.user) + public themes + auth stats → TrainClient. Signed-out browsable (read-only), never gates daily. (~330 tok)
 - `apps/web/src/app/puzzles/train/train-client.tsx` — 'use client' theme trainer. selectWeakestThemes (top-3 accuracy ASC, min 5 attempts). Phase 1 selection (weakest row + all-themes grid of ThemeTiles, ?theme= deep-link); Phase 2 <TrainingSession source="theme">. Signed-out: read-only grid + sign-in prompt. (~900 tok)
 - `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
@@ -657,7 +663,7 @@
 - `apps/web/src/components/puzzle/training-session.tsx` — Reusable drill shell. Props {theme:string|null, source:PuzzleSource, target=10, onBack?, onChangeTheme?}. Loops fetchNextPuzzle→useLocalPuzzle/Chessboard→recordAttempt({solved,msToSolve,source})→1.2s auto-advance. Header solved/attempted + progress bar, rating delta readout, SessionSummary at target with theme accuracy before/after. (~1500 tok)
 - `apps/web/src/hooks/use-local-puzzle.ts` — S04 DB-puzzle solve machine (reusable core for rush/review/mistakes). NO setup phase: puzzle.fen IS start, moves[0]=solver's first move, solvingColor from FEN. Phases player→auto-reply→…→success|fail→reveal. onMove(uci) matches via puzzle-utils, tracks msToSolve, fires onSolved({msToSolve})/onFailed once. (~1100 tok)
 - `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
-- `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating() — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~520 tok)
+- `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating(); S05 rush: startRush/finishRush/fetchRushPersonalBests; **S06 review: fetchDueReviews()→ReviewDueDto, gradeReview(id,{solved,msToSolve?})→ReviewGradeResultDto** — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~620 tok)
 - `apps/web/src/lib/board/puzzle-utils.ts` — SHARED solve helpers (daily + local hooks): replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch, uciToIntent, applyUci (normalize+apply→{fen,lastMove}), solvingColorFromFen. chess.js + rules.applyMoveToFen. (~560 tok)
 - `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
 - `apps/web/test/hooks/use-local-puzzle.test.ts` — vitest+fake timers: player phase no-setup, solvingColor from FEN (w/b), castle-uci match (e1h1==e1g1), full correct→success+msToSolve, wrong→fail+onFailed, onReveal. (~900 tok)
@@ -867,17 +873,21 @@
 
 - `puzzle-catalog.service.ts` — One theme slug and how many puzzles in the bank carry it. (~803 tok)
 - `puzzle-rating.service.ts` — New-puzzle-solver defaults, matching the schema column defaults. (~1005 tok)
+- `puzzle-review.controller.ts` — Spaced-repetition review endpoints — the due-today queue and grading over the (~440 tok)
+- `puzzle-review.service.ts` — Default page size for the due queue. (~2320 tok)
 - `puzzle-rush.controller.ts` — Puzzle Rush endpoints — the timed board-vision drill. Registered additively (~757 tok)
 - `puzzle-rush.service.ts` — Default target rating for a user who has never solved a puzzle. (~2646 tok)
-- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~2734 tok)
+- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~3025 tok)
 - `puzzle-training.controller.ts` — Trainer endpoints — the local puzzle bank, per-user serving, attempt (~846 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
-- `puzzles.module.ts` — Exports PuzzlesModule (~287 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~352 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
+- `spaced-repetition.ts` — Pure SM-2-style spaced-repetition scheduler for failed/learning puzzles. (~1497 tok)
 
 ## apps/api/src/puzzles/dto/
 
+- `grade-review.dto.ts` — Body for `POST /puzzles/review/:id/grade`. The client reports only the (~144 tok)
 - `record-attempt.dto.ts` — Body for `POST /puzzles/:id/attempt`. The client reports only the outcome — (~201 tok)
 - `rush.dto.ts` — Body for `POST /puzzles/rush/start`. Mode defaults to `3min` server-side. (~225 tok)
 
@@ -1005,10 +1015,12 @@
 
 - `puzzle-catalog.service.spec.ts` — Declares mockRedis (~1075 tok)
 - `puzzle-rating.service.spec.ts` — API routes: GET (2 endpoints) (~1595 tok)
+- `puzzle-review.service.spec.ts` — mockPrisma: puzzle (~2466 tok)
 - `puzzle-rush.service.spec.ts` — A growing bank of synthetic puzzles spanning a wide rating range. buildSet's (~2551 tok)
 - `puzzle-serving.service.spec.ts` — Last `$queryRaw` call's bound SQL + values (Prisma.Sql shape). (~3613 tok)
 - `puzzles.service.spec.ts` — Declares mockRedis (~646 tok)
 - `seed-puzzles.spec.ts` — Build a CSV data line in the exact lichess column order. (~1821 tok)
+- `spaced-repetition.spec.ts` — A pristine, never-reviewed card. (~1458 tok)
 
 ## apps/api/test/ratings/
 
@@ -1174,6 +1186,11 @@
 
 - `page.tsx` — metadata (~139 tok)
 - `puzzle-client.tsx` — formatPlays (~1162 tok)
+
+## apps/web/src/app/puzzles/review/
+
+- `page.tsx` — dynamic (~373 tok)
+- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3510 tok)
 
 ## apps/web/src/app/puzzles/rush/
 
@@ -1374,7 +1391,7 @@
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
-- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~1643 tok)
+- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~1954 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
@@ -1649,6 +1666,7 @@
 - `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2558 tok)
 - `session-04-handoff.md` — Session 04 handoff — Local solve engine + theme trainer (~1941 tok)
 - `session-05-handoff.md` — Session 05 handoff — Puzzle Rush (timed board vision) (~2616 tok)
+- `session-06-handoff.md` — Session 06 handoff — Spaced-repetition review (~2717 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1696,7 +1714,7 @@
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
-- `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~837 tok)
+- `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~1207 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
 - `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)

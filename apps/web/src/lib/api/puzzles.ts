@@ -12,6 +12,8 @@ import type {
   PuzzleSource,
   PuzzleThemeDto,
   PuzzleThemeStatDto,
+  ReviewDueDto,
+  ReviewGradeResultDto,
   RushFinishResponseDto,
   RushMode,
   RushPersonalBestsDto,
@@ -160,4 +162,34 @@ export async function fetchRushPersonalBests(): Promise<RushPersonalBestsDto> {
   });
   await ensureOk(res, 'rush-pb fetch');
   return res.json() as Promise<RushPersonalBestsDto>;
+}
+
+// --- Spaced-repetition review (SM-2 due queue) -----------------------------
+
+/** The user's due-today review queue (oldest-first) + the total due count. */
+export async function fetchDueReviews(): Promise<ReviewDueDto> {
+  const res = await fetch(`${API}/api/puzzles/review/due`, {
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+  });
+  await ensureOk(res, 'review-due fetch');
+  return res.json() as Promise<ReviewDueDto>;
+}
+
+/** Grade a reviewed card; returns its next due info (or graduation). */
+export async function gradeReview(
+  puzzleId: string,
+  body: { solved: boolean; msToSolve?: number },
+): Promise<ReviewGradeResultDto> {
+  const res = await fetch(
+    `${API}/api/puzzles/review/${encodeURIComponent(puzzleId)}/grade`,
+    {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(body),
+    },
+  );
+  await ensureOk(res, 'review grade');
+  return res.json() as Promise<ReviewGradeResultDto>;
 }

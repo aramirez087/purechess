@@ -2537,3 +2537,35 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:57 | tests (service 12, client 6) green; all gates pass | test/puzzles/puzzle-rush.service.spec.ts, test/puzzle/rush-client.test.tsx | API 417, web 584 | ~4k |
 | 13:00 | prettier, cerebrum/buglog-522/anatomy/memory, handoff | .wolf/*, docs/roadmap/.../session-05-handoff.md | committed | ~2k |
 | 12:59 | Created docs/roadmap/purechess-improve/session-05-handoff.md | — | ~2790 |
+| 13:02 | Created apps/api/src/puzzles/spaced-repetition.ts | — | ~1497 |
+| 13:02 | Edited packages/shared/src/dto/puzzle.dto.ts | expanded (+31 lines) | ~467 |
+| 13:03 | Created apps/api/src/puzzles/puzzle-review.service.ts | — | ~2328 |
+| 13:03 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | added 1 import(s) | ~122 |
+| 13:03 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | 4→7 lines | ~101 |
+| 13:03 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | added error handling | ~293 |
+| 13:04 | Created apps/api/src/puzzles/puzzle-review.controller.ts | — | ~440 |
+| 13:04 | Created apps/api/src/puzzles/dto/grade-review.dto.ts | — | ~144 |
+| 13:04 | Edited apps/api/src/puzzles/puzzles.module.ts | expanded (+14 lines) | ~239 |
+| 13:04 | Edited apps/web/src/lib/api/puzzles.ts | 12→14 lines | ~80 |
+| 13:04 | Edited apps/web/src/lib/api/puzzles.ts | modified fetchRushPersonalBests() | ~410 |
+| 13:04 | Created apps/web/src/app/puzzles/review/page.tsx | — | ~373 |
+| 13:05 | Created apps/web/src/app/puzzles/review/review-client.tsx | — | ~3546 |
+| 13:05 | Edited apps/web/src/app/puzzles/review/review-client.tsx | inline fix | ~18 |
+| 13:05 | Edited apps/web/src/app/puzzles/review/review-client.tsx | 6→3 lines | ~19 |
+| 13:05 | Created apps/api/test/puzzles/spaced-repetition.spec.ts | — | ~1458 |
+| 13:06 | Created apps/api/test/puzzles/puzzle-review.service.spec.ts | — | ~2466 |
+
+## Session — purechess-improve S06 (spaced-repetition review)
+| 13:00 | Read S00/S06 specs + S03/S04 handoffs, buglog bug-522 | docs/ + .wolf | context loaded | ~6k |
+| 13:02 | spaced-repetition.ts pure SM-2 scheduler (constants documented) | apps/api/src/puzzles/spaced-repetition.ts | created | ~1k |
+| 13:04 | PuzzleReviewService (enqueueOnFail/getDue/dueCount/grade/getDuePayload, GRADUATION=30d) | apps/api/src/puzzles/puzzle-review.service.ts | created | ~1.5k |
+| 13:05 | enqueue-on-fail hook in recordAttempt via @Optional() review service (best-effort, keeps serving spec green) | puzzle-serving.service.ts | edited additively | ~0.5k |
+| 13:06 | Controller + GradeReviewDto + module registration (additive) | puzzle-review.controller.ts, dto/grade-review.dto.ts, puzzles.module.ts | created/edited | ~0.5k |
+| 13:07 | Shared ReviewDueDto/ReviewGradeResultDto + web client fetchDueReviews/gradeReview | packages/shared/src/dto/puzzle.dto.ts, apps/web/src/lib/api/puzzles.ts | edited | ~0.5k |
+| 13:08 | Review page + review-client (thin useLocalPuzzle loop, AllCaughtUp empty state) | apps/web/src/app/puzzles/review/{page,review-client}.tsx | created | ~1.5k |
+| 13:09 | Tests: spaced-repetition.spec (good ladder/again floor/easy/determinism) + puzzle-review.service.spec (mock Prisma) | apps/api/test/puzzles/ | created | ~1.5k |
+| 13:10 | GATES GREEN: api tsc 0 + 441 tests; web tsc 0 + 584 tests. S04 training-session(4) still green | — | all pass | ~1k |
+| 13:09 | Created docs/roadmap/purechess-improve/session-06-handoff.md | — | ~2899 |
+| 13:09 | Edited apps/web/src/app/puzzles/review/review-client.tsx | inline fix | ~24 |
+| 13:09 | Edited apps/api/src/puzzles/puzzle-review.service.ts | reduced (-6 lines) | ~28 |
+| 13:09 | Edited apps/api/src/puzzles/puzzle-review.service.ts | modified per() | ~69 |

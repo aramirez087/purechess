@@ -90,3 +90,34 @@ export interface PuzzleRatingDto {
   attempts?: number;
   updatedAt?: string;
 }
+
+// --- Spaced-repetition review (SM-2 over the PuzzleReview table) ------------
+//
+// A puzzle you fail enters a review queue; solving it on schedule pushes it
+// out at growing intervals; failing it resets it. Scheduling is server-owned
+// (the client reports solved + ms and reads back the next due date).
+
+/** GET /puzzles/review/due — the due-today queue plus its size. */
+export interface ReviewDueDto {
+  /** Due puzzles, oldest-first (most overdue first). */
+  puzzles: PuzzleDto[];
+  /** Total cards due now (may exceed `puzzles.length` when the queue is capped). */
+  dueCount: number;
+  /**
+   * ISO time the next card becomes due, when nothing is due right now. Powers
+   * the "all caught up — next review {date}" empty state. Null when the user
+   * has no review cards at all.
+   */
+  nextDueAt?: string | null;
+}
+
+/** POST /puzzles/review/:id/grade — the rescheduled card after a graded review. */
+export interface ReviewGradeResultDto {
+  puzzleId: string;
+  /** True when the card graduated out of the queue (interval crossed the threshold). */
+  graduated: boolean;
+  /** ISO time the card is next due. Null once it has graduated (no longer scheduled). */
+  nextDueAt: string | null;
+  /** The card's scheduling interval (days) after this grade. */
+  intervalDays: number;
+}

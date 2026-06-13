@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import type {
   PuzzleAttemptResultDto,
@@ -8,6 +8,7 @@ import type {
 } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
 import { PuzzleRatingService } from './puzzle-rating.service';
+import { PuzzleReviewService } from './puzzle-review.service';
 
 /** Default target rating for a user who has never solved a puzzle. */
 const DEFAULT_TARGET_RATING = 1500;
@@ -49,6 +50,9 @@ export class PuzzleServingService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly ratingService: PuzzleRatingService,
+    // Optional so the serving service stays usable (and unit-testable) without
+    // the review module; in the wired app `PuzzlesModule` always provides it.
+    @Optional() private readonly reviewService?: PuzzleReviewService,
   ) {}
 
   /**
@@ -141,6 +145,22 @@ export class PuzzleServingService {
       where: { id: puzzleId },
       data: { plays: { increment: 1 } },
     });
+
+    // A failed puzzle (any mode) enters the spaced-repetition queue, due
+    // tomorrow. Additive + non-blocking-by-design: review scheduling never
+    // changes the attempt outcome or the returned rating delta. Skipped when
+    // the review service isn't wired (unit tests of serving in isolation).
+    if (!input.solved && this.reviewService) {
+      try {
+        await this.reviewService.enqueueOnFail(userId, puzzleId);
+      } catch (err) {
+        // Enqueue is best-effort — a queue write failing must not fail the
+        // attempt the user already completed.
+        this.logger.warn(
+          `enqueueOnFail failed for user ${userId} puzzle ${puzzleId}: ${String(err)}`,
+        );
+      }
+    }
 
     return {
       puzzleId,
