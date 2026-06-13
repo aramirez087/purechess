@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 3196717,
-    "total_reads": 2163,
-    "total_writes": 2728,
+    "total_tokens_estimated": 3273415,
+    "total_reads": 2184,
+    "total_writes": 2779,
     "total_sessions": 71,
-    "anatomy_hits": 1387,
+    "anatomy_hits": 1408,
     "anatomy_misses": 737,
-    "repeated_reads_blocked": 1488,
-    "estimated_savings_vs_bare_cli": 3421550
+    "repeated_reads_blocked": 1500,
+    "estimated_savings_vs_bare_cli": 3480689
   },
   "sessions": [
     {
@@ -28382,6 +28382,438 @@
         "writes_count": 50,
         "repeated_reads_blocked": 17,
         "anatomy_lookups": 31
+      }
+    },
+    {
+      "id": "session-2026-06-13-1606",
+      "started": "2026-06-13T22:06:05.665Z",
+      "ended": "2026-06-13T22:27:20.581Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/training-session.tsx",
+          "tokens_estimated": 4864,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/playwright.config.ts",
+          "tokens_estimated": 221,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 4483,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/runbooks/puzzle-db-refresh.md",
+          "tokens_estimated": 1167,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 1653,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 107,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/training-session.tsx",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 336,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 161,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/runbooks/puzzle-db-refresh.md",
+          "tokens_estimated": 978,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/adr/ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md",
+          "tokens_estimated": 1509,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/adr/ADR-7-insights-as-pure-detectors.md",
+          "tokens_estimated": 1088,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 149,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 415,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 557,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/epic-closeout.md",
+          "tokens_estimated": 1859,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-16-handoff.md",
+          "tokens_estimated": 2610,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 12388,
+        "output_tokens_estimated": 10402,
+        "reads_count": 5,
+        "writes_count": 16,
+        "repeated_reads_blocked": 4,
+        "anatomy_lookups": 5
+      }
+    },
+    {
+      "id": "session-2026-06-13-1606",
+      "started": "2026-06-13T22:06:05.665Z",
+      "ended": "2026-06-13T22:39:53.593Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/training-session.tsx",
+          "tokens_estimated": 4864,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/playwright.config.ts",
+          "tokens_estimated": 221,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 4483,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/runbooks/puzzle-db-refresh.md",
+          "tokens_estimated": 1167,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 1653,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/next.config.mjs",
+          "tokens_estimated": 848,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 107,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/training-session.tsx",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 336,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 161,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/runbooks/puzzle-db-refresh.md",
+          "tokens_estimated": 978,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/adr/ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md",
+          "tokens_estimated": 1509,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/adr/ADR-7-insights-as-pure-detectors.md",
+          "tokens_estimated": 1088,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 149,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 415,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 557,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/epic-closeout.md",
+          "tokens_estimated": 1859,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-16-handoff.md",
+          "tokens_estimated": 2610,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 13236,
+        "output_tokens_estimated": 10402,
+        "reads_count": 6,
+        "writes_count": 16,
+        "repeated_reads_blocked": 4,
+        "anatomy_lookups": 6
+      }
+    },
+    {
+      "id": "session-2026-06-13-1606",
+      "started": "2026-06-13T22:06:05.665Z",
+      "ended": "2026-06-13T22:55:02.670Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/training-session.tsx",
+          "tokens_estimated": 4864,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/playwright.config.ts",
+          "tokens_estimated": 221,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 4483,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/runbooks/puzzle-db-refresh.md",
+          "tokens_estimated": 1167,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 1653,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/next.config.mjs",
+          "tokens_estimated": 848,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/training/daily-plan.tsx",
+          "tokens_estimated": 1933,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/theme-tile.tsx",
+          "tokens_estimated": 973,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/pgn-actions.tsx",
+          "tokens_estimated": 1038,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/training/daily-plan.test.tsx",
+          "tokens_estimated": 2348,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 107,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/training-session.tsx",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 336,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 161,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/runbooks/puzzle-db-refresh.md",
+          "tokens_estimated": 978,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/adr/ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md",
+          "tokens_estimated": 1509,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/adr/ADR-7-insights-as-pure-detectors.md",
+          "tokens_estimated": 1088,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/e2e/tests/training.spec.ts",
+          "tokens_estimated": 149,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 415,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/CLAUDE.md",
+          "tokens_estimated": 557,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/epic-closeout.md",
+          "tokens_estimated": 1859,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-16-handoff.md",
+          "tokens_estimated": 2610,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/theme-tile.tsx",
+          "tokens_estimated": 93,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/pgn-actions.tsx",
+          "tokens_estimated": 96,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/training/daily-plan.tsx",
+          "tokens_estimated": 151,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 19528,
+        "output_tokens_estimated": 10742,
+        "reads_count": 10,
+        "writes_count": 19,
+        "repeated_reads_blocked": 4,
+        "anatomy_lookups": 10
       }
     }
   ],

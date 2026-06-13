@@ -90,8 +90,9 @@ export function PgnActions(props: PgnActionsProps) {
 export function PgnIconActions(props: PgnActionsProps) {
   const { handleCopy, handleCopyFen, handleDownload } = usePgnHandlers(props);
 
+  // 44px touch target on mobile (WCAG 2.5.5), compact 28px on desktop pointers.
   const buttonClass =
-    'inline-flex h-7 w-7 items-center justify-center rounded-[5px] text-[#8a948a] transition-colors hover:bg-white/5 hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]';
+    'inline-flex h-11 w-11 sm:h-7 sm:w-7 items-center justify-center rounded-[5px] text-[#8a948a] transition-colors hover:bg-white/5 hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]';
 
   return (
     <div className="flex items-center gap-0.5">

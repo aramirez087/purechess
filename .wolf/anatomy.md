@@ -1,6 +1,6 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T22:23:18.329Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T22:51:56.952Z
 > Files: 1202 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
@@ -1469,7 +1469,7 @@
 - `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1433 tok)
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
-- `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~973 tok)
+- `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~1019 tok)
 - `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4866 tok)
 
 ## apps/web/src/components/review/
@@ -1483,7 +1483,7 @@
 - `move-coach.tsx` — A coach line for the move that produced the current position: a colored (~630 tok)
 - `move-time-chart.tsx` — Per-ply move-time SVG bars (viewBox 0 0 500 80) colored by MoveClass (blunder red → brilliant emerald, neutral when unclassified), white full / black 0.6 opacity, click-to-seek, hover title, White/Black avg row (excludes ≤500ms). Self-hides when no move >500ms. (~1408 tok)
 - `opening-explorer.tsx` — Called with the row's UCI move — caller enters it into the analysis tree. (~1141 tok)
-- `pgn-actions.tsx` — Analysis tree root. When provided, Copy/Download serialise the full tree (~1038 tok)
+- `pgn-actions.tsx` — Analysis tree root. When provided, Copy/Download serialise the full tree (~1126 tok)
 - `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1162 tok)
 - `review-move-list.tsx` — Undefined = classification hasn't run yet — no badges shown. (~785 tok)
 
@@ -1494,7 +1494,7 @@
 
 ## apps/web/src/components/training/
 
-- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1933 tok)
+- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1984 tok)
 - `streak-banner.tsx` — The streak header: the current streak (flame), the longest streak, and a (~1291 tok)
 - `training-announcer.tsx` — One polite live region per training surface for SOLVE OUTCOMES and session (~344 tok)
 

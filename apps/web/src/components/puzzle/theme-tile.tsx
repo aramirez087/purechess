@@ -29,7 +29,9 @@ export interface ThemeTileProps {
 export function humanizeTheme(theme: string): string {
   const spaced = theme
     .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/([a-zA-Z])(\d)/g, '$1 $2')
+    // Split a number off only when it trails a word ("mateIn1" -> "mate In 1"),
+    // not mid-token ("e2etest" stays "e2etest", never "e 2etest").
+    .replace(/([a-zA-Z])(\d+)(?![a-zA-Z])/g, '$1 $2')
     .replace(/[-_]/g, ' ')
     .toLowerCase()
     .trim();

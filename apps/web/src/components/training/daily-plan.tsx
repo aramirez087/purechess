@@ -103,7 +103,9 @@ export function DailyPlan({ plan }: DailyPlanProps) {
           className="flex items-center justify-center gap-2 rounded-[10px] border border-brass/40 bg-brass-soft/20 px-4 py-3 text-sm font-medium text-brass-text"
         >
           <Check className="h-4 w-4" aria-hidden="true" />
-          Done for today
+          {/* "Done for today" only when the daily goal is also met — otherwise the
+              copy would contradict an unfilled goal ring. */}
+          {goalMet ? 'Done for today' : 'Plan complete'}
         </p>
       ) : null}
     </section>

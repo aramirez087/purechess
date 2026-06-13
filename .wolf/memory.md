@@ -2956,3 +2956,14 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 16:20 | S16: fixed bug-601 endgames max(boolean) → /train/plan 500 | apps/api/src/endgames/endgames.service.ts + spec | api 609 tests pass | ~2k |
 | 16:20 | S16: training.spec.ts (6 tests, 5 paths) + EXPLAIN proof | apps/web/e2e/tests/training.spec.ts | 6/6 pass isolated, 5+1flaky full run (dev-server) | ~10k |
 | 16:20 | S16: docs — runbook refresh+cadence, ADR-6/7, CLAUDE.md, closeout, handoff | docs/runbooks, docs/adr, CLAUDE.md, docs/roadmap/purechess-improve | done | ~5k |
+| 16:27 | RAN full purechess-improve epic: 16 sessions S01-S16 via subagents, sequential topo order, branch epic/purechess-improve | apps/api, apps/web, packages/shared, docs | all green; api 609 tests/48 suites, web 662 tests/83 files; getNext p95 2.63ms@50k | ~2.6M (subagents) |
+| 16:27 | Session end: 16 writes across 8 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 5 reads | ~22790 tok |
+| 16:38 | E2E browser walkthrough of running app: register→play, daily puzzle solve, theme trainer solve, rush run+summary, train hub streak/plan, review SM-2 enqueue, endgames KQ-vs-K drill, insights/openings empty states, computer game 1.e4→engine c5 | apps/web (live) | all surfaces pass, console clean | ~12k |
+| 16:38 | Fixed stale-theme closure: added `theme` to settle() useCallback deps (cleared lint warning) | apps/web/src/components/puzzle/training-session.tsx | lint clean, test green | ~1k |
+| 16:38 | Diagnosed stale .next (NEXT_PUBLIC_API_URL=:4100 baked vs CSP :4000) blocking auth; cleared .next + restarted web dev on :4000 | apps/web/.next | walkthrough unblocked | ~2k |
+| 16:39 | Session end: 16 writes across 8 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 6 reads | ~23638 tok |
+| 16:51 | Edited apps/web/src/components/puzzle/theme-tile.tsx | 6→8 lines | ~93 |
+| 16:51 | Edited apps/web/src/components/review/pgn-actions.tsx | CSS: sm, sm | ~96 |
+| 16:51 | Edited apps/web/src/components/training/daily-plan.tsx | 9→11 lines | ~151 |
+| 16:52 | UI/UX audit (desktop+mobile 390px+light/dark+a11y scan) of improve surfaces; fixed 3: Train banner 'Done for today'->'Plan complete' when goal unmet, humanizeTheme trailing-digit guard (E 2etest->E2etest), PgnIconActions 28px->44px mobile tap target | daily-plan.tsx, theme-tile.tsx, pgn-actions.tsx | all verified live; web 662 tests green | ~9k |
+| 16:55 | Session end: 19 writes across 11 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 10 reads | ~30270 tok |
