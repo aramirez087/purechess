@@ -13,6 +13,7 @@ import { SolveExplanation } from '@/components/puzzle/solve-explanation';
 import { TrainingAnnouncer } from '@/components/training/training-announcer';
 import { focusBoard } from '@/lib/board/focus-board';
 import { fetchNextPuzzle, fetchPuzzleStats, recordAttempt } from '@/lib/api/puzzles';
+import { puzzleFailed, puzzleSolved, puzzleStarted } from '@/lib/analytics/training-events';
 
 /**
  * The reusable active-drill shell. Streams rating-appropriate puzzles for a
@@ -97,6 +98,7 @@ export function TrainingSession({
     try {
       const next = await fetchNextPuzzle(theme ? { theme } : {});
       setPuzzle(next);
+      puzzleStarted(source, theme);
       // Auto-advance focus restore: a keyboard solver who had focus on the
       // board must not be dropped to <body> when the next puzzle renders.
       // Deferred past the render that swaps in the new position.
@@ -107,7 +109,7 @@ export function TrainingSession({
     } finally {
       setLoading(false);
     }
-  }, [theme, clearAdvance]);
+  }, [theme, source, clearAdvance]);
 
   // Capture the starting theme accuracy, then load the first puzzle.
   useEffect(() => {
@@ -156,6 +158,13 @@ export function TrainingSession({
           : 'Not the move — try again.',
       );
 
+      // Analytics: the documented training funnel (consent-gated wrapper).
+      if (wasSolved) {
+        puzzleSolved({ source, theme, rating: puzzle.rating });
+      } else {
+        puzzleFailed({ source, theme, rating: puzzle.rating });
+      }
+
       // Report the outcome; read back the server-computed rating delta.
       void (async () => {
         let ratingDelta: number | null = null;
@@ -179,7 +188,7 @@ export function TrainingSession({
         advanceTimerRef.current = setTimeout(() => void loadNext(), AUTO_ADVANCE_MS);
       }
     },
-    [puzzle, source, target, finishSession, loadNext],
+    [puzzle, source, theme, target, finishSession, loadNext],
   );
 
   const msToSolveRef = useRef<number | null>(null);

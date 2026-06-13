@@ -59,21 +59,30 @@ export class EndgamesService {
       return drills.map((d) => this.toDto(d as DrillRow));
     }
 
-    // One grouped read: per drill, did the user attempt it and did any attempt
-    // succeed? `_max.succeeded` is true iff at least one attempt passed.
-    const grouped = await this.prisma.endgameAttempt.groupBy({
-      by: ['drillId'],
-      where: { userId },
-      _count: { _all: true },
-      _max: { succeeded: true },
-    });
-    const byDrill = new Map(grouped.map((g) => [g.drillId, g]));
+    // Two grouped reads: per drill, how many attempts (→ attempted) and how many
+    // SUCCEEDED (→ solved iff ≥1). We count succeeded attempts rather than
+    // `_max(succeeded)` because Postgres has no `max(boolean)` aggregate — a
+    // `_max` on the boolean column throws `function max(boolean) does not exist`
+    // (error 42883) against a real DB (the mocked unit specs never caught it).
+    const [attemptCounts, successCounts] = await Promise.all([
+      this.prisma.endgameAttempt.groupBy({
+        by: ['drillId'],
+        where: { userId },
+        _count: { _all: true },
+      }),
+      this.prisma.endgameAttempt.groupBy({
+        by: ['drillId'],
+        where: { userId, succeeded: true },
+        _count: { _all: true },
+      }),
+    ]);
+    const attemptedBy = new Map(attemptCounts.map((g) => [g.drillId, g._count._all]));
+    const solvedBy = new Map(successCounts.map((g) => [g.drillId, g._count._all]));
 
     return drills.map((d) => {
-      const stat = byDrill.get(d.id);
       return this.toDto(d as DrillRow, {
-        attempted: (stat?._count._all ?? 0) > 0,
-        solved: stat?._max.succeeded ?? false,
+        attempted: (attemptedBy.get(d.id) ?? 0) > 0,
+        solved: (solvedBy.get(d.id) ?? 0) > 0,
       });
     });
   }
@@ -85,14 +94,15 @@ export class EndgamesService {
 
     if (!userId) return this.toDto(drill as DrillRow);
 
-    const agg = await this.prisma.endgameAttempt.aggregate({
-      where: { userId, drillId: drill.id },
-      _count: { _all: true },
-      _max: { succeeded: true },
-    });
+    // Count attempts + successes separately — Postgres has no `max(boolean)`
+    // aggregate, so `_max(succeeded)` throws (error 42883) against a real DB.
+    const [attempts, successes] = await Promise.all([
+      this.prisma.endgameAttempt.count({ where: { userId, drillId: drill.id } }),
+      this.prisma.endgameAttempt.count({ where: { userId, drillId: drill.id, succeeded: true } }),
+    ]);
     return this.toDto(drill as DrillRow, {
-      attempted: agg._count._all > 0,
-      solved: agg._max.succeeded ?? false,
+      attempted: attempts > 0,
+      solved: successes > 0,
     });
   }
 

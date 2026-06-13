@@ -8,6 +8,7 @@ import { BoardSettingsProvider } from '@/components/board/board-context';
 import { Button } from '@/components/ui/button';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { gradeDrill } from '@/lib/api/repertoire';
+import { openingDrillCompleted } from '@/lib/analytics/training-events';
 import {
   useOpeningDrill,
   type DrillLineResult,
@@ -182,6 +183,11 @@ export function OpeningDrill({
     lines: drill.lines,
     color: drill.color,
     onGradeLine: handleGradeLine,
+    onComplete: (summary) =>
+      openingDrillCompleted({
+        lines: summary.linesTrained,
+        accuracy: Math.round(summary.firstTryRate * 100),
+      }),
   });
 
   const handleStart = useCallback(() => {

@@ -2862,3 +2862,97 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 15:11 | Created apps/web/test/a11y/training-surfaces.test.tsx | — | ~2640 |
 | 15:16 | S15 a11y/mobile/motion polish: training-announcer + focus-board, brass→bone CTAs, reduced-motion guards, chart/streak aria-labels, a11y test (10), 8 390px shots | training-announcer.tsx, focus-board.ts, training-session/rush/review/daily-plan/streak/insights/stats/rush-hud/puzzle-rating-chart, test/a11y | gate green 652/652 | ~95k |
 | 15:17 | Created docs/roadmap/purechess-improve/session-15-handoff.md | — | ~2136 |
+| 15:24 | Created apps/api/scripts/gen-synthetic-puzzles.ts | — | ~1683 |
+| 15:26 | Created apps/api/scripts/seed-perf-fixtures.ts | — | ~2866 |
+| 15:28 | Created apps/web/src/lib/analytics/training-events.ts | — | ~1189 |
+| 15:28 | Edited apps/web/src/components/puzzle/training-session.tsx | added 1 import(s) | ~51 |
+| 15:28 | Edited apps/web/src/components/puzzle/training-session.tsx | CSS: Analytics, rating, rating | ~114 |
+| 15:28 | Edited apps/web/src/components/puzzle/training-session.tsx | 3→4 lines | ~58 |
+| 15:28 | Edited apps/web/src/components/puzzle/training-session.tsx | 3→3 lines | ~20 |
+| 15:28 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | 1→6 lines | ~50 |
+| 15:28 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | 3→4 lines | ~57 |
+| 15:29 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | CSS: rating | ~74 |
+| 15:29 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | CSS: rating | ~63 |
+| 15:29 | Edited apps/web/src/app/puzzles/review/review-client.tsx | 1→6 lines | ~45 |
+| 15:29 | Edited apps/web/src/app/puzzles/review/review-client.tsx | added optional chaining | ~107 |
+| 15:29 | Edited apps/web/src/app/puzzles/review/review-client.tsx | CSS: Analytics | ~64 |
+| 15:29 | Edited apps/web/src/app/puzzles/puzzle-client.tsx | added optional chaining | ~456 |
+| 15:30 | Edited apps/api/src/training/streak.service.ts | added 1 import(s) | ~107 |
+| 15:30 | Edited apps/api/src/training/streak.service.ts | 4→8 lines | ~116 |
+| 15:30 | Edited apps/api/src/training/streak.service.ts | added error handling | ~245 |
+| 15:30 | Edited apps/web/src/components/training/daily-plan.tsx | added 2 import(s) | ~129 |
+| 15:30 | Edited apps/web/src/components/training/daily-plan.tsx | CSS: Analytics | ~110 |
+| 15:31 | Edited apps/web/src/app/train/insights/insights-client.tsx | added 2 import(s) | ~134 |
+| 15:31 | Edited apps/web/src/app/train/insights/insights-client.tsx | CSS: Analytics | ~97 |
+| 15:31 | Edited apps/web/src/app/train/insights/insights-client.tsx | 4→4 lines | ~49 |
+| 15:31 | Edited apps/web/src/components/openings/opening-drill.tsx | added 1 import(s) | ~36 |
+| 15:31 | Edited apps/web/src/components/openings/opening-drill.tsx | CSS: onComplete, accuracy | ~87 |
+| 15:31 | Edited apps/web/src/app/endgames/endgames-client.tsx | added 1 import(s) | ~29 |
+| 15:31 | Edited apps/web/src/app/endgames/endgames-client.tsx | 11→14 lines | ~161 |
+| 15:32 | Edited apps/api/test/training/streak.service.spec.ts | added 1 import(s) | ~57 |
+| 15:32 | Edited apps/api/test/training/streak.service.spec.ts | modified build() | ~121 |
+| 15:32 | Edited apps/api/test/training/streak.service.spec.ts | expanded (+46 lines) | ~675 |
+| 15:33 | Created apps/web/test/training/training-events.test.ts | — | ~1163 |
+| 15:34 | Created apps/api/scripts/seed-e2e-fixtures.ts | — | ~681 |
+| 15:35 | Created apps/web/e2e/tests/training.spec.ts | — | ~3187 |
+| 15:35 | Edited apps/web/e2e/tests/training.spec.ts | 9→4 lines | ~58 |
+| 15:36 | Edited apps/web/e2e/tests/training.spec.ts | 2→2 lines | ~42 |
+| 15:36 | Edited apps/api/scripts/gen-synthetic-puzzles.ts | 24→19 lines | ~375 |
+| 15:36 | Edited apps/api/scripts/gen-synthetic-puzzles.ts | 4→5 lines | ~71 |
+| 15:37 | Edited apps/web/test/training/training-events.test.ts | modified flush() | ~80 |
+| 15:37 | Edited apps/web/test/training/training-events.test.ts | modified flush() | ~62 |
+| 15:38 | Edited apps/web/test/training/training-events.test.ts | modified flush() | ~79 |
+| 15:39 | Edited apps/web/test/training/training-events.test.ts | modified flush() | ~193 |
+| 15:39 | Edited apps/web/test/training/training-events.test.ts | 11→13 lines | ~106 |
+| 15:39 | Edited apps/web/test/training/training-events.test.ts | 4→6 lines | ~68 |
+| 15:39 | Edited apps/web/test/training/training-events.test.ts | 5→7 lines | ~90 |
+| 15:40 | Edited apps/web/e2e/tests/training.spec.ts | 2→2 lines | ~40 |
+| 15:46 | Edited apps/web/e2e/tests/training.spec.ts | added 2 condition(s) | ~711 |
+| 15:46 | Edited apps/web/e2e/tests/training.spec.ts | modified for() | ~388 |
+| 15:46 | Edited apps/web/e2e/tests/training.spec.ts | 28→32 lines | ~486 |
+| 15:48 | Edited apps/api/src/endgames/endgames.service.ts | modified max() | ~322 |
+| 15:48 | Edited apps/api/src/endgames/endgames.service.ts | 9→10 lines | ~146 |
+| 15:48 | Edited apps/api/test/endgames/endgames.service.spec.ts | added optional chaining | ~888 |
+| 15:49 | Edited apps/api/test/endgames/endgames.service.spec.ts | 6→7 lines | ~35 |
+| 15:50 | Edited apps/web/e2e/tests/training.spec.ts | 11→14 lines | ~194 |
+| 15:50 | Edited apps/web/e2e/tests/training.spec.ts | modified play() | ~88 |
+| 15:52 | Edited apps/web/e2e/tests/training.spec.ts | added error handling | ~311 |
+| 15:52 | Edited apps/web/e2e/tests/training.spec.ts | 5→5 lines | ~57 |
+| 15:53 | Edited apps/web/e2e/tests/training.spec.ts | modified waitForPlayerReady() | ~243 |
+| 15:53 | Edited apps/web/e2e/tests/training.spec.ts | 5→6 lines | ~83 |
+| 15:53 | Edited apps/web/e2e/tests/training.spec.ts | waitForTimeout() → waitForPlayerReady() | ~114 |
+| 15:56 | Edited apps/web/e2e/tests/training.spec.ts | added error handling | ~342 |
+| 15:57 | Edited apps/web/e2e/tests/training.spec.ts | added optional chaining | ~328 |
+| 15:57 | Edited apps/web/e2e/tests/training.spec.ts | modified async() | ~463 |
+| 15:59 | Edited apps/web/e2e/tests/training.spec.ts | selection() → first() | ~244 |
+| 16:00 | Edited apps/web/e2e/tests/training.spec.ts | modified async() | ~308 |
+| 16:01 | Edited apps/web/e2e/tests/training.spec.ts | added error handling | ~339 |
+| 16:03 | Edited apps/web/e2e/tests/training.spec.ts | modified play() | ~251 |
+| 16:03 | Edited apps/web/e2e/tests/training.spec.ts | modified if() | ~317 |
+| 16:05 | Edited apps/web/e2e/tests/training.spec.ts | added error handling | ~520 |
+
+## Session: 2026-06-13 16:06
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 16:07 | Edited apps/web/e2e/tests/training.spec.ts | reduced (-7 lines) | ~107 |
+| 16:07 | Edited apps/web/src/components/puzzle/training-session.tsx | 2→2 lines | ~19 |
+| 16:07 | Edited apps/web/e2e/tests/training.spec.ts | added 1 condition(s) | ~336 |
+| 16:07 | Edited apps/web/e2e/tests/training.spec.ts | 4→5 lines | ~69 |
+| 16:07 | Edited apps/web/e2e/tests/training.spec.ts | 3→4 lines | ~76 |
+| 16:09 | Edited apps/web/e2e/tests/training.spec.ts | 10→13 lines | ~213 |
+| 16:15 | Edited apps/web/e2e/tests/training.spec.ts | 10→9 lines | ~161 |
+| 16:17 | Edited apps/web/e2e/tests/training.spec.ts | 12→14 lines | ~256 |
+| 16:17 | Edited docs/runbooks/puzzle-db-refresh.md | modified steps() | ~913 |
+| 16:18 | Created docs/adr/ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md | — | ~1408 |
+| 16:19 | Created docs/adr/ADR-7-insights-as-pure-detectors.md | — | ~1016 |
+| 16:19 | Edited apps/web/e2e/tests/training.spec.ts | 4→9 lines | ~149 |
+| 16:20 | Edited CLAUDE.md | 2→2 lines | ~388 |
+| 16:20 | Edited CLAUDE.md | 1→3 lines | ~520 |
+| 16:22 | Created docs/roadmap/purechess-improve/epic-closeout.md | — | ~1735 |
+| 16:23 | Created docs/roadmap/purechess-improve/session-16-handoff.md | — | ~2436 |
+| 16:20 | S16: synthetic 50k bank gen+seed, perf fixtures, e2e fixtures | apps/api/scripts/gen-synthetic-puzzles.ts, seed-perf-fixtures.ts, seed-e2e-fixtures.ts | bank=50003, getNext p95=2.63ms | ~8k |
+| 16:20 | S16: PostHog training taxonomy (11 events) wired across 8 surfaces | apps/web/src/lib/analytics/training-events.ts + training-session/rush/review/puzzle-client/daily-plan/insights/opening-drill/endgames + streak.service.ts | green | ~6k |
+| 16:20 | S16: fixed bug-601 endgames max(boolean) → /train/plan 500 | apps/api/src/endgames/endgames.service.ts + spec | api 609 tests pass | ~2k |
+| 16:20 | S16: training.spec.ts (6 tests, 5 paths) + EXPLAIN proof | apps/web/e2e/tests/training.spec.ts | 6/6 pass isolated, 5+1flaky full run (dev-server) | ~10k |
+| 16:20 | S16: docs — runbook refresh+cadence, ADR-6/7, CLAUDE.md, closeout, handoff | docs/runbooks, docs/adr, CLAUDE.md, docs/roadmap/purechess-improve | done | ~5k |

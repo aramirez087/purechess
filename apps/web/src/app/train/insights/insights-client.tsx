@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -15,6 +16,7 @@ import {
 import type { InsightDto, WeaknessDto, WeaknessKind } from '@purechess/shared';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { insightActionClicked, insightViewed } from '@/lib/analytics/training-events';
 
 /**
  * The insights surface — "what should I work on?" answered with evidence.
@@ -126,6 +128,12 @@ function WeaknessCard({
   const Icon = meta.icon;
   const title = weakness.title ?? weakness.label;
   const href = weakness.actionHref ?? '/train';
+  const kind = weakness.kind ?? weakness.area;
+
+  // Analytics: the insight card was rendered (viewed).
+  useEffect(() => {
+    insightViewed(kind);
+  }, [kind]);
 
   return (
     <li
@@ -174,7 +182,7 @@ function WeaknessCard({
           'bg-foreground text-background hover:bg-foreground/90',
         )}
       >
-        <Link href={href}>
+        <Link href={href} onClick={() => insightActionClicked(kind)}>
           {meta.verb}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>

@@ -14,6 +14,11 @@ import { TrainingAnnouncer } from '@/components/training/training-announcer';
 import { focusBoard } from '@/lib/board/focus-board';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
 import { finishRush, recordAttempt, startRush } from '@/lib/api/puzzles';
+import {
+  puzzleFailed,
+  puzzleSolved,
+  rushRunFinished,
+} from '@/lib/analytics/training-events';
 
 /**
  * Puzzle Rush — the timed board-vision drill. Three phases:
@@ -287,6 +292,7 @@ function RushRun({
     const finalScore = scoreRef.current;
     const durationMs = Date.now() - startedAtRef.current;
     setAnnouncement(`Run over. Final score ${finalScore}.`);
+    rushRunFinished(mode, finalScore);
     try {
       const res = await finishRush({ mode, score: finalScore, durationMs });
       setResult({ score: finalScore, best: res.best, isPB: res.isPB });
@@ -345,6 +351,7 @@ function RushRun({
       const solved = puzzlesRef.current[index];
       if (solved) {
         void recordAttempt(solved.id, { solved: true, msToSolve, source: 'rush' }).catch(() => {});
+        puzzleSolved({ source: 'rush', rating: solved.rating });
       }
       advance();
     },
@@ -373,6 +380,7 @@ function RushRun({
     const missed = puzzlesRef.current[index];
     if (missed) {
       void recordAttempt(missed.id, { solved: false, source: 'rush' }).catch(() => {});
+      puzzleFailed({ source: 'rush', rating: missed.rating });
     }
 
     if (mode === '5strikes' && strikesRef.current >= MAX_STRIKES) {

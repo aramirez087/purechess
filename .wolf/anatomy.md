@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T21:17:00.916Z
-> Files: 1192 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T22:23:18.329Z
+> Files: 1202 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -91,7 +91,7 @@
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
-- `CLAUDE.md` — CLAUDE.md (~1653 tok)
+- `CLAUDE.md` — CLAUDE.md (~2212 tok)
 - `design.md` — Purechess Design Direction (~1616 tok)
 - `docker-compose.yml` — Docker Compose services (~496 tok)
 - `eslint.config.js` — ESLint flat configuration (~139 tok)
@@ -773,7 +773,10 @@
 
 ## apps/api/scripts/
 
+- `gen-synthetic-puzzles.ts` — gen-synthetic-puzzles.ts — generate a synthetic lichess-format puzzle CSV for (~1809 tok)
 - `README.md` — Points at the puzzle-db-refresh runbook; documents seed-puzzles.ts usage + that the dump is git-ignored. (~264 tok)
+- `seed-e2e-fixtures.ts` — seed-e2e-fixtures.ts — insert a small set of REAL, verified, single-move (~681 tok)
+- `seed-perf-fixtures.ts` — seed-perf-fixtures.ts — create ONE realistic user with a few hundred (~2866 tok)
 - `seed-puzzles.ts` — S02 lichess CC0 puzzle-dump ingester. Streams CSV (createReadStream+readline, never loads all), top-N by Popularity via bounded min-heap (O(count) mem), parseRow/validateHeader/PopularityHeap/parseArgs exported pure for tests, batch createMany({skipDuplicates}) of 1000 (idempotent on PuzzleId PK), exits 1 on file-not-found/bad-header w/ runbook hint. Run via `pnpm db:seed-puzzles` (ts-node + tsconfig.seed.json). (~2852 tok)
 
 ## apps/api/src/
@@ -875,7 +878,7 @@
 
 - `endgames.controller.ts` — Endgame drills — the curated must-know endgame bank, tablebase proxy, and (~715 tok)
 - `endgames.module.ts` — Endgame drills (curated bank + tablebase proxy + attempt recording). (~284 tok)
-- `endgames.service.ts` — The EndgameDrill columns we read for a DTO (the row shape, loosely typed). (~1776 tok)
+- `endgames.service.ts` — The EndgameDrill columns we read for a DTO (the row shape, loosely typed). (~1975 tok)
 - `tablebase.service.ts` — Probe of a single position against the lichess tablebase, normalized for our (~1625 tok)
 
 ## apps/api/src/endgames/dto/
@@ -1009,7 +1012,7 @@
 
 - `clock.ts` — **S13** injectable CLOCK ('TRAINING_CLOCK' token) so streak day-boundary math is testable. `Clock.now()`; SYSTEM_CLOCK in prod, pinned in specs. (~176 tok)
 - `streak.module.ts` — **S13** StreakModule (Prisma + CLOCK only, exports StreakService). Imported by recorder modules (Puzzles/Endgames/Repertoire) to call recordActivity WITHOUT a cycle with TrainingModule. (~237 tok)
-- `streak.service.ts` — **S13** server-authoritative streaks (UTC day). recordActivity(userId,kind,count): upsert TrainingDay counter + advance TrainingStreak at most once/UTC-day (yesterday→+1, gap→reset 1, first→1, bump longest); no same-day double count. get()→TrainingStreakDto + 84-day history. setDailyGoal (clamp 1..50). Exports pure dayKey/utcMidnight/sameUtcDay/isYesterdayUtc. (~2765 tok)
+- `streak.service.ts` — A single training action's kind. Each maps to a counter on `TrainingDay`: (~2984 tok)
 - `training.controller.ts` — **S13** `@Controller('train')` (SessionAuthGuard + @CurrentUser): GET /train/plan→TrainingPlanDto, GET /train/streak→TrainingStreakDto, POST /train/goal {dailyGoalPuzzles}→TrainingStreakDto. (~578 tok)
 - `training.module.ts` — **S13** TrainingModule (registered in app.module.ts). imports AuthModule + PuzzlesModule (history/review) + InsightsModule (top insight) + StreakModule. Provides TrainingService + CLOCK. (~374 tok)
 - `training.service.ts` — **S13** getPlan(userId)→TrainingPlanDto: assembleItems (daily if unsolved-today / 5 weakest-theme / min(due,5) reviews / 1 opening|endgame drill iff top insight) → trimToBudget(10min) → markDone (aggregate TrainingDay counters by kind). progressToday(). Pure assembleItems/trimToBudget/markDone exported. (~2804 tok)
@@ -1074,7 +1077,7 @@
 
 ## apps/api/test/endgames/
 
-- `endgames.service.spec.ts` — DRILL_A: makeRedis, build (~2945 tok)
+- `endgames.service.spec.ts` — DRILL_A: makeRedis, build (~3266 tok)
 
 ## apps/api/test/engine/
 
@@ -1145,7 +1148,7 @@
 
 ## apps/api/test/training/
 
-- `streak.service.spec.ts` — An in-memory model of the two Prisma tables the streak service touches, so the (~3027 tok)
+- `streak.service.spec.ts` — An in-memory model of the two Prisma tables the streak service touches, so the (~3665 tok)
 - `training.service.spec.ts` — Build the service with controllable dependencies. (~3252 tok)
 
 ## apps/web/
@@ -1198,6 +1201,7 @@
 - `reconnect.spec.ts` — Declares game (~284 tok)
 - `rematch.spec.ts` — PvP rematch: after a finished game, the offer creates a linked (~1296 tok)
 - `result-overlay.spec.ts` — Declares game (~1005 tok)
+- `training.spec.ts` — Training surface E2E — the five critical Improve paths against a SEEDED DB: (~4565 tok)
 
 ## apps/web/public/pieces/
 
@@ -1267,7 +1271,7 @@
 
 ## apps/web/src/app/endgames/
 
-- `endgames-client.tsx` — Stockfish fallback defender: tough play at a high movetime. (~3909 tok)
+- `endgames-client.tsx` — Stockfish fallback defender: tough play at a high movetime. (~3982 tok)
 - `page.tsx` — dynamic (~246 tok)
 
 ## apps/web/src/app/games/
@@ -1299,17 +1303,17 @@
 ## apps/web/src/app/puzzles/
 
 - `page.tsx` — metadata (~139 tok)
-- `puzzle-client.tsx` — formatPlays (~1162 tok)
+- `puzzle-client.tsx` — formatPlays (~1470 tok)
 
 ## apps/web/src/app/puzzles/review/
 
 - `page.tsx` — dynamic (~373 tok)
-- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3768 tok)
+- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3925 tok)
 
 ## apps/web/src/app/puzzles/rush/
 
 - `page.tsx` — dynamic (~383 tok)
-- `rush-client.tsx` — Puzzle Rush — the timed board-vision drill. Three phases: (~5311 tok)
+- `rush-client.tsx` — Puzzle Rush — the timed board-vision drill. Three phases: (~5388 tok)
 
 ## apps/web/src/app/puzzles/stats/
 
@@ -1333,7 +1337,7 @@
 
 ## apps/web/src/app/train/insights/
 
-- `insights-client.tsx` — The insights surface — "what should I work on?" answered with evidence. (~2053 tok)
+- `insights-client.tsx` — The insights surface — "what should I work on?" answered with evidence. (~2147 tok)
 - `page.tsx` — S12 server. force-dynamic. auth (/api/auth/me) → serverFetch /api/train/insights → InsightsClient. Signed-out renders sign-in prompt. (~333 tok)
 
 ## apps/web/src/components/
@@ -1434,7 +1438,7 @@
 
 ## apps/web/src/components/openings/
 
-- `opening-drill.tsx` — Restart with a freshly fetched session. (~3143 tok)
+- `opening-drill.tsx` — Restart with a freshly fetched session. (~3211 tok)
 - `repertoire-explorer-builder.tsx` — Grows a repertoire tree from the start position. Reuses the analysis tree (~1026 tok)
 - `repertoire-import.tsx` — Total move nodes in the subtree (excluding the root). (~2888 tok)
 - `repertoire-view.tsx` — Read view for a saved repertoire: renders the stored tree with the SAME (~1079 tok)
@@ -1466,7 +1470,7 @@
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
 - `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~973 tok)
-- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4754 tok)
+- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4866 tok)
 
 ## apps/web/src/components/review/
 
@@ -1490,7 +1494,7 @@
 
 ## apps/web/src/components/training/
 
-- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1853 tok)
+- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1933 tok)
 - `streak-banner.tsx` — The streak header: the current streak (flame), the longest streak, and a (~1291 tok)
 - `training-announcer.tsx` — One polite live region per training surface for SOLVE OUTCOMES and session (~344 tok)
 
@@ -1531,6 +1535,10 @@
 - `sentry-lazy.ts` — Lazy Sentry loader. NOTHING in the eager bundle may import '@sentry/nextjs' (~794 tok)
 - `utils.ts` — Exports cn, formatDuration, formatRelativeTime, clampRatingDelta, formatTimeControl (~369 tok)
 - `ws-url.ts` — WS cannot ride the Next /api rewrite proxy (rewrites don't upgrade), so the (~121 tok)
+
+## apps/web/src/lib/analytics/
+
+- `training-events.ts` — training-events.ts — the single, documented taxonomy for the Improve/Training (~1189 tok)
 
 ## apps/web/src/lib/api/
 
@@ -1723,6 +1731,7 @@
 ## apps/web/test/training/
 
 - `daily-plan.test.tsx` — plan (~2348 tok)
+- `training-events.test.ts` — Wait until `n` capture calls have landed (the lazy import resolves async). (~1350 tok)
 
 ## crates/purechess-engine/
 
@@ -1774,6 +1783,11 @@
 
 - `HANDOFF-next-level.md` — Next-session handoff: app state, conventions, ranked backlog (realtime PvP, rating deltas, /analyze, design leftovers), verification loop (~1900 tok)
 - `HANDOFF-next-level.md` — Handoff — Purechess "Next Level" Session (~1830 tok)
+
+## docs/adr/
+
+- `ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md` — ADR-6: Local puzzle bank + per-user puzzle Glicko (~1320 tok)
+- `ADR-7-insights-as-pure-detectors.md` — ADR-7: Insights as pure detectors over existing signals (~952 tok)
 
 ## docs/claude-sessions/purechess-category-best/
 
@@ -1832,6 +1846,7 @@
 
 - `baselines.md` — Improve epic — measurement baselines (Session 01) (~827 tok)
 - `data-model.md` — Improve epic — data model (~2107 tok)
+- `epic-closeout.md` — purechess-improve — epic closeout (~1627 tok)
 - `session-01-handoff.md` — Session 01 handoff — Charter, data model & Improve IA (~2422 tok)
 - `session-02-handoff.md` — Session 02 handoff — Puzzle ingestion pipeline (~1886 tok)
 - `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2558 tok)
@@ -1847,6 +1862,7 @@
 - `session-13-handoff.md` — Session 13 handoff — Training hub, daily plan & streaks (~3649 tok)
 - `session-14-handoff.md` — Session 14 handoff — Adaptive difficulty + coach feedback (~2922 tok)
 - `session-15-handoff.md` — Session 15 — A11y, mobile, motion & sound pass — Handoff (~2002 tok)
+- `session-16-handoff.md` — Session 16 handoff — Analytics, perf, E2E & docs (epic closeout) (~2283 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1870,7 +1886,7 @@
 
 ## docs/runbooks/
 
-- `puzzle-db-refresh.md` — Operator runbook: download lichess puzzle dump (database.lichess.org/#puzzles, CC0), seed via `pnpm db:seed-puzzles`, verify (count/rating/EXPLAIN no seq-scan), zero-downtime refresh via skipDuplicates re-run + Redis cache flush. (~1167 tok)
+- `puzzle-db-refresh.md` — Runbook: Puzzle DB refresh (~1935 tok)
 
 ## packages/engine-native/
 

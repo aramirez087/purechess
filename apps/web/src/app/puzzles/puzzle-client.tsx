@@ -1,8 +1,14 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import { PuzzleBoard } from '@/components/puzzle/puzzle-board';
 import { usePuzzle } from '@/hooks/use-puzzle';
+import {
+  puzzleFailed,
+  puzzleSolved,
+  puzzleStarted,
+} from '@/lib/analytics/training-events';
 
 function formatPlays(plays: number): string {
   if (plays >= 1000) return `${(plays / 1000).toFixed(1)}k`;
@@ -12,6 +18,29 @@ function formatPlays(plays: number): string {
 export function PuzzleClient() {
   const { state, puzzleData, onMove, onReveal, onNext, onTryAgain } = usePuzzle();
   const solving = state.solvingColor === 'w' ? 'White' : 'Black';
+
+  // Analytics: the daily puzzle solve loop (consent-gated wrapper). The daily
+  // hook has no server recordAttempt, so fire from the phase transitions here.
+  const startedForRef = useRef<string | null>(null);
+  const settledForRef = useRef<string | null>(null);
+  const puzzle = puzzleData?.puzzle;
+  useEffect(() => {
+    if (!puzzle) return;
+    if (startedForRef.current !== puzzle.id) {
+      startedForRef.current = puzzle.id;
+      settledForRef.current = null;
+      puzzleStarted('daily', puzzle.themes[0] ?? null);
+    }
+    if (
+      (state.phase === 'success' || state.phase === 'fail') &&
+      settledForRef.current !== puzzle.id
+    ) {
+      settledForRef.current = puzzle.id;
+      const payload = { source: 'daily' as const, theme: puzzle.themes[0] ?? null, rating: puzzle.rating };
+      if (state.phase === 'success') puzzleSolved(payload);
+      else puzzleFailed(payload);
+    }
+  }, [puzzle, state.phase]);
 
   return (
     <BoardSettingsProvider>

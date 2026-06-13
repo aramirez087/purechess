@@ -12,6 +12,11 @@ import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
 import { TrainingAnnouncer } from '@/components/training/training-announcer';
 import { focusBoard } from '@/lib/board/focus-board';
 import { gradeReview } from '@/lib/api/puzzles';
+import {
+  puzzleFailed,
+  puzzleSolved,
+  reviewSessionCompleted,
+} from '@/lib/analytics/training-events';
 
 /**
  * Spaced-repetition review — a thin TrainingSession-style loop over the due
@@ -131,6 +136,11 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
 
   useEffect(() => () => clearAdvance(), [clearAdvance]);
 
+  // Analytics: the review session finished — report how many were solved.
+  useEffect(() => {
+    if (done) reviewSessionCompleted(solvedRef.current);
+  }, [done]);
+
   const advance = useCallback(() => {
     clearAdvance();
     settledRef.current = false;
@@ -166,6 +176,13 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
           ? `Correct. ${remaining} review${remaining === 1 ? '' : 's'} remaining.`
           : `Not the move. ${remaining} review${remaining === 1 ? '' : 's'} remaining.`,
       );
+
+      // Analytics: tag the review-mode outcome (consent-gated wrapper).
+      if (wasSolved) {
+        puzzleSolved({ source: 'review', rating: puzzle?.rating ?? null });
+      } else {
+        puzzleFailed({ source: 'review', rating: puzzle?.rating ?? null });
+      }
 
       // Grade owns the SM-2 reschedule (NOT the normal recordAttempt path).
       void (async () => {

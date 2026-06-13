@@ -33,6 +33,7 @@ const mockPrisma = {
   endgameAttempt: {
     groupBy: jest.fn(),
     aggregate: jest.fn(),
+    count: jest.fn(),
     create: jest.fn(),
   },
 };
@@ -78,16 +79,28 @@ describe('EndgamesService', () => {
 
     it('merges the user pass/fail per drill (solved iff any attempt succeeded)', async () => {
       mockPrisma.endgameDrill.findMany.mockResolvedValue([DRILL_A, DRILL_B]);
-      // User passed DRILL_A, attempted-but-failed nothing for DRILL_B.
-      mockPrisma.endgameAttempt.groupBy.mockResolvedValue([
-        { drillId: 'd-kq', _count: { _all: 3 }, _max: { succeeded: true } },
-        { drillId: 'd-phil', _count: { _all: 2 }, _max: { succeeded: false } },
-      ]);
+      // Two grouped reads: the first counts ALL attempts, the second counts only
+      // SUCCEEDED ones (the `where.succeeded === true` branch). Postgres has no
+      // max(boolean), so `solved` is derived from a success COUNT, not _max.
+      mockPrisma.endgameAttempt.groupBy.mockImplementation(async ({ where }: any) => {
+        if (where?.succeeded === true) {
+          // d-kq passed at least once; d-phil never passed.
+          return [{ drillId: 'd-kq', _count: { _all: 1 } }];
+        }
+        return [
+          { drillId: 'd-kq', _count: { _all: 3 } },
+          { drillId: 'd-phil', _count: { _all: 2 } },
+        ];
+      });
 
       const result = await service.list('u1');
 
+      // Both groupBys are scoped to the user; the success one filters succeeded.
       expect(mockPrisma.endgameAttempt.groupBy).toHaveBeenCalledWith(
         expect.objectContaining({ where: { userId: 'u1' } }),
+      );
+      expect(mockPrisma.endgameAttempt.groupBy).toHaveBeenCalledWith(
+        expect.objectContaining({ where: { userId: 'u1', succeeded: true } }),
       );
       const kq = result.find((d) => d.slug === 'kq-vs-k-center')!;
       const phil = result.find((d) => d.slug === 'philidor')!;
@@ -97,7 +110,7 @@ describe('EndgamesService', () => {
 
     it('marks a never-attempted drill as not attempted / not solved', async () => {
       mockPrisma.endgameDrill.findMany.mockResolvedValue([DRILL_A]);
-      mockPrisma.endgameAttempt.groupBy.mockResolvedValue([]); // no attempts
+      mockPrisma.endgameAttempt.groupBy.mockResolvedValue([]); // no attempts (both reads)
 
       const [kq] = await service.list('u1');
       expect(kq.attempted).toBe(false);
@@ -113,12 +126,21 @@ describe('EndgamesService', () => {
 
     it('returns the drill with the user status when authed', async () => {
       mockPrisma.endgameDrill.findUnique.mockResolvedValue(DRILL_A);
-      mockPrisma.endgameAttempt.aggregate.mockResolvedValue({
-        _count: { _all: 1 },
-        _max: { succeeded: true },
-      });
+      // count() called twice: total attempts, then succeeded attempts.
+      mockPrisma.endgameAttempt.count.mockImplementation(async ({ where }: any) =>
+        where?.succeeded === true ? 1 : 1,
+      );
       const dto = await service.getBySlug('kq-vs-k-center', 'u1');
       expect(dto).toMatchObject({ slug: 'kq-vs-k-center', attempted: true, solved: true });
+    });
+
+    it('marks attempted-but-never-solved correctly (no max(boolean))', async () => {
+      mockPrisma.endgameDrill.findUnique.mockResolvedValue(DRILL_A);
+      mockPrisma.endgameAttempt.count.mockImplementation(async ({ where }: any) =>
+        where?.succeeded === true ? 0 : 2,
+      );
+      const dto = await service.getBySlug('kq-vs-k-center', 'u1');
+      expect(dto).toMatchObject({ attempted: true, solved: false });
     });
   });
 

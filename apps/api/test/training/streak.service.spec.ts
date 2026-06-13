@@ -8,6 +8,7 @@ import {
 } from '../../src/training/streak.service';
 import { CLOCK, type Clock } from '../../src/training/clock';
 import { PrismaService } from '../../src/database/prisma.service';
+import { PosthogService } from '../../src/analytics/posthog.service';
 
 /**
  * An in-memory model of the two Prisma tables the streak service touches, so the
@@ -79,12 +80,13 @@ function pinnedClock(initial: Date): Clock & { set(d: Date): void } {
 
 const U = 'user-1';
 
-async function build(clock: Clock, prisma: any): Promise<StreakService> {
+async function build(clock: Clock, prisma: any, posthog?: any): Promise<StreakService> {
   const module: TestingModule = await Test.createTestingModule({
     providers: [
       StreakService,
       { provide: PrismaService, useValue: prisma },
       { provide: CLOCK, useValue: clock },
+      ...(posthog ? [{ provide: PosthogService, useValue: posthog }] : []),
     ],
   }).compile();
   return module.get(StreakService);
@@ -268,5 +270,51 @@ describe('StreakService.get / setDailyGoal', () => {
     expect(dto.history?.map((d) => d.day)).toEqual(['2026-06-14', '2026-06-13']);
     expect(dto.history?.[0]).toMatchObject({ reviewsDone: 1, puzzlesSolved: 0 });
     expect(dto.history?.[1]).toMatchObject({ puzzlesSolved: 1, reviewsDone: 0 });
+  });
+});
+
+describe('StreakService — streak_advanced analytics', () => {
+  it('fires streak_advanced{n} ONLY when the streak grows (not on same-day repeats)', async () => {
+    const { prisma } = makeStore();
+    const clock = pinnedClock(new Date('2026-06-13T09:00:00.000Z'));
+    const posthog = { captureEvent: jest.fn() };
+    const svc = await build(clock, prisma, posthog);
+
+    // Day 1, first activity → streak 1, event {n:1}.
+    await svc.recordActivity(U, 'puzzle');
+    expect(posthog.captureEvent).toHaveBeenCalledTimes(1);
+    expect(posthog.captureEvent).toHaveBeenLastCalledWith(U, 'streak_advanced', { n: 1 });
+
+    // Day 1, SECOND activity → no streak change → NO new event.
+    await svc.recordActivity(U, 'review');
+    expect(posthog.captureEvent).toHaveBeenCalledTimes(1);
+
+    // Day 2 → streak 2, event {n:2}.
+    clock.set(new Date('2026-06-14T09:00:00.000Z'));
+    await svc.recordActivity(U, 'puzzle');
+    expect(posthog.captureEvent).toHaveBeenCalledTimes(2);
+    expect(posthog.captureEvent).toHaveBeenLastCalledWith(U, 'streak_advanced', { n: 2 });
+  });
+
+  it('does NOT fire when a gap resets the streak back to its prior value', async () => {
+    const { prisma } = makeStore();
+    const clock = pinnedClock(new Date('2026-06-13T09:00:00.000Z'));
+    const posthog = { captureEvent: jest.fn() };
+    const svc = await build(clock, prisma, posthog);
+
+    await svc.recordActivity(U, 'puzzle'); // streak 1 → event {n:1}
+    posthog.captureEvent.mockClear();
+
+    // A 3-day gap → streak resets to 1 (was already 1) → not a growth → no event.
+    clock.set(new Date('2026-06-17T09:00:00.000Z'));
+    await svc.recordActivity(U, 'puzzle');
+    expect(posthog.captureEvent).not.toHaveBeenCalled();
+  });
+
+  it('works without PosthogService wired (Optional injection)', async () => {
+    const { prisma } = makeStore();
+    const clock = pinnedClock(new Date('2026-06-13T09:00:00.000Z'));
+    const svc = await build(clock, prisma); // no posthog
+    await expect(svc.recordActivity(U, 'puzzle')).resolves.toMatchObject({ currentStreak: 1 });
   });
 });

@@ -116,3 +116,64 @@ pnpm db:seed-puzzles ./lichess_db_puzzle.csv --count 50000
 > need arises to refresh existing rows, switch the seed to a per-row
 > `upsert`/`ON CONFLICT DO UPDATE` — but that loses the bulk-insert speed, so
 > only do it when the requirement is real.
+
+## 5. Production refresh procedure + cadence
+
+**Cadence: quarterly** (every ~3 months), or ad-hoc when the player base reports
+the bank feels stale at a rating band. The lichess dump grows slowly; a quarterly
+top-50k refresh keeps fresh, high-popularity tactics flowing without churn. The
+bank is **immutable enough to not need a tighter cadence** — puzzle quality is
+stable, and per-user difficulty is handled by the Glicko serving ladder, not by
+swapping puzzles.
+
+Production steps (run from an operator box with prod DB access, e.g. a Fly.io
+machine `fly ssh console -a purechess-api`, or locally against the prod
+`DATABASE_URL`):
+
+1. **Back up first** (the seed is additive, but always snapshot before a bulk
+   write): `bash scripts/db-backup.sh` (pg_dump custom format to `/tmp`).
+2. **Download + decompress** the latest dump (steps 1 above). Do this on a box
+   with the disk + bandwidth for a multi-GB file — *not* committed, *not* left on
+   the machine after seeding.
+3. **Seed** against the prod DB:
+   `pnpm db:seed-puzzles ./lichess_db_puzzle.csv --count 50000`. It's
+   zero-downtime (additive `skipDuplicates`, live reads never block; see §4).
+4. **Flush the catalog cache** so the theme histogram + counts reflect new rows
+   immediately: `redis-cli -u "$REDIS_URL" DEL puzzle:catalog:themes`. (The
+   daily-puzzle cache `puzzle:daily` and tablebase cache `endgame:tb:*` are
+   unaffected by a bank refresh and need no flush.)
+5. **Verify** (step 3): count ≈ 50k+ (monotonic — only grows), rating spread
+   sane, `EXPLAIN` shows index scans, no `Seq Scan on "Puzzle"`.
+6. **Delete the dump** from the operator box.
+
+Rollback: a refresh only *adds* rows, so there's nothing to roll back functionally
+(no existing puzzle changed). If a bad seed (wrong file) inserted garbage ids,
+delete them by id prefix and re-seed; the pre-seed backup from step 1 is the
+belt-and-braces restore path.
+
+## 6. Synthetic fallback (no real dump available)
+
+When the real lichess dump isn't present (CI, a fresh dev box, perf/scale
+testing), generate a **synthetic** CSV with the exact lichess header and feed it
+to the same seeder — the bank reaches production volume without the download:
+
+```sh
+# from apps/api — writes to a git-ignored *.puzzle.csv path (never /repo)
+pnpm exec ts-node --project tsconfig.seed.json \
+  scripts/gen-synthetic-puzzles.ts /tmp/synthetic.puzzle.csv --count 50000
+pnpm db:seed-puzzles /tmp/synthetic.puzzle.csv --count 50000
+```
+
+The synthetic rows spread ratings 600–2800 (bell-curve mass at 1200–1900), draw
+1–4 themes from the real lichess vocabulary, and pair each (real, legal) FEN with
+a legal first move so the local solve loop accepts the "solution". They are NOT
+real tactics — use them only to exercise the selection queries + indexes at
+scale, never to serve real users. For E2E, also seed a handful of verified
+mate-in-1 fixtures tagged `e2etest`:
+
+```sh
+pnpm exec ts-node --project tsconfig.seed.json scripts/seed-e2e-fixtures.ts
+```
+
+Neither the generated CSV nor any generated data is committed (`*.puzzle.csv` is
+git-ignored).

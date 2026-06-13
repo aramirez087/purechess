@@ -33,6 +33,7 @@ import {
   type EndgameFailReason,
 } from '@/hooks/use-endgame-drill';
 import { cn } from '@/lib/utils';
+import { endgameAttempt } from '@/lib/analytics/training-events';
 
 /** Stockfish fallback defender: tough play at a high movetime. */
 const ENGINE_LEVEL = 8;
@@ -189,6 +190,9 @@ function PracticeBoard({
 
   const handleComplete = useCallback(
     (result: { succeeded: boolean; movesPlayed: number }) => {
+      // Analytics fires for everyone (consent-gated wrapper); the server
+      // attempt record is only persisted for signed-in users.
+      endgameAttempt(drill.slug, result.succeeded);
       if (signedOut) return;
       // Fire-and-forget: the attempt record never blocks the drill UI.
       recordEndgameAttempt(drill.slug, {

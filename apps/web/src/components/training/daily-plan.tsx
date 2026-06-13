@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -15,6 +16,7 @@ import {
 import type { TrainingPlanDto, TrainingPlanItemDto } from '@purechess/shared';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { trainingPlanViewed } from '@/lib/analytics/training-events';
 
 /**
  * Today's training plan: an ordered checklist of brass-CTA rows, a goal ring
@@ -54,6 +56,11 @@ export function DailyPlan({ plan }: DailyPlanProps) {
   const goal = plan.dailyGoalPuzzles ?? 10;
   const solved = plan.puzzlesSolvedToday ?? 0;
   const goalMet = solved >= goal;
+
+  // Analytics: the plan rendered with at least one item (funnel entry).
+  useEffect(() => {
+    if (items.length > 0) trainingPlanViewed(items.length);
+  }, [items.length]);
 
   return (
     <section data-testid="daily-plan" className="flex flex-col gap-4">

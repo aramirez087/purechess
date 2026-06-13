@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import type { TrainingDay, TrainingStreak } from '@prisma/client';
 import type { TrainingDayDto, TrainingStreakDto } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
+import { PosthogService } from '../analytics/posthog.service';
 import { CLOCK, type Clock } from './clock';
 
 /**
@@ -55,6 +56,10 @@ export class StreakService {
   constructor(
     private readonly prisma: PrismaService,
     @Inject(CLOCK) private readonly clock: Clock,
+    // Best-effort analytics. Global AnalyticsModule provides it; Optional so
+    // unit tests of the streak math need not wire PostHog. The captured
+    // `streak_advanced{n}` event mirrors the documented web training taxonomy.
+    @Optional() private readonly posthog?: PosthogService,
   ) {}
 
   /**
@@ -160,7 +165,7 @@ export class StreakService {
 
     const longest = Math.max(prev?.longestStreak ?? 0, current);
 
-    return this.prisma.trainingStreak.upsert({
+    const saved = await this.prisma.trainingStreak.upsert({
       where: { userId },
       create: {
         userId,
@@ -175,6 +180,18 @@ export class StreakService {
         lastTrainedOn: today,
       },
     });
+
+    // Analytics: fire ONLY when the streak actually grew (first activity of a
+    // new day that advanced the count). Best-effort — never throws.
+    if (current > (prev?.currentStreak ?? 0)) {
+      try {
+        this.posthog?.captureEvent(userId, 'streak_advanced', { n: current });
+      } catch {
+        // analytics must never affect the streak write
+      }
+    }
+
+    return saved;
   }
 
   /** Recent TrainingDay rows (newest-first), capped at {@link CALENDAR_DAYS}. */
