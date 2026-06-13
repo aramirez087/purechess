@@ -2461,3 +2461,15 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:15 | Created docs/roadmap/purechess-improve/baselines.md | — | ~882 |
 | 12:16 | Created docs/roadmap/purechess-improve/session-01-handoff.md | — | ~2584 |
 | 12:17 | S01 Improve foundation: schema(+11 models,migration improve_foundation), shared DTOs, 3 route shells+nav, accuracy tokens, docs | schema.prisma, dto/*, app/{train,openings,endgames}, globals.css, docs/roadmap/purechess-improve/* | all gates green | ~22k |
+| 12:21 | Created apps/api/scripts/seed-puzzles.ts | — | ~2852 |
+| 12:21 | Created apps/api/src/puzzles/puzzle-catalog.service.ts | — | ~803 |
+| 12:21 | Edited apps/api/src/puzzles/puzzles.module.ts | added 1 import(s) | ~110 |
+| 12:21 | Edited apps/api/package.json | 3→4 lines | ~68 |
+| 12:21 | Edited .gitignore | 2→7 lines | ~54 |
+| 12:22 | Created apps/api/test/puzzles/seed-puzzles.spec.ts | — | ~1821 |
+| 12:22 | Created apps/api/test/puzzles/puzzle-catalog.service.spec.ts | — | ~1075 |
+| 12:22 | Edited apps/api/tsconfig.seed.json | inline fix | ~16 |
+| 12:24 | Created docs/runbooks/puzzle-db-refresh.md | — | ~1245 |
+| 12:24 | Created apps/api/scripts/README.md | — | ~282 |
+| 12:26 | S02 puzzle ingestion: seed-puzzles.ts (stream+min-heap top-N, idempotent createMany), PuzzleCatalogService, tests, runbook | apps/api/scripts,src/puzzles,test/puzzles,docs/runbooks | 34 suites/381 tests green; sample seed 500 rows + idempotent re-run verified; EXPLAIN uses rating idx | ~38k |
+| 12:26 | Created docs/roadmap/purechess-improve/session-02-handoff.md | — | ~2017 |

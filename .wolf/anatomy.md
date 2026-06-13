@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:16:40.083Z
-> Files: 995 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:26:54.441Z
+> Files: 1016 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -75,7 +75,7 @@
 - `.DS_Store` (~2186 tok)
 - `.editorconfig` — Editor configuration (~51 tok)
 - `.gitattributes` — Git attributes (~31 tok)
-- `.gitignore` — Git ignore rules (~78 tok)
+- `.gitignore` — Git ignore rules (~122 tok)
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 Implementation Plan — Charter + Baselines (~2935 tok)
@@ -634,11 +634,14 @@
 
 ## Daily Puzzle feature (added 2026-06-13)
 
+- `apps/api/src/puzzles/puzzle-catalog.service.ts` — S02 read-only catalog over seeded Puzzle bank: listThemes() (raw `unnest(themes)` GROUP BY, count bigint→number, Redis-cached 1h key `puzzle:catalog:themes`), count(), ratingRange() ({0,0} on empty). DI: PrismaService + REDIS_CLIENT. (~360 tok)
 - `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
-- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). (~60 tok)
+- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). Now also provides+exports PuzzleCatalogService (S02). (~70 tok)
 - `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
 - `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
+- `apps/api/test/puzzles/puzzle-catalog.service.spec.ts` — Jest: mock Prisma+Redis. listThemes shape (bigint→number) + caching (2nd call no DB), count delegate, ratingRange min/max + empty {0,0}. (~600 tok)
 - `apps/api/test/puzzles/puzzles.service.spec.ts` — Jest: cache hit (no fetch), miss (fetch+setex), error throws. (~480 tok)
+- `apps/api/test/puzzles/seed-puzzles.spec.ts` — Jest: pure parse/select logic (no DB). validateHeader, parseRow (split moves/themes/openingTags, int coercion, skip empty FEN/Moves/id), PopularityHeap top-N + tie-by-plays + O(cap) memory, parseArgs. (~900 tok)
 - `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
 - `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
 - `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
@@ -651,6 +654,20 @@
 ## Epic: purechess-improve (ELO improvement surface) — added 2026-06-13
 
 
+## Improve epic — Session 01 foundation (added 2026-06-13)
+
+- `apps/api/prisma/migrations/20260613181114_improve_foundation/migration.sql` — creates all 11 tables, 4 enums, GIN on Puzzle.themes, rating B-tree, all (userId,*) indexes + User back-relations. (~1100 tok)
+- `apps/api/prisma/schema.prisma` — +11 training models (Puzzle, PuzzleAttempt, PuzzleRating, PuzzleReview, GameMistake, Repertoire, RepertoireReview, EndgameDrill, EndgameAttempt, TrainingStreak, TrainingDay) + 4 enums (PuzzleAttemptSource, RepertoireColor, EndgameCategory, EndgameObjective). Schema FROZEN for the epic. (~2900 tok)
+- `apps/web/src/app/endgames/page.tsx` — endgame drills shell (Castle icon, auth-aware). (~170 tok)
+- `apps/web/src/app/openings/page.tsx` — repertoire shell (BookOpen icon, auth-aware). (~170 tok)
+- `apps/web/src/app/train/page.tsx` — Improve hub shell (Target icon, auth-aware via /api/auth/me, force-dynamic). (~180 tok)
+- `apps/web/src/components/improve/training-placeholder.tsx` — shared Improve empty-state (icon, eyebrow, Fraunces title, "Coming together" list, signed-out sign-in prompt, related pills). Silent Tournament voice. (~520 tok)
+- `docs/roadmap/purechess-improve/baselines.md` — daily-puzzle load timings, new-route empty-states, Puzzle EXPLAIN baseline + targets. (~700 tok)
+- `docs/roadmap/purechess-improve/data-model.md` — ER sketch, per-model column tables, index rationale, enum choices. The frozen-contract map. (~1500 tok)
+- `docs/roadmap/purechess-improve/session-01-handoff.md` — frozen contract (models/columns/indexes/enums), DTO shapes, reuse anchors, open issues for Wave 3. (~1600 tok)
+- `packages/shared/src/dto/puzzle.dto.ts` — PuzzleDto, PuzzleAttemptResultDto, PuzzleThemeDto, PuzzleThemeStatDto, PuzzleRatingDto + PuzzleSource type. Plain interfaces, optional-friendly. (~320 tok)
+- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. (~340 tok)
+
 ## apps/api/
 
 - `_repro.cjs` — Declares p (~171 tok)
@@ -659,11 +676,11 @@
 - `fly.toml` (~195 tok)
 - `jest.e2e.config.js` (~117 tok)
 - `nest-cli.json` (~62 tok)
-- `package.json` — Node.js package manifest (~866 tok)
+- `package.json` — Node.js package manifest (~897 tok)
 - `README.md` — Project documentation (~554 tok)
 - `tsconfig.build.json` — TypeScript build configuration (~31 tok)
 - `tsconfig.json` — TypeScript configuration (~128 tok)
-- `tsconfig.seed.json` — /*", "src/**/*"] (~42 tok)
+- `tsconfig.seed.json` — /*", "scripts/**/*", "src/**/*"] (~46 tok)
 
 ## apps/api/prisma/
 
@@ -693,6 +710,11 @@
 ## apps/api/prisma/migrations/20260611190000_add_rematch_link/
 
 - `migration.sql` — AlterTable (~54 tok)
+
+## apps/api/scripts/
+
+- `README.md` — Points at the puzzle-db-refresh runbook; documents seed-puzzles.ts usage + that the dump is git-ignored. (~264 tok)
+- `seed-puzzles.ts` — S02 lichess CC0 puzzle-dump ingester. Streams CSV (createReadStream+readline, never loads all), top-N by Popularity via bounded min-heap (O(count) mem), parseRow/validateHeader/PopularityHeap/parseArgs exported pure for tests, batch createMany({skipDuplicates}) of 1000 (idempotent on PuzzleId PK), exits 1 on file-not-found/bad-header w/ runbook hint. Run via `pnpm db:seed-puzzles` (ts-node + tsconfig.seed.json). (~2852 tok)
 
 ## apps/api/src/
 
@@ -830,8 +852,9 @@
 
 ## apps/api/src/puzzles/
 
+- `puzzle-catalog.service.ts` — One theme slug and how many puzzles in the bank carry it. (~803 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
-- `puzzles.module.ts` — Exports PuzzlesModule (~75 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~110 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
 
@@ -957,7 +980,9 @@
 
 ## apps/api/test/puzzles/
 
+- `puzzle-catalog.service.spec.ts` — Declares mockRedis (~1075 tok)
 - `puzzles.service.spec.ts` — Declares mockRedis (~646 tok)
+- `seed-puzzles.spec.ts` — Build a CSV data line in the exact lichess column order. (~1821 tok)
 
 ## apps/api/test/ratings/
 
@@ -1574,6 +1599,7 @@
 - `baselines.md` — Improve epic — measurement baselines (Session 01) (~827 tok)
 - `data-model.md` — Improve epic — data model (~2107 tok)
 - `session-01-handoff.md` — Session 01 handoff — Charter, data model & Improve IA (~2422 tok)
+- `session-02-handoff.md` — Session 02 handoff — Puzzle ingestion pipeline (~1891 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1594,6 +1620,10 @@
 - `session-08-handoff.md` — Session 08 Handoff — Review History: PGN Rail + vs-Computer Filter + Deep-Link Review (~1663 tok)
 - `session-09-handoff.md` — Session 09 Handoff — a11y Polish (Keyboard + Screen Reader) (~1160 tok)
 - `session-10-handoff.md` — Session 10 Handoff — CI Gate / Go–No-Go (~1228 tok)
+
+## docs/runbooks/
+
+- `puzzle-db-refresh.md` — Operator runbook: download lichess puzzle dump (database.lichess.org/#puzzles, CC0), seed via `pnpm db:seed-puzzles`, verify (count/rating/EXPLAIN no seq-scan), zero-downtime refresh via skipDuplicates re-run + Redis cache flush. (~1167 tok)
 
 ## packages/engine-native/
 
@@ -1630,18 +1660,3 @@
 - `build-openings.mjs` — Bakes the lichess opening book to apps/web/public/openings.json as a (~588 tok)
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)
-
-## Improve epic — Session 01 foundation (added 2026-06-13)
-
-- `apps/api/prisma/schema.prisma` — +11 training models (Puzzle, PuzzleAttempt, PuzzleRating, PuzzleReview, GameMistake, Repertoire, RepertoireReview, EndgameDrill, EndgameAttempt, TrainingStreak, TrainingDay) + 4 enums (PuzzleAttemptSource, RepertoireColor, EndgameCategory, EndgameObjective). Schema FROZEN for the epic. (~2900 tok)
-- `apps/api/prisma/migrations/20260613181114_improve_foundation/migration.sql` — creates all 11 tables, 4 enums, GIN on Puzzle.themes, rating B-tree, all (userId,*) indexes + User back-relations. (~1100 tok)
-- `packages/shared/src/dto/puzzle.dto.ts` — PuzzleDto, PuzzleAttemptResultDto, PuzzleThemeDto, PuzzleThemeStatDto, PuzzleRatingDto + PuzzleSource type. Plain interfaces, optional-friendly. (~320 tok)
-- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. (~340 tok)
-- `apps/web/src/components/improve/training-placeholder.tsx` — shared Improve empty-state (icon, eyebrow, Fraunces title, "Coming together" list, signed-out sign-in prompt, related pills). Silent Tournament voice. (~520 tok)
-- `apps/web/src/app/train/page.tsx` — Improve hub shell (Target icon, auth-aware via /api/auth/me, force-dynamic). (~180 tok)
-- `apps/web/src/app/openings/page.tsx` — repertoire shell (BookOpen icon, auth-aware). (~170 tok)
-- `apps/web/src/app/endgames/page.tsx` — endgame drills shell (Castle icon, auth-aware). (~170 tok)
-- `docs/roadmap/purechess-improve/data-model.md` — ER sketch, per-model column tables, index rationale, enum choices. The frozen-contract map. (~1500 tok)
-- `docs/roadmap/purechess-improve/baselines.md` — daily-puzzle load timings, new-route empty-states, Puzzle EXPLAIN baseline + targets. (~700 tok)
-- `docs/roadmap/purechess-improve/session-01-handoff.md` — frozen contract (models/columns/indexes/enums), DTO shapes, reuse anchors, open issues for Wave 3. (~1600 tok)
-- NOTE: AppShell.tsx nav gained `Train` (Target icon) link; MobileNav.tsx gained Train/Openings/Endgames; globals.css @layer utilities gained `.acc-low/.acc-mid/.acc-high` accuracy color scale.

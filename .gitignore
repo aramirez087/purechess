@@ -18,5 +18,10 @@ coverage/
 test-results/
 playwright-report/
 
+# Lichess puzzle dump — downloaded by an operator, seeded into Postgres, never committed.
+# See docs/runbooks/puzzle-db-refresh.md
+lichess_db_puzzle.csv
+*.puzzle.csv
+
 # Rust (crates/ workspace)
 target/
