@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 3346120,
-    "total_reads": 2207,
-    "total_writes": 2822,
-    "total_sessions": 73,
-    "anatomy_hits": 1431,
+    "total_tokens_estimated": 3352686,
+    "total_reads": 2209,
+    "total_writes": 2823,
+    "total_sessions": 75,
+    "anatomy_hits": 1433,
     "anatomy_misses": 737,
     "repeated_reads_blocked": 1508,
-    "estimated_savings_vs_bare_cli": 3521915
+    "estimated_savings_vs_bare_cli": 3522315
   },
   "sessions": [
     {
@@ -29234,6 +29234,40 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-06-13-1749",
+      "started": "2026-06-13T23:49:36.656Z",
+      "ended": "2026-06-13T23:51:41.427Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s02-sound/apps/web/src/lib/board/sound.ts",
+          "tokens_estimated": 4046,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s02-sound/apps/web/test/board/sound-classify.test.ts",
+          "tokens_estimated": 530,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s02-sound/.session-02-plan.md",
+          "tokens_estimated": 1990,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 4576,
+        "output_tokens_estimated": 1990,
+        "reads_count": 2,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
       }
     }
   ],

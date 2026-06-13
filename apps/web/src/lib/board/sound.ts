@@ -43,6 +43,42 @@ interface ImpactHit {
   jitter: number;
 }
 
+const MOVE_HIT: ImpactHit = {
+  delay: 0,
+  baseFreq: 200,
+  modes: [
+    { ratio: 1, q: 11, gain: 1.0 },
+    { ratio: 2.3, q: 7, gain: 0.42 },
+    { ratio: 4.5, q: 4, gain: 0.11 },
+  ],
+  attack: { duration: 0.003, filterHz: 2050, q: 0.9, gain: 0.05 },
+  exciter: { duration: 0.12, filterHz: 1950 },
+  thud: { freq: 88, duration: 0.1, gain: 0.28 },
+  voices: 2,
+  detune: 6,
+  volume: 0.65,
+  jitter: 0.05,
+};
+
+function gameStartNote(delay: number, baseFreq: number, volume: number): ImpactHit {
+  return {
+    delay,
+    baseFreq,
+    modes: [
+      { ratio: 1, q: 9, gain: 1.0 },
+      { ratio: 2.1, q: 5, gain: 0.32 },
+      { ratio: 3.8, q: 4, gain: 0.1 },
+    ],
+    attack: { duration: 0.003, filterHz: 2000, q: 1.0, gain: 0.04 },
+    exciter: { duration: 0.07, filterHz: 2000 },
+    thud: { freq: 124, duration: 0.05, gain: 0.14 },
+    voices: 1,
+    detune: 0,
+    volume,
+    jitter: 0.02,
+  };
+}
+
 const IMPACTS: Record<SoundType, ImpactHit[]> = {
   tick: [
     {
@@ -60,24 +96,7 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
       jitter: 0.02,
     },
   ],
-  move: [
-    {
-      delay: 0,
-      baseFreq: 200,
-      modes: [
-        { ratio: 1, q: 11, gain: 1.0 },
-        { ratio: 2.3, q: 7, gain: 0.42 },
-        { ratio: 4.5, q: 4, gain: 0.11 },
-      ],
-      attack: { duration: 0.003, filterHz: 2050, q: 0.9, gain: 0.05 },
-      exciter: { duration: 0.12, filterHz: 1950 },
-      thud: { freq: 88, duration: 0.1, gain: 0.28 },
-      voices: 2,
-      detune: 6,
-      volume: 0.65,
-      jitter: 0.05,
-    },
-  ],
+  move: [MOVE_HIT],
   capture: [
     {
       delay: 0,
@@ -114,22 +133,7 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
   ],
   // Two pieces land: the king's knock, then the rook's lighter one.
   castle: [
-    {
-      delay: 0,
-      baseFreq: 200,
-      modes: [
-        { ratio: 1, q: 11, gain: 1.0 },
-        { ratio: 2.3, q: 7, gain: 0.42 },
-        { ratio: 4.5, q: 4, gain: 0.11 },
-      ],
-      attack: { duration: 0.003, filterHz: 2050, q: 0.9, gain: 0.05 },
-      exciter: { duration: 0.12, filterHz: 1950 },
-      thud: { freq: 88, duration: 0.1, gain: 0.28 },
-      voices: 2,
-      detune: 6,
-      volume: 0.65,
-      jitter: 0.05,
-    },
+    MOVE_HIT,
     {
       delay: 0.1,
       baseFreq: 280,
@@ -216,54 +220,9 @@ const IMPACTS: Record<SoundType, ImpactHit[]> = {
     },
   ],
   'game-start': [
-    {
-      delay: 0,
-      baseFreq: 295,
-      modes: [
-        { ratio: 1, q: 9, gain: 1.0 },
-        { ratio: 2.1, q: 5, gain: 0.32 },
-        { ratio: 3.8, q: 4, gain: 0.1 },
-      ],
-      attack: { duration: 0.003, filterHz: 2000, q: 1.0, gain: 0.04 },
-      exciter: { duration: 0.07, filterHz: 2000 },
-      thud: { freq: 124, duration: 0.05, gain: 0.14 },
-      voices: 1,
-      detune: 0,
-      volume: 0.5,
-      jitter: 0.02,
-    },
-    {
-      delay: 0.12,
-      baseFreq: 370,
-      modes: [
-        { ratio: 1, q: 9, gain: 1.0 },
-        { ratio: 2.1, q: 5, gain: 0.32 },
-        { ratio: 3.8, q: 4, gain: 0.1 },
-      ],
-      attack: { duration: 0.003, filterHz: 2000, q: 1.0, gain: 0.04 },
-      exciter: { duration: 0.07, filterHz: 2000 },
-      thud: { freq: 124, duration: 0.05, gain: 0.14 },
-      voices: 1,
-      detune: 0,
-      volume: 0.5,
-      jitter: 0.02,
-    },
-    {
-      delay: 0.24,
-      baseFreq: 460,
-      modes: [
-        { ratio: 1, q: 9, gain: 1.0 },
-        { ratio: 2.1, q: 5, gain: 0.32 },
-        { ratio: 3.8, q: 4, gain: 0.1 },
-      ],
-      attack: { duration: 0.003, filterHz: 2000, q: 1.0, gain: 0.04 },
-      exciter: { duration: 0.07, filterHz: 2000 },
-      thud: { freq: 124, duration: 0.05, gain: 0.14 },
-      voices: 1,
-      detune: 0,
-      volume: 0.55,
-      jitter: 0.02,
-    },
+    gameStartNote(0, 295, 0.5),
+    gameStartNote(0.12, 370, 0.5),
+    gameStartNote(0.24, 460, 0.55),
   ],
   // Puzzle solved: a bright three-note rise — celebratory, no thud, a shimmer
   // that resolves upward.

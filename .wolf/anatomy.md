@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:49:00.246Z
-> Files: 1204 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:54:03.014Z
+> Files: 1205 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -81,7 +81,7 @@
 - `.nvmrc` (~1 tok)
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 — Implementation Plan: Charter + jscpd Baseline (~4430 tok)
-- `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
+- `.session-02-plan.md` — Session 02 Implementation Plan — sound.ts dedup (~1741 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
@@ -1580,7 +1580,7 @@
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
 - `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2647 tok)
 - `sacrifice.ts` — Sacrifice detection for the "brilliant" classification. Pure (chess.js only). (~658 tok)
-- `sound.ts` — Declares ModalSpec (~4046 tok)
+- `sound.ts` — ModalSpec: gameStartNote (~3700 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
 - `theme-explanations.ts` — Curated, hand-written explanations for the common high-frequency tactical (~3147 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
@@ -1833,6 +1833,7 @@
 ## docs/roadmap/dedup-cleanup/
 
 - `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
+- `session-02-handoff.md` — Session 02 Handoff — sound.ts intra-file dedup (~816 tok)
 
 ## docs/roadmap/purechess-category-best/
 
