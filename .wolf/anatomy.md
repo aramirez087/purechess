@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T13:22:21.017Z
-> Files: 932 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T14:24:43.075Z
+> Files: 940 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -53,6 +53,7 @@
 
 - `add-coaching-features-to-encapsulated-gem.md` — Coaching features (computer games) + move-time chart (review) (~2586 tok)
 - `add-practice-from-here-immutable-parrot.md` — Add "Practice from here" to analyze board + review (~1713 tok)
+- `analyze-page-uses-textarea-majestic-shore.md` — Board Position Editor (`/editor`) (~2408 tok)
 - `continue-improving-purechess-the-iridescent-liskov.md` — PureChess — Next Iteration: PvP Parity + Matchmaking + Computer-Game LCP (~4253 tok)
 - `move-panel-has-nag-quiet-duckling.md` — Automatic game accuracy analysis on the /analyze board (~1506 tok)
 - `you-are-improving-purechess-cheeky-fog.md` — Board UX: FEN-diff animation + geometric premove hints (~2029 tok)
@@ -1044,14 +1045,19 @@
 ## apps/web/src/app/analyze/
 
 - `analyze-board.tsx` — GameResult → PGN Result tag value. (~5339 tok)
-- `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~1980 tok)
-- `page.tsx` — /analyze server page: buildMetadata title "Analyze — Purechess", renders AnalyzeClient. (~122 tok)
+- `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~2099 tok)
+- `page.tsx` — metadata (~160 tok)
 
 ## apps/web/src/app/computer-game/[gameId]/
 
 - `computer-game-client.tsx` — Hints per game — encourages thinking first, asking second. (~10040 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~292 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
+
+## apps/web/src/app/editor/
+
+- `editor-client.tsx` — Castling is only meaningful when the matching king + rook sit on home squares. (~2517 tok)
+- `page.tsx` — metadata (~143 tok)
 
 ## apps/web/src/app/games/
 
@@ -1120,6 +1126,11 @@
 ## apps/web/src/components/computer-game/
 
 - `live-announcer.tsx` — Last computer move in SAN notation, e.g. "Nf3". Null before first computer move. (~342 tok)
+
+## apps/web/src/components/editor/
+
+- `editor-board.tsx` — Click on a square — the page uses this to place/remove the active palette piece. (~1127 tok)
+- `piece-palette.tsx` — A palette selection is either a piece to place or the trash (click-to-remove) tool. (~755 tok)
 
 ## apps/web/src/components/game/
 
@@ -1251,6 +1262,7 @@
 - `annotations.ts` — Drawing an identical shape removes it (toggle); anything else appends. (~521 tok)
 - `clock-tier.ts` — Urgency tier for a live clock chip, derived from remaining time. (~151 tok)
 - `coords.ts` — Pure board coordinate math (no DOM): pointToSquare (rect→square, 0.5-sq off-board margin then null), snapToNearestDest (touch snap, 2-sq cap), squareToIndices/getSquareAt, FILES/RANKS (~1082 tok)
+- `editor-state.ts` — Pure editor state ↔ FEN conversion — zero dependencies, no React, no chess.js. (~1199 tok)
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
 - `legal-sans.ts` — Legal-move enumeration + query matching for the text move input overlay. (~536 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
@@ -1310,6 +1322,7 @@
 - `clock-tier.test.ts` (~271 tok)
 - `coords.test.ts` — Pixel center of a square for the given orientation. (~1461 tok)
 - `drag.test.tsx` — jsdom has no PointerEvent — without this, fireEvent falls back to a plain (~1260 tok)
+- `editor-state.test.ts` — API routes: GET (4 endpoints) (~790 tok)
 - `keyboard.test.tsx` — START_FEN (~1672 tok)
 - `legal-sans.test.ts` — Declares START (~876 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
@@ -1331,6 +1344,10 @@
 ## apps/web/test/computer-game/
 
 - `a11y.test.tsx` — --------------------------------------------------------------------------- (~2228 tok)
+
+## apps/web/test/editor/
+
+- `editor-board.test.tsx` — square (~869 tok)
 
 ## apps/web/test/game/
 

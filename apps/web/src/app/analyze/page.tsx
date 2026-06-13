@@ -9,6 +9,11 @@ export const metadata: Metadata = buildMetadata({
   canonical: '/analyze',
 });
 
-export default function AnalyzePage() {
-  return <AnalyzeClient />;
+export default async function AnalyzePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ fen?: string }>;
+}) {
+  const sp = await searchParams;
+  return <AnalyzeClient initialInput={sp.fen ?? ''} />;
 }

@@ -26,10 +26,19 @@ function parseAnalysisInput(raw: string): AnalysisReview | null {
     : (buildReviewFromPgn(text) ?? buildReviewFromFen(text));
 }
 
-export function AnalyzeClient() {
-  const [input, setInput] = useState('');
+export function AnalyzeClient({ initialInput = '' }: { initialInput?: string }) {
+  const [input, setInput] = useState(initialInput);
   const [error, setError] = useState<string | null>(null);
   const [review, setReview] = useState<AnalysisReview | null>(null);
+
+  // Arriving from the board editor with ?fen=… — auto-load the position so the
+  // user lands on the analysis board, not the paste form. Mount only.
+  useEffect(() => {
+    if (!initialInput) return;
+    const parsed = parseAnalysisInput(initialInput);
+    if (parsed) setReview(parsed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // The submit unmounts the focused button and mounts the review shell —
   // hand keyboard/SR focus to the shell so the swap is not a dead end.
