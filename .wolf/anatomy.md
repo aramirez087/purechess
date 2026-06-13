@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:49:00.246Z
-> Files: 1204 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:59:11.320Z
+> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -82,7 +82,7 @@
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 — Implementation Plan: Charter + jscpd Baseline (~4430 tok)
 - `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
-- `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
+- `.session-03-plan.md` — Session 03 — Implementation Plan: Rating Chart Dedup (~4367 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
@@ -1378,6 +1378,10 @@
 - `use-move-animation.ts` — Victim of a capture: held at its square by the AnimationLayer while the mover slides in. (~873 tok)
 - `use-move-input.ts` — false in read-only / off-turn contexts — openWith becomes a no-op. (~1471 tok)
 
+## apps/web/src/components/charts/
+
+- `line-rating-chart.tsx` — ratings[i] and timestamps[i] must be parallel arrays (same length, same index). (~1466 tok)
+
 ## apps/web/src/components/computer-game/
 
 - `live-announcer.tsx` — Last computer move in SAN notation, e.g. "Nf3". Null before first computer move. (~342 tok)
@@ -1458,14 +1462,14 @@
 - `edit-profile-dialog.tsx` — EditProfileDialog — renders modal (~1274 tok)
 - `profile-header.tsx` — ProfileHeader (~594 tok)
 - `puzzle-rating-pill.tsx` — A compact puzzle-rating stat for the own-profile ratings area. Additive and (~639 tok)
-- `rating-chart.tsx` — Pure-SVG interactive rating history chart (category tabs, 1m/3m/1y/all range, W/D/L dots, hover tooltip + game deep link). No chart deps. (~2777 tok)
+- `rating-chart.tsx` — CATEGORIES (~1694 tok)
 - `ratings-card.tsx` — Current-rating 3-col grid + RatingChart below (when ratingHistory non-empty) (~700 tok)
 - `recent-games.tsx` — ResultBadge (~1480 tok)
 
 ## apps/web/src/components/puzzle/
 
 - `puzzle-board.tsx` — PuzzleBoard (~1106 tok)
-- `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~2107 tok)
+- `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~1046 tok)
 - `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1433 tok)
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
@@ -1833,6 +1837,7 @@
 ## docs/roadmap/dedup-cleanup/
 
 - `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
+- `session-03-handoff.md` — Session 03 Handoff — Rating Chart Dedup (~1209 tok)
 
 ## docs/roadmap/purechess-category-best/
 
