@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
 import { RushHud } from '@/components/puzzle/rush-hud';
+import { TrainingAnnouncer } from '@/components/training/training-announcer';
+import { focusBoard } from '@/lib/board/focus-board';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
 import { finishRush, recordAttempt, startRush } from '@/lib/api/puzzles';
 
@@ -217,6 +219,12 @@ function RushRun({
   const [flash, setFlash] = useState<'wrong' | null>(null);
   const [over, setOver] = useState(false);
   const [result, setResult] = useState<RunResult | null>(null);
+  // Polite SR line. Rush advances on every move, so we do NOT narrate each
+  // solve (that would be relentless chatter) — only the meaningful beats: a
+  // strike (a mistake the player must track) and the final result.
+  const [announcement, setAnnouncement] = useState('');
+
+  const boardWrapRef = useRef<HTMLDivElement>(null);
 
   // Refs the timer/callbacks read so they never go stale.
   const scoreRef = useRef(0);
@@ -278,6 +286,7 @@ function RushRun({
 
     const finalScore = scoreRef.current;
     const durationMs = Date.now() - startedAtRef.current;
+    setAnnouncement(`Run over. Final score ${finalScore}.`);
     try {
       const res = await finishRush({ mode, score: finalScore, durationMs });
       setResult({ score: finalScore, best: res.best, isPB: res.isPB });
@@ -317,6 +326,8 @@ function RushRun({
         void endRun();
         return i;
       }
+      // Auto-advance focus restore for keyboard solvers (see focusBoard).
+      requestAnimationFrame(() => focusBoard(boardWrapRef.current));
       return next;
     });
   }, [endRun]);
@@ -345,6 +356,14 @@ function RushRun({
     setCombo(0);
     strikesRef.current += 1;
     setStrikes(strikesRef.current);
+
+    // Politely note the strike (the only per-move beat worth narrating in rush).
+    if (mode === '5strikes') {
+      const left = Math.max(0, MAX_STRIKES - strikesRef.current);
+      setAnnouncement(`Strike ${strikesRef.current}. ${left} left.`);
+    } else {
+      setAnnouncement(`Wrong. Score ${scoreRef.current}.`);
+    }
 
     // Red flash, then instant advance.
     setFlash('wrong');
@@ -398,8 +417,9 @@ function RushRun({
         <RushHud mode={mode} timeMs={timeMs} strikes={strikes} score={score} combo={combo} />
 
         <div
+          ref={boardWrapRef}
           className={cn(
-            'relative w-full rounded-[6px] transition-shadow duration-150',
+            'relative w-full rounded-[6px] transition-shadow duration-150 motion-reduce:transition-none',
             flash === 'wrong' && 'shadow-[0_0_0_3px_hsl(var(--destructive)/0.7)]',
           )}
           data-flash={flash ?? undefined}
@@ -448,6 +468,8 @@ function RushRun({
         >
           End run
         </Button>
+
+        <TrainingAnnouncer message={announcement} />
       </div>
     </BoardSettingsProvider>
   );

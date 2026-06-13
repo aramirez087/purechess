@@ -4,6 +4,7 @@ import { Flame, Timer, XCircle } from 'lucide-react';
 import type { RushMode } from '@purechess/shared';
 import { cn } from '@/lib/utils';
 import { clockTier } from '@/lib/board/clock-tier';
+import { useBoardSettings } from '@/components/board/board-context';
 
 /**
  * The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a
@@ -38,6 +39,11 @@ function formatClock(ms: number): string {
 }
 
 export function RushHud({ mode, timeMs, strikes, score, combo }: RushHudProps) {
+  // The board-settings "animations off" toggle drives animationMs to 0; honor
+  // it here too so the countdown pulse stops under the same switch as the
+  // board (prefers-reduced-motion is handled by globals.css [class*='clock-pulse']).
+  const { settings } = useBoardSettings();
+  const motionOff = settings.animationMs === 0;
   const tier = clockTier(timeMs);
   const lowTime = mode === '3min' && typeof timeMs === 'number' && timeMs <= PULSE_UNDER_MS;
   const strikesLeft = Math.max(0, MAX_STRIKES - strikes);
@@ -51,11 +57,15 @@ export function RushHud({ mode, timeMs, strikes, score, combo }: RushHudProps) {
       {mode === '3min' ? (
         <div
           className={cn(
-            'flex items-center gap-2 rounded-[7px] border px-3 py-1.5 transition-colors',
+            'flex items-center gap-2 rounded-[7px] border px-3 py-1.5 transition-colors motion-reduce:transition-none',
             lowTime
-              ? 'border-red-700/60 bg-[#0b0d0b]/80 text-red-400 animate-[clock-pulse_1s_ease-in-out_infinite]'
+              ? 'border-red-700/60 bg-[#0b0d0b]/80 text-red-400'
               : 'border-border bg-raised text-foreground',
-            tier === 'dying' && 'animate-[clock-pulse_0.4s_ease-in-out_infinite] font-bold',
+            // The pulse is the accelerate cue — kept unless animations are off
+            // (settings switch) or the OS prefers reduced motion (globals.css).
+            lowTime && !motionOff && 'animate-[clock-pulse_1s_ease-in-out_infinite]',
+            tier === 'dying' && 'font-bold',
+            tier === 'dying' && !motionOff && 'animate-[clock-pulse_0.4s_ease-in-out_infinite]',
           )}
           role="timer"
           aria-live="off"
@@ -103,7 +113,7 @@ export function RushHud({ mode, timeMs, strikes, score, combo }: RushHudProps) {
       {/* Combo — a quiet flame that brightens with the streak. */}
       <div
         className={cn(
-          'flex items-center gap-1.5 rounded-[7px] border px-2.5 py-1.5 transition-colors',
+          'flex items-center gap-1.5 rounded-[7px] border px-2.5 py-1.5 transition-colors motion-reduce:transition-none',
           combo >= 2 ? 'border-brass/40 text-brass' : 'border-border text-muted-foreground',
         )}
         data-testid="rush-combo"

@@ -167,9 +167,11 @@ function WeaknessCard({
         asChild
         className={cn(
           'h-10 shrink-0 gap-1.5 px-4 font-semibold',
-          featured
-            ? 'bg-brass text-brass-foreground hover:bg-brass/90'
-            : 'bg-foreground text-background hover:bg-foreground/90',
+          // Both rows use the bone in-app primary (design.md: brass solid is
+          // reserved for the auth door; the accent budget on this surface is
+          // already spent on the featured card's brass tint + icon). The
+          // featured row still reads as the headline via its brass-tinted card.
+          'bg-foreground text-background hover:bg-foreground/90',
         )}
       >
         <Link href={href}>

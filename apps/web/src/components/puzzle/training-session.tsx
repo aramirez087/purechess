@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
 import { humanizeTheme } from '@/components/puzzle/theme-tile';
 import { SolveExplanation } from '@/components/puzzle/solve-explanation';
+import { TrainingAnnouncer } from '@/components/training/training-announcer';
+import { focusBoard } from '@/lib/board/focus-board';
 import { fetchNextPuzzle, fetchPuzzleStats, recordAttempt } from '@/lib/api/puzzles';
 
 /**
@@ -70,7 +72,10 @@ export function TrainingSession({
   // Theme accuracy captured before the first puzzle and again at completion.
   const [startAccuracy, setStartAccuracy] = useState<number | null>(null);
   const [endAccuracy, setEndAccuracy] = useState<number | null>(null);
+  // Polite SR outcome line (verdict + progress); the board narrates the move.
+  const [announcement, setAnnouncement] = useState('');
 
+  const boardWrapRef = useRef<HTMLDivElement>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Guards the per-puzzle recordAttempt so it fires exactly once.
   const recordedRef = useRef(false);
@@ -92,6 +97,10 @@ export function TrainingSession({
     try {
       const next = await fetchNextPuzzle(theme ? { theme } : {});
       setPuzzle(next);
+      // Auto-advance focus restore: a keyboard solver who had focus on the
+      // board must not be dropped to <body> when the next puzzle renders.
+      // Deferred past the render that swaps in the new position.
+      requestAnimationFrame(() => focusBoard(boardWrapRef.current));
     } catch {
       setError('Could not load the next puzzle.');
       setPuzzle(null);
@@ -139,6 +148,13 @@ export function TrainingSession({
         solvedRef.current = nextSolved;
         setSolved(nextSolved);
       }
+
+      // Politely narrate the verdict + progress (the board narrates the move).
+      setAnnouncement(
+        wasSolved
+          ? `Correct. Solved ${nextSolved} of ${target}.`
+          : 'Not the move — try again.',
+      );
 
       // Report the outcome; read back the server-computed rating delta.
       void (async () => {
@@ -237,14 +253,14 @@ export function TrainingSession({
             aria-label={`Progress toward ${target} solves`}
           >
             <div
-              className="h-full rounded-full bg-brass transition-[width] duration-500"
+              className="h-full rounded-full bg-brass transition-[width] duration-500 motion-reduce:transition-none"
               style={{ width: `${progressPct}%` }}
             />
           </div>
         </header>
 
         <div className="mx-auto w-full max-w-[560px]">
-          <div className="relative w-full">
+          <div className="relative w-full" ref={boardWrapRef}>
             <Chessboard
               position={state.fen}
               orientation={state.solvingColor === 'w' ? 'white' : 'black'}
@@ -321,6 +337,8 @@ export function TrainingSession({
             />
           </div>
         )}
+
+        <TrainingAnnouncer message={announcement} />
       </div>
     </BoardSettingsProvider>
   );

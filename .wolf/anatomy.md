@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T21:00:31.117Z
-> Files: 1187 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T21:17:00.916Z
+> Files: 1192 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -710,7 +710,7 @@
 - `apps/web/src/app/train/page.tsx` — **S13** training-hub server shell: auth (/api/auth/me) + (signed-in) parallel serverFetch of /train/plan, /train/streak, /train/insights (each .catch→null), → <TrainClient>. force-dynamic. (~260 tok)
 - `apps/web/src/app/train/train-client.tsx` — **S13** 'use client' hub. Signed-in: StreakBanner + Focus one-liner (top insight) + DailyPlan + mode grid (8 tiles; Review tile carries due badge = review item target−done). Signed-out: sign-in pitch + daily-puzzle link. countReviewDue() pure. (~1600 tok)
 - `apps/web/src/components/improve/training-placeholder.tsx` — shared Improve empty-state (icon, eyebrow, Fraunces title, "Coming together" list, signed-out sign-in prompt, related pills). Silent Tournament voice. (~520 tok)
-- `apps/web/src/components/training/daily-plan.tsx` — **S13** DailyPlan: ordered checklist of brass-CTA PlanRows (icon/verb per kind, N/target progress, completed strike), SVG GoalRing (fills to dailyGoal, success state at goal), "Done for today" when all complete, empty state. (~1300 tok)
+- `apps/web/src/components/training/daily-plan.tsx` — **S13/S15** DailyPlan: ordered checklist of BONE-CTA PlanRows (S15: was solid-brass, now bg-foreground per design.md; completed row = quiet outline 'Again'), icon/verb per kind, N/target progress, SVG GoalRing (fills to dailyGoal, `motion-reduce:transition-none`, role=img aria-label), "Done for today" when complete, empty state. (~1300 tok)
 - `apps/web/src/components/training/streak-banner.tsx` — **S13** StreakBanner: current(flame)/longest(trophy) figures + 12-week contribution calendar (grid-rows-7). buildCalendar(history,total) pure: oldest-first cells ending today, brass-opacity band by daily activity count. (~900 tok)
 - `apps/web/src/hooks/use-endgame-drill.ts` — S10 ASYNC drill state machine. positionStatus(fen) + isSlip(objective,defCat) exported pure (chess.js). onMove probes after each user move (defender-POV), isSlip flips→threw-win/lost-draw fail, defender reply = probe.bestMove|engineMoveFn, success=mate|hard-draw|DRAW_HOLD_MOVES. (~1500 tok)
 - `apps/web/src/lib/api/endgames.ts` — S10 web client for /endgames: listEndgameDrills/getEndgameDrill (public), probeEndgame (server tablebase proxy), recordEndgameAttempt (auth). credentials:'include'. (~520 tok)
@@ -1304,17 +1304,17 @@
 ## apps/web/src/app/puzzles/review/
 
 - `page.tsx` — dynamic (~373 tok)
-- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3510 tok)
+- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3768 tok)
 
 ## apps/web/src/app/puzzles/rush/
 
 - `page.tsx` — dynamic (~383 tok)
-- `rush-client.tsx` — Puzzle Rush — the timed board-vision drill. Three phases: (~4970 tok)
+- `rush-client.tsx` — Puzzle Rush — the timed board-vision drill. Three phases: (~5311 tok)
 
 ## apps/web/src/app/puzzles/stats/
 
 - `page.tsx` — dynamic (~402 tok)
-- `stats-client.tsx` — Puzzle stats surface. Top: the puzzle rating (big), an accuracy summary, and a (~1750 tok)
+- `stats-client.tsx` — Puzzle stats surface. Top: the puzzle rating (big), an accuracy summary, and a (~1751 tok)
 
 ## apps/web/src/app/puzzles/train/
 
@@ -1333,7 +1333,7 @@
 
 ## apps/web/src/app/train/insights/
 
-- `insights-client.tsx` — S12 'use client'. Ranked WeaknessDto card list: each card = title + evidence (numbers) + "Fix this" Button→actionHref; top card featured (brass). KIND_META maps kind→icon+verb. Signed-out: insights-signin-prompt. Empty/low-data: insights-empty (links to trainers). testids insights-list/insight-card(data-kind)/insight-evidence. (~1989 tok)
+- `insights-client.tsx` — The insights surface — "what should I work on?" answered with evidence. (~2053 tok)
 - `page.tsx` — S12 server. force-dynamic. auth (/api/auth/me) → serverFetch /api/train/insights → InsightsClient. Signed-out renders sign-in prompt. (~333 tok)
 
 ## apps/web/src/components/
@@ -1461,12 +1461,12 @@
 ## apps/web/src/components/puzzle/
 
 - `puzzle-board.tsx` — humanizeTheme (~1176 tok)
-- `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~1922 tok)
-- `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1197 tok)
+- `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~2107 tok)
+- `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1433 tok)
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
 - `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~973 tok)
-- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4485 tok)
+- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4754 tok)
 
 ## apps/web/src/components/review/
 
@@ -1490,8 +1490,9 @@
 
 ## apps/web/src/components/training/
 
-- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1823 tok)
-- `streak-banner.tsx` — The streak header: the current streak (flame), the longest streak, and a (~1239 tok)
+- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1853 tok)
+- `streak-banner.tsx` — The streak header: the current streak (flame), the longest streak, and a (~1291 tok)
+- `training-announcer.tsx` — One polite live region per training surface for SOLVE OUTCOMES and session (~344 tok)
 
 ## apps/web/src/components/ui/
 
@@ -1553,6 +1554,7 @@
 - `coords.ts` — Pure board coordinate math (no DOM): pointToSquare (rect→square, 0.5-sq off-board margin then null), snapToNearestDest (touch snap, 2-sq cap), squareToIndices/getSquareAt, FILES/RANKS (~1082 tok)
 - `editor-state.ts` — Pure editor state ↔ FEN conversion — zero dependencies, no React, no chess.js. (~1199 tok)
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
+- `focus-board.ts` — Keyboard-focus restoration for auto-advancing drills. (~373 tok)
 - `legal-sans.ts` — Legal-move enumeration + query matching for the text move input overlay. (~536 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
 - `move-glyph.tsx` — On-board move-classification badge — the chess.com-style corner glyph that (~746 tok)
@@ -1590,6 +1592,10 @@
 ## apps/web/src/types/
 
 - `game-review.ts` — Custom starting position (FEN). Omitted = standard initial position. (~352 tok)
+
+## apps/web/test/a11y/
+
+- `training-surfaces.test.tsx` — Session 15 a11y regression net for the training surfaces. Asserts REAL (~2640 tok)
 
 ## apps/web/test/analyze/
 
@@ -1696,7 +1702,7 @@
 
 ## apps/web/test/puzzle/
 
-- `rush-client.test.tsx` — --- Mocks ------------------------------------------------------------------ (~2285 tok)
+- `rush-client.test.tsx` — --- Mocks ------------------------------------------------------------------ (~2344 tok)
 - `solve-explanation.test.tsx` — --- Mocks ------------------------------------------------------------------ (~1445 tok)
 - `theme-accuracy-table.test.tsx` — stat (~1398 tok)
 - `training-session.test.tsx` — --- Mocks ------------------------------------------------------------------ (~1444 tok)
@@ -1840,6 +1846,7 @@
 - `session-12-handoff.md` — Session 12 handoff — Insights & weakness engine (~3230 tok)
 - `session-13-handoff.md` — Session 13 handoff — Training hub, daily plan & streaks (~3649 tok)
 - `session-14-handoff.md` — Session 14 handoff — Adaptive difficulty + coach feedback (~2922 tok)
+- `session-15-handoff.md` — Session 15 — A11y, mobile, motion & sound pass — Handoff (~2002 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1897,6 +1904,7 @@
 ## scripts/
 
 - `apps/web/src/components/home/hero-heading.tsx` — Static hero h1 ("The board is the product."). Deliberately NO animation: it is the LCP element, so animate-rise-* would block LCP. (~340 tok)
+- `apps/web/test/a11y/training-surfaces.test.tsx` — **S15** a11y net: asserts real names/roles on ThemeTile, DailyPlan rows + goal ring, RushHud (strikes/score/combo, timer aria-live=off), insight cards, streak calendar; and that TrainingSession's polite live region fires 'Correct. Solved N of M.' / 'Not the move — try again.' on solve outcome. (~10 tests) (~1400 tok)
 - `apps/web/test/game/game-loading-skeleton.test.tsx` — Locks: GameLoadingSkeleton renders a contentful SVG (33 rects) so FCP can fire; keeps role=status loading label. (~260 tok)
 - `apps/web/test/home/hero-heading.test.tsx` — Locks: hero h1 carries no rise/fade entrance animation in SSR or post-mount (LCP guard). (~250 tok)
 - `build-engine.sh` — Build the purechess-engine native binary for the host platform. (~199 tok)

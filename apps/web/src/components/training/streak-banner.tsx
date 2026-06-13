@@ -21,6 +21,7 @@ export interface StreakBannerProps {
 
 export function StreakBanner({ streak }: StreakBannerProps) {
   const cells = buildCalendar(streak.history ?? [], WEEKS * DAYS_PER_WEEK);
+  const activeDays = cells.filter((c) => c.active).length;
 
   return (
     <section
@@ -49,7 +50,7 @@ export function StreakBanner({ streak }: StreakBannerProps) {
         data-testid="streak-calendar"
         className="grid grid-flow-col grid-rows-7 gap-1"
         role="img"
-        aria-label={`Training activity over the last ${WEEKS} weeks`}
+        aria-label={`Training activity: active on ${activeDays} of the last ${WEEKS * DAYS_PER_WEEK} days. Current streak ${streak.currentStreak} day${streak.currentStreak === 1 ? '' : 's'}.`}
       >
         {cells.map((cell) => (
           <span

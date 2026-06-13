@@ -152,8 +152,8 @@ function PlanRow({ item }: { item: TrainingPlanItemDto }) {
         className={cn(
           'h-9 shrink-0 gap-1.5 px-3.5 text-sm font-semibold',
           completed
-            ? 'bg-foreground text-background hover:bg-foreground/90'
-            : 'bg-brass text-brass-foreground hover:bg-brass/90',
+            ? 'border border-border bg-transparent text-muted-foreground hover:bg-raised'
+            : 'bg-foreground text-background hover:bg-foreground/90',
         )}
       >
         <Link href={href}>
@@ -186,7 +186,10 @@ function GoalRing({ solved, goal, met }: { solved: number; goal: number; met: bo
           cx="24"
           cy="24"
           r={r}
-          className={cn('fill-none transition-[stroke-dasharray]', met ? 'stroke-success' : 'stroke-brass')}
+          className={cn(
+            'fill-none transition-[stroke-dasharray] duration-500 motion-reduce:transition-none',
+            met ? 'stroke-success' : 'stroke-brass',
+          )}
           strokeWidth="4"
           strokeLinecap="round"
           strokeDasharray={`${dash} ${c}`}

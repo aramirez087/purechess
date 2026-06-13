@@ -9,6 +9,8 @@ import { BoardSettingsProvider } from '@/components/board/board-context';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
+import { TrainingAnnouncer } from '@/components/training/training-announcer';
+import { focusBoard } from '@/lib/board/focus-board';
 import { gradeReview } from '@/lib/api/puzzles';
 
 /**
@@ -111,7 +113,10 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
   const [done, setDone] = useState(false);
   // The most recent next-due, surfaced in the summary ("next review in X").
   const [lastNextDueAt, setLastNextDueAt] = useState<string | null>(null);
+  // Polite SR outcome line (verdict + remaining); the board narrates the move.
+  const [announcement, setAnnouncement] = useState('');
 
+  const boardWrapRef = useRef<HTMLDivElement>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const settledRef = useRef(false);
   const solvedRef = useRef(0);
@@ -136,6 +141,8 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
         setDone(true);
         return i;
       }
+      // Auto-advance focus restore for keyboard solvers (see focusBoard).
+      requestAnimationFrame(() => focusBoard(boardWrapRef.current));
       return next;
     });
   }, [queue.length, clearAdvance]);
@@ -151,6 +158,14 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
         solvedRef.current = nextSolved;
         setSolved(nextSolved);
       }
+
+      // Politely narrate the verdict + how many reviews remain in the queue.
+      const remaining = Math.max(0, queue.length - (index + 1));
+      setAnnouncement(
+        wasSolved
+          ? `Correct. ${remaining} review${remaining === 1 ? '' : 's'} remaining.`
+          : `Not the move. ${remaining} review${remaining === 1 ? '' : 's'} remaining.`,
+      );
 
       // Grade owns the SM-2 reschedule (NOT the normal recordAttempt path).
       void (async () => {
@@ -224,7 +239,7 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
         </header>
 
         <div className="mx-auto w-full max-w-[560px]">
-          <div className="relative w-full">
+          <div className="relative w-full" ref={boardWrapRef}>
             <Chessboard
               position={state.fen}
               orientation={state.solvingColor === 'w' ? 'white' : 'black'}
@@ -272,6 +287,8 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
             ' '
           )}
         </p>
+
+        <TrainingAnnouncer message={announcement} />
       </div>
     </BoardSettingsProvider>
   );

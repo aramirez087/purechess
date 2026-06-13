@@ -2824,3 +2824,41 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:57 | solve-explanation.test (8 cases: copy/missing/rush/hide/arrow/step/collapse/dismiss) | apps/web/test/puzzle/solve-explanation.test.tsx | 8 pass | ~900 |
 | 14:58 | all 4 gates GREEN: API tsc 0, API test 605, web tsc 0, web vitest 642 | — | PASS | — |
 | 15:00 | Created docs/roadmap/purechess-improve/session-14-handoff.md | — | ~3117 |
+| 15:05 | Edited apps/web/src/components/training/daily-plan.tsx | 9→9 lines | ~90 |
+| 15:05 | Edited apps/web/src/app/train/insights/insights-client.tsx | CSS: md | ~144 |
+| 15:05 | Edited apps/web/src/app/puzzles/stats/stats-client.tsx | 4→4 lines | ~48 |
+| 15:05 | Created apps/web/src/components/training/training-announcer.tsx | — | ~344 |
+| 15:05 | Edited apps/web/src/components/puzzle/training-session.tsx | added 2 import(s) | ~119 |
+| 15:06 | Created apps/web/src/lib/board/focus-board.ts | — | ~373 |
+| 15:06 | Edited apps/web/src/components/puzzle/training-session.tsx | 4→7 lines | ~118 |
+| 15:06 | Edited apps/web/src/components/puzzle/training-session.tsx | CSS: restore | ~157 |
+| 15:06 | Edited apps/web/src/components/puzzle/training-session.tsx | modified if() | ~139 |
+| 15:06 | Edited apps/web/src/components/puzzle/training-session.tsx | 4→4 lines | ~51 |
+| 15:06 | Edited apps/web/src/components/puzzle/training-session.tsx | modified AttemptReadout() | ~57 |
+| 15:06 | Edited apps/web/src/app/puzzles/review/review-client.tsx | added 2 import(s) | ~69 |
+| 15:06 | Edited apps/web/src/app/puzzles/review/review-client.tsx | 5→8 lines | ~132 |
+| 15:06 | Edited apps/web/src/app/puzzles/review/review-client.tsx | modified if() | ~129 |
+| 15:07 | Edited apps/web/src/app/puzzles/review/review-client.tsx | modified if() | ~179 |
+| 15:07 | Edited apps/web/src/app/puzzles/review/review-client.tsx | 4→4 lines | ~51 |
+| 15:07 | Edited apps/web/src/app/puzzles/review/review-client.tsx | modified ReviewReadout() | ~65 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | added 2 import(s) | ~71 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | CSS: beats | ~142 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | modified if() | ~106 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | added 1 condition(s) | ~151 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | 5→6 lines | ~91 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | CSS: motion-reduce | ~92 |
+| 15:07 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | 12→14 lines | ~94 |
+| 15:08 | Edited apps/web/src/components/puzzle/rush-hud.tsx | added 1 import(s) | ~74 |
+| 15:08 | Edited apps/web/src/components/puzzle/rush-hud.tsx | modified RushHud() | ~171 |
+| 15:08 | Edited apps/web/src/components/puzzle/rush-hud.tsx | CSS: motion-reduce | ~198 |
+| 15:08 | Edited apps/web/src/components/puzzle/rush-hud.tsx | CSS: motion-reduce | ~81 |
+| 15:08 | Edited apps/web/src/components/training/daily-plan.tsx | CSS: motion-reduce | ~54 |
+| 15:08 | Edited apps/web/src/components/puzzle/training-session.tsx | CSS: motion-reduce | ~57 |
+| 15:09 | Edited apps/web/src/components/puzzle/puzzle-rating-chart.tsx | CSS: readers, points | ~211 |
+| 15:09 | Edited apps/web/src/components/puzzle/puzzle-rating-chart.tsx | 5→5 lines | ~38 |
+| 15:09 | Edited apps/web/src/components/training/streak-banner.tsx | modified StreakBanner() | ~56 |
+| 15:09 | Edited apps/web/src/components/training/streak-banner.tsx | CSS: activity | ~90 |
+| 15:10 | Edited apps/web/test/puzzle/rush-client.test.tsx | 3→8 lines | ~102 |
+| 15:11 | Created apps/web/test/a11y/training-surfaces.test.tsx | — | ~2640 |
+| 15:16 | S15 a11y/mobile/motion polish: training-announcer + focus-board, brass→bone CTAs, reduced-motion guards, chart/streak aria-labels, a11y test (10), 8 390px shots | training-announcer.tsx, focus-board.ts, training-session/rush/review/daily-plan/streak/insights/stats/rush-hud/puzzle-rating-chart, test/a11y | gate green 652/652 | ~95k |
+| 15:17 | Created docs/roadmap/purechess-improve/session-15-handoff.md | — | ~2136 |

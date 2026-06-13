@@ -10,6 +10,11 @@ vi.mock('@/lib/board/sound', () => ({
 
 vi.mock('@/components/board/board-context', () => ({
   BoardSettingsProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  // RushHud reads board settings to honor the "animations off" switch.
+  useBoardSettings: () => ({
+    settings: { sound: true, coordinates: false, animationMs: 200 },
+    updateSettings: () => {},
+  }),
 }));
 
 vi.mock('next/link', () => ({

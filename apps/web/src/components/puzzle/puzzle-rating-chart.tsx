@@ -60,6 +60,19 @@ export function PuzzleRatingChart({ history, className }: PuzzleRatingChartProps
     return { coords, gridlines, xLabels };
   }, [history]);
 
+  // Text-equivalent summary for screen readers: SVG charts are otherwise
+  // opaque. States the span, the endpoints, and the net direction.
+  const summary = useMemo(() => {
+    if (history.length < 2) return EMPTY_COPY;
+    const first = history[0].rating;
+    const last = history[history.length - 1].rating;
+    const lo = Math.min(...history.map((p) => p.rating));
+    const hi = Math.max(...history.map((p) => p.rating));
+    const net = last - first;
+    const dir = net > 0 ? `up ${net}` : net < 0 ? `down ${-net}` : 'flat';
+    return `Puzzle rating over ${history.length} points: ${first} to ${last} (${dir}). Low ${lo}, high ${hi}.`;
+  }, [history]);
+
   const hovered = hoverIdx !== null && layout ? history[hoverIdx] : null;
   const hoveredCoord = hoverIdx !== null && layout ? layout.coords[hoverIdx] : null;
   const delta =
@@ -89,7 +102,7 @@ export function PuzzleRatingChart({ history, className }: PuzzleRatingChartProps
           width="100%"
           preserveAspectRatio="xMidYMid meet"
           role="img"
-          aria-label="Puzzle rating over time"
+          aria-label={summary}
         >
           {layout.gridlines.map((line) => (
             <g key={line.rating}>

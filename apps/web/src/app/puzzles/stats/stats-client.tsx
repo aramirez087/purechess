@@ -100,7 +100,7 @@ export function PuzzleStatsClient({ signedIn, history, stats }: PuzzleStatsClien
         {weakest && weakestName ? (
           <Button
             asChild
-            className="h-11 shrink-0 gap-2 bg-brass px-5 font-semibold text-brass-foreground hover:bg-brass/90"
+            className="h-11 shrink-0 gap-2 bg-foreground px-5 font-semibold text-background hover:bg-foreground/90"
           >
             <Link href={`/puzzles/train?theme=${encodeURIComponent(weakest.slug)}`}>
               <Target className="h-4 w-4" aria-hidden="true" />
