@@ -2569,3 +2569,32 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 13:09 | Edited apps/web/src/app/puzzles/review/review-client.tsx | inline fix | ~24 |
 | 13:09 | Edited apps/api/src/puzzles/puzzle-review.service.ts | reduced (-6 lines) | ~28 |
 | 13:09 | Edited apps/api/src/puzzles/puzzle-review.service.ts | modified per() | ~69 |
+| 13:10 | Edited docs/roadmap/purechess-improve/session-06-handoff.md | "<filled at commit>" → "d967964" | ~14 |
+| 13:13 | Edited packages/shared/src/dto/puzzle.dto.ts | expanded (+72 lines) | ~981 |
+| 13:14 | Created apps/api/src/puzzles/dto/save-mistakes.dto.ts | — | ~346 |
+| 13:14 | Created apps/api/src/puzzles/game-mistake.service.ts | — | ~2330 |
+| 13:15 | Created apps/api/src/puzzles/game-mistake.controller.ts | — | ~722 |
+| 13:15 | Edited apps/api/src/puzzles/puzzles.module.ts | 28→33 lines | ~240 |
+| 13:16 | Created apps/api/test/puzzles/game-mistake.service.spec.ts | — | ~3596 |
+| 13:16 | Edited apps/web/src/lib/api/puzzles.ts | 14→17 lines | ~99 |
+| 13:17 | Edited apps/web/src/lib/api/puzzles.ts | modified gradeReview() | ~717 |
+| 13:17 | Created apps/web/src/hooks/use-mistake-capture.ts | — | ~1220 |
+| 13:18 | Created apps/web/src/components/review/mistake-trainer.tsx | — | ~2670 |
+| 13:18 | Edited apps/web/src/app/games/[gameId]/page.tsx | CSS: viewerColor | ~207 |
+| 13:18 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 2 import(s) | ~139 |
+| 13:18 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 7→12 lines | ~147 |
+| 13:18 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 5 condition(s) | ~520 |
+| 13:19 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 4→7 lines | ~81 |
+| 13:19 | Created apps/web/test/review/mistake-trainer.test.tsx | — | ~1419 |
+
+## Session — 2026-06-13 — S07 mistakes from your games (epic/purechess-improve)
+| 13:10 | confirmed frozen schema: PuzzleReview.puzzleId FK→Puzzle, GameMistake no SR cols | schema.prisma | backlog model chosen | ~600 |
+| 13:12 | added GameMistakeDto/MistakeCandidateDto/Save* to shared, rebuilt | packages/shared/src/dto/puzzle.dto.ts | shared build ok | ~400 |
+| 13:13 | GameMistakeService (server FEN re-derivation anti-spoof, own-side+threshold, backlog) | apps/api/src/puzzles/game-mistake.service.ts | new | ~900 |
+| 13:14 | GameMistakeController (POST games/:id/mistakes, GET me/mistakes, POST me/mistakes/:id/review) + SaveMistakesDto + module reg | game-mistake.controller.ts, dto/save-mistakes.dto.ts, puzzles.module.ts | additive | ~500 |
+| 13:15 | service spec (18 cases, legal FENs) — server rejects spoof, own-side only, filters, markReviewed | apps/api/test/puzzles/game-mistake.service.spec.ts | 18 pass | ~900 |
+| 13:17 | web api client fns + use-mistake-capture hook (fire-and-forget, idempotent) | apps/web/src/lib/api/puzzles.ts, hooks/use-mistake-capture.ts | new | ~700 |
+| 13:18 | MistakeTrainer panel + additive review-client/page wiring (viewerColor prop) | components/review/mistake-trainer.tsx, app/games/[gameId]/{review-client,page}.tsx | additive | ~1100 |
+| 13:19 | trainer test (6 cases) | apps/web/test/review/mistake-trainer.test.tsx | 6 pass | ~700 |
+| 13:20 | all gates green: API 40s/459t, shared build, web 75f/590t, all tsc clean, lint clean | — | PASS | ~600 |
+| 13:24 | Created docs/roadmap/purechess-improve/session-07-handoff.md | — | ~3751 |

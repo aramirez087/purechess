@@ -10,6 +10,8 @@ import { PuzzleRushController } from './puzzle-rush.controller';
 import { PuzzleRushService } from './puzzle-rush.service';
 import { PuzzleReviewController } from './puzzle-review.controller';
 import { PuzzleReviewService } from './puzzle-review.service';
+import { GameMistakeController } from './game-mistake.controller';
+import { GameMistakeService } from './game-mistake.service';
 
 @Module({
   imports: [AuthModule],
@@ -18,6 +20,7 @@ import { PuzzleReviewService } from './puzzle-review.service';
     PuzzleTrainingController,
     PuzzleRushController,
     PuzzleReviewController,
+    GameMistakeController,
   ],
   providers: [
     PuzzlesService,
@@ -26,6 +29,7 @@ import { PuzzleReviewService } from './puzzle-review.service';
     PuzzleRatingService,
     PuzzleRushService,
     PuzzleReviewService,
+    GameMistakeService,
   ],
   exports: [
     PuzzleCatalogService,
@@ -33,6 +37,7 @@ import { PuzzleReviewService } from './puzzle-review.service';
     PuzzleRatingService,
     PuzzleRushService,
     PuzzleReviewService,
+    GameMistakeService,
   ],
 })
 export class PuzzlesModule {}

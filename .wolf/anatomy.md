@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:09:57.337Z
-> Files: 1069 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:24:21.224Z
+> Files: 1084 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -636,6 +636,9 @@
 
 - `apps/api/src/puzzles/dto/grade-review.dto.ts` — S06 class-validator body for review grade: solved:boolean, msToSolve?:int≥0. (~90 tok)
 - `apps/api/src/puzzles/dto/record-attempt.dto.ts` — S03 RecordAttemptDto (class-validator): solved bool, msToSolve? int≥0, source? enum(theme|daily|rush|review|mistake). (~120 tok)
+- `apps/api/src/puzzles/dto/save-mistakes.dto.ts` — S07 class-validator body for POST games/:id/mistakes: `MistakeCandidateInput` (ply≥1, fen/playedUci/bestUci strings, bestLineUci string[], cpLoss≥0, optional themeGuess[]) nested via @Type in `SaveMistakesDto.mistakes` (ArrayMaxSize 200). (~190 tok)
+- `apps/api/src/puzzles/game-mistake.controller.ts` — S07 `@Controller()` (no base prefix, absolute method paths span two trees) + class-level SessionAuthGuard. POST games/:gameId/mistakes (SaveMistakesDto → {saved}), GET me/mistakes?unreviewedOnly= (→GameMistakeDto[]), POST me/mistakes/:id/review (→{next}). @CurrentUser. Registered additively in puzzles.module. (~330 tok)
+- `apps/api/src/puzzles/game-mistake.service.ts` — S07 "mistakes from your own games" — server-authoritative gate over GameMistake. `saveMistakes(userId,gameId,candidates)`: loads game+Move rows, verifies ownership (Forbidden else), then per candidate re-derives the position BEFORE ply P from `Move[P-1].fenAfterMove` (or startingFen at P=1), SKIPS unless claimed fen (1st-4-fields) + playedUci match the record, own-side (ply parity vs user side), and `cpLoss>=MISTAKE_CP_THRESHOLD(150)`; upserts (unique gameId+ply+userId) storing the SERVER-derived fen; returns saved count. `listMistakes(userId,{unreviewedOnly?})` newest-first; `getDueMistakes(userId,limit=20)` unreviewed backlog oldest-first (the review-union seam); `markReviewed(userId,id)` updateMany(count) → next unreviewed or null. DI: PrismaService. Exports MISTAKE_CP_THRESHOLD. (~900 tok)
 - `apps/api/src/puzzles/puzzle-catalog.service.ts` — S02 read-only catalog over seeded Puzzle bank: listThemes() (raw `unnest(themes)` GROUP BY, count bigint→number, Redis-cached 1h key `puzzle:catalog:themes`), count(), ratingRange() ({0,0} on empty). DI: PrismaService + REDIS_CLIENT. (~360 tok)
 - `apps/api/src/puzzles/puzzle-rating.service.ts` — S03 per-user puzzle Glicko. applyResult(userId,puzzleRating,rd,solved): REUSES `updateRating` from ratings/glicko2.ts (puzzle = one opponent, score 1/0), upserts PuzzleRating Float cols (unrounded), defaults 1500/350/0.06, clamps zero-RD opponent to 60. get(): snapshot or defaults. DI: PrismaService. (~420 tok)
 - `apps/api/src/puzzles/puzzle-review.controller.ts` — S06 `@Controller('puzzles/review')` additive: GET due (→getDuePayload) + POST :id/grade (GradeReviewDto). SessionAuthGuard + @CurrentUser. (~230 tok)
@@ -647,6 +650,7 @@
 - `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
 - `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
 - `apps/api/src/puzzles/spaced-repetition.ts` — S06 PURE SM-2 scheduler (no DB). `schedule(prev:{intervalDays,easeFactor,reps,lapses}, grade:'again'|'good'|'easy') → {…state, nextDueOffsetDays}`. Constants exported: DEFAULT_EASE 2.5, MIN_EASE 1.3, FIRST/SECOND_INTERVAL 1/6, AGAIN_EASE_PENALTY 0.2, EASY_EASE_BONUS 0.15, EASY_BONUS ×1.3. Deterministic, never mutates input. (~520 tok)
+- `apps/api/test/puzzles/game-mistake.service.spec.ts` — S07 jest (18, mocked Prisma): saveMistakes ownership (Forbidden/NotFound), persists own-side over-threshold storing SERVER-derived fen, REJECTS spoofed fen + spoofed playedUci, skips opponent moves + below-threshold + ghost ply, custom startingFen ply-1, threshold boundary; listMistakes unreviewedOnly passthrough + DTO mapping; getDueMistakes oldest-first; markReviewed flip+next / null / NotFound(count 0). Legal opening FENs (chess.js-generated). (~900 tok)
 - `apps/api/test/puzzles/puzzle-catalog.service.spec.ts` — Jest: mock Prisma+Redis. listThemes shape (bigint→number) + caching (2nd call no DB), count delegate, ratingRange min/max + empty {0,0}. (~600 tok)
 - `apps/api/test/puzzles/puzzle-rating.service.spec.ts` — S03 Jest (mock Prisma). applyResult: new-user 1500/350/0.06, solved↑/failed↓, reuses updateRating verbatim (equals direct call), zero-RD clamp. get() snapshot/defaults. PINS Glicko paper vector (game-rating non-regression). (~620 tok)
 - `apps/api/test/puzzles/puzzle-serving.service.spec.ts` — S03 Jest (mock Prisma + PuzzleRatingService). Asserts on the Prisma.Sql `.sql`/`.values`: target-rating resolution (arg/user/1500), NOT EXISTS exclusion, themes @> ARRAY, random()/LIMIT 1, fallback ladder ±150→±300→±600→drop. recordAttempt writes+bumps+returns delta, defaults, NotFound. getStats 3/5=60%, weakest-first, empty, cap-1000. (~900 tok)
@@ -661,14 +665,17 @@
 - `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
 - `apps/web/src/components/puzzle/theme-tile.tsx` — Selectable theme card: humanizeTheme (camelCase/slug→title), accuracyBand (low/mid/high), puzzle count, accuracy% (hidden if 0 attempts) via `.acc-*` scale, optional "Weakest" badge. (~600 tok)
 - `apps/web/src/components/puzzle/training-session.tsx` — Reusable drill shell. Props {theme:string|null, source:PuzzleSource, target=10, onBack?, onChangeTheme?}. Loops fetchNextPuzzle→useLocalPuzzle/Chessboard→recordAttempt({solved,msToSolve,source})→1.2s auto-advance. Header solved/attempted + progress bar, rating delta readout, SessionSummary at target with theme accuracy before/after. (~1500 tok)
+- `apps/web/src/components/review/mistake-trainer.tsx` — S07 `<MistakeTrainer gameId mistakes:MistakeItem[]>` review-rail panel. Lists own-side mistakes ("Move N. SAN — −cp"); click → inline solve via useLocalPuzzle (fen=before-blunder, moves=bestLineUci) "Find the move you missed". Solving marks reviewed by resolving ply→id from fetchMistakes(gameId) (best-effort) then markMistakeReviewed(id). Self-hides when empty. Bespoke-hex palette. Exports MistakeItem type. (~1100 tok)
 - `apps/web/src/hooks/use-local-puzzle.ts` — S04 DB-puzzle solve machine (reusable core for rush/review/mistakes). NO setup phase: puzzle.fen IS start, moves[0]=solver's first move, solvingColor from FEN. Phases player→auto-reply→…→success|fail→reveal. onMove(uci) matches via puzzle-utils, tracks msToSolve, fires onSolved({msToSolve})/onFailed once. (~1100 tok)
+- `apps/web/src/hooks/use-mistake-capture.ts` — S07 `useMistakeCapture({gameId,moves,startFen,viewerColor,classification})`: once classification completes, collects the viewer's OWN mistake/blunder moves over `CAPTURE_CP_THRESHOLD(150)` and POSTs once via saveGameMistakes (fire-and-forget; `sentForGameRef` once-guard cleared on failure for retry). No-op when viewerColor null or classification absent. Exports pure `collectOwnMistakes(classified,moves,color,startFen)` → MistakeCandidateDto[] (fen=replayToFen before-blunder, bestLineUci=[bestUci]). (~520 tok)
 - `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
-- `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating(); S05 rush: startRush/finishRush/fetchRushPersonalBests; **S06 review: fetchDueReviews()→ReviewDueDto, gradeReview(id,{solved,msToSolve?})→ReviewGradeResultDto** — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~620 tok)
+- `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating(); S05 rush: startRush/finishRush/fetchRushPersonalBests; S06 review: fetchDueReviews()→ReviewDueDto, gradeReview(id,{solved,msToSolve?})→ReviewGradeResultDto; **S07 mistakes: saveGameMistakes(gameId,candidates)→{saved}, fetchMistakes(unreviewedOnly?)→GameMistakeDto[], markMistakeReviewed(id)→{next}** — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~680 tok)
 - `apps/web/src/lib/board/puzzle-utils.ts` — SHARED solve helpers (daily + local hooks): replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch, uciToIntent, applyUci (normalize+apply→{fen,lastMove}), solvingColorFromFen. chess.js + rules.applyMoveToFen. (~560 tok)
 - `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
 - `apps/web/test/hooks/use-local-puzzle.test.ts` — vitest+fake timers: player phase no-setup, solvingColor from FEN (w/b), castle-uci match (e1h1==e1g1), full correct→success+msToSolve, wrong→fail+onFailed, onReveal. (~900 tok)
 - `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
 - `apps/web/test/puzzle/training-session.test.tsx` — vitest: recordAttempt source (theme/rush), auto-advance to next, summary before/after accuracy. Mocks api client + Chessboard + board-context. (~900 tok)
+- `apps/web/test/review/mistake-trainer.test.tsx` — S07 vitest (6): mocks Chessboard (play-solution/play-wrong buttons) + puzzles api (fetchMistakes/markMistakeReviewed) + sound. Empty→renders null; lists "Move 2. Qh5"+"−3.4"; click→solve from before-blunder FEN; solving best line→"You found it"+markMistakeReviewed('mistake-row-1'); wrong move→"Not the move"+no mark; no persisted id→solve works but no mark. Legal FEN (after 1.e4 e5), solution g1f3 (bug-522). (~700 tok)
 
 ## Epic: purechess-improve (ELO improvement surface) — added 2026-06-13
 
@@ -871,6 +878,8 @@
 
 ## apps/api/src/puzzles/
 
+- `game-mistake.controller.ts` — Result of marking a mistake reviewed: the next unreviewed mistake (or null). (~722 tok)
+- `game-mistake.service.ts` — Centipawn-loss floor for a move to count as a persistable mistake. Matches (~2330 tok)
 - `puzzle-catalog.service.ts` — One theme slug and how many puzzles in the bank carry it. (~803 tok)
 - `puzzle-rating.service.ts` — New-puzzle-solver defaults, matching the schema column defaults. (~1005 tok)
 - `puzzle-review.controller.ts` — Spaced-repetition review endpoints — the due-today queue and grading over the (~440 tok)
@@ -880,7 +889,7 @@
 - `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~3025 tok)
 - `puzzle-training.controller.ts` — Trainer endpoints — the local puzzle bank, per-user serving, attempt (~846 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
-- `puzzles.module.ts` — Exports PuzzlesModule (~352 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~410 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
 - `spaced-repetition.ts` — Pure SM-2-style spaced-repetition scheduler for failed/learning puzzles. (~1497 tok)
@@ -890,6 +899,7 @@
 - `grade-review.dto.ts` — Body for `POST /puzzles/review/:id/grade`. The client reports only the (~144 tok)
 - `record-attempt.dto.ts` — Body for `POST /puzzles/:id/attempt`. The client reports only the outcome — (~201 tok)
 - `rush.dto.ts` — Body for `POST /puzzles/rush/start`. Mode defaults to `3min` server-side. (~225 tok)
+- `save-mistakes.dto.ts` — One candidate mistake the client reports for `POST /games/:gameId/mistakes`. (~346 tok)
 
 ## apps/api/src/ratings/
 
@@ -1013,6 +1023,7 @@
 
 ## apps/api/test/puzzles/
 
+- `game-mistake.service.spec.ts` — A valid White-side mistake claim at ply 3 (matches the persisted record). (~3596 tok)
 - `puzzle-catalog.service.spec.ts` — Declares mockRedis (~1075 tok)
 - `puzzle-rating.service.spec.ts` — API routes: GET (2 endpoints) (~1595 tok)
 - `puzzle-review.service.spec.ts` — mockPrisma: puzzle (~2466 tok)
@@ -1166,8 +1177,8 @@
 ## apps/web/src/app/games/[gameId]/
 
 - `error.tsx` — GameError (~134 tok)
-- `page.tsx` — formatResult (~717 tok)
-- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~5890 tok)
+- `page.tsx` — formatResult (~799 tok)
+- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~6425 tok)
 
 ## apps/web/src/app/login/
 
@@ -1339,6 +1350,7 @@
 - `classification-badge.tsx` — Tiny colored glyph after a move's SAN. Renders nothing for good/forced. (~260 tok)
 - `eval-graph.tsx` — Interactive SVG eval-history chart (48px, viewBox 0 0 100 100 non-uniform scale): white/black territory fills via half-height clipPaths, dashed center, current-ply marker, click-to-seek, hover title. (~1069 tok)
 - `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1892 tok)
+- `mistake-trainer.tsx` — One detected mistake to drill. Derived from the client classification on the (~2670 tok)
 - `move-coach.tsx` — A coach line for the move that produced the current position: a colored (~630 tok)
 - `move-time-chart.tsx` — Per-ply move-time SVG bars (viewBox 0 0 500 80) colored by MoveClass (blunder red → brilliant emerald, neutral when unclassified), white full / black 0.6 opacity, click-to-seek, hover title, White/Black avg row (excludes ≤500ms). Self-hides when no move >500ms. (~1408 tok)
 - `opening-explorer.tsx` — Called with the row's UCI move — caller enters it into the analysis tree. (~1141 tok)
@@ -1371,6 +1383,7 @@
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-local-puzzle.ts` — Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the (~2156 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
+- `use-mistake-capture.ts` — Centipawn-loss floor for a move to count as a capturable mistake — mirrors the (~1220 tok)
 - `use-move-classifier.ts` — 1-based ply. (~2597 tok)
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
@@ -1391,7 +1404,7 @@
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
-- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~1954 tok)
+- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~2521 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
@@ -1545,6 +1558,7 @@
 
 - `eval-graph.test.tsx` — Empty evals, ±600cp clamp (no NaN), click-to-seek with mocked getBoundingClientRect, zero-width guard. (~585 tok)
 - `eval-panel.test.tsx` — START (~1577 tok)
+- `mistake-trainer.test.tsx` — --- Mocks ----------------------------------------------------------------- (~1419 tok)
 - `move-time-chart.test.tsx` — move (~1304 tok)
 - `opening-explorer.test.tsx` — useOpeningExplorerMock (~1182 tok)
 - `review-page.test.tsx` — MOCK_MOVES (~2196 tok)
@@ -1666,7 +1680,8 @@
 - `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2558 tok)
 - `session-04-handoff.md` — Session 04 handoff — Local solve engine + theme trainer (~1941 tok)
 - `session-05-handoff.md` — Session 05 handoff — Puzzle Rush (timed board vision) (~2616 tok)
-- `session-06-handoff.md` — Session 06 handoff — Spaced-repetition review (~2717 tok)
+- `session-06-handoff.md` — Session 06 handoff — Spaced-repetition review (~2715 tok)
+- `session-07-handoff.md` — Session 07 handoff — Mistakes from your own games → puzzles (~3516 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1714,7 +1729,7 @@
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
-- `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~1207 tok)
+- `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~2055 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
 - `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)

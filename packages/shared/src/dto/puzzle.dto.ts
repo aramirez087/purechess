@@ -121,3 +121,75 @@ export interface ReviewGradeResultDto {
   /** The card's scheduling interval (days) after this grade. */
   intervalDays: number;
 }
+
+// --- Mistakes from your own games (S07) ------------------------------------
+//
+// A blunder/mistake the client move-classifier detected in one of the user's
+// OWN games. The client POSTs candidates; the server re-derives the position
+// from the persisted game and only keeps the user's own over-threshold moves
+// (anti-spoof). Each row becomes a "solve your own mistake" puzzle: the FEN is
+// the position BEFORE the blunder, the solution is the engine's best line. The
+// `reviewed` flag tracks the unreviewed backlog (there are no spaced-repetition
+// columns on GameMistake — the backlog IS the queue, see S07 handoff).
+
+/**
+ * One candidate mistake the client reports for persistence. The server never
+ * trusts `fen`/`playedUci` blindly — it re-derives them from the stored Move
+ * rows at `ply` and rejects any row that disagrees.
+ */
+export interface MistakeCandidateDto {
+  /** 1-based ply of the move that lost material/eval. */
+  ply: number;
+  /** Position BEFORE the move (client claim; server re-derives + verifies). */
+  fen: string;
+  /** The move actually played, UCI (client claim; server re-derives + verifies). */
+  playedUci: string;
+  /** Engine's best move in the position before, UCI. */
+  bestUci: string;
+  /** Engine's best line from the position before, UCI (the solution to re-solve). */
+  bestLineUci: string[];
+  /** Centipawns lost by the played move vs. best (≥ 0). */
+  cpLoss: number;
+  /** Optional tactical-theme guesses for the position (drives S12 insight clusters). */
+  themeGuess?: string[];
+}
+
+/** POST /games/:gameId/mistakes — wraps the candidate list. */
+export interface SaveMistakesRequestDto {
+  mistakes: MistakeCandidateDto[];
+}
+
+/** POST /games/:gameId/mistakes — how many candidates were persisted. */
+export interface SaveMistakesResultDto {
+  /** Count of rows actually upserted (own-side, over-threshold, server-verified). */
+  saved: number;
+}
+
+/**
+ * A persisted GameMistake, surfaced to the client as a re-solvable puzzle.
+ * `fen` is the position before the blunder; `bestLineUci` is the solution line.
+ * `themeGuess` clusters feed the S12 weakness insights. Mirrors the GameMistake
+ * model (no spaced-repetition columns — `reviewed` tracks the backlog).
+ */
+export interface GameMistakeDto {
+  id: string;
+  gameId: string;
+  /** 1-based ply of the mistaken move. */
+  ply: number;
+  /** Position BEFORE the blunder — the puzzle's start FEN. */
+  fen: string;
+  /** The move the user actually played, UCI. */
+  playedUci: string;
+  /** The engine's best move in that position, UCI. */
+  bestUci: string;
+  /** The engine's best line — the solution to re-solve, UCI. */
+  bestLineUci: string[];
+  /** Centipawns lost by the played move (≥ 0). */
+  cpLoss: number;
+  /** Tactical-theme guesses (for S12 weakness clustering). */
+  themeGuess?: string[];
+  /** True once the user has re-solved this mistake. */
+  reviewed: boolean;
+  /** ISO time the mistake was first recorded. */
+  createdAt: string;
+}

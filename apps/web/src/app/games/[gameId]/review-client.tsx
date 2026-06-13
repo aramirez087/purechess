@@ -23,9 +23,11 @@ import { ClassificationBadge } from '@/components/review/classification-badge';
 import { AccuracySummary } from '@/components/review/accuracy-summary';
 import { MoveCoach } from '@/components/review/move-coach';
 import { PgnActions } from '@/components/review/pgn-actions';
+import { MistakeTrainer, type MistakeItem } from '@/components/review/mistake-trainer';
 import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
 import { useMoveClassifier } from '@/hooks/use-move-classifier';
+import { useMistakeCapture, CAPTURE_CP_THRESHOLD } from '@/hooks/use-mistake-capture';
 import { useOpeningName } from '@/hooks/use-opening-name';
 import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
@@ -45,6 +47,11 @@ interface ReviewClientProps {
   reportTarget?: { opponentId: string; opponentUsername: string } | null;
   /** Optional left-rail action (e.g. /analyze's "New analysis"). */
   exitAction?: React.ReactNode;
+  /**
+   * The signed-in viewer's own side, or null when they aren't a player. Drives
+   * mistake capture + the "train your mistakes" panel (own-side moves only).
+   */
+  viewerColor?: 'w' | 'b' | null;
 }
 
 export function formatResult(result: GameResult): string {
@@ -146,7 +153,12 @@ function MatchupRow({
   );
 }
 
-export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientProps) {
+export function ReviewClient({
+  game,
+  reportTarget,
+  exitAction,
+  viewerColor = null,
+}: ReviewClientProps) {
   const { ply, fen, lastMove, isCorrupt, goTo, goNext, goPrev, goStart, goEnd } =
     useGameReview(game);
   const [flipped, setFlipped] = useState(false);
@@ -157,6 +169,39 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
     running: classifying,
     run: runClassifier,
   } = useMoveClassifier(game.moves, game.startFen);
+  // Capture the viewer's own blunders into the backlog once analysis finishes —
+  // fire-and-forget, idempotent (server upserts). No-op for spectators/analysis.
+  useMistakeCapture({
+    gameId: game.id,
+    moves: game.moves,
+    startFen: game.startFen,
+    viewerColor,
+    classification,
+  });
+  // This game's own-side mistakes, shaped for the inline trainer. Position
+  // BEFORE each blunder is re-derived from the move list; the solution is the
+  // engine's best move. Mirrors the server's own-side + threshold gate.
+  const mistakeItems = useMemo<MistakeItem[]>(() => {
+    if (!viewerColor || !classification) return [];
+    const items: MistakeItem[] = [];
+    for (const m of classification.moves) {
+      if (m.color !== viewerColor) continue;
+      if (m.class !== 'mistake' && m.class !== 'blunder') continue;
+      if (m.cpl < CAPTURE_CP_THRESHOLD || !m.bestUci) continue;
+      const fenBefore = replayToFen(game.moves, m.ply - 1, game.startFen);
+      if (!fenBefore) continue;
+      items.push({
+        ply: m.ply,
+        moveNumber: Math.ceil(m.ply / 2),
+        color: m.color,
+        san: m.san,
+        fen: fenBefore,
+        bestLineUci: [m.bestUci],
+        cpLoss: Math.round(m.cpl),
+      });
+    }
+    return items;
+  }, [viewerColor, classification, game.moves, game.startFen]);
   const displayFen = fen ?? STARTING_FEN;
   // Single engine search per position feeds both the eval bar and the readout.
   const { evaluation, thinking, lines } = usePositionEval(displayFen, !isCorrupt, { multiPv: 3 });
@@ -441,6 +486,9 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
                     </span>
                   </div>
                   <MoveCoach move={currentMove} bestSan={coachBestSan} />
+                  {mistakeItems.length > 0 && (
+                    <MistakeTrainer gameId={game.id} mistakes={mistakeItems} />
+                  )}
                 </div>
               )}
             </div>

@@ -6,6 +6,8 @@
  */
 
 import type {
+  GameMistakeDto,
+  MistakeCandidateDto,
   PuzzleAttemptResultDto,
   PuzzleDto,
   PuzzleRatingDto,
@@ -18,6 +20,7 @@ import type {
   RushMode,
   RushPersonalBestsDto,
   RushStartResponseDto,
+  SaveMistakesResultDto,
 } from '@purechess/shared';
 
 export interface LichessPuzzleData {
@@ -192,4 +195,53 @@ export async function gradeReview(
   );
   await ensureOk(res, 'review grade');
   return res.json() as Promise<ReviewGradeResultDto>;
+}
+
+// --- Mistakes from your own games (S07) ------------------------------------
+//
+// The client move-classifier flags the user's blunders during game review; we
+// POST them once (the endpoint upserts, so it's idempotent). The server
+// re-derives every position and keeps only the user's own over-threshold moves
+// — the client is never trusted for what it blundered.
+
+/** Persist the user's detected mistakes from a game; returns the saved count. */
+export async function saveGameMistakes(
+  gameId: string,
+  mistakes: MistakeCandidateDto[],
+): Promise<SaveMistakesResultDto> {
+  const res = await fetch(`${API}/api/games/${encodeURIComponent(gameId)}/mistakes`, {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ mistakes }),
+  });
+  await ensureOk(res, 'save mistakes');
+  return res.json() as Promise<SaveMistakesResultDto>;
+}
+
+/** The user's mistakes (newest first); pass `unreviewedOnly` for the backlog. */
+export async function fetchMistakes(unreviewedOnly = false): Promise<GameMistakeDto[]> {
+  const qs = unreviewedOnly ? '?unreviewedOnly=true' : '';
+  const res = await fetch(`${API}/api/me/mistakes${qs}`, {
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+  });
+  await ensureOk(res, 'mistakes fetch');
+  return res.json() as Promise<GameMistakeDto[]>;
+}
+
+/** Mark a mistake reviewed (re-solved); returns the next unreviewed mistake. */
+export async function markMistakeReviewed(
+  mistakeId: string,
+): Promise<{ next: GameMistakeDto | null }> {
+  const res = await fetch(
+    `${API}/api/me/mistakes/${encodeURIComponent(mistakeId)}/review`,
+    {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      credentials: 'include',
+    },
+  );
+  await ensureOk(res, 'mistake review');
+  return res.json() as Promise<{ next: GameMistakeDto | null }>;
 }

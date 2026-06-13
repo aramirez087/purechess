@@ -56,13 +56,18 @@ export default async function GameReviewPage({ params }: Props) {
   if (!review) notFound();
 
   let reportTarget: { opponentId: string; opponentUsername: string } | null = null;
+  // The viewer's own side — drives "capture only my mistakes". Null when the
+  // viewer isn't a player (spectator / signed out).
+  let viewerColor: 'w' | 'b' | null = null;
   if (currentUser) {
     if (currentUser.id === review.white.id) {
       reportTarget = { opponentId: review.black.id, opponentUsername: review.black.username };
+      viewerColor = 'w';
     } else if (currentUser.id === review.black.id) {
       reportTarget = { opponentId: review.white.id, opponentUsername: review.white.username };
+      viewerColor = 'b';
     }
   }
 
-  return <ReviewClient game={review} reportTarget={reportTarget} />;
+  return <ReviewClient game={review} reportTarget={reportTarget} viewerColor={viewerColor} />;
 }
