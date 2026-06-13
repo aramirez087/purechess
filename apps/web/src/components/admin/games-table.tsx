@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { fetchGames, type AdminGame } from '@/lib/api/admin';
 import { formatRelativeTime } from '@/lib/utils';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
+import { Th, Td, TablePagination } from './data-table';
 
 interface GamesTableProps {
   userId?: string;
@@ -143,77 +143,14 @@ export function GamesTable({ userId }: GamesTableProps) {
         </div>
       )}
 
-      <Pagination
+      <TablePagination
         page={page}
         totalPages={totalPages}
         total={total}
+        singularLabel="game"
         onPageChange={setPage}
       />
     </div>
   );
 }
 
-function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
-  return (
-    <th
-      scope="col"
-      className={cn(
-        'px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground',
-        className,
-      )}
-    >
-      {children}
-    </th>
-  );
-}
-
-function Td({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <td className={cn('px-4 py-2.5', className)}>{children}</td>;
-}
-
-function Pagination({
-  page,
-  totalPages,
-  total,
-  onPageChange,
-}: {
-  page: number;
-  totalPages: number;
-  total: number;
-  onPageChange: (p: number) => void;
-}) {
-  return (
-    <div className="flex items-center justify-between text-xs text-muted-foreground">
-      <span>
-        {total} {total === 1 ? 'game' : 'games'}
-      </span>
-      <div className="flex items-center gap-1">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={page <= 1}
-          onClick={() => onPageChange(page - 1)}
-        >
-          <ChevronLeft className="h-3.5 w-3.5" />
-        </Button>
-        <span className="px-2 font-mono tabular-nums">
-          {page} / {totalPages}
-        </span>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={page >= totalPages}
-          onClick={() => onPageChange(page + 1)}
-        >
-          <ChevronRight className="h-3.5 w-3.5" />
-        </Button>
-      </div>
-    </div>
-  );
-}

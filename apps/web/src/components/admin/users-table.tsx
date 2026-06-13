@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { fetchUsers, type AdminUser } from '@/lib/api/admin';
 import { formatRelativeTime, cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Search, ShieldCheck, ShieldOff } from 'lucide-react';
+import { Search, ShieldCheck, ShieldOff } from 'lucide-react';
+import { Th, TableShell, TableLoadingState, TablePagination } from './data-table';
 
 export function UsersTable() {
   const [q, setQ] = useState('');
@@ -73,32 +73,18 @@ export function UsersTable() {
       </div>
 
       {isLoading ? (
-        <div className="rounded-lg border border-border/70 bg-surface/60 p-8 text-center text-sm text-muted-foreground">
-          Loading…
-        </div>
+        <TableLoadingState />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-border/70 bg-surface/60 shadow-elevated">
+        <TableShell>
           <table className="w-full text-sm">
             <thead className="border-b border-border/60 bg-background/60">
               <tr>
-                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  User
-                </th>
-                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Email
-                </th>
-                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Joined
-                </th>
-                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Last seen
-                </th>
-                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Ratings
-                </th>
-                <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Status
-                </th>
+                <Th>User</Th>
+                <Th>Email</Th>
+                <Th>Joined</Th>
+                <Th>Last seen</Th>
+                <Th>Ratings</Th>
+                <Th>Status</Th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/40">
@@ -165,35 +151,16 @@ export function UsersTable() {
               )}
             </tbody>
           </table>
-        </div>
+        </TableShell>
       )}
 
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>
-          {total} {total === 1 ? 'user' : 'users'}
-        </span>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page <= 1}
-            onClick={() => setPage(page - 1)}
-          >
-            <ChevronLeft className="h-3.5 w-3.5" />
-          </Button>
-          <span className="px-2 font-mono tabular-nums">
-            {page} / {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page >= totalPages}
-            onClick={() => setPage(page + 1)}
-          >
-            <ChevronRight className="h-3.5 w-3.5" />
-          </Button>
-        </div>
-      </div>
+      <TablePagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        singularLabel="user"
+        onPageChange={setPage}
+      />
     </div>
   );
 }

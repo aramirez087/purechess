@@ -3,6 +3,18 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+## Session: 2026-06-13 (S04 — Admin Table Dedup)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:50 | Created shared data-table.tsx (Th, Td, TableShell, TableLoadingState, TablePagination) | apps/web/src/components/admin/data-table.tsx | done | ~633 |
+| 17:51 | Refactored games-table: deleted local Th/Td/Pagination, import from data-table | apps/web/src/components/admin/games-table.tsx | done | ~400 |
+| 17:52 | Refactored reports-table: deleted local Th/Td, replaced inline pagination | apps/web/src/components/admin/reports-table.tsx | done | ~400 |
+| 17:53 | Refactored users-table: Th/TableShell/TableLoadingState/TablePagination | apps/web/src/components/admin/users-table.tsx | done | ~400 |
+| 17:54 | Refactored audit/page: deleted local Th, replaced loading/shell/pagination | apps/web/src/app/admin/audit/page.tsx | done | ~400 |
+| 17:56 | Gates: tsc exit 0, lint exit 0, 662 vitest tests pass, jscpd admin=0 clones, total 43 (was 45) | — | all green | ~2k |
+| 17:57 | Wrote session-04-handoff.md | docs/roadmap/dedup-cleanup/session-04-handoff.md | done | ~500 |
+
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
 | 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
@@ -2990,3 +3002,31 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
 | 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
+
+## Session: 2026-06-13 17:49
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:52 | Created .session-04-plan.md | — | ~3287 |
+| 17:52 | Session end: 1 writes across 1 files (.session-04-plan.md) | 4 reads | ~7843 tok |
+
+## Session: 2026-06-13 17:52
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:53 | Created apps/web/src/components/admin/data-table.tsx | — | ~633 |
+| 17:54 | Edited apps/web/src/components/admin/games-table.tsx | 9→9 lines | ~117 |
+| 17:54 | Edited apps/web/src/components/admin/games-table.tsx | 6→7 lines | ~48 |
+| 17:54 | Edited apps/web/src/components/admin/games-table.tsx | — | ~0 |
+| 17:54 | Edited apps/web/src/components/admin/reports-table.tsx | 4→4 lines | ~66 |
+| 17:54 | Edited apps/web/src/components/admin/reports-table.tsx | reduced (-19 lines) | ~58 |
+| 17:54 | Edited apps/web/src/components/admin/reports-table.tsx | — | ~0 |
+| 17:54 | Edited apps/web/src/components/admin/users-table.tsx | 5→5 lines | ~88 |
+| 17:54 | Edited apps/web/src/components/admin/users-table.tsx | 6→4 lines | ~24 |
+| 17:54 | Edited apps/web/src/components/admin/users-table.tsx | removed 20 lines | ~66 |
+| 17:54 | Edited apps/web/src/components/admin/users-table.tsx | reduced (-19 lines) | ~62 |
+| 17:55 | Edited apps/web/src/app/admin/audit/page.tsx | 6→6 lines | ~109 |
+| 17:55 | Edited apps/web/src/app/admin/audit/page.tsx | 6→4 lines | ~24 |
+| 17:55 | Edited apps/web/src/app/admin/audit/page.tsx | reduced (-18 lines) | ~76 |
+| 17:55 | Edited apps/web/src/app/admin/audit/page.tsx | — | ~0 |
+| 17:57 | Created docs/roadmap/dedup-cleanup/session-04-handoff.md | — | ~1028 |
