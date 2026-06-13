@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import type {
   DrillLineDto,
@@ -16,6 +16,7 @@ import {
   type ReviewGrade,
 } from '../puzzles/spaced-repetition';
 import { GRADUATION_INTERVAL_DAYS } from '../puzzles/puzzle-review.service';
+import { StreakService } from '../training/streak.service';
 
 /**
  * How many lines to queue for one drill session. Due (most-overdue) lines lead;
@@ -61,7 +62,13 @@ interface EnumeratedLine {
 export class RepertoireReviewService {
   private readonly logger = new Logger(RepertoireReviewService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    // Optional, best-effort streak hook — an opening-line drill counts as a
+    // drill. Provided via StreakModule in the wired app, absent (no-op) in the
+    // repertoire-review unit spec.
+    @Optional() private readonly streakService?: StreakService,
+  ) {}
 
   /**
    * The lines to drill this session: every line whose leaf is due now
@@ -176,6 +183,18 @@ export class RepertoireReviewService {
       this.logger.log(
         `drill line mastered: user ${userId} rep ${repertoireId} path "${nodePath}" (interval ${next.intervalDays}d)`,
       );
+    }
+
+    // A graded drill line counts as a drill toward the training streak. Best-
+    // effort: a streak write never fails the grade.
+    if (this.streakService) {
+      try {
+        await this.streakService.recordActivity(userId, 'drill');
+      } catch (err) {
+        this.logger.warn(
+          `streak recordActivity failed for user ${userId} rep ${repertoireId}: ${String(err)}`,
+        );
+      }
     }
 
     return { nodePath, nextDueAt: dueAt.toISOString(), intervalDays: next.intervalDays };

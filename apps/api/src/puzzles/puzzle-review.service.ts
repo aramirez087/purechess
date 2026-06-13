@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import type { PuzzleDto, ReviewDueDto, ReviewGradeResultDto } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
+import { StreakService } from '../training/streak.service';
 import { DEFAULT_EASE, schedule, type CardState, type ReviewGrade } from './spaced-repetition';
 
 /** Default page size for the due queue. */
@@ -34,7 +35,12 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
 export class PuzzleReviewService {
   private readonly logger = new Logger(PuzzleReviewService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    // Optional, best-effort streak hook — provided via StreakModule in the wired
+    // app, absent (no-op) in the review unit spec.
+    @Optional() private readonly streakService?: StreakService,
+  ) {}
 
   /**
    * Enqueue a failed puzzle for review tomorrow. Idempotent per (user, puzzle):
@@ -132,6 +138,11 @@ export class PuzzleReviewService {
       return { puzzleId, graduated: true, nextDueAt: null, intervalDays: 0 };
     }
 
+    // A graded review (solved OR failed) is a completed review action — advance
+    // the streak. Best-effort: a streak write never fails the grade. Fires once
+    // per real graded card (the no-op early return above is skipped).
+    await this.recordStreakActivity(userId, puzzleId);
+
     const grade = resolveGrade(solved, msToSolve);
     const next = schedule(toCardState(existing), grade);
 
@@ -164,6 +175,18 @@ export class PuzzleReviewService {
       nextDueAt: dueAt.toISOString(),
       intervalDays: next.intervalDays,
     };
+  }
+
+  /** Best-effort streak bump for a completed review (never throws). */
+  private async recordStreakActivity(userId: string, puzzleId: string): Promise<void> {
+    if (!this.streakService) return;
+    try {
+      await this.streakService.recordActivity(userId, 'review');
+    } catch (err) {
+      this.logger.warn(
+        `streak recordActivity failed for user ${userId} review ${puzzleId}: ${String(err)}`,
+      );
+    }
   }
 
   /** Assemble the full due-queue payload for the client. */

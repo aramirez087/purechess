@@ -1,48 +1,43 @@
 import type { Metadata } from 'next';
-import { Target } from 'lucide-react';
-import type { SafeUser } from '@purechess/shared';
+import type {
+  InsightDto,
+  SafeUser,
+  TrainingPlanDto,
+  TrainingStreakDto,
+} from '@purechess/shared';
 import { AppShell } from '@/components/layout/AppShell';
-import { TrainingPlaceholder } from '@/components/improve/training-placeholder';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
+import { TrainClient } from './train-client';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Train — Purechess',
   description:
-    'Your training hub: a focused 10-minute plan aimed at your weakest area, with puzzles, openings and endgames.',
+    'Your training hub: a focused 10-minute plan aimed at your weakest area, with puzzles, openings and endgames — and a streak that rewards showing up.',
   canonical: '/train',
 });
 
 export default async function TrainPage() {
   // /api/auth/me returns 200 {user: null} when signed out — not a 4xx.
-  const result = await serverFetch<{ user: SafeUser | null }>('/api/auth/me', {
-    withAuth: true,
-  });
-  const signedOut = !result?.user;
+  const me = await serverFetch<{ user: SafeUser | null }>('/api/auth/me', { withAuth: true });
+  const signedIn = Boolean(me?.user);
+
+  // The hub's three signals are auth-gated; fetch them only when signed in. Each
+  // is fetched defensively — a single failure degrades to null, never 500s the
+  // page (the hub renders the parts it has).
+  const [plan, streak, insight] = signedIn
+    ? await Promise.all([
+        serverFetch<TrainingPlanDto>('/api/train/plan', { withAuth: true }).catch(() => null),
+        serverFetch<TrainingStreakDto>('/api/train/streak', { withAuth: true }).catch(() => null),
+        serverFetch<InsightDto>('/api/train/insights', { withAuth: true }).catch(() => null),
+      ])
+    : [null, null, null];
 
   return (
     <AppShell>
-      <TrainingPlaceholder
-        icon={Target}
-        eyebrow="Improve"
-        title="Train"
-        description="One place to get better: a daily plan that targets your weakest area, calibrated to your rating."
-        upcoming={[
-          'A 10-minute daily plan built from your weakest themes',
-          'A puzzle trainer calibrated to your rating, with adaptive difficulty',
-          'Spaced repetition of the puzzles you failed',
-          'Tactics drawn from your own lost games',
-          'Streaks, goals and a progress view that shows your rating moving',
-        ]}
-        signedOut={signedOut}
-        related={[
-          { href: '/puzzles', label: 'Daily puzzle' },
-          { href: '/openings', label: 'Openings' },
-          { href: '/endgames', label: 'Endgames' },
-        ]}
-      />
+      <TrainClient signedIn={signedIn} plan={plan} streak={streak} insight={insight} />
     </AppShell>
   );
 }

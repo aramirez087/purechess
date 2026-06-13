@@ -26,6 +26,7 @@ import { PuzzlesModule } from './puzzles/puzzles.module';
 import { RepertoireModule } from './repertoire/repertoire.module';
 import { EndgamesModule } from './endgames/endgames.module';
 import { InsightsModule } from './insights/insights.module';
+import { TrainingModule } from './training/training.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { InsightsModule } from './insights/insights.module';
     RepertoireModule,
     EndgamesModule,
     InsightsModule,
+    TrainingModule,
     ...(process.env['NODE_ENV'] === 'test' ? [TestingModule] : []),
   ],
   controllers: [AppController],

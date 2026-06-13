@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module';
+import { StreakModule } from '../training/streak.module';
 import { PuzzlesController } from './puzzles.controller';
 import { PuzzlesService } from './puzzles.service';
 import { PuzzleCatalogService } from './puzzle-catalog.service';
@@ -15,7 +16,7 @@ import { GameMistakeController } from './game-mistake.controller';
 import { GameMistakeService } from './game-mistake.service';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, StreakModule],
   controllers: [
     PuzzlesController,
     PuzzleTrainingController,

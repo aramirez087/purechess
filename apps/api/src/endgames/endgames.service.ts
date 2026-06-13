@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import type {
   EndgameAttemptResultDto,
   EndgameCategoryDto,
@@ -7,6 +7,7 @@ import type {
   EndgameProbeDto,
 } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
+import { StreakService } from '../training/streak.service';
 import { TablebaseService } from './tablebase.service';
 
 /** The EndgameDrill columns we read for a DTO (the row shape, loosely typed). */
@@ -32,9 +33,14 @@ interface DrillRow {
  */
 @Injectable()
 export class EndgamesService {
+  private readonly logger = new Logger(EndgamesService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly tablebase: TablebaseService,
+    // Optional, best-effort streak hook — an endgame attempt counts as a drill.
+    // Provided via StreakModule in the wired app, absent (no-op) in the unit spec.
+    @Optional() private readonly streakService?: StreakService,
   ) {}
 
   /**
@@ -123,6 +129,19 @@ export class EndgamesService {
         movesPlayed: input.movesPlayed,
       },
     });
+
+    // An endgame attempt counts as a drill toward the training streak. Best-
+    // effort: a streak write never fails the recorded attempt.
+    if (this.streakService) {
+      try {
+        await this.streakService.recordActivity(userId, 'drill');
+      } catch (err) {
+        this.logger.warn(
+          `streak recordActivity failed for user ${userId} endgame ${slug}: ${String(err)}`,
+        );
+      }
+    }
+
     return {
       drillId: drill.id,
       slug,

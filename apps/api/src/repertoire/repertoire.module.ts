@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module';
+import { StreakModule } from '../training/streak.module';
 import { RepertoireController } from './repertoire.controller';
 import { RepertoireService } from './repertoire.service';
 import { RepertoireReviewController } from './repertoire-review.controller';
@@ -12,7 +13,7 @@ import { RepertoireReviewService } from './repertoire-review.service';
  * the S13 hub can inject it for the due-line badge.
  */
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, StreakModule],
   controllers: [RepertoireController, RepertoireReviewController],
   providers: [RepertoireService, RepertoireReviewService],
   exports: [RepertoireService, RepertoireReviewService],

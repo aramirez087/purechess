@@ -7,18 +7,25 @@
 /** A single actionable item in the daily training plan. */
 export interface TrainingPlanItemDto {
   /** Stable kind so the UI can route + icon it. */
-  kind: 'theme' | 'review' | 'rush' | 'mistake' | 'opening' | 'endgame';
+  kind: 'daily' | 'theme' | 'review' | 'rush' | 'mistake' | 'opening' | 'endgame';
   /** Short imperative label, e.g. "Solve 8 fork puzzles". */
   label: string;
   /** Optional theme/opening/endgame slug this item targets. */
   targetSlug?: string;
-  /** Suggested count (puzzles/reviews/drills). */
+  /** Suggested count (puzzles/reviews/drills) — alias of {@link target}. */
   count?: number;
+  /**
+   * How many of this item the user should complete today (e.g. 8 puzzles, 5
+   * reviews). The plan item is satisfied once `doneToday >= target`.
+   */
+  target?: number;
+  /** How many the user has already done today (from the day's TrainingDay counts). */
+  doneToday?: number;
   /** Rough minutes this item should take. */
   estimatedMinutes?: number;
   /** Where the item links to, e.g. "/puzzles/train?theme=fork". */
   href?: string;
-  /** True once the user has satisfied this item today. */
+  /** True once the user has satisfied this item today (`doneToday >= target`). */
   completed?: boolean;
 }
 
@@ -36,6 +43,12 @@ export interface TrainingPlanDto {
   puzzlesSolvedToday?: number;
   /** Total estimated minutes for the plan. */
   estimatedMinutes?: number;
+}
+
+/** Body for `POST /train/goal` — set the user's daily puzzle goal. */
+export interface SetTrainingGoalDto {
+  /** New daily puzzle goal (1..50). */
+  dailyGoalPuzzles: number;
 }
 
 /** One calendar day of activity — feeds the contribution graph. */

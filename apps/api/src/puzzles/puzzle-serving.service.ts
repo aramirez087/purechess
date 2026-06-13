@@ -9,6 +9,7 @@ import type {
 import { PrismaService } from '../database/prisma.service';
 import { PuzzleRatingService } from './puzzle-rating.service';
 import { PuzzleReviewService } from './puzzle-review.service';
+import { StreakService } from '../training/streak.service';
 
 /** Default target rating for a user who has never solved a puzzle. */
 const DEFAULT_TARGET_RATING = 1500;
@@ -53,6 +54,9 @@ export class PuzzleServingService {
     // Optional so the serving service stays usable (and unit-testable) without
     // the review module; in the wired app `PuzzlesModule` always provides it.
     @Optional() private readonly reviewService?: PuzzleReviewService,
+    // Optional, best-effort streak hook — a streak write must never fail the
+    // recorded attempt. Provided via StreakModule in the wired app.
+    @Optional() private readonly streakService?: StreakService,
   ) {}
 
   /**
@@ -158,6 +162,19 @@ export class PuzzleServingService {
         // attempt the user already completed.
         this.logger.warn(
           `enqueueOnFail failed for user ${userId} puzzle ${puzzleId}: ${String(err)}`,
+        );
+      }
+    }
+
+    // A SOLVED puzzle (any mode) advances the user's training streak — the one
+    // additive streak hook on the puzzle path. Best-effort: a streak write
+    // failing never changes the attempt outcome or the returned rating delta.
+    if (input.solved && this.streakService) {
+      try {
+        await this.streakService.recordActivity(userId, 'puzzle');
+      } catch (err) {
+        this.logger.warn(
+          `streak recordActivity failed for user ${userId} puzzle ${puzzleId}: ${String(err)}`,
         );
       }
     }

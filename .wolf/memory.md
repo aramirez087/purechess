@@ -2746,3 +2746,51 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:26 | Created apps/web/src/app/train/insights/page.tsx | — | ~333 |
 | 14:27 | Created apps/web/src/app/train/insights/insights-client.tsx | — | ~1989 |
 | 14:29 | Created docs/roadmap/purechess-improve/session-12-handoff.md | — | ~3445 |
+| 14:34 | Edited packages/shared/src/dto/training.dto.ts | expanded (+7 lines) | ~300 |
+| 14:34 | Edited packages/shared/src/dto/training.dto.ts | expanded (+6 lines) | ~81 |
+| 14:34 | Created apps/api/src/training/clock.ts | — | ~176 |
+| 14:35 | Created apps/api/src/training/streak.service.ts | — | ~2765 |
+| 14:35 | Created apps/api/src/training/training.service.ts | — | ~2804 |
+| 14:35 | Created apps/api/src/training/dto/set-goal.dto.ts | — | ~92 |
+| 14:36 | Created apps/api/src/training/training.controller.ts | — | ~578 |
+| 14:36 | Created apps/api/src/training/streak.module.ts | — | ~237 |
+| 14:36 | Created apps/api/src/training/training.module.ts | — | ~374 |
+| 14:36 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | added 1 import(s) | ~70 |
+| 14:36 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | 4→7 lines | ~128 |
+| 14:36 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | added 1 condition(s) | ~272 |
+| 14:37 | Edited apps/api/src/puzzles/puzzle-review.service.ts | added 1 import(s) | ~105 |
+| 14:37 | Edited apps/api/src/puzzles/puzzle-review.service.ts | 3→8 lines | ~95 |
+| 14:37 | Edited apps/api/src/puzzles/puzzle-review.service.ts | modified if() | ~148 |
+| 14:37 | Edited apps/api/src/puzzles/puzzle-review.service.ts | added error handling | ~166 |
+| 14:37 | Edited apps/api/src/endgames/endgames.service.ts | added 1 import(s) | ~117 |
+| 14:37 | Edited apps/api/src/endgames/endgames.service.ts | 6→11 lines | ~130 |
+| 14:37 | Edited apps/api/src/endgames/endgames.service.ts | added error handling | ~198 |
+| 14:37 | Edited apps/api/src/repertoire/repertoire-review.service.ts | 2→2 lines | ~35 |
+| 14:37 | Edited apps/api/src/repertoire/repertoire-review.service.ts | added 1 import(s) | ~39 |
+| 14:37 | Edited apps/api/src/repertoire/repertoire-review.service.ts | expanded (+6 lines) | ~113 |
+| 14:38 | Edited apps/api/src/repertoire/repertoire-review.service.ts | added error handling | ~204 |
+| 14:38 | Edited apps/api/src/repertoire/repertoire.module.ts | added 1 import(s) | ~120 |
+| 14:38 | Edited apps/api/src/repertoire/repertoire.module.ts | 3→3 lines | ~33 |
+| 14:38 | Edited apps/api/src/endgames/endgames.module.ts | added 1 import(s) | ~91 |
+| 14:38 | Edited apps/api/src/endgames/endgames.module.ts | 3→3 lines | ~25 |
+| 14:38 | Edited apps/api/src/puzzles/puzzles.module.ts | added 1 import(s) | ~59 |
+| 14:38 | Edited apps/api/src/puzzles/puzzles.module.ts | 4→4 lines | ~26 |
+| 14:38 | Edited apps/api/src/app.module.ts | added 1 import(s) | ~35 |
+| 14:38 | Edited apps/api/src/app.module.ts | 3→4 lines | ~37 |
+| 14:39 | Created apps/api/test/training/streak.service.spec.ts | — | ~3027 |
+| 14:40 | Created apps/api/test/training/training.service.spec.ts | — | ~3252 |
+| 14:40 | Edited apps/web/src/lib/api/training.ts | 8→12 lines | ~111 |
+| 14:41 | Edited apps/web/src/lib/api/training.ts | modified fetchInsights() | ~456 |
+| 14:41 | Created apps/web/src/components/training/streak-banner.tsx | — | ~1239 |
+| 14:41 | Created apps/web/src/components/training/daily-plan.tsx | — | ~1823 |
+| 14:42 | Created apps/web/src/app/train/train-client.tsx | — | ~2458 |
+| 14:42 | Created apps/web/src/app/train/page.tsx | — | ~469 |
+| 14:43 | Created apps/web/test/training/daily-plan.test.tsx | — | ~2348 |
+
+## Session — purechess-improve S13 (training hub, daily plan & streaks)
+| 14:50 | S13: StreakService (UTC-day, injected CLOCK, server-authoritative; recordActivity upsert TrainingDay + advance streak once/day) | apps/api/src/training/{clock,streak.service,streak.module}.ts | done | ~6k |
+| 14:50 | S13: TrainingService.getPlan (live-signal assembly + 10min trim + aggregate done-marking) + controller (/train/plan,streak,goal) + module reg | apps/api/src/training/{training.service,training.controller,training.module}.ts, dto/set-goal.dto.ts, app.module.ts | done | ~5k |
+| 14:50 | S13: recordActivity hooks (@Optional best-effort) into 4 recorders: puzzle solve, review grade, endgame attempt, opening-drill grade; StreakModule imported into Puzzles/Endgames/Repertoire modules | puzzle-serving/puzzle-review/endgames/repertoire-review services + 3 modules | done | ~3k |
+| 14:50 | S13: /train hub web — TrainClient (streak banner, Focus line, daily plan, 8 mode tiles+review badge, signed-out daily+pitch), DailyPlan, StreakBanner, training.ts client, page.tsx shell | apps/web/src/app/train/{page,train-client}.tsx, components/training/{daily-plan,streak-banner}.tsx, lib/api/training.ts | done | ~6k |
+| 14:50 | S13: tests — streak.service.spec (13: consecutive/gap/same-day/longest/boundary), training.service.spec (19: assembly/done/cap), daily-plan.test (13). Gates: API 590, web 634, shared build, both tsc clean, lint clean | apps/api/test/training/**, apps/web/test/training/** | green | ~5k |
+| 14:47 | Created docs/roadmap/purechess-improve/session-13-handoff.md | — | ~3893 |

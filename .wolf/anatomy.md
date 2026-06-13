@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T20:29:12.199Z
-> Files: 1159 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T20:47:52.238Z
+> Files: 1178 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -704,18 +704,22 @@
 - `apps/web/src/app/endgames/endgames-client.tsx` — S10 endgames surface: categorized drill list w/ pass/fail ticks + ObjectiveBadge, Practice opens PracticeBoard (useEndgameDrill + Chessboard, Stockfish getBestMove(_,8,2000) defender, probeEndgame, recordEndgameAttempt fire-and-forget, "Show best move" reveal arrow, Try-again remount). TanStack ['endgame-drills']. (~1600 tok)
 - `apps/web/src/app/endgames/page.tsx` — endgame drills server shell (AppShell + buildMetadata + serverFetch auth-me); mounts <EndgamesClient signedOut>. (~170 tok)
 - `apps/web/src/app/openings/page.tsx` — repertoire shell (BookOpen icon, auth-aware). (~170 tok)
-- `apps/web/src/app/train/page.tsx` — Improve hub shell (Target icon, auth-aware via /api/auth/me, force-dynamic). (~180 tok)
+- `apps/web/src/app/train/page.tsx` — **S13** training-hub server shell: auth (/api/auth/me) + (signed-in) parallel serverFetch of /train/plan, /train/streak, /train/insights (each .catch→null), → <TrainClient>. force-dynamic. (~260 tok)
+- `apps/web/src/app/train/train-client.tsx` — **S13** 'use client' hub. Signed-in: StreakBanner + Focus one-liner (top insight) + DailyPlan + mode grid (8 tiles; Review tile carries due badge = review item target−done). Signed-out: sign-in pitch + daily-puzzle link. countReviewDue() pure. (~1600 tok)
 - `apps/web/src/components/improve/training-placeholder.tsx` — shared Improve empty-state (icon, eyebrow, Fraunces title, "Coming together" list, signed-out sign-in prompt, related pills). Silent Tournament voice. (~520 tok)
+- `apps/web/src/components/training/daily-plan.tsx` — **S13** DailyPlan: ordered checklist of brass-CTA PlanRows (icon/verb per kind, N/target progress, completed strike), SVG GoalRing (fills to dailyGoal, success state at goal), "Done for today" when all complete, empty state. (~1300 tok)
+- `apps/web/src/components/training/streak-banner.tsx` — **S13** StreakBanner: current(flame)/longest(trophy) figures + 12-week contribution calendar (grid-rows-7). buildCalendar(history,total) pure: oldest-first cells ending today, brass-opacity band by daily activity count. (~900 tok)
 - `apps/web/src/hooks/use-endgame-drill.ts` — S10 ASYNC drill state machine. positionStatus(fen) + isSlip(objective,defCat) exported pure (chess.js). onMove probes after each user move (defender-POV), isSlip flips→threw-win/lost-draw fail, defender reply = probe.bestMove|engineMoveFn, success=mate|hard-draw|DRAW_HOLD_MOVES. (~1500 tok)
 - `apps/web/src/lib/api/endgames.ts` — S10 web client for /endgames: listEndgameDrills/getEndgameDrill (public), probeEndgame (server tablebase proxy), recordEndgameAttempt (auth). credentials:'include'. (~520 tok)
+- `apps/web/src/lib/api/training.ts` — web client for /train: fetchInsights()→InsightDto (S12); **S13: fetchTrainingPlan()→TrainingPlanDto, fetchStreak()→TrainingStreakDto, setTrainingGoal(n)→TrainingStreakDto**. credentials:'include'. (~340 tok)
 - `apps/web/test/endgames/use-endgame-drill.test.ts` — Vitest: positionStatus/isSlip pure; mate→success; category-flip→threw-win fail; defender from probe vs Stockfish; illegal ignored; stalemate draw-pass. Real chess.js, inject probeFn/engineMoveFn. (~900 tok)
+- `apps/web/test/training/daily-plan.test.tsx` — **S13** Vitest: DailyPlan rows/progress/done-state/goal-ring/empty; StreakBanner figures+84 cells; buildCalendar pure; TrainClient signed-out vs signed-in (plan/streak/grid/review-badge/focus-line/all-modes-reachable). (~1200 tok)
 - `docs/roadmap/purechess-improve/baselines.md` — daily-puzzle load timings, new-route empty-states, Puzzle EXPLAIN baseline + targets. (~700 tok)
 - `docs/roadmap/purechess-improve/data-model.md` — ER sketch, per-model column tables, index rationale, enum choices. The frozen-contract map. (~1500 tok)
 - `docs/roadmap/purechess-improve/session-01-handoff.md` — frozen contract (models/columns/indexes/enums), DTO shapes, reuse anchors, open issues for Wave 3. (~1600 tok)
 - `packages/shared/src/dto/endgame.dto.ts` — S10 DTOs: EndgameDrillDto (slug/name/category/fen/objective/targetDtm?/difficulty/attempted?/solved?), EndgameProbeDto (category win|draw|loss|unknown, bestMove?, dtm?), EndgameAttemptInputDto, EndgameAttemptResultDto. (~430 tok)
 - `packages/shared/src/dto/puzzle.dto.ts` — PuzzleDto, PuzzleAttemptResultDto, PuzzleThemeDto, PuzzleThemeStatDto, PuzzleRatingDto + PuzzleSource type; **S11: PuzzleRatingPointDto {rating,at}, PuzzleSummaryDto {puzzleRating,attempted,solved,accuracy?,weakestTheme?}, PuzzleHistoryDto {ratingHistory,summary}**. Plain interfaces, optional-friendly. (~360 tok)
-- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. **S12: WeaknessDto extended with kind(WeaknessKind)/title/evidence/severity/actionHref (all optional); WeaknessKind = theme|game-mistake|opening|endgame|time; InsightDto.headline = top weakness title.** (~340 tok)
-- `apps/web/src/lib/api/training.ts` — S12 web client for /train: fetchInsights()→InsightDto. credentials:'include'. (~180 tok)
+- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. **S12: WeaknessDto extended with kind(WeaknessKind)/title/evidence/severity/actionHref (all optional); WeaknessKind = theme|game-mistake|opening|endgame|time; InsightDto.headline = top weakness title.** **S13: TrainingPlanItemDto gained kind 'daily' + target/doneToday (optional); SetTrainingGoalDto {dailyGoalPuzzles}.** (~380 tok)
 
 ## apps/api/
 
@@ -772,7 +776,7 @@
 ## apps/api/src/
 
 - `app.controller.ts` — Exports AppController (~157 tok)
-- `app.module.ts` — API routes: GET (2 endpoints) (~874 tok)
+- `app.module.ts` — API routes: GET (2 endpoints) (~898 tok)
 - `app.service.ts` — Exports HealthStatus, AppService (~337 tok)
 - `main.ts` — Declares bootstrap (~481 tok)
 
@@ -867,8 +871,8 @@
 ## apps/api/src/endgames/
 
 - `endgames.controller.ts` — Endgame drills — the curated must-know endgame bank, tablebase proxy, and (~715 tok)
-- `endgames.module.ts` — Endgame drills (curated bank + tablebase proxy + attempt recording). (~264 tok)
-- `endgames.service.ts` — The EndgameDrill columns we read for a DTO (the row shape, loosely typed). (~1550 tok)
+- `endgames.module.ts` — Endgame drills (curated bank + tablebase proxy + attempt recording). (~284 tok)
+- `endgames.service.ts` — The EndgameDrill columns we read for a DTO (the row shape, loosely typed). (~1776 tok)
 - `tablebase.service.ts` — Probe of a single position against the lichess tablebase, normalized for our (~1625 tok)
 
 ## apps/api/src/endgames/dto/
@@ -930,13 +934,13 @@
 - `puzzle-history.service.ts` — Hard cap on the number of points the rating curve ever returns, regardless of (~1736 tok)
 - `puzzle-rating.service.ts` — New-puzzle-solver defaults, matching the schema column defaults. (~1005 tok)
 - `puzzle-review.controller.ts` — Spaced-repetition review endpoints — the due-today queue and grading over the (~440 tok)
-- `puzzle-review.service.ts` — Default page size for the due queue. (~2320 tok)
+- `puzzle-review.service.ts` — Default page size for the due queue. (~2605 tok)
 - `puzzle-rush.controller.ts` — Puzzle Rush endpoints — the timed board-vision drill. Registered additively (~757 tok)
 - `puzzle-rush.service.ts` — Default target rating for a user who has never solved a puzzle. (~2646 tok)
-- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~3025 tok)
+- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~3254 tok)
 - `puzzle-training.controller.ts` — Trainer endpoints — the local puzzle bank, per-user serving, attempt (~981 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
-- `puzzles.module.ts` — Exports PuzzlesModule (~443 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~464 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
 - `spaced-repetition.ts` — Pure SM-2-style spaced-repetition scheduler for failed/learning puzzles. (~1497 tok)
@@ -968,10 +972,10 @@
 ## apps/api/src/repertoire/
 
 - `repertoire-review.controller.ts` — Opening trainer endpoints — drill the user's repertoire lines and grade them (~470 tok)
-- `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3012 tok)
+- `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3225 tok)
 - `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
 - `repertoire.controller.ts` — Opening-repertoire CRUD + import. Every route is auth-gated and scoped to the (~668 tok)
-- `repertoire.module.ts` — Opening repertoires (CRUD + import) plus the opening trainer (drill + grade). (~262 tok)
+- `repertoire.module.ts` — Opening repertoires (CRUD + import) plus the opening trainer (drill + grade). (~282 tok)
 - `repertoire.service.ts` — Prisma `Repertoire` row plus the latest-review timestamp for the summary. (~2206 tok)
 
 ## apps/api/src/repertoire/dto/
@@ -996,6 +1000,19 @@
 - `testing.controller.ts` — Exports TestingController (~592 tok)
 - `testing.module.ts` — Exports TestingModule (~75 tok)
 - `testing.service.ts` — Derive the session-row id exactly as SessionsService does. Previously this (~1011 tok)
+
+## apps/api/src/training/
+
+- `clock.ts` — **S13** injectable CLOCK ('TRAINING_CLOCK' token) so streak day-boundary math is testable. `Clock.now()`; SYSTEM_CLOCK in prod, pinned in specs. (~176 tok)
+- `streak.module.ts` — **S13** StreakModule (Prisma + CLOCK only, exports StreakService). Imported by recorder modules (Puzzles/Endgames/Repertoire) to call recordActivity WITHOUT a cycle with TrainingModule. (~237 tok)
+- `streak.service.ts` — **S13** server-authoritative streaks (UTC day). recordActivity(userId,kind,count): upsert TrainingDay counter + advance TrainingStreak at most once/UTC-day (yesterday→+1, gap→reset 1, first→1, bump longest); no same-day double count. get()→TrainingStreakDto + 84-day history. setDailyGoal (clamp 1..50). Exports pure dayKey/utcMidnight/sameUtcDay/isYesterdayUtc. (~2765 tok)
+- `training.controller.ts` — **S13** `@Controller('train')` (SessionAuthGuard + @CurrentUser): GET /train/plan→TrainingPlanDto, GET /train/streak→TrainingStreakDto, POST /train/goal {dailyGoalPuzzles}→TrainingStreakDto. (~578 tok)
+- `training.module.ts` — **S13** TrainingModule (registered in app.module.ts). imports AuthModule + PuzzlesModule (history/review) + InsightsModule (top insight) + StreakModule. Provides TrainingService + CLOCK. (~374 tok)
+- `training.service.ts` — **S13** getPlan(userId)→TrainingPlanDto: assembleItems (daily if unsolved-today / 5 weakest-theme / min(due,5) reviews / 1 opening|endgame drill iff top insight) → trimToBudget(10min) → markDone (aggregate TrainingDay counters by kind). progressToday(). Pure assembleItems/trimToBudget/markDone exported. (~2804 tok)
+
+## apps/api/src/training/dto/
+
+- `set-goal.dto.ts` — Body for `POST /train/goal`. The user picks their daily puzzle target; the (~92 tok)
 
 ## apps/api/src/types/
 
@@ -1120,6 +1137,11 @@
 
 - `reports-admin.controller.spec.ts` — Declares mockService (~850 tok)
 - `reports.service.spec.ts` — Declares mockPosthog (~1463 tok)
+
+## apps/api/test/training/
+
+- `streak.service.spec.ts` — An in-memory model of the two Prisma tables the streak service touches, so the (~3027 tok)
+- `training.service.spec.ts` — Build the service with controllable dependencies. (~3252 tok)
 
 ## apps/web/
 
@@ -1301,7 +1323,8 @@
 
 ## apps/web/src/app/train/
 
-- `page.tsx` — dynamic (~500 tok)
+- `page.tsx` — dynamic (~469 tok)
+- `train-client.tsx` — The training hub — the front door to "get better today". For a signed-in user (~2458 tok)
 
 ## apps/web/src/app/train/insights/
 
@@ -1459,6 +1482,11 @@
 - `settings-dialog.tsx` — SettingsDialog — renders modal (~455 tok)
 - `settings-form.tsx` — APP_THEMES (~3044 tok)
 
+## apps/web/src/components/training/
+
+- `daily-plan.tsx` — Today's training plan: an ordered checklist of brass-CTA rows, a goal ring (~1823 tok)
+- `streak-banner.tsx` — The streak header: the current streak (flame), the longest streak, and a (~1239 tok)
+
 ## apps/web/src/components/ui/
 
 - `button.tsx` — buttonVariants (~560 tok)
@@ -1506,7 +1534,7 @@
 - `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~2639 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 - `repertoire.ts` — Client for the opening-repertoire API (`/repertoire`). Every call is (~1372 tok)
-- `training.ts` — Client for the training / insights API (`/train`). (~384 tok)
+- `training.ts` — Client for the training hub / insights API (`/train`). (~750 tok)
 
 ## apps/web/src/lib/board/
 
@@ -1678,6 +1706,10 @@
 
 - `settings-dialog.test.tsx` — monoButton (~821 tok)
 
+## apps/web/test/training/
+
+- `daily-plan.test.tsx` — plan (~2348 tok)
+
 ## crates/purechess-engine/
 
 - `build.rs` (~11 tok)
@@ -1798,6 +1830,7 @@
 - `session-10-handoff.md` — Session 10 handoff — Endgame drills (vs tablebase) (~2351 tok)
 - `session-11-handoff.md` — Session 11 handoff — Puzzle stats & charts (~2139 tok)
 - `session-12-handoff.md` — Session 12 handoff — Insights & weakness engine (~3230 tok)
+- `session-13-handoff.md` — Session 13 handoff — Training hub, daily plan & streaks (~3649 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1850,7 +1883,7 @@
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
 - `repertoire.dto.ts` — Opening-repertoire DTOs shared between web and api. (~1793 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
-- `training.dto.ts` — A single actionable item in the daily training plan. (~1358 tok)
+- `training.dto.ts` — A single actionable item in the daily training plan. (~1508 tok)
 
 ## scripts/
 
