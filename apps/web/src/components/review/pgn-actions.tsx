@@ -2,6 +2,8 @@
 
 import { Copy, Download, Hash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { exportTreeToPgn } from '@/lib/board/pgn-export';
+import type { AnalysisNode } from '@/lib/board/analysis-tree';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -10,27 +12,42 @@ interface PgnActionsProps {
   gameId: string;
   fen?: string;
   className?: string;
+  /**
+   * Analysis tree root. When provided, Copy/Download serialise the full tree
+   * (variations + NAGs + comments + shapes) instead of the flat `pgn` string.
+   */
+  tree?: AnalysisNode;
+  /** Headers ({ White, Black, Event, Result }) for the exported PGN. */
+  pgnHeaders?: Record<string, string>;
 }
 
-function usePgnHandlers({ pgn, gameId, fen }: PgnActionsProps) {
+function usePgnHandlers({ pgn, gameId, fen, tree, pgnHeaders }: PgnActionsProps) {
+  const pgnText = tree ? exportTreeToPgn(tree, pgnHeaders) : pgn;
+
   function handleCopy() {
-    navigator.clipboard.writeText(pgn).then(() => {
-      toast.success('PGN copied to clipboard');
-    }).catch(() => {
-      toast.error('Failed to copy PGN');
-    });
+    navigator.clipboard
+      .writeText(pgnText)
+      .then(() => {
+        toast.success('PGN copied to clipboard');
+      })
+      .catch(() => {
+        toast.error('Failed to copy PGN');
+      });
   }
 
   function handleCopyFen() {
-    navigator.clipboard.writeText(fen!).then(() => {
-      toast.success('FEN copied to clipboard');
-    }).catch(() => {
-      toast.error('Failed to copy FEN');
-    });
+    navigator.clipboard
+      .writeText(fen!)
+      .then(() => {
+        toast.success('FEN copied to clipboard');
+      })
+      .catch(() => {
+        toast.error('Failed to copy FEN');
+      });
   }
 
   function handleDownload() {
-    const blob = new Blob([pgn], { type: 'text/plain' });
+    const blob = new Blob([pgnText], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -78,14 +95,32 @@ export function PgnIconActions(props: PgnActionsProps) {
 
   return (
     <div className="flex items-center gap-0.5">
-      <button type="button" aria-label="Copy PGN" title="Copy PGN" className={buttonClass} onClick={handleCopy}>
+      <button
+        type="button"
+        aria-label="Copy PGN"
+        title="Copy PGN"
+        className={buttonClass}
+        onClick={handleCopy}
+      >
         <Copy className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
-      <button type="button" aria-label="Download PGN" title="Download PGN" className={buttonClass} onClick={handleDownload}>
+      <button
+        type="button"
+        aria-label="Download PGN"
+        title="Download PGN"
+        className={buttonClass}
+        onClick={handleDownload}
+      >
         <Download className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
       {props.fen && (
-        <button type="button" aria-label="Copy FEN" title="Copy FEN" className={buttonClass} onClick={handleCopyFen}>
+        <button
+          type="button"
+          aria-label="Copy FEN"
+          title="Copy FEN"
+          className={buttonClass}
+          onClick={handleCopyFen}
+        >
           <Hash className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       )}

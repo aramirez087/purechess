@@ -103,4 +103,35 @@ describe('parsePgnToTree', () => {
     expect(e5.san).toBe('e5');
     expect(e5.children).toHaveLength(0);
   });
+
+  it('parses a [%cal] arrow out of a comment', () => {
+    const { root } = parsePgnToTree('1. e4 {[%cal Gf3e5]}', Chess);
+    const e4 = root.children[0];
+    expect(e4.shapes).toEqual([{ type: 'arrow', from: 'f3', to: 'e5', color: 'green' }]);
+    expect(e4.comment).toBeUndefined();
+  });
+
+  it('parses a [%csl] circle out of a comment', () => {
+    const { root } = parsePgnToTree('1. e4 {[%csl Ye4]}', Chess);
+    const e4 = root.children[0];
+    expect(e4.shapes).toEqual([{ type: 'circle', square: 'e4', color: 'yellow' }]);
+    expect(e4.comment).toBeUndefined();
+  });
+
+  it('keeps the prose when a comment mixes a directive and text', () => {
+    const { root } = parsePgnToTree('1. e4 {[%cal Re4d4] Ruy Lopez}', Chess);
+    const e4 = root.children[0];
+    expect(e4.shapes).toEqual([{ type: 'arrow', from: 'e4', to: 'd4', color: 'red' }]);
+    expect(e4.comment).toBe('Ruy Lopez');
+  });
+
+  it('parses both directives in one comment with no prose left', () => {
+    const { root } = parsePgnToTree('1. e4 {[%cal Ge2e4][%csl Ge4]}', Chess);
+    const e4 = root.children[0];
+    expect(e4.shapes).toEqual([
+      { type: 'arrow', from: 'e2', to: 'e4', color: 'green' },
+      { type: 'circle', square: 'e4', color: 'green' },
+    ]);
+    expect(e4.comment).toBeUndefined();
+  });
 });

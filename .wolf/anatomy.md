@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T02:02:50.695Z
-> Files: 910 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T03:47:57.694Z
+> Files: 916 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -1014,7 +1014,7 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10542 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~11242 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~288 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~420 tok)
 
@@ -1036,7 +1036,7 @@
 
 ## apps/web/src/app/analyze/
 
-- `analyze-board.tsx` — Left-rail action (the "New analysis" button). (~3205 tok)
+- `analyze-board.tsx` — GameResult → PGN Result tag value. (~3659 tok)
 - `analyze-client.tsx` — Auto-detects pasted PGN vs FEN. A FEN's first field is the piece (~1980 tok)
 - `page.tsx` — /analyze server page: buildMetadata title "Analyze — Purechess", renders AnalyzeClient. (~122 tok)
 
@@ -1094,7 +1094,7 @@
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
 - `annotation-layer.tsx` — Pull the line back from the dest center so the marker tip lands ~center. (~1527 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — isLightSquare (~7782 tok)
+- `chessboard.tsx` — isLightSquare (~7870 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
 - `move-input-overlay.tsx` — Floating command-palette over the board for typed moves. Renders only (~1272 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
@@ -1181,8 +1181,8 @@
 - `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1892 tok)
 - `move-time-chart.tsx` — Per-ply move-time SVG bars (viewBox 0 0 500 80) colored by MoveClass (blunder red → brilliant emerald, neutral when unclassified), white full / black 0.6 opacity, click-to-seek, hover title, White/Black avg row (excludes ≤500ms). Self-hides when no move >500ms. (~1408 tok)
 - `opening-explorer.tsx` — Called with the row's UCI move — caller enters it into the analysis tree. (~1141 tok)
-- `pgn-actions.tsx` — Full-button variant, sized to dock as a panel footer: each action splits (~890 tok)
-- `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1079 tok)
+- `pgn-actions.tsx` — Analysis tree root. When provided, Copy/Download serialise the full tree (~1038 tok)
+- `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1162 tok)
 - `review-move-list.tsx` — Undefined = classification hasn't run yet — no badges shown. (~785 tok)
 
 ## apps/web/src/components/settings/
@@ -1212,6 +1212,7 @@
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
+- `use-replay-san.ts` — FEN after each ply; `fens[0]` is the start, `fens[k]` follows ply k. (~418 tok)
 - `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~166 tok)
 
 ## apps/web/src/lib/
@@ -1230,7 +1231,7 @@
 
 ## apps/web/src/lib/board/
 
-- `analysis-tree.ts` — Branching analysis tree for the /analyze board. Pure TS — no React, no (~953 tok)
+- `analysis-tree.ts` — Branching analysis tree for the /analyze board. Pure TS — no React, no (~1040 tok)
 - `anim-diff.ts` — Pure-FEN move plan for the animation layer: diffs the piece placement of (~1035 tok)
 - `animations.ts` — True when move animations must be skipped entirely (instant placement, no (~304 tok)
 - `annotations.ts` — Drawing an identical shape removes it (toggle); anything else appends. (~521 tok)
@@ -1239,7 +1240,9 @@
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
 - `legal-sans.ts` — Legal-move enumeration + query matching for the text move input overlay. (~536 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
-- `pgn-parser.ts` — Variation-preserving PGN parser for the /analyze board. chess.js's (~1803 tok)
+- `pgn-export.ts` — Serialises an AnalysisNode tree back to PGN with variations, NAGs, (~1446 tok)
+- `pgn-export.ts` — Serialises an AnalysisNode tree back to PGN (variations + NAGs + comments + [%cal][%csl] shapes); round-trips through parsePgnToTree. (~900 tok)
+- `pgn-parser.ts` — Variation-preserving PGN parser for the /analyze board. chess.js's (~2322 tok)
 - `piece-sets.ts` — Registry of the available piece sets. Server-safe (no React, no stores) so (~392 tok)
 - `piece-svgs.tsx` — Pieces are served from the set the user picked in settings (`pieceSet`, (~845 tok)
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
@@ -1247,11 +1250,11 @@
 - `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
 - `pv-to-san.ts` — Converts a UCI PV sequence into SAN notation. (~295 tok)
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
-- `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2347 tok)
+- `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2647 tok)
 - `sound.ts` — Declares ModalSpec (~3527 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
-- `types.ts` — Analysis boards: input follows the side to move instead of `orientation`, (~508 tok)
+- `types.ts` — Analysis boards: input follows the side to move instead of `orientation`, (~559 tok)
 
 ## apps/web/src/lib/engine/
 
@@ -1294,9 +1297,12 @@
 - `legal-sans.test.ts` — Declares START (~876 tok)
 - `material.test.ts` — Declares START_FEN (~560 tok)
 - `no-animations.test.tsx` — Settings toggle → `data-no-animations` on the Chessboard container: attribute present/absent + `animationsDisabled()` engages. (~583 tok)
-- `pgn-parser.test.ts` — API routes: GET (3 endpoints) (~1250 tok)
+- `pgn-export.test.ts` — Movetext = everything after the header block's blank line. (~986 tok)
+- `pgn-export.test.ts` — exportTreeToPgn unit + round-trip tests (mainline/variation/NAG/shape/comment). (~700 tok)
+- `pgn-parser.test.ts` — API routes: GET (3 endpoints) (~1619 tok)
 - `premove-geometry.test.ts` — White to move everywhere below, so BLACK pieces are the premovable side. (~997 tok)
 - `pv-to-san.test.ts` — Declares START (~388 tok)
+- `replay-san.test.ts` — Declares START_FEN (~497 tok)
 - `sound-classify.test.ts` — Declares fensAround (~530 tok)
 - `sr-announce.test.ts` — START_FEN: fenAfterMoves (~756 tok)
 

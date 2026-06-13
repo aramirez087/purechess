@@ -2161,3 +2161,54 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 20:02 | Edited apps/web/src/components/board/piece.tsx | CSS: -webkit-user-drag, -webkit-user-drag | ~66 |
 | 20:05 | Fixed drag-ghost (bug-464): select-none on board grid + [-webkit-user-drag:none] on piece img; 187 board tests + tsc green | chessboard.tsx, piece.tsx | fixed | ~9k |
 | 20:04 | Session end: 4 writes across 4 files (pc-timeout-check.sql, pc-prod-query.cjs, chessboard.tsx, piece.tsx) | 5 reads | ~17695 tok |
+
+## Session: 2026-06-13 20:22
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:26 | Edited apps/web/src/lib/board/analysis-tree.ts | expanded (+8 lines) | ~259 |
+| 20:27 | Edited apps/web/src/lib/board/pgn-parser.ts | added 3 condition(s) | ~520 |
+| 20:27 | Edited apps/web/src/lib/board/pgn-parser.ts | added 1 condition(s) | ~122 |
+| 20:27 | Created apps/web/src/lib/board/pgn-export.ts | — | ~1420 |
+| 20:28 | Edited apps/web/src/lib/board/pgn-export.ts | modified serializeLine() | ~372 |
+| 20:28 | Edited apps/web/src/lib/board/types.ts | 3→8 lines | ~85 |
+| 20:28 | Edited apps/web/src/components/board/chessboard.tsx | 4→5 lines | ~26 |
+| 20:28 | Edited apps/web/src/components/board/chessboard.tsx | added nullish coalescing | ~136 |
+| 20:28 | Edited apps/web/src/app/analyze/analyze-board.tsx | CSS: PGN_RESULT | ~175 |
+| 20:29 | Edited apps/web/src/app/analyze/analyze-board.tsx | added nullish coalescing | ~400 |
+| 20:29 | Edited apps/web/src/app/analyze/analyze-board.tsx | 10→12 lines | ~157 |
+| 20:29 | Edited apps/web/src/app/analyze/analyze-board.tsx | 3→8 lines | ~79 |
+| 20:29 | Edited apps/web/src/components/review/pgn-actions.tsx | modified usePgnHandlers() | ~458 |
+| 20:30 | Created apps/web/test/board/pgn-export.test.ts | — | ~986 |
+| 20:30 | Edited apps/web/test/board/pgn-parser.test.ts | expanded (+31 lines) | ~436 |
+| 20:31 | PGN round-trip: shapes on tree node, parse+export [%cal][%csl] | analysis-tree.ts, pgn-parser.ts, pgn-export.ts(new), types.ts, chessboard.tsx, analyze-board.tsx, pgn-actions.tsx, +2 tests | 508 web unit tests pass, typecheck clean | ~9k |
+| 20:33 | Session end: 15 writes across 9 files (analysis-tree.ts, pgn-parser.ts, pgn-export.ts, types.ts, chessboard.tsx) | 11 reads | ~28819 tok |
+| 21:11 | Session end: 15 writes across 9 files (analysis-tree.ts, pgn-parser.ts, pgn-export.ts, types.ts, chessboard.tsx) | 11 reads | ~28819 tok |
+
+## Session: 2026-06-13 21:16
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-06-13 21:39
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:45 | Edited apps/web/src/lib/board/rules.ts | added error handling | ~340 |
+| 21:45 | Created apps/web/src/hooks/use-replay-san.ts | — | ~418 |
+| 21:45 | Edited apps/web/src/components/review/review-controls.tsx | expanded (+6 lines) | ~110 |
+| 21:45 | Edited apps/web/src/components/review/review-controls.tsx | added 1 condition(s) | ~49 |
+| 21:45 | Edited apps/web/src/components/review/review-controls.tsx | 3→3 lines | ~48 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 2 import(s) | ~89 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: EMPTY_MOVES | ~48 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | CSS: length | ~84 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | modified parsePgnMoves() | ~100 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added 1 condition(s) | ~157 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | parsePgnMoves() → input() | ~99 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | added nullish coalescing | ~128 |
+| 21:46 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 6→6 lines | ~60 |
+| 21:47 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | expanded (+15 lines) | ~278 |
+| 21:47 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 4→5 lines | ~28 |
+| 21:47 | Created apps/web/test/board/replay-san.test.ts | — | ~497 |
+| 21:48 | Live PvP board history browsing: board now renders FEN at seeked ply (was always live); browse-aware auto-advance; visible seek nav | live-game-client.tsx, rules.ts(replaySanLine), use-replay-san.ts, review-controls.tsx(bindKeys), replay-san.test.ts | done, typecheck+lint+5 tests green | ~14k |
+| 21:49 | Session end: 16 writes across 5 files (rules.ts, use-replay-san.ts, review-controls.tsx, live-game-client.tsx, replay-san.test.ts) | 10 reads | ~25782 tok |

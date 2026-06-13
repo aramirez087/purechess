@@ -123,6 +123,35 @@ export function makeMove(
   }
 }
 
+/**
+ * Replays a SAN move list (as parsed from a live game's PGN) from the standard
+ * start, returning the FEN after each ply alongside the squares of the move
+ * that produced it. `fens[0]` is the initial position (`lastMoves[0]` null);
+ * `fens[k]` / `lastMoves[k]` describe the position after ply k, so a board can
+ * render any historical position while a player browses back. Returns null if
+ * any SAN fails to apply (corrupt record) — the caller falls back to the live
+ * FEN.
+ */
+export function replaySanLine(sanMoves: string[]): {
+  fens: string[];
+  lastMoves: Array<{ from: Square; to: Square } | null>;
+} | null {
+  try {
+    const chess = new Chess();
+    const fens: string[] = [chess.fen()];
+    const lastMoves: Array<{ from: Square; to: Square } | null> = [null];
+    for (const san of sanMoves) {
+      const m = chess.move(san);
+      if (!m) return null;
+      fens.push(chess.fen());
+      lastMoves.push({ from: m.from as Square, to: m.to as Square });
+    }
+    return { fens, lastMoves };
+  } catch {
+    return null;
+  }
+}
+
 /** First legal move as UCI — used to claim a flag fall with any legal move. */
 export function firstLegalUci(fen: string): string | null {
   try {

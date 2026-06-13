@@ -12,6 +12,12 @@ interface ReviewControlsProps {
   atStart?: boolean;
   /** Disables the next/end buttons (final ply). */
   atEnd?: boolean;
+  /**
+   * Bind arrow/Home/End keys to seek. Default true. Set false where another
+   * hook already owns keyboard navigation (the live game's useGameKeyboard),
+   * so a single keypress doesn't seek twice.
+   */
+  bindKeys?: boolean;
 }
 
 // Same quiet recipe as the game clients' control buttons, squared for icons.
@@ -28,8 +34,10 @@ export function ReviewControls({
   onEnd,
   atStart = false,
   atEnd = false,
+  bindKeys = true,
 }: ReviewControlsProps) {
   useEffect(() => {
+    if (!bindKeys) return;
     function handleKey(e: KeyboardEvent) {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       switch (e.key) {
@@ -57,7 +65,7 @@ export function ReviewControls({
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [onStart, onPrev, onNext, onEnd]);
+  }, [onStart, onPrev, onNext, onEnd, bindKeys]);
 
   return (
     <div className="flex items-center gap-1.5">

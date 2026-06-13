@@ -7683,6 +7683,204 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-13T02:02:50.702Z"
+    },
+    {
+      "id": "bug-467",
+      "timestamp": "2026-06-13T02:27:06.315Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/lib/board/pgn-parser.ts",
+      "root_cause": "No early return/throw for edge case: !color",
+      "fix": "Added guard clause: if (!color)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T02:27:06.315Z"
+    },
+    {
+      "id": "bug-468",
+      "timestamp": "2026-06-13T02:27:12.060Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/lib/board/pgn-parser.ts",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 7\u21929 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T02:27:12.060Z"
+    },
+    {
+      "id": "bug-469",
+      "timestamp": "2026-06-13T02:28:40.909Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/components/board/chessboard.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T02:28:40.909Z"
+    },
+    {
+      "id": "bug-470",
+      "timestamp": "2026-06-13T02:29:01.204Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/app/analyze/analyze-board.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T02:29:01.204Z"
+    },
+    {
+      "id": "bug-471",
+      "timestamp": "2026-06-13T02:29:26.898Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/review/pgn-actions.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 41\u219252 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T02:29:26.898Z"
+    },
+    {
+      "id": "bug-472",
+      "timestamp": "2026-06-13T02:31:00.000Z",
+      "error_message": "pgn-export emitted a variation BEFORE the mainline move it replaced (e.g. '1. e4 (1... c5) e5' instead of '1. e4 e5 (1... c5)')",
+      "file": "apps/web/src/lib/board/pgn-export.ts",
+      "root_cause": "serializeLine emitted node's own token then node.children[1..] as variations, but children[1..] are alternatives to children[0] (the NEXT move) and must appear AFTER it. Off-by-one in the walk.",
+      "fix": "Restructured the loop to emit children[0] (mainline move) first, THEN children[1..] as parenthesised variations, then descend. Caught before commit by the round-trip test.",
+      "tags": [
+        "pgn",
+        "analyze",
+        "variations",
+        "serialization",
+        "off-by-one"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T02:31:00.000Z"
+    },
+    {
+      "id": "bug-473",
+      "timestamp": "2026-06-13T03:45:22.887Z",
+      "error_message": "Missing error handling in replaySanLine",
+      "file": "apps/web/src/lib/board/rules.ts",
+      "root_cause": "Code path had no error handling \u2014 exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T03:45:22.887Z"
+    },
+    {
+      "id": "bug-474",
+      "timestamp": "2026-06-13T03:45:41.300Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/components/review/review-controls.tsx",
+      "root_cause": "No early return/throw for edge case: !bindKeys",
+      "fix": "Added guard clause: if (!bindKeys)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T03:45:41.300Z"
+    },
+    {
+      "id": "bug-475",
+      "timestamp": "2026-06-13T03:46:19.418Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: // Start pinned to the live position so an SSR'd mid-game do; // opening before the live-edge effect runs. | Also: const sanMoves = _sanMoves;; // History browsing: when scrolled back, render the position",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-06-13T03:46:43.741Z"
+    },
+    {
+      "id": "bug-476",
+      "timestamp": "2026-06-13T03:46:37.534Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "No early return/throw for edge case: prevEdge === null || cur >= prevEdge",
+      "fix": "Added guard clause: if (prevEdge === null || cur >= prevEdge)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T03:46:37.534Z"
+    },
+    {
+      "id": "bug-477",
+      "timestamp": "2026-06-13T03:46:48.772Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T03:46:48.772Z"
+    },
+    {
+      "id": "bug-478",
+      "timestamp": "2026-06-13T03:48:00.000Z",
+      "error_message": "While playing a live game there was no way to go back and view previous moves while waiting for the opponent.",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Seek machinery (currentPly state, MovePanel onSeek, useGameKeyboard arrow keys) was all wired, but the Chessboard always rendered the live game.fen and ignored currentPly, so seeking changed nothing visible.",
+      "fix": "Added rules.replaySanLine (SAN->per-ply FENs+lastMoves) + useReplaySan hook; board now renders displayFen=replay.fens[currentPly] when browsing (currentPly<plyCount) and locks input; live-edge auto-advance keeps a browsing player from being yanked forward by an opponent move; added visible ReviewControls seek buttons (bindKeys=false) to the rail footer.",
+      "tags": [
+        "live-game",
+        "pvp",
+        "move-history",
+        "board",
+        "seek",
+        "chessboard",
+        "ux"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T03:48:00.000Z"
     }
   ]
 }

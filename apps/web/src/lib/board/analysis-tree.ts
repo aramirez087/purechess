@@ -9,6 +9,8 @@
  * tree a human builds by hand.
  */
 
+import type { BoardShape } from './annotations';
+
 export type TreePath = number[];
 
 export interface AnalysisNode {
@@ -27,6 +29,12 @@ export interface AnalysisNode {
    * other is derived. Both can render; NAG takes display priority.
    */
   nag?: number;
+  /**
+   * Board annotations attached to this position: user-drawn arrows/circles
+   * plus any parsed from `[%cal]`/`[%csl]` directives in the PGN comment.
+   * Persists across navigation and round-trips through PGN export.
+   */
+  shapes?: BoardShape[];
 }
 
 /**

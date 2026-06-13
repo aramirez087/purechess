@@ -64,6 +64,7 @@ export function Chessboard({
   freePlay = false,
   autoShapes,
   onShapesChange,
+  externalShapes,
 }: ChessboardProps) {
   const { settings } = useBoardSettings();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -100,6 +101,14 @@ export function Chessboard({
     setShapes([]);
     onShapesChange?.([]);
   }, [onShapesChange]);
+
+  // Parent-driven restoration: navigating to a tree node swaps in that node's
+  // saved shapes. Not a user edit, so onShapesChange is NOT fired here.
+  useEffect(() => {
+    const next = externalShapes ?? [];
+    shapesRef.current = next;
+    setShapes(next);
+  }, [externalShapes]);
 
   const anim = useMoveAnimation(position, lastDragMoveRef, settings.animationMs > 0);
 

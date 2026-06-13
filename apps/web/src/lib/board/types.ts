@@ -46,6 +46,11 @@ export interface ChessboardProps {
   autoShapes?: BoardShape[];
   /** Observe user-drawn shapes (drawing stays uncontrolled). */
   onShapesChange?: (shapes: BoardShape[]) => void;
+  /**
+   * Resets the internal shape state to this array. Used when navigating to a
+   * different tree node that has its own saved shapes.
+   */
+  externalShapes?: BoardShape[];
 }
 
 export interface PromotionState {

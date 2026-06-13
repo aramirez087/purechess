@@ -8,10 +8,62 @@
  * loading chess.js lazily (see rules-lazy) — the type-only import below is
  * erased at build time.
  */
+import type { Square } from '@purechess/shared';
 import type { Chess } from 'chess.js';
 import type { AnalysisNode } from './analysis-tree';
+import type { AnnotationColor, BoardShape } from './annotations';
 
 export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+/** PGN shape color codes (lila/ChessBase/Scid) → our AnnotationColor. */
+const COLOR_MAP: Record<string, AnnotationColor> = {
+  G: 'green',
+  R: 'red',
+  Y: 'yellow',
+  B: 'blue',
+};
+
+/**
+ * Pulls `[%cal ...]` (arrows) and `[%csl ...]` (circles) directives out of a
+ * comment block's text. Returns the parsed shapes plus whatever prose is left
+ * once the directives are stripped (trimmed).
+ *
+ * Arrow token: `G{from}{to}` (e.g. `Ge2e4`). Circle token: `G{square}`
+ * (e.g. `Ge4`). Unknown color codes / malformed tokens are skipped.
+ */
+export function parseShapesFromComment(text: string): {
+  shapes: BoardShape[];
+  remaining: string;
+} {
+  const shapes: BoardShape[] = [];
+  const cleaned = text
+    .replace(/\[%cal ([^\]]*)\]/g, (_, args: string) => {
+      args.split(',').forEach((token) => {
+        const color = COLOR_MAP[token[0]];
+        if (!color) return;
+        const sq = token.slice(1);
+        if (sq.length === 4) {
+          shapes.push({
+            type: 'arrow',
+            from: sq.slice(0, 2) as Square,
+            to: sq.slice(2, 4) as Square,
+            color,
+          });
+        }
+      });
+      return '';
+    })
+    .replace(/\[%csl ([^\]]*)\]/g, (_, args: string) => {
+      args.split(',').forEach((token) => {
+        const color = COLOR_MAP[token[0]];
+        if (!color || token.length < 3) return;
+        shapes.push({ type: 'circle', square: token.slice(1, 3) as Square, color });
+      });
+      return '';
+    })
+    .trim();
+  return { shapes, remaining: cleaned };
+}
 
 const RESULT_TOKENS = new Set(['1-0', '0-1', '1/2-1/2', '*']);
 
@@ -143,8 +195,10 @@ export function parseVariation(
 
     if (tok.startsWith('{')) {
       if (prev !== parentNode) {
-        const text = tok.replace(/^\{/, '').replace(/\}$/, '').trim();
-        if (text) prev.comment = prev.comment ? `${prev.comment} ${text}` : text;
+        const raw = tok.replace(/^\{/, '').replace(/\}$/, '').trim();
+        const { shapes, remaining } = parseShapesFromComment(raw);
+        if (shapes.length > 0) prev.shapes = prev.shapes ? [...prev.shapes, ...shapes] : shapes;
+        if (remaining) prev.comment = prev.comment ? `${prev.comment} ${remaining}` : remaining;
       }
       continue;
     }

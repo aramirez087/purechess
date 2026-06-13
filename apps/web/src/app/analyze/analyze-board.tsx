@@ -21,12 +21,20 @@ import { useAnalysisTree } from '@/hooks/use-analysis-tree';
 import { useOpeningName } from '@/hooks/use-opening-name';
 import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
+import { nodeAtPath } from '@/lib/board/analysis-tree';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
-import type { MoveIntent, PieceType, Square } from '@purechess/shared';
+import { GameResult, type MoveIntent, type PieceType, type Square } from '@purechess/shared';
 import type { AnalysisReview, ReviewPlayer } from '@/types/game-review';
 
 type Color = 'white' | 'black';
+
+/** GameResult → PGN Result tag value. */
+const PGN_RESULT: Record<GameResult, string> = {
+  [GameResult.WhiteWins]: '1-0',
+  [GameResult.BlackWins]: '0-1',
+  [GameResult.Draw]: '1/2-1/2',
+};
 
 interface AnalyzeBoardProps {
   game: AnalysisReview;
@@ -103,6 +111,31 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
       tree.playMove(from, to, promotion);
     },
     [tree],
+  );
+
+  // Shapes live on the tree node for the current position. Drawing/erasing
+  // writes them through; navigating restores them. nodeAtPath returns the live
+  // tree object — direct mutation is intentional (same pattern as addMove);
+  // the path change that triggers re-render recomputes restoredShapes.
+  const handleShapesChange = useCallback(
+    (newShapes: BoardShape[]) => {
+      const node = nodeAtPath(tree.root, tree.path);
+      if (node) node.shapes = newShapes.length > 0 ? newShapes : undefined;
+    },
+    [tree.root, tree.path],
+  );
+  const currentNode = nodeAtPath(tree.root, tree.path) ?? tree.root;
+  const restoredShapes = currentNode.shapes ?? [];
+
+  // Annotated PGN export carries the players + outcome the record supports.
+  const pgnHeaders = useMemo<Record<string, string>>(
+    () => ({
+      Event: 'Purechess Analysis',
+      White: game.white.username,
+      Black: game.black.username,
+      Result: game.result !== undefined ? PGN_RESULT[game.result] : '*',
+    }),
+    [game.white.username, game.black.username, game.result],
   );
 
   function stripFor(color: Color): PlayerStripProps {
@@ -193,7 +226,12 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
                 </div>
               </dl>
               <div className="border-t border-[#2b332c] p-2.5">
-                <PgnActions pgn={game.pgn} gameId={game.id} />
+                <PgnActions
+                  pgn={game.pgn}
+                  tree={tree.root}
+                  pgnHeaders={pgnHeaders}
+                  gameId={game.id}
+                />
               </div>
             </GameRail>
             {exitAction}
@@ -214,6 +252,8 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
               legalMoves={tree.legalMoves}
               onMove={handleMove}
               autoShapes={autoShapes}
+              onShapesChange={handleShapesChange}
+              externalShapes={restoredShapes}
               lastMove={tree.lastMove ?? undefined}
               className="[&_[role=grid]]:overflow-hidden [&_[role=grid]]:rounded-[3px] [&_[role=grid]]:shadow-[inset_0_0_0_1px_rgba(11,13,11,0.28)]"
             />

@@ -37,9 +37,11 @@ import {
   abortPvpGame,
   rematchPvpGame,
 } from '@/lib/api/pvp-games';
+import { ReviewControls } from '@/components/review/review-controls';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 import { useGameSocket } from '@/hooks/use-game-socket';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
+import { useReplaySan } from '@/hooks/use-replay-san';
 
 type Color = 'white' | 'black';
 
@@ -52,6 +54,9 @@ type PageState =
 // slow safety-net heartbeat when live pushes are flowing.
 const POLL_MS = 1500;
 const SLOW_POLL_MS = 10_000;
+
+// Stable identity for the not-playing case so the replay hook's key is steady.
+const EMPTY_MOVES: string[] = [];
 
 /**
  * True when `next` would take the UI backwards relative to `cur`: an older
@@ -241,7 +246,11 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
       : { phase: 'loading' },
   );
   const [flipped, setFlipped] = useState(false);
-  const [currentPly, setCurrentPly] = useState(0);
+  // Start pinned to the live position so an SSR'd mid-game doesn't flash the
+  // opening before the live-edge effect runs.
+  const [currentPly, setCurrentPly] = useState(() =>
+    initialGame ? parsePgnMoves(initialGame.pgn).length : 0,
+  );
   const [resultDismissed, setResultDismissed] = useState(false);
   // Bumped by the error screen's "Try again" to re-run the initial load.
   const [loadToken, setLoadToken] = useState(0);
@@ -249,7 +258,10 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
 
   const _isPlaying = state.phase === 'playing';
   const _isGameOver = _isPlaying && isTerminal(state.game.status);
-  const _sanCount = _isPlaying ? parsePgnMoves(state.game.pgn).length : 0;
+  const _sanMoves = _isPlaying ? parsePgnMoves(state.game.pgn) : EMPTY_MOVES;
+  const _sanCount = _sanMoves.length;
+  // Per-ply FENs for history browsing (chess.js is lazy → null until warm).
+  const replay = useReplaySan(_sanMoves);
   const statusLive = _isPlaying ? state.game.status : null;
   // The socket (and slow heartbeat) stay up on finished games so rematch
   // offers/accepts pushed to the room still land without a reload.
@@ -257,8 +269,17 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
   const _ply = _isPlaying ? state.game.ply : 0;
   const _canAbort = _isPlaying && state.game.status === 'active' && _ply < 2;
 
+  // Ride the live edge forward as moves arrive — UNLESS the player has scrolled
+  // back to review earlier moves, in which case an incoming move must not yank
+  // them to the latest position. First run (mount) always lands on live.
+  const liveEdgeRef = useRef<number | null>(null);
   useEffect(() => {
-    setCurrentPly(_sanCount);
+    setCurrentPly((cur) => {
+      const prevEdge = liveEdgeRef.current;
+      liveEdgeRef.current = _sanCount;
+      if (prevEdge === null || cur >= prevEdge) return _sanCount;
+      return Math.min(cur, _sanCount);
+    });
   }, [_sanCount]);
 
   // A push that arrives while our own move POST is in flight is dropped to
@@ -606,7 +627,11 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
   }
 
   const { game, submitting, moveError } = state;
-  const sanMoves = parsePgnMoves(game.pgn);
+  const sanMoves = _sanMoves;
+  // History browsing: when scrolled back, render the position at the seeked ply
+  // and lock input (you can't move from the past). chess.js is lazy, so fall
+  // back to the live FEN until the per-ply replay warms.
+  const browsing = currentPly < sanMoves.length;
   const yourColor = game.yourColor;
   const orientation: Color = flipped ? (yourColor === 'white' ? 'black' : 'white') : yourColor;
   const bottomColor = orientation;
@@ -616,9 +641,13 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
   const isGameOver = isTerminal(game.status);
   const yourTurn = !isGameOver && sideToMove === yourColor;
   // Not gated on turn: the board's own premove flow handles out-of-turn input
-  // and the server rejects anything illegal.
-  const readOnly = isGameOver || submitting;
-  const lastMove = parseLastMove(game.lastMove);
+  // and the server rejects anything illegal. Browsing history locks input too.
+  const readOnly = isGameOver || submitting || browsing;
+  const displayFen = browsing && replay ? (replay.fens[currentPly] ?? game.fen) : game.fen;
+  const displayLastMove =
+    browsing && replay
+      ? (replay.lastMoves[currentPly] ?? undefined)
+      : parseLastMove(game.lastMove);
   const resultLabel = isAborted ? 'Aborted' : getResultLabel(game.result, yourColor);
   const reasonLabel =
     !isAborted && game.resultReason
@@ -717,10 +746,10 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
             }
           >
             <Chessboard
-              position={game.fen}
+              position={displayFen}
               orientation={orientation}
               onMove={handleMove}
-              lastMove={lastMove}
+              lastMove={displayLastMove}
               readOnly={readOnly}
               className="[&_[role=grid]]:overflow-hidden [&_[role=grid]]:rounded-[3px] [&_[role=grid]]:shadow-[inset_0_0_0_1px_rgba(11,13,11,0.28)]"
             />
@@ -793,7 +822,22 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
               </>
             }
             footer={
-              <BoardControlBar onFlip={() => setFlipped((f) => !f)} className="p-2">
+              <>
+                {/* Move-history browser — go back to review earlier moves while
+                    waiting for the opponent. Arrow/Home/End keys are owned by
+                    useGameKeyboard, so this group skips its own key binding. */}
+                <div className="flex items-center justify-center border-b border-[#2b332c] px-2 py-2">
+                  <ReviewControls
+                    bindKeys={false}
+                    onStart={() => setCurrentPly(0)}
+                    onPrev={() => setCurrentPly((p) => Math.max(0, p - 1))}
+                    onNext={() => setCurrentPly((p) => Math.min(sanMoves.length, p + 1))}
+                    onEnd={() => setCurrentPly(sanMoves.length)}
+                    atStart={currentPly === 0}
+                    atEnd={currentPly >= sanMoves.length}
+                  />
+                </div>
+                <BoardControlBar onFlip={() => setFlipped((f) => !f)} className="p-2">
                 {isGameOver ? (
                   <>
                     <button
@@ -863,7 +907,8 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
                     </button>
                   </>
                 )}
-              </BoardControlBar>
+                </BoardControlBar>
+              </>
             }
           >
             <MovePanel
