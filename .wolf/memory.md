@@ -2973,3 +2973,20 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:08 | Created apps/web/src/lib/api/client.ts | — | ~528 |
 | 17:10 | Dedup: humanizeTheme (puzzle-board imports shared) + new lib/api/client.ts (API_BASE/apiFetch/ensureOk) consumed by 8 api clients. jscpd audit of web+api+shared: 51->45 clones, 1050->931 dup lines | lib/api/client.ts +8 files | typecheck/lint clean, web 662 green | ~14k |
 | 17:11 | Session end: 22 writes across 13 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~32784 tok |
+
+## Session: 2026-06-13 17:40
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:45 | Created .session-01-plan.md | — | ~4725 |
+| 17:45 | S01 charter: ran jscpd baseline (45 clones/931 lines), mapped all 45 clones to 9 sessions, confirmed disjoint ownership, wrote .session-01-plan.md | .session-01-plan.md | plan complete, no overrides needed | ~8k tok |
+| 17:45 | Session end: 1 writes across 1 files (.session-01-plan.md) | 1 reads | ~5063 tok |
+
+## Session: 2026-06-13 17:45
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:49 | Created docs/roadmap/dedup-cleanup/session-01-handoff.md | — | ~4282 |
+
+| 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
+| 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
