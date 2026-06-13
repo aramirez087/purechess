@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:24:21.224Z
-> Files: 1084 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:37:30.617Z
+> Files: 1098 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -745,7 +745,7 @@
 ## apps/api/src/
 
 - `app.controller.ts` — Exports AppController (~157 tok)
-- `app.module.ts` — API routes: GET (2 endpoints) (~803 tok)
+- `app.module.ts` — API routes: GET (2 endpoints) (~828 tok)
 - `app.service.ts` — Exports HealthStatus, AppService (~337 tok)
 - `main.ts` — Declares bootstrap (~481 tok)
 
@@ -918,6 +918,17 @@
 
 - `redis.module.ts` — Exports RedisModule (~115 tok)
 
+## apps/api/src/repertoire/
+
+- `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
+- `repertoire.controller.ts` — Opening-repertoire CRUD + import. Every route is auth-gated and scoped to the (~668 tok)
+- `repertoire.module.ts` — Opening repertoires (CRUD + import). `AuthModule` supplies `SessionAuthGuard` (~158 tok)
+- `repertoire.service.ts` — Prisma `Repertoire` row plus the latest-review timestamp for the summary. (~2206 tok)
+
+## apps/api/src/repertoire/dto/
+
+- `repertoire-body.dto.ts` — Request bodies for the repertoire controller. The tree is validated as a raw (~433 tok)
+
 ## apps/api/src/reports/
 
 - `reports-admin.controller.ts` — Exports ReportsAdminController (~322 tok)
@@ -1041,6 +1052,10 @@
 ## apps/api/test/realtime/
 
 - `realtime.gateway.spec.ts` — USER_ID: makeSocket, captureMiddleware, authedSocket (~3827 tok)
+
+## apps/api/test/repertoire/
+
+- `repertoire.service.spec.ts` — A small legal tree: 1.e4 e5 (one line). (~3442 tok)
 
 ## apps/api/test/reports/
 
@@ -1187,7 +1202,8 @@
 
 ## apps/web/src/app/openings/
 
-- `page.tsx` — dynamic (~449 tok)
+- `openings-client.tsx` — Relative "trained" label. (~1988 tok)
+- `page.tsx` — dynamic (~262 tok)
 
 ## apps/web/src/app/profile/[username]/
 
@@ -1318,6 +1334,12 @@
 - `MobileNav.tsx` — navLinks (~774 tok)
 - `UserMenu.tsx` — Top-bar account chip — resolves the session itself via /api/auth/me. (~938 tok)
 
+## apps/web/src/components/openings/
+
+- `repertoire-explorer-builder.tsx` — Grows a repertoire tree from the start position. Reuses the analysis tree (~1026 tok)
+- `repertoire-import.tsx` — Total move nodes in the subtree (excluding the root). (~2888 tok)
+- `repertoire-view.tsx` — Read view for a saved repertoire: renders the stored tree with the SAME (~1079 tok)
+
 ## apps/web/src/components/play/
 
 - `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
@@ -1406,6 +1428,7 @@
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
 - `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~2521 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
+- `repertoire.ts` — Client for the opening-repertoire API (`/repertoire`). Every call is (~1064 tok)
 
 ## apps/web/src/lib/board/
 
@@ -1532,6 +1555,10 @@
 - `use-opening-name.test.ts` — SICILIAN_EPD: mockFetch (~774 tok)
 - `use-position-eval.test.ts` — Declares START (~751 tok)
 - `use-puzzle.test.ts` — RenderHookResult: mountAtPlayer (~1141 tok)
+
+## apps/web/test/openings/
+
+- `repertoire-import.test.ts` — Importing a known PGN must yield the expected number of leaf lines — this is (~478 tok)
 
 ## apps/web/test/play/
 
@@ -1681,7 +1708,8 @@
 - `session-04-handoff.md` — Session 04 handoff — Local solve engine + theme trainer (~1941 tok)
 - `session-05-handoff.md` — Session 05 handoff — Puzzle Rush (timed board vision) (~2616 tok)
 - `session-06-handoff.md` — Session 06 handoff — Spaced-repetition review (~2715 tok)
-- `session-07-handoff.md` — Session 07 handoff — Mistakes from your own games → puzzles (~3516 tok)
+- `session-07-handoff.md` — Session 07 handoff — Mistakes from your own games → puzzles (~3519 tok)
+- `session-08-handoff.md` — Session 08 handoff — Opening repertoire model + import (~2486 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1720,7 +1748,7 @@
 
 ## packages/shared/src/
 
-- `index.ts` (~164 tok)
+- `index.ts` (~174 tok)
 - `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
 
@@ -1731,6 +1759,7 @@
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
 - `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~2055 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
+- `repertoire.dto.ts` — Opening-repertoire DTOs shared between web and api. (~1082 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
 - `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)
 

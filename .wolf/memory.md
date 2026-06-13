@@ -2598,3 +2598,39 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 13:19 | trainer test (6 cases) | apps/web/test/review/mistake-trainer.test.tsx | 6 pass | ~700 |
 | 13:20 | all gates green: API 40s/459t, shared build, web 75f/590t, all tsc clean, lint clean | — | PASS | ~600 |
 | 13:24 | Created docs/roadmap/purechess-improve/session-07-handoff.md | — | ~3751 |
+| 13:24 | Edited docs/roadmap/purechess-improve/session-07-handoff.md | inline fix | ~14 |
+| 13:27 | Created packages/shared/src/dto/repertoire.dto.ts | — | ~1082 |
+| 13:27 | Edited packages/shared/src/index.ts | 3→4 lines | ~40 |
+| 13:28 | Created apps/api/src/repertoire/repertoire-tree.ts | — | ~3477 |
+| 13:28 | Created apps/api/src/repertoire/dto/repertoire-body.dto.ts | — | ~433 |
+| 13:29 | Created apps/api/src/repertoire/repertoire.service.ts | — | ~2247 |
+| 13:29 | Edited apps/api/src/repertoire/repertoire.service.ts | 6→1 lines | ~24 |
+| 13:29 | Edited apps/api/src/repertoire/repertoire.service.ts | removed 5 lines | ~2 |
+| 13:29 | Created apps/api/src/repertoire/repertoire.controller.ts | — | ~668 |
+| 13:29 | Created apps/api/src/repertoire/repertoire.module.ts | — | ~158 |
+| 13:29 | Edited apps/api/src/app.module.ts | added 1 import(s) | ~36 |
+| 13:29 | Edited apps/api/src/app.module.ts | 3→4 lines | ~38 |
+| 13:30 | Created apps/api/test/repertoire/repertoire.service.spec.ts | — | ~3442 |
+| 13:30 | Edited apps/api/src/repertoire/repertoire-tree.ts | added 1 condition(s) | ~260 |
+| 13:31 | Edited apps/api/src/repertoire/repertoire-tree.ts | modified checkNodeFields() | ~555 |
+| 13:31 | Edited apps/api/src/repertoire/repertoire-tree.ts | modified validateTree() | ~106 |
+| 13:31 | Created apps/web/src/lib/api/repertoire.ts | — | ~1064 |
+| 13:32 | Created apps/web/src/components/openings/repertoire-import.tsx | — | ~2888 |
+| 13:32 | Created apps/web/src/components/openings/repertoire-explorer-builder.tsx | — | ~1026 |
+| 13:32 | Created apps/web/src/components/openings/repertoire-view.tsx | — | ~1120 |
+| 13:33 | Edited apps/web/src/components/openings/repertoire-view.tsx | inline fix | ~20 |
+| 13:33 | Edited apps/web/src/components/openings/repertoire-view.tsx | removed 6 lines | ~8 |
+| 13:33 | Created apps/web/src/app/openings/openings-client.tsx | — | ~1988 |
+| 13:33 | Edited apps/web/src/app/openings/page.tsx | 7→6 lines | ~81 |
+| 13:34 | Edited apps/web/src/app/openings/page.tsx | CSS: sm, lg | ~87 |
+| 13:34 | Created apps/web/test/openings/repertoire-import.test.ts | — | ~478 |
+
+## Session — purechess-improve S08 (opening repertoire model + import) — 2026-06-13
+| 13:20 | shared DTO repertoire.dto.ts (RepertoireNodeDto mirrors AnalysisNode; Create/Update/Import/Summary) + index export + build | packages/shared | green | ~1500 |
+| 13:24 | API repertoire-tree.ts (validateTree, parsePgnToTree port, MAX_TREE_NODES=5000, iterative walks) | apps/api/src/repertoire | green | ~3000 |
+| 13:28 | RepertoireService (CRUD+import, ownership=404, last-trained groupBy) + controller (class-level SessionAuthGuard, import before :id) + module + app.module reg | apps/api/src/repertoire, app.module.ts | green | ~2500 |
+| 13:34 | repertoire.service.spec.ts — 22 tests (CRUD, ownership 404, illegal/oversized/empty import). Fixed bug-537 (recursive walk stack-overflow on deep tree → iterative). | apps/api/test/repertoire | 22/22 pass | ~2000 |
+| 13:40 | Web: lib/api/repertoire.ts client; openings-client.tsx (TanStack list/new/read); RepertoireImport (PGN paste + explorer build), RepertoireExplorerBuilder, RepertoireView — all reuse useAnalysisTree+Chessboard+AnalysisMovePanel+OpeningExplorer; page.tsx mounts client | apps/web/src/app/openings, components/openings, lib/api | green | ~3000 |
+| 13:34 | repertoire-import.test.ts — 5 tests (known PGN → expected line count) | apps/web/test/openings | 5/5 pass | ~600 |
+| 13:45 | GATES: api tsc clean + 481 tests; shared build clean; web tsc clean + 595 tests; api lint clean. cerebrum+buglog+memory updated. | (gates) | all green | ~1500 |
+| 13:37 | Created docs/roadmap/purechess-improve/session-08-handoff.md | — | ~2652 |

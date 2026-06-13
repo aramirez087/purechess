@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import { BookOpen } from 'lucide-react';
 import type { SafeUser } from '@purechess/shared';
 import { AppShell } from '@/components/layout/AppShell';
-import { TrainingPlaceholder } from '@/components/improve/training-placeholder';
+import { OpeningsClient } from './openings-client';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
 
@@ -23,23 +22,9 @@ export default async function OpeningsPage() {
 
   return (
     <AppShell>
-      <TrainingPlaceholder
-        icon={BookOpen}
-        eyebrow="Improve"
-        title="Openings"
-        description="Drill the openings you actually play. Import a repertoire, then practise your own lines until they are automatic."
-        upcoming={[
-          'A repertoire stored as a move tree, for White and Black',
-          'Import from PGN or the opening explorer',
-          'Spaced-repetition drilling of your own lines',
-          'Out-of-book detection so you fix the move you actually forget',
-        ]}
-        signedOut={signedOut}
-        related={[
-          { href: '/train', label: 'Training hub' },
-          { href: '/endgames', label: 'Endgames' },
-        ]}
-      />
+      <div className="px-4 py-8 sm:px-6 lg:px-8">
+        <OpeningsClient signedOut={signedOut} />
+      </div>
     </AppShell>
   );
 }
