@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 3353963,
-    "total_reads": 2211,
-    "total_writes": 2823,
+    "total_tokens_estimated": 3360757,
+    "total_reads": 2215,
+    "total_writes": 2839,
     "total_sessions": 75,
-    "anatomy_hits": 1433,
-    "anatomy_misses": 739,
+    "anatomy_hits": 1435,
+    "anatomy_misses": 741,
     "repeated_reads_blocked": 1508,
-    "estimated_savings_vs_bare_cli": 3522315
+    "estimated_savings_vs_bare_cli": 3522715
   },
   "sessions": [
     {
@@ -29278,6 +29278,127 @@
         "output_tokens_estimated": 3522,
         "reads_count": 4,
         "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-06-13-1752",
+      "started": "2026-06-13T23:52:31.276Z",
+      "ended": "2026-06-13T23:58:27.850Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/users-table.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/games-table.tsx",
+          "tokens_estimated": 2073,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/reports-table.tsx",
+          "tokens_estimated": 2248,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/app/admin/audit/page.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/data-table.tsx",
+          "tokens_estimated": 633,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/games-table.tsx",
+          "tokens_estimated": 117,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/games-table.tsx",
+          "tokens_estimated": 48,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/games-table.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/reports-table.tsx",
+          "tokens_estimated": 66,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/reports-table.tsx",
+          "tokens_estimated": 58,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/reports-table.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/users-table.tsx",
+          "tokens_estimated": 88,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/users-table.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/users-table.tsx",
+          "tokens_estimated": 66,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/components/admin/users-table.tsx",
+          "tokens_estimated": 62,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/app/admin/audit/page.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/app/admin/audit/page.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/app/admin/audit/page.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/apps/web/src/app/admin/audit/page.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s04-admin-tables/docs/roadmap/dedup-cleanup/session-04-handoff.md",
+          "tokens_estimated": 1102,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 4321,
+        "output_tokens_estimated": 2473,
+        "reads_count": 4,
+        "writes_count": 16,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 2
       }
