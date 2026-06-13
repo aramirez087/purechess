@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:26:54.441Z
-> Files: 1016 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:37:04.875Z
+> Files: 1029 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -634,19 +634,25 @@
 
 ## Daily Puzzle feature (added 2026-06-13)
 
+- `apps/api/src/puzzles/dto/record-attempt.dto.ts` — S03 RecordAttemptDto (class-validator): solved bool, msToSolve? int≥0, source? enum(theme|daily|rush|review|mistake). (~120 tok)
 - `apps/api/src/puzzles/puzzle-catalog.service.ts` — S02 read-only catalog over seeded Puzzle bank: listThemes() (raw `unnest(themes)` GROUP BY, count bigint→number, Redis-cached 1h key `puzzle:catalog:themes`), count(), ratingRange() ({0,0} on empty). DI: PrismaService + REDIS_CLIENT. (~360 tok)
+- `apps/api/src/puzzles/puzzle-rating.service.ts` — S03 per-user puzzle Glicko. applyResult(userId,puzzleRating,rd,solved): REUSES `updateRating` from ratings/glicko2.ts (puzzle = one opponent, score 1/0), upserts PuzzleRating Float cols (unrounded), defaults 1500/350/0.06, clamps zero-RD opponent to 60. get(): snapshot or defaults. DI: PrismaService. (~420 tok)
+- `apps/api/src/puzzles/puzzle-serving.service.ts` — S03 serving engine. getNext(userId,{theme?,rating?}): target=arg→PuzzleRating.rating→1500, window ladder ±150/±300/±600 then drop unseen+window (keeps theme), NOT EXISTS exclusion of attempted ids, `themes @> ARRAY[$theme]` GIN, `ORDER BY random() LIMIT 1` via parameterized Prisma.sql. recordAttempt(): inserts PuzzleAttempt (before/after captured), drives PuzzleRatingService, bumps plays, returns delta DTO. getStats(): per-theme accuracy, weakest-first (acc ASC). DI: PrismaService + PuzzleRatingService. (~700 tok)
+- `apps/api/src/puzzles/puzzle-training.controller.ts` — S03 `@Controller('puzzles')` additive trainer routes: GET themes (public→catalog), GET next + POST :id/attempt + GET stats + GET rating (all SessionAuthGuard + @CurrentUser). Sibling to the daily PuzzlesController. (~360 tok)
 - `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
-- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). Now also provides+exports PuzzleCatalogService (S02). (~70 tok)
+- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). imports AuthModule (for SessionAuthGuard). controllers: PuzzlesController + PuzzleTrainingController (S03). providers/exports: PuzzleCatalogService (S02) + PuzzleServingService + PuzzleRatingService (S03). (~110 tok)
 - `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
 - `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
 - `apps/api/test/puzzles/puzzle-catalog.service.spec.ts` — Jest: mock Prisma+Redis. listThemes shape (bigint→number) + caching (2nd call no DB), count delegate, ratingRange min/max + empty {0,0}. (~600 tok)
+- `apps/api/test/puzzles/puzzle-rating.service.spec.ts` — S03 Jest (mock Prisma). applyResult: new-user 1500/350/0.06, solved↑/failed↓, reuses updateRating verbatim (equals direct call), zero-RD clamp. get() snapshot/defaults. PINS Glicko paper vector (game-rating non-regression). (~620 tok)
+- `apps/api/test/puzzles/puzzle-serving.service.spec.ts` — S03 Jest (mock Prisma + PuzzleRatingService). Asserts on the Prisma.Sql `.sql`/`.values`: target-rating resolution (arg/user/1500), NOT EXISTS exclusion, themes @> ARRAY, random()/LIMIT 1, fallback ladder ±150→±300→±600→drop. recordAttempt writes+bumps+returns delta, defaults, NotFound. getStats 3/5=60%, weakest-first, empty, cap-1000. (~900 tok)
 - `apps/api/test/puzzles/puzzles.service.spec.ts` — Jest: cache hit (no fetch), miss (fetch+setex), error throws. (~480 tok)
 - `apps/api/test/puzzles/seed-puzzles.spec.ts` — Jest: pure parse/select logic (no DB). validateHeader, parseRow (split moves/themes/openingTags, int coercion, skip empty FEN/Moves/id), PopularityHeap top-N + tie-by-plays + O(cap) memory, parseArgs. (~900 tok)
 - `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
 - `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
 - `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
 - `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
-- `apps/web/src/lib/api/puzzles.ts` — getDailyPuzzle() client + web-side LichessPuzzleData type. Fetches `${API}/api/puzzles/daily`. (~230 tok)
+- `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating() — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~520 tok)
 - `apps/web/src/lib/board/puzzle-utils.ts` — replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch. chess.js. (~430 tok)
 - `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
 - `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
@@ -853,10 +859,17 @@
 ## apps/api/src/puzzles/
 
 - `puzzle-catalog.service.ts` — One theme slug and how many puzzles in the bank carry it. (~803 tok)
+- `puzzle-rating.service.ts` — New-puzzle-solver defaults, matching the schema column defaults. (~1005 tok)
+- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~2734 tok)
+- `puzzle-training.controller.ts` — Trainer endpoints — the local puzzle bank, per-user serving, attempt (~846 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
-- `puzzles.module.ts` — Exports PuzzlesModule (~110 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~227 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
+
+## apps/api/src/puzzles/dto/
+
+- `record-attempt.dto.ts` — Body for `POST /puzzles/:id/attempt`. The client reports only the outcome — (~201 tok)
 
 ## apps/api/src/ratings/
 
@@ -981,6 +994,8 @@
 ## apps/api/test/puzzles/
 
 - `puzzle-catalog.service.spec.ts` — Declares mockRedis (~1075 tok)
+- `puzzle-rating.service.spec.ts` — API routes: GET (2 endpoints) (~1595 tok)
+- `puzzle-serving.service.spec.ts` — Last `$queryRaw` call's bound SQL + values (Prisma.Sql shape). (~3613 tok)
 - `puzzles.service.spec.ts` — Declares mockRedis (~646 tok)
 - `seed-puzzles.spec.ts` — Build a CSV data line in the exact lichess column order. (~1821 tok)
 
@@ -1334,7 +1349,7 @@
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
-- `puzzles.ts` — Client for our puzzles API, which proxies + caches Lichess's daily puzzle. (~318 tok)
+- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~1187 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
@@ -1599,7 +1614,8 @@
 - `baselines.md` — Improve epic — measurement baselines (Session 01) (~827 tok)
 - `data-model.md` — Improve epic — data model (~2107 tok)
 - `session-01-handoff.md` — Session 01 handoff — Charter, data model & Improve IA (~2422 tok)
-- `session-02-handoff.md` — Session 02 handoff — Puzzle ingestion pipeline (~1891 tok)
+- `session-02-handoff.md` — Session 02 handoff — Puzzle ingestion pipeline (~1886 tok)
+- `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2562 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

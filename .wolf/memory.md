@@ -2473,3 +2473,17 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:24 | Created apps/api/scripts/README.md | — | ~282 |
 | 12:26 | S02 puzzle ingestion: seed-puzzles.ts (stream+min-heap top-N, idempotent createMany), PuzzleCatalogService, tests, runbook | apps/api/scripts,src/puzzles,test/puzzles,docs/runbooks | 34 suites/381 tests green; sample seed 500 rows + idempotent re-run verified; EXPLAIN uses rating idx | ~38k |
 | 12:26 | Created docs/roadmap/purechess-improve/session-02-handoff.md | — | ~2017 |
+| 12:27 | Edited docs/roadmap/purechess-improve/session-02-handoff.md | "<filled in after commit>" → "e231331" | ~14 |
+| 12:27 | Edited docs/roadmap/purechess-improve/session-02-handoff.md | "e231331" → "7c78a0b" | ~14 |
+| 12:29 | Created apps/api/src/puzzles/dto/record-attempt.dto.ts | — | ~201 |
+| 12:30 | Created apps/api/src/puzzles/puzzle-rating.service.ts | — | ~1005 |
+| 12:30 | Created apps/api/src/puzzles/puzzle-serving.service.ts | — | ~2734 |
+| 12:31 | Created apps/api/src/puzzles/puzzle-training.controller.ts | — | ~850 |
+| 12:31 | Edited apps/api/src/puzzles/puzzle-training.controller.ts | 11→10 lines | ~33 |
+| 12:31 | Created apps/api/src/puzzles/puzzles.module.ts | — | ~227 |
+| 12:31 | Edited apps/web/src/lib/api/puzzles.ts | API() → declared() | ~139 |
+| 12:32 | Edited apps/web/src/lib/api/puzzles.ts | added 3 condition(s) | ~858 |
+| 12:32 | Created apps/api/test/puzzles/puzzle-rating.service.spec.ts | — | ~1595 |
+| 12:33 | Created apps/api/test/puzzles/puzzle-serving.service.spec.ts | — | ~3613 |
+| 12:40 | S03 puzzle serving API: PuzzleServingService (getNext ladder + recordAttempt + getStats), PuzzleRatingService (reuses glicko2 updateRating), PuzzleTrainingController (5 routes, additive in puzzles.module.ts), web client fns | apps/api/src/puzzles/*, apps/web/src/lib/api/puzzles.ts | all 3 gates green (api tsc+405 tests, shared build, web tsc); live-verified themes 200 / next 401 / daily 200 on 400 seeded puzzles, then cleaned up | ~9000 |
+| 12:37 | Created docs/roadmap/purechess-improve/session-03-handoff.md | — | ~2733 |
