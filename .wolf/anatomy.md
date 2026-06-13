@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:46:59.367Z
-> Files: 1044 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:59:51.556Z
+> Files: 1054 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -867,16 +867,19 @@
 
 - `puzzle-catalog.service.ts` — One theme slug and how many puzzles in the bank carry it. (~803 tok)
 - `puzzle-rating.service.ts` — New-puzzle-solver defaults, matching the schema column defaults. (~1005 tok)
+- `puzzle-rush.controller.ts` — Puzzle Rush endpoints — the timed board-vision drill. Registered additively (~757 tok)
+- `puzzle-rush.service.ts` — Default target rating for a user who has never solved a puzzle. (~2646 tok)
 - `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~2734 tok)
 - `puzzle-training.controller.ts` — Trainer endpoints — the local puzzle bank, per-user serving, attempt (~846 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
-- `puzzles.module.ts` — Exports PuzzlesModule (~227 tok)
+- `puzzles.module.ts` — Exports PuzzlesModule (~287 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
 
 ## apps/api/src/puzzles/dto/
 
 - `record-attempt.dto.ts` — Body for `POST /puzzles/:id/attempt`. The client reports only the outcome — (~201 tok)
+- `rush.dto.ts` — Body for `POST /puzzles/rush/start`. Mode defaults to `3min` server-side. (~225 tok)
 
 ## apps/api/src/ratings/
 
@@ -1002,6 +1005,7 @@
 
 - `puzzle-catalog.service.spec.ts` — Declares mockRedis (~1075 tok)
 - `puzzle-rating.service.spec.ts` — API routes: GET (2 endpoints) (~1595 tok)
+- `puzzle-rush.service.spec.ts` — A growing bank of synthetic puzzles spanning a wide rating range. buildSet's (~2551 tok)
 - `puzzle-serving.service.spec.ts` — Last `$queryRaw` call's bound SQL + values (Prisma.Sql shape). (~3613 tok)
 - `puzzles.service.spec.ts` — Declares mockRedis (~646 tok)
 - `seed-puzzles.spec.ts` — Build a CSV data line in the exact lichess column order. (~1821 tok)
@@ -1171,6 +1175,11 @@
 - `page.tsx` — metadata (~139 tok)
 - `puzzle-client.tsx` — formatPlays (~1162 tok)
 
+## apps/web/src/app/puzzles/rush/
+
+- `page.tsx` — dynamic (~383 tok)
+- `rush-client.tsx` — Puzzle Rush — the timed board-vision drill. Three phases: (~4970 tok)
+
 ## apps/web/src/app/puzzles/train/
 
 - `page.tsx` — dynamic (~498 tok)
@@ -1302,6 +1311,7 @@
 ## apps/web/src/components/puzzle/
 
 - `puzzle-board.tsx` — humanizeTheme (~1176 tok)
+- `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1197 tok)
 - `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~973 tok)
 - `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4268 tok)
 
@@ -1364,7 +1374,7 @@
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
-- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~1187 tok)
+- `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~1643 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 
 ## apps/web/src/lib/board/
@@ -1511,6 +1521,7 @@
 
 ## apps/web/test/puzzle/
 
+- `rush-client.test.tsx` — --- Mocks ------------------------------------------------------------------ (~2285 tok)
 - `training-session.test.tsx` — --- Mocks ------------------------------------------------------------------ (~1444 tok)
 
 ## apps/web/test/review/
@@ -1637,6 +1648,7 @@
 - `session-02-handoff.md` — Session 02 handoff — Puzzle ingestion pipeline (~1886 tok)
 - `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2558 tok)
 - `session-04-handoff.md` — Session 04 handoff — Local solve engine + theme trainer (~1941 tok)
+- `session-05-handoff.md` — Session 05 handoff — Puzzle Rush (timed board vision) (~2616 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1675,7 +1687,7 @@
 
 ## packages/shared/src/
 
-- `index.ts` (~154 tok)
+- `index.ts` (~164 tok)
 - `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
 
@@ -1686,6 +1698,7 @@
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
 - `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~837 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
+- `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
 - `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)
 
 ## scripts/

@@ -12,6 +12,10 @@ import type {
   PuzzleSource,
   PuzzleThemeDto,
   PuzzleThemeStatDto,
+  RushFinishResponseDto,
+  RushMode,
+  RushPersonalBestsDto,
+  RushStartResponseDto,
 } from '@purechess/shared';
 
 export interface LichessPuzzleData {
@@ -116,4 +120,44 @@ export async function fetchPuzzleRating(): Promise<PuzzleRatingDto> {
   });
   await ensureOk(res, 'puzzle-rating fetch');
   return res.json() as Promise<PuzzleRatingDto>;
+}
+
+// --- Puzzle Rush (timed board-vision drill) --------------------------------
+
+/** Starts a rush run: returns a run id + the escalating-difficulty puzzle set. */
+export async function startRush(mode: RushMode = '3min'): Promise<RushStartResponseDto> {
+  const res = await fetch(`${API}/api/puzzles/rush/start`, {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ mode }),
+  });
+  await ensureOk(res, 'rush start');
+  return res.json() as Promise<RushStartResponseDto>;
+}
+
+/** Records a finished rush run; returns the personal best + whether it's a PB. */
+export async function finishRush(body: {
+  mode: RushMode;
+  score: number;
+  durationMs?: number;
+}): Promise<RushFinishResponseDto> {
+  const res = await fetch(`${API}/api/puzzles/rush/finish`, {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(body),
+  });
+  await ensureOk(res, 'rush finish');
+  return res.json() as Promise<RushFinishResponseDto>;
+}
+
+/** The user's rush personal best per mode (for the pre-run screen). */
+export async function fetchRushPersonalBests(): Promise<RushPersonalBestsDto> {
+  const res = await fetch(`${API}/api/puzzles/rush/pb`, {
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+  });
+  await ensureOk(res, 'rush-pb fetch');
+  return res.json() as Promise<RushPersonalBestsDto>;
 }

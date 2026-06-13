@@ -2503,3 +2503,37 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:44 | Created apps/web/test/puzzle/training-session.test.tsx | — | ~1464 |
 | 12:44 | Edited apps/web/test/puzzle/training-session.test.tsx | CSS: timeout | ~194 |
 | 12:46 | Created docs/roadmap/purechess-improve/session-04-handoff.md | — | ~2070 |
+| 12:49 | Created packages/shared/src/dto/rush.dto.ts | — | ~576 |
+| 12:49 | Edited packages/shared/src/index.ts | 2→3 lines | ~29 |
+| 12:50 | Created apps/api/src/puzzles/puzzle-rush.service.ts | — | ~2568 |
+| 12:50 | Created apps/api/src/puzzles/dto/rush.dto.ts | — | ~225 |
+| 12:50 | Created apps/api/src/puzzles/puzzle-rush.controller.ts | — | ~757 |
+| 12:50 | Edited apps/api/src/puzzles/puzzles.module.ts | expanded (+8 lines) | ~183 |
+| 12:50 | Edited apps/web/src/lib/api/puzzles.ts | 8→12 lines | ~69 |
+| 12:51 | Edited apps/web/src/lib/api/puzzles.ts | modified fetchPuzzleRating() | ~532 |
+| 12:51 | Created apps/web/src/components/puzzle/rush-hud.tsx | — | ~1197 |
+| 12:52 | Created apps/web/src/app/puzzles/rush/rush-client.tsx | — | ~4748 |
+| 12:52 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | modified RushClient() | ~110 |
+| 12:52 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | modified if() | ~104 |
+| 12:52 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | modified RushRun() | ~73 |
+| 12:53 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | 14→12 lines | ~166 |
+| 12:53 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | CSS: b, current, current | ~266 |
+| 12:53 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | 3→8 lines | ~93 |
+| 12:53 | Edited apps/web/src/app/puzzles/rush/rush-client.tsx | modified if() | ~146 |
+| 12:53 | Created apps/web/src/app/puzzles/rush/page.tsx | — | ~383 |
+| 12:54 | Created apps/api/test/puzzles/puzzle-rush.service.spec.ts | — | ~2384 |
+| 12:54 | Edited apps/api/test/puzzles/puzzle-rush.service.spec.ts | added 1 condition(s) | ~359 |
+| 12:54 | Edited apps/api/src/puzzles/puzzle-rush.service.ts | 2→7 lines | ~101 |
+| 12:55 | Edited apps/api/test/puzzles/puzzle-rush.service.spec.ts | 7→8 lines | ~149 |
+| 12:56 | Created apps/web/test/puzzle/rush-client.test.tsx | — | ~2227 |
+| 12:56 | Edited apps/web/test/puzzle/rush-client.test.tsx | escalate() → start() | ~136 |
+| 12:57 | Edited apps/web/test/puzzle/rush-client.test.tsx | getByText() → getByRole() | ~83 |
+
+## Session 2026-06-13 — purechess-improve S05 Puzzle Rush
+| 12:50 | S05 rush shared DTOs | packages/shared/src/dto/rush.dto.ts + index.ts | added RushMode/Start/Finish/PB DTOs | ~1k |
+| 12:52 | PuzzleRushService (buildSet + recordRun, PB in Redis) | apps/api/src/puzzles/puzzle-rush.service.ts | escalating set + Redis PB hash | ~3k |
+| 12:54 | PuzzleRushController + body DTOs, additive module reg | apps/api/src/puzzles/puzzle-rush.controller.ts + dto/rush.dto.ts + puzzles.module.ts | POST start/finish, GET pb | ~2k |
+| 12:55 | web client fns + RushHud + rush page/client | apps/web/src/lib/api/puzzles.ts, components/puzzle/rush-hud.tsx, app/puzzles/rush/* | reuses clock-pulse + useLocalPuzzle | ~5k |
+| 12:57 | tests (service 12, client 6) green; all gates pass | test/puzzles/puzzle-rush.service.spec.ts, test/puzzle/rush-client.test.tsx | API 417, web 584 | ~4k |
+| 13:00 | prettier, cerebrum/buglog-522/anatomy/memory, handoff | .wolf/*, docs/roadmap/.../session-05-handoff.md | committed | ~2k |
+| 12:59 | Created docs/roadmap/purechess-improve/session-05-handoff.md | — | ~2790 |
