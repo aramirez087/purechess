@@ -2634,3 +2634,43 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 13:34 | repertoire-import.test.ts — 5 tests (known PGN → expected line count) | apps/web/test/openings | 5/5 pass | ~600 |
 | 13:45 | GATES: api tsc clean + 481 tests; shared build clean; web tsc clean + 595 tests; api lint clean. cerebrum+buglog+memory updated. | (gates) | all green | ~1500 |
 | 13:37 | Created docs/roadmap/purechess-improve/session-08-handoff.md | — | ~2652 |
+| 13:40 | Edited packages/shared/src/dto/repertoire.dto.ts | expanded (+63 lines) | ~882 |
+| 13:41 | Created apps/api/src/repertoire/repertoire-review.service.ts | — | ~3012 |
+| 13:41 | Edited apps/api/src/repertoire/dto/repertoire-body.dto.ts | 15→17 lines | ~84 |
+| 13:41 | Edited apps/api/src/repertoire/dto/repertoire-body.dto.ts | expanded (+14 lines) | ~140 |
+| 13:41 | Created apps/api/src/repertoire/repertoire-review.controller.ts | — | ~470 |
+| 13:41 | Edited apps/api/src/repertoire/repertoire.module.ts | 16→20 lines | ~261 |
+| 13:42 | Created apps/api/test/repertoire/repertoire-review.service.spec.ts | — | ~2940 |
+| 13:42 | Edited apps/api/test/repertoire/repertoire-review.service.spec.ts | modified lines() | ~96 |
+| 13:42 | Edited apps/api/test/repertoire/repertoire-review.service.spec.ts | 9→10 lines | ~150 |
+| 13:43 | Edited apps/api/test/repertoire/repertoire-review.service.spec.ts | expanded (+14 lines) | ~583 |
+| 13:43 | Edited apps/web/src/lib/api/repertoire.ts | 7→10 lines | ~60 |
+| 13:43 | Edited apps/web/src/lib/api/repertoire.ts | modified deleteRepertoire() | ~400 |
+| 13:44 | Created apps/web/src/hooks/use-opening-drill.ts | — | ~3124 |
+| 13:44 | Edited apps/web/src/hooks/use-opening-drill.ts | finishSession() → line() | ~586 |
+| 13:45 | Edited apps/web/src/hooks/use-opening-drill.ts | 6→5 lines | ~52 |
+| 13:45 | Edited apps/web/src/hooks/use-opening-drill.ts | modified userColorChar() | ~18 |
+| 13:45 | Edited apps/web/src/hooks/use-opening-drill.ts | pickInternal() → start() | ~148 |
+| 13:45 | Edited apps/web/src/hooks/use-opening-drill.ts | removed 13 lines | ~18 |
+| 13:45 | Edited apps/web/src/hooks/use-opening-drill.ts | added 1 condition(s) | ~108 |
+| 13:46 | Created apps/web/src/components/openings/opening-drill.tsx | — | ~3143 |
+| 13:46 | Edited apps/web/src/app/openings/openings-client.tsx | CSS: name | ~236 |
+| 13:46 | Edited apps/web/src/app/openings/openings-client.tsx | CSS: onDrill | ~353 |
+| 13:46 | Edited apps/web/src/app/openings/openings-client.tsx | CSS: staleTime, gcTime | ~160 |
+| 13:46 | Edited apps/web/src/app/openings/openings-client.tsx | CSS: queryKey | ~303 |
+| 13:46 | Edited apps/web/src/app/openings/openings-client.tsx | CSS: name | ~85 |
+| 13:47 | Created apps/web/test/openings/opening-drill.test.tsx | — | ~1983 |
+| 13:48 | Edited apps/web/test/openings/opening-drill.test.tsx | 4→7 lines | ~113 |
+| 13:48 | Edited apps/web/test/openings/opening-drill.test.tsx | 7→6 lines | ~95 |
+
+## Session: purechess-improve S09 — opening trainer (2026-06-13)
+| 13:30 | read S00/S09/S08/S06 specs + spaced-repetition.ts + repertoire.* + puzzle-utils + analysis-tree | docs, apps/api/src/repertoire, apps/web | context loaded | ~22k |
+| 13:35 | added drill DTOs (DrillLineDto/DrillLinesDto/GradeDrillDto/GradeDrillResultDto/DrillStepDto) + rebuilt shared | packages/shared/src/dto/repertoire.dto.ts | shared build clean | ~3k |
+| 13:40 | RepertoireReviewService (getDrillLines/grade/dueLineCount) + enumerateLines, REUSES schedule()+GRADUATION_INTERVAL_DAYS verbatim | apps/api/src/repertoire/repertoire-review.service.ts | tsc clean | ~4k |
+| 13:42 | RepertoireReviewController (GET :id/drill, POST :id/grade) + GradeDrillBodyDto + additive module registration | apps/api/src/repertoire/{repertoire-review.controller.ts,repertoire.module.ts,dto/repertoire-body.dto.ts} | tsc clean | ~2k |
+| 13:45 | API spec (12 tests): enumerateLines, due+new selection, cap, ownership 404, grade via shared scheduler, dueLineCount | apps/api/test/repertoire/repertoire-review.service.spec.ts | 493 pass (was 481) | ~3k |
+| 13:46 | use-opening-drill state machine (opponent auto-play, booked-move check, off-book=miss+arrow, leaf grade) | apps/web/src/hooks/use-opening-drill.ts | tsc clean | ~3k |
+| 13:47 | OpeningDrill component + wired Drill button + drill view into openings-client | apps/web/src/components/openings/opening-drill.tsx, app/openings/openings-client.tsx | tsc clean | ~3k |
+| 13:48 | web drill spec (6 tests) + extended repertoire.ts client (fetchDrillLines/gradeDrill) | apps/web/test/openings/opening-drill.test.tsx, lib/api/repertoire.ts | 601 pass (was 595) | ~3k |
+| 13:50 | all 4 gates green; handoff + cerebrum + buglog | docs/roadmap/purechess-improve/session-09-handoff.md | DONE | ~2k |
+| 13:50 | Created docs/roadmap/purechess-improve/session-09-handoff.md | — | ~2709 |

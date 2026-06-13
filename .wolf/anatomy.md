@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:37:30.617Z
-> Files: 1098 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:50:58.575Z
+> Files: 1105 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -920,14 +920,16 @@
 
 ## apps/api/src/repertoire/
 
+- `repertoire-review.controller.ts` — Opening trainer endpoints — drill the user's repertoire lines and grade them (~470 tok)
+- `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3012 tok)
 - `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
 - `repertoire.controller.ts` — Opening-repertoire CRUD + import. Every route is auth-gated and scoped to the (~668 tok)
-- `repertoire.module.ts` — Opening repertoires (CRUD + import). `AuthModule` supplies `SessionAuthGuard` (~158 tok)
+- `repertoire.module.ts` — Opening repertoires (CRUD + import) plus the opening trainer (drill + grade). (~262 tok)
 - `repertoire.service.ts` — Prisma `Repertoire` row plus the latest-review timestamp for the summary. (~2206 tok)
 
 ## apps/api/src/repertoire/dto/
 
-- `repertoire-body.dto.ts` — Request bodies for the repertoire controller. The tree is validated as a raw (~433 tok)
+- `repertoire-body.dto.ts` — Request bodies for the repertoire controller. The tree is validated as a raw (~558 tok)
 
 ## apps/api/src/reports/
 
@@ -1055,6 +1057,7 @@
 
 ## apps/api/test/repertoire/
 
+- `repertoire-review.service.spec.ts` — START_FEN: tree, repRow (~3147 tok)
 - `repertoire.service.spec.ts` — A small legal tree: 1.e4 e5 (one line). (~3442 tok)
 
 ## apps/api/test/reports/
@@ -1202,7 +1205,7 @@
 
 ## apps/web/src/app/openings/
 
-- `openings-client.tsx` — Relative "trained" label. (~1988 tok)
+- `openings-client.tsx` — Relative "trained" label. (~2398 tok)
 - `page.tsx` — dynamic (~262 tok)
 
 ## apps/web/src/app/profile/[username]/
@@ -1336,6 +1339,7 @@
 
 ## apps/web/src/components/openings/
 
+- `opening-drill.tsx` — Restart with a freshly fetched session. (~3143 tok)
 - `repertoire-explorer-builder.tsx` — Grows a repertoire tree from the start position. Reuses the analysis tree (~1026 tok)
 - `repertoire-import.tsx` — Total move nodes in the subtree (excluding the root). (~2888 tok)
 - `repertoire-view.tsx` — Read view for a saved repertoire: renders the stored tree with the SAME (~1079 tok)
@@ -1407,6 +1411,7 @@
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
 - `use-mistake-capture.ts` — Centipawn-loss floor for a move to count as a capturable mistake — mirrors the (~1220 tok)
 - `use-move-classifier.ts` — 1-based ply. (~2597 tok)
+- `use-opening-drill.ts` — Drives the opening trainer's state machine over a queued set of lines. (~2864 tok)
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
@@ -1428,7 +1433,7 @@
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
 - `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~2521 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
-- `repertoire.ts` — Client for the opening-repertoire API (`/repertoire`). Every call is (~1064 tok)
+- `repertoire.ts` — Client for the opening-repertoire API (`/repertoire`). Every call is (~1372 tok)
 
 ## apps/web/src/lib/board/
 
@@ -1558,6 +1563,7 @@
 
 ## apps/web/test/openings/
 
+- `opening-drill.test.tsx` — --- Mocks ------------------------------------------------------------------ (~2018 tok)
 - `repertoire-import.test.ts` — Importing a known PGN must yield the expected number of leaf lines — this is (~478 tok)
 
 ## apps/web/test/play/
@@ -1710,6 +1716,7 @@
 - `session-06-handoff.md` — Session 06 handoff — Spaced-repetition review (~2715 tok)
 - `session-07-handoff.md` — Session 07 handoff — Mistakes from your own games → puzzles (~3519 tok)
 - `session-08-handoff.md` — Session 08 handoff — Opening repertoire model + import (~2486 tok)
+- `session-09-handoff.md` — Session 09 handoff — Opening trainer (drill your lines) (~2540 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1759,7 +1766,7 @@
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
 - `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~2055 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
-- `repertoire.dto.ts` — Opening-repertoire DTOs shared between web and api. (~1082 tok)
+- `repertoire.dto.ts` — Opening-repertoire DTOs shared between web and api. (~1793 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
 - `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)
 

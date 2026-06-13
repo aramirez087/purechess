@@ -9,6 +9,9 @@
  */
 import type {
   CreateRepertoireDto,
+  DrillLinesDto,
+  GradeDrillDto,
+  GradeDrillResultDto,
   ImportRepertoireDto,
   RepertoireDto,
   RepertoireSummaryDto,
@@ -105,4 +108,33 @@ export async function deleteRepertoire(id: string): Promise<{ id: string }> {
   });
   await ensureOk(res, 'repertoire delete');
   return res.json() as Promise<{ id: string }>;
+}
+
+/**
+ * The lines to drill this session for a repertoire (due leaves first, then a
+ * few never-trained lines). The board plays the opponent's replies; the user
+ * supplies the booked moves for their color.
+ */
+export async function fetchDrillLines(id: string): Promise<DrillLinesDto> {
+  const res = await fetch(`${API}/api/repertoire/${encodeURIComponent(id)}/drill`, {
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+  });
+  await ensureOk(res, 'drill lines');
+  return res.json() as Promise<DrillLinesDto>;
+}
+
+/** Grade a drilled line — reschedules it via the shared spaced-repetition queue. */
+export async function gradeDrill(
+  id: string,
+  body: GradeDrillDto,
+): Promise<GradeDrillResultDto> {
+  const res = await fetch(`${API}/api/repertoire/${encodeURIComponent(id)}/grade`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    credentials: 'include',
+    body: JSON.stringify(body),
+  });
+  await ensureOk(res, 'drill grade');
+  return res.json() as Promise<GradeDrillResultDto>;
 }

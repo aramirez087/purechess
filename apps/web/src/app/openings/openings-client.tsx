@@ -3,19 +3,25 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { BookOpen, Plus } from 'lucide-react';
+import { BookOpen, Plus, Target } from 'lucide-react';
 import type { RepertoireDto, RepertoireSummaryDto } from '@purechess/shared';
 import {
   deleteRepertoire,
+  fetchDrillLines,
   getRepertoire,
   listRepertoires,
 } from '@/lib/api/repertoire';
 import { Button } from '@/components/ui/button';
 import { RepertoireImport } from '@/components/openings/repertoire-import';
 import { RepertoireView } from '@/components/openings/repertoire-view';
+import { OpeningDrill } from '@/components/openings/opening-drill';
 import { cn } from '@/lib/utils';
 
-type View = { kind: 'list' } | { kind: 'new' } | { kind: 'read'; id: string };
+type View =
+  | { kind: 'list' }
+  | { kind: 'new' }
+  | { kind: 'read'; id: string }
+  | { kind: 'drill'; id: string; name: string };
 
 /** Relative "trained" label. */
 function lastTrainedLabel(iso?: string): string {
@@ -52,17 +58,19 @@ function ColorChip({ color }: { color: 'white' | 'black' }) {
 function RepertoireRow({
   rep,
   onOpen,
+  onDrill,
 }: {
   rep: RepertoireSummaryDto;
   onOpen: () => void;
+  onDrill: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="flex w-full items-center justify-between gap-4 rounded-[10px] border border-border bg-surface/60 px-4 py-3.5 text-left transition-colors hover:border-brass/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/50"
-    >
-      <div className="min-w-0">
+    <div className="flex w-full items-center justify-between gap-3 rounded-[10px] border border-border bg-surface/60 px-4 py-3.5 transition-colors hover:border-brass/50">
+      <button
+        type="button"
+        onClick={onOpen}
+        className="min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/50 rounded-md"
+      >
         <div className="flex items-center gap-2">
           <span className="truncate font-medium text-foreground">{rep.name}</span>
           <ColorChip color={rep.color} />
@@ -71,9 +79,18 @@ function RepertoireRow({
           {rep.lineCount} line{rep.lineCount === 1 ? '' : 's'} · {rep.nodeCount} move
           {rep.nodeCount === 1 ? '' : 's'} · {lastTrainedLabel(rep.lastTrainedAt)}
         </p>
-      </div>
-      <span className="shrink-0 text-sm text-brass">Open</span>
-    </button>
+      </button>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={onDrill}
+        disabled={rep.lineCount === 0}
+        className="shrink-0"
+      >
+        <Target className="h-4 w-4" aria-hidden="true" />
+        Drill
+      </Button>
+    </div>
   );
 }
 
@@ -97,6 +114,15 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
     queryKey: ['repertoire', view.kind === 'read' ? view.id : null],
     queryFn: () => getRepertoire((view as { kind: 'read'; id: string }).id),
     enabled: view.kind === 'read',
+  });
+
+  const drillSession = useQuery({
+    queryKey: ['repertoire-drill', view.kind === 'drill' ? view.id : null],
+    queryFn: () => fetchDrillLines((view as { kind: 'drill'; id: string }).id),
+    enabled: view.kind === 'drill',
+    // A fresh session every time the user opens the drill (no stale due set).
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const del = useMutation({
@@ -152,6 +178,26 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
     );
   }
 
+  if (view.kind === 'drill') {
+    if (drillSession.isLoading || !drillSession.data) {
+      return <p className="py-10 text-center text-sm text-muted-foreground">Loading drill…</p>;
+    }
+    return (
+      <div className="mx-auto max-w-4xl">
+        <OpeningDrill
+          repertoireId={view.id}
+          repertoireName={view.name}
+          drill={drillSession.data}
+          onBack={() => {
+            queryClient.invalidateQueries({ queryKey: ['repertoires'] });
+            setView({ kind: 'list' });
+          }}
+          onRestart={() => drillSession.refetch()}
+        />
+      </div>
+    );
+  }
+
   // view.kind === 'list'
   const repertoires = list.data ?? [];
   return (
@@ -190,6 +236,7 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
               key={rep.id}
               rep={rep}
               onOpen={() => setView({ kind: 'read', id: rep.id })}
+              onDrill={() => setView({ kind: 'drill', id: rep.id, name: rep.name })}
             />
           ))}
         </div>

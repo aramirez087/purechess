@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsObject,
   IsOptional,
@@ -8,6 +9,7 @@ import {
 } from 'class-validator';
 import type {
   CreateRepertoireDto,
+  GradeDrillDto,
   ImportRepertoireDto,
   RepertoireColorDto,
   RepertoireNodeDto,
@@ -66,4 +68,18 @@ export class ImportRepertoireBodyDto implements ImportRepertoireDto {
   @IsString()
   @MaxLength(2_000_000)
   declare pgn?: string;
+}
+
+/**
+ * Body for `POST /repertoire/:id/grade` — the outcome of drilling one line.
+ * `nodePath` is the line's serialized leaf path; `correctFirstTry` is true only
+ * when every user move in the line was right on the first attempt.
+ */
+export class GradeDrillBodyDto implements GradeDrillDto {
+  @IsString()
+  @MaxLength(2000)
+  declare nodePath: string;
+
+  @IsBoolean()
+  declare correctFirstTry: boolean;
 }

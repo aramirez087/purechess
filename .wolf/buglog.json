@@ -8853,6 +8853,90 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-13T20:40:00.000Z"
+    },
+    {
+      "id": "bug-538",
+      "timestamp": "2026-06-13T19:41:34.772Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/api/src/repertoire/repertoire.module.ts",
+      "root_cause": "5 lines replaced/restructured",
+      "fix": "Rewrote 16\u219220 lines (5 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T19:41:34.772Z"
+    },
+    {
+      "id": "bug-539",
+      "timestamp": "2026-06-13T19:43:07.476Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "root_cause": "11 lines replaced/restructured",
+      "fix": "Rewrote 28\u219242 lines (11 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T19:43:07.476Z"
+    },
+    {
+      "id": "bug-540",
+      "timestamp": "2026-06-13T19:46:26.944Z",
+      "error_message": "CSS fix: kind",
+      "file": "apps/web/src/app/openings/openings-client.tsx",
+      "root_cause": "kind: 'read' \u2192 'drill'",
+      "fix": "Changed kind: 'read' \u2192 'drill'",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 4,
+      "last_seen": "2026-06-13T19:46:58.781Z"
+    },
+    {
+      "id": "bug-541",
+      "timestamp": "2026-06-13T19:48:03.541Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/test/openings/opening-drill.test.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 4\u21927 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T19:48:03.541Z"
+    },
+    {
+      "id": "bug-538",
+      "timestamp": "2026-06-13T13:46:00.000Z",
+      "error_message": "S09 drill spec: expect(paths).toEqual(['0.0','0.0.0.0','0.1']) failed \u2014 got ['0.0.0.0','0.1']; dueLineCount expected 2 got 1",
+      "file": "apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "root_cause": "Test fixture treated an INTERIOR node (e5 at path 0.0) as a drillable line. enumerateLines only emits LEAF paths (children.length===0); e5 continues into Nf3 so it is not a leaf. A due card on a non-leaf path is also ignored by getDrillLines (path-resolves check).",
+      "fix": "Corrected the fixture: the 1.e4 e5 2.Nf3 Nc6 tree has exactly two leaf lines (0.0.0.0 and 0.1), not three. Re-pointed the due-card test to a real leaf path. All 12 spec tests pass.",
+      "tags": [
+        "repertoire",
+        "drill",
+        "s09",
+        "improve",
+        "enumerate-lines",
+        "test-fixture",
+        "leaf-path"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T13:46:00.000Z"
     }
   ]
 }

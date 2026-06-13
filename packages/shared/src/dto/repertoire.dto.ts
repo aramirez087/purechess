@@ -107,3 +107,66 @@ export interface ImportRepertoireDto {
   /** Raw PGN, parsed server-side when no `tree` is given. */
   pgn?: string;
 }
+
+// --- Opening trainer (drill your lines, S09) -------------------------------
+//
+// Drilling a repertoire walks each root→leaf "line" from the user's side: the
+// not-user-color nodes auto-play (the opponent's booked reply), and on the
+// user-color nodes the user must produce the booked move. A line whose leaf is
+// "due" (RepertoireReview.dueAt <= now) — plus a few never-trained lines — is
+// queued for the session; grading a line reschedules it via the shared SM-2
+// scheduler (the same one the puzzle review queue uses).
+
+/** One ply of a drill line: the move plus the position it leads to. */
+export interface DrillStepDto {
+  /** SAN that led here. */
+  san: string;
+  /** UCI that led here (king-destination form for castling). */
+  uci: string;
+  /** Position AFTER this move. */
+  fen: string;
+}
+
+/**
+ * One line to drill: a root→leaf path through the tree, with the serialized
+ * `nodePath` it is scheduled under (RepertoireReview.nodePath) and whether it
+ * has ever been trained before.
+ */
+export interface DrillLineDto {
+  /** Serialized path to the leaf (RepertoireReview.nodePath; `''` = root). */
+  nodePath: string;
+  /** Start position of the line (the repertoire's rootFen). */
+  rootFen: string;
+  /** Every ply from the root to the leaf, in order. */
+  steps: DrillStepDto[];
+  /** True when this line has no RepertoireReview row yet (never trained). */
+  isNew: boolean;
+}
+
+/** GET /repertoire/:id/drill — the lines to train this session. */
+export interface DrillLinesDto {
+  repertoireId: string;
+  /** White or black — which side the user plays (and which moves they supply). */
+  color: RepertoireColorDto;
+  /** The lines queued for this session (due leaves first, then a few new). */
+  lines: DrillLineDto[];
+  /** Total lines whose leaf is due now (may exceed `lines.length` when capped). */
+  dueLineCount: number;
+}
+
+/** Body for `POST /repertoire/:id/grade` — the outcome of drilling one line. */
+export interface GradeDrillDto {
+  /** The drilled line's serialized leaf path (RepertoireReview.nodePath). */
+  nodePath: string;
+  /** True only when EVERY user move in the line was correct on the first try. */
+  correctFirstTry: boolean;
+}
+
+/** POST /repertoire/:id/grade — the rescheduled line after a graded drill. */
+export interface GradeDrillResultDto {
+  nodePath: string;
+  /** ISO time this line is next due to be drilled. */
+  nextDueAt: string;
+  /** The line's scheduling interval (days) after this grade. */
+  intervalDays: number;
+}

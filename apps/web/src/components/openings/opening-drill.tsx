@@ -1,0 +1,313 @@
+'use client';
+
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { ArrowLeft, Check, RotateCcw, Target } from 'lucide-react';
+import type { DrillLinesDto, MoveIntent } from '@purechess/shared';
+import { Chessboard } from '@/components/board';
+import { BoardSettingsProvider } from '@/components/board/board-context';
+import { Button } from '@/components/ui/button';
+import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
+import { gradeDrill } from '@/lib/api/repertoire';
+import {
+  useOpeningDrill,
+  type DrillLineResult,
+  type DrillSummary,
+} from '@/hooks/use-opening-drill';
+import { cn } from '@/lib/utils';
+
+export interface OpeningDrillProps {
+  repertoireId: string;
+  repertoireName: string;
+  drill: DrillLinesDto;
+  onBack: () => void;
+  /** Restart with a freshly fetched session. */
+  onRestart?: () => void;
+}
+
+/** Quiet "to move" label + line/move progress. */
+function DrillPrompt({
+  toMove,
+  outOfBook,
+  lineNumber,
+  totalLines,
+  moveNumber,
+  lineLength,
+}: {
+  toMove: 'white' | 'black';
+  outOfBook: boolean;
+  lineNumber: number;
+  totalLines: number;
+  moveNumber: number;
+  lineLength: number;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3 text-sm">
+      <span
+        className={cn(
+          'inline-flex items-center gap-2 font-medium',
+          outOfBook ? 'text-destructive' : 'text-foreground',
+        )}
+      >
+        <span
+          aria-hidden="true"
+          className={cn(
+            'h-2.5 w-2.5 rounded-full ring-1 ring-border',
+            toMove === 'white' ? 'bg-[#f0ede5]' : 'bg-[#1a1e19]',
+          )}
+        />
+        {outOfBook ? 'Out of book — the booked move is shown' : `${toMove} to move`}
+      </span>
+      <span className="tabular-nums text-muted-foreground">
+        Line {lineNumber}/{totalLines} · move {moveNumber} of {lineLength}
+      </span>
+    </div>
+  );
+}
+
+/** End-of-session readout: lines trained, % first-try, per-line next-due. */
+function DrillSummaryView({
+  summary,
+  nextDueByPath,
+  onBack,
+  onRestart,
+}: {
+  summary: DrillSummary;
+  nextDueByPath: Map<string, string>;
+  onBack: () => void;
+  onRestart?: () => void;
+}) {
+  const pct = Math.round(summary.firstTryRate * 100);
+  return (
+    <div className="space-y-5 rounded-[12px] border border-border bg-surface/60 p-6 text-center">
+      <Check className="mx-auto h-8 w-8 text-brass" aria-hidden="true" />
+      <div>
+        <h2 className="font-display text-2xl italic text-foreground">Session complete</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {summary.linesTrained} line{summary.linesTrained === 1 ? '' : 's'} trained ·{' '}
+          <span className="font-medium text-foreground">{pct}%</span> first-try
+        </p>
+      </div>
+
+      {summary.results.length > 0 && (
+        <ul className="mx-auto max-w-sm space-y-1.5 text-left text-sm">
+          {summary.results.map((r, i) => (
+            <li
+              key={r.nodePath + i}
+              className="flex items-center justify-between gap-3 rounded-md border border-border bg-background/40 px-3 py-2"
+            >
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1.5',
+                  r.correctFirstTry ? 'text-success' : 'text-destructive',
+                )}
+              >
+                {r.correctFirstTry ? (
+                  <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                ) : (
+                  <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                )}
+                {r.correctFirstTry ? 'Clean' : `${r.misses} miss${r.misses === 1 ? '' : 'es'}`}
+              </span>
+              <span className="tabular-nums text-muted-foreground">
+                {nextDueLabel(nextDueByPath.get(r.nodePath))}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="flex items-center justify-center gap-2">
+        <Button variant="ghost" onClick={onBack}>
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to repertoire
+        </Button>
+        {onRestart && (
+          <Button onClick={onRestart}>
+            <RotateCcw className="h-4 w-4" aria-hidden="true" /> Drill again
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** Relative "next due" label for a grade result. */
+function nextDueLabel(iso?: string): string {
+  if (!iso) return '';
+  const days = Math.round((new Date(iso).getTime() - Date.now()) / 86_400_000);
+  if (days <= 0) return 'Due again today';
+  if (days === 1) return 'Next: tomorrow';
+  return `Next: ${days}d`;
+}
+
+/**
+ * The opening trainer surface. Walks the queued lines with the same Chessboard
+ * the rest of the app uses: opponent replies auto-play, the user must produce
+ * the booked move, and an off-book legal move draws the book-move arrow (via
+ * the existing `autoShapes` annotation support — NOT a fork) and counts as a
+ * miss. Each finished line is graded into the spaced-repetition queue; the
+ * session ends with a lines-trained / first-try / next-due readout.
+ *
+ * Server-authoritative: the client reports each line's `correctFirstTry`; the
+ * server owns the scheduling math and returns the next-due date.
+ */
+export function OpeningDrill({
+  repertoireId,
+  repertoireName,
+  drill,
+  onBack,
+  onRestart,
+}: OpeningDrillProps) {
+  const [started, setStarted] = useState(false);
+  // Per-line next-due, captured from each grade response, for the summary.
+  const nextDueByPath = useRef<Map<string, string>>(new Map());
+
+  const handleGradeLine = useCallback(
+    (result: DrillLineResult) => {
+      // Fire-and-forget: persist the grade, stash the next-due for the summary.
+      gradeDrill(repertoireId, {
+        nodePath: result.nodePath,
+        correctFirstTry: result.correctFirstTry,
+      })
+        .then((res) => {
+          nextDueByPath.current.set(result.nodePath, res.nextDueAt);
+        })
+        .catch(() => {
+          // A grade write failing never blocks the drill — the queue is best-effort.
+        });
+    },
+    [repertoireId],
+  );
+
+  const { state, start, onMove } = useOpeningDrill({
+    lines: drill.lines,
+    color: drill.color,
+    onGradeLine: handleGradeLine,
+  });
+
+  const handleStart = useCallback(() => {
+    setStarted(true);
+    start();
+  }, [start]);
+
+  const handleMove = useCallback((intent: MoveIntent) => onMove(intent), [onMove]);
+
+  // The book-move correction arrow (existing annotation support), green.
+  const autoShapes = useMemo<BoardShape[]>(() => {
+    if (!state.bookMove) return [];
+    const arrow = bestMoveArrow(state.bookMove, 'green');
+    return arrow ? [arrow] : [];
+  }, [state.bookMove]);
+
+  const toMove: 'white' | 'black' = state.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+
+  // --- Empty queue: nothing due, nothing new --------------------------------
+  if (drill.lines.length === 0) {
+    return (
+      <div className="space-y-5">
+        <DrillHeader name={repertoireName} onBack={onBack} dueLineCount={drill.dueLineCount} />
+        <div className="rounded-[12px] border border-dashed border-border bg-surface/40 p-10 text-center">
+          <Check className="mx-auto mb-3 h-7 w-7 text-brass" aria-hidden="true" />
+          <p className="font-medium text-foreground">Nothing to drill right now</p>
+          <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
+            Every line is up to date. Come back when lines are due, or add more lines to this
+            repertoire.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <BoardSettingsProvider>
+      <div className="space-y-5">
+        <DrillHeader name={repertoireName} onBack={onBack} dueLineCount={drill.dueLineCount} />
+
+        {!started ? (
+          <div className="rounded-[12px] border border-border bg-surface/60 p-8 text-center">
+            <Target className="mx-auto mb-3 h-7 w-7 text-brass" aria-hidden="true" />
+            <p className="font-medium text-foreground">
+              {drill.lines.length} line{drill.lines.length === 1 ? '' : 's'} ready
+            </p>
+            <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
+              Play your booked moves — the opponent replies for you. Off-book moves are flagged
+              and the line comes back sooner.
+            </p>
+            <Button className="mt-5" onClick={handleStart} data-testid="drill-start">
+              Start drilling
+            </Button>
+          </div>
+        ) : state.phase === 'done' && state.summary ? (
+          <DrillSummaryView
+            summary={state.summary}
+            nextDueByPath={nextDueByPath.current}
+            onBack={onBack}
+            onRestart={onRestart}
+          />
+        ) : (
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+            <div className="mx-auto w-full max-w-[460px] space-y-3">
+              <DrillPrompt
+                toMove={toMove}
+                outOfBook={!!state.bookMove}
+                lineNumber={state.lineNumber}
+                totalLines={state.totalLines}
+                moveNumber={state.moveNumber}
+                lineLength={state.lineLength}
+              />
+              <Chessboard
+                position={state.fen}
+                orientation={drill.color}
+                onMove={handleMove}
+                lastMove={
+                  state.lastMove
+                    ? { from: state.lastMove[0] as never, to: state.lastMove[1] as never }
+                    : undefined
+                }
+                autoShapes={autoShapes}
+              />
+            </div>
+            <aside className="hidden lg:block">
+              <div className="rounded-[10px] border border-border bg-surface/60 p-4 text-sm">
+                <p className="font-medium text-foreground">{repertoireName}</p>
+                <p className="mt-1 text-muted-foreground">
+                  Drilling {drill.color}. {state.totalLines} line
+                  {state.totalLines === 1 ? '' : 's'} this session.
+                </p>
+              </div>
+            </aside>
+          </div>
+        )}
+      </div>
+    </BoardSettingsProvider>
+  );
+}
+
+function DrillHeader({
+  name,
+  onBack,
+  dueLineCount,
+}: {
+  name: string;
+  onBack: () => void;
+  dueLineCount: number;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <button
+        type="button"
+        onClick={onBack}
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back
+      </button>
+      <div className="flex items-center gap-2">
+        <h2 className="font-display text-xl italic text-foreground">Drill: {name}</h2>
+        {dueLineCount > 0 && (
+          <span className="rounded-full border border-brass/40 bg-brass/10 px-2 py-0.5 text-xs font-medium text-brass">
+            {dueLineCount} due
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
