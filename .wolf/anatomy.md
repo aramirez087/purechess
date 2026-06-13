@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T19:50:58.575Z
-> Files: 1105 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T20:08:10.997Z
+> Files: 1134 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -30,6 +30,8 @@
 - `qnotch.mjs` — wQ crown: M9 26 c8.5-1.5 21-1.5 27 0 l2-12 l-7 11 V11 l-5.5 13.5 l-3-15 l-3 15 l-5.5-14 V25 L7 14 z (~612 tok)
 - `sheen-math.mjs` — CSS gradient: 166deg, stops: 0% white a=0.06, 34% white a=0, 70% black a=0.04, 100% black a=0.11 (~638 tok)
 - `stacking-repro.html` — Declares html (~476 tok)
+- `verify-fens.cjs` — Declares fens (~544 tok)
+- `verify-fens2.cjs` — Declares drills (~793 tok)
 - `walnut-contrast.mjs` — hsl: over, lum, cr (~414 tok)
 
 ## ../../../../tmp/bq-render/
@@ -684,13 +686,26 @@
 
 - `apps/api/prisma/migrations/20260613181114_improve_foundation/migration.sql` — creates all 11 tables, 4 enums, GIN on Puzzle.themes, rating B-tree, all (userId,*) indexes + User back-relations. (~1100 tok)
 - `apps/api/prisma/schema.prisma` — +11 training models (Puzzle, PuzzleAttempt, PuzzleRating, PuzzleReview, GameMistake, Repertoire, RepertoireReview, EndgameDrill, EndgameAttempt, TrainingStreak, TrainingDay) + 4 enums (PuzzleAttemptSource, RepertoireColor, EndgameCategory, EndgameObjective). Schema FROZEN for the epic. (~2900 tok)
-- `apps/web/src/app/endgames/page.tsx` — endgame drills shell (Castle icon, auth-aware). (~170 tok)
+- `apps/api/prisma/seed/endgame-drills.ts` — S10 seed. ENDGAME_DRILLS (25 curated, all 6 families) + assertLegalFen/assertAllLegal (chess.js legal+not-check+not-over, runtime-verified pre-write) + seedEndgameDrills (idempotent upsert by slug). CLI = db:seed-endgames. (~1400 tok)
+- `apps/api/src/endgames/dto/attempt.dto.ts` — RecordEndgameAttemptDto {succeeded: bool, movesPlayed: int>=0}. (~80 tok)
+- `apps/api/src/endgames/dto/probe.dto.ts` — ProbeFenDto {fen: string @MinLength(1)}. (~60 tok)
+- `apps/api/src/endgames/endgames.controller.ts` — S10 @Controller('endgames'): GET / + /:slug (OptionalSessionAuthGuard), POST /:slug/probe (public proxy), POST /:slug/attempt (SessionAuthGuard). (~420 tok)
+- `apps/api/src/endgames/endgames.module.ts` — S10 EndgamesModule: imports AuthModule, controllers EndgamesController, providers+exports EndgamesService+TablebaseService. (~140 tok)
+- `apps/api/src/endgames/endgames.service.ts` — S10: list(userId?) merges per-user pass/fail (groupBy _max.succeeded), getBySlug, probe(slug,fen) (404s unknown slug), recordAttempt → EndgameAttempt. Server-authoritative. (~700 tok)
+- `apps/api/src/endgames/tablebase.service.ts` — S10 lichess tablebase proxy. probe(fen)→{category,bestMove?,dtm?}. Redis key endgame:tb:<fen> 30d hard cache; >7 men→unknown (no call); 4s timeout/error→unknown (uncached). normalize/countMen/mapCategory exported pure. (~700 tok)
+- `apps/api/test/endgames/endgames.service.spec.ts` — Jest: EndgamesService list/getBySlug/probe/recordAttempt (mock Prisma+TablebaseService); TablebaseService cache-hard/>7-men/error-degrade/loss-map (Redis double + fetch spy). 14 tests. (~1100 tok)
+- `apps/web/src/app/endgames/endgames-client.tsx` — S10 endgames surface: categorized drill list w/ pass/fail ticks + ObjectiveBadge, Practice opens PracticeBoard (useEndgameDrill + Chessboard, Stockfish getBestMove(_,8,2000) defender, probeEndgame, recordEndgameAttempt fire-and-forget, "Show best move" reveal arrow, Try-again remount). TanStack ['endgame-drills']. (~1600 tok)
+- `apps/web/src/app/endgames/page.tsx` — endgame drills server shell (AppShell + buildMetadata + serverFetch auth-me); mounts <EndgamesClient signedOut>. (~170 tok)
 - `apps/web/src/app/openings/page.tsx` — repertoire shell (BookOpen icon, auth-aware). (~170 tok)
 - `apps/web/src/app/train/page.tsx` — Improve hub shell (Target icon, auth-aware via /api/auth/me, force-dynamic). (~180 tok)
 - `apps/web/src/components/improve/training-placeholder.tsx` — shared Improve empty-state (icon, eyebrow, Fraunces title, "Coming together" list, signed-out sign-in prompt, related pills). Silent Tournament voice. (~520 tok)
+- `apps/web/src/hooks/use-endgame-drill.ts` — S10 ASYNC drill state machine. positionStatus(fen) + isSlip(objective,defCat) exported pure (chess.js). onMove probes after each user move (defender-POV), isSlip flips→threw-win/lost-draw fail, defender reply = probe.bestMove|engineMoveFn, success=mate|hard-draw|DRAW_HOLD_MOVES. (~1500 tok)
+- `apps/web/src/lib/api/endgames.ts` — S10 web client for /endgames: listEndgameDrills/getEndgameDrill (public), probeEndgame (server tablebase proxy), recordEndgameAttempt (auth). credentials:'include'. (~520 tok)
+- `apps/web/test/endgames/use-endgame-drill.test.ts` — Vitest: positionStatus/isSlip pure; mate→success; category-flip→threw-win fail; defender from probe vs Stockfish; illegal ignored; stalemate draw-pass. Real chess.js, inject probeFn/engineMoveFn. (~900 tok)
 - `docs/roadmap/purechess-improve/baselines.md` — daily-puzzle load timings, new-route empty-states, Puzzle EXPLAIN baseline + targets. (~700 tok)
 - `docs/roadmap/purechess-improve/data-model.md` — ER sketch, per-model column tables, index rationale, enum choices. The frozen-contract map. (~1500 tok)
 - `docs/roadmap/purechess-improve/session-01-handoff.md` — frozen contract (models/columns/indexes/enums), DTO shapes, reuse anchors, open issues for Wave 3. (~1600 tok)
+- `packages/shared/src/dto/endgame.dto.ts` — S10 DTOs: EndgameDrillDto (slug/name/category/fen/objective/targetDtm?/difficulty/attempted?/solved?), EndgameProbeDto (category win|draw|loss|unknown, bestMove?, dtm?), EndgameAttemptInputDto, EndgameAttemptResultDto. (~430 tok)
 - `packages/shared/src/dto/puzzle.dto.ts` — PuzzleDto, PuzzleAttemptResultDto, PuzzleThemeDto, PuzzleThemeStatDto, PuzzleRatingDto + PuzzleSource type. Plain interfaces, optional-friendly. (~320 tok)
 - `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. (~340 tok)
 
@@ -702,7 +717,7 @@
 - `fly.toml` (~195 tok)
 - `jest.e2e.config.js` (~117 tok)
 - `nest-cli.json` (~62 tok)
-- `package.json` — Node.js package manifest (~897 tok)
+- `package.json` — Node.js package manifest (~924 tok)
 - `README.md` — Project documentation (~554 tok)
 - `tsconfig.build.json` — TypeScript build configuration (~31 tok)
 - `tsconfig.json` — TypeScript configuration (~128 tok)
@@ -737,6 +752,10 @@
 
 - `migration.sql` — AlterTable (~54 tok)
 
+## apps/api/prisma/seed/
+
+- `endgame-drills.ts` — endgame-drills.ts — seed the curated EndgameDrill bank. (~3005 tok)
+
 ## apps/api/scripts/
 
 - `README.md` — Points at the puzzle-db-refresh runbook; documents seed-puzzles.ts usage + that the dump is git-ignored. (~264 tok)
@@ -745,7 +764,7 @@
 ## apps/api/src/
 
 - `app.controller.ts` — Exports AppController (~157 tok)
-- `app.module.ts` — API routes: GET (2 endpoints) (~828 tok)
+- `app.module.ts` — API routes: GET (2 endpoints) (~851 tok)
 - `app.service.ts` — Exports HealthStatus, AppService (~337 tok)
 - `main.ts` — Declares bootstrap (~481 tok)
 
@@ -836,6 +855,18 @@
 
 - `database.module.ts` — Exports DatabaseModule (~61 tok)
 - `prisma.service.ts` — Stay under Neon's default 5-min autosuspend window so the compute never sleeps. (~409 tok)
+
+## apps/api/src/endgames/
+
+- `endgames.controller.ts` — Endgame drills — the curated must-know endgame bank, tablebase proxy, and (~715 tok)
+- `endgames.module.ts` — Endgame drills (curated bank + tablebase proxy + attempt recording). (~264 tok)
+- `endgames.service.ts` — The EndgameDrill columns we read for a DTO (the row shape, loosely typed). (~1550 tok)
+- `tablebase.service.ts` — Probe of a single position against the lichess tablebase, normalized for our (~1625 tok)
+
+## apps/api/src/endgames/dto/
+
+- `attempt.dto.ts` — Body for `POST /endgames/:slug/attempt`. The client reports only the outcome (~104 tok)
+- `probe.dto.ts` — Body for `POST /endgames/:slug/probe` — the FEN to probe. (~58 tok)
 
 ## apps/api/src/games/
 
@@ -1003,6 +1034,10 @@
 - `matchmaking.e2e-spec.ts` — API routes: POST, DELETE, GET (6 endpoints) (~1684 tok)
 - `ratings.e2e-spec.ts` — API routes: GET, POST (2 endpoints) (~448 tok)
 - `setup.ts` — API routes: POST (1 endpoints) (~519 tok)
+
+## apps/api/test/endgames/
+
+- `endgames.service.spec.ts` — DRILL_A: makeRedis, build (~2945 tok)
 
 ## apps/api/test/engine/
 
@@ -1184,7 +1219,8 @@
 
 ## apps/web/src/app/endgames/
 
-- `page.tsx` — dynamic (~452 tok)
+- `endgames-client.tsx` — Stockfish fallback defender: tough play at a high movetime. (~3909 tok)
+- `page.tsx` — dynamic (~246 tok)
 
 ## apps/web/src/app/games/
 
@@ -1401,6 +1437,7 @@
 ## apps/web/src/hooks/
 
 - `use-analysis-tree.ts` — All legal moves at the current position; empty while chess.js loads. (~1222 tok)
+- `use-endgame-drill.ts` — Drives an endgame drill: the user plays their side on the board and converts (~3248 tok)
 - `use-game-history.ts` — Exports useGameHistory (~482 tok)
 - `use-game-keyboard.ts` — Exports UseGameKeyboardOptions, useGameKeyboard (~660 tok)
 - `use-game-review.ts` — Exports GameReviewState, useGameReview (~430 tok)
@@ -1430,6 +1467,7 @@
 
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
+- `endgames.ts` — Client for the endgame-drills API (`/endgames`). (~826 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)
 - `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~2521 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
@@ -1532,6 +1570,10 @@
 ## apps/web/test/editor/
 
 - `editor-board.test.tsx` — square (~869 tok)
+
+## apps/web/test/endgames/
+
+- `use-endgame-drill.test.ts` — WIN_DRILL: intent (~2387 tok)
 
 ## apps/web/test/game/
 
@@ -1717,6 +1759,7 @@
 - `session-07-handoff.md` — Session 07 handoff — Mistakes from your own games → puzzles (~3519 tok)
 - `session-08-handoff.md` — Session 08 handoff — Opening repertoire model + import (~2486 tok)
 - `session-09-handoff.md` — Session 09 handoff — Opening trainer (drill your lines) (~2540 tok)
+- `session-10-handoff.md` — Session 10 handoff — Endgame drills (vs tablebase) (~2351 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1755,13 +1798,14 @@
 
 ## packages/shared/src/
 
-- `index.ts` (~174 tok)
+- `index.ts` (~184 tok)
 - `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
 
 ## packages/shared/src/dto/
 
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
+- `endgame.dto.ts` — Endgame-drill DTOs (`@purechess/shared`). Plain TS interfaces, zero runtime (~904 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
 - `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~2055 tok)

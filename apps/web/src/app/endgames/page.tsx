@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import { Castle } from 'lucide-react';
 import type { SafeUser } from '@purechess/shared';
 import { AppShell } from '@/components/layout/AppShell';
-import { TrainingPlaceholder } from '@/components/improve/training-placeholder';
+import { EndgamesClient } from './endgames-client';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
 
@@ -23,23 +22,7 @@ export default async function EndgamesPage() {
 
   return (
     <AppShell>
-      <TrainingPlaceholder
-        icon={Castle}
-        eyebrow="Improve"
-        title="Endgames"
-        description="Winning a won position is a skill you can train. Drill curated endgames against perfect play and learn the technique."
-        upcoming={[
-          'A curated set of must-know endgames, by family',
-          'Convert and defend against tablebase-perfect play',
-          'Clear pass/fail with the line you should have found',
-          'Your weakest endgame family surfaced from your games',
-        ]}
-        signedOut={signedOut}
-        related={[
-          { href: '/train', label: 'Training hub' },
-          { href: '/openings', label: 'Openings' },
-        ]}
-      />
+      <EndgamesClient signedOut={signedOut} />
     </AppShell>
   );
 }

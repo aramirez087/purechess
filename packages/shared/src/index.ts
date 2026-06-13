@@ -17,3 +17,4 @@ export * from './dto/puzzle.dto';
 export * from './dto/training.dto';
 export * from './dto/rush.dto';
 export * from './dto/repertoire.dto';
+export * from './dto/endgame.dto';

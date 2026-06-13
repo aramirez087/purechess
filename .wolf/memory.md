@@ -2674,3 +2674,38 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 13:48 | web drill spec (6 tests) + extended repertoire.ts client (fetchDrillLines/gradeDrill) | apps/web/test/openings/opening-drill.test.tsx, lib/api/repertoire.ts | 601 pass (was 595) | ~3k |
 | 13:50 | all 4 gates green; handoff + cerebrum + buglog | docs/roadmap/purechess-improve/session-09-handoff.md | DONE | ~2k |
 | 13:50 | Created docs/roadmap/purechess-improve/session-09-handoff.md | — | ~2709 |
+| 13:53 | Created ../../../../tmp/verify-fens.cjs | — | ~544 |
+| 13:54 | Created ../../../../tmp/verify-fens2.cjs | — | ~793 |
+| 13:54 | Edited ../../../../tmp/verify-fens2.cjs | inline fix | ~23 |
+| 13:55 | Edited ../../../../tmp/verify-fens2.cjs | inline fix | ~23 |
+| 13:55 | Edited ../../../../tmp/verify-fens2.cjs | inline fix | ~24 |
+| 13:55 | Edited ../../../../tmp/verify-fens2.cjs | inline fix | ~23 |
+| 13:55 | Created packages/shared/src/dto/endgame.dto.ts | — | ~904 |
+| 13:55 | Edited packages/shared/src/index.ts | 1→2 lines | ~21 |
+| 13:56 | Created apps/api/prisma/seed/endgame-drills.ts | — | ~3005 |
+| 13:56 | Edited apps/api/package.json | 1→2 lines | ~52 |
+| 13:57 | Created apps/api/src/endgames/tablebase.service.ts | — | ~1625 |
+| 13:57 | Created apps/api/src/endgames/dto/probe.dto.ts | — | ~58 |
+| 13:57 | Created apps/api/src/endgames/dto/attempt.dto.ts | — | ~104 |
+| 13:57 | Created apps/api/src/endgames/endgames.service.ts | — | ~1550 |
+| 13:58 | Created apps/api/src/endgames/endgames.controller.ts | — | ~715 |
+| 13:58 | Created apps/api/src/endgames/endgames.module.ts | — | ~264 |
+| 13:58 | Edited apps/api/src/app.module.ts | added 1 import(s) | ~37 |
+| 13:58 | Edited apps/api/src/app.module.ts | 3→4 lines | ~37 |
+| 13:59 | Created apps/api/test/endgames/endgames.service.spec.ts | — | ~2945 |
+| 14:00 | Created apps/web/src/lib/api/endgames.ts | — | ~826 |
+| 14:01 | Created apps/web/src/hooks/use-endgame-drill.ts | — | ~3305 |
+| 14:01 | Edited apps/web/src/hooks/use-endgame-drill.ts | 6→2 lines | ~33 |
+| 14:02 | Created apps/web/src/app/endgames/endgames-client.tsx | — | ~3909 |
+| 14:02 | Edited apps/web/src/app/endgames/page.tsx | 7→6 lines | ~81 |
+| 14:02 | Edited apps/web/src/app/endgames/page.tsx | removed 22 lines | ~28 |
+| 14:03 | Created apps/web/test/endgames/use-endgame-drill.test.ts | — | ~2387 |
+
+## Session: 2026-06-13 — purechess-improve S10 endgame drills
+| 14:05 | S10 endgame drills: shared DTO + TablebaseService (Redis hard-cache, >7men/error→unknown) + EndgamesService/Controller/Module (registered app.module) + seed (25 curated FENs, idempotent by slug) + db:seed-endgames script | apps/api/src/endgames/**, prisma/seed/endgame-drills.ts, packages/shared/dto/endgame.dto.ts | all gates green | ~38k |
+| 14:05 | use-endgame-drill.ts async state machine (throw-detect via defender-POV probe flip; tablebase-then-Stockfish defender) + endgames-client.tsx (categorized list, pass/fail ticks, practice board, best-move reveal) + endgames.ts web client | apps/web/src/hooks/use-endgame-drill.ts, app/endgames/**, lib/api/endgames.ts | green | |
+| 14:05 | Tests: endgames.service.spec.ts (14, list/probe-cache/attempt) + use-endgame-drill.test.ts (12, mate→success/flip→throw/probe-vs-engine) | apps/api/test/endgames/**, apps/web/test/endgames/** | API 507 pass, web 613 pass | |
+| 14:05 | Seed verified: 25 legal drills land, re-run idempotent (0 new/25 updated), all 6 categories | apps/api/prisma/seed/endgame-drills.ts | confirmed | |
+| 14:07 | Created docs/roadmap/purechess-improve/session-10-handoff.md | — | ~2482 |
+| 14:08 | Edited docs/roadmap/purechess-improve/session-10-handoff.md | "<filled at commit>" → "01e69a0cf3318c94b54481c8e" | ~25 |
+| 14:08 | Edited docs/roadmap/purechess-improve/session-10-handoff.md | modified feat() | ~45 |
