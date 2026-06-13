@@ -2404,3 +2404,27 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 09:51 | Edited apps/web/test/hooks/use-puzzle.test.ts | 11→13 lines | ~120 |
 | 09:53 | Daily puzzle feature: API proxy module + use-puzzle state machine + /puzzles page; fixed lichess initialPly off-by-one (bug-508), verified full solution legal vs live API | apps/api/src/puzzles/*, apps/web/{hooks/use-puzzle,components/puzzle/puzzle-board,app/puzzles/*,lib/board/puzzle-utils,lib/api/puzzles}, sound+nav+hero edits | 19 web tests + 3 api specs green, typecheck+lint clean, /puzzles HTTP 200 | ~12000 |
 | 09:54 | Session end: 29 writes across 20 files (add-a-daily-fuzzy-haven.md, puzzles.types.ts, puzzles.service.ts, puzzles.controller.ts, puzzles.module.ts) | 35 reads | ~51952 tok |
+| 11:40 | Session end: 29 writes across 20 files (add-a-daily-fuzzy-haven.md, puzzles.types.ts, puzzles.service.ts, puzzles.controller.ts, puzzles.module.ts) | 35 reads | ~51952 tok |
+| 11:55 | Created docs/epics/purechess-improve.md | — | ~3772 |
+| 11:55 | Created docs/claude-sessions/purechess-improve/session-00-operator-rules.md | — | ~1357 |
+| 11:56 | Created docs/claude-sessions/purechess-improve/session-01-charter-data-model.md | — | ~1854 |
+| 11:56 | Created docs/claude-sessions/purechess-improve/session-02-puzzle-ingestion.md | — | ~1382 |
+| 11:57 | Created docs/claude-sessions/purechess-improve/session-03-puzzle-serving-api.md | — | ~1643 |
+| 11:57 | Created docs/claude-sessions/purechess-improve/session-04-solve-engine-theme-trainer.md | — | ~1498 |
+| 11:58 | Created docs/claude-sessions/purechess-improve/session-05-puzzle-rush.md | — | ~1315 |
+| 11:58 | Created docs/claude-sessions/purechess-improve/session-06-spaced-repetition-review.md | — | ~1265 |
+| 11:59 | Created docs/claude-sessions/purechess-improve/session-07-mistakes-from-games.md | — | ~1423 |
+| 11:59 | Created docs/claude-sessions/purechess-improve/session-08-repertoire-model-import.md | — | ~1233 |
+| 12:00 | Created docs/claude-sessions/purechess-improve/session-09-opening-trainer.md | — | ~1200 |
+| 12:00 | Edited docs/claude-sessions/purechess-improve/session-09-opening-trainer.md | 5→6 lines | ~40 |
+| 12:00 | Edited docs/claude-sessions/purechess-improve/session-09-opening-trainer.md | 3→4 lines | ~21 |
+| 12:00 | Created docs/claude-sessions/purechess-improve/session-10-endgame-drills.md | — | ~1501 |
+| 12:01 | Created docs/claude-sessions/purechess-improve/session-11-stats-charts.md | — | ~1073 |
+| 12:01 | Created docs/claude-sessions/purechess-improve/session-12-insights-engine.md | — | ~1337 |
+| 12:02 | Created docs/claude-sessions/purechess-improve/session-13-training-hub.md | — | ~1456 |
+| 12:02 | Created docs/claude-sessions/purechess-improve/session-14-adaptive-coach.md | — | ~1344 |
+| 12:03 | Created docs/claude-sessions/purechess-improve/session-15-a11y-mobile-polish.md | — | ~1162 |
+| 12:03 | Created docs/claude-sessions/purechess-improve/session-16-analytics-perf-e2e-docs.md | — | ~1340 |
+| 12:04 | Edited docs/claude-sessions/purechess-improve/session-09-opening-trainer.md | 3→2 lines | ~11 |
+| 12:04 | Authored purechess-improve epic (ELO training surface): overview + 16 sessions + operator rules | docs/epics/purechess-improve.md, docs/claude-sessions/purechess-improve/* | complete, frontmatter validated | ~9k |
+| 12:04 | Session end: 50 writes across 38 files (add-a-daily-fuzzy-haven.md, puzzles.types.ts, puzzles.service.ts, puzzles.controller.ts, puzzles.module.ts) | 36 reads | ~82259 tok |

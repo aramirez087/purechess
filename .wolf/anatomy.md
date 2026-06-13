@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T15:51:57.642Z
-> Files: 955 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:04:00.240Z
+> Files: 986 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -631,6 +631,22 @@
 - `.gitignore` — Git ignore rules (~17 tok)
 - `package-lock.json` — npm lock file (~3958 tok)
 - `package.json` — Node.js package manifest (~19 tok)
+
+## Daily Puzzle feature (added 2026-06-13)
+
+- `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
+- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). (~60 tok)
+- `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
+- `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
+- `apps/api/test/puzzles/puzzles.service.spec.ts` — Jest: cache hit (no fetch), miss (fetch+setex), error throws. (~480 tok)
+- `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
+- `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
+- `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
+- `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
+- `apps/web/src/lib/api/puzzles.ts` — getDailyPuzzle() client + web-side LichessPuzzleData type. Fetches `${API}/api/puzzles/daily`. (~230 tok)
+- `apps/web/src/lib/board/puzzle-utils.ts` — replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch. chess.js. (~430 tok)
+- `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
+- `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
 
 ## apps/api/
 
@@ -1493,9 +1509,33 @@
 - `session-07-ci-gate.md` — Session 07: CI gate — full verification, integration fixes, go/no-go (~768 tok)
 - `session-08-prod-deploy-verify.md` — Session 08: Production — deploy with real WS, smoke, prove the bar (~891 tok)
 
+## docs/claude-sessions/purechess-improve/
+
+- `session-00-operator-rules.md` — Session 00: Operator Rules — purechess-improve (~1272 tok)
+- `session-01-charter-data-model.md` — Session 01: Charter, data model & Improve IA (~1738 tok)
+- `session-02-puzzle-ingestion.md` — Session 02: Puzzle ingestion pipeline (~1296 tok)
+- `session-03-puzzle-serving-api.md` — Session 03: Puzzle serving API + Glicko puzzle rating (~1540 tok)
+- `session-04-solve-engine-theme-trainer.md` — Session 04: Local solve engine + theme trainer (~1404 tok)
+- `session-05-puzzle-rush.md` — Session 05: Puzzle Rush — timed board vision (~1233 tok)
+- `session-06-spaced-repetition-review.md` — Session 06: Spaced-repetition review (~1186 tok)
+- `session-07-mistakes-from-games.md` — Session 07: Mistakes from your games → puzzles (~1334 tok)
+- `session-08-repertoire-model-import.md` — Session 08: Opening repertoire model + import (~1156 tok)
+- `session-09-opening-trainer.md` — Session 09: Opening trainer — drill your lines (~1131 tok)
+- `session-10-endgame-drills.md` — Session 10: Endgame drills — convert won positions (~1407 tok)
+- `session-11-stats-charts.md` — Session 11: Puzzle stats & charts (~1006 tok)
+- `session-12-insights-engine.md` — Session 12: Insights & weakness engine (~1253 tok)
+- `session-13-training-hub.md` — Session 13: Training hub, daily plan & streaks (~1365 tok)
+- `session-14-adaptive-coach.md` — Session 14: Adaptive difficulty + coach feedback (~1260 tok)
+- `session-15-a11y-mobile-polish.md` — Session 15: A11y, mobile, motion & sound pass (~1090 tok)
+- `session-16-analytics-perf-e2e-docs.md` — Session 16: Analytics, perf, E2E & docs — ship it (~1256 tok)
+
 ## docs/claude-sessions/vs-computer-foundations/
 
 - `.epic-produces-overrides.json` (~111 tok)
+
+## docs/epics/
+
+- `purechess-improve.md` — Epic: Purechess Improve (~3536 tok)
 
 ## docs/roadmap/purechess-category-best/
 
@@ -1564,18 +1604,9 @@
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)
 
-## Daily Puzzle feature (added 2026-06-13)
-- `apps/api/src/puzzles/puzzles.types.ts` — LichessPuzzleData interface (game.pgn/players, puzzle.initialPly/solution/themes). Module-local, not in shared. (~140 tok)
-- `apps/api/src/puzzles/puzzles.service.ts` — getDailyPuzzle(): Redis-cached (key `puzzle:daily`, 24h TTL) proxy of lichess.org/api/puzzle/daily via native fetch. (~280 tok)
-- `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
-- `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). (~60 tok)
-- `apps/api/test/puzzles/puzzles.service.spec.ts` — Jest: cache hit (no fetch), miss (fetch+setex), error throws. (~480 tok)
-- `apps/web/src/lib/board/puzzle-utils.ts` — replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch. chess.js. (~430 tok)
-- `apps/web/src/lib/api/puzzles.ts` — getDailyPuzzle() client + web-side LichessPuzzleData type. Fetches `${API}/api/puzzles/daily`. (~230 tok)
-- `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
-- `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
-- `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
-- `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
-- `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
-- `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
-- (also: `lib/board/types.ts` SoundType + `lib/board/sound.ts` IMPACTS gained `success`/`error` tones; nav links in AppShell.tsx + MobileNav.tsx gained `/puzzles`.)
+## Epic: purechess-improve (ELO improvement surface) — added 2026-06-13
+Planning docs only (no app code yet). Epic overview + 16 session prompts + operator rules.
+
+- docs/epics/purechess-improve.md — epic overview: thesis (ELO levers), architecture, 16-session DAG, conventions, success metrics. ~180 lines.
+- docs/claude-sessions/purechess-improve/session-00-operator-rules.md — shared rules: schema-frozen-after-S01, reuse-not-rebuild, known merge seams, DoD.
+- docs/claude-sessions/purechess-improve/session-01..16-*.md — per-session paste-ready prompts w/ frontmatter (depends_on, touches, produces, parallel_safe, model). Waves: 0 charter, 1 puzzle backbone, 2 solve UX, 3 modes(rush/review/mistakes/repertoire/opening-trainer/endgames), 4 stats/insights/hub, 5 adaptive/a11y/ship.
