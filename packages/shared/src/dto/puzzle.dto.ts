@@ -91,6 +91,48 @@ export interface PuzzleRatingDto {
   updatedAt?: string;
 }
 
+/**
+ * One point on the puzzle-rating curve: the user's puzzle rating right AFTER an
+ * attempt (or a daily bucket close), with the time it was recorded. Server-
+ * computed and read-only; mirrors `PuzzleAttempt.ratingAfterUser` over time.
+ */
+export interface PuzzleRatingPointDto {
+  /** The user's puzzle rating at this point (rounded). */
+  rating: number;
+  /** ISO time of the attempt this point reflects. */
+  at: string;
+}
+
+/**
+ * Headline puzzle-training summary for the stats surface. `weakestTheme` is the
+ * single theme to drill next (accuracy ASC over a meaningful sample) — null when
+ * the user has too few attempts to single one out. S12/S13 consume this shape.
+ */
+export interface PuzzleSummaryDto {
+  /** Current puzzle Glicko rating (rounded). */
+  puzzleRating: number;
+  /** Total attempts recorded (within the stats window). */
+  attempted: number;
+  /** Total solved attempts. */
+  solved: number;
+  /** solved / attempted, 0..1. Undefined when attempted === 0. */
+  accuracy?: number;
+  /** The weakest theme to practice next, or null when none stands out. */
+  weakestTheme?: PuzzleThemeStatDto | null;
+}
+
+/**
+ * GET /puzzles/history — the puzzle-rating curve plus the headline summary. The
+ * rating curve is bucketed/capped server-side so a heavy user never returns a
+ * 10k-point series (see PuzzleHistoryService).
+ */
+export interface PuzzleHistoryDto {
+  /** Puzzle-rating curve, oldest-first, bucketed + capped. */
+  ratingHistory: PuzzleRatingPointDto[];
+  /** Headline numbers for the top of the stats page. */
+  summary: PuzzleSummaryDto;
+}
+
 // --- Spaced-repetition review (SM-2 over the PuzzleReview table) ------------
 //
 // A puzzle you fail enters a review queue; solving it on schedule pushes it

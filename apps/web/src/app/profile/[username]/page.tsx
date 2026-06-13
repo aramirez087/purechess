@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { AppShell } from '@/components/layout/AppShell';
 import { ProfileHeader } from '@/components/profile/profile-header';
 import { RatingsCard } from '@/components/profile/ratings-card';
+import { PuzzleRatingPill } from '@/components/profile/puzzle-rating-pill';
 import { StatsCard } from '@/components/profile/stats-card';
 import { RecentGames } from '@/components/profile/recent-games';
 import { serverFetch } from '@/lib/api';
@@ -53,6 +54,7 @@ export default async function ProfilePage({ params }: Props) {
           isOwnProfile={isOwnProfile}
         />
         <RatingsCard ratings={profile.ratings} ratingHistory={profile.ratingHistory} />
+        {isOwnProfile && <PuzzleRatingPill />}
         <StatsCard stats={profile.stats} />
         <RecentGames games={profile.recentGames} />
       </div>

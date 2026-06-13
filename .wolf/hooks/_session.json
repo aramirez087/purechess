@@ -28,7 +28,7 @@
       "first_read": "2026-06-13T15:34:05.824Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx": {
-      "count": 3,
+      "count": 4,
       "tokens": 7899,
       "first_read": "2026-06-13T15:34:07.912Z"
     },
@@ -43,8 +43,8 @@
       "first_read": "2026-06-13T15:34:08.764Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts": {
-      "count": 2,
-      "tokens": 781,
+      "count": 3,
+      "tokens": 828,
       "first_read": "2026-06-13T15:34:09.000Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/matchmaking/matchmaking.service.ts": {
@@ -73,7 +73,7 @@
       "first_read": "2026-06-13T15:34:16.444Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/auth/guards/optional-session-auth.guard.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 202,
       "first_read": "2026-06-13T15:34:16.544Z"
     },
@@ -103,7 +103,7 @@
       "first_read": "2026-06-13T15:34:18.982Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/lib/board/rules.ts": {
-      "count": 2,
+      "count": 3,
       "tokens": 2647,
       "first_read": "2026-06-13T15:34:19.602Z"
     },
@@ -133,7 +133,7 @@
       "first_read": "2026-06-13T15:34:21.814Z"
     },
     "/Users/aramirez/Code/purechess/packages/shared/src/chess.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 0,
       "first_read": "2026-06-13T15:34:22.713Z"
     },
@@ -178,12 +178,12 @@
       "first_read": "2026-06-13T15:41:37.138Z"
     },
     "/Users/aramirez/Code/purechess/docs/claude-sessions/purechess-improve/session-09-opening-trainer.md": {
-      "count": 1,
-      "tokens": 1136,
+      "count": 2,
+      "tokens": 1131,
       "first_read": "2026-06-13T18:03:56.783Z"
     },
     "/Users/aramirez/Code/purechess/docs/claude-sessions/purechess-improve/session-00-operator-rules.md": {
-      "count": 8,
+      "count": 11,
       "tokens": 1272,
       "first_read": "2026-06-13T18:08:24.456Z"
     },
@@ -208,8 +208,8 @@
       "first_read": "2026-06-13T18:08:36.164Z"
     },
     "/Users/aramirez/Code/purechess/packages/shared/src/index.ts": {
-      "count": 4,
-      "tokens": 164,
+      "count": 5,
+      "tokens": 174,
       "first_read": "2026-06-13T18:08:39.552Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/page.tsx": {
@@ -223,7 +223,7 @@
       "first_read": "2026-06-13T18:08:58.254Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/app/globals.css": {
-      "count": 3,
+      "count": 4,
       "tokens": 4017,
       "first_read": "2026-06-13T18:08:59.192Z"
     },
@@ -243,7 +243,7 @@
       "first_read": "2026-06-13T18:19:41.163Z"
     },
     "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-01-handoff.md": {
-      "count": 3,
+      "count": 4,
       "tokens": 2422,
       "first_read": "2026-06-13T18:19:42.101Z"
     },
@@ -253,8 +253,8 @@
       "first_read": "2026-06-13T18:19:42.260Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.module.ts": {
-      "count": 5,
-      "tokens": 352,
+      "count": 6,
+      "tokens": 410,
       "first_read": "2026-06-13T18:19:57.472Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.service.ts": {
@@ -278,13 +278,13 @@
       "first_read": "2026-06-13T18:20:16.878Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/package.json": {
-      "count": 1,
+      "count": 2,
       "tokens": 382,
       "first_read": "2026-06-13T18:21:34.805Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/tsconfig.seed.json": {
-      "count": 1,
-      "tokens": 42,
+      "count": 2,
+      "tokens": 46,
       "first_read": "2026-06-13T18:22:41.522Z"
     },
     "/Users/aramirez/Code/purechess/docs/claude-sessions/purechess-improve/session-03-puzzle-serving-api.md": {
@@ -298,12 +298,12 @@
       "first_read": "2026-06-13T18:28:31.823Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-catalog.service.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 803,
       "first_read": "2026-06-13T18:28:43.125Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/auth/decorators/current-user.decorator.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 94,
       "first_read": "2026-06-13T18:28:53.073Z"
     },
@@ -348,7 +348,7 @@
       "first_read": "2026-06-13T18:31:14.291Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/lib/api/puzzles.ts": {
-      "count": 6,
+      "count": 7,
       "tokens": 2521,
       "first_read": "2026-06-13T18:31:44.329Z"
     },
@@ -358,7 +358,7 @@
       "first_read": "2026-06-13T18:38:33.238Z"
     },
     "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-03-handoff.md": {
-      "count": 3,
+      "count": 4,
       "tokens": 2558,
       "first_read": "2026-06-13T18:38:33.581Z"
     },
@@ -368,7 +368,7 @@
       "first_read": "2026-06-13T18:38:37.466Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/lib/board/puzzle-utils.ts": {
-      "count": 2,
+      "count": 4,
       "tokens": 1121,
       "first_read": "2026-06-13T18:38:37.735Z"
     },
@@ -383,8 +383,8 @@
       "first_read": "2026-06-13T18:38:42.369Z"
     },
     "/Users/aramirez/Code/purechess/packages/shared/src/dto/puzzle.dto.ts": {
-      "count": 4,
-      "tokens": 1207,
+      "count": 5,
+      "tokens": 2055,
       "first_read": "2026-06-13T18:38:51.092Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-puzzle.test.ts": {
@@ -413,12 +413,12 @@
       "first_read": "2026-06-13T18:48:15.247Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-serving.service.ts": {
-      "count": 2,
-      "tokens": 2734,
+      "count": 3,
+      "tokens": 3025,
       "first_read": "2026-06-13T18:48:28.752Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-training.controller.ts": {
-      "count": 2,
+      "count": 4,
       "tokens": 846,
       "first_read": "2026-06-13T18:48:32.630Z"
     },
@@ -438,17 +438,17 @@
       "first_read": "2026-06-13T18:48:46.562Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/test/puzzle/training-session.test.tsx": {
-      "count": 2,
+      "count": 4,
       "tokens": 1444,
       "first_read": "2026-06-13T18:48:56.857Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-rating.service.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 1005,
       "first_read": "2026-06-13T18:49:23.827Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/dto/record-attempt.dto.ts": {
-      "count": 2,
+      "count": 3,
       "tokens": 201,
       "first_read": "2026-06-13T18:50:24.592Z"
     },
@@ -493,7 +493,7 @@
       "first_read": "2026-06-13T19:12:15.377Z"
     },
     "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-06-handoff.md": {
-      "count": 1,
+      "count": 2,
       "tokens": 2715,
       "first_read": "2026-06-13T19:12:15.935Z"
     },
@@ -518,7 +518,7 @@
       "first_read": "2026-06-13T19:12:27.698Z"
     },
     "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-review.service.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 2320,
       "first_read": "2026-06-13T19:12:31.810Z"
     },
@@ -558,7 +558,7 @@
       "first_read": "2026-06-13T19:25:42.688Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/lib/board/analysis-tree.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 1040,
       "first_read": "2026-06-13T19:25:48.838Z"
     },
@@ -598,9 +598,164 @@
       "first_read": "2026-06-13T19:26:55.154Z"
     },
     "/Users/aramirez/Code/purechess/apps/web/src/lib/api.ts": {
-      "count": 1,
+      "count": 2,
       "tokens": 0,
       "first_read": "2026-06-13T19:26:55.507Z"
+    },
+    "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-08-handoff.md": {
+      "count": 1,
+      "tokens": 2486,
+      "first_read": "2026-06-13T19:38:47.692Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/puzzles/spaced-repetition.ts": {
+      "count": 1,
+      "tokens": 1497,
+      "first_read": "2026-06-13T19:38:51.620Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire.service.ts": {
+      "count": 1,
+      "tokens": 2206,
+      "first_read": "2026-06-13T19:39:01.453Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire.module.ts": {
+      "count": 2,
+      "tokens": 262,
+      "first_read": "2026-06-13T19:39:01.959Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire.controller.ts": {
+      "count": 1,
+      "tokens": 668,
+      "first_read": "2026-06-13T19:39:08.414Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire-tree.ts": {
+      "count": 1,
+      "tokens": 3654,
+      "first_read": "2026-06-13T19:39:08.722Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/api/repertoire.ts": {
+      "count": 2,
+      "tokens": 1372,
+      "first_read": "2026-06-13T19:39:13.375Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/test/repertoire/repertoire.service.spec.ts": {
+      "count": 2,
+      "tokens": 3442,
+      "first_read": "2026-06-13T19:39:18.745Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/openings/openings-client.tsx": {
+      "count": 2,
+      "tokens": 2398,
+      "first_read": "2026-06-13T19:39:18.907Z"
+    },
+    "/Users/aramirez/Code/purechess/packages/shared/src/dto/repertoire.dto.ts": {
+      "count": 1,
+      "tokens": 1082,
+      "first_read": "2026-06-13T19:39:23.453Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/openings/repertoire-view.tsx": {
+      "count": 1,
+      "tokens": 1079,
+      "first_read": "2026-06-13T19:39:27.967Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/board/annotations.ts": {
+      "count": 2,
+      "tokens": 521,
+      "first_read": "2026-06-13T19:39:35.237Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/repertoire/dto/repertoire-body.dto.ts": {
+      "count": 1,
+      "tokens": 433,
+      "first_read": "2026-06-13T19:41:06.980Z"
+    },
+    "/Users/aramirez/Code/purechess/docs/claude-sessions/purechess-improve/session-10-endgame-drills.md": {
+      "count": 1,
+      "tokens": 1407,
+      "first_read": "2026-06-13T19:52:18.214Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/engine/stockfish-client.ts": {
+      "count": 1,
+      "tokens": 4083,
+      "first_read": "2026-06-13T19:52:19.384Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/scripts/seed-puzzles.ts": {
+      "count": 1,
+      "tokens": 2852,
+      "first_read": "2026-06-13T19:52:27.397Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/prisma/seed.ts": {
+      "count": 1,
+      "tokens": 2205,
+      "first_read": "2026-06-13T19:52:28.801Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/endgames/page.tsx": {
+      "count": 1,
+      "tokens": 452,
+      "first_read": "2026-06-13T19:52:33.334Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts": {
+      "count": 1,
+      "tokens": 2864,
+      "first_read": "2026-06-13T19:52:38.222Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/test/puzzles/puzzle-rating.service.spec.ts": {
+      "count": 1,
+      "tokens": 1595,
+      "first_read": "2026-06-13T19:52:44.047Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-local-puzzle.test.ts": {
+      "count": 1,
+      "tokens": 1316,
+      "first_read": "2026-06-13T19:53:04.944Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/openings/opening-drill.tsx": {
+      "count": 1,
+      "tokens": 3143,
+      "first_read": "2026-06-13T20:01:29.461Z"
+    },
+    "/Users/aramirez/Code/purechess/docs/claude-sessions/purechess-improve/session-11-stats-charts.md": {
+      "count": 1,
+      "tokens": 1006,
+      "first_read": "2026-06-13T20:09:21.408Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/profile/rating-chart.tsx": {
+      "count": 1,
+      "tokens": 2777,
+      "first_read": "2026-06-13T20:09:26.318Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/lib/board/accuracy.ts": {
+      "count": 1,
+      "tokens": 494,
+      "first_read": "2026-06-13T20:09:26.833Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/profile/ratings-card.tsx": {
+      "count": 1,
+      "tokens": 700,
+      "first_read": "2026-06-13T20:09:47.171Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/train/train-client.tsx": {
+      "count": 1,
+      "tokens": 1645,
+      "first_read": "2026-06-13T20:09:47.574Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/train": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-13T20:09:51.147Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/theme-tile.tsx": {
+      "count": 1,
+      "tokens": 973,
+      "first_read": "2026-06-13T20:09:54.318Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/profile/[username]/page.tsx": {
+      "count": 1,
+      "tokens": 603,
+      "first_read": "2026-06-13T20:10:02.973Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/app/profile/me/page.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-13T20:10:08.572Z"
     }
   },
   "files_written": [
@@ -1887,6 +2042,492 @@
       "action": "create",
       "tokens": 2841,
       "at": "2026-06-13T19:37:30.624Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/dto/repertoire.dto.ts",
+      "action": "edit",
+      "tokens": 882,
+      "at": "2026-06-13T19:40:14.226Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire-review.service.ts",
+      "action": "create",
+      "tokens": 3012,
+      "at": "2026-06-13T19:41:03.164Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/repertoire/dto/repertoire-body.dto.ts",
+      "action": "edit",
+      "tokens": 84,
+      "at": "2026-06-13T19:41:12.467Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/repertoire/dto/repertoire-body.dto.ts",
+      "action": "edit",
+      "tokens": 140,
+      "at": "2026-06-13T19:41:17.348Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire-review.controller.ts",
+      "action": "create",
+      "tokens": 470,
+      "at": "2026-06-13T19:41:26.307Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/repertoire/repertoire.module.ts",
+      "action": "edit",
+      "tokens": 261,
+      "at": "2026-06-13T19:41:34.771Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "action": "create",
+      "tokens": 2940,
+      "at": "2026-06-13T19:42:28.138Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "action": "edit",
+      "tokens": 96,
+      "at": "2026-06-13T19:42:43.516Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "action": "edit",
+      "tokens": 150,
+      "at": "2026-06-13T19:42:50.143Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "action": "edit",
+      "tokens": 583,
+      "at": "2026-06-13T19:43:07.474Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/repertoire.ts",
+      "action": "edit",
+      "tokens": 60,
+      "at": "2026-06-13T19:43:26.616Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/repertoire.ts",
+      "action": "edit",
+      "tokens": 400,
+      "at": "2026-06-13T19:43:35.826Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "create",
+      "tokens": 3124,
+      "at": "2026-06-13T19:44:35.319Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "edit",
+      "tokens": 586,
+      "at": "2026-06-13T19:44:55.910Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "edit",
+      "tokens": 52,
+      "at": "2026-06-13T19:45:02.466Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "edit",
+      "tokens": 18,
+      "at": "2026-06-13T19:45:06.001Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "edit",
+      "tokens": 148,
+      "at": "2026-06-13T19:45:12.428Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "edit",
+      "tokens": 18,
+      "at": "2026-06-13T19:45:17.443Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-opening-drill.ts",
+      "action": "edit",
+      "tokens": 108,
+      "at": "2026-06-13T19:45:29.697Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/openings/opening-drill.tsx",
+      "action": "create",
+      "tokens": 3143,
+      "at": "2026-06-13T19:46:16.345Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/openings/openings-client.tsx",
+      "action": "edit",
+      "tokens": 236,
+      "at": "2026-06-13T19:46:26.943Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/openings/openings-client.tsx",
+      "action": "edit",
+      "tokens": 353,
+      "at": "2026-06-13T19:46:39.640Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/openings/openings-client.tsx",
+      "action": "edit",
+      "tokens": 160,
+      "at": "2026-06-13T19:46:46.191Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/openings/openings-client.tsx",
+      "action": "edit",
+      "tokens": 303,
+      "at": "2026-06-13T19:46:54.187Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/openings/openings-client.tsx",
+      "action": "edit",
+      "tokens": 85,
+      "at": "2026-06-13T19:46:58.779Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/openings/opening-drill.test.tsx",
+      "action": "create",
+      "tokens": 1983,
+      "at": "2026-06-13T19:47:50.207Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/openings/opening-drill.test.tsx",
+      "action": "edit",
+      "tokens": 113,
+      "at": "2026-06-13T19:48:03.540Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/openings/opening-drill.test.tsx",
+      "action": "edit",
+      "tokens": 95,
+      "at": "2026-06-13T19:48:11.830Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-09-handoff.md",
+      "action": "create",
+      "tokens": 2902,
+      "at": "2026-06-13T19:50:58.581Z"
+    },
+    {
+      "file": "/tmp/verify-fens.cjs",
+      "action": "create",
+      "tokens": 583,
+      "at": "2026-06-13T19:53:36.216Z"
+    },
+    {
+      "file": "/tmp/verify-fens2.cjs",
+      "action": "create",
+      "tokens": 850,
+      "at": "2026-06-13T19:54:04.476Z"
+    },
+    {
+      "file": "/tmp/verify-fens2.cjs",
+      "action": "edit",
+      "tokens": 24,
+      "at": "2026-06-13T19:54:13.750Z"
+    },
+    {
+      "file": "/tmp/verify-fens2.cjs",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-06-13T19:55:00.673Z"
+    },
+    {
+      "file": "/tmp/verify-fens2.cjs",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-06-13T19:55:04.806Z"
+    },
+    {
+      "file": "/tmp/verify-fens2.cjs",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-06-13T19:55:27.313Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/dto/endgame.dto.ts",
+      "action": "create",
+      "tokens": 904,
+      "at": "2026-06-13T19:55:48.572Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/index.ts",
+      "action": "edit",
+      "tokens": 21,
+      "at": "2026-06-13T19:55:51.804Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/prisma/seed/endgame-drills.ts",
+      "action": "create",
+      "tokens": 3005,
+      "at": "2026-06-13T19:56:44.146Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/package.json",
+      "action": "edit",
+      "tokens": 52,
+      "at": "2026-06-13T19:56:49.220Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/endgames/tablebase.service.ts",
+      "action": "create",
+      "tokens": 1625,
+      "at": "2026-06-13T19:57:16.823Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/endgames/dto/probe.dto.ts",
+      "action": "create",
+      "tokens": 58,
+      "at": "2026-06-13T19:57:24.479Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/endgames/dto/attempt.dto.ts",
+      "action": "create",
+      "tokens": 104,
+      "at": "2026-06-13T19:57:28.551Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/endgames/endgames.service.ts",
+      "action": "create",
+      "tokens": 1550,
+      "at": "2026-06-13T19:57:51.752Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/endgames/endgames.controller.ts",
+      "action": "create",
+      "tokens": 715,
+      "at": "2026-06-13T19:58:05.645Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/endgames/endgames.module.ts",
+      "action": "create",
+      "tokens": 264,
+      "at": "2026-06-13T19:58:11.474Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts",
+      "action": "edit",
+      "tokens": 37,
+      "at": "2026-06-13T19:58:14.710Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/app.module.ts",
+      "action": "edit",
+      "tokens": 37,
+      "at": "2026-06-13T19:58:18.239Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/endgames/endgames.service.spec.ts",
+      "action": "create",
+      "tokens": 2945,
+      "at": "2026-06-13T19:59:28.172Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/endgames.ts",
+      "action": "create",
+      "tokens": 826,
+      "at": "2026-06-13T20:00:07.817Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-endgame-drill.ts",
+      "action": "create",
+      "tokens": 3305,
+      "at": "2026-06-13T20:01:19.181Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-endgame-drill.ts",
+      "action": "edit",
+      "tokens": 33,
+      "at": "2026-06-13T20:01:25.842Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/endgames/endgames-client.tsx",
+      "action": "create",
+      "tokens": 3909,
+      "at": "2026-06-13T20:02:29.021Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/endgames/page.tsx",
+      "action": "edit",
+      "tokens": 81,
+      "at": "2026-06-13T20:02:34.840Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/endgames/page.tsx",
+      "action": "edit",
+      "tokens": 28,
+      "at": "2026-06-13T20:02:40.618Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/endgames/use-endgame-drill.test.ts",
+      "action": "create",
+      "tokens": 2387,
+      "at": "2026-06-13T20:03:49.311Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-10-handoff.md",
+      "action": "create",
+      "tokens": 2659,
+      "at": "2026-06-13T20:07:19.603Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-10-handoff.md",
+      "action": "edit",
+      "tokens": 27,
+      "at": "2026-06-13T20:08:01.258Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-10-handoff.md",
+      "action": "edit",
+      "tokens": 48,
+      "at": "2026-06-13T20:08:11.003Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/packages/shared/src/dto/puzzle.dto.ts",
+      "action": "edit",
+      "tokens": 474,
+      "at": "2026-06-13T20:10:45.665Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-history.service.ts",
+      "action": "create",
+      "tokens": 1833,
+      "at": "2026-06-13T20:11:17.017Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-history.service.ts",
+      "action": "edit",
+      "tokens": 82,
+      "at": "2026-06-13T20:11:23.713Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-history.service.ts",
+      "action": "edit",
+      "tokens": 35,
+      "at": "2026-06-13T20:11:29.250Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.module.ts",
+      "action": "edit",
+      "tokens": 76,
+      "at": "2026-06-13T20:11:34.223Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzles.module.ts",
+      "action": "edit",
+      "tokens": 99,
+      "at": "2026-06-13T20:11:39.857Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-training.controller.ts",
+      "action": "edit",
+      "tokens": 178,
+      "at": "2026-06-13T20:11:46.832Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-training.controller.ts",
+      "action": "edit",
+      "tokens": 67,
+      "at": "2026-06-13T20:11:52.208Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/src/puzzles/puzzle-training.controller.ts",
+      "action": "edit",
+      "tokens": 154,
+      "at": "2026-06-13T20:11:57.930Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/puzzles.ts",
+      "action": "edit",
+      "tokens": 54,
+      "at": "2026-06-13T20:12:02.786Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/api/puzzles.ts",
+      "action": "edit",
+      "tokens": 214,
+      "at": "2026-06-13T20:12:09.026Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/puzzle-rating-chart.tsx",
+      "action": "create",
+      "tokens": 1922,
+      "at": "2026-06-13T20:12:34.949Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/puzzle/theme-accuracy-table.tsx",
+      "action": "create",
+      "tokens": 1384,
+      "at": "2026-06-13T20:12:55.421Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/stats/page.tsx",
+      "action": "create",
+      "tokens": 402,
+      "at": "2026-06-13T20:13:07.909Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/puzzles/stats/stats-client.tsx",
+      "action": "create",
+      "tokens": 1750,
+      "at": "2026-06-13T20:13:31.579Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/profile/puzzle-rating-pill.tsx",
+      "action": "create",
+      "tokens": 639,
+      "at": "2026-06-13T20:13:54.128Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/profile/[username]/page.tsx",
+      "action": "edit",
+      "tokens": 76,
+      "at": "2026-06-13T20:13:59.022Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/app/profile/[username]/page.tsx",
+      "action": "edit",
+      "tokens": 51,
+      "at": "2026-06-13T20:14:02.608Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/puzzle/theme-accuracy-table.test.tsx",
+      "action": "create",
+      "tokens": 1412,
+      "at": "2026-06-13T20:14:26.030Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/api/test/puzzles/puzzle-history.service.spec.ts",
+      "action": "create",
+      "tokens": 1969,
+      "at": "2026-06-13T20:15:07.426Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/puzzle/theme-accuracy-table.test.tsx",
+      "action": "edit",
+      "tokens": 90,
+      "at": "2026-06-13T20:15:40.547Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/test/puzzle/theme-accuracy-table.test.tsx",
+      "action": "edit",
+      "tokens": 130,
+      "at": "2026-06-13T20:16:01.146Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/docs/roadmap/purechess-improve/session-11-handoff.md",
+      "action": "create",
+      "tokens": 2444,
+      "at": "2026-06-13T20:19:33.130Z"
     }
   ],
   "edit_counts": {
@@ -1894,12 +2535,12 @@
     "apps/api/src/puzzles/puzzles.types.ts": 1,
     "apps/api/src/puzzles/puzzles.service.ts": 1,
     "apps/api/src/puzzles/puzzles.controller.ts": 1,
-    "apps/api/src/puzzles/puzzles.module.ts": 6,
-    "apps/api/src/app.module.ts": 4,
+    "apps/api/src/puzzles/puzzles.module.ts": 8,
+    "apps/api/src/app.module.ts": 6,
     "apps/web/src/lib/board/types.ts": 1,
     "apps/web/src/lib/board/sound.ts": 1,
     "apps/web/src/lib/board/puzzle-utils.ts": 3,
-    "apps/web/src/lib/api/puzzles.ts": 9,
+    "apps/web/src/lib/api/puzzles.ts": 11,
     "apps/web/src/hooks/use-puzzle.ts": 6,
     "apps/web/src/components/puzzle/puzzle-board.tsx": 4,
     "apps/web/src/app/puzzles/page.tsx": 1,
@@ -1929,20 +2570,20 @@
     "docs/claude-sessions/purechess-improve/session-15-a11y-mobile-polish.md": 1,
     "docs/claude-sessions/purechess-improve/session-16-analytics-perf-e2e-docs.md": 1,
     "apps/api/prisma/schema.prisma": 18,
-    "packages/shared/src/dto/puzzle.dto.ts": 3,
+    "packages/shared/src/dto/puzzle.dto.ts": 4,
     "packages/shared/src/dto/training.dto.ts": 1,
-    "packages/shared/src/index.ts": 3,
+    "packages/shared/src/index.ts": 4,
     "apps/web/src/components/improve/training-placeholder.tsx": 1,
     "apps/web/src/app/train/page.tsx": 1,
     "apps/web/src/app/openings/page.tsx": 3,
-    "apps/web/src/app/endgames/page.tsx": 1,
+    "apps/web/src/app/endgames/page.tsx": 3,
     "apps/web/src/app/globals.css": 1,
     "docs/roadmap/purechess-improve/data-model.md": 1,
     "docs/roadmap/purechess-improve/baselines.md": 1,
     "docs/roadmap/purechess-improve/session-01-handoff.md": 1,
     "apps/api/scripts/seed-puzzles.ts": 1,
     "apps/api/src/puzzles/puzzle-catalog.service.ts": 1,
-    "apps/api/package.json": 1,
+    "apps/api/package.json": 2,
     ".gitignore": 1,
     "apps/api/test/puzzles/seed-puzzles.spec.ts": 1,
     "apps/api/test/puzzles/puzzle-catalog.service.spec.ts": 1,
@@ -1953,7 +2594,7 @@
     "apps/api/src/puzzles/dto/record-attempt.dto.ts": 1,
     "apps/api/src/puzzles/puzzle-rating.service.ts": 1,
     "apps/api/src/puzzles/puzzle-serving.service.ts": 4,
-    "apps/api/src/puzzles/puzzle-training.controller.ts": 2,
+    "apps/api/src/puzzles/puzzle-training.controller.ts": 5,
     "apps/api/test/puzzles/puzzle-rating.service.spec.ts": 1,
     "apps/api/test/puzzles/puzzle-serving.service.spec.ts": 1,
     "docs/roadmap/purechess-improve/session-03-handoff.md": 2,
@@ -1994,24 +2635,57 @@
     "apps/web/src/app/games/[gameId]/review-client.tsx": 4,
     "apps/web/test/review/mistake-trainer.test.tsx": 1,
     "docs/roadmap/purechess-improve/session-07-handoff.md": 2,
-    "packages/shared/src/dto/repertoire.dto.ts": 1,
+    "packages/shared/src/dto/repertoire.dto.ts": 2,
     "apps/api/src/repertoire/repertoire-tree.ts": 4,
-    "apps/api/src/repertoire/dto/repertoire-body.dto.ts": 1,
+    "apps/api/src/repertoire/dto/repertoire-body.dto.ts": 3,
     "apps/api/src/repertoire/repertoire.service.ts": 3,
     "apps/api/src/repertoire/repertoire.controller.ts": 1,
-    "apps/api/src/repertoire/repertoire.module.ts": 1,
+    "apps/api/src/repertoire/repertoire.module.ts": 2,
     "apps/api/test/repertoire/repertoire.service.spec.ts": 1,
-    "apps/web/src/lib/api/repertoire.ts": 1,
+    "apps/web/src/lib/api/repertoire.ts": 3,
     "apps/web/src/components/openings/repertoire-import.tsx": 1,
     "apps/web/src/components/openings/repertoire-explorer-builder.tsx": 1,
     "apps/web/src/components/openings/repertoire-view.tsx": 3,
-    "apps/web/src/app/openings/openings-client.tsx": 1,
+    "apps/web/src/app/openings/openings-client.tsx": 6,
     "apps/web/test/openings/repertoire-import.test.ts": 1,
-    "docs/roadmap/purechess-improve/session-08-handoff.md": 1
+    "docs/roadmap/purechess-improve/session-08-handoff.md": 1,
+    "apps/api/src/repertoire/repertoire-review.service.ts": 1,
+    "apps/api/src/repertoire/repertoire-review.controller.ts": 1,
+    "apps/api/test/repertoire/repertoire-review.service.spec.ts": 4,
+    "apps/web/src/hooks/use-opening-drill.ts": 7,
+    "apps/web/src/components/openings/opening-drill.tsx": 1,
+    "apps/web/test/openings/opening-drill.test.tsx": 3,
+    "docs/roadmap/purechess-improve/session-09-handoff.md": 1,
+    "../../../../tmp/verify-fens.cjs": 1,
+    "../../../../tmp/verify-fens2.cjs": 5,
+    "packages/shared/src/dto/endgame.dto.ts": 1,
+    "apps/api/prisma/seed/endgame-drills.ts": 1,
+    "apps/api/src/endgames/tablebase.service.ts": 1,
+    "apps/api/src/endgames/dto/probe.dto.ts": 1,
+    "apps/api/src/endgames/dto/attempt.dto.ts": 1,
+    "apps/api/src/endgames/endgames.service.ts": 1,
+    "apps/api/src/endgames/endgames.controller.ts": 1,
+    "apps/api/src/endgames/endgames.module.ts": 1,
+    "apps/api/test/endgames/endgames.service.spec.ts": 1,
+    "apps/web/src/lib/api/endgames.ts": 1,
+    "apps/web/src/hooks/use-endgame-drill.ts": 2,
+    "apps/web/src/app/endgames/endgames-client.tsx": 1,
+    "apps/web/test/endgames/use-endgame-drill.test.ts": 1,
+    "docs/roadmap/purechess-improve/session-10-handoff.md": 3,
+    "apps/api/src/puzzles/puzzle-history.service.ts": 3,
+    "apps/web/src/components/puzzle/puzzle-rating-chart.tsx": 1,
+    "apps/web/src/components/puzzle/theme-accuracy-table.tsx": 1,
+    "apps/web/src/app/puzzles/stats/page.tsx": 1,
+    "apps/web/src/app/puzzles/stats/stats-client.tsx": 1,
+    "apps/web/src/components/profile/puzzle-rating-pill.tsx": 1,
+    "apps/web/src/app/profile/[username]/page.tsx": 2,
+    "apps/web/test/puzzle/theme-accuracy-table.test.tsx": 3,
+    "apps/api/test/puzzles/puzzle-history.service.spec.ts": 1,
+    "docs/roadmap/purechess-improve/session-11-handoff.md": 1
   },
-  "anatomy_hits": 112,
-  "anatomy_misses": 6,
-  "repeated_reads_warned": 68,
+  "anatomy_hits": 141,
+  "anatomy_misses": 8,
+  "repeated_reads_warned": 106,
   "cerebrum_warnings": 0,
   "stop_count": 3
 }

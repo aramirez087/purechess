@@ -2709,3 +2709,28 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:07 | Created docs/roadmap/purechess-improve/session-10-handoff.md | — | ~2482 |
 | 14:08 | Edited docs/roadmap/purechess-improve/session-10-handoff.md | "<filled at commit>" → "01e69a0cf3318c94b54481c8e" | ~25 |
 | 14:08 | Edited docs/roadmap/purechess-improve/session-10-handoff.md | modified feat() | ~45 |
+| 14:10 | Edited packages/shared/src/dto/puzzle.dto.ts | expanded (+42 lines) | ~474 |
+| 14:11 | Created apps/api/src/puzzles/puzzle-history.service.ts | — | ~1833 |
+| 14:11 | Edited apps/api/src/puzzles/puzzle-history.service.ts | reduced (-9 lines) | ~82 |
+| 14:11 | Edited apps/api/src/puzzles/puzzle-history.service.ts | 6→4 lines | ~35 |
+| 14:11 | Edited apps/api/src/puzzles/puzzles.module.ts | added 1 import(s) | ~76 |
+| 14:11 | Edited apps/api/src/puzzles/puzzles.module.ts | 14→16 lines | ~99 |
+| 14:11 | Edited apps/api/src/puzzles/puzzle-training.controller.ts | added 1 import(s) | ~178 |
+| 14:11 | Edited apps/api/src/puzzles/puzzle-training.controller.ts | modified constructor() | ~67 |
+| 14:11 | Edited apps/api/src/puzzles/puzzle-training.controller.ts | expanded (+10 lines) | ~154 |
+| 14:12 | Edited apps/web/src/lib/api/puzzles.ts | 9→10 lines | ~54 |
+| 14:12 | Edited apps/web/src/lib/api/puzzles.ts | modified fetchPuzzleRating() | ~214 |
+| 14:12 | Created apps/web/src/components/puzzle/puzzle-rating-chart.tsx | — | ~1922 |
+| 14:12 | Created apps/web/src/components/puzzle/theme-accuracy-table.tsx | — | ~1384 |
+| 14:13 | Created apps/web/src/app/puzzles/stats/page.tsx | — | ~402 |
+| 14:13 | Created apps/web/src/app/puzzles/stats/stats-client.tsx | — | ~1750 |
+| 14:13 | Created apps/web/src/components/profile/puzzle-rating-pill.tsx | — | ~639 |
+| 14:13 | Edited apps/web/src/app/profile/[username]/page.tsx | added 1 import(s) | ~76 |
+| 14:14 | Edited apps/web/src/app/profile/[username]/page.tsx | 2→3 lines | ~51 |
+| 14:14 | Created apps/web/test/puzzle/theme-accuracy-table.test.tsx | — | ~1412 |
+| 14:15 | Created apps/api/test/puzzles/puzzle-history.service.spec.ts | — | ~1969 |
+| 14:15 | Edited apps/web/test/puzzle/theme-accuracy-table.test.tsx | modified stat() | ~90 |
+| 14:16 | Edited apps/web/test/puzzle/theme-accuracy-table.test.tsx | 10→11 lines | ~130 |
+
+| 14:16 | S11 puzzle stats & charts: PuzzleHistoryService (ratingHistory cap-200 + daily-close bucket, summary{rating,attempted,solved,accuracy,weakestTheme}), GET /puzzles/history, PuzzleRatingChart (pure-SVG reuse), ThemeAccuracyTable (weakest-first, ⚠<50, deep-links), /puzzles/stats page+client, profile PuzzleRatingPill, shared DTOs (PuzzleRatingPoint/Summary/History), fetchPuzzleHistory. Tests: theme-accuracy-table.test.tsx (8) + puzzle-history.service.spec.ts (13). | apps/api/src/puzzles/{puzzle-history.service,puzzle-training.controller,puzzles.module}.ts, apps/web/src/components/puzzle/{puzzle-rating-chart,theme-accuracy-table}.tsx, apps/web/src/app/puzzles/stats/{page,stats-client}.tsx, apps/web/src/components/profile/puzzle-rating-pill.tsx, apps/web/src/lib/api/puzzles.ts, packages/shared/src/dto/puzzle.dto.ts | all gates green (api 518, web 621) | ~38k |
+| 14:19 | Created docs/roadmap/purechess-improve/session-11-handoff.md | — | ~2282 |

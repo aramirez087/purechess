@@ -12,6 +12,7 @@ import type { User } from '@prisma/client';
 import type {
   PuzzleAttemptResultDto,
   PuzzleDto,
+  PuzzleHistoryDto,
   PuzzleRatingDto,
   PuzzleThemeDto,
   PuzzleThemeStatDto,
@@ -21,6 +22,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { PuzzleCatalogService } from './puzzle-catalog.service';
 import { PuzzleServingService } from './puzzle-serving.service';
 import { PuzzleRatingService } from './puzzle-rating.service';
+import { PuzzleHistoryService } from './puzzle-history.service';
 import { RecordAttemptDto } from './dto/record-attempt.dto';
 
 /**
@@ -36,6 +38,7 @@ export class PuzzleTrainingController {
     private readonly catalog: PuzzleCatalogService,
     private readonly serving: PuzzleServingService,
     private readonly rating: PuzzleRatingService,
+    private readonly historyService: PuzzleHistoryService,
   ) {}
 
   /** Public: the theme catalog (slug + count) for the picker / empty-state. */
@@ -88,5 +91,15 @@ export class PuzzleTrainingController {
   @UseGuards(SessionAuthGuard)
   getRating(@CurrentUser() user: User): Promise<PuzzleRatingDto> {
     return this.rating.get(user.id);
+  }
+
+  /**
+   * The user's puzzle-rating curve (bucketed + capped) plus the headline
+   * summary (rating, accuracy, weakest theme) for the stats surface.
+   */
+  @Get('history')
+  @UseGuards(SessionAuthGuard)
+  getHistory(@CurrentUser() user: User): Promise<PuzzleHistoryDto> {
+    return this.historyService.history(user.id);
   }
 }

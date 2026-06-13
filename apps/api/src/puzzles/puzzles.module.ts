@@ -5,6 +5,7 @@ import { PuzzlesService } from './puzzles.service';
 import { PuzzleCatalogService } from './puzzle-catalog.service';
 import { PuzzleServingService } from './puzzle-serving.service';
 import { PuzzleRatingService } from './puzzle-rating.service';
+import { PuzzleHistoryService } from './puzzle-history.service';
 import { PuzzleTrainingController } from './puzzle-training.controller';
 import { PuzzleRushController } from './puzzle-rush.controller';
 import { PuzzleRushService } from './puzzle-rush.service';
@@ -27,6 +28,7 @@ import { GameMistakeService } from './game-mistake.service';
     PuzzleCatalogService,
     PuzzleServingService,
     PuzzleRatingService,
+    PuzzleHistoryService,
     PuzzleRushService,
     PuzzleReviewService,
     GameMistakeService,
@@ -35,6 +37,7 @@ import { GameMistakeService } from './game-mistake.service';
     PuzzleCatalogService,
     PuzzleServingService,
     PuzzleRatingService,
+    PuzzleHistoryService,
     PuzzleRushService,
     PuzzleReviewService,
     GameMistakeService,

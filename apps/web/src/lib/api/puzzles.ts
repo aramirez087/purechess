@@ -10,6 +10,7 @@ import type {
   MistakeCandidateDto,
   PuzzleAttemptResultDto,
   PuzzleDto,
+  PuzzleHistoryDto,
   PuzzleRatingDto,
   PuzzleSource,
   PuzzleThemeDto,
@@ -125,6 +126,16 @@ export async function fetchPuzzleRating(): Promise<PuzzleRatingDto> {
   });
   await ensureOk(res, 'puzzle-rating fetch');
   return res.json() as Promise<PuzzleRatingDto>;
+}
+
+/** The current user's puzzle-rating curve (bucketed + capped) + headline summary. */
+export async function fetchPuzzleHistory(): Promise<PuzzleHistoryDto> {
+  const res = await fetch(`${API}/api/puzzles/history`, {
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+  });
+  await ensureOk(res, 'puzzle-history fetch');
+  return res.json() as Promise<PuzzleHistoryDto>;
 }
 
 // --- Puzzle Rush (timed board-vision drill) --------------------------------
