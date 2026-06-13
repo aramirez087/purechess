@@ -1,9 +1,13 @@
 import { Chess } from 'chess.js';
+import type { MoveIntent, PieceType, Square } from '@purechess/shared';
+import { applyMoveToFen } from '@/lib/board/rules';
 
 /**
- * Pure helpers for the daily-puzzle flow: replaying the puzzle game's PGN to
- * the starting position and comparing the solver's UCI moves against the
- * Lichess solution. Kept free of React so they're trivially unit-testable.
+ * Pure helpers for the puzzle solve loop — shared between the daily-puzzle
+ * flow (PGN-replayed lichess puzzles, `use-puzzle.ts`) and DB-backed local
+ * puzzles (`use-local-puzzle.ts`). Replaying PGN, comparing UCI moves against
+ * a scripted solution, and stepping the line all live here so both hooks reuse
+ * one implementation. Kept free of React so they're trivially unit-testable.
  */
 
 export interface ReplayPly {
@@ -77,4 +81,34 @@ export function normalizeCastleUci(uci: string): string {
 /** Whether two UCIs are equivalent, accounting for castling normalization. */
 export function uciMatch(played: string, expected: string): boolean {
   return normalizeCastleUci(played) === normalizeCastleUci(expected);
+}
+
+/** Parses a UCI string (e.g. "e2e4", "e7e8q") into a board MoveIntent. */
+export function uciToIntent(uci: string): MoveIntent {
+  return {
+    from: uci.slice(0, 2) as Square,
+    to: uci.slice(2, 4) as Square,
+    promotion: (uci[4] as PieceType | undefined) || undefined,
+  };
+}
+
+/**
+ * Applies a solution UCI (normalizing Lichess's rook-square castling form) to a
+ * FEN. Returns the resulting FEN plus the king-destination from/to for board
+ * highlighting, or null if the move is illegal/unparseable. Shared by both the
+ * daily and local solve hooks for the player move, auto-reply, and reveal steps.
+ */
+export function applyUci(
+  fen: string,
+  uci: string,
+): { fen: string; lastMove: [string, string] } | null {
+  const norm = normalizeCastleUci(uci);
+  const next = applyMoveToFen(fen, uciToIntent(norm));
+  if (!next) return null;
+  return { fen: next, lastMove: [norm.slice(0, 2), norm.slice(2, 4)] };
+}
+
+/** The active-color field of a FEN, defaulting to white for malformed input. */
+export function solvingColorFromFen(fen: string): 'w' | 'b' {
+  return (fen.split(' ')[1] as 'w' | 'b') === 'b' ? 'b' : 'w';
 }

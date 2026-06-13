@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:37:04.875Z
-> Files: 1029 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:46:59.367Z
+> Files: 1044 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -650,12 +650,19 @@
 - `apps/api/test/puzzles/seed-puzzles.spec.ts` — Jest: pure parse/select logic (no DB). validateHeader, parseRow (split moves/themes/openingTags, int coercion, skip empty FEN/Moves/id), PopularityHeap top-N + tie-by-plays + O(cap) memory, parseArgs. (~900 tok)
 - `apps/web/src/app/puzzles/page.tsx` — Server page, buildMetadata, AppShell → PuzzleClient. (~90 tok)
 - `apps/web/src/app/puzzles/puzzle-client.tsx` — 'use client' usePuzzle layout: board + info panel (rating/plays/themes-after-solve) + "Find the best move for X" prompt. Wraps BoardSettingsProvider. (~560 tok)
+- `apps/web/src/app/puzzles/train/page.tsx` — Server page: auth (me.user) + public themes + auth stats → TrainClient. Signed-out browsable (read-only), never gates daily. (~330 tok)
+- `apps/web/src/app/puzzles/train/train-client.tsx` — 'use client' theme trainer. selectWeakestThemes (top-3 accuracy ASC, min 5 attempts). Phase 1 selection (weakest row + all-themes grid of ThemeTiles, ?theme= deep-link); Phase 2 <TrainingSession source="theme">. Signed-out: read-only grid + sign-in prompt. (~900 tok)
 - `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
+- `apps/web/src/components/puzzle/theme-tile.tsx` — Selectable theme card: humanizeTheme (camelCase/slug→title), accuracyBand (low/mid/high), puzzle count, accuracy% (hidden if 0 attempts) via `.acc-*` scale, optional "Weakest" badge. (~600 tok)
+- `apps/web/src/components/puzzle/training-session.tsx` — Reusable drill shell. Props {theme:string|null, source:PuzzleSource, target=10, onBack?, onChangeTheme?}. Loops fetchNextPuzzle→useLocalPuzzle/Chessboard→recordAttempt({solved,msToSolve,source})→1.2s auto-advance. Header solved/attempted + progress bar, rating delta readout, SessionSummary at target with theme accuracy before/after. (~1500 tok)
+- `apps/web/src/hooks/use-local-puzzle.ts` — S04 DB-puzzle solve machine (reusable core for rush/review/mistakes). NO setup phase: puzzle.fen IS start, moves[0]=solver's first move, solvingColor from FEN. Phases player→auto-reply→…→success|fail→reveal. onMove(uci) matches via puzzle-utils, tracks msToSolve, fires onSolved({msToSolve})/onFailed once. (~1100 tok)
 - `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
 - `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating() — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~520 tok)
-- `apps/web/src/lib/board/puzzle-utils.ts` — replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch. chess.js. (~430 tok)
+- `apps/web/src/lib/board/puzzle-utils.ts` — SHARED solve helpers (daily + local hooks): replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch, uciToIntent, applyUci (normalize+apply→{fen,lastMove}), solvingColorFromFen. chess.js + rules.applyMoveToFen. (~560 tok)
 - `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
+- `apps/web/test/hooks/use-local-puzzle.test.ts` — vitest+fake timers: player phase no-setup, solvingColor from FEN (w/b), castle-uci match (e1h1==e1g1), full correct→success+msToSolve, wrong→fail+onFailed, onReveal. (~900 tok)
 - `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
+- `apps/web/test/puzzle/training-session.test.tsx` — vitest: recordAttempt source (theme/rush), auto-advance to next, summary before/after accuracy. Mocks api client + Chessboard + board-context. (~900 tok)
 
 ## Epic: purechess-improve (ELO improvement surface) — added 2026-06-13
 
@@ -1164,6 +1171,11 @@
 - `page.tsx` — metadata (~139 tok)
 - `puzzle-client.tsx` — formatPlays (~1162 tok)
 
+## apps/web/src/app/puzzles/train/
+
+- `page.tsx` — dynamic (~498 tok)
+- `train-client.tsx` — Theme trainer entry. Phase 1 lets the user pick a theme (weakest surfaced (~1645 tok)
+
 ## apps/web/src/app/register/
 
 - `page.tsx` — Suspense wrapper for RegisterForm (~120 tok)
@@ -1290,6 +1302,8 @@
 ## apps/web/src/components/puzzle/
 
 - `puzzle-board.tsx` — humanizeTheme (~1176 tok)
+- `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~973 tok)
+- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4268 tok)
 
 ## apps/web/src/components/review/
 
@@ -1328,12 +1342,13 @@
 - `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1287 tok)
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
+- `use-local-puzzle.ts` — Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the (~2156 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
 - `use-move-classifier.ts` — 1-based ply. (~2597 tok)
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
-- `use-puzzle.ts` — Static derivation from a loaded puzzle — never changes once set. (~2445 tok)
+- `use-puzzle.ts` — Static derivation from a loaded puzzle — never changes once set. (~2211 tok)
 - `use-replay-san.ts` — FEN after each ply; `fens[0]` is the start, `fens[k]` follows ply k. (~418 tok)
 - `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~166 tok)
 
@@ -1374,7 +1389,7 @@
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
 - `premove-geometry.ts` — Geometric premove destinations (chessground-style): every square the piece (~909 tok)
 - `premove.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~73 tok)
-- `puzzle-utils.ts` — Pure helpers for the daily-puzzle flow: replaying the puzzle game's PGN to (~717 tok)
+- `puzzle-utils.ts` — Pure helpers for the puzzle solve loop — shared between the daily-puzzle (~1121 tok)
 - `pv-to-san.ts` — Converts a UCI PV sequence into SAN notation. (~295 tok)
 - `rules-lazy.ts` — Memoized loader for the chess.js-backed rules module, so the eager board (~221 tok)
 - `rules.ts` — Everything that needs actual chess rules — and therefore chess.js (~18 kB (~2647 tok)
@@ -1470,6 +1485,7 @@
 
 ## apps/web/test/hooks/
 
+- `use-local-puzzle.test.ts` — Declares AUTO_REPLY_MS (~1316 tok)
 - `use-move-classifier.test.ts` — Declares wireMove (~2766 tok)
 - `use-move-input.test.ts` — START: keyEvent, openHook (~1562 tok)
 - `use-opening-explorer.test.ts` — Fetch mock whose responses resolve only when the test says so. (~2140 tok)
@@ -1492,6 +1508,10 @@
 
 - `profile-page.test.tsx` — mockRatings (~1176 tok)
 - `rating-chart.test.tsx` — DAY_MS (~1147 tok)
+
+## apps/web/test/puzzle/
+
+- `training-session.test.tsx` — --- Mocks ------------------------------------------------------------------ (~1444 tok)
 
 ## apps/web/test/review/
 
@@ -1615,7 +1635,8 @@
 - `data-model.md` — Improve epic — data model (~2107 tok)
 - `session-01-handoff.md` — Session 01 handoff — Charter, data model & Improve IA (~2422 tok)
 - `session-02-handoff.md` — Session 02 handoff — Puzzle ingestion pipeline (~1886 tok)
-- `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2562 tok)
+- `session-03-handoff.md` — Session 03 handoff — Puzzle serving API + puzzle Glicko rating (~2558 tok)
+- `session-04-handoff.md` — Session 04 handoff — Local solve engine + theme trainer (~1941 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

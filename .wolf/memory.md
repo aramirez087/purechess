@@ -2487,3 +2487,19 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:33 | Created apps/api/test/puzzles/puzzle-serving.service.spec.ts | — | ~3613 |
 | 12:40 | S03 puzzle serving API: PuzzleServingService (getNext ladder + recordAttempt + getStats), PuzzleRatingService (reuses glicko2 updateRating), PuzzleTrainingController (5 routes, additive in puzzles.module.ts), web client fns | apps/api/src/puzzles/*, apps/web/src/lib/api/puzzles.ts | all 3 gates green (api tsc+405 tests, shared build, web tsc); live-verified themes 200 / next 401 / daily 200 on 400 seeded puzzles, then cleaned up | ~9000 |
 | 12:37 | Created docs/roadmap/purechess-improve/session-03-handoff.md | — | ~2733 |
+| 12:37 | Edited docs/roadmap/purechess-improve/session-03-handoff.md | "<filled in after commit>" → "76f9142" | ~14 |
+| 12:39 | Edited apps/web/src/lib/board/puzzle-utils.ts | 7→11 lines | ~159 |
+| 12:39 | Edited apps/web/src/lib/board/puzzle-utils.ts | added 1 condition(s) | ~386 |
+| 12:39 | Edited apps/web/src/hooks/use-puzzle.ts | 10→9 lines | ~94 |
+| 12:39 | Edited apps/web/src/hooks/use-puzzle.ts | removed 21 lines | ~20 |
+| 12:40 | Created apps/web/src/hooks/use-local-puzzle.ts | — | ~2156 |
+| 12:40 | Created apps/web/src/components/puzzle/theme-tile.tsx | — | ~973 |
+| 12:41 | Created apps/web/src/components/puzzle/training-session.tsx | — | ~4286 |
+| 12:41 | Edited apps/web/src/components/puzzle/training-session.tsx | reduced (-6 lines) | ~149 |
+| 12:41 | Edited apps/web/src/components/puzzle/training-session.tsx | inline fix | ~18 |
+| 12:42 | Created apps/web/src/app/puzzles/train/page.tsx | — | ~498 |
+| 12:42 | Created apps/web/src/app/puzzles/train/train-client.tsx | — | ~1645 |
+| 12:43 | Created apps/web/test/hooks/use-local-puzzle.test.ts | — | ~1316 |
+| 12:44 | Created apps/web/test/puzzle/training-session.test.tsx | — | ~1464 |
+| 12:44 | Edited apps/web/test/puzzle/training-session.test.tsx | CSS: timeout | ~194 |
+| 12:46 | Created docs/roadmap/purechess-improve/session-04-handoff.md | — | ~2070 |

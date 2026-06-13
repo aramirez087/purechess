@@ -1,11 +1,10 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Color, MoveIntent, PieceType, Square } from '@purechess/shared';
-import { applyMoveToFen } from '@/lib/board/rules';
+import type { Color } from '@purechess/shared';
 import { soundEngine } from '@/lib/board/sound';
 import {
-  normalizeCastleUci,
+  applyUci,
   replayPgnVerbose,
   uciMatch,
 } from '@/lib/board/puzzle-utils';
@@ -64,26 +63,6 @@ const INITIAL_STATE: PuzzleState = {
   moveIndex: 0,
   error: null,
 };
-
-function uciToIntent(uci: string): MoveIntent {
-  return {
-    from: uci.slice(0, 2) as Square,
-    to: uci.slice(2, 4) as Square,
-    promotion: (uci[4] as PieceType | undefined) || undefined,
-  };
-}
-
-/**
- * Applies a solution UCI (normalizing Lichess's rook-square castling form) to a
- * FEN. Returns the resulting FEN plus the king-destination from/to for board
- * highlighting, or null if the move is illegal/unparseable.
- */
-function applyUci(fen: string, uci: string): { fen: string; lastMove: [string, string] } | null {
-  const norm = normalizeCastleUci(uci);
-  const next = applyMoveToFen(fen, uciToIntent(norm));
-  if (!next) return null;
-  return { fen: next, lastMove: [norm.slice(0, 2), norm.slice(2, 4)] };
-}
 
 function buildContext(data: LichessPuzzleData): PuzzleContext | null {
   const { initialPly, solution } = data.puzzle;
