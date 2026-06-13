@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Ban, Flag, Handshake, Loader2, Plus, RotateCcw } from 'lucide-react';
+import { Ban, Flag, Handshake, Lightbulb, Loader2, Plus, RotateCcw } from 'lucide-react';
 import type { ComputerGameStateDto } from '@purechess/shared';
 import type { Square } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
@@ -35,9 +35,12 @@ import {
   drawComputerGame,
 } from '@/lib/api/computer-games';
 import { PgnIconActions } from '@/components/review/pgn-actions';
+import { EvalBar } from '@/components/review/eval-panel';
 import { ResultOverlay, type ResultTone } from '@/components/game/result-overlay';
+import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
+import { usePositionEval } from '@/hooks/use-position-eval';
 import { useSettingsStore } from '@/stores/settings-store';
 import { soundEngine } from '@/lib/board/sound';
 
@@ -47,6 +50,9 @@ type PageState =
   | { phase: 'loading' }
   | { phase: 'error'; message: string }
   | { phase: 'playing'; game: ComputerGameStateDto; submitting: boolean; moveError: string | null };
+
+/** Hints per game — encourages thinking first, asking second. */
+const HINT_LIMIT = 3;
 
 const REASON_LABELS: Record<string, string> = {
   checkmate: 'Checkmate',
@@ -208,6 +214,10 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
   const [flipped, setFlipped] = useState(false);
   const [currentPly, setCurrentPly] = useState(0);
   const [resultDismissed, setResultDismissed] = useState(false);
+  const [hintShape, setHintShape] = useState<BoardShape[]>([]);
+  const [hintsUsed, setHintsUsed] = useState(0);
+  const [hintPending, setHintPending] = useState(false);
+  const hintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Bumped by the error screen's "Try again" to re-run the initial load.
   const [loadToken, setLoadToken] = useState(0);
   // Guards against React Strict-Mode double-invoking the bot driver, which
@@ -232,7 +242,7 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     isComputerThinking: _isComputerThinking,
     currentPly,
     totalPly: _sanCount,
-    onHint: undefined,
+    onHint: _isGameOver ? undefined : handleHint,
     onTakeback: _isGameOver ? undefined : handleTakeback,
     onResign: _isGameOver ? undefined : handleResign,
     onDraw: _isGameOver ? undefined : handleClaimDraw,
@@ -268,6 +278,40 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     }
   }, [_isPlaying, liveClock, state, lowTimeSound]);
 
+  // Live eval bar (settings-gated). Analyzes only on the human's turn so the
+  // engine job queue stays free while the bot computes its reply; a null fen
+  // (toggle off / not playing) stops the hook's debounce entirely.
+  const showEvalBar = useSettingsStore((s) => s.showEvalBar);
+  const humanTurnForEval =
+    _isPlaying &&
+    state.game.status === 'active' &&
+    !state.submitting &&
+    getSideToMove(state.game.fen) === getHumanColor(state.game.computerColor);
+  const { evaluation, thinking } = usePositionEval(
+    showEvalBar && _isPlaying ? state.game.fen : null,
+    humanTurnForEval,
+    { multiPv: 1 },
+  );
+
+  // Tracks the live fen so an in-flight hint can detect the player moved while
+  // the engine thought, and a showing hint arrow clears when the position moves
+  // on (it no longer applies).
+  const liveFen = _isPlaying ? state.game.fen : null;
+  const latestFenRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (latestFenRef.current !== null && liveFen !== latestFenRef.current) {
+      setHintShape((s) => (s.length ? [] : s));
+    }
+    latestFenRef.current = liveFen;
+  }, [liveFen]);
+
+  useEffect(
+    () => () => {
+      if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+    },
+    [],
+  );
+
   // When the side to move hits 0:00 client-side, the server only learns about
   // the flag on the next submit — so claim it: any move attempt on a flagged
   // clock resolves to a completed/timeout state (engine checks time before
@@ -294,6 +338,32 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_isPlaying, liveClock, state, gameId]);
+
+  // Full-strength engine hint (not the level-nerfed getBestMove) — shows the
+  // genuinely best move as a 3-second arrow. Limited to HINT_LIMIT per game.
+  async function handleHint() {
+    if (state.phase !== 'playing') return;
+    if (hintsUsed >= HINT_LIMIT || hintPending || hintShape.length > 0) return;
+    if (state.submitting || state.game.status !== 'active' || isComputerTurn(state.game)) return;
+    const fenAtClick = state.game.fen;
+    setHintPending(true);
+    try {
+      const { analyze } = await import('@/lib/engine/stockfish-client');
+      const result = await analyze(fenAtClick, { movetimeMs: 1500, multiPv: 1 });
+      // The player may have moved (or the game ended) while the engine thought.
+      if (disposedRef.current || latestFenRef.current !== fenAtClick) return;
+      const arrow = bestMoveArrow(result.pv?.[0] ?? result.bestmove);
+      if (arrow) {
+        setHintShape([arrow]);
+        setHintsUsed((n) => n + 1);
+        hintTimeoutRef.current = setTimeout(() => setHintShape([]), 3000);
+      }
+    } catch {
+      // Engine hiccup — leave the hint unspent.
+    } finally {
+      setHintPending(false);
+    }
+  }
 
   // Computes the engine's reply locally (Web Worker) and submits it. Runs
   // inside the async chain (not a state effect) so it fires exactly once per
@@ -526,6 +596,21 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
           : null
       : null;
 
+  const hintsLeft = HINT_LIMIT - hintsUsed;
+  // Shared between the abort-window and mid-game control bars — hints are
+  // available from move one.
+  const hintButton = (
+    <button
+      onClick={handleHint}
+      disabled={hintsLeft <= 0 || !humanActive || hintPending || hintShape.length > 0}
+      title="Show the engine's best move"
+      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      <Lightbulb className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+      {hintsLeft <= 0 ? 'No hints left' : hintsUsed > 0 ? `Hint (${hintsLeft} left)` : 'Hint'}
+    </button>
+  );
+
   function stripFor(color: Color): PlayerStripProps {
     const isHuman = color === humanColor;
     const active = isHuman ? humanActive : computerActive;
@@ -584,7 +669,13 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
                   reasonLabel={reasonLabel}
                   onDismiss={() => setResultDismissed(true)}
                   onRematch={handleRematch}
+                  analyzeHref={`/games/${gameId}`}
                 />
+              ) : undefined
+            }
+            evalBar={
+              showEvalBar ? (
+                <EvalBar evaluation={evaluation} orientation={orientation} thinking={thinking} />
               ) : undefined
             }
           >
@@ -594,6 +685,7 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
               onMove={handleMove}
               lastMove={lastMove}
               readOnly={readOnly}
+              autoShapes={hintShape}
               className="[&_[role=grid]]:overflow-hidden [&_[role=grid]]:rounded-[3px] [&_[role=grid]]:shadow-[inset_0_0_0_1px_rgba(11,13,11,0.28)]"
             />
           </BoardColumn>
@@ -652,19 +744,23 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
                     </Link>
                   </>
                 ) : canAbort ? (
-                  <button
-                    onClick={handleAbort}
-                    disabled={submitting}
-                    className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <Ban
-                      className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
-                      aria-hidden="true"
-                    />
-                    Abort
-                  </button>
+                  <>
+                    {hintButton}
+                    <button
+                      onClick={handleAbort}
+                      disabled={submitting}
+                      className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Ban
+                        className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
+                        aria-hidden="true"
+                      />
+                      Abort
+                    </button>
+                  </>
                 ) : (
                   <>
+                    {hintButton}
                     <button
                       onClick={handleTakeback}
                       disabled={submitting || !humanActive || sanMoves.length < 2}

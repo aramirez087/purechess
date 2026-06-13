@@ -711,6 +711,7 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
                   reasonLabel={reasonLabel}
                   onDismiss={() => setResultDismissed(true)}
                   onRematch={rematchMinePending ? undefined : handleRematch}
+                  analyzeHref={`/games/${gameId}`}
                 />
               ) : undefined
             }

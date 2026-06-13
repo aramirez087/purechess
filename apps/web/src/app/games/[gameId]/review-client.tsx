@@ -16,6 +16,7 @@ import {
 import { ReviewControls } from '@/components/review/review-controls';
 import { EvalBar, EngineLines } from '@/components/review/eval-panel';
 import { EvalGraph } from '@/components/review/eval-graph';
+import { MoveTimeChart } from '@/components/review/move-time-chart';
 import { ClassificationBadge } from '@/components/review/classification-badge';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { ReportButton } from '@/components/reports/report-button';
@@ -370,28 +371,36 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
                 </div>
               )}
               {classification && (
-                <>
-                  <EvalGraph
-                    evals={classification.evals}
-                    currentPly={ply}
-                    onSeek={goTo}
-                    className="rounded-[4px]"
-                  />
-                  <div className="mt-1.5 flex items-center justify-between font-mono text-[11px] tabular-nums text-[#9da79c]">
-                    <span>
-                      White&ensp;ACPL:{' '}
-                      <span className={acplColor(classification.whiteAcpl)}>
-                        {Math.round(classification.whiteAcpl)}
-                      </span>
+                <EvalGraph
+                  evals={classification.evals}
+                  currentPly={ply}
+                  onSeek={goTo}
+                  className="rounded-[4px]"
+                />
+              )}
+              {/* Self-hides when the game has no real thinking time. */}
+              <MoveTimeChart
+                moves={game.moves}
+                classifications={classification?.moves}
+                currentPly={ply}
+                onSeek={goTo}
+                className="mt-1.5"
+              />
+              {classification && (
+                <div className="mt-1.5 flex items-center justify-between font-mono text-[11px] tabular-nums text-[#9da79c]">
+                  <span>
+                    White&ensp;ACPL:{' '}
+                    <span className={acplColor(classification.whiteAcpl)}>
+                      {Math.round(classification.whiteAcpl)}
                     </span>
-                    <span>
-                      Black&ensp;ACPL:{' '}
-                      <span className={acplColor(classification.blackAcpl)}>
-                        {Math.round(classification.blackAcpl)}
-                      </span>
+                  </span>
+                  <span>
+                    Black&ensp;ACPL:{' '}
+                    <span className={acplColor(classification.blackAcpl)}>
+                      {Math.round(classification.blackAcpl)}
                     </span>
-                  </div>
-                </>
+                  </span>
+                </div>
               )}
             </div>
             <div className="min-h-0 flex-1">

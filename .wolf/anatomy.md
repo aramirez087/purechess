@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-12T12:56:35.785Z
-> Files: 904 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T02:02:50.695Z
+> Files: 910 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -24,6 +24,8 @@
 - `coord-contrast.mjs` — hslToRgb: lum, contrast, blend (~648 tok)
 - `epic-issue-body.md` — Bug 1 — the printed resume command aborts on the failed session's own branch (~1278 tok)
 - `inspect.cjs` — Declares p (~262 tok)
+- `pc-prod-query.cjs` — Declares p (~281 tok)
+- `pc-timeout-check.sql` (~105 tok)
 - `qnotch.mjs` — wQ crown: M9 26 c8.5-1.5 21-1.5 27 0 l2-12 l-7 11 V11 l-5.5 13.5 l-3-15 l-3 15 l-5.5-14 V25 L7 14 z (~612 tok)
 - `sheen-math.mjs` — CSS gradient: 166deg, stops: 0% white a=0.06, 34% white a=0, 70% black a=0.04, 100% black a=0.11 (~638 tok)
 - `stacking-repro.html` — Declares html (~476 tok)
@@ -48,6 +50,7 @@
 
 ## ../../.claude/plans/
 
+- `add-coaching-features-to-encapsulated-gem.md` — Coaching features (computer games) + move-time chart (review) (~2586 tok)
 - `continue-improving-purechess-the-iridescent-liskov.md` — PureChess — Next Iteration: PvP Parity + Matchmaking + Computer-Game LCP (~4253 tok)
 - `you-are-improving-purechess-cheeky-fog.md` — Board UX: FEN-diff animation + geometric premove hints (~2029 tok)
 - `you-are-improving-the-shimmering-canyon.md` — Board drag: coordinate-math square detection + touch snap (chessground patterns) (~2538 tok)
@@ -1011,7 +1014,7 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10528 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10542 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~288 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~420 tok)
 
@@ -1039,7 +1042,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Whether it's the computer's turn to move in the given state. (~8564 tok)
+- `computer-game-client.tsx` — Hints per game — encourages thinking first, asking second. (~9840 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~292 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
@@ -1053,7 +1056,7 @@
 
 - `error.tsx` — GameError (~134 tok)
 - `page.tsx` — formatResult (~717 tok)
-- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~4954 tok)
+- `review-client.tsx` — Completed game or pasted analysis — result/termination may be unknown. (~5054 tok)
 
 ## apps/web/src/app/login/
 
@@ -1091,11 +1094,11 @@
 - `animation-layer.tsx` — Slides the moved piece(s) from origin to destination square. Rendered above (~1143 tok)
 - `annotation-layer.tsx` — Pull the line back from the dest center so the marker tip lands ~center. (~1527 tok)
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
-- `chessboard.tsx` — isLightSquare (~7715 tok)
+- `chessboard.tsx` — isLightSquare (~7782 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
 - `move-input-overlay.tsx` — Floating command-palette over the board for typed moves. Renders only (~1272 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
-- `piece.tsx` — Piece (~288 tok)
+- `piece.tsx` — Piece (~336 tok)
 - `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~1941 tok)
 
 ## apps/web/src/components/board/hooks/
@@ -1127,7 +1130,7 @@
 - `move-panel.tsx` — 1-based ply index. (~1446 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~2078 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~1497 tok)
-- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1885 tok)
+- `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~2131 tok)
 - `result-overlay.tsx` — The big serif word for the result moment. Checkmate keeps its iconic name (~1886 tok)
 
 ## apps/web/src/components/games/
@@ -1176,6 +1179,7 @@
 - `classification-badge.tsx` — Tiny colored glyph after a move's SAN. Renders nothing for good/forced. (~260 tok)
 - `eval-graph.tsx` — Interactive SVG eval-history chart (48px, viewBox 0 0 100 100 non-uniform scale): white/black territory fills via half-height clipPaths, dashed center, current-ply marker, click-to-seek, hover title. (~1069 tok)
 - `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1892 tok)
+- `move-time-chart.tsx` — Per-ply move-time SVG bars (viewBox 0 0 500 80) colored by MoveClass (blunder red → brilliant emerald, neutral when unclassified), white full / black 0.6 opacity, click-to-seek, hover title, White/Black avg row (excludes ≤500ms). Self-hides when no move >500ms. (~1408 tok)
 - `opening-explorer.tsx` — Called with the row's UCI move — caller enters it into the analysis tree. (~1141 tok)
 - `pgn-actions.tsx` — Full-button variant, sized to dock as a panel footer: each action splits (~890 tok)
 - `review-controls.tsx` — Disables the start/previous buttons (ply 0). (~1079 tok)
@@ -1183,7 +1187,7 @@
 
 ## apps/web/src/components/settings/
 
-- `settings-form.tsx` — APP_THEMES (~2904 tok)
+- `settings-form.tsx` — APP_THEMES (~3044 tok)
 
 ## apps/web/src/components/ui/
 
@@ -1208,6 +1212,7 @@
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
+- `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~166 tok)
 
 ## apps/web/src/lib/
 
@@ -1258,7 +1263,7 @@
 
 ## apps/web/src/stores/
 
-- `settings-store.ts` — Exports Settings, useSettingsStore (~479 tok)
+- `settings-store.ts` — Live engine eval bar during computer games. (~507 tok)
 
 ## apps/web/src/types/
 
@@ -1345,6 +1350,7 @@
 
 - `eval-graph.test.tsx` — Empty evals, ±600cp clamp (no NaN), click-to-seek with mocked getBoundingClientRect, zero-width guard. (~585 tok)
 - `eval-panel.test.tsx` — START (~1577 tok)
+- `move-time-chart.test.tsx` — Null render under 500ms threshold, bar count/colors per classification, avg excludes sub-500ms + hides empty side, click-to-seek with mocked getBoundingClientRect, zero-width guard. (~1282 tok)
 - `opening-explorer.test.tsx` — useOpeningExplorerMock (~1182 tok)
 - `review-page.test.tsx` — MOCK_MOVES (~2196 tok)
 

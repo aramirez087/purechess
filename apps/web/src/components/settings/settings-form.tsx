@@ -9,7 +9,7 @@ import { useSettingsStore } from '@/stores/settings-store';
 import { BOARD_THEMES } from '@/lib/board/themes';
 import { PIECE_SETS, pieceSetBase } from '@/lib/board/piece-sets';
 import { prefersReducedMotion } from '@/lib/board/animations';
-import { Monitor, Moon, Sun, Volume2, Move3D, Hash, Square } from 'lucide-react';
+import { Monitor, Moon, Sun, Volume2, Move3D, Hash, Square, Gauge } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const APP_THEMES = [
@@ -147,6 +147,20 @@ export function SettingsForm() {
             checked={settings.animations}
             onCheckedChange={reducedMotion ? undefined : (v) => settings.update({ animations: v })}
             aria-disabled={reducedMotion ? 'true' : undefined}
+          />
+        </SettingRow>
+        <Separator className="bg-border/60" />
+        <SettingRow
+          label="Evaluation bar"
+          htmlFor="showEvalBar"
+          hint="Show the live engine eval next to the board in computer games."
+          icon={Gauge}
+        >
+          <Switch
+            id="showEvalBar"
+            aria-label="Evaluation bar"
+            checked={settings.showEvalBar}
+            onCheckedChange={(v) => settings.update({ showEvalBar: v })}
           />
         </SettingRow>
       </Section>

@@ -17,7 +17,9 @@ export const Piece = memo(function Piece({ type, color, ghost, className }: Piec
   return (
     <SvgComponent
       className={cn(
-        'block h-full w-full select-none pointer-events-none',
+        // Safari ignores draggable={false} on <img>; -webkit-user-drag:none
+        // stops it starting a native single-image drag (bug-464).
+        'block h-full w-full select-none pointer-events-none [-webkit-user-drag:none]',
         // Two-layer shadow: tight contact dark + soft ambient falloff, so the
         // piece reads as sitting ON the board instead of floating over it.
         color === 'b'

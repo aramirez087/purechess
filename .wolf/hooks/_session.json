@@ -1,12 +1,68 @@
 {
-  "session_id": "session-2026-06-12-0835",
-  "started": "2026-06-12T14:35:52.363Z",
-  "files_read": {},
-  "files_written": [],
-  "edit_counts": {},
-  "anatomy_hits": 0,
-  "anatomy_misses": 0,
-  "repeated_reads_warned": 0,
+  "session_id": "session-2026-06-13-1852",
+  "started": "2026-06-13T00:52:44.279Z",
+  "files_read": {
+    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.helpers.ts": {
+      "count": 1,
+      "tokens": 1580,
+      "first_read": "2026-06-13T00:54:47.178Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts": {
+      "count": 1,
+      "tokens": 4147,
+      "first_read": "2026-06-13T00:55:22.131Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/play/computer-game-setup.tsx": {
+      "count": 1,
+      "tokens": 3587,
+      "first_read": "2026-06-13T00:56:14.197Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-drag.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-13T00:58:05.828Z"
+    },
+    "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx": {
+      "count": 3,
+      "tokens": 7782,
+      "first_read": "2026-06-13T02:02:15.963Z"
+    }
+  },
+  "files_written": [
+    {
+      "file": "/tmp/pc-timeout-check.sql",
+      "action": "create",
+      "tokens": 113,
+      "at": "2026-06-13T01:01:05.314Z"
+    },
+    {
+      "file": "/tmp/pc-prod-query.cjs",
+      "action": "create",
+      "tokens": 301,
+      "at": "2026-06-13T01:02:44.675Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+      "action": "edit",
+      "tokens": 119,
+      "at": "2026-06-13T02:02:44.101Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/piece.tsx",
+      "action": "edit",
+      "tokens": 66,
+      "at": "2026-06-13T02:02:50.701Z"
+    }
+  ],
+  "edit_counts": {
+    "../../../../tmp/pc-timeout-check.sql": 1,
+    "../../../../tmp/pc-prod-query.cjs": 1,
+    "apps/web/src/components/board/chessboard.tsx": 1,
+    "apps/web/src/components/board/piece.tsx": 1
+  },
+  "anatomy_hits": 4,
+  "anatomy_misses": 1,
+  "repeated_reads_warned": 2,
   "cerebrum_warnings": 0,
-  "stop_count": 0
+  "stop_count": 2
 }

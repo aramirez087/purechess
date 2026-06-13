@@ -11,6 +11,7 @@ export function useSettings(): Settings {
     lowTimeSound: s.lowTimeSound,
     animations: s.animations,
     pieceSet: s.pieceSet,
+    showEvalBar: s.showEvalBar,
   }));
 }
 

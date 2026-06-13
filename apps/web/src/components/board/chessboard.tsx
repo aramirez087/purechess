@@ -502,7 +502,10 @@ export function Chessboard({
           // server-rendered board paints at its final geometry pre-hydration
           // (no 512px default flash, and the piece <img>s are LCP-eligible
           // straight from the streamed HTML).
-          'grid aspect-square w-full grid-cols-8 grid-rows-8 overflow-hidden rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          // select-none kills text-selection across squares: without it a mouse
+          // sweep selects the board, and dragging that selection spawns a native
+          // multi-image drag ghost (every piece <img> in range) (bug-464).
+          'grid aspect-square w-full select-none grid-cols-8 grid-rows-8 overflow-hidden rounded-[4px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           // Squares set their own cursor; override them all while a drag is live.
           dragState.active && 'cursor-grabbing [&_[data-square]]:!cursor-grabbing',
         )}

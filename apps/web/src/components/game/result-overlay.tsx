@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Plus, RotateCcw } from 'lucide-react';
+import { ChartLine, Plus, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type ResultTone = 'win' | 'loss' | 'draw';
@@ -43,12 +43,15 @@ export function ResultOverlay({
   reasonLabel,
   onDismiss,
   onRematch,
+  analyzeHref,
 }: {
   tone: ResultTone;
   resultLabel: string;
   reasonLabel: string | null;
   onDismiss: () => void;
   onRematch?: () => void;
+  /** Link to the game's review page — omit where review isn't available. */
+  analyzeHref?: string;
 }) {
   const toneRing: Record<ResultTone, string> = {
     win: 'shadow-[0_28px_90px_-20px_rgba(214,181,99,0.5)]',
@@ -132,6 +135,15 @@ export function ResultOverlay({
           >
             View board
           </button>
+          {analyzeHref && (
+            <Link
+              href={analyzeHref}
+              className="inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+            >
+              <ChartLine className="h-4 w-4" aria-hidden="true" />
+              Analyze
+            </Link>
+          )}
           {onRematch && (
             <button
               type="button"

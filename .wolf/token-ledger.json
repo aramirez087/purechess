@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 2233169,
-    "total_reads": 1696,
-    "total_writes": 2366,
-    "total_sessions": 59,
-    "anatomy_hits": 996,
-    "anatomy_misses": 670,
-    "repeated_reads_blocked": 1282,
-    "estimated_savings_vs_bare_cli": 2614506
+    "total_tokens_estimated": 2456122,
+    "total_reads": 1770,
+    "total_writes": 2442,
+    "total_sessions": 60,
+    "anatomy_hits": 1057,
+    "anatomy_misses": 680,
+    "repeated_reads_blocked": 1329,
+    "estimated_savings_vs_bare_cli": 2860216
   },
   "sessions": [
     {
@@ -23429,6 +23429,915 @@
         "reads_count": 5,
         "writes_count": 9,
         "repeated_reads_blocked": 0,
+        "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-06-12-0835",
+      "started": "2026-06-12T14:35:52.363Z",
+      "ended": "2026-06-12T21:30:57.813Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 8564,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 1885,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 4083,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 10528,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-panel.tsx",
+          "tokens_estimated": 1892,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-position-eval.ts",
+          "tokens_estimated": 953,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-graph.tsx",
+          "tokens_estimated": 1069,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/annotations.ts",
+          "tokens_estimated": 521,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+          "tokens_estimated": 7715,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/analyze-board.tsx",
+          "tokens_estimated": 3205,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 4954,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-move-classifier.ts",
+          "tokens_estimated": 1737,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/packages/shared/src/chess.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 479,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/eval-graph.test.tsx",
+          "tokens_estimated": 585,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/eval-panel.test.tsx",
+          "tokens_estimated": 1577,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-position-eval.test.ts",
+          "tokens_estimated": 751,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/review-page.test.tsx",
+          "tokens_estimated": 2196,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/board-column.tsx",
+          "tokens_estimated": 769,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 2904,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/.claude/plans/add-coaching-features-to-encapsulated-gem.md",
+          "tokens_estimated": 2956,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 43,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 235,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 17,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 99,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 222,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/move-time-chart.tsx",
+          "tokens_estimated": 1408,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 135,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 118,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 389,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 56367,
+        "output_tokens_estimated": 5741,
+        "reads_count": 21,
+        "writes_count": 14,
+        "repeated_reads_blocked": 13,
+        "anatomy_lookups": 18
+      }
+    },
+    {
+      "id": "session-2026-06-12-0835",
+      "started": "2026-06-12T14:35:52.363Z",
+      "ended": "2026-06-12T21:36:10.536Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 9827,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 1885,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 4083,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 10528,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-panel.tsx",
+          "tokens_estimated": 1892,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-position-eval.ts",
+          "tokens_estimated": 953,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-graph.tsx",
+          "tokens_estimated": 1069,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/annotations.ts",
+          "tokens_estimated": 521,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+          "tokens_estimated": 7715,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/analyze-board.tsx",
+          "tokens_estimated": 3205,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 5054,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-move-classifier.ts",
+          "tokens_estimated": 1737,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/packages/shared/src/chess.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 479,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/eval-graph.test.tsx",
+          "tokens_estimated": 585,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/eval-panel.test.tsx",
+          "tokens_estimated": 1577,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-position-eval.test.ts",
+          "tokens_estimated": 751,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/review-page.test.tsx",
+          "tokens_estimated": 2196,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/board-column.tsx",
+          "tokens_estimated": 769,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 2904,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-settings.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/.claude/plans/add-coaching-features-to-encapsulated-gem.md",
+          "tokens_estimated": 2956,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 43,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 235,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 17,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 99,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 222,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/move-time-chart.tsx",
+          "tokens_estimated": 1408,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 135,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 118,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 389,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 352,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 14,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 323,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 120,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 357,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 204,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 37,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/move-time-chart.test.tsx",
+          "tokens_estimated": 1282,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-settings.ts",
+          "tokens_estimated": 27,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 144,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 57730,
+        "output_tokens_estimated": 8981,
+        "reads_count": 22,
+        "writes_count": 28,
+        "repeated_reads_blocked": 16,
+        "anatomy_lookups": 18
+      }
+    },
+    {
+      "id": "session-2026-06-12-0835",
+      "started": "2026-06-12T14:35:52.363Z",
+      "ended": "2026-06-13T00:43:10.265Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 9827,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 1885,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/engine/stockfish-client.ts",
+          "tokens_estimated": 4083,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 10528,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-panel.tsx",
+          "tokens_estimated": 1892,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-position-eval.ts",
+          "tokens_estimated": 953,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/eval-graph.tsx",
+          "tokens_estimated": 1069,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/lib/board/annotations.ts",
+          "tokens_estimated": 521,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+          "tokens_estimated": 7715,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/analyze/analyze-board.tsx",
+          "tokens_estimated": 3205,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 5054,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-move-classifier.ts",
+          "tokens_estimated": 1737,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/packages/shared/src/chess.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 479,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/eval-graph.test.tsx",
+          "tokens_estimated": 585,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/eval-panel.test.tsx",
+          "tokens_estimated": 1577,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/hooks/use-position-eval.test.ts",
+          "tokens_estimated": 751,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/review-page.test.tsx",
+          "tokens_estimated": 2196,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/board-column.tsx",
+          "tokens_estimated": 769,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 2904,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-settings.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/.claude/plans/add-coaching-features-to-encapsulated-gem.md",
+          "tokens_estimated": 2956,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 43,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/stores/settings-store.ts",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/settings/settings-form.tsx",
+          "tokens_estimated": 235,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 17,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 99,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/game/result-overlay.tsx",
+          "tokens_estimated": 222,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/review/move-time-chart.tsx",
+          "tokens_estimated": 1408,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 135,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 118,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 389,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 352,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 14,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 323,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 120,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 357,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 204,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/games/[gameId]/review-client.tsx",
+          "tokens_estimated": 37,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/test/review/move-time-chart.test.tsx",
+          "tokens_estimated": 1282,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-settings.ts",
+          "tokens_estimated": 27,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 144,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 57730,
+        "output_tokens_estimated": 8981,
+        "reads_count": 22,
+        "writes_count": 28,
+        "repeated_reads_blocked": 16,
+        "anatomy_lookups": 18
+      }
+    },
+    {
+      "id": "session-2026-06-13-1852",
+      "started": "2026-06-13T00:52:44.279Z",
+      "ended": "2026-06-13T01:05:56.560Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.helpers.ts",
+          "tokens_estimated": 1580,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts",
+          "tokens_estimated": 4147,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 3587,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-drag.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/tmp/pc-timeout-check.sql",
+          "tokens_estimated": 113,
+          "action": "create"
+        },
+        {
+          "file": "/tmp/pc-prod-query.cjs",
+          "tokens_estimated": 301,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 9314,
+        "output_tokens_estimated": 414,
+        "reads_count": 4,
+        "writes_count": 2,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-06-13-1852",
+      "started": "2026-06-13T00:52:44.279Z",
+      "ended": "2026-06-13T02:04:16.493Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.helpers.ts",
+          "tokens_estimated": 1580,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/api/src/computer-games/computer-games.service.ts",
+          "tokens_estimated": 4147,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 3587,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/hooks/use-drag.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+          "tokens_estimated": 7782,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/tmp/pc-timeout-check.sql",
+          "tokens_estimated": 113,
+          "action": "create"
+        },
+        {
+          "file": "/tmp/pc-prod-query.cjs",
+          "tokens_estimated": 301,
+          "action": "create"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/chessboard.tsx",
+          "tokens_estimated": 119,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/purechess/apps/web/src/components/board/piece.tsx",
+          "tokens_estimated": 66,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 17096,
+        "output_tokens_estimated": 599,
+        "reads_count": 5,
+        "writes_count": 4,
+        "repeated_reads_blocked": 2,
         "anatomy_lookups": 4
       }
     }

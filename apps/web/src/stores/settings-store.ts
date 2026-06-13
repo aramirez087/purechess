@@ -13,6 +13,8 @@ export interface Settings {
   lowTimeSound: boolean;
   animations: boolean;
   pieceSet: PieceSetId;
+  /** Live engine eval bar during computer games. */
+  showEvalBar: boolean;
 }
 
 interface SettingsStore extends Settings {
@@ -28,6 +30,7 @@ const DEFAULTS: Settings = {
   lowTimeSound: false,
   animations: true,
   pieceSet: DEFAULT_PIECE_SET,
+  showEvalBar: true,
 };
 
 export const useSettingsStore = create<SettingsStore>()(

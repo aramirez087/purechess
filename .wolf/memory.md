@@ -2116,3 +2116,48 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 15:22 | Created ../../.claude/plans/add-coaching-features-to-encapsulated-gem.md | — | ~2759 |
+| 15:29 | Edited apps/web/src/stores/settings-store.ts | 4→6 lines | ~43 |
+| 15:29 | Edited apps/web/src/stores/settings-store.ts | 4→5 lines | ~28 |
+| 15:29 | Edited apps/web/src/components/settings/settings-form.tsx | inline fix | ~26 |
+| 15:29 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: showEvalBar | ~235 |
+| 15:29 | Edited apps/web/src/components/game/result-overlay.tsx | inline fix | ~17 |
+| 15:29 | Edited apps/web/src/components/game/result-overlay.tsx | modified ResultOverlay() | ~99 |
+| 15:29 | Edited apps/web/src/components/game/result-overlay.tsx | expanded (+9 lines) | ~222 |
+| 15:30 | Created apps/web/src/components/review/move-time-chart.tsx | — | ~1408 |
+| 15:30 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | inline fix | ~26 |
+| 15:30 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added 3 import(s) | ~135 |
+| 15:30 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 1→4 lines | ~39 |
+| 15:30 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 3→7 lines | ~118 |
+| 15:30 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: fen, multiPv, fen | ~389 |
+| 15:30 | Session end: 14 writes across 6 files (add-coaching-features-to-encapsulated-gem.md, settings-store.ts, settings-form.tsx, result-overlay.tsx, move-time-chart.tsx) | 21 reads | ~62108 tok |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | added error handling | ~352 |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | inline fix | ~14 |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified stripFor() | ~323 |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | expanded (+6 lines) | ~120 |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 5→6 lines | ~61 |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 3→5 lines | ~46 |
+| 15:31 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | 15→17 lines | ~357 |
+| 15:31 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | 3→4 lines | ~60 |
+| 15:31 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added optional chaining | ~213 |
+| 15:32 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 18→16 lines | ~204 |
+| 15:32 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~37 |
+| 15:32 | Created apps/web/test/review/move-time-chart.test.tsx | — | ~1282 |
+| 15:33 | Edited apps/web/src/hooks/use-settings.ts | 3→4 lines | ~27 |
+| 15:35 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | modified if() | ~144 |
+| 15:36 | Session end: 28 writes across 10 files (add-coaching-features-to-encapsulated-gem.md, settings-store.ts, settings-form.tsx, result-overlay.tsx, move-time-chart.tsx) | 22 reads | ~66711 tok |
+| 18:43 | Session end: 28 writes across 10 files (add-coaching-features-to-encapsulated-gem.md, settings-store.ts, settings-form.tsx, result-overlay.tsx, move-time-chart.tsx) | 22 reads | ~66711 tok |
+
+## Session: 2026-06-13 18:52
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:01 | Created ../../../../tmp/pc-timeout-check.sql | — | ~105 |
+| 19:02 | Created ../../../../tmp/pc-prod-query.cjs | — | ~281 |
+| 01:35 | Triaged user timeout report: prod DB row cmqbmy2zl001lv8u5eso53ot4 was 3+2 blitz, not untimed — not a bug (bug-463); untimed sentinel audited safe | .wolf/buglog.json | resolved not-a-bug | ~28k |
+| 01:36 | Diagnosed multi-piece drag ghost: no select-none/preventDefault on board grid, selection-drag native ghost (bug-464, fix proposed not applied) | chessboard.tsx, use-drag.ts | diagnosed | ~6k |
+| 19:05 | Session end: 2 writes across 2 files (pc-timeout-check.sql, pc-prod-query.cjs) | 4 reads | ~9728 tok |
+| 20:02 | Edited apps/web/src/components/board/chessboard.tsx | CSS: squares | ~119 |
+| 20:02 | Edited apps/web/src/components/board/piece.tsx | CSS: -webkit-user-drag, -webkit-user-drag | ~66 |
+| 20:05 | Fixed drag-ghost (bug-464): select-none on board grid + [-webkit-user-drag:none] on piece img; 187 board tests + tsc green | chessboard.tsx, piece.tsx | fixed | ~9k |
+| 20:04 | Session end: 4 writes across 4 files (pc-timeout-check.sql, pc-prod-query.cjs, chessboard.tsx, piece.tsx) | 5 reads | ~17695 tok |
