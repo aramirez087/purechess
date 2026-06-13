@@ -3,6 +3,7 @@
 import { memo } from 'react';
 import type { Square as SquareType, Piece } from '@purechess/shared';
 import { cn } from '@/lib/utils';
+import { MoveGlyphBadge, type MoveGlyphClass } from '@/lib/board/move-glyph';
 import { Piece as PieceComponent } from './piece';
 
 interface SquareProps {
@@ -28,6 +29,8 @@ interface SquareProps {
   /** Affordance computed by the board: own piece = grab, legal destination = pointer. */
   cursor?: 'grab' | 'pointer' | 'default';
   ghostPiece?: Piece;
+  /** Review move-classification badge (chess.com-style corner glyph). */
+  glyph?: MoveGlyphClass;
   onPointerDown?: (e: React.PointerEvent, square: SquareType) => void;
   onClick?: (square: SquareType) => void;
   ariaLabel: string;
@@ -52,6 +55,7 @@ export const Square = memo(function Square({
   isDragOver,
   cursor = 'default',
   ghostPiece,
+  glyph,
   onPointerDown,
   onClick,
   ariaLabel,
@@ -188,6 +192,7 @@ export const Square = memo(function Square({
           <PieceComponent type={ghostPiece.type} color={ghostPiece.color} ghost />
         </div>
       )}
+      {glyph && <MoveGlyphBadge moveClass={glyph} />}
     </div>
   );
 });

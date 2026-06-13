@@ -1,8 +1,10 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlipVertical2, User } from 'lucide-react';
+import { FlipVertical2, Swords, User } from 'lucide-react';
+import { Chess } from 'chess.js';
 import { Chessboard } from '@/components/board';
+import { PracticeFromFenDialog } from '@/components/play/practice-from-fen-dialog';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import {
   GameShell,
@@ -16,15 +18,24 @@ import { AnalysisMovePanel } from '@/components/review/analysis-move-panel';
 import { OpeningExplorer } from '@/components/review/opening-explorer';
 import { ReviewControls } from '@/components/review/review-controls';
 import { EvalBar, EngineLines } from '@/components/review/eval-panel';
+import { AccuracySummary } from '@/components/review/accuracy-summary';
+import { MoveCoach } from '@/components/review/move-coach';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { useAnalysisTree } from '@/hooks/use-analysis-tree';
+import { useMoveClassifier } from '@/hooks/use-move-classifier';
 import { useOpeningName } from '@/hooks/use-opening-name';
 import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { nodeAtPath } from '@/lib/board/analysis-tree';
 import { computeMaterial } from '@/lib/board/material';
 import { cn } from '@/lib/utils';
-import { GameResult, type MoveIntent, type PieceType, type Square } from '@purechess/shared';
+import {
+  GameResult,
+  type MoveIntent,
+  type PieceType,
+  type Square,
+  type WireMove,
+} from '@purechess/shared';
 import type { AnalysisReview, ReviewPlayer } from '@/types/game-review';
 
 type Color = 'white' | 'black';
@@ -62,11 +73,44 @@ function pliesBefore(startFen?: string): number {
 export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
   const tree = useAnalysisTree(game);
   const [flipped, setFlipped] = useState(false);
+  // Flat mainline (the children[0] chain) for the classifier. A pasted PGN
+  // lands in `game.tree` with an empty `game.moves`, so read the moves off the
+  // tree — this also keeps badge indices aligned with the panel's token.idx.
+  const mainlineMoves = useMemo<WireMove[]>(() => {
+    const out: WireMove[] = [];
+    let prevFen = tree.root.fen;
+    let node = tree.root.children[0];
+    let ply = 1;
+    while (node) {
+      out.push({
+        ply,
+        san: node.san,
+        uci: node.uci,
+        fenAfter: node.fen,
+        clockAfterMs: 0,
+        moveTimeMs: 0,
+        by: prevFen.split(' ')[1] === 'w' ? 'w' : 'b',
+      });
+      prevFen = node.fen;
+      node = node.children[0];
+      ply += 1;
+    }
+    return out;
+  }, [tree.root]);
+  // Full-game classification — user-triggered. Shares the one Stockfish worker
+  // with the live eval bar below, so it stays behind a button (no auto-run).
+  const {
+    result: classification,
+    progress,
+    running: classifying,
+    run: runClassifier,
+  } = useMoveClassifier(mainlineMoves, game.startFen);
   const { evaluation, thinking, lines } = usePositionEval(tree.fen, true, { multiPv: 3 });
   const opening = useOpeningName(tree.fen);
   // Hold the last book name so leaving book fades the text out instead of
   // snapping it blank mid-transition.
   const [heldOpening, setHeldOpening] = useState<string | null>(null);
+  const [practiceOpen, setPracticeOpen] = useState(false);
   useEffect(() => {
     if (opening) setHeldOpening(opening);
   }, [opening]);
@@ -83,6 +127,35 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
     if (second) shapes.push(second);
     return shapes;
   }, [thinking, evaluation, lines]);
+
+  // Classification aligns with the mainline only; variations have no glyph.
+  const onMainline = tree.path.length > 0 && tree.path.every((i) => i === 0);
+  const currentMove = onMainline ? classification?.moves[tree.path.length - 1] : undefined;
+  const coachBestSan = useMemo<string | undefined>(() => {
+    if (!currentMove?.bestUci) return undefined;
+    const k = tree.path.length - 1; // 0-based mainline index of the current move
+    const before = k > 0 ? mainlineMoves[k - 1]?.fenAfter : tree.root.fen;
+    if (!before) return undefined;
+    try {
+      const chess = new Chess(before);
+      const uci = currentMove.bestUci;
+      const move = chess.move({
+        from: uci.slice(0, 2),
+        to: uci.slice(2, 4),
+        promotion: uci.length > 4 ? uci[4] : undefined,
+      });
+      return move?.san;
+    } catch {
+      return undefined;
+    }
+  }, [currentMove?.bestUci, tree.path, mainlineMoves, tree.root.fen]);
+  const moveGlyph = useMemo(
+    () =>
+      tree.lastMove && currentMove
+        ? { square: tree.lastMove.to, moveClass: currentMove.class }
+        : undefined,
+    [tree.lastMove, currentMove],
+  );
 
   const orientation: Color = flipped ? 'black' : 'white';
   const bottomColor = orientation;
@@ -252,6 +325,7 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
               legalMoves={tree.legalMoves}
               onMove={handleMove}
               autoShapes={autoShapes}
+              moveGlyph={moveGlyph}
               onShapesChange={handleShapesChange}
               externalShapes={restoredShapes}
               lastMove={tree.lastMove ?? undefined}
@@ -276,24 +350,70 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
               className="min-h-0 flex-1"
               bodyClassName="flex min-h-0 flex-1 flex-col"
             >
+              {mainlineMoves.length > 0 && (
+                <div className="shrink-0 border-b border-[#2b332c] px-2.5 py-2">
+                  {!classification && !classifying && (
+                    <button
+                      type="button"
+                      onClick={runClassifier}
+                      className="inline-flex h-8 w-full items-center justify-center whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-[13px] font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                    >
+                      Analyze game
+                    </button>
+                  )}
+                  {classifying && (
+                    <div aria-live="polite">
+                      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-[#9da79c]">
+                        <span>Analyzing…</span>
+                        <span className="tabular-nums">{Math.round(progress * 100)}%</span>
+                      </div>
+                      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-[#2b332c]">
+                        <div
+                          className="h-full rounded-full bg-[#d6b563] transition-[width] duration-300"
+                          style={{ width: `${Math.round(progress * 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {classification && (
+                    <div className="flex flex-col gap-2">
+                      <AccuracySummary result={classification} />
+                      <MoveCoach move={currentMove} bestSan={coachBestSan} />
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="min-h-0 flex-1">
                 <AnalysisMovePanel
                   root={tree.root}
                   currentPath={tree.path}
                   onSelect={tree.goToPath}
                   startPly={startPly}
+                  classifications={classification?.moves}
                 />
               </div>
               <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[#2b332c] p-2">
-                <button
-                  type="button"
-                  onClick={() => setFlipped((f) => !f)}
-                  aria-label="Flip board"
-                  className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                >
-                  <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
-                  Flip
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFlipped((f) => !f)}
+                    aria-label="Flip board"
+                    className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                  >
+                    <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
+                    Flip
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPracticeOpen(true)}
+                    title="Practice from this position"
+                    aria-label="Practice from this position"
+                    className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                  >
+                    <Swords className="h-4 w-4" aria-hidden="true" />
+                    Practice
+                  </button>
+                </div>
                 <ReviewControls
                   onStart={tree.goStart}
                   onPrev={tree.goPrev}
@@ -307,6 +427,13 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
           </>
         }
       />
+      {practiceOpen && (
+        <PracticeFromFenDialog
+          fen={tree.fen}
+          open
+          onClose={() => setPracticeOpen(false)}
+        />
+      )}
     </BoardSettingsProvider>
   );
 }

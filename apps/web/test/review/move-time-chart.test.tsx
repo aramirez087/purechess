@@ -25,6 +25,8 @@ function classified(ply: number, cls: ClassifiedMove['class']): ClassifiedMove {
     evalBefore: 0,
     evalAfter: 0,
     cpl: 0,
+    winLoss: 0,
+    accuracyPct: 100,
     class: cls,
   };
 }

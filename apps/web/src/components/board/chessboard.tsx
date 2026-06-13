@@ -63,6 +63,7 @@ export function Chessboard({
   readOnly = false,
   freePlay = false,
   autoShapes,
+  moveGlyph,
   onShapesChange,
   externalShapes,
 }: ChessboardProps) {
@@ -625,6 +626,7 @@ export function Chessboard({
                       ? (getPieceAt(position, premove.from) ?? undefined)
                       : undefined
                   }
+                  glyph={moveGlyph?.square === square ? moveGlyph.moveClass : undefined}
                   ariaLabel={buildAriaLabel(square, piece, isLegalDest ? legalDests : [])}
                   onPointerDown={
                     readOnly

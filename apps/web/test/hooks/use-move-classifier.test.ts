@@ -5,6 +5,7 @@ import {
   classify,
   normalizeEval,
 } from '@/hooks/use-move-classifier';
+import { cpToWinPercent, winLossToAccuracy } from '@/lib/board/accuracy';
 import { analyze } from '@/lib/engine/stockfish-client';
 import type { WireMove } from '@purechess/shared';
 
@@ -27,18 +28,31 @@ function wireMove(ply: number, san: string, uci: string): WireMove {
 const E4_E5: WireMove[] = [wireMove(1, 'e4', 'e2e4'), wireMove(2, 'e5', 'e7e5')];
 
 describe('classify', () => {
-  it('maps CPL thresholds to classes', () => {
-    expect(classify(-15, 20)).toBe('brilliant');
-    expect(classify(0, 20)).toBe('brilliant');
-    expect(classify(5, 20)).toBe('best');
-    expect(classify(20, 20)).toBe('good');
-    expect(classify(50, 20)).toBe('inaccuracy');
-    expect(classify(100, 20)).toBe('mistake');
-    expect(classify(101, 20)).toBe('blunder');
+  it('maps win-percentage-loss thresholds to classes', () => {
+    expect(classify(0, 20)).toBe('best');
+    expect(classify(1.9, 20)).toBe('best');
+    expect(classify(2, 20)).toBe('good');
+    expect(classify(4.9, 20)).toBe('good');
+    expect(classify(5, 20)).toBe('inaccuracy');
+    expect(classify(9.9, 20)).toBe('inaccuracy');
+    expect(classify(10, 20)).toBe('mistake');
+    expect(classify(19.9, 20)).toBe('mistake');
+    expect(classify(20, 20)).toBe('blunder');
+    expect(classify(60, 20)).toBe('blunder');
   });
 
-  it('returns forced when there is exactly one legal move, regardless of CPL', () => {
-    expect(classify(500, 1)).toBe('forced');
+  it('only marks brilliant when a sub-zero win-loss is also a sacrifice', () => {
+    // Matching/beating the top line alone is just a best move, not a !!.
+    expect(classify(-15, 20)).toBe('best');
+    expect(classify(0, 20)).toBe('best');
+    // A genuine sacrifice that keeps the win chance earns the !!.
+    expect(classify(-15, 20, true)).toBe('brilliant');
+    expect(classify(0, 20, true)).toBe('brilliant');
+  });
+
+  it('returns forced when there is exactly one legal move, regardless of loss', () => {
+    expect(classify(60, 1)).toBe('forced');
+    expect(classify(-50, 1, true)).toBe('forced');
   });
 });
 
@@ -75,7 +89,7 @@ describe('useMoveClassifier', () => {
 
     const r = result.current.result!;
     expect(r.evals).toEqual([30, 10, 80]);
-    // White move: 30 - 10 = 20 cpl → good.
+    // White move: capped cpl 30 - 10 = 20.
     expect(r.moves[0]).toMatchObject({
       ply: 1,
       san: 'e4',
@@ -83,17 +97,42 @@ describe('useMoveClassifier', () => {
       evalBefore: 30,
       evalAfter: 10,
       cpl: 20,
-      class: 'good',
     });
-    // Black move (wants lower eval): 80 - 10 = 70 cpl → mistake.
-    expect(r.moves[1]).toMatchObject({ ply: 2, cpl: 70, class: 'mistake' });
+    // Black move (wants lower White-POV eval): capped cpl 80 - 10 = 70.
+    expect(r.moves[1]).toMatchObject({ ply: 2, cpl: 70 });
     expect(r.whiteAcpl).toBe(20);
     expect(r.blackAcpl).toBe(70);
     expect(result.current.running).toBe(false);
     expect(result.current.progress).toBe(1);
   });
 
-  it('clamps negative CPL to 0 and classifies the move brilliant', async () => {
+  it('derives per-move win-loss and accuracy from win probability', async () => {
+    vi.mocked(analyze)
+      .mockResolvedValueOnce({ depth: 12, bestmove: 'e2e4', pv: ['e2e4'], cp: 30 })
+      .mockResolvedValueOnce({ depth: 12, bestmove: 'e7e5', pv: ['e7e5'], cp: -10 })
+      .mockResolvedValueOnce({ depth: 12, bestmove: 'g1f3', pv: ['g1f3'], cp: 80 });
+
+    const { result } = renderHook(() => useMoveClassifier(E4_E5));
+    act(() => {
+      result.current.run();
+    });
+    await waitFor(() => expect(result.current.result).not.toBeNull());
+
+    const r = result.current.result!;
+    // White loses 20cp — under the 25cp noise floor, so zero win-loss / 100 acc.
+    expect(r.moves[0].cpl).toBe(20);
+    expect(r.moves[0].winLoss).toBe(0);
+    expect(r.moves[0].accuracyPct).toBeCloseTo(100, 5);
+    // Black loses 70cp — above the floor, win-loss from win probability.
+    const blackWinLoss = cpToWinPercent(-10) - cpToWinPercent(-80);
+    expect(r.moves[1].winLoss).toBeCloseTo(blackWinLoss, 5);
+    expect(r.moves[1].accuracyPct).toBeCloseTo(winLossToAccuracy(blackWinLoss), 5);
+    // One move each side → player accuracy equals that move's accuracy.
+    expect(r.whiteAccuracy).toBeCloseTo(100, 5);
+    expect(r.blackAccuracy).toBeCloseTo(winLossToAccuracy(blackWinLoss), 5);
+  });
+
+  it('clamps negative CPL to 0 and (non-sacrifice) classifies the move best', async () => {
     vi.mocked(analyze)
       .mockResolvedValueOnce({ depth: 12, bestmove: 'e2e4', pv: ['e2e4'], cp: 10 })
       // Black to move, raw -40 = +40 White-POV: White gained 30cp over the engine line.
@@ -105,7 +144,9 @@ describe('useMoveClassifier', () => {
     });
     await waitFor(() => expect(result.current.result).not.toBeNull());
 
-    expect(result.current.result!.moves[0]).toMatchObject({ cpl: 0, class: 'brilliant' });
+    // e4 hangs nothing, so a sub-zero CPL is best — never brilliant.
+    expect(result.current.result!.moves[0]).toMatchObject({ cpl: 0, class: 'best' });
+    expect(result.current.result!.moves[0].bestUci).toBe('e2e4');
     expect(result.current.result!.whiteAcpl).toBe(0);
   });
 

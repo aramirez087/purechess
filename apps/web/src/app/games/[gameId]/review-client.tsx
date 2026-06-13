@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Bot, FlipVertical2, User } from 'lucide-react';
+import { Bot, FlipVertical2, Swords, User } from 'lucide-react';
+import { Chess } from 'chess.js';
 import { Chessboard } from '@/components/board';
+import { PracticeFromFenDialog } from '@/components/play/practice-from-fen-dialog';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import {
   GameShell,
@@ -18,6 +20,8 @@ import { EvalBar, EngineLines } from '@/components/review/eval-panel';
 import { EvalGraph } from '@/components/review/eval-graph';
 import { MoveTimeChart } from '@/components/review/move-time-chart';
 import { ClassificationBadge } from '@/components/review/classification-badge';
+import { AccuracySummary } from '@/components/review/accuracy-summary';
+import { MoveCoach } from '@/components/review/move-coach';
 import { PgnActions } from '@/components/review/pgn-actions';
 import { ReportButton } from '@/components/reports/report-button';
 import { useGameReview } from '@/hooks/use-game-review';
@@ -26,6 +30,7 @@ import { useOpeningName } from '@/hooks/use-opening-name';
 import { usePositionEval } from '@/hooks/use-position-eval';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { computeMaterial } from '@/lib/board/material';
+import { replayToFen } from '@/lib/replay';
 import { cn } from '@/lib/utils';
 import { GameResult, GameTermination } from '@purechess/shared';
 import type { AnalysisReview, ReviewPlayer } from '@/types/game-review';
@@ -159,6 +164,7 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
   // the matchup line while the seek position is still in book.
   const opening = useOpeningName(displayFen);
   const [heldOpening, setHeldOpening] = useState<string | null>(null);
+  const [practiceOpen, setPracticeOpen] = useState(false);
   useEffect(() => {
     if (opening) setHeldOpening(opening);
   }, [opening]);
@@ -170,6 +176,36 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
     const arrow = thinking ? null : bestMoveArrow(evaluation?.bestmove);
     return arrow ? [arrow] : [];
   }, [thinking, evaluation?.bestmove]);
+
+  // The classified move that produced the current position (ply 0 = start).
+  const currentMove = ply > 0 ? classification?.moves[ply - 1] : undefined;
+  // Engine's better move (SAN) for the coach line, computed from the position
+  // BEFORE the current move. Only resolved when the move fell short of best.
+  const coachBestSan = useMemo<string | undefined>(() => {
+    if (!currentMove?.bestUci) return undefined;
+    const before = replayToFen(game.moves, ply - 1, game.startFen);
+    if (!before) return undefined;
+    try {
+      const chess = new Chess(before);
+      const uci = currentMove.bestUci;
+      const move = chess.move({
+        from: uci.slice(0, 2),
+        to: uci.slice(2, 4),
+        promotion: uci.length > 4 ? uci[4] : undefined,
+      });
+      return move?.san;
+    } catch {
+      return undefined;
+    }
+  }, [currentMove?.bestUci, ply, game.moves, game.startFen]);
+  // Pin the move-quality badge to the square the current move landed on.
+  const moveGlyph = useMemo(
+    () =>
+      lastMove && currentMove
+        ? { square: lastMove.to, moveClass: currentMove.class }
+        : undefined,
+    [lastMove, currentMove],
+  );
 
   if (isCorrupt) {
     return (
@@ -326,6 +362,7 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
               orientation={orientation}
               readOnly
               autoShapes={autoShapes}
+              moveGlyph={moveGlyph}
               lastMove={lastMove ?? undefined}
               className="[&_[role=grid]]:overflow-hidden [&_[role=grid]]:rounded-[3px] [&_[role=grid]]:shadow-[inset_0_0_0_1px_rgba(11,13,11,0.28)]"
             />
@@ -387,19 +424,23 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
                 className="mt-1.5"
               />
               {classification && (
-                <div className="mt-1.5 flex items-center justify-between font-mono text-[11px] tabular-nums text-[#9da79c]">
-                  <span>
-                    White&ensp;ACPL:{' '}
-                    <span className={acplColor(classification.whiteAcpl)}>
-                      {Math.round(classification.whiteAcpl)}
+                <div className="mt-2 flex flex-col gap-2">
+                  <AccuracySummary result={classification} />
+                  <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.12em] tabular-nums text-[#8a948a]">
+                    <span>
+                      W ACPL{' '}
+                      <span className={acplColor(classification.whiteAcpl)}>
+                        {Math.round(classification.whiteAcpl)}
+                      </span>
                     </span>
-                  </span>
-                  <span>
-                    Black&ensp;ACPL:{' '}
-                    <span className={acplColor(classification.blackAcpl)}>
-                      {Math.round(classification.blackAcpl)}
+                    <span>
+                      B ACPL{' '}
+                      <span className={acplColor(classification.blackAcpl)}>
+                        {Math.round(classification.blackAcpl)}
+                      </span>
                     </span>
-                  </span>
+                  </div>
+                  <MoveCoach move={currentMove} bestSan={coachBestSan} />
                 </div>
               )}
             </div>
@@ -416,15 +457,27 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
             </div>
             {/* Seek controls dock inside the moves sheet — one continuous panel. */}
             <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[#2b332c] p-2">
-              <button
-                type="button"
-                onClick={() => setFlipped((f) => !f)}
-                aria-label="Flip board"
-                className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-              >
-                <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
-                Flip
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFlipped((f) => !f)}
+                  aria-label="Flip board"
+                  className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                >
+                  <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
+                  Flip
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPracticeOpen(true)}
+                  title="Practice from this position"
+                  aria-label="Practice from this position"
+                  className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+                >
+                  <Swords className="h-4 w-4" aria-hidden="true" />
+                  Practice
+                </button>
+              </div>
               <ReviewControls
                 onStart={goStart}
                 onPrev={goPrev}
@@ -437,6 +490,13 @@ export function ReviewClient({ game, reportTarget, exitAction }: ReviewClientPro
           </GameRail>
         }
       />
+      {practiceOpen && (
+        <PracticeFromFenDialog
+          fen={displayFen}
+          open
+          onClose={() => setPracticeOpen(false)}
+        />
+      )}
     </BoardSettingsProvider>
   );
 }

@@ -9,6 +9,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ClassificationBadge } from '@/components/review/classification-badge';
+import type { ClassifiedMove } from '@/hooks/use-move-classifier';
 import { cn } from '@/lib/utils';
 
 export interface AnalysisMovePanelProps {
@@ -17,6 +19,11 @@ export interface AnalysisMovePanelProps {
   onSelect: (path: TreePath) => void;
   /** Plies played before the root position (custom-FEN starts). */
   startPly?: number;
+  /**
+   * Computed move classifications, indexed by mainline position (token.idx ===
+   * game-move index). Renders a badge per mainline move where no PGN NAG wins.
+   */
+  classifications?: ClassifiedMove[];
   className?: string;
 }
 
@@ -95,6 +102,7 @@ export function AnalysisMovePanel({
   currentPath,
   onSelect,
   startPly = 0,
+  classifications,
   className,
 }: AnalysisMovePanelProps) {
   const activeRef = useRef<HTMLButtonElement>(null);
@@ -180,8 +188,8 @@ export function AnalysisMovePanel({
                 <span className="flex w-9 shrink-0 items-center justify-end border-b border-transparent py-1 pl-2 pr-2.5 font-mono text-[11px] tabular-nums text-[#8a958a]">
                   {row.no}.
                 </span>
-                <MainlineCell token={row.white} currentPath={currentPath} onSelect={onSelect} activeRef={activeRef} />
-                <MainlineCell token={row.black} currentPath={currentPath} onSelect={onSelect} activeRef={activeRef} />
+                <MainlineCell token={row.white} currentPath={currentPath} onSelect={onSelect} activeRef={activeRef} classifications={classifications} />
+                <MainlineCell token={row.black} currentPath={currentPath} onSelect={onSelect} activeRef={activeRef} classifications={classifications} />
               </div>
               {[...whiteVars, ...blackVars].map((branch) => (
                 <VariationLine
@@ -208,11 +216,13 @@ function MainlineCell({
   currentPath,
   onSelect,
   activeRef,
+  classifications,
 }: {
   token?: ChainToken;
   currentPath: TreePath;
   onSelect: (path: TreePath) => void;
   activeRef: React.RefObject<HTMLButtonElement>;
+  classifications?: ClassifiedMove[];
 }) {
   if (!token) return <span className="w-1/2 px-2.5 py-1" aria-hidden="true" />;
   const active = samePath(token.path, currentPath);
@@ -231,7 +241,12 @@ function MainlineCell({
       )}
     >
       {token.node.san}
-      {token.node.nag !== undefined && <NagBadge nag={token.node.nag} />}
+      {/* PGN NAG wins over the computed class; only one badge ever renders. */}
+      {token.node.nag !== undefined ? (
+        <NagBadge nag={token.node.nag} />
+      ) : (
+        <ClassificationBadge class={classifications?.[token.idx]?.class} />
+      )}
       {token.node.comment && <CommentIcon comment={token.node.comment} />}
     </button>
   );

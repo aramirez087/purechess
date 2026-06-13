@@ -1,5 +1,6 @@
 import type { Square, Move, MoveIntent, PieceType } from '@purechess/shared';
 import type { BoardShape } from './annotations';
+import type { MoveGlyphClass } from './move-glyph';
 
 export type Orientation = 'white' | 'black';
 
@@ -44,6 +45,11 @@ export interface ChessboardProps {
   freePlay?: boolean;
   /** Externally driven annotations (engine arrows) — never cleared by input. */
   autoShapes?: BoardShape[];
+  /**
+   * Review-only: a move-classification badge pinned to one square (the square
+   * the reviewed move landed on). Renders the chess.com-style corner glyph.
+   */
+  moveGlyph?: { square: Square; moveClass: MoveGlyphClass };
   /** Observe user-drawn shapes (drawing stays uncontrolled). */
   onShapesChange?: (shapes: BoardShape[]) => void;
   /**

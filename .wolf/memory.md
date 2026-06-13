@@ -2212,3 +2212,107 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 21:47 | Created apps/web/test/board/replay-san.test.ts | — | ~497 |
 | 21:48 | Live PvP board history browsing: board now renders FEN at seeked ply (was always live); browse-aware auto-advance; visible seek nav | live-game-client.tsx, rules.ts(replaySanLine), use-replay-san.ts, review-controls.tsx(bindKeys), replay-san.test.ts | done, typecheck+lint+5 tests green | ~14k |
 | 21:49 | Session end: 16 writes across 5 files (rules.ts, use-replay-san.ts, review-controls.tsx, live-game-client.tsx, replay-san.test.ts) | 10 reads | ~25782 tok |
+
+## Session: 2026-06-13 21:54
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-06-13 21:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:37 | Created ../../.claude/plans/move-panel-has-nag-quiet-duckling.md | — | ~1607 |
+| 22:38 | Created apps/web/src/lib/board/accuracy.ts | — | ~268 |
+| 22:38 | Edited apps/web/src/hooks/use-move-classifier.ts | added 1 import(s) | ~44 |
+| 22:39 | Edited apps/web/src/hooks/use-move-classifier.ts | 12→17 lines | ~140 |
+| 22:39 | Edited apps/web/src/hooks/use-move-classifier.ts | modified for() | ~484 |
+| 22:39 | Edited apps/web/src/components/review/analysis-move-panel.tsx | expanded (+7 lines) | ~238 |
+| 22:39 | Edited apps/web/src/components/review/analysis-move-panel.tsx | modified AnalysisMovePanel() | ~42 |
+| 22:39 | Edited apps/web/src/components/review/analysis-move-panel.tsx | 2→2 lines | ~88 |
+| 22:39 | Edited apps/web/src/components/review/analysis-move-panel.tsx | modified MainlineCell() | ~116 |
+| 22:39 | Edited apps/web/src/components/review/analysis-move-panel.tsx | added optional chaining | ~116 |
+| 22:40 | Edited apps/web/src/app/analyze/analyze-board.tsx | added 2 import(s) | ~124 |
+| 22:40 | Edited apps/web/src/app/analyze/analyze-board.tsx | CSS: result, running, run | ~140 |
+| 22:40 | Edited apps/web/src/app/analyze/analyze-board.tsx | added optional chaining | ~824 |
+| 22:40 | Edited apps/web/test/hooks/use-move-classifier.test.ts | added 1 import(s) | ~60 |
+| 22:40 | Edited apps/web/test/hooks/use-move-classifier.test.ts | expanded (+21 lines) | ~309 |
+| 22:41 | Created apps/web/test/board/accuracy.test.ts | — | ~460 |
+| 22:41 | Edited apps/web/test/review/move-time-chart.test.tsx | CSS: accuracyPct | ~27 |
+| 22:42 | Session end: 17 writes across 8 files (move-panel-has-nag-quiet-duckling.md, accuracy.ts, use-move-classifier.ts, analysis-move-panel.tsx, analyze-board.tsx) | 20 reads | ~35219 tok |
+| 22:46 | Session end: 17 writes across 8 files (move-panel-has-nag-quiet-duckling.md, accuracy.ts, use-move-classifier.ts, analysis-move-panel.tsx, analyze-board.tsx) | 21 reads | ~37199 tok |
+| 22:47 | Edited apps/web/src/app/analyze/analyze-board.tsx | expanded (+6 lines) | ~34 |
+| 22:47 | Edited apps/web/src/app/analyze/analyze-board.tsx | modified while() | ~331 |
+| 22:47 | Edited apps/web/src/app/analyze/analyze-board.tsx | 2→2 lines | ~36 |
+| 22:49 | Session end: 20 writes across 8 files (move-panel-has-nag-quiet-duckling.md, accuracy.ts, use-move-classifier.ts, analysis-move-panel.tsx, analyze-board.tsx) | 22 reads | ~41245 tok |
+
+## Session: 2026-06-13 22:56
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 23:00 | Created ../../.claude/plans/add-practice-from-here-immutable-parrot.md | — | ~1827 |
+| 23:07 | Created apps/web/src/components/play/practice-from-fen-dialog.tsx | — | ~2689 |
+| 23:08 | Edited apps/web/src/app/analyze/analyze-board.tsx | added 1 import(s) | ~55 |
+| 23:08 | Edited apps/web/src/app/analyze/analyze-board.tsx | 6→7 lines | ~82 |
+| 23:08 | Edited apps/web/src/app/analyze/analyze-board.tsx | expanded (+17 lines) | ~692 |
+| 23:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~57 |
+| 23:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 5→6 lines | ~82 |
+| 23:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | expanded (+17 lines) | ~666 |
+| 23:09 | Created apps/web/test/components/practice-from-fen-dialog.test.tsx | — | ~917 |
+| 23:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | 6→8 lines | ~56 |
+| 23:10 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 6→8 lines | ~56 |
+| 23:11 | Session end: 11 writes across 5 files (add-practice-from-here-immutable-parrot.md, practice-from-fen-dialog.tsx, analyze-board.tsx, review-client.tsx, practice-from-fen-dialog.test.tsx) | 23 reads | ~34484 tok |
+
+## Session: 2026-06-13 23:34
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 23:38 | designqc: captured 6 screenshots (131KB, ~15000 tok) | /, /play, /login | ready for eval | ~0 |
+| 23:42 | Created apps/web/src/lib/board/move-glyph.tsx | — | ~746 |
+| 23:44 | Created apps/web/src/lib/board/sacrifice.ts | — | ~658 |
+| 23:44 | Edited apps/web/src/hooks/use-move-classifier.ts | added 1 import(s) | ~60 |
+| 23:44 | Edited apps/web/src/hooks/use-move-classifier.ts | 4→6 lines | ~54 |
+| 23:44 | Edited apps/web/src/hooks/use-move-classifier.ts | modified classify() | ~143 |
+| 23:44 | Edited apps/web/src/hooks/use-move-classifier.ts | modified for() | ~225 |
+| 23:44 | Edited apps/web/src/hooks/use-move-classifier.ts | modified isSacrifice() | ~226 |
+| 23:45 | Edited apps/web/test/hooks/use-move-classifier.test.ts | expanded (+8 lines) | ~254 |
+| 23:45 | Edited apps/web/test/hooks/use-move-classifier.test.ts | 15→17 lines | ~246 |
+| 23:45 | Created apps/web/test/board/sacrifice.test.ts | — | ~452 |
+| 23:46 | Edited apps/web/src/lib/board/types.ts | added 1 import(s) | ~51 |
+| 23:46 | Edited apps/web/src/lib/board/types.ts | 2→7 lines | ~97 |
+| 23:46 | Edited apps/web/src/components/board/square.tsx | added 1 import(s) | ~75 |
+| 23:46 | Edited apps/web/src/components/board/square.tsx | 5→7 lines | ~74 |
+| 23:46 | Edited apps/web/src/components/board/square.tsx | 6→7 lines | ~30 |
+| 23:46 | Edited apps/web/src/components/board/square.tsx | 8→9 lines | ~74 |
+| 23:46 | Edited apps/web/src/components/board/chessboard.tsx | 4→5 lines | ~24 |
+| 23:46 | Edited apps/web/src/components/board/chessboard.tsx | CSS: moveClass | ~109 |
+| 23:47 | Created apps/web/src/components/review/accuracy-summary.tsx | — | ~798 |
+| 00:08 | Created apps/web/src/components/review/move-coach.tsx | — | ~630 |
+| 00:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~58 |
+| 00:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 2 import(s) | ~98 |
+| 00:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added 1 import(s) | ~50 |
+| 00:08 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | added error handling | ~388 |
+| 00:09 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 6→7 lines | ~70 |
+| 00:09 | Edited apps/web/src/app/games/[gameId]/review-client.tsx | 17→21 lines | ~280 |
+| 00:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | added 1 import(s) | ~41 |
+| 00:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | added 2 import(s) | ~96 |
+| 00:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | added error handling | ~369 |
+| 00:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | 4→5 lines | ~64 |
+| 00:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | reduced (-10 lines) | ~83 |
+| 00:10 | Edited apps/web/src/app/analyze/analyze-board.tsx | 2→1 lines | ~21 |
+| 00:13 | Created apps/web/src/lib/board/accuracy.ts | — | ~494 |
+| 00:13 | Edited apps/web/src/hooks/use-move-classifier.ts | 4→4 lines | ~65 |
+| 00:14 | Edited apps/web/src/hooks/use-move-classifier.ts | 5→7 lines | ~76 |
+| 00:14 | Edited apps/web/src/hooks/use-move-classifier.ts | modified classify() | ~238 |
+| 00:14 | Edited apps/web/src/hooks/use-move-classifier.ts | modified clampCp() | ~58 |
+| 00:14 | Edited apps/web/src/hooks/use-move-classifier.ts | modified isSacrifice() | ~512 |
+| 00:15 | Edited apps/web/src/hooks/use-move-classifier.ts | modified clampCp() | ~106 |
+| 00:15 | Edited apps/web/src/hooks/use-move-classifier.ts | 6→2 lines | ~24 |
+| 00:15 | Created apps/web/test/board/accuracy.test.ts | — | ~664 |
+| 00:16 | Edited apps/web/test/hooks/use-move-classifier.test.ts | 2→2 lines | ~38 |
+| 00:16 | Edited apps/web/test/hooks/use-move-classifier.test.ts | 23→28 lines | ~335 |
+| 00:16 | Edited apps/web/test/hooks/use-move-classifier.test.ts | modified move() | ~541 |
+| 00:17 | Edited apps/web/test/review/move-time-chart.test.tsx | CSS: winLoss | ~32 |
+| 00:19 | Edited apps/web/src/hooks/use-move-classifier.ts | expanded (+6 lines) | ~174 |
+| 00:19 | Edited apps/web/src/hooks/use-move-classifier.ts | modified isSacrifice() | ~265 |
+| 00:19 | Edited apps/web/test/hooks/use-move-classifier.test.ts | Black() → toBe() | ~213 |

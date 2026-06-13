@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { analyze } from '@/lib/engine/stockfish-client';
+import { cpToWinPercent, winLossToAccuracy } from '@/lib/board/accuracy';
+import { isSacrifice } from '@/lib/board/sacrifice';
 import { replayToFen } from '@/lib/replay';
 import type { WireMove } from '@purechess/shared';
 
@@ -24,15 +26,24 @@ export interface ClassifiedMove {
   evalBefore: number;
   /** White-POV centipawns (normalized from mate). */
   evalAfter: number;
-  /** Centipawn loss (always ≥ 0, from the mover's perspective). */
+  /** Centipawn loss (always ≥ 0, mover's POV, capped for sane ACPL). */
   cpl: number;
+  /** Win-probability points lost by the move (≥ 0, mover's POV). */
+  winLoss: number;
+  /** 0–100 accuracy derived from `winLoss`. */
+  accuracyPct: number;
   class: MoveClass;
+  /** Engine's best move (UCI) in the position BEFORE this move — coach hint. */
+  bestUci?: string;
 }
 
 export interface ClassificationResult {
   moves: ClassifiedMove[];
   whiteAcpl: number;
   blackAcpl: number;
+  /** Mean per-move accuracy %, 0–100 (forced moves excluded, like ACPL). */
+  whiteAccuracy: number;
+  blackAccuracy: number;
   /** White-POV cp per ply (index 0 = start position). */
   evals: number[];
 }
@@ -47,7 +58,21 @@ export interface UseMoveClassifierReturn {
 }
 
 const MATE_CP = 10000;
-const MOVETIME_MS = 500;
+// Deeper than the live eval bar: classification compares two independent
+// searches, so shallow noise (±40cp) masquerades as real inaccuracy. ~1.1s/move
+// halves that variance — a full game still finishes under a minute.
+const MOVETIME_MS = 1100;
+// Centipawn cap for ACPL display: a forced mate would otherwise post a
+// thousands-deep "loss" and wreck the average. Lichess caps at ±1000 too.
+const CP_CAP = 1000;
+// A move losing under a quarter-pawn is within search noise — never demote it
+// below "good" no matter how the win% wobbled near an even eval.
+const NOISE_CP = 25;
+
+/** Clamp a centipawn eval to ±CP_CAP for the ACPL readout. */
+function clampCp(cp: number): number {
+  return Math.max(-CP_CAP, Math.min(CP_CAP, cp));
+}
 
 /**
  * Normalize an engine score to centipawns. Mate scores map near ±10000 so
@@ -62,17 +87,18 @@ export function normalizeEval(cp: number | undefined, mate: number | undefined):
 }
 
 /**
- * Classify on the RAW (unclamped) CPL: a negative loss means the move beat
- * the engine's top line — that's what makes 'brilliant' rare. The stored
- * `cpl` is clamped at 0 (engine fluctuates ±2cp at equal depth).
+ * Classify on win-percentage LOSS (drop in win chance, mover's POV). A negative
+ * loss means the move matched or beat the engine's top line; combined with a
+ * real sacrifice that's a brilliancy. Thresholds mirror chess.com's bands
+ * (≈5 / 10 / 20 win% drop for inaccuracy / mistake / blunder).
  */
-export function classify(cpl: number, legalMoveCount: number): MoveClass {
+export function classify(winLoss: number, legalMoveCount: number, isSac = false): MoveClass {
   if (legalMoveCount === 1) return 'forced';
-  if (cpl <= 0) return 'brilliant';
-  if (cpl <= 5) return 'best';
-  if (cpl <= 20) return 'good';
-  if (cpl <= 50) return 'inaccuracy';
-  if (cpl <= 100) return 'mistake';
+  if (winLoss <= 0 && isSac) return 'brilliant';
+  if (winLoss < 2) return 'best';
+  if (winLoss < 5) return 'good';
+  if (winLoss < 10) return 'inaccuracy';
+  if (winLoss < 20) return 'mistake';
   return 'blunder';
 }
 
@@ -125,17 +151,20 @@ export function useMoveClassifier(
         }
 
         const evals: number[] = [];
+        const bestMoves: (string | undefined)[] = [];
         for (let i = 0; i < fens.length; i++) {
           const fen = fens[i];
           const terminal = terminalEval(new Chess(fen));
           let whitePov: number;
           if (terminal !== null) {
             whitePov = terminal;
+            bestMoves.push(undefined);
           } else {
             const line = await analyze(fen, { movetimeMs: MOVETIME_MS });
             if (genRef.current !== gen) return;
             const sign = fen.split(' ')[1] === 'b' ? -1 : 1;
             whitePov = sign * normalizeEval(line.cp, line.mate);
+            bestMoves.push(line.bestmove || undefined);
           }
           evals.push(whitePov);
           setProgress((i + 1) / fens.length);
@@ -146,15 +175,32 @@ export function useMoveClassifier(
         let whiteCount = 0;
         let blackSum = 0;
         let blackCount = 0;
+        let whiteAccSum = 0;
+        let blackAccSum = 0;
         for (let ply = 1; ply <= moves.length; ply++) {
           const fenBefore = fens[ply - 1];
           const whiteMoved = fenBefore.split(' ')[1] === 'w';
           const legalMoveCount = new Chess(fenBefore).moves().length;
-          const rawCpl = whiteMoved
-            ? evals[ply - 1] - evals[ply]
-            : evals[ply] - evals[ply - 1];
-          const cls = classify(rawCpl, legalMoveCount);
-          const cpl = Math.max(0, rawCpl);
+          // Evals are White-POV; flip to the mover's POV so "loss" is positive
+          // when the move hurt the side that played it.
+          const sign = whiteMoved ? 1 : -1;
+          const moverBefore = sign * evals[ply - 1];
+          const moverAfter = sign * evals[ply];
+          // Capped centipawn loss — for the ACPL readout and the noise floor.
+          const cpl = Math.max(0, clampCp(moverBefore) - clampCp(moverAfter));
+          // Win-probability loss drives class + accuracy (saturates near mate).
+          // Below the noise floor the move kept its eval, so we zero the loss:
+          // search jitter near an even position can't fake an inaccuracy.
+          const rawWinLoss =
+            cpl < NOISE_CP ? 0 : cpToWinPercent(moverBefore) - cpToWinPercent(moverAfter);
+          const winLoss = Math.max(0, rawWinLoss);
+          // Sacrifice check only matters for the brilliant gate (win-loss ≤ 0).
+          const isSac =
+            rawWinLoss <= 0 && legalMoveCount > 1
+              ? isSacrifice(fenBefore, moves[ply - 1].uci)
+              : false;
+          const cls = classify(rawWinLoss, legalMoveCount, isSac);
+          const accuracyPct = winLossToAccuracy(winLoss);
           classified.push({
             ply,
             san: moves[ply - 1].san,
@@ -162,14 +208,19 @@ export function useMoveClassifier(
             evalBefore: evals[ply - 1],
             evalAfter: evals[ply],
             cpl,
+            winLoss,
+            accuracyPct,
             class: cls,
+            bestUci: bestMoves[ply - 1],
           });
           if (cls !== 'forced') {
             if (whiteMoved) {
               whiteSum += cpl;
+              whiteAccSum += accuracyPct;
               whiteCount++;
             } else {
               blackSum += cpl;
+              blackAccSum += accuracyPct;
               blackCount++;
             }
           }
@@ -180,6 +231,8 @@ export function useMoveClassifier(
           moves: classified,
           whiteAcpl: whiteCount > 0 ? whiteSum / whiteCount : 0,
           blackAcpl: blackCount > 0 ? blackSum / blackCount : 0,
+          whiteAccuracy: whiteCount > 0 ? whiteAccSum / whiteCount : 0,
+          blackAccuracy: blackCount > 0 ? blackAccSum / blackCount : 0,
           evals,
         });
       } catch {
