@@ -3007,3 +3007,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:52 | Edited apps/web/src/lib/board/sound.ts | removed 50 lines | ~36 |
 | 17:53 | S02 dedup: extracted MOVE_HIT const + gameStartNote() fn; removed 3 sound.ts self-clones | apps/web/src/lib/board/sound.ts | typecheck/lint/tests green; jscpd 45→42 clones | ~2k |
 | 17:54 | Created docs/roadmap/dedup-cleanup/session-02-handoff.md | — | ~870 |
+| 17:54 | Session end: 4 writes across 2 files (sound.ts, session-02-handoff.md) | 1 reads | ~5427 tok |
