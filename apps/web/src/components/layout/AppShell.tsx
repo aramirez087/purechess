@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
@@ -8,6 +9,8 @@ import { SettingsDialog } from '@/components/settings/settings-dialog';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
+  // Improve surface — hub at /train; /puzzles /openings /endgames reachable from it.
+  { href: '/train', label: 'Train', icon: Target },
   { href: '/puzzles', label: 'Puzzles' },
   { href: '/games', label: 'Games' },
 ];
@@ -68,19 +71,23 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
           ) : null}
 
           <nav className="hidden md:flex items-center gap-1 ml-2" aria-label="Primary">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'rounded-md px-3 py-1.5 text-sm font-medium',
-                  'text-muted-foreground hover:text-foreground hover:bg-raised',
-                  'transition-colors',
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium',
+                    'text-muted-foreground hover:text-foreground hover:bg-raised',
+                    'transition-colors',
+                  )}
+                >
+                  {Icon ? <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" /> : null}
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="ml-auto flex items-center gap-1">

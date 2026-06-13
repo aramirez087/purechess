@@ -2428,3 +2428,36 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 12:04 | Edited docs/claude-sessions/purechess-improve/session-09-opening-trainer.md | 3→2 lines | ~11 |
 | 12:04 | Authored purechess-improve epic (ELO training surface): overview + 16 sessions + operator rules | docs/epics/purechess-improve.md, docs/claude-sessions/purechess-improve/* | complete, frontmatter validated | ~9k |
 | 12:04 | Session end: 50 writes across 38 files (add-a-daily-fuzzy-haven.md, puzzles.types.ts, puzzles.service.ts, puzzles.controller.ts, puzzles.module.ts) | 36 reads | ~82259 tok |
+| 12:09 | Edited apps/api/prisma/schema.prisma | expanded (+36 lines) | ~227 |
+| 12:09 | Edited apps/api/prisma/schema.prisma | expanded (+11 lines) | ~122 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | expanded (+224 lines) | ~2015 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 2→2 lines | ~21 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 2→2 lines | ~16 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 2→2 lines | ~15 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 2→2 lines | ~19 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 6→4 lines | ~66 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 5→3 lines | ~45 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 6→4 lines | ~58 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 5→3 lines | ~43 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 6→4 lines | ~67 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 5→3 lines | ~42 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 5→3 lines | ~47 |
+| 12:10 | Edited apps/api/prisma/schema.prisma | 5→3 lines | ~47 |
+| 12:11 | Edited apps/api/prisma/schema.prisma | 2→2 lines | ~22 |
+| 12:11 | Edited apps/api/prisma/schema.prisma | 6→4 lines | ~59 |
+| 12:11 | Edited apps/api/prisma/schema.prisma | 5→3 lines | ~39 |
+| 12:11 | Created packages/shared/src/dto/puzzle.dto.ts | — | ~837 |
+| 12:12 | Created packages/shared/src/dto/training.dto.ts | — | ~954 |
+| 12:12 | Edited packages/shared/src/index.ts | 3→5 lines | ~54 |
+| 12:12 | Created apps/web/src/components/improve/training-placeholder.tsx | — | ~1284 |
+| 12:12 | Created apps/web/src/app/train/page.tsx | — | ~500 |
+| 12:13 | Created apps/web/src/app/openings/page.tsx | — | ~449 |
+| 12:13 | Created apps/web/src/app/endgames/page.tsx | — | ~452 |
+| 12:13 | Edited apps/web/src/components/layout/AppShell.tsx | CSS: icon | ~172 |
+| 12:13 | Edited apps/web/src/components/layout/AppShell.tsx | 13→17 lines | ~193 |
+| 12:13 | Edited apps/web/src/components/layout/MobileNav.tsx | 7→11 lines | ~106 |
+| 12:13 | Edited apps/web/src/app/globals.css | expanded (+40 lines) | ~372 |
+| 12:15 | Created docs/roadmap/purechess-improve/data-model.md | — | ~2248 |
+| 12:15 | Created docs/roadmap/purechess-improve/baselines.md | — | ~882 |
+| 12:16 | Created docs/roadmap/purechess-improve/session-01-handoff.md | — | ~2584 |
+| 12:17 | S01 Improve foundation: schema(+11 models,migration improve_foundation), shared DTOs, 3 route shells+nav, accuracy tokens, docs | schema.prisma, dto/*, app/{train,openings,endgames}, globals.css, docs/roadmap/purechess-improve/* | all gates green | ~22k |

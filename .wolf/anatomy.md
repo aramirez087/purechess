@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:04:00.240Z
-> Files: 986 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T18:16:40.083Z
+> Files: 995 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -648,6 +648,9 @@
 - `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
 - `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
 
+## Epic: purechess-improve (ELO improvement surface) — added 2026-06-13
+
+
 ## apps/api/
 
 - `_repro.cjs` — Declares p (~171 tok)
@@ -664,7 +667,7 @@
 
 ## apps/api/prisma/
 
-- `schema.prisma` — Declares GameResult (~1902 tok)
+- `schema.prisma` — Declares GameResult (~4116 tok)
 - `seed.ts` — prisma: main (~2205 tok)
 
 ## apps/api/prisma/migrations/
@@ -1034,7 +1037,7 @@
 
 - `error.tsx` — Error (~362 tok)
 - `global-error.tsx` — GlobalError (~1085 tok)
-- `globals.css` — Styles: 29 rules, 135 vars (~3663 tok)
+- `globals.css` — Styles: 18 rules, 135 vars (~4017 tok)
 - `layout.tsx` — fraunces (~335 tok)
 - `not-found.tsx` — NotFound (~196 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
@@ -1087,6 +1090,10 @@
 - `editor-client.tsx` — Castling is only meaningful when the matching king + rook sit on home squares. (~2517 tok)
 - `page.tsx` — metadata (~143 tok)
 
+## apps/web/src/app/endgames/
+
+- `page.tsx` — dynamic (~452 tok)
+
 ## apps/web/src/app/games/
 
 - `error.tsx` — GamesError (~232 tok)
@@ -1104,6 +1111,10 @@
 - `login-form.tsx` — LoginForm — renders form (~1264 tok)
 - `page.tsx` — Suspense wrapper for LoginForm (~120 tok)
 
+## apps/web/src/app/openings/
+
+- `page.tsx` — dynamic (~449 tok)
+
 ## apps/web/src/app/profile/[username]/
 
 - `page.tsx` — dynamic (~603 tok)
@@ -1117,6 +1128,10 @@
 
 - `page.tsx` — Suspense wrapper for RegisterForm (~120 tok)
 - `register-form.tsx` — USERNAME_PATTERN — renders form (~1667 tok)
+
+## apps/web/src/app/train/
+
+- `page.tsx` — dynamic (~500 tok)
 
 ## apps/web/src/components/
 
@@ -1203,11 +1218,15 @@
 - `home-viewed-tracker.tsx` — HomeViewedTracker (~68 tok)
 - `trust-strip.tsx` — STATEMENTS (~256 tok)
 
+## apps/web/src/components/improve/
+
+- `training-placeholder.tsx` — Lucide icon for the surface (Target / GraduationCap / Castle ...). (~1284 tok)
+
 ## apps/web/src/components/layout/
 
-- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~962 tok)
+- `AppShell.tsx` — Optional accent under the top bar — e.g. "Live", "In game" — to hint context. (~1080 tok)
 - `Logo.tsx` — SIZE (~624 tok)
-- `MobileNav.tsx` — navLinks (~731 tok)
+- `MobileNav.tsx` — navLinks (~774 tok)
 - `UserMenu.tsx` — Top-bar account chip — resolves the session itself via /api/auth/me. (~938 tok)
 
 ## apps/web/src/components/play/
@@ -1550,6 +1569,12 @@
 - `session-07-handoff.md` — Session 07 Handoff — CI Gate / Integration / GO·NO-GO (~4007 tok)
 - `session-08-handoff.md` — Session 08 Handoff — Prod Deploy + WebSocket Verify (~3886 tok)
 
+## docs/roadmap/purechess-improve/
+
+- `baselines.md` — Improve epic — measurement baselines (Session 01) (~827 tok)
+- `data-model.md` — Improve epic — data model (~2107 tok)
+- `session-01-handoff.md` — Session 01 handoff — Charter, data model & Improve IA (~2422 tok)
+
 ## docs/roadmap/rust-engine-migration/
 
 - `session-01-handoff.md` — Session 01 Handoff — Rust Engine Contracts Charter (WP1) (~3179 tok)
@@ -1583,7 +1608,7 @@
 
 ## packages/shared/src/
 
-- `index.ts` (~136 tok)
+- `index.ts` (~154 tok)
 - `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
 
@@ -1592,7 +1617,9 @@
 - `computer-game.dto.ts` — Target UCI_Elo for engine strength mode (Session 03). (~666 tok)
 - `engine-analysis.dto.ts` — Centipawn score from side-to-move POV; absent if mate. (~192 tok)
 - `matchmaking.dto.ts` — Display label, e.g. '3+0'. (~488 tok)
+- `puzzle.dto.ts` — How a puzzle attempt was surfaced. Mirrors the PuzzleAttemptSource enum. (~837 tok)
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
+- `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)
 
 ## scripts/
 
@@ -1604,9 +1631,17 @@
 - `generate-traces.ts` — Generates game-traces.json for the shadow-mode parity suite. (~1885 tok)
 - `shadow-runner.ts` — Shadow parity runner — compares TsEngineAdapter vs NativeEngineAdapter across 200+ game traces. (~602 tok)
 
-## Epic: purechess-improve (ELO improvement surface) — added 2026-06-13
-Planning docs only (no app code yet). Epic overview + 16 session prompts + operator rules.
+## Improve epic — Session 01 foundation (added 2026-06-13)
 
-- docs/epics/purechess-improve.md — epic overview: thesis (ELO levers), architecture, 16-session DAG, conventions, success metrics. ~180 lines.
-- docs/claude-sessions/purechess-improve/session-00-operator-rules.md — shared rules: schema-frozen-after-S01, reuse-not-rebuild, known merge seams, DoD.
-- docs/claude-sessions/purechess-improve/session-01..16-*.md — per-session paste-ready prompts w/ frontmatter (depends_on, touches, produces, parallel_safe, model). Waves: 0 charter, 1 puzzle backbone, 2 solve UX, 3 modes(rush/review/mistakes/repertoire/opening-trainer/endgames), 4 stats/insights/hub, 5 adaptive/a11y/ship.
+- `apps/api/prisma/schema.prisma` — +11 training models (Puzzle, PuzzleAttempt, PuzzleRating, PuzzleReview, GameMistake, Repertoire, RepertoireReview, EndgameDrill, EndgameAttempt, TrainingStreak, TrainingDay) + 4 enums (PuzzleAttemptSource, RepertoireColor, EndgameCategory, EndgameObjective). Schema FROZEN for the epic. (~2900 tok)
+- `apps/api/prisma/migrations/20260613181114_improve_foundation/migration.sql` — creates all 11 tables, 4 enums, GIN on Puzzle.themes, rating B-tree, all (userId,*) indexes + User back-relations. (~1100 tok)
+- `packages/shared/src/dto/puzzle.dto.ts` — PuzzleDto, PuzzleAttemptResultDto, PuzzleThemeDto, PuzzleThemeStatDto, PuzzleRatingDto + PuzzleSource type. Plain interfaces, optional-friendly. (~320 tok)
+- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. (~340 tok)
+- `apps/web/src/components/improve/training-placeholder.tsx` — shared Improve empty-state (icon, eyebrow, Fraunces title, "Coming together" list, signed-out sign-in prompt, related pills). Silent Tournament voice. (~520 tok)
+- `apps/web/src/app/train/page.tsx` — Improve hub shell (Target icon, auth-aware via /api/auth/me, force-dynamic). (~180 tok)
+- `apps/web/src/app/openings/page.tsx` — repertoire shell (BookOpen icon, auth-aware). (~170 tok)
+- `apps/web/src/app/endgames/page.tsx` — endgame drills shell (Castle icon, auth-aware). (~170 tok)
+- `docs/roadmap/purechess-improve/data-model.md` — ER sketch, per-model column tables, index rationale, enum choices. The frozen-contract map. (~1500 tok)
+- `docs/roadmap/purechess-improve/baselines.md` — daily-puzzle load timings, new-route empty-states, Puzzle EXPLAIN baseline + targets. (~700 tok)
+- `docs/roadmap/purechess-improve/session-01-handoff.md` — frozen contract (models/columns/indexes/enums), DTO shapes, reuse anchors, open issues for Wave 3. (~1600 tok)
+- NOTE: AppShell.tsx nav gained `Train` (Target icon) link; MobileNav.tsx gained Train/Openings/Endgames; globals.css @layer utilities gained `.acc-low/.acc-mid/.acc-high` accuracy color scale.

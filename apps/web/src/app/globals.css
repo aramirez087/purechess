@@ -181,6 +181,46 @@
   .hairline {
     border-color: hsl(var(--border) / 0.6);
   }
+
+  /* ---------------------------------------------------------------------
+   * Improve epic — training accuracy color scale (defined ONCE here so
+   * every training surface reuses it; see docs/roadmap/purechess-improve).
+   * Built on the existing semantic tokens (destructive / warning / success)
+   * so it adapts to light + dark and adds no new hue. Banding:
+   *   accuracy < 50%  -> red      (.acc-low)
+   *   accuracy < 70%  -> yellow   (.acc-mid)
+   *   accuracy >= 70% -> green    (.acc-high)
+   * Pair color with text/iconography — never encode status by color alone.
+   * ------------------------------------------------------------------- */
+  .acc-low {
+    color: hsl(var(--destructive));
+  }
+  .acc-mid {
+    color: hsl(var(--warning));
+  }
+  .acc-high {
+    color: hsl(var(--success));
+  }
+
+  .acc-bg-low {
+    background-color: hsl(var(--destructive) / 0.16);
+  }
+  .acc-bg-mid {
+    background-color: hsl(var(--warning) / 0.16);
+  }
+  .acc-bg-high {
+    background-color: hsl(var(--success) / 0.16);
+  }
+
+  .acc-border-low {
+    border-color: hsl(var(--destructive) / 0.5);
+  }
+  .acc-border-mid {
+    border-color: hsl(var(--warning) / 0.5);
+  }
+  .acc-border-high {
+    border-color: hsl(var(--success) / 0.5);
+  }
 }
 
 :root {

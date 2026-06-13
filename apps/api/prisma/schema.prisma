@@ -61,6 +61,42 @@ enum FairPlaySignalType {
   multi_account_fingerprint
 }
 
+// ---------------------------------------------------------------------------
+// Improve epic — training surface (schema FROZEN after Session 01).
+// Enums below are Postgres native enums: stable, closed sets only.
+// ---------------------------------------------------------------------------
+
+/// How a puzzle attempt was surfaced to the user.
+enum PuzzleAttemptSource {
+  theme
+  daily
+  rush
+  review
+  mistake
+}
+
+/// Side a repertoire is built for.
+enum RepertoireColor {
+  white
+  black
+}
+
+/// Curated endgame drill family.
+enum EndgameCategory {
+  basic_mate
+  king_pawn
+  rook
+  minor
+  queen
+  other
+}
+
+/// What "success" means in an endgame drill.
+enum EndgameObjective {
+  win
+  draw
+}
+
 model User {
   id            String    @id @default(cuid())
   username      String    @unique @db.Citext
@@ -86,6 +122,17 @@ model User {
   reportsReviewed    Report[]          @relation("ReviewedByUser")
   fairPlaySignals    FairPlaySignal[]
   adminAuditLogs     AdminAuditLog[]
+
+  // Improve epic — training surface back-relations.
+  puzzleAttempts     PuzzleAttempt[]
+  puzzleRating       PuzzleRating?
+  puzzleReviews      PuzzleReview[]
+  gameMistakes       GameMistake[]
+  repertoires        Repertoire[]
+  repertoireReviews  RepertoireReview[]
+  endgameAttempts    EndgameAttempt[]
+  trainingStreak     TrainingStreak?
+  trainingDays       TrainingDay[]
 }
 
 model OAuthAccount {
@@ -260,4 +307,208 @@ model AdminAuditLog {
   createdAt   DateTime @default(now())
 
   admin User @relation(fields: [adminUserId], references: [id])
+}
+
+// ===========================================================================
+// Improve epic — training surface. Schema FROZEN after Session 01.
+// One migration: improve_foundation.
+// ===========================================================================
+
+/// Seeded puzzle bank (lichess CC0 dump, top-N by popularity). `id` is the
+/// lichess PuzzleId, so re-seeds upsert idempotently. Selection queries filter
+/// by rating range + theme; hence the rating B-tree and the GIN on themes.
+model Puzzle {
+  id              String   @id // lichess PuzzleId (e.g. "00sHx")
+  fen             String
+  moves           String[] // solution line, UCI (first move = opponent's setup)
+  rating          Int
+  ratingDeviation Int      @default(0)
+  popularity      Int      @default(0)
+  plays           Int      @default(0)
+  themes          String[] // lichess theme slugs (fork, pin, mateIn2, ...)
+  openingTags     String[] // lichess opening family slugs
+  createdAt       DateTime @default(now())
+
+  attempts PuzzleAttempt[]
+  reviews  PuzzleReview[]
+
+  @@index([rating]) // rating-range selection
+  @@index([themes], type: Gin) // array-contains theme selection
+}
+
+/// One server-recorded solve outcome. Append-only; the client reports
+/// solved + ms-to-solve, the server stamps the Glicko rating before/after.
+model PuzzleAttempt {
+  id               String              @id @default(cuid())
+  userId           String
+  puzzleId         String
+  solved           Boolean
+  msToSolve        Int?
+  ratingBeforeUser Int?
+  ratingAfterUser  Int?
+  source           PuzzleAttemptSource @default(theme)
+  createdAt        DateTime            @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  puzzle Puzzle @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, puzzleId]) // "have I seen this puzzle" / unseen selection
+  @@index([userId, createdAt]) // recent-attempts feed, stats windows
+}
+
+/// Per-user puzzle Glicko-2. Mirrors the Rating model's Glicko fields but as
+/// Float (puzzle rating is updated every attempt — a continuous period).
+/// PK = userId: one puzzle rating per user.
+model PuzzleRating {
+  userId     String   @id
+  rating     Float    @default(1500)
+  deviation  Float    @default(350)
+  volatility Float    @default(0.06)
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// SM-2 spaced-repetition row for a failed/learning puzzle. Unique per
+/// (user, puzzle); (userId, dueAt) drives the "due today" queue.
+model PuzzleReview {
+  id           String   @id @default(cuid())
+  userId       String
+  puzzleId     String
+  dueAt        DateTime
+  intervalDays Int      @default(0)
+  easeFactor   Float    @default(2.5)
+  lapses       Int      @default(0)
+  reps         Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  puzzle Puzzle @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, puzzleId])
+  @@index([userId, dueAt]) // due-today queue, ordered by dueAt
+}
+
+/// A blunder lifted from the user's own game (client-side move classification).
+/// Becomes a "solve your own mistake" puzzle and can enter the review queue.
+/// Unique per (game, ply, user) so re-reviewing a game is idempotent.
+model GameMistake {
+  id          String   @id @default(cuid())
+  userId      String
+  gameId      String
+  ply         Int
+  fen         String
+  playedUci   String
+  bestUci     String
+  bestLineUci String[]
+  cpLoss      Int
+  themeGuess  String[]
+  reviewed    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, ply, userId])
+  @@index([userId, createdAt]) // recent mistakes feed
+}
+
+/// An opening repertoire stored as a move tree (treeJson). One per name/color
+/// per user is the norm but not enforced (drafts allowed).
+model Repertoire {
+  id        String          @id @default(cuid())
+  userId    String
+  name      String
+  color     RepertoireColor
+  rootFen   String
+  treeJson  Json
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviews RepertoireReview[]
+
+  @@index([userId])
+}
+
+/// Spaced-repetition row for a single node (line) inside a repertoire.
+/// nodePath identifies the node in treeJson. (userId, dueAt) drives the queue.
+model RepertoireReview {
+  id           String   @id @default(cuid())
+  userId       String
+  repertoireId String
+  nodePath     String
+  dueAt        DateTime
+  intervalDays Int      @default(0)
+  easeFactor   Float    @default(2.5)
+  reps         Int      @default(0)
+  lapses       Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repertoire Repertoire @relation(fields: [repertoireId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dueAt])
+}
+
+/// Curated endgame position (NOT user data — seeded). `slug` is the stable id
+/// used in URLs and seeds; targetDtm is optional (distance-to-mate hint).
+model EndgameDrill {
+  id         String           @id @default(cuid())
+  slug       String           @unique
+  name       String
+  category   EndgameCategory
+  fen        String
+  objective  EndgameObjective
+  targetDtm  Int?
+  difficulty Int              @default(0)
+  createdAt  DateTime         @default(now())
+
+  attempts EndgameAttempt[]
+}
+
+/// One server-recorded endgame drill attempt (pass/fail).
+model EndgameAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  drillId     String
+  succeeded   Boolean
+  movesPlayed Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drill EndgameDrill @relation(fields: [drillId], references: [id], onDelete: Cascade)
+
+  @@index([userId, drillId])
+}
+
+/// Per-user training streak + daily goal. PK = userId. lastTrainedOn is a
+/// calendar date (no time) so the streak math is timezone-stable per the
+/// day boundary chosen by the training service.
+model TrainingStreak {
+  userId            String    @id
+  currentStreak     Int       @default(0)
+  longestStreak     Int       @default(0)
+  lastTrainedOn     DateTime? @db.Date
+  dailyGoalPuzzles  Int       @default(10)
+  updatedAt         DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// One calendar day of training activity per user — the contribution-graph +
+/// daily-plan source. Unique per (user, day).
+model TrainingDay {
+  id            String   @id @default(cuid())
+  userId        String
+  day           DateTime @db.Date
+  puzzlesSolved Int      @default(0)
+  reviewsDone   Int      @default(0)
+  drillsDone    Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, day])
 }

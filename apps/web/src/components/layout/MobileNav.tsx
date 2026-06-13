@@ -11,7 +11,11 @@ import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
+  // Improve surface.
+  { href: '/train', label: 'Train' },
   { href: '/puzzles', label: 'Puzzles' },
+  { href: '/openings', label: 'Openings' },
+  { href: '/endgames', label: 'Endgames' },
   { href: '/games', label: 'Games' },
   { href: '/profile', label: 'Profile' },
   { href: '/settings', label: 'Settings' },

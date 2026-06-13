@@ -13,3 +13,5 @@ export * from './users';
 export * from './dto/computer-game.dto';
 export * from './dto/engine-analysis.dto';
 export * from './dto/pvp-game.dto';
+export * from './dto/puzzle.dto';
+export * from './dto/training.dto';
