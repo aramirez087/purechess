@@ -9,7 +9,7 @@ import { useSettingsStore } from '@/stores/settings-store';
 import { BOARD_THEMES } from '@/lib/board/themes';
 import { PIECE_SETS, pieceSetBase } from '@/lib/board/piece-sets';
 import { prefersReducedMotion } from '@/lib/board/animations';
-import { Monitor, Moon, Sun, Volume2, Move3D, Hash, Square, Gauge } from 'lucide-react';
+import { Monitor, Moon, Sun, Volume2, Move3D, Hash, Square, Gauge, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const APP_THEMES = [
@@ -161,6 +161,20 @@ export function SettingsForm() {
             aria-label="Evaluation bar"
             checked={settings.showEvalBar}
             onCheckedChange={(v) => settings.update({ showEvalBar: v })}
+          />
+        </SettingRow>
+        <Separator className="bg-border/60" />
+        <SettingRow
+          label="Coach explanations"
+          htmlFor="hideExplanations"
+          hint="Show the pattern explanation after solving a training puzzle."
+          icon={Lightbulb}
+        >
+          <Switch
+            id="hideExplanations"
+            aria-label="Coach explanations"
+            checked={!settings.hideExplanations}
+            onCheckedChange={(v) => settings.update({ hideExplanations: !v })}
           />
         </SettingRow>
       </Section>

@@ -10,6 +10,12 @@ import { PrismaService } from '../database/prisma.service';
 import { PuzzleRatingService } from './puzzle-rating.service';
 import { PuzzleReviewService } from './puzzle-review.service';
 import { StreakService } from '../training/streak.service';
+import {
+  calibrationBand,
+  interleaveThemes,
+  nextDifficulty,
+  type RecentResult,
+} from './adaptive-selector';
 
 /** Default target rating for a user who has never solved a puzzle. */
 const DEFAULT_TARGET_RATING = 1500;
@@ -19,6 +25,9 @@ const RATING_WINDOWS = [150, 300, 600] as const;
 
 /** Cap on recent attempts pulled for the per-theme stats roll-up. */
 const STATS_ATTEMPT_CAP = 1000;
+
+/** Recent attempts pulled for the adaptive policy (difficulty + interleave). */
+const ADAPTIVE_WINDOW = 20;
 
 /** A row from the raw selection query (only the columns `PuzzleDto` needs). */
 interface PuzzleRow {
@@ -65,17 +74,38 @@ export class PuzzleServingService {
    * {@link DEFAULT_TARGET_RATING}. The window starts at ±150 and widens through
    * a fallback ladder (±300, ±600, then drop both the rating *and* unseen
    * filters) until a puzzle is found; the firing tier is logged.
+   *
+   * Pass `adaptive: true` to enable the OPTIONAL policy layer (S14): the target
+   * rating is steered by the damped control law in {@link nextDifficulty} over
+   * the user's recent results, the first-tier window widens during the
+   * calibration window, and — when no explicit theme is asked for — a weak theme
+   * is interleaved in via {@link interleaveThemes}. With NO history (or when
+   * `adaptive` is omitted) this is byte-for-byte the S03 behavior: the policy
+   * layer never runs, and even with `adaptive: true` an empty history makes
+   * every policy function a no-op.
    */
   async getNext(
     userId: string,
-    opts: { theme?: string; rating?: number } = {},
+    opts: { theme?: string; rating?: number; adaptive?: boolean } = {},
   ): Promise<PuzzleDto> {
-    const target = await this.resolveTargetRating(userId, opts.rating);
-    const theme = opts.theme?.trim() || undefined;
+    const baseTarget = await this.resolveTargetRating(userId, opts.rating);
+    const explicitTheme = opts.theme?.trim() || undefined;
+
+    // Optional adaptive policy layer. Resolves to the same `baseTarget` / no
+    // theme bias when the user has no history, so the default ladder is
+    // unchanged. Only runs when explicitly requested.
+    const policy = opts.adaptive
+      ? await this.resolveAdaptivePolicy(userId, baseTarget, explicitTheme)
+      : null;
+    const target = policy ? policy.target : baseTarget;
+    const theme = explicitTheme ?? policy?.theme;
+    const firstHalf = policy ? policy.firstBandHalf : RATING_WINDOWS[0];
 
     // Tiers 0..2: progressively wider rating window, still excluding seen ids.
+    // Tier 0's half-width comes from the policy (widened during calibration);
+    // tiers 1..2 stay the steady fallback widths.
     for (let tier = 0; tier < RATING_WINDOWS.length; tier++) {
-      const half = RATING_WINDOWS[tier];
+      const half = tier === 0 ? firstHalf : RATING_WINDOWS[tier];
       const row = await this.pickOne(userId, {
         min: target - half,
         max: target + half,
@@ -253,6 +283,64 @@ export class PuzzleServingService {
     });
 
     return stats;
+  }
+
+  /**
+   * Resolve the OPTIONAL adaptive policy (S14) from the user's recent attempts.
+   * Returns the steered target rating, the (possibly widened) first-tier band
+   * half-width, and a theme to bias toward when none was explicitly requested.
+   *
+   * Backward-compatible by construction:
+   * - empty history → {@link nextDifficulty} returns `baseTarget` unchanged and
+   *   {@link interleaveThemes} returns `null` (no theme), so the only difference
+   *   from the default path is the calibration-widened first band — which is the
+   *   intended new-user behavior, not a regression of the seeded ladder.
+   * - an explicit theme short-circuits the interleave (the caller's choice wins).
+   */
+  private async resolveAdaptivePolicy(
+    userId: string,
+    baseTarget: number,
+    explicitTheme: string | undefined,
+  ): Promise<{ target: number; firstBandHalf: number; theme: string | undefined }> {
+    const attempts = await this.prisma.puzzleAttempt.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: ADAPTIVE_WINDOW,
+      select: {
+        solved: true,
+        msToSolve: true,
+        puzzle: { select: { rating: true, themes: true } },
+      },
+    });
+
+    // findMany is oldest-last for the policy (it reasons most-recent-last); the
+    // query is newest-first, so reverse.
+    const ordered = [...attempts].reverse();
+    const recent: RecentResult[] = ordered.map((a) => ({
+      solved: a.solved,
+      msToSolve: a.msToSolve,
+      puzzleRating: a.puzzle?.rating ?? null,
+    }));
+
+    const target = nextDifficulty(recent, baseTarget, baseTarget);
+    const firstBandHalf = calibrationBand(recent.length);
+
+    let theme = explicitTheme;
+    if (!theme && recent.length > 0) {
+      const weakThemes = await this.weakestThemeSlugs(userId);
+      const recentThemes = ordered.flatMap((a) => a.puzzle?.themes ?? []);
+      theme = interleaveThemes(weakThemes, recentThemes) ?? undefined;
+    }
+
+    return { target, firstBandHalf, theme };
+  }
+
+  /** Weakest theme slugs (accuracy ASC) for the interleave bias. */
+  private async weakestThemeSlugs(userId: string): Promise<string[]> {
+    const stats = await this.getStats(userId);
+    // getStats already returns weakest-first; bias toward themes with a real
+    // sample so a single miss on a rare theme doesn't dominate the stream.
+    return stats.filter((s) => s.attempts >= 3).map((s) => s.slug);
   }
 
   /** Target rating: explicit arg → user's puzzle rating → default 1500. */

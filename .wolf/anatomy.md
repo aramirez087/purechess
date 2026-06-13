@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T20:47:52.238Z
-> Files: 1178 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T21:00:31.117Z
+> Files: 1187 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -636,6 +636,7 @@
 
 ## Daily Puzzle feature (added 2026-06-13)
 
+- `apps/api/src/puzzles/adaptive-selector.ts` — S14 PURE policy fns (no DB). `nextDifficulty(recent,currentTarget,anchor)`: damped proportional controller toward 0.80 success, ±60/call, bounded anchor±300; EMPTY recent = currentTarget unchanged (no-op). `interleaveThemes(weak,recent)`: weakest-bias, cap same-theme run at 2 (spacing>blocking), null when none. `calibrationBand`/`isCalibrating`: <8 attempts widens band 350 + bigger gain. All constants exported for tests/handoff. (~700 tok)
 - `apps/api/src/puzzles/dto/grade-review.dto.ts` — S06 class-validator body for review grade: solved:boolean, msToSolve?:int≥0. (~90 tok)
 - `apps/api/src/puzzles/dto/record-attempt.dto.ts` — S03 RecordAttemptDto (class-validator): solved bool, msToSolve? int≥0, source? enum(theme|daily|rush|review|mistake). (~120 tok)
 - `apps/api/src/puzzles/dto/save-mistakes.dto.ts` — S07 class-validator body for POST games/:id/mistakes: `MistakeCandidateInput` (ply≥1, fen/playedUci/bestUci strings, bestLineUci string[], cpLoss≥0, optional themeGuess[]) nested via @Type in `SaveMistakesDto.mistakes` (ArrayMaxSize 200). (~190 tok)
@@ -646,7 +647,7 @@
 - `apps/api/src/puzzles/puzzle-rating.service.ts` — S03 per-user puzzle Glicko. applyResult(userId,puzzleRating,rd,solved): REUSES `updateRating` from ratings/glicko2.ts (puzzle = one opponent, score 1/0), upserts PuzzleRating Float cols (unrounded), defaults 1500/350/0.06, clamps zero-RD opponent to 60. get(): snapshot or defaults. DI: PrismaService. (~420 tok)
 - `apps/api/src/puzzles/puzzle-review.controller.ts` — S06 `@Controller('puzzles/review')` additive: GET due (→getDuePayload) + POST :id/grade (GradeReviewDto). SessionAuthGuard + @CurrentUser. (~230 tok)
 - `apps/api/src/puzzles/puzzle-review.service.ts` — S06 spaced-repetition queue over PuzzleReview. enqueueOnFail (upsert due ~tomorrow, idempotent on (userId,puzzleId)); getDue(userId,limit=20) due `dueAt<=now` oldest-first via (userId,dueAt) idx → PuzzleDto[]; dueCount(userId):Promise<number> (S13 badge); nextDueAt; grade(userId,puzzleId,solved,msToSolve?) maps→schedule, updates-or-deletes (GRADUATION_INTERVAL_DAYS=30 → delete); getDuePayload bundles {puzzles,dueCount,nextDueAt}. DI: PrismaService. (~760 tok)
-- `apps/api/src/puzzles/puzzle-serving.service.ts` — S03 serving engine. getNext(userId,{theme?,rating?}): target=arg→PuzzleRating.rating→1500, window ladder ±150/±300/±600 then drop unseen+window (keeps theme), NOT EXISTS exclusion of attempted ids, `themes @> ARRAY[$theme]` GIN, `ORDER BY random() LIMIT 1` via parameterized Prisma.sql. recordAttempt(): inserts PuzzleAttempt (before/after captured), drives PuzzleRatingService, bumps plays, returns delta DTO. **S06: on solved=false also calls `reviewService.enqueueOnFail` (best-effort, `@Optional()`-injected — skipped/safe in serving-only unit tests).** getStats(): per-theme accuracy, weakest-first (acc ASC). DI: PrismaService + PuzzleRatingService + @Optional PuzzleReviewService. (~750 tok)
+- `apps/api/src/puzzles/puzzle-serving.service.ts` — S03 serving engine. getNext(userId,{theme?,rating?}): target=arg→PuzzleRating.rating→1500, window ladder ±150/±300/±600 then drop unseen+window (keeps theme), NOT EXISTS exclusion of attempted ids, `themes @> ARRAY[$theme]` GIN, `ORDER BY random() LIMIT 1` via parameterized Prisma.sql. recordAttempt(): inserts PuzzleAttempt (before/after captured), drives PuzzleRatingService, bumps plays, returns delta DTO. **S06: on solved=false also calls `reviewService.enqueueOnFail` (best-effort, `@Optional()`-injected — skipped/safe in serving-only unit tests).** getStats(): per-theme accuracy, weakest-first (acc ASC). DI: PrismaService + PuzzleRatingService + @Optional PuzzleReviewService. **S14: getNext gained an OPT-IN `adaptive?` flag — when set, `resolveAdaptivePolicy` reads last-20 attempts and applies adaptive-selector (steered target, calibration-widened first band, interleaved weak theme); falsy = byte-identical S03.** (~820 tok)
 - `apps/api/src/puzzles/puzzle-training.controller.ts` — S03 `@Controller('puzzles')` additive trainer routes: GET themes (public→catalog), GET next + POST :id/attempt + GET stats + GET rating (all SessionAuthGuard + @CurrentUser). **S11: + GET history (guard) → PuzzleHistoryService.history → {ratingHistory, summary}.** Sibling to the daily PuzzlesController. (~400 tok)
 - `apps/api/src/puzzles/puzzles.controller.ts` — `@Controller('puzzles')` GET daily → service. Public, no guard. Resolves to /api/puzzles/daily. (~110 tok)
 - `apps/api/src/puzzles/puzzles.module.ts` — PuzzlesModule (registered in app.module.ts). imports AuthModule (for SessionAuthGuard). controllers: PuzzlesController + PuzzleTrainingController (S03) + PuzzleRushController (S05) + PuzzleReviewController (S06) + GameMistakeController (S07). providers/exports: PuzzleCatalogService (S02) + PuzzleServingService + PuzzleRatingService (S03) + PuzzleHistoryService (S11) + PuzzleRushService (S05) + PuzzleReviewService (S06) + GameMistakeService (S07). (~150 tok)
@@ -671,15 +672,17 @@
 - `apps/web/src/components/profile/puzzle-rating-pill.tsx` — S11 'use client' compact own-profile stat. Client-fetches fetchPuzzleRating on mount (additive — never touches game RatingsCard/ProfileDto), renders nothing until loaded / on error, Link→/puzzles/stats. Mounted in profile/[username]/page.tsx only when isOwnProfile. testid puzzle-rating-pill. (~350 tok)
 - `apps/web/src/components/puzzle/puzzle-board.tsx` — PuzzleBoard wraps Chessboard (readOnly off-phase), overlays for loading/success(themes+Next)/fail(Show solution/Try again). (~520 tok)
 - `apps/web/src/components/puzzle/puzzle-rating-chart.tsx` — S11 'use client'. Reuses the profile rating-chart visual language VERBATIM (pure SVG, no chart lib; brass `--primary` line, dashed gridlines, axis labels, hover tooltip). Single series PuzzleRatingPointDto[]. <2 points → empty state "Solve ~20 puzzles to start your rating curve" (testid puzzle-rating-chart-empty). (~700 tok)
+- `apps/web/src/components/puzzle/solve-explanation.tsx` — S14 coach panel shown post-solve/reveal. Props {themes, fen, solutionMoves, source, onDismiss?, defaultCollapsed?}. Returns null in rush OR when `hideExplanations` set. Renders curated theme copy (`explainThemes`) + a "why it works" read-only mini-Chessboard stepping the solution (`buildFrames`/`applyUci`) with the motif arrow (`bestMoveArrow(moves[0])`→autoShapes) on the start position. Collapsible header + dismiss X. (~1200 tok)
 - `apps/web/src/components/puzzle/theme-accuracy-table.tsx` — S11 'use client'. Rows = themes, weakest-first via exported `sortWeakestFirst` (acc ASC, drop 0-attempt, tie larger-sample then slug). Cols: name (Link→/puzzles/train?theme=<slug>, ⚠ when <50% via acc-low), solved/attempts, accuracy bar (acc-bg-* band) + pct (acc-* band). testids: theme-accuracy-table/-row(data-slug)/-empty, accuracy-bar. Reuses humanizeTheme+accuracyBand from theme-tile. (~750 tok)
 - `apps/web/src/components/puzzle/theme-tile.tsx` — Selectable theme card: humanizeTheme (camelCase/slug→title), accuracyBand (low/mid/high), puzzle count, accuracy% (hidden if 0 attempts) via `.acc-*` scale, optional "Weakest" badge. (~600 tok)
-- `apps/web/src/components/puzzle/training-session.tsx` — Reusable drill shell. Props {theme:string|null, source:PuzzleSource, target=10, onBack?, onChangeTheme?}. Loops fetchNextPuzzle→useLocalPuzzle/Chessboard→recordAttempt({solved,msToSolve,source})→1.2s auto-advance. Header solved/attempted + progress bar, rating delta readout, SessionSummary at target with theme accuracy before/after. (~1500 tok)
+- `apps/web/src/components/puzzle/training-session.tsx` — Reusable drill shell. Props {theme:string|null, source:PuzzleSource, target=10, onBack?, onChangeTheme?}. Loops fetchNextPuzzle→useLocalPuzzle/Chessboard→recordAttempt({solved,msToSolve,source})→1.2s auto-advance. Header solved/attempted + progress bar, rating delta readout, SessionSummary at target with theme accuracy before/after. **S14: renders `<SolveExplanation key=puzzle.id … defaultCollapsed>` below the board once an outcome settles.** (~1550 tok)
 - `apps/web/src/components/review/mistake-trainer.tsx` — S07 `<MistakeTrainer gameId mistakes:MistakeItem[]>` review-rail panel. Lists own-side mistakes ("Move N. SAN — −cp"); click → inline solve via useLocalPuzzle (fen=before-blunder, moves=bestLineUci) "Find the move you missed". Solving marks reviewed by resolving ply→id from fetchMistakes(gameId) (best-effort) then markMistakeReviewed(id). Self-hides when empty. Bespoke-hex palette. Exports MistakeItem type. (~1100 tok)
 - `apps/web/src/hooks/use-local-puzzle.ts` — S04 DB-puzzle solve machine (reusable core for rush/review/mistakes). NO setup phase: puzzle.fen IS start, moves[0]=solver's first move, solvingColor from FEN. Phases player→auto-reply→…→success|fail→reveal. onMove(uci) matches via puzzle-utils, tracks msToSolve, fires onSolved({msToSolve})/onFailed once. (~1100 tok)
 - `apps/web/src/hooks/use-mistake-capture.ts` — S07 `useMistakeCapture({gameId,moves,startFen,viewerColor,classification})`: once classification completes, collects the viewer's OWN mistake/blunder moves over `CAPTURE_CP_THRESHOLD(150)` and POSTs once via saveGameMistakes (fire-and-forget; `sentForGameRef` once-guard cleared on failure for retry). No-op when viewerColor null or classification absent. Exports pure `collectOwnMistakes(classified,moves,color,startFen)` → MistakeCandidateDto[] (fen=replayToFen before-blunder, bestLineUci=[bestUci]). (~520 tok)
 - `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
 - `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating(); S05 rush: startRush/finishRush/fetchRushPersonalBests; S06 review: fetchDueReviews()→ReviewDueDto, gradeReview(id,{solved,msToSolve?})→ReviewGradeResultDto; **S07 mistakes: saveGameMistakes(gameId,candidates)→{saved}, fetchMistakes(unreviewedOnly?)→GameMistakeDto[], markMistakeReviewed(id)→{next}**; **S11: fetchPuzzleHistory()→PuzzleHistoryDto {ratingHistory, summary}** — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~700 tok)
 - `apps/web/src/lib/board/puzzle-utils.ts` — SHARED solve helpers (daily + local hooks): replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch, uciToIntent, applyUci (normalize+apply→{fen,lastMove}), solvingColorFromFen. chess.js + rules.applyMoveToFen. (~560 tok)
+- `apps/web/src/lib/board/theme-explanations.ts` — S14 STATIC curated `ThemeKey→{name,oneLiner,whatToLookFor}` map (lichess slugs: fork/pin/skewer/discoveredAttack/doubleCheck/backRankMate/smotheredMate/deflection/decoy/removingTheDefender/hangingPiece/trappedPiece/zwischenzug/+~15 more incl. mateIn1-3). `explainTheme(slug)` degrades missing slugs → humanized name + empty copy; `explainThemes(slugs,limit=2)` dedupes. No generation. (~1400 tok)
 - `apps/web/test/board/puzzle-utils.test.ts` — vitest: replay/isSolverTurn/normalizeCastle/uciMatch. (~340 tok)
 - `apps/web/test/hooks/use-local-puzzle.test.ts` — vitest+fake timers: player phase no-setup, solvingColor from FEN (w/b), castle-uci match (e1h1==e1g1), full correct→success+msToSolve, wrong→fail+onFailed, onReveal. (~900 tok)
 - `apps/web/test/hooks/use-puzzle.test.ts` — vitest+fake timers: loading→player, correct/wrong/final move, onReveal. Mocks api+sound. (~520 tok)
@@ -928,6 +931,7 @@
 
 ## apps/api/src/puzzles/
 
+- `adaptive-selector.ts` — Adaptive difficulty + theme-interleave policy. (~3055 tok)
 - `game-mistake.controller.ts` — Result of marking a mistake reviewed: the next unreviewed mistake (or null). (~722 tok)
 - `game-mistake.service.ts` — Centipawn-loss floor for a move to count as a persistable mistake. Matches (~2330 tok)
 - `puzzle-catalog.service.ts` — One theme slug and how many puzzles in the bank carry it. (~803 tok)
@@ -937,7 +941,7 @@
 - `puzzle-review.service.ts` — Default page size for the due queue. (~2605 tok)
 - `puzzle-rush.controller.ts` — Puzzle Rush endpoints — the timed board-vision drill. Registered additively (~757 tok)
 - `puzzle-rush.service.ts` — Default target rating for a user who has never solved a puzzle. (~2646 tok)
-- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~3254 tok)
+- `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~4376 tok)
 - `puzzle-training.controller.ts` — Trainer endpoints — the local puzzle bank, per-user serving, attempt (~981 tok)
 - `puzzles.controller.ts` — Public — the daily puzzle needs no auth guard. (~128 tok)
 - `puzzles.module.ts` — Exports PuzzlesModule (~464 tok)
@@ -1108,6 +1112,7 @@
 
 ## apps/api/test/puzzles/
 
+- `adaptive-selector.spec.ts` — Build a window of N fast solves (all solved, all under the fast threshold). (~2103 tok)
 - `game-mistake.service.spec.ts` — A valid White-side mistake claim at ply 3 (matches the persisted record). (~3596 tok)
 - `puzzle-catalog.service.spec.ts` — Declares mockRedis (~1075 tok)
 - `puzzle-history.service.spec.ts` — mockPrisma: attempt (~1969 tok)
@@ -1458,9 +1463,10 @@
 - `puzzle-board.tsx` — humanizeTheme (~1176 tok)
 - `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~1922 tok)
 - `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1197 tok)
+- `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
 - `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~973 tok)
-- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4268 tok)
+- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4485 tok)
 
 ## apps/web/src/components/review/
 
@@ -1480,7 +1486,7 @@
 ## apps/web/src/components/settings/
 
 - `settings-dialog.tsx` — SettingsDialog — renders modal (~455 tok)
-- `settings-form.tsx` — APP_THEMES (~3044 tok)
+- `settings-form.tsx` — APP_THEMES (~3194 tok)
 
 ## apps/web/src/components/training/
 
@@ -1516,7 +1522,7 @@
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
 - `use-puzzle.ts` — Static derivation from a loaded puzzle — never changes once set. (~2211 tok)
 - `use-replay-san.ts` — FEN after each ply; `fens[0]` is the start, `fens[k]` follows ply k. (~418 tok)
-- `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~166 tok)
+- `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~178 tok)
 
 ## apps/web/src/lib/
 
@@ -1565,6 +1571,7 @@
 - `sacrifice.ts` — Sacrifice detection for the "brilliant" classification. Pure (chess.js only). (~658 tok)
 - `sound.ts` — Declares ModalSpec (~4046 tok)
 - `sr-announce.ts` — Compatibility shim — the implementation moved to `rules.ts` (chess.js). (~57 tok)
+- `theme-explanations.ts` — Curated, hand-written explanations for the common high-frequency tactical (~3147 tok)
 - `themes.ts` — Exports BoardThemeId, BoardTheme, BOARD_THEMES, applyBoardTheme (~288 tok)
 - `types.ts` — Analysis boards: input follows the side to move instead of `orientation`, (~646 tok)
 
@@ -1578,7 +1585,7 @@
 
 ## apps/web/src/stores/
 
-- `settings-store.ts` — Live engine eval bar during computer games. (~507 tok)
+- `settings-store.ts` — Live engine eval bar during computer games. (~543 tok)
 
 ## apps/web/src/types/
 
@@ -1690,6 +1697,7 @@
 ## apps/web/test/puzzle/
 
 - `rush-client.test.tsx` — --- Mocks ------------------------------------------------------------------ (~2285 tok)
+- `solve-explanation.test.tsx` — --- Mocks ------------------------------------------------------------------ (~1445 tok)
 - `theme-accuracy-table.test.tsx` — stat (~1398 tok)
 - `training-session.test.tsx` — --- Mocks ------------------------------------------------------------------ (~1444 tok)
 
@@ -1831,6 +1839,7 @@
 - `session-11-handoff.md` — Session 11 handoff — Puzzle stats & charts (~2139 tok)
 - `session-12-handoff.md` — Session 12 handoff — Insights & weakness engine (~3230 tok)
 - `session-13-handoff.md` — Session 13 handoff — Training hub, daily plan & streaks (~3649 tok)
+- `session-14-handoff.md` — Session 14 handoff — Adaptive difficulty + coach feedback (~2922 tok)
 
 ## docs/roadmap/rust-engine-migration/
 

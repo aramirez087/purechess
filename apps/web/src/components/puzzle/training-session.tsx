@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
 import { humanizeTheme } from '@/components/puzzle/theme-tile';
+import { SolveExplanation } from '@/components/puzzle/solve-explanation';
 import { fetchNextPuzzle, fetchPuzzleStats, recordAttempt } from '@/lib/api/puzzles';
 
 /**
@@ -303,6 +304,23 @@ export function TrainingSession({
             ' '
           )}
         </p>
+
+        {/* Coach panel: after the attempt settles, teach the puzzle's pattern.
+            Suppressed in rush and when the user hides explanations (handled
+            inside SolveExplanation). Collapsed by default so it never blocks the
+            quick auto-advance, but available to anyone who wants the lesson. */}
+        {outcome && puzzle && (
+          <div className="mx-auto w-full max-w-[560px]">
+            <SolveExplanation
+              key={puzzle.id}
+              themes={puzzle.themes}
+              fen={puzzle.fen}
+              solutionMoves={puzzle.moves}
+              source={source}
+              defaultCollapsed
+            />
+          </div>
+        )}
       </div>
     </BoardSettingsProvider>
   );

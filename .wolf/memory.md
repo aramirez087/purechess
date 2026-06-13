@@ -2794,3 +2794,33 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 14:50 | S13: /train hub web — TrainClient (streak banner, Focus line, daily plan, 8 mode tiles+review badge, signed-out daily+pitch), DailyPlan, StreakBanner, training.ts client, page.tsx shell | apps/web/src/app/train/{page,train-client}.tsx, components/training/{daily-plan,streak-banner}.tsx, lib/api/training.ts | done | ~6k |
 | 14:50 | S13: tests — streak.service.spec (13: consecutive/gap/same-day/longest/boundary), training.service.spec (19: assembly/done/cap), daily-plan.test (13). Gates: API 590, web 634, shared build, both tsc clean, lint clean | apps/api/test/training/**, apps/web/test/training/** | green | ~5k |
 | 14:47 | Created docs/roadmap/purechess-improve/session-13-handoff.md | — | ~3893 |
+| 14:51 | Created apps/api/src/puzzles/adaptive-selector.ts | — | ~3055 |
+| 14:51 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | expanded (+10 lines) | ~246 |
+| 14:51 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | 7→6 lines | ~34 |
+| 14:51 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | added nullish coalescing | ~646 |
+| 14:51 | Edited apps/api/src/puzzles/puzzle-serving.service.ts | added optional chaining | ~738 |
+| 14:52 | Created apps/api/test/puzzles/adaptive-selector.spec.ts | — | ~1900 |
+| 14:52 | Edited apps/api/test/puzzles/adaptive-selector.spec.ts | modified atTargetWindow() | ~154 |
+| 14:53 | Edited apps/api/test/puzzles/adaptive-selector.spec.ts | 9→13 lines | ~240 |
+| 14:54 | Created apps/web/src/lib/board/theme-explanations.ts | — | ~3147 |
+| 14:54 | Edited apps/web/src/stores/settings-store.ts | 4→6 lines | ~58 |
+| 14:54 | Edited apps/web/src/stores/settings-store.ts | 3→4 lines | ~24 |
+| 14:55 | Created apps/web/src/components/puzzle/solve-explanation.tsx | — | ~2817 |
+| 14:55 | Edited apps/web/src/components/puzzle/training-session.tsx | added 1 import(s) | ~81 |
+| 14:55 | Edited apps/web/src/components/puzzle/training-session.tsx | CSS: panel | ~333 |
+| 14:56 | Edited apps/web/src/components/settings/settings-form.tsx | inline fix | ~29 |
+| 14:56 | Edited apps/web/src/components/settings/settings-form.tsx | CSS: hideExplanations | ~220 |
+| 14:56 | Edited apps/web/src/hooks/use-settings.ts | 3→4 lines | ~31 |
+| 14:57 | Created apps/web/test/puzzle/solve-explanation.test.tsx | — | ~1445 |
+
+## Session 2026-06-13 — purechess-improve S14 (adaptive difficulty + coach feedback)
+| 14:55 | adaptive-selector.ts pure policy (nextDifficulty damped controller, interleaveThemes, calibration) | apps/api/src/puzzles/adaptive-selector.ts | created | ~1500 |
+| 14:55 | wire opt-in adaptive layer into getNext (resolveAdaptivePolicy) | apps/api/src/puzzles/puzzle-serving.service.ts | S03 tests unchanged (17 pass) | ~800 |
+| 14:56 | adaptive-selector.spec (15 cases: climb/ease/damp/bound/calibrate/interleave/no-op) | apps/api/test/puzzles/adaptive-selector.spec.ts | 15 pass | ~1200 |
+| 14:56 | theme-explanations.ts curated map (~28 themes) + explainTheme/explainThemes | apps/web/src/lib/board/theme-explanations.ts | created | ~1400 |
+| 14:57 | SolveExplanation component (mini-board + motif arrow + clickable line, rush/hide guards) | apps/web/src/components/puzzle/solve-explanation.tsx | created | ~1200 |
+| 14:57 | hideExplanations pref in settings store + use-settings + settings-form toggle | settings-store.ts, use-settings.ts, settings-form.tsx | created | ~300 |
+| 14:57 | wire SolveExplanation into training-session below board | apps/web/src/components/puzzle/training-session.tsx | wired | ~200 |
+| 14:57 | solve-explanation.test (8 cases: copy/missing/rush/hide/arrow/step/collapse/dismiss) | apps/web/test/puzzle/solve-explanation.test.tsx | 8 pass | ~900 |
+| 14:58 | all 4 gates GREEN: API tsc 0, API test 605, web tsc 0, web vitest 642 | — | PASS | — |
+| 15:00 | Created docs/roadmap/purechess-improve/session-14-handoff.md | — | ~3117 |

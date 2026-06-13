@@ -15,6 +15,8 @@ export interface Settings {
   pieceSet: PieceSetId;
   /** Live engine eval bar during computer games. */
   showEvalBar: boolean;
+  /** Hide the post-solve coach explanation panel in training modes. */
+  hideExplanations: boolean;
 }
 
 interface SettingsStore extends Settings {
@@ -31,6 +33,7 @@ const DEFAULTS: Settings = {
   animations: true,
   pieceSet: DEFAULT_PIECE_SET,
   showEvalBar: true,
+  hideExplanations: false,
 };
 
 export const useSettingsStore = create<SettingsStore>()(

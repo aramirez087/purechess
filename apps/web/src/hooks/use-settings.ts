@@ -12,6 +12,7 @@ export function useSettings(): Settings {
     animations: s.animations,
     pieceSet: s.pieceSet,
     showEvalBar: s.showEvalBar,
+    hideExplanations: s.hideExplanations,
   }));
 }
 
