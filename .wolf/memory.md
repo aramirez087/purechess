@@ -2734,3 +2734,15 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 14:16 | S11 puzzle stats & charts: PuzzleHistoryService (ratingHistory cap-200 + daily-close bucket, summary{rating,attempted,solved,accuracy,weakestTheme}), GET /puzzles/history, PuzzleRatingChart (pure-SVG reuse), ThemeAccuracyTable (weakest-first, ⚠<50, deep-links), /puzzles/stats page+client, profile PuzzleRatingPill, shared DTOs (PuzzleRatingPoint/Summary/History), fetchPuzzleHistory. Tests: theme-accuracy-table.test.tsx (8) + puzzle-history.service.spec.ts (13). | apps/api/src/puzzles/{puzzle-history.service,puzzle-training.controller,puzzles.module}.ts, apps/web/src/components/puzzle/{puzzle-rating-chart,theme-accuracy-table}.tsx, apps/web/src/app/puzzles/stats/{page,stats-client}.tsx, apps/web/src/components/profile/puzzle-rating-pill.tsx, apps/web/src/lib/api/puzzles.ts, packages/shared/src/dto/puzzle.dto.ts | all gates green (api 518, web 621) | ~38k |
 | 14:19 | Created docs/roadmap/purechess-improve/session-11-handoff.md | — | ~2282 |
+| 14:22 | Edited packages/shared/src/dto/training.dto.ts | expanded (+26 lines) | ~696 |
+| 14:24 | Created apps/api/src/insights/weakness-detectors.ts | — | ~5013 |
+| 14:25 | Created apps/api/src/insights/insights.service.ts | — | ~3474 |
+| 14:25 | Created apps/api/src/insights/insights.controller.ts | — | ~283 |
+| 14:25 | Created apps/api/src/insights/insights.module.ts | — | ~344 |
+| 14:25 | Edited apps/api/src/app.module.ts | added 1 import(s) | ~54 |
+| 14:25 | Edited apps/api/src/app.module.ts | 3→4 lines | ~37 |
+| 14:26 | Created apps/api/test/insights/weakness-detectors.spec.ts | — | ~4268 |
+| 14:26 | Created apps/web/src/lib/api/training.ts | — | ~384 |
+| 14:26 | Created apps/web/src/app/train/insights/page.tsx | — | ~333 |
+| 14:27 | Created apps/web/src/app/train/insights/insights-client.tsx | — | ~1989 |
+| 14:29 | Created docs/roadmap/purechess-improve/session-12-handoff.md | — | ~3445 |

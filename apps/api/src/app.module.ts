@@ -25,6 +25,7 @@ import { ComputerGamesModule } from './computer-games/computer-games.module';
 import { PuzzlesModule } from './puzzles/puzzles.module';
 import { RepertoireModule } from './repertoire/repertoire.module';
 import { EndgamesModule } from './endgames/endgames.module';
+import { InsightsModule } from './insights/insights.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { EndgamesModule } from './endgames/endgames.module';
     PuzzlesModule,
     RepertoireModule,
     EndgamesModule,
+    InsightsModule,
     ...(process.env['NODE_ENV'] === 'test' ? [TestingModule] : []),
   ],
   controllers: [AppController],

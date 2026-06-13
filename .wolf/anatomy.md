@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T20:19:33.124Z
-> Files: 1150 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T20:29:12.199Z
+> Files: 1159 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -714,7 +714,8 @@
 - `docs/roadmap/purechess-improve/session-01-handoff.md` — frozen contract (models/columns/indexes/enums), DTO shapes, reuse anchors, open issues for Wave 3. (~1600 tok)
 - `packages/shared/src/dto/endgame.dto.ts` — S10 DTOs: EndgameDrillDto (slug/name/category/fen/objective/targetDtm?/difficulty/attempted?/solved?), EndgameProbeDto (category win|draw|loss|unknown, bestMove?, dtm?), EndgameAttemptInputDto, EndgameAttemptResultDto. (~430 tok)
 - `packages/shared/src/dto/puzzle.dto.ts` — PuzzleDto, PuzzleAttemptResultDto, PuzzleThemeDto, PuzzleThemeStatDto, PuzzleRatingDto + PuzzleSource type; **S11: PuzzleRatingPointDto {rating,at}, PuzzleSummaryDto {puzzleRating,attempted,solved,accuracy?,weakestTheme?}, PuzzleHistoryDto {ratingHistory,summary}**. Plain interfaces, optional-friendly. (~360 tok)
-- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. (~340 tok)
+- `packages/shared/src/dto/training.dto.ts` — TrainingPlanDto/ItemDto, TrainingStreakDto, TrainingDayDto, InsightDto, WeaknessDto. **S12: WeaknessDto extended with kind(WeaknessKind)/title/evidence/severity/actionHref (all optional); WeaknessKind = theme|game-mistake|opening|endgame|time; InsightDto.headline = top weakness title.** (~340 tok)
+- `apps/web/src/lib/api/training.ts` — S12 web client for /train: fetchInsights()→InsightDto. credentials:'include'. (~180 tok)
 
 ## apps/api/
 
@@ -771,7 +772,7 @@
 ## apps/api/src/
 
 - `app.controller.ts` — Exports AppController (~157 tok)
-- `app.module.ts` — API routes: GET (2 endpoints) (~851 tok)
+- `app.module.ts` — API routes: GET (2 endpoints) (~874 tok)
 - `app.service.ts` — Exports HealthStatus, AppService (~337 tok)
 - `main.ts` — Declares bootstrap (~481 tok)
 
@@ -881,6 +882,13 @@
 - `games.controller.ts` — Live PvP (friend-invite) games — players only, session required. (~563 tok)
 - `games.module.ts` — Exports GamesModule (~216 tok)
 - `games.service.ts` — Either player may abort while fewer than this many plies are on the board. (~7807 tok)
+
+## apps/api/src/insights/
+
+- `insights.controller.ts` — S12 `@Controller('train')`. GET /train/insights (SessionAuthGuard + @CurrentUser) → InsightDto. (~283 tok)
+- `insights.module.ts` — S12 InsightsModule (registered in app.module.ts). imports AuthModule + PuzzlesModule + EndgamesModule + RepertoireModule (the aggregators it injects). exports InsightsService (S13 hub embeds top insight). (~344 tok)
+- `insights.service.ts` — S12 read-only insights engine. compute(): gather 5 aggregates (serving.getStats, mistakes.listMistakes→themeGuess clusters, repertoireReview.findMany lapses>0, endgames.list→category gaps, read-only move/game/gameMistake time agg over last 30 games) → run all detectors → rankWeaknesses(severity×impact, dedupe by kind, top 5). Cache Redis insights:<userId> 15min. Exports pure rankWeaknesses + score. (~3474 tok)
+- `weakness-detectors.ts` — S12 TRUST-CRITICAL pure detectors, each (aggregated input)→WeaknessDto|null, conservative (volume floor + clear gap). tacticalThemeWeakness (≥15 attempts, acc≤0.65, weighted by themeCommonness), recurringGameMistake (≥3 same-theme game mistakes), openingLeak (≥3 lapses), endgameGap (≥2 attempted-unsolved), timeManagement (fast-blunder ≥2× baseline OR ≥10-game flag-loss rate — most conservative). Exports thresholds + themeCommonness + humanize. (~5013 tok)
 
 ## apps/api/src/invites/
 
@@ -1063,6 +1071,10 @@
 ## apps/api/test/health/
 
 - `health.spec.ts` — Declares mockAppService (~1100 tok)
+
+## apps/api/test/insights/
+
+- `weakness-detectors.spec.ts` — EndgameCategoryStat: baseAgg, w (~4268 tok)
 
 ## apps/api/test/invites/
 
@@ -1291,6 +1303,11 @@
 
 - `page.tsx` — dynamic (~500 tok)
 
+## apps/web/src/app/train/insights/
+
+- `insights-client.tsx` — S12 'use client'. Ranked WeaknessDto card list: each card = title + evidence (numbers) + "Fix this" Button→actionHref; top card featured (brass). KIND_META maps kind→icon+verb. Signed-out: insights-signin-prompt. Empty/low-data: insights-empty (links to trainers). testids insights-list/insight-card(data-kind)/insight-evidence. (~1989 tok)
+- `page.tsx` — S12 server. force-dynamic. auth (/api/auth/me) → serverFetch /api/train/insights → InsightsClient. Signed-out renders sign-in prompt. (~333 tok)
+
 ## apps/web/src/components/
 
 - `error-boundary.tsx` — text (~559 tok)
@@ -1489,6 +1506,7 @@
 - `puzzles.ts` — Client for our puzzles API: the daily-puzzle proxy plus the Improve trainer (~2639 tok)
 - `pvp-games.ts` — Exports getPvpGame, submitPvpMove, resignPvpGame, drawPvpGame + 2 more (~524 tok)
 - `repertoire.ts` — Client for the opening-repertoire API (`/repertoire`). Every call is (~1372 tok)
+- `training.ts` — Client for the training / insights API (`/train`). (~384 tok)
 
 ## apps/web/src/lib/board/
 
@@ -1779,6 +1797,7 @@
 - `session-09-handoff.md` — Session 09 handoff — Opening trainer (drill your lines) (~2540 tok)
 - `session-10-handoff.md` — Session 10 handoff — Endgame drills (vs tablebase) (~2351 tok)
 - `session-11-handoff.md` — Session 11 handoff — Puzzle stats & charts (~2139 tok)
+- `session-12-handoff.md` — Session 12 handoff — Insights & weakness engine (~3230 tok)
 
 ## docs/roadmap/rust-engine-migration/
 
@@ -1831,7 +1850,7 @@
 - `pvp-game.dto.ts` — Move submission for a live PvP game. (~563 tok)
 - `repertoire.dto.ts` — Opening-repertoire DTOs shared between web and api. (~1793 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
-- `training.dto.ts` — A single actionable item in the daily training plan. (~954 tok)
+- `training.dto.ts` — A single actionable item in the daily training plan. (~1358 tok)
 
 ## scripts/
 
