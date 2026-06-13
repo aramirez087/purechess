@@ -2990,3 +2990,23 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
 | 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
+
+## Session: 2026-06-13 17:49
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:52 | Created .session-05-plan.md | — | ~3044 |
+| 17:52 | Session end: 1 writes across 1 files (.session-05-plan.md) | 3 reads | ~13496 tok |
+
+## Session: 2026-06-13 17:52
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:53 | Created apps/web/src/components/puzzle/solve-session-shell.tsx | — | ~672 |
+| 17:53 | Edited apps/web/src/components/puzzle/training-session.tsx | 3→3 lines | ~74 |
+| 17:53 | Edited apps/web/src/components/puzzle/training-session.tsx | reduced (-29 lines) | ~402 |
+| 17:53 | Edited apps/web/src/components/puzzle/training-session.tsx | — | ~0 |
+| 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | 6→5 lines | ~96 |
+| 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | reduced (-29 lines) | ~267 |
+| 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | removed 20 lines | ~21 |
+| 17:55 | Created docs/roadmap/dedup-cleanup/session-05-handoff.md | — | ~1115 |
