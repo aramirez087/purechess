@@ -22,6 +22,7 @@ function classified(ply: number, cls: ClassifiedMove['class']): ClassifiedMove {
     ply,
     san: 'e4',
     uci: 'e2e4',
+    color: ply % 2 === 1 ? 'w' : 'b',
     evalBefore: 0,
     evalAfter: 0,
     cpl: 0,

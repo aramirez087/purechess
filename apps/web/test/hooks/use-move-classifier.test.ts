@@ -192,6 +192,27 @@ describe('useMoveClassifier', () => {
     expect(r.blackAcpl).toBe(0);
   });
 
+  it('tags each move with the side that played it, not ply parity', async () => {
+    // Custom start: Black to move (after 1.e4). Ply 1 is therefore a BLACK move,
+    // so parity (odd → white) would mislabel it — color must come from the FEN.
+    const startFen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
+    const moves = [wireMove(1, 'e5', 'e7e5'), wireMove(2, 'Nf3', 'g1f3')];
+    vi.mocked(analyze)
+      .mockResolvedValueOnce({ depth: 12, bestmove: 'e7e5', pv: ['e7e5'], cp: -20 })
+      .mockResolvedValueOnce({ depth: 12, bestmove: 'g1f3', pv: ['g1f3'], cp: 25 })
+      .mockResolvedValueOnce({ depth: 12, bestmove: 'b8c6', pv: ['b8c6'], cp: -15 });
+
+    const { result } = renderHook(() => useMoveClassifier(moves, startFen));
+    act(() => {
+      result.current.run();
+    });
+    await waitFor(() => expect(result.current.result).not.toBeNull());
+
+    const r = result.current.result!;
+    expect(r.moves[0].color).toBe('b');
+    expect(r.moves[1].color).toBe('w');
+  });
+
   it('reset() cancels an in-flight run', async () => {
     let resolveAnalyze!: (v: { depth: number; bestmove: string; pv: string[]; cp: number }) => void;
     vi.mocked(analyze).mockImplementation(

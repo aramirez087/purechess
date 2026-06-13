@@ -82,6 +82,10 @@ export default withSentryConfig(nextConfig, {
   project: process.env.SENTRY_PROJECT ?? 'purechess-web',
   silent: true,
   hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: false,
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+    automaticVercelMonitors: false,
+  },
 });

@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -253,10 +254,10 @@ export default function DemoPage() {
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Confirm resignation</DialogTitle>
+                    <DialogDescription className="text-sm text-muted-foreground">
+                      Are you sure you want to resign this game?
+                    </DialogDescription>
                   </DialogHeader>
-                  <p className="text-sm text-muted-foreground">
-                    Are you sure you want to resign this game?
-                  </p>
                   <div className="flex justify-end gap-2 pt-2">
                     <Button variant="outline" size="sm">Cancel</Button>
                     <Button variant="destructive" size="sm">Resign</Button>

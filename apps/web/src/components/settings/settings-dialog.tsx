@@ -5,6 +5,7 @@ import { Settings2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -31,6 +32,9 @@ export function SettingsDialog() {
             </span>
             <DialogTitle className="text-base tracking-tight">Settings</DialogTitle>
           </div>
+          <DialogDescription className="sr-only">
+            Adjust board, sound, and display preferences.
+          </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <SettingsForm />

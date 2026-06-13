@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T06:19:45.568Z
-> Files: 928 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T13:22:21.017Z
+> Files: 932 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -15,6 +15,7 @@
 
 - `a11y-focus-ring-verify-9314.mjs` — hslToRgb: lum, contrast (~801 tok)
 - `append-bug-a4.cjs` — Declares fs (~380 tok)
+- `append-bugs.cjs` — Declares fs (~846 tok)
 - `bn-geom.mjs` — cubic: solveY (~712 tok)
 - `colorcheck.mjs` — hsl: grad, sheen, lum (~583 tok)
 - `commit-msg.txt` — Declares in (~304 tok)
@@ -948,7 +949,7 @@
 - `fly.toml` (~401 tok)
 - `next-env.d.ts` — / <reference types="next" /> (~58 tok)
 - `next.config.js` — Next.js configuration (~581 tok)
-- `next.config.mjs` — Declares isDev (~833 tok)
+- `next.config.mjs` — Declares isDev (~848 tok)
 - `package.json` — Node.js package manifest (~580 tok)
 - `postcss.config.js` — PostCSS configuration (~36 tok)
 - `README.md` — Project documentation (~363 tok)
@@ -1009,6 +1010,10 @@
 - `not-found.tsx` — NotFound (~196 tok)
 - `providers.tsx` — ThemeSync (~624 tok)
 
+## apps/web/src/app/(demo)/demo/
+
+- `page.tsx` — START_FEN — renders modal (~3646 tok)
+
 ## apps/web/src/app/(play)/play/
 
 - `error.tsx` — PlayError (~265 tok)
@@ -1044,7 +1049,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Hints per game — encourages thinking first, asking second. (~9840 tok)
+- `computer-game-client.tsx` — Hints per game — encourages thinking first, asking second. (~10040 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~292 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
@@ -1098,7 +1103,7 @@
 - `board-context.tsx` — BoardSettingsContext (~704 tok)
 - `chessboard.tsx` — isLightSquare (~7899 tok)
 - `coordinates.tsx` — In-square corner coordinates (lichess-style): rank numbers in the top-right (~673 tok)
-- `move-input-overlay.tsx` — Floating command-palette over the board for typed moves. Renders only (~1272 tok)
+- `move-input-overlay.tsx` — Floating command-palette over the board for typed moves. Renders only (~1290 tok)
 - `move-input.tsx` — PROMOTION_PIECES (~1398 tok)
 - `piece.tsx` — Piece (~336 tok)
 - `square.tsx` — Suppress the static piece render (it is being animated by the AnimationLayer). (~2010 tok)
@@ -1172,6 +1177,7 @@
 
 ## apps/web/src/components/profile/
 
+- `edit-profile-dialog.tsx` — EditProfileDialog — renders modal (~1274 tok)
 - `profile-header.tsx` — ProfileHeader (~594 tok)
 - `rating-chart.tsx` — Pure-SVG interactive rating history chart (category tabs, 1m/3m/1y/all range, W/D/L dots, hover tooltip + game deep link). No chart deps. (~2777 tok)
 - `ratings-card.tsx` — Current-rating 3-col grid + RatingChart below (when ratingHistory non-empty) (~700 tok)
@@ -1179,7 +1185,7 @@
 
 ## apps/web/src/components/review/
 
-- `accuracy-summary.tsx` — Classes shown in the tally, worst-to-best reading order, with glyph styling. (~798 tok)
+- `accuracy-summary.tsx` — Classes shown in the tally, worst-to-best reading order, with glyph styling. (~814 tok)
 - `analysis-move-panel.tsx` — Plies played before the root position (custom-FEN starts). (~3262 tok)
 - `classification-badge.tsx` — Tiny colored glyph after a move's SAN. Renders nothing for good/forced. (~260 tok)
 - `eval-graph.tsx` — Interactive SVG eval-history chart (48px, viewBox 0 0 100 100 non-uniform scale): white/black territory fills via half-height clipPaths, dashed center, current-ply marker, click-to-seek, hover title. (~1069 tok)
@@ -1193,6 +1199,7 @@
 
 ## apps/web/src/components/settings/
 
+- `settings-dialog.tsx` — SettingsDialog — renders modal (~455 tok)
 - `settings-form.tsx` — APP_THEMES (~3044 tok)
 
 ## apps/web/src/components/ui/
@@ -1214,7 +1221,7 @@
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
-- `use-move-classifier.ts` — 1-based ply. (~2556 tok)
+- `use-move-classifier.ts` — 1-based ply. (~2597 tok)
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
@@ -1345,7 +1352,7 @@
 
 ## apps/web/test/hooks/
 
-- `use-move-classifier.test.ts` — Declares wireMove (~2478 tok)
+- `use-move-classifier.test.ts` — Declares wireMove (~2766 tok)
 - `use-move-input.test.ts` — START: keyEvent, openHook (~1562 tok)
 - `use-opening-explorer.test.ts` — Fetch mock whose responses resolve only when the test says so. (~2140 tok)
 - `use-opening-name.test.ts` — SICILIAN_EPD: mockFetch (~774 tok)
@@ -1371,7 +1378,7 @@
 
 - `eval-graph.test.tsx` — Empty evals, ±600cp clamp (no NaN), click-to-seek with mocked getBoundingClientRect, zero-width guard. (~585 tok)
 - `eval-panel.test.tsx` — START (~1577 tok)
-- `move-time-chart.test.tsx` — move (~1293 tok)
+- `move-time-chart.test.tsx` — move (~1304 tok)
 - `opening-explorer.test.tsx` — useOpeningExplorerMock (~1182 tok)
 - `review-page.test.tsx` — MOCK_MOVES (~2196 tok)
 

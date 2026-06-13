@@ -15,10 +15,9 @@ function countClass(
   side: 'w' | 'b',
   cls: MoveGlyphClass,
 ): number {
-  // Ply is 1-based: odd → white moved, even → black moved.
-  return result.moves.filter(
-    (m) => (m.ply % 2 === 1 ? 'w' : 'b') === side && m.class === cls,
-  ).length;
+  // Use the move's own side (set from the position) — ply parity is wrong when
+  // the game starts from a custom black-to-move FEN on /analyze.
+  return result.moves.filter((m) => m.color === side && m.class === cls).length;
 }
 
 function SideColumn({

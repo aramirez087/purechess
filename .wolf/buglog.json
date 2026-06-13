@@ -8127,6 +8127,122 @@
       "related_bugs": [],
       "occurrences": 2,
       "last_seen": "2026-06-13T06:19:03.997Z"
+    },
+    {
+      "id": "bug-494",
+      "timestamp": "2026-06-13T13:09:51.783Z",
+      "error_message": "Wrong return value",
+      "file": "apps/web/src/components/review/accuracy-summary.tsx",
+      "root_cause": "Was returning: result.moves.filter(",
+      "fix": "Now returns: result.moves.filter((m) => m.color === side && m.c",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T13:09:51.783Z"
+    },
+    {
+      "id": "bug-495",
+      "timestamp": "2026-06-13T13:10:49.624Z",
+      "error_message": "Missing await",
+      "file": "apps/web/test/hooks/use-move-classifier.test.ts",
+      "root_cause": "Async call without await — returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T13:10:49.624Z"
+    },
+    {
+      "id": "bug-496",
+      "timestamp": "2026-06-13T13:19:10.460Z",
+      "error_message": "Type error",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: // Highlight whichever side moved last: when it's the comput; // human just moved (engine still thinking, or human deliver",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-06-13T13:19:22.253Z"
+    },
+    {
+      "id": "bug-497",
+      "timestamp": "2026-06-13T07:21:00.000Z",
+      "error_message": "Accuracy summary attributes brilliant/mistake/blunder counts to the wrong player when the game starts from a black-to-move custom FEN (/analyze).",
+      "file": "apps/web/src/components/review/accuracy-summary.tsx",
+      "root_cause": "countClass derived the side from ply parity (ply%2===1 => white), which is only valid for white-first games; the classifier supports a startFen where black moves on ply 1.",
+      "fix": "Added color (w|b) to ClassifiedMove in use-move-classifier.ts (set from the position via whiteMoved); countClass now filters on m.color. Added regression test.",
+      "tags": [
+        "a11y-unrelated",
+        "analyze",
+        "classification",
+        "off-by-color",
+        "web"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T07:21:00.000Z"
+    },
+    {
+      "id": "bug-498",
+      "timestamp": "2026-06-13T07:21:00.000Z",
+      "error_message": "ESLint: jsx-a11y/role-supports-aria-props — aria-disabled not supported by role listitem.",
+      "file": "apps/web/src/components/board/move-input-overlay.tsx",
+      "root_cause": "The empty-state <li> (\"No legal move\") carried a bare aria-disabled; an li (implicit role listitem) does not support aria-disabled.",
+      "fix": "Replaced aria-disabled with role=\"presentation\" (it is a placeholder, not a real listbox option).",
+      "tags": [
+        "a11y",
+        "lint",
+        "web"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T07:21:00.000Z"
+    },
+    {
+      "id": "bug-499",
+      "timestamp": "2026-06-13T07:21:00.000Z",
+      "error_message": "Radix warning: Missing Description or aria-describedby for DialogContent (settings, edit-profile, demo dialogs).",
+      "file": "apps/web/src/components/settings/settings-dialog.tsx, apps/web/src/components/profile/edit-profile-dialog.tsx, apps/web/src/app/(demo)/demo/page.tsx",
+      "root_cause": "DialogContent had a DialogTitle but no DialogDescription, so Radix could not wire aria-describedby — flagged as an accessibility warning in tests.",
+      "fix": "Added sr-only DialogDescription to settings + edit-profile dialogs; converted the demo dialog descriptive <p> into a DialogDescription.",
+      "tags": [
+        "a11y",
+        "radix",
+        "dialog",
+        "web"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T07:21:00.000Z"
+    },
+    {
+      "id": "bug-500",
+      "timestamp": "2026-06-13T07:21:00.000Z",
+      "error_message": "In computer games the human player's own move is never highlighted on the board; while the engine thinks it shows the computer's previous move (or nothing).",
+      "file": "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "root_cause": "ComputerGameStateDto only carries lastComputerMove (no general lastMove like the PvP DTO), so the board lastMove highlight could only ever reflect the computer's move.",
+      "fix": "Track the human's last move in local state (set in handleMove); render it as lastMove when it is the computer's turn (human just moved / human delivered mate), else the computer's move.",
+      "tags": [
+        "ux",
+        "board",
+        "computer-game",
+        "web"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T07:21:00.000Z"
     }
   ]
 }

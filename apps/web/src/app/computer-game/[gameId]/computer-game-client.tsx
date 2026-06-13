@@ -212,6 +212,10 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
       : { phase: 'loading' },
   );
   const [flipped, setFlipped] = useState(false);
+  // The human's most recent move squares — the DTO only carries
+  // `lastComputerMove`, so without this the player's own move is never
+  // highlighted (it shows the computer's prior move while the engine thinks).
+  const [humanMove, setHumanMove] = useState<{ from: Square; to: Square } | null>(null);
   const [currentPly, setCurrentPly] = useState(0);
   const [resultDismissed, setResultDismissed] = useState(false);
   const [hintShape, setHintShape] = useState<BoardShape[]>([]);
@@ -432,6 +436,7 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     const rules = await loadRules();
     const optimisticFen: string | null = rules.applyMoveToFen(before.fen, intent);
 
+    setHumanMove({ from: intent.from, to: intent.to });
     setState((s: PageState) =>
       s.phase === 'playing'
         ? {
@@ -566,7 +571,12 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
   const isAborted = game.status === 'aborted';
   const isGameOver = game.status === 'completed' || isAborted;
   const readOnly = isGameOver || submitting;
-  const lastMove = parseLastMove(game.lastComputerMove);
+  // Highlight whichever side moved last: when it's the computer's turn the
+  // human just moved (engine still thinking, or human delivered mate), so show
+  // the human's move; otherwise the computer's reply is the most recent.
+  const humanJustPlayed = sideToMove === game.computerColor;
+  const lastMove =
+    humanJustPlayed && humanMove ? humanMove : parseLastMove(game.lastComputerMove);
   const resultLabel = isAborted ? 'Aborted' : getResultLabel(game.result, game.computerColor);
   const reasonLabel =
     !isAborted && game.resultReason

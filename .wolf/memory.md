@@ -2321,3 +2321,30 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 07:09 | Edited apps/web/src/hooks/use-move-classifier.ts | 5→7 lines | ~63 |
+| 07:09 | Edited apps/web/src/hooks/use-move-classifier.ts | 4→5 lines | ~46 |
+| 07:09 | Edited apps/web/src/components/review/accuracy-summary.tsx | 4→3 lines | ~65 |
+| 07:09 | Edited apps/web/src/components/board/move-input-overlay.tsx | 3→3 lines | ~40 |
+| 07:10 | Edited apps/web/src/components/settings/settings-dialog.tsx | 6→7 lines | ~35 |
+| 07:10 | Edited apps/web/src/components/settings/settings-dialog.tsx | 3→6 lines | ~76 |
+| 07:10 | Edited apps/web/src/components/profile/edit-profile-dialog.tsx | 7→8 lines | ~39 |
+| 07:10 | Edited apps/web/src/components/profile/edit-profile-dialog.tsx | 2→5 lines | ~72 |
+| 07:10 | Edited apps/web/test/hooks/use-move-classifier.test.ts | expanded (+21 lines) | ~304 |
+| 07:11 | Edited apps/web/test/review/move-time-chart.test.tsx | CSS: color | ~57 |
+| 07:12 | Edited apps/web/src/app/(demo)/demo/page.tsx | 6→6 lines | ~92 |
+| 07:12 | Edited apps/web/src/app/(demo)/demo/page.tsx | 5→6 lines | ~28 |
+| 07:19 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: from, to | ~116 |
+| 07:19 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: from, to | ~60 |
+| 07:19 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | CSS: last, humanMove | ~113 |
+| 07:20 | Created ../../../../tmp/append-bugs.cjs | — | ~846 |
+
+## Session 2026-06-13 — bug hunt (goal: 0 bugs)
+| 07:08 | Ran typecheck/lint/tests (TS+Rust): API 353✓, web 534✓, Rust 17✓, typecheck clean | all | green baseline | ~3k |
+| 07:09 | bug-497: accuracy-summary mis-attributed move-class counts by ply parity (wrong on black-to-move startFen) | accuracy-summary.tsx, use-move-classifier.ts | added ClassifiedMove.color (from FEN), countClass uses it; +regression test | ~4k |
+| 07:10 | bug-498: aria-disabled on <li> (listitem) lint error | move-input-overlay.tsx | role="presentation" | ~1k |
+| 07:10 | bug-499: DialogContent missing Description (Radix a11y) | settings-dialog, edit-profile-dialog, demo/page | sr-only DialogDescription / convert <p> | ~2k |
+| 07:18 | bug-500: human's move never highlighted in computer games (DTO lacks general lastMove) | computer-game-client.tsx | track humanMove locally; show when computer to move | ~4k |
+| 07:20 | Re-ran all suites: web 535✓ (+1), API 353✓, typecheck+lint clean; 2 reviewer agents cleared feature + API engine/ratings | all | done | ~2k |
+| 07:22 | Edited apps/web/next.config.mjs | 5→9 lines | ~41 |
+| 07:24 | Cleared @sentry/nextjs build deprecation warnings (disableLogger/automaticVercelMonitors → webpack.treeshake.removeDebugLogging/webpack.automaticVercelMonitors), verified vs v10.56.0 types | apps/web/next.config.mjs | warnings gone, lint clean | ~1k |
+| 07:23 | Session end: 17 writes across 11 files (use-move-classifier.ts, accuracy-summary.tsx, move-input-overlay.tsx, settings-dialog.tsx, edit-profile-dialog.tsx) | 35 reads | ~85684 tok |

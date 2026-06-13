@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
@@ -75,6 +76,9 @@ export function EditProfileDialog({
       <DialogContent>
         <DialogHeader className="border-b border-border/60 pb-4">
           <DialogTitle className="text-base tracking-tight">Edit profile</DialogTitle>
+          <DialogDescription className="sr-only">
+            Update your display name and profile details.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4 py-4">

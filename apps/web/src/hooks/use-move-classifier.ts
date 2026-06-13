@@ -22,6 +22,8 @@ export interface ClassifiedMove {
   ply: number;
   san: string;
   uci: string;
+  /** Side that played the move — derived from the position, not ply parity. */
+  color: 'w' | 'b';
   /** White-POV centipawns (normalized from mate). */
   evalBefore: number;
   /** White-POV centipawns (normalized from mate). */
@@ -205,6 +207,7 @@ export function useMoveClassifier(
             ply,
             san: moves[ply - 1].san,
             uci: moves[ply - 1].uci,
+            color: whiteMoved ? 'w' : 'b',
             evalBefore: evals[ply - 1],
             evalAfter: evals[ply],
             cpl,

@@ -113,7 +113,7 @@ function MoveInputPanel({
           className="max-h-48 overflow-y-auto py-1"
         >
           {matches.length === 0 && (
-            <li className="px-3 py-1.5 font-mono text-xs text-[#8a958a]" aria-disabled>
+            <li className="px-3 py-1.5 font-mono text-xs text-[#8a958a]" role="presentation">
               No legal move
             </li>
           )}
