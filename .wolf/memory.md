@@ -3010,3 +3010,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | reduced (-29 lines) | ~267 |
 | 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | removed 20 lines | ~21 |
 | 17:55 | Created docs/roadmap/dedup-cleanup/session-05-handoff.md | — | ~1115 |
+| 17:56 | Session end: 8 writes across 4 files (solve-session-shell.tsx, training-session.tsx, review-client.tsx, session-05-handoff.md) | 3 reads | ~12962 tok |

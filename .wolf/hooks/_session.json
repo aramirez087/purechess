@@ -1,19 +1,80 @@
 {
-  "session_id": "session-2026-06-13-1745",
-  "started": "2026-06-13T23:45:54.836Z",
-  "files_read": {},
+  "session_id": "session-2026-06-13-1752",
+  "started": "2026-06-13T23:52:12.065Z",
+  "files_read": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/components/puzzle/training-session.tsx": {
+      "count": 1,
+      "tokens": 4866,
+      "first_read": "2026-06-13T23:52:24.679Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/app/puzzles/review/review-client.tsx": {
+      "count": 1,
+      "tokens": 3925,
+      "first_read": "2026-06-13T23:52:25.365Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/test/puzzle/training-session.test.tsx": {
+      "count": 1,
+      "tokens": 1444,
+      "first_read": "2026-06-13T23:52:33.496Z"
+    }
+  },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s01-charter/docs/roadmap/dedup-cleanup/session-01-handoff.md",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/components/puzzle/solve-session-shell.tsx",
       "action": "create",
-      "tokens": 4588,
-      "at": "2026-06-13T23:49:00.253Z"
+      "tokens": 672,
+      "at": "2026-06-13T23:53:29.875Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/components/puzzle/training-session.tsx",
+      "action": "edit",
+      "tokens": 74,
+      "at": "2026-06-13T23:53:36.642Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/components/puzzle/training-session.tsx",
+      "action": "edit",
+      "tokens": 402,
+      "at": "2026-06-13T23:53:49.247Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/components/puzzle/training-session.tsx",
+      "action": "edit",
+      "tokens": 0,
+      "at": "2026-06-13T23:53:54.246Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/app/puzzles/review/review-client.tsx",
+      "action": "edit",
+      "tokens": 96,
+      "at": "2026-06-13T23:54:00.160Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/app/puzzles/review/review-client.tsx",
+      "action": "edit",
+      "tokens": 267,
+      "at": "2026-06-13T23:54:11.150Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/apps/web/src/app/puzzles/review/review-client.tsx",
+      "action": "edit",
+      "tokens": 21,
+      "at": "2026-06-13T23:54:17.077Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s05-training-shell/docs/roadmap/dedup-cleanup/session-05-handoff.md",
+      "action": "create",
+      "tokens": 1195,
+      "at": "2026-06-13T23:55:55.847Z"
     }
   ],
   "edit_counts": {
-    "docs/roadmap/dedup-cleanup/session-01-handoff.md": 1
+    "apps/web/src/components/puzzle/solve-session-shell.tsx": 1,
+    "apps/web/src/components/puzzle/training-session.tsx": 3,
+    "apps/web/src/app/puzzles/review/review-client.tsx": 3,
+    "docs/roadmap/dedup-cleanup/session-05-handoff.md": 1
   },
-  "anatomy_hits": 0,
+  "anatomy_hits": 3,
   "anatomy_misses": 0,
   "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
