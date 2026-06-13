@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import type { Square } from '@purechess/shared';
 import type { PuzzleState } from '@/hooks/use-puzzle';
 import type { LichessPuzzleData } from '@/lib/api/puzzles';
+import { humanizeTheme } from '@/components/puzzle/theme-tile';
 
 interface PuzzleBoardProps {
   state: PuzzleState;
@@ -15,13 +16,6 @@ interface PuzzleBoardProps {
   onReveal: () => void;
   onTryAgain: () => void;
   onNext: () => void;
-}
-
-function humanizeTheme(theme: string): string {
-  // camelCase → spaced words, then capitalize ("middlegame" → "Middlegame",
-  // "queensideAttack" → "Queenside attack").
-  const spaced = theme.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
-  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
 export function PuzzleBoard({

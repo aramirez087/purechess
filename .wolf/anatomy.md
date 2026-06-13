@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T22:51:56.952Z
-> Files: 1202 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:08:20.549Z
+> Files: 1203 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -1464,7 +1464,7 @@
 
 ## apps/web/src/components/puzzle/
 
-- `puzzle-board.tsx` — humanizeTheme (~1176 tok)
+- `puzzle-board.tsx` — PuzzleBoard (~1106 tok)
 - `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~2107 tok)
 - `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1433 tok)
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
@@ -1543,6 +1543,7 @@
 ## apps/web/src/lib/api/
 
 - `auth.ts` — 200 {user: null} when unauthenticated — never a 401. (~394 tok)
+- `client.ts` — Shared browser → API plumbing for every `lib/api/*` client. (~528 tok)
 - `computer-games.ts` — Exports createComputerGame, getComputerGame, submitComputerMove, takebackComputerMove + 5 more (~772 tok)
 - `endgames.ts` — Client for the endgame-drills API (`/endgames`). (~826 tok)
 - `matchmaking.ts` — Exports joinMatchmaking, leaveMatchmaking, getMatchmakingStatus (~367 tok)

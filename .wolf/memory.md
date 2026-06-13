@@ -2967,3 +2967,9 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 16:51 | Edited apps/web/src/components/training/daily-plan.tsx | 9→11 lines | ~151 |
 | 16:52 | UI/UX audit (desktop+mobile 390px+light/dark+a11y scan) of improve surfaces; fixed 3: Train banner 'Done for today'->'Plan complete' when goal unmet, humanizeTheme trailing-digit guard (E 2etest->E2etest), PgnIconActions 28px->44px mobile tap target | daily-plan.tsx, theme-tile.tsx, pgn-actions.tsx | all verified live; web 662 tests green | ~9k |
 | 16:55 | Session end: 19 writes across 11 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 10 reads | ~30270 tok |
+| 17:04 | Session end: 19 writes across 11 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 10 reads | ~30270 tok |
+| 17:05 | Edited apps/web/src/components/puzzle/puzzle-board.tsx | added 1 import(s) | ~51 |
+| 17:05 | Edited apps/web/src/components/puzzle/puzzle-board.tsx | removed 8 lines | ~9 |
+| 17:08 | Created apps/web/src/lib/api/client.ts | — | ~528 |
+| 17:10 | Dedup: humanizeTheme (puzzle-board imports shared) + new lib/api/client.ts (API_BASE/apiFetch/ensureOk) consumed by 8 api clients. jscpd audit of web+api+shared: 51->45 clones, 1050->931 dup lines | lib/api/client.ts +8 files | typecheck/lint clean, web 662 green | ~14k |
+| 17:11 | Session end: 22 writes across 13 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~32784 tok |
