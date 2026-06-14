@@ -5309,7 +5309,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 5,
+      "occurrences": 6,
       "last_seen": "2026-06-11T12:47:48.155Z"
     },
     {
@@ -5373,7 +5373,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 5,
+      "occurrences": 6,
       "last_seen": "2026-06-11T13:10:03.020Z"
     },
     {
@@ -6269,7 +6269,7 @@
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 5,
+      "occurrences": 6,
       "last_seen": "2026-06-12T00:13:00.089Z"
     },
     {
@@ -11381,6 +11381,516 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-14T00:04:44.736Z"
+    },
+    {
+      "id": "bug-708",
+      "timestamp": "2026-06-11T16:01:26.521Z",
+      "error_message": "Wrong operator: !== should be ||",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Used \"!==\" instead of \"||\"",
+      "fix": "Changed operator !== \u2192 ||",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:01:26.521Z"
+    },
+    {
+      "id": "bug-709",
+      "timestamp": "2026-06-11T16:01:29.978Z",
+      "error_message": "Null/undefined access in ",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: const _isGameOver = _isPlaying && isTerminal(state.game.stat; // The socket (and slow heartbeat) stay up on finished games | Also: // Draw-offer / rematch transitions, mirrored to one polite ; // SR users hear offers arrive/resolve without the visuals. | Also: /**; * Shared template for non-move POST actions: optimistic-free | Also: const isAborted = game.status === 'aborted';; const isGameOver = isTerminal(game.status);",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 5,
+      "last_seen": "2026-06-11T16:02:44.020Z"
+    },
+    {
+      "id": "bug-710",
+      "timestamp": "2026-06-11T16:02:12.256Z",
+      "error_message": "CSS fix: onResign",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "onResign: _isGameOver ? undefined : handleResign, \u2192 _isGameOver ? undefined : _canAbort ? handleAbort : handleResign,",
+      "fix": "Changed onResign: _isGameOver ? undefined : handleResign, \u2192 _isGameOver ? undefined : _canAbort ? handleAbort : handleResign,",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:02:12.256Z"
+    },
+    {
+      "id": "bug-711",
+      "timestamp": "2026-06-11T16:03:51.520Z",
+      "error_message": "Missing guard clause",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "No early return/throw for edge case: rematchMinePending || submitting",
+      "fix": "Added guard clause: if (rematchMinePending || submitting)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:03:51.520Z"
+    },
+    {
+      "id": "bug-712",
+      "timestamp": "2026-06-11T10:30:00-06:00",
+      "error_message": "PvP games ending by resign/timeout/draw-agreement exported a PGN with a stale '*' result tag",
+      "file": "apps/api/src/games/games.service.ts",
+      "root_cause": "GamesService.finalize() persisted status/result but never rebuilt the PGN \u2014 only submitMove rebuilt it, so any non-move completion path left the last move's '*' tag",
+      "fix": "finalize() now rebuilds the PGN with the real result tag (1-0/0-1/1/2-1/2) via engine.buildPgn and persists it in the same guarded updateMany; emitted WS payload carries the new pgn",
+      "tags": [
+        "pvp",
+        "pgn",
+        "finalize",
+        "games-service"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T10:30:00-06:00"
+    },
+    {
+      "id": "bug-713",
+      "timestamp": "2026-06-11T16:20:14.974Z",
+      "error_message": "Missing await",
+      "file": "apps/api/src/realtime/realtime.gateway.ts",
+      "root_cause": "Async call without await \u2014 returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:20:14.974Z"
+    },
+    {
+      "id": "bug-714",
+      "timestamp": "2026-06-11T16:24:01.483Z",
+      "error_message": "Incorrect value in code",
+      "file": "apps/web/src/app/(play)/play/play-page-client.tsx",
+      "root_cause": "Had \"mt-12 grid gap-5 sm:grid-cols-2\"",
+      "fix": "Changed to \"mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:24:01.483Z"
+    },
+    {
+      "id": "bug-715",
+      "timestamp": "2026-06-11T16:27:09.930Z",
+      "error_message": "CSS fix: name",
+      "file": "apps/web/test/play/quick-match-setup.test.tsx",
+      "root_cause": "name: 'Casual' \u2192 /^Casual/",
+      "fix": "Changed name: 'Casual' \u2192 /^Casual/",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:27:09.930Z"
+    },
+    {
+      "id": "bug-716",
+      "timestamp": "2026-06-11T16:45:29.021Z",
+      "error_message": "Wrong reference: Friend should be Live",
+      "file": "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "root_cause": "Used \"Friend\" instead of \"Live\"",
+      "fix": "Changed Friend \u2192 Live",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T16:45:29.021Z"
+    },
+    {
+      "id": "bug-717",
+      "timestamp": "2026-06-11T11:10:00-06:00",
+      "error_message": "TypeError: request is not a function (every API e2e suite)",
+      "file": "apps/api/test/e2e/*.ts",
+      "root_cause": "import * as request from 'supertest' with esModuleInterop:true produces a non-callable namespace object \u2014 the e2e suite could never have passed locally",
+      "fix": "changed to default import `import request from 'supertest'` across test/e2e/",
+      "tags": [
+        "e2e",
+        "supertest",
+        "esModuleInterop",
+        "jest"
+      ],
+      "related_bugs": [
+        "bug-338"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T11:10:00-06:00"
+    },
+    {
+      "id": "bug-718",
+      "timestamp": "2026-06-11T11:10:00-06:00",
+      "error_message": "500 Internal Server Error on every authed e2e route: Cannot read properties of undefined (reading 'purechess_session')",
+      "file": "apps/api/test/e2e/setup.ts",
+      "root_cause": "createApp (TestingModule) never registered cookie-parser, which main.ts does \u2014 guards read req.cookies and crashed",
+      "fix": "app.use(cookieParser()) in createApp, mirroring main.ts; also fixed stale endpoint expectations (invites `code`->inviteToken, admin PATCH->POST disable + audit-log->audit, games /:id -> /:id/state). Full e2e suite green (21/21) for the first time",
+      "tags": [
+        "e2e",
+        "cookie-parser",
+        "nestjs",
+        "harness"
+      ],
+      "related_bugs": [
+        "bug-337"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T11:10:00-06:00"
+    },
+    {
+      "id": "bug-719",
+      "timestamp": "2026-06-11T11:10:00-06:00",
+      "error_message": "Matchmaking queue retained a ghost ZSET entry for a player already paired into a game",
+      "file": "apps/api/src/matchmaking/matchmaking.service.ts",
+      "root_cause": "status() read the queue-entry hash, then an opponent's join claimed+deleted it, then status()'s mmJoin re-scan re-enqueued the stale snapshot \u2014 a third joiner could claim a player already in a game",
+      "fix": "mmJoin Lua takes a mustExist flag ('1' on status re-scans): if mm:u:{self} is gone, return '__claimed__' and do NOT re-enqueue; the pairing arrives via the mm:match mailbox on the next poll",
+      "tags": [
+        "matchmaking",
+        "redis",
+        "lua",
+        "race"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T11:10:00-06:00"
+    },
+    {
+      "id": "bug-720",
+      "timestamp": "2026-06-11T18:35:00Z",
+      "error_message": "Sculpted queen 'crown panel' specular ellipse straddled the open V-notch between crown spikes \u2014 painted a ~10-13% white glaze on bare board pixels between the spikes (both wQ/bQ) and fed the CSS drop-shadow",
+      "file": "apps/web/scripts/build-sculpted-pieces.mjs",
+      "root_cause": "Overlay ellipses paint on the raw SVG canvas, not clipped to the piece silhouette; the panel center (18.5,20.5) sat in the gap between crown spikes",
+      "fix": "Re-seated the highlight onto the central spike face E(22.3,19,1.5,3.4,rot -8), verified extents against the spike flank lines, regenerated the set",
+      "tags": [
+        "svg",
+        "piece-set",
+        "sculpted",
+        "overlay-bleed",
+        "geometry"
+      ],
+      "related_bugs": [
+        "bug-389"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:35:00Z"
+    },
+    {
+      "id": "bug-721",
+      "timestamp": "2026-06-11T18:35:00Z",
+      "error_message": "Legacy persisted pieceSet 'standard' merged into the store unmodified forever \u2014 field typed PieceSetId held an out-of-union value; future `s.pieceSet === 'sculpted'` comparisons would silently misbehave for legacy users",
+      "file": "apps/web/src/stores/settings-store.ts",
+      "root_cause": "zustand persist shallow-merges the old envelope with no version/migrate/merge; only read-site fallbacks (pieceSetBase) masked it",
+      "fix": "Added a persist `merge` that coerces unrecognized pieceSet ids to DEFAULT_PIECE_SET at the boundary; pieceSetBase fallback kept as defense-in-depth",
+      "tags": [
+        "zustand",
+        "persist",
+        "migration",
+        "type-soundness",
+        "settings"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:35:00Z"
+    },
+    {
+      "id": "bug-722",
+      "timestamp": "2026-06-11T18:35:00Z",
+      "error_message": "bQ orb glints invisible at game size (sized for wQ's r=2.0 orbs, not bQ's r=2.75) and bN speculars sat low-right against the key light / too faint to register \u2014 bN and bQ orbs were the flattest black elements",
+      "file": "apps/web/scripts/build-sculpted-pieces.mjs",
+      "root_cause": "Glint scaled to the wrong orb radius; knight neck sheen placed on the mane side instead of the lit chest ridge; crest alpha 0.13 contributed nothing",
+      "fix": "Glints up to E(cx-0.9,cy-1.0,1.4,1.2,b:0.62) (max extent 2.745 <= orb r 2.75); knight overlays moved to mane-top ridge E(26.5,11.4,b:0.22) + chest ridge E(26,20.5,b:0.2,rot 16); regenerated",
+      "tags": [
+        "svg",
+        "piece-set",
+        "sculpted",
+        "specular",
+        "design"
+      ],
+      "related_bugs": [
+        "bug-392"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-11T18:35:00Z"
+    },
+    {
+      "id": "bug-723",
+      "timestamp": "2026-06-12T01:05:00Z",
+      "error_message": "Deploy CI 'Verify Production' failed: curl -sf api/health hung ~53s at the Fly edge then 5xx'd, 'API health failed post-deploy' \u2014 while the app itself was healthy seconds later",
+      "file": ".github/workflows/deploy.yml",
+      "root_cause": "Single un-retried curl raced the post-rolling-deploy window: with auto_stop_machines=true + 30s check grace_period, the Fly proxy can briefly have no passing machine to route to right after machine replacement; curl -sf treats the resulting held-then-5xx response as hard failure",
+      "fix": "Verify steps now retry up to 10x with 10s backoff and --max-time 15, echoing the response body per attempt so a real failure is diagnosable; also bumped actions/checkout v4->v5 in deploy.yml+ci.yml (Node 20 actions force-switched to Node 24 on 2026-06-16)",
+      "tags": [
+        "ci",
+        "deploy",
+        "fly",
+        "health-check",
+        "flaky",
+        "rolling-deploy"
+      ],
+      "related_bugs": [
+        "bug-113"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-12T01:05:00Z"
+    },
+    {
+      "id": "bug-724",
+      "timestamp": "2026-06-13T13:00:00Z",
+      "error_message": "rush-client.test.tsx: solving move never registered \u2014 rush-score stayed '0' after a correct click",
+      "file": "apps/web/test/puzzle/rush-client.test.tsx",
+      "root_cause": "Synthetic test puzzles used a placeholder fen ('a2a3-fen'). useLocalPuzzle's onMove calls applyUci(fen, uci); on an invalid FEN applyUci returns null and the hook silently returns (if (!applied) return;) WITHOUT firing onSolved/onFailed, so the score/combo never moved.",
+      "fix": "Gave every synthetic puzzle the standard start FEN + a legal pawn-push as moves[0] (a2a3..f2f3); the wrong move is another legal push (h2h4) that uciMatch (pure string compare) rejects.",
+      "tags": [
+        "test",
+        "vitest",
+        "puzzle",
+        "useLocalPuzzle",
+        "fen",
+        "applyUci",
+        "rush"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T13:00:00Z"
+    },
+    {
+      "id": "bug-725",
+      "timestamp": "2026-06-13T13:46:00.000Z",
+      "error_message": "S09 drill spec: expect(paths).toEqual(['0.0','0.0.0.0','0.1']) failed \u2014 got ['0.0.0.0','0.1']; dueLineCount expected 2 got 1",
+      "file": "apps/api/test/repertoire/repertoire-review.service.spec.ts",
+      "root_cause": "Test fixture treated an INTERIOR node (e5 at path 0.0) as a drillable line. enumerateLines only emits LEAF paths (children.length===0); e5 continues into Nf3 so it is not a leaf. A due card on a non-leaf path is also ignored by getDrillLines (path-resolves check).",
+      "fix": "Corrected the fixture: the 1.e4 e5 2.Nf3 Nc6 tree has exactly two leaf lines (0.0.0.0 and 0.1), not three. Re-pointed the due-card test to a real leaf path. All 12 spec tests pass.",
+      "tags": [
+        "repertoire",
+        "drill",
+        "s09",
+        "improve",
+        "enumerate-lines",
+        "test-fixture",
+        "leaf-path"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T13:46:00.000Z"
+    },
+    {
+      "id": "bug-726",
+      "timestamp": "2026-06-13T21:15:00.470253+00:00",
+      "error_message": "Training drills (theme/rush/review) never announced solve outcome to screen readers; the result overlay was aria-hidden icons + non-live text.",
+      "file": "apps/web/src/components/training/training-announcer.tsx (new), training-session.tsx, rush-client.tsx, review-client.tsx",
+      "root_cause": "The Chessboard's role=status region only narrates the MOVE (FEN diff), not the verdict. The visual overlays ('Solved'/'Incorrect') used aria-hidden lucide icons + plain <p> outside any live region, so SR users got no Correct/Not-the-move feedback or progress.",
+      "fix": "Added a shared <TrainingAnnouncer> (one polite role=status aria-live region per surface, mirrors computer-game LiveAnnouncer). Each surface sets a verdict+progress string on settle ('Correct. Solved 3 of 10.' / 'Not the move \u2014 try again.' / rush strikes / 'Run over. Final score N.'). The board keeps narrating the move so the two never double-announce.",
+      "tags": [
+        "a11y",
+        "screen-reader",
+        "aria-live",
+        "training",
+        "puzzles",
+        "rush",
+        "review"
+      ],
+      "related_bugs": [
+        "bug-361"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T21:15:00.470253+00:00"
+    },
+    {
+      "id": "bug-727",
+      "timestamp": "2026-06-13T21:15:00.470253+00:00",
+      "error_message": "Auto-advance dropped keyboard focus: when a puzzle auto-advanced, a keyboard solver's focus stayed on a stale board / fell to <body> with no signal the next puzzle loaded.",
+      "file": "apps/web/src/lib/board/focus-board.ts (new), training-session.tsx, rush-client.tsx, review-client.tsx",
+      "root_cause": "The classic auto-advance a11y break \u2014 the board re-renders with a new position but nothing restores focus to the grid for keyboard-only solvers.",
+      "fix": "Added focusBoard(container): on each auto-advance (loadNext / index advance) a requestAnimationFrame re-focuses the board's role=grid \u2014 but ONLY when focus was already inside the board container (never steals focus from a mouse user reading elsewhere).",
+      "tags": [
+        "a11y",
+        "keyboard",
+        "focus",
+        "auto-advance",
+        "training"
+      ],
+      "related_bugs": [
+        "bug-565"
+      ],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T21:15:00.470253+00:00"
+    },
+    {
+      "id": "bug-728",
+      "timestamp": "2026-06-13T21:15:00.470253+00:00",
+      "error_message": "Solid-brass primary buttons crept into 3 training surfaces during Wave-3 parallel work \u2014 forbidden by design.md (brass solid is reserved for the auth door).",
+      "file": "apps/web/src/components/training/daily-plan.tsx, app/train/insights/insights-client.tsx, app/puzzles/stats/stats-client.tsx",
+      "root_cause": "Parallel S12/S13 sessions used bg-brass text-brass-foreground for the plan-row CTA, the featured insight 'Drill it' button, and the stats 'Practice X' button. design.md: in-app primary is bone (bg-foreground text-background); brass solid is only the sign-in/create-account door.",
+      "fix": "Converted all three primary buttons to bone (bg-foreground text-background). daily-plan's completed-row 'Again' became a quiet outline. Brass STATUS accents kept (review-due badge, streak calendar cells) \u2014 those are within budget.",
+      "tags": [
+        "design",
+        "consistency",
+        "brass",
+        "design.md",
+        "training"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T21:15:00.470253+00:00"
+    },
+    {
+      "id": "bug-729",
+      "timestamp": "2026-06-13T21:15:00.470253+00:00",
+      "error_message": "RushHud countdown pulse and goal-ring/progress fills honored prefers-reduced-motion but not the in-app 'animations off' settings switch; charts had only a generic aria-label.",
+      "file": "apps/web/src/components/puzzle/rush-hud.tsx, components/training/daily-plan.tsx, components/puzzle/training-session.tsx, components/puzzle/puzzle-rating-chart.tsx, components/training/streak-banner.tsx",
+      "root_cause": "The HUD/goal-ring live outside the board's data-no-animations container, so the settings toggle never reached them. The rating chart's role=img aria-label was just 'Puzzle rating over time' (no data).",
+      "fix": "RushHud now reads useBoardSettings() and drops the clock-pulse class when animationMs===0. Added motion-reduce:transition-none to the goal-ring fill, session progress bar, rush flash, and HUD transitions. Chart aria-label is now a text-equivalent summary (span/endpoints/net direction); streak calendar aria-label states active-day count + current streak.",
+      "tags": [
+        "a11y",
+        "reduced-motion",
+        "data-no-animations",
+        "charts",
+        "training"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T21:15:00.470253+00:00"
+    },
+    {
+      "id": "bug-730",
+      "timestamp": "2026-06-13T21:15:00.470253+00:00",
+      "error_message": "chrome-devtools MCP wedged: 'The browser is already running for .../chrome-profile' on every call.",
+      "file": "(environment) /Users/aramirez/.cache/chrome-devtools-mcp/chrome-profile",
+      "root_cause": "An orphan MCP-spawned Chrome (--enable-automation, about:blank, pointed at the MCP user-data-dir) from a prior session held the profile SingletonLock; a competing MCP server instance owned it, so this session's server could not attach.",
+      "fix": "Identified the orphan by its --enable-automation + chrome-devtools-mcp user-data-dir flags (NOT the user's interactive Chrome), killed that PID, removed the stale Singleton{Lock,Cookie,Socket} symlinks, then new_page succeeded. Captured all 8 screenshots after.",
+      "tags": [
+        "chrome-devtools",
+        "mcp",
+        "tooling",
+        "screenshots"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-13T21:15:00.470253+00:00"
+    },
+    {
+      "id": "bug-731",
+      "timestamp": "2026-06-14T00:05:31.766Z",
+      "error_message": "Wrong reference: InviteColor should be PieceColor",
+      "file": "apps/web/src/components/play/invite-create.tsx",
+      "root_cause": "Used \"InviteColor\" instead of \"PieceColor\"",
+      "fix": "Changed InviteColor \u2192 PieceColor",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-14T00:05:31.766Z"
+    },
+    {
+      "id": "bug-732",
+      "timestamp": "2026-06-14T00:05:43.821Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/play/invite-create.tsx",
+      "root_cause": "56 lines replaced/restructured",
+      "fix": "Rewrote 74\u219214 lines (56 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-14T00:05:43.821Z"
+    },
+    {
+      "id": "bug-733",
+      "timestamp": "2026-06-14T00:06:23.186Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/play/quick-match-setup.tsx",
+      "root_cause": "50 lines replaced/restructured",
+      "fix": "Rewrote 51\u21927 lines (50 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-14T00:06:23.186Z"
+    },
+    {
+      "id": "bug-734",
+      "timestamp": "2026-06-14T00:06:54.871Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/play/computer-game-setup.tsx",
+      "root_cause": "16 lines replaced/restructured",
+      "fix": "Rewrote 23\u21927 lines (16 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-14T00:06:54.871Z"
+    },
+    {
+      "id": "bug-735",
+      "timestamp": "2026-06-14T00:07:29.126Z",
+      "error_message": "Significant refactor of ",
+      "file": "apps/web/src/components/play/practice-from-fen-dialog.tsx",
+      "root_cause": "16 lines replaced/restructured",
+      "fix": "Rewrote 23\u21927 lines (16 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-14T00:07:29.126Z"
+    },
+    {
+      "id": "bug-736",
+      "timestamp": "2026-06-14T00:08:24.800Z",
+      "error_message": "CSS fix: options",
+      "file": "apps/web/src/components/play/time-control-picker.tsx",
+      "root_cause": "options: TimeControlOption[] \u2192 readonly TimeControlOption[]",
+      "fix": "Changed options: TimeControlOption[] \u2192 readonly TimeControlOption[]",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-14T00:08:24.800Z"
     },
     {
       "id": "bug-NNN",

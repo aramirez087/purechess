@@ -29,6 +29,7 @@
 | 18:00 | Created use-puzzle-core.ts (shared timer+state-machine core) | apps/web/src/hooks/use-puzzle-core.ts | new file | ~950 tok |
 | 18:05 | Rewrote use-local-puzzle.ts and use-puzzle.ts to use core | apps/web/src/hooks/ | clones #40 #41 eliminated | ~1700 tok |
 | 18:10 | Ran gates: vitest 662/662 green, lint clean, jscpd clone pair gone | — | all gates pass | ~200 tok |
+| 18:09 | S07: created time-control-picker.tsx with TimeControlPicker/StakesPicker/ColorPicker/StrengthModePicker/LEVEL_LABELS | apps/web/src/components/play/time-control-picker.tsx | done — 4 clone pairs eliminated, 83 vitest files green | ~3k |
 
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
@@ -3103,3 +3104,36 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:07 | Edited apps/web/src/hooks/use-puzzle-core.ts | 12→16 lines | ~181 |
 | 18:08 | Created docs/roadmap/dedup-cleanup/session-06-handoff.md | — | ~1077 |
 | 18:09 | Session end: 9 writes across 4 files (use-puzzle-core.ts, use-local-puzzle.ts, use-puzzle.ts, session-06-handoff.md) | 5 reads | ~14268 tok |
+## Session: 2026-06-13 17:56
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:00 | Created .session-07-plan.md | — | ~3299 |
+| 18:00 | Session end: 1 writes across 1 files (.session-07-plan.md) | 7 reads | ~15733 tok |
+
+## Session: 2026-06-14 18:00
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:05 | Created apps/web/src/components/play/time-control-picker.tsx | — | ~1364 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | added 1 import(s) | ~94 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | removed 7 lines | ~9 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | inline fix | ~22 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | removed 74 lines | ~147 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | 4→3 lines | ~67 |
+| 18:06 | Edited apps/web/src/components/play/quick-match-setup.tsx | 6→4 lines | ~79 |
+| 18:06 | Edited apps/web/src/components/play/quick-match-setup.tsx | removed 51 lines | ~68 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | added 2 import(s) | ~156 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 12 lines | ~8 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 7 lines | ~10 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | 7→7 lines | ~111 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 17 lines | ~26 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | reduced (-16 lines) | ~85 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | added 2 import(s) | ~207 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | removed 18 lines | ~7 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | 4→4 lines | ~74 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | reduced (-16 lines) | ~90 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | removed 13 lines | ~26 |
+| 18:08 | Edited apps/web/src/components/play/time-control-picker.tsx | 5→5 lines | ~40 |
+| 18:09 | Created docs/roadmap/dedup-cleanup/session-07-handoff.md | — | ~1131 |
+| 18:10 | Session end: 21 writes across 6 files (time-control-picker.tsx, invite-create.tsx, quick-match-setup.tsx, computer-game-setup.tsx, practice-from-fen-dialog.tsx) | 7 reads | ~15380 tok |
