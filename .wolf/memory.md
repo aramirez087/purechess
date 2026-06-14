@@ -3,6 +3,7 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 18:03 | S08 dedup: extracted toCardState/offsetDays/MS_PER_DAY into spaced-repetition.ts; removed private copies from puzzle-review+repertoire-review; 170 tests green | apps/api/src/puzzles/spaced-repetition.ts, puzzle-review.service.ts, repertoire/repertoire-review.service.ts | clone #4 eliminated | ~1200 tok |
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
 | 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
@@ -2990,3 +2991,27 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
 | 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
+
+## Session: 2026-06-13 17:58
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:00 | Created .session-08-plan.md | — | ~3038 |
+| 18:01 | Session end: 1 writes across 1 files (.session-08-plan.md) | 6 reads | ~17653 tok |
+
+## Session: 2026-06-14 18:01
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:01 | Edited apps/api/src/puzzles/spaced-repetition.ts | added 1 condition(s) | ~268 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | expanded (+8 lines) | ~42 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | 4→2 lines | ~14 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | removed 16 lines | ~19 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | 6→1 lines | ~17 |
+| 18:02 | Edited apps/api/src/puzzles/puzzle-review.service.ts | reduced (-8 lines) | ~26 |
+| 18:02 | Edited apps/api/src/repertoire/repertoire-review.service.ts | 6→1 lines | ~29 |
+| 18:02 | Edited apps/api/src/repertoire/repertoire-review.service.ts | 3→1 lines | ~8 |
+| 18:02 | Edited apps/api/src/repertoire/repertoire-review.service.ts | — | ~0 |
+| 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | 9→12 lines | ~62 |
+| 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | expanded (+32 lines) | ~291 |
+| 18:03 | Created docs/roadmap/dedup-cleanup/session-08-handoff.md | — | ~1050 |

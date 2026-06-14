@@ -3,8 +3,11 @@ import {
   EASY_BONUS,
   FIRST_INTERVAL_DAYS,
   MIN_EASE,
+  MS_PER_DAY,
   SECOND_INTERVAL_DAYS,
+  offsetDays,
   schedule,
+  toCardState,
   type CardState,
 } from '../../src/puzzles/spaced-repetition';
 
@@ -100,6 +103,38 @@ describe('spaced-repetition schedule()', () => {
       // easy ease = 2.65; base = round(15*2.65)=40; *1.3 bonus = 52
       expect(easy.intervalDays).toBeGreaterThan(good.intervalDays);
       expect(easy.intervalDays).toBe(Math.round(Math.round(15 * 2.65) * EASY_BONUS));
+    });
+  });
+
+  describe('toCardState()', () => {
+    it('returns SM-2 defaults for null (new card)', () => {
+      expect(toCardState(null)).toEqual({
+        intervalDays: 0,
+        easeFactor: DEFAULT_EASE,
+        reps: 0,
+        lapses: 0,
+      });
+    });
+
+    it('maps a stored row verbatim', () => {
+      const row = { intervalDays: 6, easeFactor: 2.3, reps: 2, lapses: 1 };
+      expect(toCardState(row)).toEqual(row);
+    });
+  });
+
+  describe('offsetDays()', () => {
+    it('returns a Date approximately N days from now', () => {
+      const before = Date.now();
+      const d = offsetDays(1);
+      const after = Date.now();
+      expect(d.getTime()).toBeGreaterThanOrEqual(before + MS_PER_DAY - 100);
+      expect(d.getTime()).toBeLessThanOrEqual(after + MS_PER_DAY + 100);
+    });
+
+    it('offsetDays(0) is approximately now', () => {
+      const now = Date.now();
+      const d = offsetDays(0);
+      expect(Math.abs(d.getTime() - now)).toBeLessThan(100);
     });
   });
 
