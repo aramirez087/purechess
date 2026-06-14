@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Check, Cpu, Play } from 'lucide-react';
+import { Cpu, Play } from 'lucide-react';
 import { createComputerGame } from '@/lib/api/computer-games';
 import type { CreateComputerGameDto } from '@purechess/shared';
 import { TIME_CONTROL_PRESETS } from '@purechess/shared';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
-import { ColorPicker, LEVEL_LABELS, StrengthModePicker } from '@/components/play/time-control-picker';
+import { ColorPicker, LEVEL_LABELS, StrengthSection } from '@/components/play/time-control-picker';
 import type { PieceColor, StrengthMode } from '@/components/play/time-control-picker';
 import { cn } from '@/lib/utils';
 
@@ -128,47 +128,12 @@ export function ComputerGameSetup({ onGameCreated }: ComputerGameSetupProps) {
         </div>
 
         {/* Strength */}
-        <div className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-              Strength
-            </Label>
-            {strengthMode === 'level' && (
-              <span className="text-sm font-medium text-brass">
-                Level {level} &middot; {LEVEL_LABELS[level]}
-              </span>
-            )}
-          </div>
-
-          <StrengthModePicker mode={strengthMode} onChange={(m) => setStrengthMode(m)} />
-
-          {strengthMode === 'level' && (
-            <div className="grid grid-cols-8 gap-1.5">
-              {([1, 2, 3, 4, 5, 6, 7, 8] as CreateComputerGameDto['level'][]).map((l) => (
-                <button
-                  key={l}
-                  type="button"
-                  onClick={() => setLevel(l)}
-                  aria-pressed={level === l}
-                  aria-label={'Level ' + l + ' ' + LEVEL_LABELS[l]}
-                  className={cn(
-                    PILL_BASE,
-                    'relative h-11 font-mono text-sm tabular-nums',
-                    level === l ? PILL_ACTIVE : PILL_INACTIVE,
-                  )}
-                >
-                  {level === l && (
-                    <span className="absolute right-0.5 top-0.5">
-                      <Check className="h-2.5 w-2.5" />
-                    </span>
-                  )}
-                  {l}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {strengthMode === 'elo' && (
+        <StrengthSection
+          strengthMode={strengthMode}
+          level={level}
+          onModeChange={(m) => setStrengthMode(m)}
+          onLevelChange={(l) => setLevel(l)}
+          eloSection={
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <input
@@ -204,8 +169,8 @@ export function ComputerGameSetup({ onGameCreated }: ComputerGameSetupProps) {
                 Engine plays at approximately ELO {eloTarget}
               </p>
             </div>
-          )}
-        </div>
+          }
+        />
 
         {/* Play as */}
         <div className="space-y-3">

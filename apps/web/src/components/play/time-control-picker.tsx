@@ -1,5 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
+import { Check } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
 import { cn } from '@/lib/utils';
@@ -159,6 +161,73 @@ export function StrengthModePicker({ mode, onChange }: StrengthModePickerProps) 
           {m === 'level' ? 'By Level' : 'ELO Target'}
         </button>
       ))}
+    </div>
+  );
+}
+
+// ─── Strength Section ─────────────────────────────────────────────────────────
+
+const LEVEL_VALUES = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+export type StockfishLevel = (typeof LEVEL_VALUES)[number];
+
+export interface StrengthSectionProps {
+  strengthMode: StrengthMode;
+  level: StockfishLevel;
+  onModeChange: (mode: StrengthMode) => void;
+  onLevelChange: (level: StockfishLevel) => void;
+  /** ELO input UI (rendered when strengthMode === 'elo'). */
+  eloSection: ReactNode;
+  /** Optional override for the outer wrapper spacing class (defaults to 'space-y-3'). */
+  className?: string;
+}
+
+export function StrengthSection({
+  strengthMode,
+  level,
+  onModeChange,
+  onLevelChange,
+  eloSection,
+  className,
+}: StrengthSectionProps) {
+  return (
+    <div className={className ?? 'space-y-3'}>
+      <div className="flex items-baseline justify-between">
+        <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+          Strength
+        </Label>
+        {strengthMode === 'level' && (
+          <span className="text-sm font-medium text-brass">
+            Level {level} &middot; {LEVEL_LABELS[level]}
+          </span>
+        )}
+      </div>
+      <StrengthModePicker mode={strengthMode} onChange={onModeChange} />
+      {strengthMode === 'level' && (
+        <div className="grid grid-cols-8 gap-1.5">
+          {LEVEL_VALUES.map((l) => (
+            <button
+              key={l}
+              type="button"
+              onClick={() => onLevelChange(l)}
+              aria-pressed={level === l}
+              aria-label={'Level ' + l + ' ' + LEVEL_LABELS[l]}
+              className={cn(
+                PILL_BASE,
+                'relative h-11 font-mono text-sm tabular-nums',
+                level === l ? PILL_ACTIVE : PILL_INACTIVE,
+              )}
+            >
+              {level === l && (
+                <span className="absolute right-0.5 top-0.5">
+                  <Check className="h-2.5 w-2.5" />
+                </span>
+              )}
+              {l}
+            </button>
+          ))}
+        </div>
+      )}
+      {strengthMode === 'elo' && eloSection}
     </div>
   );
 }

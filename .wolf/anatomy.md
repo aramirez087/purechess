@@ -1,23 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:54:03.014Z
-> Files: 1205 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:59:11.320Z
-> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:57:40.428Z
-> Files: 1208 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:55:55.841Z
-> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:08:57.556Z
-> Files: 1207 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:09:54.150Z
-> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:03:56.986Z
-> Files: 1205 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:20:14.492Z
-> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:25:49.362Z
-> Files: 1209 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:49:21.126Z
+> Files: 1242 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -98,8 +82,8 @@
 - `.prettierignore` (~15 tok)
 - `.session-01-plan.md` — Session 01 — Implementation Plan: Charter + jscpd Baseline (~4430 tok)
 - `.session-02-plan.md` — Session 02 Implementation Plan — sound.ts dedup (~1741 tok)
-- `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
+- `.session-03-plan.md` — Session 03 — Implementation Plan: napi-rs Bindings (WP3) (~6134 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: Rating Chart Dedup (~4367 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-04-plan.md` — Session 04 — Admin Table Dedup Plan (~3081 tok)
@@ -115,6 +99,7 @@
 - `.session-09-plan.md` — Session 09 — Implementation Plan: PGN Parser Dedup (~3189 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: Game Client Dedup (~4778 tok)
+- `.session-11-plan.md` — Session 11 Implementation Plan — CI Gate (~2665 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~2212 tok)
 - `design.md` — Purechess Design Direction (~1616 tok)
@@ -761,7 +746,7 @@
 - `package.json` — Node.js package manifest (~924 tok)
 - `README.md` — Project documentation (~554 tok)
 - `tsconfig.build.json` — TypeScript build configuration (~31 tok)
-- `tsconfig.json` — TypeScript configuration (~128 tok)
+- `tsconfig.json` — TypeScript configuration (~138 tok)
 - `tsconfig.seed.json` — /*", "scripts/**/*", "src/**/*"] (~46 tok)
 
 ## apps/api/prisma/
@@ -1006,8 +991,8 @@
 
 - `repertoire-review.controller.ts` — Opening trainer endpoints — drill the user's repertoire lines and grade them (~470 tok)
 - `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3047 tok)
-- `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
 - `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3225 tok)
+- `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
 - `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3012 tok)
 - `repertoire.controller.ts` — Opening-repertoire CRUD + import. Every route is auth-gated and scoped to the (~668 tok)
 - `repertoire.module.ts` — Opening repertoires (CRUD + import) plus the opening trainer (drill + grade). (~282 tok)
@@ -1485,13 +1470,13 @@
 
 ## apps/web/src/components/play/
 
-- `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3241 tok)
+- `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~2844 tok)
 - `invite-create.tsx` — TIME_CONTROLS (~2126 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
-- `practice-from-fen-dialog.tsx` — TIME_PRESETS — renders modal (~2351 tok)
-- `time-control-picker.tsx` — S07 shared pickers: TimeControlPicker (pill grid + label), StakesPicker (Rated/Casual), ColorPicker (White/Black/Random), StrengthModePicker (By Level/ELO Target), LEVEL_LABELS constant; PieceColor + StrengthMode types. Eliminates clones #29-#32 from the four play setup dialogs. (~500 tok)
+- `practice-from-fen-dialog.tsx` — TIME_PRESETS — renders modal (~1942 tok)
 - `quick-match-setup.tsx` — formatElapsed (~1601 tok)
+- `time-control-picker.tsx` — ELO input UI (rendered when strengthMode === 'elo'). (~2007 tok)
 - `time-control-picker.tsx` — TimeControlPicker (~1367 tok)
 
 ## apps/web/src/components/profile/
@@ -1509,7 +1494,7 @@
 - `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~1046 tok)
 - `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1433 tok)
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
-- `solve-session-shell.tsx` — Overlay(s) to render inside the board frame (loading, error, outcome). (~672 tok)
+- `solve-session-shell.tsx` — Overlay(s) to render inside the board frame (loading, error, outcome). (~709 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
 - `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~1019 tok)
 - `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4479 tok)
@@ -1521,7 +1506,7 @@
 - `classification-badge.tsx` — Tiny colored glyph after a move's SAN. Renders nothing for good/forced. (~260 tok)
 - `eval-graph.tsx` — Interactive SVG eval-history chart (48px, viewBox 0 0 100 100 non-uniform scale): white/black territory fills via half-height clipPaths, dashed center, current-ply marker, click-to-seek, hover title. (~1069 tok)
 - `eval-panel.tsx` — Win-probability-ish share of the bar for White, from a White-POV cp. (~1892 tok)
-- `mistake-trainer.tsx` — One detected mistake to drill. Derived from the client classification on the (~2670 tok)
+- `mistake-trainer.tsx` — One detected mistake to drill. Derived from the client classification on the (~2541 tok)
 - `move-coach.tsx` — A coach line for the move that produced the current position: a colored (~630 tok)
 - `move-time-chart.tsx` — Per-ply move-time SVG bars (viewBox 0 0 500 80) colored by MoveClass (blunder red → brilliant emerald, neutral when unclassified), white full / black 0.6 opacity, click-to-seek, hover title, White/Black avg row (excludes ≤500ms). Self-hides when no move >500ms. (~1408 tok)
 - `opening-explorer.tsx` — Called with the row's UCI move — caller enters it into the analysis tree. (~1141 tok)
@@ -1888,6 +1873,7 @@
 - `session-08-handoff.md` — Session 08 Handoff — SM-2 Scheduler Deduplication (~985 tok)
 - `session-09-handoff.md` — Session 09 Handoff — PGN Parser Dedup (~1499 tok)
 - `session-10-handoff.md` — Session 10 Handoff — Game Client Dedup (~1291 tok)
+- `session-11-handoff.md` — Session 11 Handoff — CI Gate (~2424 tok)
 
 ## docs/roadmap/purechess-category-best/
 
@@ -1952,22 +1938,22 @@
 
 - `index.js` (~20 tok)
 - `package.json` — Node.js package manifest (~85 tok)
-- `tsconfig.json` — TypeScript configuration (~84 tok)
+- `tsconfig.json` — TypeScript configuration (~93 tok)
 
 ## packages/engine-native/src/
 
 - `index.ts` — Typed re-exports for @purechess/engine-native. (~276 tok)
 - `types.ts` — TypeScript interfaces mirroring the napi-rs generated shapes. (~479 tok)
 
+## packages/shared/
+
+- `tsconfig.json` — TypeScript configuration (~108 tok)
+
 ## packages/shared/src/
 
 - `index.ts` (~194 tok)
 - `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
-
-## packages/shared/src/pgn/
-
-- `pgn-utils.ts` — Shared PGN utils: STARTING_FEN, tokenizeMovetext, parseHeaders, MoveVariationCallbacks<N>, walkMoveVariation<N>. Zero runtime deps. Consumed by apps/web pgn-parser.ts and apps/api repertoire-tree.ts. (~350 tok)
 
 ## packages/shared/src/dto/
 
@@ -1983,6 +1969,7 @@
 
 ## packages/shared/src/pgn/
 
+- `pgn-utils.ts` — Shared PGN utils: STARTING_FEN, tokenizeMovetext, parseHeaders, MoveVariationCallbacks<N>, walkMoveVariation<N>. Zero runtime deps. Consumed by apps/web pgn-parser.ts and apps/api repertoire-tree.ts. (~350 tok)
 - `pgn-utils.ts` — Shared PGN tokenizing / movetext-walking utilities. (~1720 tok)
 
 ## scripts/

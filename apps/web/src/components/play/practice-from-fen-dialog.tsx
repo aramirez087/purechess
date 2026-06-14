@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Check, Play, Swords } from 'lucide-react';
+import { Play, Swords } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
-import { ColorPicker, LEVEL_LABELS, StrengthModePicker } from '@/components/play/time-control-picker';
+import { ColorPicker, StrengthSection } from '@/components/play/time-control-picker';
 import type { PieceColor, StrengthMode } from '@/components/play/time-control-picker';
 import { createComputerGameFromFen } from '@/lib/api/computer-games';
 import type { CreateFromFenDto } from '@purechess/shared';
@@ -131,47 +131,13 @@ export function PracticeFromFenDialog({ fen, open, onClose }: PracticeFromFenDia
           </div>
 
           {/* Strength */}
-          <div className="space-y-2.5">
-            <div className="flex items-baseline justify-between">
-              <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                Strength
-              </Label>
-              {strengthMode === 'level' && (
-                <span className="text-sm font-medium text-brass">
-                  Level {level} &middot; {LEVEL_LABELS[level]}
-                </span>
-              )}
-            </div>
-
-            <StrengthModePicker mode={strengthMode} onChange={(m) => setStrengthMode(m)} />
-
-            {strengthMode === 'level' && (
-              <div className="grid grid-cols-8 gap-1.5">
-                {([1, 2, 3, 4, 5, 6, 7, 8] as CreateFromFenDto['level'][]).map((l) => (
-                  <button
-                    key={l}
-                    type="button"
-                    onClick={() => setLevel(l)}
-                    aria-pressed={level === l}
-                    aria-label={'Level ' + l + ' ' + LEVEL_LABELS[l]}
-                    className={cn(
-                      PILL_BASE,
-                      'relative h-11 font-mono text-sm tabular-nums',
-                      level === l ? PILL_ACTIVE : PILL_INACTIVE,
-                    )}
-                  >
-                    {level === l && (
-                      <span className="absolute right-0.5 top-0.5">
-                        <Check className="h-2.5 w-2.5" />
-                      </span>
-                    )}
-                    {l}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {strengthMode === 'elo' && (
+          <StrengthSection
+            strengthMode={strengthMode}
+            level={level}
+            onModeChange={(m) => setStrengthMode(m)}
+            onLevelChange={(l) => setLevel(l)}
+            className="space-y-2.5"
+            eloSection={
               <div className="flex items-center gap-3">
                 <input
                   type="number"
@@ -190,8 +156,8 @@ export function PracticeFromFenDialog({ fen, open, onClose }: PracticeFromFenDia
                   Engine plays at approximately ELO {eloTarget}
                 </span>
               </div>
-            )}
-          </div>
+            }
+          />
         </div>
 
         <DialogFooter className="border-t border-border/60 pt-4">
