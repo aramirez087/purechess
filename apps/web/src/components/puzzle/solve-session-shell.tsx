@@ -14,15 +14,17 @@ export type SolveState = {
 
 export interface PuzzleBoardPaneProps {
   state: SolveState;
-  boardWrapRef: RefObject<HTMLDivElement>;
+  boardWrapRef?: RefObject<HTMLDivElement>;
   onMove: (uci: string) => void;
   /** Overlay(s) to render inside the board frame (loading, error, outcome). */
   children?: React.ReactNode;
+  /** Override the outer wrapper max-width class (defaults to max-w-[560px]). */
+  className?: string;
 }
 
-export function PuzzleBoardPane({ state, boardWrapRef, onMove, children }: PuzzleBoardPaneProps) {
+export function PuzzleBoardPane({ state, boardWrapRef, onMove, children, className }: PuzzleBoardPaneProps) {
   return (
-    <div className="mx-auto w-full max-w-[560px]">
+    <div className={cn('mx-auto w-full max-w-[560px]', className)}>
       <div className="relative w-full" ref={boardWrapRef}>
         <Chessboard
           position={state.fen}

@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2, ChevronLeft, Target, XCircle } from 'lucide-react';
-import type { PuzzleDto, Square } from '@purechess/shared';
-import { Chessboard } from '@/components/board/chessboard';
+import type { PuzzleDto } from '@purechess/shared';
+import { PuzzleBoardPane } from '@/components/puzzle/solve-session-shell';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
 import { fetchMistakes, markMistakeReviewed } from '@/lib/api/puzzles';
 import { cn } from '@/lib/utils';
@@ -205,21 +205,7 @@ function MistakeSolve({
         </span>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[300px]">
-        <Chessboard
-          position={state.fen}
-          orientation={state.solvingColor === 'w' ? 'white' : 'black'}
-          readOnly={state.phase !== 'player'}
-          lastMove={
-            state.lastMove
-              ? { from: state.lastMove[0] as Square, to: state.lastMove[1] as Square }
-              : undefined
-          }
-          onMove={(m) => {
-            if (!m.from || !m.to) return;
-            onMove(m.from + m.to + (m.promotion ?? ''));
-          }}
-        />
+      <PuzzleBoardPane state={state} onMove={onMove} className="max-w-[300px]">
         {outcome === 'solved' && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-1.5 rounded-[4px] bg-[#0b0d0b]/75 text-center backdrop-blur-sm">
             <CheckCircle2 className="h-7 w-7 text-[#d6b563]" aria-hidden="true" />
@@ -239,7 +225,7 @@ function MistakeSolve({
             </button>
           </div>
         )}
-      </div>
+      </PuzzleBoardPane>
 
       <p
         className={cn(

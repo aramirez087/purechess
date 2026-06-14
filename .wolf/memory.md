@@ -3207,3 +3207,45 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:25 | Created docs/roadmap/dedup-cleanup/session-10-handoff.md | — | ~1377 |
 | 18:24 | S10: extracted game-client-utils.ts, GameOverBanner, GameRailBrandHeader, useLowTimeTick; rewrote both game clients | apps/web/src/lib/board/game-client-utils.ts, apps/web/src/components/game/{game-over-banner,game-rail-brand-header}.tsx, apps/web/src/hooks/use-low-time-tick.ts, computer-game-client.tsx, live-game-client.tsx | 0 clones in game clients; 45→43 overall; 662 tests pass; lint+typecheck clean | ~8000 |
 | 18:26 | Session end: 13 writes across 8 files (game-client-utils.ts, game-over-banner.tsx, game-rail-brand-header.tsx, use-low-time-tick.ts, index.ts) | 3 reads | ~41872 tok |
+
+## Session: 2026-06-14 18:26
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:29 | Created .session-11-plan.md | — | ~2820 |
+| 18:29 | Edited .session-11-plan.md | inline fix | ~49 |
+| 18:29 | Session end: 2 writes across 1 files (.session-11-plan.md) | 0 reads | ~3075 tok |
+
+## Session: 2026-06-14 18:29
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:30 | Edited packages/shared/tsconfig.json | 5.0 → 6.0 | ~10 |
+| 18:30 | Edited packages/engine-native/tsconfig.json | 5.0 → 6.0 | ~10 |
+| 18:30 | Edited apps/api/tsconfig.json | 5.0 → 6.0 | ~10 |
+| 18:31 | Edited packages/shared/tsconfig.json | 6.0 → 5.0 | ~10 |
+| 18:31 | Edited packages/engine-native/tsconfig.json | 6.0 → 5.0 | ~10 |
+| 18:31 | Edited apps/api/tsconfig.json | 6.0 → 5.0 | ~10 |
+| 18:40 | Edited apps/web/src/components/puzzle/solve-session-shell.tsx | modified PuzzleBoardPane() | ~172 |
+| 18:40 | Edited apps/web/src/components/review/mistake-trainer.tsx | 2→2 lines | ~36 |
+| 18:40 | Edited apps/web/src/components/review/mistake-trainer.tsx | removed 16 lines | ~33 |
+| 18:40 | Edited apps/web/src/components/review/mistake-trainer.tsx | 5→5 lines | ~18 |
+| 18:40 | Edited apps/web/src/components/play/time-control-picker.tsx | added 1 import(s) | ~29 |
+| 18:41 | Edited apps/web/src/components/play/time-control-picker.tsx | added nullish coalescing | ~540 |
+| 18:41 | Edited apps/web/src/components/play/computer-game-setup.tsx | 2→2 lines | ~54 |
+| 18:41 | Edited apps/web/src/components/play/computer-game-setup.tsx | reduced (-15 lines) | ~876 |
+| 18:41 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | 2→2 lines | ~54 |
+| 18:41 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | reduced (-14 lines) | ~539 |
+| 18:44 | Edited apps/web/src/components/play/time-control-picker.tsx | CSS: onLevelChange, PILL_ACTIVE | ~618 |
+| 18:44 | Edited apps/web/src/components/play/time-control-picker.tsx | added 1 import(s) | ~36 |
+| 18:45 | Edited apps/web/src/components/play/computer-game-setup.tsx | inline fix | ~25 |
+| 18:45 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 25 lines | ~52 |
+| 18:45 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | inline fix | ~25 |
+| 18:45 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | reduced (-20 lines) | ~66 |
+| 18:45 | Edited apps/web/src/components/play/computer-game-setup.tsx | inline fix | ~12 |
+| 18:45 | Edited apps/web/src/components/play/computer-game-setup.tsx | inline fix | ~29 |
+| 18:45 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | inline fix | ~13 |
+| 18:49 | Created docs/roadmap/dedup-cleanup/session-11-handoff.md | — | ~2586 |
+
+| 18:49 | S11 CI gate: tsconfig ignoreDeprecations fix, PuzzleBoardPane className/optional-ref, StrengthSection extraction, all gates green, jscpd 45→24 | multiple files | success | ~8500 |
+| 18:49 | Session end: 26 writes across 7 files (tsconfig.json, solve-session-shell.tsx, mistake-trainer.tsx, time-control-picker.tsx, computer-game-setup.tsx) | 10 reads | ~35570 tok |
