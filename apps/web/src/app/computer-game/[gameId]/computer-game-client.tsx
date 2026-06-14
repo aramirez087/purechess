@@ -17,11 +17,11 @@ import {
   BoardControlBar,
   GameErrorState,
   MoveErrorNotice,
+  GameOverBanner,
+  GameRailBrandHeader,
   type PlayerStripProps,
 } from '@/components/game';
 import { GameLoadingSkeleton } from '@/components/game/game-loading-skeleton';
-import { Logo } from '@/components/layout/Logo';
-import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
 import { loadRules } from '@/lib/board/rules-lazy';
@@ -41,10 +41,17 @@ import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
 import { usePositionEval } from '@/hooks/use-position-eval';
+import { useLowTimeTick } from '@/hooks/use-low-time-tick';
 import { useSettingsStore } from '@/stores/settings-store';
-import { soundEngine } from '@/lib/board/sound';
-
-type Color = 'white' | 'black';
+import {
+  type Color,
+  REASON_LABELS,
+  getSideToMove,
+  parseLastMove,
+  parsePgnMoves,
+  getResultLabel,
+  resultChipFor,
+} from '@/lib/board/game-client-utils';
 
 type PageState =
   | { phase: 'loading' }
@@ -54,32 +61,6 @@ type PageState =
 /** Hints per game — encourages thinking first, asking second. */
 const HINT_LIMIT = 3;
 
-const REASON_LABELS: Record<string, string> = {
-  checkmate: 'Checkmate',
-  resignation: 'Resignation',
-  timeout: 'Timeout',
-  stalemate: 'Stalemate',
-  insufficient_material: 'Insufficient material',
-  threefold_repetition: 'Threefold repetition',
-  fifty_move_rule: 'Fifty-move rule',
-  draw_agreement: 'Draw agreement',
-  abandonment: 'Abandonment',
-};
-
-function getResultLabel(result: string | null, computerColor: Color): string {
-  if (!result) return '';
-  if (result === 'draw') return 'Draw';
-  const computerWins =
-    (result === 'white_wins' && computerColor === 'white') ||
-    (result === 'black_wins' && computerColor === 'black');
-  return computerWins ? 'You lost' : 'You won';
-}
-
-function parseLastMove(uci: string | null): { from: Square; to: Square } | undefined {
-  if (!uci || uci.length < 4) return undefined;
-  return { from: uci.slice(0, 2) as Square, to: uci.slice(2, 4) as Square };
-}
-
 function formatColor(color: Color): string {
   return color === 'white' ? 'White' : 'Black';
 }
@@ -88,28 +69,11 @@ function getHumanColor(computerColor: Color): Color {
   return computerColor === 'white' ? 'black' : 'white';
 }
 
-function getSideToMove(fen: string): Color {
-  return fen.split(' ')[1] === 'b' ? 'black' : 'white';
-}
-
 /** Whether it's the computer's turn to move in the given state. */
 function isComputerTurn(game: ComputerGameStateDto): boolean {
   if (game.status !== 'active') return false;
   const sideToMove = game.fen.split(' ')[1];
   return sideToMove === (game.computerColor === 'white' ? 'w' : 'b');
-}
-
-function parsePgnMoves(pgn: string): string[] {
-  if (!pgn.trim()) return [];
-  const clean = pgn
-    .replace(/\[[^\]]*\]/g, '')
-    .replace(/\{[^}]*\}/g, '')
-    .replace(/\([^)]*\)/g, '')
-    .trim();
-  const tokens = clean
-    .split(/\s+/)
-    .filter((t) => t && !/^\d+\./.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
-  return tokens;
 }
 
 /**
@@ -133,28 +97,8 @@ function StatusHero({
   level: number;
   timed: boolean;
 }) {
-  if (isGameOver) {
-    const toneClasses: Record<ResultTone, string> = {
-      win: 'bg-gradient-to-b from-[#d6b563]/[0.14] to-transparent',
-      draw: 'bg-gradient-to-b from-[#1b201a] to-transparent',
-      loss: 'bg-gradient-to-b from-destructive/[0.12] to-transparent',
-    };
-    return (
-      <div className={cn('px-4 py-3.5 text-center', toneClasses[tone])}>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9da79c]">
-          Game over
-        </p>
-        <p className="font-display mt-1 text-[22px] italic leading-tight text-[#f8f1de]">
-          {resultLabel}
-        </p>
-        {reasonLabel && (
-          <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-[#b9b19d]">
-            by {reasonLabel}
-          </p>
-        )}
-      </div>
-    );
-  }
+  if (isGameOver)
+    return <GameOverBanner tone={tone} resultLabel={resultLabel} reasonLabel={reasonLabel} />;
   return (
     <div className="px-4 py-3">
       <div className="flex items-center justify-between gap-3">
@@ -184,13 +128,6 @@ function StatusHero({
       </p>
     </div>
   );
-}
-
-/** Score-sheet result chip for a finished game, from this side's perspective. */
-function resultChipFor(result: string | null, color: Color): string | undefined {
-  if (!result) return undefined;
-  if (result === 'draw') return '½';
-  return (result === 'white_wins') === (color === 'white') ? '1' : '0';
 }
 
 interface Props {
@@ -265,22 +202,15 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
 
   // Low-time tick: one per second while the human's clock runs under 10s.
   const lowTimeSound = useSettingsStore((s) => s.lowTimeSound);
-  const lastTickSecondRef = useRef<number | null>(null);
-  useEffect(() => {
-    if (!_isPlaying || !liveClock || state.game.status !== 'active') return;
-    const humanIsWhite = getHumanColor(state.game.computerColor) === 'white';
-    const humanTurn = getSideToMove(state.game.fen) === (humanIsWhite ? 'white' : 'black');
-    const ms = humanIsWhite ? liveClock.whiteMs : liveClock.blackMs;
-    if (!humanTurn || ms <= 0 || ms >= 10_000) {
-      lastTickSecondRef.current = null;
-      return;
-    }
-    const sec = Math.ceil(ms / 1000);
-    if (lastTickSecondRef.current !== sec) {
-      lastTickSecondRef.current = sec;
-      soundEngine.playTick(lowTimeSound);
-    }
-  }, [_isPlaying, liveClock, state, lowTimeSound]);
+  const _humanTurnMs: number | null =
+    state.phase === 'playing' && liveClock && state.game.status === 'active'
+      ? (() => {
+          const humanCol = getHumanColor(state.game.computerColor);
+          if (getSideToMove(state.game.fen) !== humanCol) return null;
+          return humanCol === 'white' ? liveClock.whiteMs : liveClock.blackMs;
+        })()
+      : null;
+  useLowTimeTick(_humanTurnMs, lowTimeSound);
 
   // Live eval bar (settings-gated). Analyzes only on the human's turn so the
   // engine job queue stays free while the bot computes its reply; a null fen
@@ -417,10 +347,10 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, loadToken]);
 
-  function handleRetry() {
+  const handleRetry = (): void => {
     setState({ phase: 'loading' });
     setLoadToken((t) => t + 1);
-  }
+  };
 
   async function handleMove(intent: MoveIntent) {
     if (state.phase !== 'playing') return;
@@ -557,12 +487,6 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
 
   const { game, submitting, moveError } = state;
   const sanMoves = parsePgnMoves(game.pgn);
-  const lastComputerMoveSan: string | null = (() => {
-    if (!game.lastComputerMove || sanMoves.length === 0) return null;
-    const sideToMove = game.fen.split(' ')[1];
-    const computerJustPlayed = sideToMove !== (game.computerColor === 'white' ? 'w' : 'b');
-    return computerJustPlayed ? (sanMoves[sanMoves.length - 1] ?? null) : null;
-  })();
   const humanColor = getHumanColor(game.computerColor);
   const orientation: Color = flipped ? (humanColor === 'white' ? 'black' : 'white') : humanColor;
   const bottomColor = orientation;
@@ -577,7 +501,7 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
   const humanJustPlayed = sideToMove === game.computerColor;
   const lastMove =
     humanJustPlayed && humanMove ? humanMove : parseLastMove(game.lastComputerMove);
-  const resultLabel = isAborted ? 'Aborted' : getResultLabel(game.result, game.computerColor);
+  const resultLabel = isAborted ? 'Aborted' : getResultLabel(game.result, humanColor);
   const reasonLabel =
     !isAborted && game.resultReason
       ? (REASON_LABELS[game.resultReason] ?? game.resultReason)
@@ -713,16 +637,7 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
             bodyClassName="relative min-h-0 flex-1"
             header={
               <>
-                <div className="flex min-h-[3.25rem] items-center justify-between border-b border-[#2b332c] px-3">
-                  <Link
-                    href="/"
-                    aria-label="PureChess home"
-                    className="rounded-[6px] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                  >
-                    <Logo className="text-lg text-[#f1eee6]" />
-                  </Link>
-                  <SettingsDialog />
-                </div>
+                <GameRailBrandHeader />
                 <StatusHero
                   isGameOver={isGameOver}
                   tone={resultTone}

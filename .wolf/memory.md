@@ -3181,3 +3181,29 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:19 | All gates passed — 45→42 clones, 931→885 dup lines | typecheck/lint/jest/vitest | zero pgn-parser↔repertoire-tree pairs | ~200 tok |
 | 18:20 | Session 09 handoff | docs/roadmap/dedup-cleanup/session-09-handoff.md | complete | ~300 tok |
 | 18:20 | Session end: 6 writes across 5 files (pgn-utils.ts, index.ts, pgn-parser.ts, repertoire-tree.ts, session-09-handoff.md) | 12 reads | ~28149 tok |
+## Session: 2026-06-14 18:04
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:11 | Created .session-10-plan.md | — | ~5097 |
+| 18:12 | Session end: 1 writes across 1 files (.session-10-plan.md) | 2 reads | ~26743 tok |
+
+## Session: 2026-06-14 18:12
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:15 | Created apps/web/src/lib/board/game-client-utils.ts | — | ~529 |
+| 18:15 | Created apps/web/src/components/game/game-over-banner.tsx | — | ~304 |
+| 18:15 | Created apps/web/src/components/game/game-rail-brand-header.tsx | — | ~200 |
+| 18:15 | Created apps/web/src/hooks/use-low-time-tick.ts | — | ~208 |
+| 18:15 | Edited apps/web/src/components/game/index.ts | 2→4 lines | ~80 |
+| 18:17 | Created apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | — | ~9164 |
+| 18:18 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | reduced (-6 lines) | ~43 |
+| 18:18 | Edited apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx | removed 4 lines | ~3 |
+| 18:21 | Created apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | — | ~10281 |
+| 18:21 | Edited apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx | inline fix | ~22 |
+| 18:23 | Edited apps/web/src/hooks/use-low-time-tick.ts | inline fix | ~28 |
+| 18:23 | Edited apps/web/src/hooks/use-low-time-tick.ts | inline fix | ~14 |
+| 18:25 | Created docs/roadmap/dedup-cleanup/session-10-handoff.md | — | ~1377 |
+| 18:24 | S10: extracted game-client-utils.ts, GameOverBanner, GameRailBrandHeader, useLowTimeTick; rewrote both game clients | apps/web/src/lib/board/game-client-utils.ts, apps/web/src/components/game/{game-over-banner,game-rail-brand-header}.tsx, apps/web/src/hooks/use-low-time-tick.ts, computer-game-client.tsx, live-game-client.tsx | 0 clones in game clients; 45→43 overall; 662 tests pass; lint+typecheck clean | ~8000 |
+| 18:26 | Session end: 13 writes across 8 files (game-client-utils.ts, game-over-banner.tsx, game-rail-brand-header.tsx, use-low-time-tick.ts, index.ts) | 3 reads | ~41872 tok |

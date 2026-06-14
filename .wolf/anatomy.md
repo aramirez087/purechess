@@ -16,6 +16,8 @@
 > Files: 1205 tracked | Anatomy hits: 0 | Misses: 0
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:20:14.492Z
 > Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:25:49.362Z
+> Files: 1209 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -112,6 +114,7 @@
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: PGN Parser Dedup (~3189 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
+- `.session-10-plan.md` — Session 10 — Implementation Plan: Game Client Dedup (~4778 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~2212 tok)
 - `design.md` — Purechess Design Direction (~1616 tok)
@@ -1257,7 +1260,7 @@
 
 ## apps/web/src/app/(play)/play/[gameId]/
 
-- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~11242 tok)
+- `live-game-client.tsx` — True when `next` would take the UI backwards relative to `cur`: an older (~10279 tok)
 - `loading.tsx` — Route-level loading UI for /play/[gameId]. (~288 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~420 tok)
 
@@ -1289,7 +1292,7 @@
 
 ## apps/web/src/app/computer-game/[gameId]/
 
-- `computer-game-client.tsx` — Hints per game — encourages thinking first, asking second. (~10040 tok)
+- `computer-game-client.tsx` — Hints per game — encourages thinking first, asking second. (~9031 tok)
 - `loading.tsx` — Route-level loading UI for /computer-game/[gameId]. (~292 tok)
 - `page.tsx` — Server-side state fetch so the board streams as HTML and the piece images (~421 tok)
 
@@ -1430,10 +1433,12 @@
 - `game-error-state.tsx` — Branded full-screen game error: eyebrow, Fraunces verdict, brass hairline, back/retry (~450 tok)
 - `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~1088 tok)
 - `game-loading-skeleton.tsx` — Board-shaped skeleton mirroring the GameShell 2-zone geometry (board column + (~663 tok)
+- `game-over-banner.tsx` — TONE_CLASSES (~304 tok)
+- `game-rail-brand-header.tsx` — GameRailBrandHeader (~200 tok)
 - `game-rail.tsx` — Uppercase tracked header label, e.g. "Moves". Omit for a header-less panel. (~454 tok)
 - `game-shell.tsx` — Top app bar. Defaults to a plain <GameTopBar/>; pass `null` to render none. (~1010 tok)
 - `game-top-bar.tsx` — Optional rating chip (e.g. the player's rating). (~455 tok)
-- `index.ts` — Declares GameShellProps (~211 tok)
+- `index.ts` — Declares GameShellProps (~245 tok)
 - `move-error-notice.tsx` — Server rejection message; renders nothing when null. (~315 tok)
 - `move-panel.tsx` — 1-based ply index. (~1446 tok)
 - `player-strip.tsx` — Which army this player commands — renders a board-color swatch by the name. (~2078 tok)
@@ -1555,6 +1560,8 @@
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
 - `use-local-puzzle.ts` — Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the (~1448 tok)
+- `use-local-puzzle.ts` — Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the (~2156 tok)
+- `use-low-time-tick.ts` — Fires one tick-sound per second while your clock is between 0 and 10 s. (~213 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
 - `use-mistake-capture.ts` — Centipawn-loss floor for a move to count as a capturable mistake — mirrors the (~1220 tok)
 - `use-move-classifier.ts` — 1-based ply. (~2597 tok)
@@ -1602,6 +1609,7 @@
 - `editor-state.ts` — Pure editor state ↔ FEN conversion — zero dependencies, no React, no chess.js. (~1199 tok)
 - `fen.ts` — Pure FEN parsing — zero dependencies, safe to ship in the eager board (~578 tok)
 - `focus-board.ts` — Keyboard-focus restoration for auto-advancing drills. (~373 tok)
+- `game-client-utils.ts` — Result label from the viewer's perspective (viewerColor = the color you play). (~529 tok)
 - `legal-sans.ts` — Legal-move enumeration + query matching for the text move input overlay. (~536 tok)
 - `material.ts` — Captured pieces of one color, sorted by value (queen first), with their total point value. (~799 tok)
 - `move-glyph.tsx` — On-board move-classification badge — the chess.com-style corner glyph that (~746 tok)
@@ -1879,6 +1887,7 @@
 - `session-07-handoff.md` — Session 07 Handoff — Play Setup UI Dedup (~1060 tok)
 - `session-08-handoff.md` — Session 08 Handoff — SM-2 Scheduler Deduplication (~985 tok)
 - `session-09-handoff.md` — Session 09 Handoff — PGN Parser Dedup (~1499 tok)
+- `session-10-handoff.md` — Session 10 Handoff — Game Client Dedup (~1291 tok)
 
 ## docs/roadmap/purechess-category-best/
 
