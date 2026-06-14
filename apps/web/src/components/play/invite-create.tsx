@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useCreateInvite, useCancelInvite, getInvite } from '@/hooks/use-invite';
-import type { InviteColor, TimeControlCategory } from '@/hooks/use-invite';
+import type { TimeControlCategory } from '@/hooks/use-invite';
 import { Check, Copy, Link2, Users } from 'lucide-react';
-import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
-import { cn } from '@/lib/utils';
+import { TimeControlPicker, StakesPicker, ColorPicker } from '@/components/play/time-control-picker';
+import type { PieceColor } from '@/components/play/time-control-picker';
 
 const TIME_CONTROLS: { label: string; sub: string; seconds: number; increment: number; category: TimeControlCategory }[] = [
   { label: '1+0', sub: 'Bullet', seconds: 60, increment: 0, category: 'bullet' },
@@ -21,12 +21,6 @@ const TIME_CONTROLS: { label: string; sub: string; seconds: number; increment: n
   { label: '15+10', sub: 'Rapid', seconds: 900, increment: 10, category: 'rapid' },
 ];
 
-const COLORS: { label: string; value: InviteColor }[] = [
-  { label: 'White', value: 'white' },
-  { label: 'Black', value: 'black' },
-  { label: 'Random', value: 'random' },
-];
-
 interface InviteCreateProps {
   onCancel: () => void;
 }
@@ -34,7 +28,7 @@ interface InviteCreateProps {
 export function InviteCreate({ onCancel }: InviteCreateProps) {
   const router = useRouter();
   const [selectedTimeControl, setSelectedTimeControl] = useState(3);
-  const [selectedColor, setSelectedColor] = useState<InviteColor>('random');
+  const [selectedColor, setSelectedColor] = useState<PieceColor>('random');
   const [rated, setRated] = useState(true);
   const [inviteResult, setInviteResult] = useState<{ gameId: string; inviteUrl: string } | null>(null);
   const [copied, setCopied] = useState(false);
@@ -160,80 +154,20 @@ export function InviteCreate({ onCancel }: InviteCreateProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-7 pt-6">
-        <div className="space-y-3">
-          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Time control
-          </Label>
-          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-7">
-            {TIME_CONTROLS.map((tc, i) => (
-              <button
-                key={tc.label}
-                type="button"
-                onClick={() => setSelectedTimeControl(i)}
-                aria-pressed={selectedTimeControl === i}
-                aria-label={tc.sub + ' ' + tc.label}
-                className={cn(
-                  PILL_BASE,
-                  'flex h-auto flex-col items-center justify-center gap-0.5 py-2',
-                  selectedTimeControl === i ? PILL_ACTIVE : PILL_INACTIVE,
-                )}
-              >
-                <span className="font-mono text-[11px] leading-none tabular-nums">{tc.label}</span>
-                <span className="text-[11px] leading-none">{tc.sub}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+        <TimeControlPicker
+          options={TIME_CONTROLS}
+          value={selectedTimeControl}
+          onChange={setSelectedTimeControl}
+        />
 
         <div className="space-y-3">
           <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Play as
           </Label>
-          <div className="grid grid-cols-3 gap-1.5">
-            {COLORS.map((c) => (
-              <button
-                key={c.value}
-                type="button"
-                onClick={() => setSelectedColor(c.value)}
-                aria-pressed={selectedColor === c.value}
-                className={cn(
-                  PILL_BASE,
-                  'h-10 text-sm',
-                  selectedColor === c.value ? PILL_ACTIVE : PILL_INACTIVE,
-                )}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
+          <ColorPicker value={selectedColor} onChange={(c) => setSelectedColor(c)} />
         </div>
 
-        <div className="space-y-3">
-          <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Stakes
-          </Label>
-          <div className="grid grid-cols-2 gap-1.5">
-            {[
-              { label: 'Rated', value: true, sub: 'Counts toward your rating' },
-              { label: 'Casual', value: false, sub: 'Just for the game' },
-            ].map((opt) => (
-              <button
-                key={opt.label}
-                type="button"
-                onClick={() => setRated(opt.value)}
-                aria-pressed={rated === opt.value}
-                className={cn(
-                  PILL_BASE,
-                  'flex h-auto flex-col items-center justify-center gap-0.5 py-2',
-                  rated === opt.value ? PILL_ACTIVE : PILL_INACTIVE,
-                )}
-              >
-                <span className="text-sm leading-none">{opt.label}</span>
-                <span className="text-[11px] leading-none">{opt.sub}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+        <StakesPicker rated={rated} onChange={(r) => setRated(r)} />
 
         <div className="pt-2">
           <Button

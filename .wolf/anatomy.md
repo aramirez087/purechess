@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:49:00.246Z
-> Files: 1204 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:09:54.150Z
+> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -86,7 +86,7 @@
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
-- `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
+- `.session-07-plan.md` — Session 07 — Implementation Plan: Play Setup UI Dedup (~3093 tok)
 - `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
@@ -1445,13 +1445,14 @@
 
 ## apps/web/src/components/play/
 
-- `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3587 tok)
-- `invite-create.tsx` — TIME_CONTROLS (~2856 tok)
+- `computer-game-setup.tsx` — Retained for callers; back navigation now lives in the page-level link. (~3241 tok)
+- `invite-create.tsx` — TIME_CONTROLS (~2126 tok)
 - `invite-join.tsx` — formatTimeControl (~1752 tok)
 - `pill-styles.ts` — Canonical brass selection recipes: PILL_* (free-standing setup-picker chips) + SEGMENT_* (single-track filter groups, e.g. /games ledger filters) (~488 tok)
-- `practice-from-fen-dialog.tsx` — "Practice from here" dialog: color/time/strength pills → POST /computer-games/from-fen → /computer-game/[gameId]. Used by analyze-board + review-client. (~1500 tok)
-- `practice-from-fen-dialog.tsx` — LEVEL_LABELS — renders modal (~2689 tok)
-- `quick-match-setup.tsx` — formatElapsed (~2175 tok)
+- `practice-from-fen-dialog.tsx` — TIME_PRESETS — renders modal (~2351 tok)
+- `time-control-picker.tsx` — S07 shared pickers: TimeControlPicker (pill grid + label), StakesPicker (Rated/Casual), ColorPicker (White/Black/Random), StrengthModePicker (By Level/ELO Target), LEVEL_LABELS constant; PieceColor + StrengthMode types. Eliminates clones #29-#32 from the four play setup dialogs. (~500 tok)
+- `quick-match-setup.tsx` — formatElapsed (~1601 tok)
+- `time-control-picker.tsx` — TimeControlPicker (~1367 tok)
 
 ## apps/web/src/components/profile/
 
@@ -1833,6 +1834,7 @@
 ## docs/roadmap/dedup-cleanup/
 
 - `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
+- `session-07-handoff.md` — Session 07 Handoff — Play Setup UI Dedup (~1060 tok)
 
 ## docs/roadmap/purechess-category-best/
 

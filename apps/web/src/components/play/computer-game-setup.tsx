@@ -10,22 +10,13 @@ import { createComputerGame } from '@/lib/api/computer-games';
 import type { CreateComputerGameDto } from '@purechess/shared';
 import { TIME_CONTROL_PRESETS } from '@purechess/shared';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
+import { ColorPicker, LEVEL_LABELS, StrengthModePicker } from '@/components/play/time-control-picker';
+import type { PieceColor, StrengthMode } from '@/components/play/time-control-picker';
 import { cn } from '@/lib/utils';
 
 // timeControlSeconds <= 0 = untimed on the API (engine clock never flags).
 const UNTIMED_SECONDS = 0;
 const UNTIMED_INCREMENT = 0;
-
-const LEVEL_LABELS: Record<number, string> = {
-  1: 'Beginner',
-  2: 'Beginner+',
-  3: 'Easy',
-  4: 'Intermediate',
-  5: 'Intermediate+',
-  6: 'Advanced',
-  7: 'Expert',
-  8: 'Master',
-};
 
 const TIME_PICKER_PRESETS: { key: string; sublabel: string; label: string }[] = [
   { key: 'untimed', sublabel: '∞', label: 'Untimed' },
@@ -41,12 +32,6 @@ const THINK_TIME_MAP: Record<string, number> = {
   slow: 2500,
 };
 
-const COLORS: { label: string; value: CreateComputerGameDto['color'] }[] = [
-  { label: 'White', value: 'white' },
-  { label: 'Black', value: 'black' },
-  { label: 'Random', value: 'random' },
-];
-
 interface ComputerGameSetupProps {
   /** Retained for callers; back navigation now lives in the page-level link. */
   onCancel?: () => void;
@@ -55,12 +40,12 @@ interface ComputerGameSetupProps {
 
 export function ComputerGameSetup({ onGameCreated }: ComputerGameSetupProps) {
   const [level, setLevel] = useState<CreateComputerGameDto['level']>(4);
-  const [color, setColor] = useState<CreateComputerGameDto['color']>('random');
+  const [color, setColor] = useState<PieceColor>('random');
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [timePreset, setTimePreset] = useState<string>('untimed');
-  const [strengthMode, setStrengthMode] = useState<'level' | 'elo'>('level');
+  const [strengthMode, setStrengthMode] = useState<StrengthMode>('level');
   const [eloTarget, setEloTarget] = useState<number>(1500);
   const [humanLike, setHumanLike] = useState(false);
   const [thinkTime, setThinkTime] = useState<'auto' | 'fast' | 'normal' | 'slow'>('auto');
@@ -155,23 +140,7 @@ export function ComputerGameSetup({ onGameCreated }: ComputerGameSetupProps) {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5">
-            {(['level', 'elo'] as const).map((mode) => (
-              <button
-                key={mode}
-                type="button"
-                onClick={() => setStrengthMode(mode)}
-                aria-pressed={strengthMode === mode}
-                className={cn(
-                  PILL_BASE,
-                  'h-9',
-                  strengthMode === mode ? PILL_ACTIVE : PILL_INACTIVE,
-                )}
-              >
-                {mode === 'level' ? 'By Level' : 'ELO Target'}
-              </button>
-            ))}
-          </div>
+          <StrengthModePicker mode={strengthMode} onChange={(m) => setStrengthMode(m)} />
 
           {strengthMode === 'level' && (
             <div className="grid grid-cols-8 gap-1.5">
@@ -243,23 +212,7 @@ export function ComputerGameSetup({ onGameCreated }: ComputerGameSetupProps) {
           <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Play as
           </Label>
-          <div className="grid grid-cols-3 gap-1.5">
-            {COLORS.map((c) => (
-              <button
-                key={c.value}
-                type="button"
-                onClick={() => setColor(c.value)}
-                aria-pressed={color === c.value}
-                className={cn(
-                  PILL_BASE,
-                  'h-10 text-sm',
-                  color === c.value ? PILL_ACTIVE : PILL_INACTIVE,
-                )}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
+          <ColorPicker value={color} onChange={(c) => setColor(c)} />
         </div>
 
         {/* Think time */}

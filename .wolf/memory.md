@@ -3,6 +3,8 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 18:09 | S07: created time-control-picker.tsx with TimeControlPicker/StakesPicker/ColorPicker/StrengthModePicker/LEVEL_LABELS | apps/web/src/components/play/time-control-picker.tsx | done — 4 clone pairs eliminated, 83 vitest files green | ~3k |
+
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
 | 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
@@ -2990,3 +2992,36 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
 | 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
+
+## Session: 2026-06-13 17:56
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:00 | Created .session-07-plan.md | — | ~3299 |
+| 18:00 | Session end: 1 writes across 1 files (.session-07-plan.md) | 7 reads | ~15733 tok |
+
+## Session: 2026-06-14 18:00
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:05 | Created apps/web/src/components/play/time-control-picker.tsx | — | ~1364 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | added 1 import(s) | ~94 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | removed 7 lines | ~9 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | inline fix | ~22 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | removed 74 lines | ~147 |
+| 18:05 | Edited apps/web/src/components/play/invite-create.tsx | 4→3 lines | ~67 |
+| 18:06 | Edited apps/web/src/components/play/quick-match-setup.tsx | 6→4 lines | ~79 |
+| 18:06 | Edited apps/web/src/components/play/quick-match-setup.tsx | removed 51 lines | ~68 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | added 2 import(s) | ~156 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 12 lines | ~8 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 7 lines | ~10 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | 7→7 lines | ~111 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | removed 17 lines | ~26 |
+| 18:06 | Edited apps/web/src/components/play/computer-game-setup.tsx | reduced (-16 lines) | ~85 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | added 2 import(s) | ~207 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | removed 18 lines | ~7 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | 4→4 lines | ~74 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | reduced (-16 lines) | ~90 |
+| 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | removed 13 lines | ~26 |
+| 18:08 | Edited apps/web/src/components/play/time-control-picker.tsx | 5→5 lines | ~40 |
+| 18:09 | Created docs/roadmap/dedup-cleanup/session-07-handoff.md | — | ~1131 |

@@ -15,26 +15,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { PILL_ACTIVE, PILL_BASE, PILL_INACTIVE } from '@/components/play/pill-styles';
+import { ColorPicker, LEVEL_LABELS, StrengthModePicker } from '@/components/play/time-control-picker';
+import type { PieceColor, StrengthMode } from '@/components/play/time-control-picker';
 import { createComputerGameFromFen } from '@/lib/api/computer-games';
 import type { CreateFromFenDto } from '@purechess/shared';
 import { cn } from '@/lib/utils';
-
-const LEVEL_LABELS: Record<number, string> = {
-  1: 'Beginner',
-  2: 'Beginner+',
-  3: 'Easy',
-  4: 'Intermediate',
-  5: 'Intermediate+',
-  6: 'Advanced',
-  7: 'Expert',
-  8: 'Master',
-};
-
-const COLORS: { label: string; value: CreateFromFenDto['color'] }[] = [
-  { label: 'White', value: 'white' },
-  { label: 'Black', value: 'black' },
-  { label: 'Random', value: 'random' },
-];
 
 // Presets fixed by spec — not shared TIME_CONTROL_PRESETS (those include untimed
 // and others not wanted for a quick practice game).
@@ -54,9 +39,9 @@ interface PracticeFromFenDialogProps {
 
 export function PracticeFromFenDialog({ fen, open, onClose }: PracticeFromFenDialogProps) {
   const router = useRouter();
-  const [color, setColor] = useState<CreateFromFenDto['color']>('random');
+  const [color, setColor] = useState<PieceColor>('random');
   const [timeKey, setTimeKey] = useState<string>('5+3');
-  const [strengthMode, setStrengthMode] = useState<'level' | 'elo'>('level');
+  const [strengthMode, setStrengthMode] = useState<StrengthMode>('level');
   const [level, setLevel] = useState<CreateFromFenDto['level']>(4);
   const [eloTarget, setEloTarget] = useState<number>(1500);
   const [isPending, setIsPending] = useState(false);
@@ -117,23 +102,7 @@ export function PracticeFromFenDialog({ fen, open, onClose }: PracticeFromFenDia
             <Label className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
               Play as
             </Label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {COLORS.map((c) => (
-                <button
-                  key={c.value}
-                  type="button"
-                  onClick={() => setColor(c.value)}
-                  aria-pressed={color === c.value}
-                  className={cn(
-                    PILL_BASE,
-                    'h-10 text-sm',
-                    color === c.value ? PILL_ACTIVE : PILL_INACTIVE,
-                  )}
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
+            <ColorPicker value={color} onChange={(c) => setColor(c)} />
           </div>
 
           {/* Time control */}
@@ -174,19 +143,7 @@ export function PracticeFromFenDialog({ fen, open, onClose }: PracticeFromFenDia
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-1.5">
-              {(['level', 'elo'] as const).map((mode) => (
-                <button
-                  key={mode}
-                  type="button"
-                  onClick={() => setStrengthMode(mode)}
-                  aria-pressed={strengthMode === mode}
-                  className={cn(PILL_BASE, 'h-9', strengthMode === mode ? PILL_ACTIVE : PILL_INACTIVE)}
-                >
-                  {mode === 'level' ? 'By Level' : 'ELO Target'}
-                </button>
-              ))}
-            </div>
+            <StrengthModePicker mode={strengthMode} onChange={(m) => setStrengthMode(m)} />
 
             {strengthMode === 'level' && (
               <div className="grid grid-cols-8 gap-1.5">
