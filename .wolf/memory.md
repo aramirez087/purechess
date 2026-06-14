@@ -2990,3 +2990,21 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
 | 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
+
+## Session: 2026-06-13 17:49
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:51 | Created .session-02-plan.md | — | ~1857 |
+| 17:51 | Session end: 1 writes across 1 files (.session-02-plan.md) | 2 reads | ~6566 tok |
+
+## Session: 2026-06-13 17:51
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:52 | Edited apps/web/src/lib/board/sound.ts | modified gameStartNote() | ~384 |
+| 17:52 | Edited apps/web/src/lib/board/sound.ts | removed 19 lines | ~29 |
+| 17:52 | Edited apps/web/src/lib/board/sound.ts | removed 50 lines | ~36 |
+| 17:53 | S02 dedup: extracted MOVE_HIT const + gameStartNote() fn; removed 3 sound.ts self-clones | apps/web/src/lib/board/sound.ts | typecheck/lint/tests green; jscpd 45→42 clones | ~2k |
+| 17:54 | Created docs/roadmap/dedup-cleanup/session-02-handoff.md | — | ~870 |
+| 17:54 | Session end: 4 writes across 2 files (sound.ts, session-02-handoff.md) | 1 reads | ~5427 tok |
