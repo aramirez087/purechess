@@ -3,6 +3,18 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+## Session: 2026-06-13 (S03 — Rating Chart Dedup)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:55 | Read source files + test; identified exact diff between two chart components | rating-chart.tsx, puzzle-rating-chart.tsx, test/profile/rating-chart.test.tsx | planning only | ~8k |
+| 17:57 | Created shared module with constants, computeChartLayout, LineRatingChart, ChartTooltip | apps/web/src/components/charts/line-rating-chart.tsx | done | ~2k |
+| 17:58 | Rewrote rating-chart.tsx as thin wrapper | apps/web/src/components/profile/rating-chart.tsx | done | ~1k |
+| 17:58 | Rewrote puzzle-rating-chart.tsx as thin wrapper | apps/web/src/components/puzzle/puzzle-rating-chart.tsx | done | ~1k |
+| 17:59 | Ran pnpm install + build shared + tsc + lint + vitest — all green | apps/web | 83 files, 662 tests pass | ~1k |
+| 17:59 | jscpd confirmed rating-chart pair absent; clones #26/#27/#28 eliminated (107 lines) | apps/web/src | PASS | ~1k |
+| 18:00 | Wrote session-03-handoff.md | docs/roadmap/dedup-cleanup/session-03-handoff.md | done | ~1k |
+
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
 | 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
@@ -3008,3 +3020,15 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:53 | S02 dedup: extracted MOVE_HIT const + gameStartNote() fn; removed 3 sound.ts self-clones | apps/web/src/lib/board/sound.ts | typecheck/lint/tests green; jscpd 45→42 clones | ~2k |
 | 17:54 | Created docs/roadmap/dedup-cleanup/session-02-handoff.md | — | ~870 |
 | 17:54 | Session end: 4 writes across 2 files (sound.ts, session-02-handoff.md) | 1 reads | ~5427 tok |
+| 17:53 | Created .session-03-plan.md | — | ~4658 |
+| 17:53 | Session end: 1 writes across 1 files (.session-03-plan.md) | 3 reads | ~11021 tok |
+
+## Session: 2026-06-13 17:53
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:56 | Created apps/web/src/components/charts/line-rating-chart.tsx | — | ~1466 |
+| 17:57 | Created apps/web/src/components/profile/rating-chart.tsx | — | ~1694 |
+| 17:57 | Created apps/web/src/components/puzzle/puzzle-rating-chart.tsx | — | ~1046 |
+| 17:59 | Created docs/roadmap/dedup-cleanup/session-03-handoff.md | — | ~1289 |
+| 17:59 | Session end: 4 writes across 4 files (line-rating-chart.tsx, rating-chart.tsx, puzzle-rating-chart.tsx, session-03-handoff.md) | 3 reads | ~11618 tok |
