@@ -3,12 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, CheckCircle2, LogIn, XCircle } from 'lucide-react';
-import type { ReviewDueDto, Square } from '@purechess/shared';
-import { Chessboard } from '@/components/board/chessboard';
+import type { ReviewDueDto } from '@purechess/shared';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
+import { Overlay, PuzzleBoardPane, PuzzlePrompt } from '@/components/puzzle/solve-session-shell';
 import { TrainingAnnouncer } from '@/components/training/training-announcer';
 import { focusBoard } from '@/lib/board/focus-board';
 import { gradeReview } from '@/lib/api/puzzles';
@@ -255,55 +254,26 @@ function ReviewRun({ initialDue }: { initialDue: ReviewDueDto }) {
           </span>
         </header>
 
-        <div className="mx-auto w-full max-w-[560px]">
-          <div className="relative w-full" ref={boardWrapRef}>
-            <Chessboard
-              position={state.fen}
-              orientation={state.solvingColor === 'w' ? 'white' : 'black'}
-              readOnly={state.phase !== 'player'}
-              lastMove={
-                state.lastMove
-                  ? { from: state.lastMove[0] as Square, to: state.lastMove[1] as Square }
-                  : undefined
-              }
-              onMove={(m) => {
-                if (!m.from || !m.to) return;
-                onMove(m.from + m.to + (m.promotion ?? ''));
-              }}
-            />
-
-            {outcome?.solved && (
-              <Overlay tone="success">
-                <CheckCircle2 className="h-8 w-8 text-brass" aria-hidden="true" />
-                <p className="text-base font-semibold text-foreground">
-                  {outcome.graduated ? 'Learned' : 'Solved'}
-                </p>
-                <ReviewReadout outcome={outcome} />
-              </Overlay>
-            )}
-            {outcome && !outcome.solved && (
-              <Overlay tone="error">
-                <XCircle className="h-8 w-8 text-destructive" aria-hidden="true" />
-                <p className="text-base font-semibold text-foreground">Incorrect</p>
-                <ReviewReadout outcome={outcome} />
-              </Overlay>
-            )}
-          </div>
-        </div>
-
-        <p className="min-h-[1.25rem] text-center text-sm text-muted-foreground">
-          {state.phase === 'player' && !outcome ? (
-            <>
-              Find the best move for{' '}
-              <span className="font-medium text-foreground">
-                {state.solvingColor === 'w' ? 'White' : 'Black'}
-              </span>
-              .
-            </>
-          ) : (
-            ' '
+        <PuzzleBoardPane state={state} boardWrapRef={boardWrapRef} onMove={onMove}>
+          {outcome?.solved && (
+            <Overlay tone="success">
+              <CheckCircle2 className="h-8 w-8 text-brass" aria-hidden="true" />
+              <p className="text-base font-semibold text-foreground">
+                {outcome.graduated ? 'Learned' : 'Solved'}
+              </p>
+              <ReviewReadout outcome={outcome} />
+            </Overlay>
           )}
-        </p>
+          {outcome && !outcome.solved && (
+            <Overlay tone="error">
+              <XCircle className="h-8 w-8 text-destructive" aria-hidden="true" />
+              <p className="text-base font-semibold text-foreground">Incorrect</p>
+              <ReviewReadout outcome={outcome} />
+            </Overlay>
+          )}
+        </PuzzleBoardPane>
+
+        <PuzzlePrompt phase={state.phase} solvingColor={state.solvingColor} hasOutcome={outcome !== null} />
 
         <TrainingAnnouncer message={announcement} />
       </div>
@@ -380,25 +350,6 @@ function Stat({ label, value }: { label: string; value: string }) {
         {label}
       </span>
       <span className="text-lg font-semibold text-foreground">{value}</span>
-    </div>
-  );
-}
-
-function Overlay({
-  tone = 'neutral',
-  children,
-}: {
-  tone?: 'neutral' | 'success' | 'error';
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className={cn(
-        'absolute inset-0 z-30 flex flex-col items-center justify-center gap-2.5 rounded-[4px] p-6 text-center backdrop-blur-sm',
-        tone === 'neutral' ? 'bg-background/55' : 'bg-background/75',
-      )}
-    >
-      {children}
     </div>
   );
 }

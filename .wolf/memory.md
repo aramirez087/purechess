@@ -3045,6 +3045,8 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:59 | Session end: 4 writes across 4 files (line-rating-chart.tsx, rating-chart.tsx, puzzle-rating-chart.tsx, session-03-handoff.md) | 3 reads | ~11618 tok |
 | 17:52 | Created .session-04-plan.md | — | ~3287 |
 | 17:52 | Session end: 1 writes across 1 files (.session-04-plan.md) | 4 reads | ~7843 tok |
+| 17:52 | Created .session-05-plan.md | — | ~3044 |
+| 17:52 | Session end: 1 writes across 1 files (.session-05-plan.md) | 3 reads | ~13496 tok |
 
 ## Session: 2026-06-13 17:52
 
@@ -3067,3 +3069,12 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:55 | Edited apps/web/src/app/admin/audit/page.tsx | — | ~0 |
 | 17:57 | Created docs/roadmap/dedup-cleanup/session-04-handoff.md | — | ~1028 |
 | 17:58 | Session end: 16 writes across 6 files (data-table.tsx, games-table.tsx, reports-table.tsx, users-table.tsx, page.tsx) | 4 reads | ~6794 tok |
+| 17:53 | Created apps/web/src/components/puzzle/solve-session-shell.tsx | — | ~672 |
+| 17:53 | Edited apps/web/src/components/puzzle/training-session.tsx | 3→3 lines | ~74 |
+| 17:53 | Edited apps/web/src/components/puzzle/training-session.tsx | reduced (-29 lines) | ~402 |
+| 17:53 | Edited apps/web/src/components/puzzle/training-session.tsx | — | ~0 |
+| 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | 6→5 lines | ~96 |
+| 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | reduced (-29 lines) | ~267 |
+| 17:54 | Edited apps/web/src/app/puzzles/review/review-client.tsx | removed 20 lines | ~21 |
+| 17:55 | Created docs/roadmap/dedup-cleanup/session-05-handoff.md | — | ~1115 |
+| 17:56 | Session end: 8 writes across 4 files (solve-session-shell.tsx, training-session.tsx, review-client.tsx, session-05-handoff.md) | 3 reads | ~12962 tok |

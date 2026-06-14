@@ -6,6 +6,8 @@
 > Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:57:40.428Z
 > Files: 1208 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:55:55.841Z
+> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -92,6 +94,7 @@
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
 - `.session-04-plan.md` — Session 04 — Admin Table Dedup Plan (~3081 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
+- `.session-05-plan.md` — Session 05 Implementation Plan — Training/Review Shell Dedup (~2854 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
 - `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
 - `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
@@ -1319,7 +1322,7 @@
 ## apps/web/src/app/puzzles/review/
 
 - `page.tsx` — dynamic (~373 tok)
-- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3925 tok)
+- `review-client.tsx` — Spaced-repetition review — a thin TrainingSession-style loop over the due (~3534 tok)
 
 ## apps/web/src/app/puzzles/rush/
 
@@ -1485,9 +1488,10 @@
 - `puzzle-rating-chart.tsx` — Puzzle-rating curve over time. Reuses the profile rating-chart's visual (~1046 tok)
 - `rush-hud.tsx` — The live rush HUD: a big countdown (3min) or strikes-remaining (5strikes), a (~1433 tok)
 - `solve-explanation.tsx` — The post-solve coach panel. After a puzzle is solved (or revealed), it teaches (~2817 tok)
+- `solve-session-shell.tsx` — Overlay(s) to render inside the board frame (loading, error, outcome). (~672 tok)
 - `theme-accuracy-table.tsx` — Per-theme accuracy table, weakest-first. Each row is a deep link into the (~1384 tok)
 - `theme-tile.tsx` — Selectable theme card for the trainer's selection screen. Shows the humanized (~1019 tok)
-- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4866 tok)
+- `training-session.tsx` — The reusable active-drill shell. Streams rating-appropriate puzzles for a (~4479 tok)
 
 ## apps/web/src/components/review/
 
@@ -1853,6 +1857,7 @@
 - `session-02-handoff.md` — Session 02 Handoff — sound.ts intra-file dedup (~816 tok)
 - `session-03-handoff.md` — Session 03 Handoff — Rating Chart Dedup (~1209 tok)
 - `session-04-handoff.md` — Session 04 Handoff — Admin Table Dedup (~964 tok)
+- `session-05-handoff.md` — Session 05 Handoff — Training Shell Dedup (~1046 tok)
 
 ## docs/roadmap/purechess-category-best/
 
