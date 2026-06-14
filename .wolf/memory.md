@@ -3015,3 +3015,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | 9→12 lines | ~62 |
 | 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | expanded (+32 lines) | ~291 |
 | 18:03 | Created docs/roadmap/dedup-cleanup/session-08-handoff.md | — | ~1050 |
+| 18:04 | Session end: 12 writes across 5 files (spaced-repetition.ts, puzzle-review.service.ts, repertoire-review.service.ts, spaced-repetition.spec.ts, session-08-handoff.md) | 4 reads | ~10527 tok |

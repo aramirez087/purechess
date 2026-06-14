@@ -1,21 +1,112 @@
 {
-  "session_id": "session-2026-06-13-1745",
-  "started": "2026-06-13T23:45:54.836Z",
-  "files_read": {},
+  "session_id": "session-2026-06-14-1801",
+  "started": "2026-06-14T00:01:03.095Z",
+  "files_read": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/spaced-repetition.ts": {
+      "count": 1,
+      "tokens": 1497,
+      "first_read": "2026-06-14T00:01:09.554Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/puzzle-review.service.ts": {
+      "count": 2,
+      "tokens": 2446,
+      "first_read": "2026-06-14T00:01:14.885Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/repertoire/repertoire-review.service.ts": {
+      "count": 1,
+      "tokens": 3225,
+      "first_read": "2026-06-14T00:01:15.058Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/test/puzzles/spaced-repetition.spec.ts": {
+      "count": 1,
+      "tokens": 1458,
+      "first_read": "2026-06-14T00:01:21.129Z"
+    }
+  },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s01-charter/docs/roadmap/dedup-cleanup/session-01-handoff.md",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/spaced-repetition.ts",
+      "action": "edit",
+      "tokens": 268,
+      "at": "2026-06-14T00:01:32.591Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/puzzle-review.service.ts",
+      "action": "edit",
+      "tokens": 42,
+      "at": "2026-06-14T00:01:36.709Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/puzzle-review.service.ts",
+      "action": "edit",
+      "tokens": 14,
+      "at": "2026-06-14T00:01:39.876Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/puzzle-review.service.ts",
+      "action": "edit",
+      "tokens": 19,
+      "at": "2026-06-14T00:01:44.829Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/puzzle-review.service.ts",
+      "action": "edit",
+      "tokens": 17,
+      "at": "2026-06-14T00:01:48.399Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/puzzles/puzzle-review.service.ts",
+      "action": "edit",
+      "tokens": 26,
+      "at": "2026-06-14T00:02:01.192Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/repertoire/repertoire-review.service.ts",
+      "action": "edit",
+      "tokens": 29,
+      "at": "2026-06-14T00:02:05.166Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/repertoire/repertoire-review.service.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-06-14T00:02:08.189Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/src/repertoire/repertoire-review.service.ts",
+      "action": "edit",
+      "tokens": 0,
+      "at": "2026-06-14T00:02:13.401Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/test/puzzles/spaced-repetition.spec.ts",
+      "action": "edit",
+      "tokens": 62,
+      "at": "2026-06-14T00:02:18.061Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/apps/api/test/puzzles/spaced-repetition.spec.ts",
+      "action": "edit",
+      "tokens": 291,
+      "at": "2026-06-14T00:02:26.165Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s08-sr-scheduler/docs/roadmap/dedup-cleanup/session-08-handoff.md",
       "action": "create",
-      "tokens": 4588,
-      "at": "2026-06-13T23:49:00.253Z"
+      "tokens": 1125,
+      "at": "2026-06-14T00:03:56.994Z"
     }
   ],
   "edit_counts": {
-    "docs/roadmap/dedup-cleanup/session-01-handoff.md": 1
+    "apps/api/src/puzzles/spaced-repetition.ts": 1,
+    "apps/api/src/puzzles/puzzle-review.service.ts": 5,
+    "apps/api/src/repertoire/repertoire-review.service.ts": 3,
+    "apps/api/test/puzzles/spaced-repetition.spec.ts": 2,
+    "docs/roadmap/dedup-cleanup/session-08-handoff.md": 1
   },
-  "anatomy_hits": 0,
+  "anatomy_hits": 4,
   "anatomy_misses": 0,
-  "repeated_reads_warned": 0,
+  "repeated_reads_warned": 1,
   "cerebrum_warnings": 0,
   "stop_count": 1
 }

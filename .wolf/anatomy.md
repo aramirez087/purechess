@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:49:00.246Z
-> Files: 1204 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:03:56.986Z
+> Files: 1205 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -87,7 +87,7 @@
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
 - `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
-- `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
+- `.session-08-plan.md` — Session 08 — Implementation Plan: SM-2 Scheduler Deduplication (~2848 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
@@ -941,7 +941,7 @@
 - `puzzle-history.service.ts` — Hard cap on the number of points the rating curve ever returns, regardless of (~1736 tok)
 - `puzzle-rating.service.ts` — New-puzzle-solver defaults, matching the schema column defaults. (~1005 tok)
 - `puzzle-review.controller.ts` — Spaced-repetition review endpoints — the due-today queue and grading over the (~440 tok)
-- `puzzle-review.service.ts` — Default page size for the due queue. (~2605 tok)
+- `puzzle-review.service.ts` — Default page size for the due queue. (~2429 tok)
 - `puzzle-rush.controller.ts` — Puzzle Rush endpoints — the timed board-vision drill. Registered additively (~757 tok)
 - `puzzle-rush.service.ts` — Default target rating for a user who has never solved a puzzle. (~2646 tok)
 - `puzzle-serving.service.ts` — Default target rating for a user who has never solved a puzzle. (~4376 tok)
@@ -950,7 +950,7 @@
 - `puzzles.module.ts` — Exports PuzzlesModule (~464 tok)
 - `puzzles.service.ts` — Returns today's Lichess daily puzzle, cached in Redis for 24h so we hit the (~367 tok)
 - `puzzles.types.ts` — Shape of the public Lichess daily-puzzle response (~202 tok)
-- `spaced-repetition.ts` — Pure SM-2-style spaced-repetition scheduler for failed/learning puzzles. (~1497 tok)
+- `spaced-repetition.ts` — Pure SM-2-style spaced-repetition scheduler for failed/learning puzzles. (~1724 tok)
 
 ## apps/api/src/puzzles/dto/
 
@@ -979,7 +979,7 @@
 ## apps/api/src/repertoire/
 
 - `repertoire-review.controller.ts` — Opening trainer endpoints — drill the user's repertoire lines and grade them (~470 tok)
-- `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3225 tok)
+- `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3047 tok)
 - `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
 - `repertoire.controller.ts` — Opening-repertoire CRUD + import. Every route is auth-gated and scoped to the (~668 tok)
 - `repertoire.module.ts` — Opening repertoires (CRUD + import) plus the opening trainer (drill + grade). (~282 tok)
@@ -1125,7 +1125,7 @@
 - `puzzle-serving.service.spec.ts` — Last `$queryRaw` call's bound SQL + values (Prisma.Sql shape). (~3613 tok)
 - `puzzles.service.spec.ts` — Declares mockRedis (~646 tok)
 - `seed-puzzles.spec.ts` — Build a CSV data line in the exact lichess column order. (~1821 tok)
-- `spaced-repetition.spec.ts` — A pristine, never-reviewed card. (~1458 tok)
+- `spaced-repetition.spec.ts` — A pristine, never-reviewed card. (~1749 tok)
 
 ## apps/api/test/ratings/
 
@@ -1833,6 +1833,7 @@
 ## docs/roadmap/dedup-cleanup/
 
 - `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
+- `session-08-handoff.md` — Session 08 Handoff — SM-2 Scheduler Deduplication (~985 tok)
 
 ## docs/roadmap/purechess-category-best/
 
