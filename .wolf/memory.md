@@ -3025,3 +3025,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:07 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | removed 13 lines | ~26 |
 | 18:08 | Edited apps/web/src/components/play/time-control-picker.tsx | 5→5 lines | ~40 |
 | 18:09 | Created docs/roadmap/dedup-cleanup/session-07-handoff.md | — | ~1131 |
+| 18:10 | Session end: 21 writes across 6 files (time-control-picker.tsx, invite-create.tsx, quick-match-setup.tsx, computer-game-setup.tsx, practice-from-fen-dialog.tsx) | 7 reads | ~15380 tok |
