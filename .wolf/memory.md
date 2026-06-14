@@ -3014,3 +3014,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:16 | Rewrote repertoire-tree.ts to use shared | apps/api/src/repertoire/repertoire-tree.ts | removed local tokenize/parseHeaders/GLYPH_NAGS | ~600 tok |
 | 18:19 | All gates passed — 45→42 clones, 931→885 dup lines | typecheck/lint/jest/vitest | zero pgn-parser↔repertoire-tree pairs | ~200 tok |
 | 18:20 | Session 09 handoff | docs/roadmap/dedup-cleanup/session-09-handoff.md | complete | ~300 tok |
+| 18:20 | Session end: 6 writes across 5 files (pgn-utils.ts, index.ts, pgn-parser.ts, repertoire-tree.ts, session-09-handoff.md) | 12 reads | ~28149 tok |
