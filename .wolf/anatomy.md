@@ -4,6 +4,8 @@
 > Files: 1205 tracked | Anatomy hits: 0 | Misses: 0
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:59:11.320Z
 > Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:57:40.428Z
+> Files: 1208 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -88,6 +90,7 @@
 - `.session-02-plan.md` — Session 02 Implementation Plan — Realtime Resilience (~4021 tok)
 - `.session-03-plan.md` — Session 03 — Implementation Plan: Rating Chart Dedup (~4367 tok)
 - `.session-04-plan.md` — Session 04 Implementation Plan — TS Adapter (WP4) (~7171 tok)
+- `.session-04-plan.md` — Session 04 — Admin Table Dedup Plan (~3081 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
 - `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
@@ -1244,6 +1247,10 @@
 
 - `layout.tsx` — getMe (~307 tok)
 
+## apps/web/src/app/admin/audit/
+
+- `page.tsx` — AdminAuditPage — renders table (~1213 tok)
+
 ## apps/web/src/app/admin/games/[gameId]/
 
 - `page.tsx` — AdminGameDetailPage — renders table (~1932 tok)
@@ -1354,8 +1361,10 @@
 ## apps/web/src/components/admin/
 
 - `admin-page-header.tsx` — AdminPageHeader (~231 tok)
-- `games-table.tsx` — GamesTable — renders table (~2073 tok)
-- `reports-table.tsx` — STATUS_OPTIONS — renders table (~2248 tok)
+- `data-table.tsx` — Shared admin table primitives: Th, Td, TableShell, TableLoadingState, TablePagination (~633 tok)
+- `games-table.tsx` — GamesTable — renders table (~1654 tok)
+- `reports-table.tsx` — STATUS_OPTIONS — renders table (~1817 tok)
+- `users-table.tsx` — UsersTable — renders table (~1775 tok)
 
 ## apps/web/src/components/auth/
 
@@ -1843,6 +1852,7 @@
 - `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
 - `session-02-handoff.md` — Session 02 Handoff — sound.ts intra-file dedup (~816 tok)
 - `session-03-handoff.md` — Session 03 Handoff — Rating Chart Dedup (~1209 tok)
+- `session-04-handoff.md` — Session 04 Handoff — Admin Table Dedup (~964 tok)
 
 ## docs/roadmap/purechess-category-best/
 

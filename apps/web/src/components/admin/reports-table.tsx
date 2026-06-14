@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 import { fetchAdminReports } from '@/lib/api/reports';
 import { formatRelativeTime, cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, ChevronRight as ArrowRight, Filter } from 'lucide-react';
+import { ChevronRight as ArrowRight, Filter } from 'lucide-react';
+import { Th, Td, TablePagination } from './data-table';
 
 const STATUS_OPTIONS = [
   { value: '', label: 'All statuses' },
@@ -155,58 +155,16 @@ export function ReportsTable() {
             </table>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>
-              {data.total} {data.total === 1 ? 'report' : 'reports'}
-            </span>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => setPage(page - 1)}
-              >
-                <ChevronLeft className="h-3.5 w-3.5" />
-              </Button>
-              <span className="px-2 font-mono tabular-nums">
-                {page} / {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= totalPages}
-                onClick={() => setPage(page + 1)}
-              >
-                <ChevronRight className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
+          <TablePagination
+            page={page}
+            totalPages={totalPages}
+            total={data.total}
+            singularLabel="report"
+            onPageChange={setPage}
+          />
         </>
       )}
     </div>
   );
 }
 
-function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
-  return (
-    <th
-      scope="col"
-      className={cn(
-        'px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground',
-        className,
-      )}
-    >
-      {children}
-    </th>
-  );
-}
-
-function Td({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <td className={cn('px-4 py-2.5', className)}>{children}</td>;
-}
