@@ -3157,3 +3157,27 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | expanded (+32 lines) | ~291 |
 | 18:03 | Created docs/roadmap/dedup-cleanup/session-08-handoff.md | — | ~1050 |
 | 18:04 | Session end: 12 writes across 5 files (spaced-repetition.ts, puzzle-review.service.ts, repertoire-review.service.ts, spaced-repetition.spec.ts, session-08-handoff.md) | 4 reads | ~10527 tok |
+## Session: 2026-06-13 17:59
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:08 | Created .session-09-plan.md | — | ~3402 |
+| 18:08 | Session end: 1 writes across 1 files (.session-09-plan.md) | 10 reads | ~15704 tok |
+
+## Session: 2026-06-14 18:08
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:13 | Created packages/shared/src/pgn/pgn-utils.ts | — | ~1720 |
+| 18:13 | Edited packages/shared/src/index.ts | 1→2 lines | ~20 |
+| 18:14 | Created apps/web/src/lib/board/pgn-parser.ts | — | ~1436 |
+| 18:15 | Created apps/api/src/repertoire/repertoire-tree.ts | — | ~3012 |
+| 18:18 | Edited apps/web/src/lib/board/pgn-parser.ts | modified parseVariation() | ~363 |
+| 18:20 | Created docs/roadmap/dedup-cleanup/session-09-handoff.md | — | ~1599 |
+## Session: 2026-06-13 (S09 — PGN Parser Dedup)
+| 18:15 | Created packages/shared/src/pgn/pgn-utils.ts | packages/shared | STARTING_FEN, tokenizeMovetext, parseHeaders, walkMoveVariation exported | ~800 tok |
+| 18:16 | Rewrote pgn-parser.ts to use shared | apps/web/src/lib/board/pgn-parser.ts | removed local RESULT_TOKENS/GLYPH_NAGS/tokenizer/parseHeaders | ~600 tok |
+| 18:16 | Rewrote repertoire-tree.ts to use shared | apps/api/src/repertoire/repertoire-tree.ts | removed local tokenize/parseHeaders/GLYPH_NAGS | ~600 tok |
+| 18:19 | All gates passed — 45→42 clones, 931→885 dup lines | typecheck/lint/jest/vitest | zero pgn-parser↔repertoire-tree pairs | ~200 tok |
+| 18:20 | Session 09 handoff | docs/roadmap/dedup-cleanup/session-09-handoff.md | complete | ~300 tok |
+| 18:20 | Session end: 6 writes across 5 files (pgn-utils.ts, index.ts, pgn-parser.ts, repertoire-tree.ts, session-09-handoff.md) | 12 reads | ~28149 tok |

@@ -18,3 +18,4 @@ export * from './dto/training.dto';
 export * from './dto/rush.dto';
 export * from './dto/repertoire.dto';
 export * from './dto/endgame.dto';
+export * from './pgn/pgn-utils';
