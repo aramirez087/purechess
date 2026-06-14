@@ -8,6 +8,8 @@
 > Files: 1208 tracked | Anatomy hits: 0 | Misses: 0
 > Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:55:55.841Z
 > Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:08:57.556Z
+> Files: 1207 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -96,6 +98,7 @@
 - `.session-05-plan.md` — Session 05 Implementation Plan — Shadow Mode CI Gate (WP5) (~5779 tok)
 - `.session-05-plan.md` — Session 05 Implementation Plan — Training/Review Shell Dedup (~2854 tok)
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
+- `.session-06-plan.md` — Session 06 — Implementation Plan (~5687 tok)
 - `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
 - `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
 - `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
@@ -687,9 +690,10 @@
 - `apps/web/src/components/puzzle/theme-tile.tsx` — Selectable theme card: humanizeTheme (camelCase/slug→title), accuracyBand (low/mid/high), puzzle count, accuracy% (hidden if 0 attempts) via `.acc-*` scale, optional "Weakest" badge. (~600 tok)
 - `apps/web/src/components/puzzle/training-session.tsx` — Reusable drill shell. Props {theme:string|null, source:PuzzleSource, target=10, onBack?, onChangeTheme?}. Loops fetchNextPuzzle→useLocalPuzzle/Chessboard→recordAttempt({solved,msToSolve,source})→1.2s auto-advance. Header solved/attempted + progress bar, rating delta readout, SessionSummary at target with theme accuracy before/after. **S14: renders `<SolveExplanation key=puzzle.id … defaultCollapsed>` below the board once an outcome settles.** (~1550 tok)
 - `apps/web/src/components/review/mistake-trainer.tsx` — S07 `<MistakeTrainer gameId mistakes:MistakeItem[]>` review-rail panel. Lists own-side mistakes ("Move N. SAN — −cp"); click → inline solve via useLocalPuzzle (fen=before-blunder, moves=bestLineUci) "Find the move you missed". Solving marks reviewed by resolving ply→id from fetchMistakes(gameId) (best-effort) then markMistakeReviewed(id). Self-hides when empty. Bespoke-hex palette. Exports MistakeItem type. (~1100 tok)
-- `apps/web/src/hooks/use-local-puzzle.ts` — S04 DB-puzzle solve machine (reusable core for rush/review/mistakes). NO setup phase: puzzle.fen IS start, moves[0]=solver's first move, solvingColor from FEN. Phases player→auto-reply→…→success|fail→reveal. onMove(uci) matches via puzzle-utils, tracks msToSolve, fires onSolved({msToSolve})/onFailed once. (~1100 tok)
+- `apps/web/src/hooks/use-local-puzzle.ts` — S04 DB-puzzle solve machine (reusable core for rush/review/mistakes). NO setup phase. Delegates runReveal/runAutoReply/applyPlayerMoveStep to use-puzzle-core; adds msToSolve timer + onSolved/onFailed callbacks. Public API: {state,onMove,onReveal}. (~850 tok)
 - `apps/web/src/hooks/use-mistake-capture.ts` — S07 `useMistakeCapture({gameId,moves,startFen,viewerColor,classification})`: once classification completes, collects the viewer's OWN mistake/blunder moves over `CAPTURE_CP_THRESHOLD(150)` and POSTs once via saveGameMistakes (fire-and-forget; `sentForGameRef` once-guard cleared on failure for retry). No-op when viewerColor null or classification absent. Exports pure `collectOwnMistakes(classified,moves,color,startFen)` → MistakeCandidateDto[] (fen=replayToFen before-blunder, bestLineUci=[bestUci]). (~520 tok)
-- `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() state machine: loading→setup→player→auto-reply→success/fail→reveal. Timers 600/500/800ms. plays success/error sounds. (~900 tok)
+- `apps/web/src/hooks/use-puzzle-core.ts` — [S06 dedup] Shared timer+state-machine core for both DB and daily puzzle hooks. Exports AUTO_REPLY_MS=500, REVEAL_MS=800, usePuzzleCore(stateRef,setState,solutionRef,onSolvedFiredRef?). Returns {timerRef,clearTimer,runAutoReply,runReveal,applyPlayerMoveStep('wrong'|'done'|'applied'|'noop'),onReveal}. (~950 tok)
+- `apps/web/src/hooks/use-puzzle.ts` — usePuzzle() daily lichess puzzle hook. loading→setup→player→auto-reply→success/fail→reveal. Delegates runReveal/runAutoReply/applyPlayerMoveStep to use-puzzle-core. Owns buildContext, beginSetup, load, onNext, onTryAgain. Public API: {state,puzzleData,onMove,onReveal,onNext,onTryAgain}. (~850 tok)
 - `apps/web/src/lib/api/puzzles.ts` — puzzle API client. getDailyPuzzle() + web-side LichessPuzzleData type; S03 trainer fns over the local bank: fetchThemes(), fetchNextPuzzle({theme?,rating?}), recordAttempt(id,{solved,msToSolve?,source?}), fetchPuzzleStats(), fetchPuzzleRating(); S05 rush: startRush/finishRush/fetchRushPersonalBests; S06 review: fetchDueReviews()→ReviewDueDto, gradeReview(id,{solved,msToSolve?})→ReviewGradeResultDto; **S07 mistakes: saveGameMistakes(gameId,candidates)→{saved}, fetchMistakes(unreviewedOnly?)→GameMistakeDto[], markMistakeReviewed(id)→{next}**; **S11: fetchPuzzleHistory()→PuzzleHistoryDto {ratingHistory, summary}** — auth-gated ones use `credentials:'include'`; shapes are `@purechess/shared` DTOs. (~700 tok)
 - `apps/web/src/lib/board/puzzle-utils.ts` — SHARED solve helpers (daily + local hooks): replayPgnVerbose/replayPgnToFen, isSolverTurn, normalizeCastleUci (rook→king-dest), uciMatch, uciToIntent, applyUci (normalize+apply→{fen,lastMove}), solvingColorFromFen. chess.js + rules.applyMoveToFen. (~560 tok)
 - `apps/web/src/lib/board/theme-explanations.ts` — S14 STATIC curated `ThemeKey→{name,oneLiner,whatToLookFor}` map (lichess slugs: fork/pin/skewer/discoveredAttack/doubleCheck/backRankMate/smotheredMate/deflection/decoy/removingTheDefender/hangingPiece/trappedPiece/zwischenzug/+~15 more incl. mateIn1-3). `explainTheme(slug)` degrades missing slugs → humanized name + empty copy; `explainThemes(slugs,limit=2)` dedupes. No generation. (~1400 tok)
@@ -1538,7 +1542,7 @@
 - `use-game-socket.ts` — Live push channel up — polling can relax to a slow heartbeat. (~1287 tok)
 - `use-invite.ts` — Rated games feed Glicko-2 on completion. Omitted = casual. (~852 tok)
 - `use-live-clock.ts` — mm:ss (h:mm:ss above an hour, s.t tenths under 10s). (~797 tok)
-- `use-local-puzzle.ts` — Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the (~2156 tok)
+- `use-local-puzzle.ts` — Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the (~1448 tok)
 - `use-matchmaking.ts` — Self-heal budget: silent re-joins after a TTL drop / lost claim. (~1404 tok)
 - `use-mistake-capture.ts` — Centipawn-loss floor for a move to count as a capturable mistake — mirrors the (~1220 tok)
 - `use-move-classifier.ts` — 1-based ply. (~2597 tok)
@@ -1546,7 +1550,8 @@
 - `use-opening-explorer.ts` — Opening-explorer stats from the free Lichess Explorer API (~1199 tok)
 - `use-opening-name.ts` — Opening-name lookup against the lichess chess-openings book, baked to (~698 tok)
 - `use-position-eval.ts` — One multipv engine line, scores normalized to White's POV. (~953 tok)
-- `use-puzzle.ts` — Static derivation from a loaded puzzle — never changes once set. (~2211 tok)
+- `use-puzzle-core.ts` — Minimal state shape the core reads from stateRef. (~1639 tok)
+- `use-puzzle.ts` — Static derivation from a loaded puzzle — never changes once set. (~1480 tok)
 - `use-replay-san.ts` — FEN after each ply; `fens[0]` is the start, `fens[k]` follows ply k. (~418 tok)
 - `use-settings.ts` — Exports useSettings, useUpdateSettings, useResetSettings (~178 tok)
 
@@ -1858,6 +1863,7 @@
 - `session-03-handoff.md` — Session 03 Handoff — Rating Chart Dedup (~1209 tok)
 - `session-04-handoff.md` — Session 04 Handoff — Admin Table Dedup (~964 tok)
 - `session-05-handoff.md` — Session 05 Handoff — Training Shell Dedup (~1046 tok)
+- `session-06-handoff.md` — Session 06 Handoff — Puzzle Hook Dedup (~1009 tok)
 
 ## docs/roadmap/purechess-category-best/
 
