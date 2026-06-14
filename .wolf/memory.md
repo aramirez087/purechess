@@ -3246,3 +3246,6 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:45 | Edited apps/web/src/components/play/computer-game-setup.tsx | inline fix | ~29 |
 | 18:45 | Edited apps/web/src/components/play/practice-from-fen-dialog.tsx | inline fix | ~13 |
 | 18:49 | Created docs/roadmap/dedup-cleanup/session-11-handoff.md | — | ~2586 |
+
+| 18:49 | S11 CI gate: tsconfig ignoreDeprecations fix, PuzzleBoardPane className/optional-ref, StrengthSection extraction, all gates green, jscpd 45→24 | multiple files | success | ~8500 |
+| 18:49 | Session end: 26 writes across 7 files (tsconfig.json, solve-session-shell.tsx, mistake-trainer.tsx, time-control-picker.tsx, computer-game-setup.tsx) | 10 reads | ~35570 tok |
