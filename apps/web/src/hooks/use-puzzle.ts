@@ -2,13 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Color } from '@purechess/shared';
-import { soundEngine } from '@/lib/board/sound';
 import {
-  applyUci,
   replayPgnVerbose,
-  uciMatch,
 } from '@/lib/board/puzzle-utils';
 import { getDailyPuzzle, type LichessPuzzleData } from '@/lib/api/puzzles';
+import { usePuzzleCore } from '@/hooks/use-puzzle-core';
 
 export type PuzzlePhase =
   | 'loading'
@@ -52,8 +50,6 @@ interface PuzzleContext {
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 const SETUP_MS = 600;
-const AUTO_REPLY_MS = 500;
-const REVEAL_MS = 800;
 
 const INITIAL_STATE: PuzzleState = {
   phase: 'loading',
@@ -93,7 +89,6 @@ export function usePuzzle(): UsePuzzleReturn {
   const [puzzleData, setPuzzleData] = useState<LichessPuzzleData | null>(null);
 
   const ctxRef = useRef<PuzzleContext | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Mirrors `state` so timer/callback closures read the latest snapshot without
   // re-binding. One render behind, which is safe: the relevant fields only
   // change at transitions the user can't outrace.
@@ -102,12 +97,15 @@ export function usePuzzle(): UsePuzzleReturn {
     stateRef.current = state;
   }, [state]);
 
-  const clearTimer = useCallback(() => {
-    if (timerRef.current !== null) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  }, []);
+  // Keep solutionRef in sync each render so the core always sees the latest solution.
+  const solutionRef = useRef<string[]>([]);
+  solutionRef.current = ctxRef.current?.solution ?? [];
+
+  const { timerRef, clearTimer, applyPlayerMoveStep, onReveal } = usePuzzleCore(
+    stateRef,
+    setState,
+    solutionRef,
+  );
 
   // setup → player: show the pre-setup board, animate the last opponent move
   // after a beat, then hand control to the solver.
@@ -133,105 +131,16 @@ export function usePuzzle(): UsePuzzleReturn {
         });
       }, SETUP_MS);
     },
-    [clearTimer],
-  );
-
-  // auto-reply → player|success: play the opponent's scripted response.
-  const runAutoReply = useCallback(
-    (fen: string, index: number) => {
-      const ctx = ctxRef.current;
-      if (!ctx) return;
-      clearTimer();
-      timerRef.current = setTimeout(() => {
-        const applied = applyUci(fen, ctx.solution[index]);
-        if (!applied) {
-          setState((s) => ({ ...s, phase: 'player' }));
-          return;
-        }
-        const newIndex = index + 1;
-        const done = newIndex >= ctx.solution.length;
-        if (done) soundEngine.play('success');
-        setState((s) => ({
-          ...s,
-          phase: done ? 'success' : 'player',
-          fen: applied.fen,
-          lastMove: applied.lastMove,
-          moveIndex: newIndex,
-        }));
-      }, AUTO_REPLY_MS);
-    },
-    [clearTimer],
-  );
-
-  // reveal: step through the remaining solution, one move every REVEAL_MS.
-  const runReveal = useCallback(
-    (fen: string, index: number) => {
-      const ctx = ctxRef.current;
-      if (!ctx || index >= ctx.solution.length) return;
-      clearTimer();
-      timerRef.current = setTimeout(() => {
-        const applied = applyUci(fen, ctx.solution[index]);
-        if (!applied) return;
-        const newIndex = index + 1;
-        setState((s) => ({
-          ...s,
-          phase: 'reveal',
-          fen: applied.fen,
-          lastMove: applied.lastMove,
-          moveIndex: newIndex,
-        }));
-        runReveal(applied.fen, newIndex);
-      }, REVEAL_MS);
-    },
-    [clearTimer],
+    [clearTimer, timerRef],
   );
 
   const onMove = useCallback(
     (uci: string) => {
-      const ctx = ctxRef.current;
-      const s = stateRef.current;
-      if (!ctx || s.phase !== 'player') return;
-
-      if (!uciMatch(uci, ctx.solution[s.moveIndex])) {
-        soundEngine.play('error');
-        setState((prev) => ({ ...prev, phase: 'fail' }));
-        return;
-      }
-
-      const applied = applyUci(s.fen, uci);
-      if (!applied) return;
-      const newIndex = s.moveIndex + 1;
-
-      if (newIndex >= ctx.solution.length) {
-        soundEngine.play('success');
-        setState((prev) => ({
-          ...prev,
-          phase: 'success',
-          fen: applied.fen,
-          lastMove: applied.lastMove,
-          moveIndex: newIndex,
-        }));
-        return;
-      }
-
-      setState((prev) => ({
-        ...prev,
-        phase: 'auto-reply',
-        fen: applied.fen,
-        lastMove: applied.lastMove,
-        moveIndex: newIndex,
-      }));
-      runAutoReply(applied.fen, newIndex);
+      if (!ctxRef.current) return;
+      applyPlayerMoveStep(uci);
     },
-    [runAutoReply],
+    [applyPlayerMoveStep],
   );
-
-  const onReveal = useCallback(() => {
-    const s = stateRef.current;
-    if (s.phase !== 'fail') return;
-    setState((prev) => ({ ...prev, phase: 'reveal' }));
-    runReveal(s.fen, s.moveIndex);
-  }, [runReveal]);
 
   const load = useCallback(async () => {
     clearTimer();

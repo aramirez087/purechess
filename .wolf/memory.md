@@ -3,6 +3,11 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+## Session: 2026-06-13 (S06 — Puzzle hook dedup)
+| 18:00 | Created use-puzzle-core.ts (shared timer+state-machine core) | apps/web/src/hooks/use-puzzle-core.ts | new file | ~950 tok |
+| 18:05 | Rewrote use-local-puzzle.ts and use-puzzle.ts to use core | apps/web/src/hooks/ | clones #40 #41 eliminated | ~1700 tok |
+| 18:10 | Ran gates: vitest 662/662 green, lint clean, jscpd clone pair gone | — | all gates pass | ~200 tok |
+
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
 | 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
@@ -2990,3 +2995,24 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 17:49 | S01 charter: ran jscpd baseline (45 clones/931 lines), confirmed all 9 cluster anchors, verified disjoint ownership, wrote handoff | docs/roadmap/dedup-cleanup/session-01-handoff.md | success | ~4000 |
 | 17:49 | Session end: 1 writes across 1 files (session-01-handoff.md) | 0 reads | ~4588 tok |
+
+## Session: 2026-06-13 17:54
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:01 | Created .session-06-plan.md | — | ~6066 |
+| 18:01 | Session end: 1 writes across 1 files (.session-06-plan.md) | 5 reads | ~14445 tok |
+
+## Session: 2026-06-14 18:01
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:03 | Created apps/web/src/hooks/use-puzzle-core.ts | — | ~1470 |
+| 18:04 | Created apps/web/src/hooks/use-local-puzzle.ts | — | ~1500 |
+| 18:04 | Edited apps/web/src/hooks/use-local-puzzle.ts | inline fix | ~20 |
+| 18:04 | Edited apps/web/src/hooks/use-local-puzzle.ts | 8→4 lines | ~36 |
+| 18:05 | Created apps/web/src/hooks/use-puzzle.ts | — | ~1480 |
+| 18:07 | Edited apps/web/src/hooks/use-puzzle-core.ts | 5→7 lines | ~63 |
+| 18:07 | Edited apps/web/src/hooks/use-puzzle-core.ts | 6→8 lines | ~70 |
+| 18:07 | Edited apps/web/src/hooks/use-puzzle-core.ts | 12→16 lines | ~181 |
+| 18:08 | Created docs/roadmap/dedup-cleanup/session-06-handoff.md | — | ~1077 |

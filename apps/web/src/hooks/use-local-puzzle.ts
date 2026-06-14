@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Color, PuzzleDto } from '@purechess/shared';
-import { soundEngine } from '@/lib/board/sound';
-import { applyUci, solvingColorFromFen, uciMatch } from '@/lib/board/puzzle-utils';
+import { solvingColorFromFen } from '@/lib/board/puzzle-utils';
+import { usePuzzleCore } from '@/hooks/use-puzzle-core';
 
 /**
  * Solve-state machine for DB-backed puzzles (the local puzzle bank). Unlike the
@@ -53,9 +53,6 @@ export interface UseLocalPuzzleReturn {
   onReveal: () => void;
 }
 
-const AUTO_REPLY_MS = 500;
-const REVEAL_MS = 800;
-
 const EMPTY_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 const IDLE_STATE: LocalPuzzleState = {
@@ -73,9 +70,8 @@ export function useLocalPuzzle({
 }: UseLocalPuzzleArgs): UseLocalPuzzleReturn {
   const [state, setState] = useState<LocalPuzzleState>(IDLE_STATE);
 
-  // The puzzle's immutable solution line; null while idle.
+  // The puzzle's immutable solution line; empty while idle.
   const movesRef = useRef<string[]>([]);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Wall-clock of the first player move; null until the solver moves.
   const startedAtRef = useRef<number | null>(null);
   // Guards so onSolved/onFailed fire at most once per puzzle.
@@ -94,12 +90,24 @@ export function useLocalPuzzle({
     onFailedRef.current = onFailed;
   }, [onSolved, onFailed]);
 
-  const clearTimer = useCallback(() => {
-    if (timerRef.current !== null) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
+  const settleSolved = useCallback(() => {
+    if (settledRef.current) return;
+    settledRef.current = true;
+    const started = startedAtRef.current;
+    const msToSolve = started === null ? 0 : Math.max(0, Date.now() - started);
+    onSolvedRef.current?.({ msToSolve });
   }, []);
+
+  // Wire settleSolved into the core so it fires when the puzzle is solved.
+  const onSolvedFiredRef = useRef<(() => void) | undefined>(undefined);
+  onSolvedFiredRef.current = settleSolved;
+
+  const { clearTimer, applyPlayerMoveStep, onReveal } = usePuzzleCore(
+    stateRef,
+    setState,
+    movesRef,
+    onSolvedFiredRef,
+  );
 
   // (Re)initialize the machine whenever the puzzle identity changes. The FEN is
   // the start; the solver is to move (no setup ply to animate).
@@ -125,66 +133,6 @@ export function useLocalPuzzle({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzle?.id]);
 
-  const settleSolved = useCallback(() => {
-    if (settledRef.current) return;
-    settledRef.current = true;
-    const started = startedAtRef.current;
-    const msToSolve = started === null ? 0 : Math.max(0, Date.now() - started);
-    onSolvedRef.current?.({ msToSolve });
-  }, []);
-
-  // auto-reply -> player | success: play the opponent's scripted response.
-  const runAutoReply = useCallback(
-    (fen: string, index: number) => {
-      const moves = movesRef.current;
-      clearTimer();
-      timerRef.current = setTimeout(() => {
-        const applied = applyUci(fen, moves[index]);
-        if (!applied) {
-          setState((s) => ({ ...s, phase: 'player' }));
-          return;
-        }
-        const newIndex = index + 1;
-        const done = newIndex >= moves.length;
-        if (done) {
-          soundEngine.play('success');
-          settleSolved();
-        }
-        setState((s) => ({
-          ...s,
-          phase: done ? 'success' : 'player',
-          fen: applied.fen,
-          lastMove: applied.lastMove,
-          moveIndex: newIndex,
-        }));
-      }, AUTO_REPLY_MS);
-    },
-    [clearTimer, settleSolved],
-  );
-
-  // reveal: step through the remaining solution, one move every REVEAL_MS.
-  const runReveal = useCallback(
-    (fen: string, index: number) => {
-      const moves = movesRef.current;
-      if (index >= moves.length) return;
-      clearTimer();
-      timerRef.current = setTimeout(() => {
-        const applied = applyUci(fen, moves[index]);
-        if (!applied) return;
-        const newIndex = index + 1;
-        setState((s) => ({
-          ...s,
-          phase: 'reveal',
-          fen: applied.fen,
-          lastMove: applied.lastMove,
-          moveIndex: newIndex,
-        }));
-        runReveal(applied.fen, newIndex);
-      }, REVEAL_MS);
-    },
-    [clearTimer],
-  );
-
   const onMove = useCallback(
     (uci: string) => {
       const s = stateRef.current;
@@ -194,51 +142,14 @@ export function useLocalPuzzle({
       // Start the timer on the first player move of the puzzle.
       if (startedAtRef.current === null) startedAtRef.current = Date.now();
 
-      if (!uciMatch(uci, moves[s.moveIndex])) {
-        soundEngine.play('error');
-        if (!settledRef.current) {
-          settledRef.current = true;
-          onFailedRef.current?.();
-        }
-        setState((prev) => ({ ...prev, phase: 'fail' }));
-        return;
+      const result = applyPlayerMoveStep(uci);
+      if (result === 'wrong' && !settledRef.current) {
+        settledRef.current = true;
+        onFailedRef.current?.();
       }
-
-      const applied = applyUci(s.fen, uci);
-      if (!applied) return;
-      const newIndex = s.moveIndex + 1;
-
-      if (newIndex >= moves.length) {
-        soundEngine.play('success');
-        settleSolved();
-        setState((prev) => ({
-          ...prev,
-          phase: 'success',
-          fen: applied.fen,
-          lastMove: applied.lastMove,
-          moveIndex: newIndex,
-        }));
-        return;
-      }
-
-      setState((prev) => ({
-        ...prev,
-        phase: 'auto-reply',
-        fen: applied.fen,
-        lastMove: applied.lastMove,
-        moveIndex: newIndex,
-      }));
-      runAutoReply(applied.fen, newIndex);
     },
-    [runAutoReply, settleSolved],
+    [applyPlayerMoveStep],
   );
-
-  const onReveal = useCallback(() => {
-    const s = stateRef.current;
-    if (s.phase !== 'fail') return;
-    setState((prev) => ({ ...prev, phase: 'reveal' }));
-    runReveal(s.fen, s.moveIndex);
-  }, [runReveal]);
 
   // Clear any pending timer on unmount.
   useEffect(() => clearTimer, [clearTimer]);
