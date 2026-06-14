@@ -3016,3 +3016,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:23 | Edited apps/web/src/hooks/use-low-time-tick.ts | inline fix | ~14 |
 | 18:25 | Created docs/roadmap/dedup-cleanup/session-10-handoff.md | — | ~1377 |
 | 18:24 | S10: extracted game-client-utils.ts, GameOverBanner, GameRailBrandHeader, useLowTimeTick; rewrote both game clients | apps/web/src/lib/board/game-client-utils.ts, apps/web/src/components/game/{game-over-banner,game-rail-brand-header}.tsx, apps/web/src/hooks/use-low-time-tick.ts, computer-game-client.tsx, live-game-client.tsx | 0 clones in game clients; 45→43 overall; 662 tests pass; lint+typecheck clean | ~8000 |
+| 18:26 | Session end: 13 writes across 8 files (game-client-utils.ts, game-over-banner.tsx, game-rail-brand-header.tsx, use-low-time-tick.ts, index.ts) | 3 reads | ~41872 tok |
