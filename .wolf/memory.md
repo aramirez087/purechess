@@ -3016,3 +3016,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:07 | Edited apps/web/src/hooks/use-puzzle-core.ts | 6→8 lines | ~70 |
 | 18:07 | Edited apps/web/src/hooks/use-puzzle-core.ts | 12→16 lines | ~181 |
 | 18:08 | Created docs/roadmap/dedup-cleanup/session-06-handoff.md | — | ~1077 |
+| 18:09 | Session end: 9 writes across 4 files (use-puzzle-core.ts, use-local-puzzle.ts, use-puzzle.ts, session-06-handoff.md) | 5 reads | ~14268 tok |

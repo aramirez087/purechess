@@ -1,19 +1,96 @@
 {
-  "session_id": "session-2026-06-13-1745",
-  "started": "2026-06-13T23:45:54.836Z",
-  "files_read": {},
+  "session_id": "session-2026-06-14-1801",
+  "started": "2026-06-14T00:01:21.436Z",
+  "files_read": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-local-puzzle.ts": {
+      "count": 1,
+      "tokens": 2156,
+      "first_read": "2026-06-14T00:01:32.381Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle.ts": {
+      "count": 1,
+      "tokens": 2211,
+      "first_read": "2026-06-14T00:01:33.134Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/test/hooks/use-local-puzzle.test.ts": {
+      "count": 1,
+      "tokens": 1316,
+      "first_read": "2026-06-14T00:02:37.386Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/test/hooks/use-puzzle.test.ts": {
+      "count": 1,
+      "tokens": 1141,
+      "first_read": "2026-06-14T00:02:37.956Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle-core.ts": {
+      "count": 1,
+      "tokens": 1470,
+      "first_read": "2026-06-14T00:07:21.301Z"
+    }
+  },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s01-charter/docs/roadmap/dedup-cleanup/session-01-handoff.md",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle-core.ts",
       "action": "create",
-      "tokens": 4588,
-      "at": "2026-06-13T23:49:00.253Z"
+      "tokens": 1470,
+      "at": "2026-06-14T00:03:59.958Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-local-puzzle.ts",
+      "action": "create",
+      "tokens": 1500,
+      "at": "2026-06-14T00:04:32.191Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-local-puzzle.ts",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-06-14T00:04:40.957Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-local-puzzle.ts",
+      "action": "edit",
+      "tokens": 36,
+      "at": "2026-06-14T00:04:44.734Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle.ts",
+      "action": "create",
+      "tokens": 1480,
+      "at": "2026-06-14T00:05:12.795Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle-core.ts",
+      "action": "edit",
+      "tokens": 63,
+      "at": "2026-06-14T00:07:26.502Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle-core.ts",
+      "action": "edit",
+      "tokens": 70,
+      "at": "2026-06-14T00:07:30.613Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/apps/web/src/hooks/use-puzzle-core.ts",
+      "action": "edit",
+      "tokens": 181,
+      "at": "2026-06-14T00:07:36.226Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s06-puzzle-hooks/docs/roadmap/dedup-cleanup/session-06-handoff.md",
+      "action": "create",
+      "tokens": 1154,
+      "at": "2026-06-14T00:08:57.562Z"
     }
   ],
   "edit_counts": {
-    "docs/roadmap/dedup-cleanup/session-01-handoff.md": 1
+    "apps/web/src/hooks/use-puzzle-core.ts": 4,
+    "apps/web/src/hooks/use-local-puzzle.ts": 3,
+    "apps/web/src/hooks/use-puzzle.ts": 1,
+    "docs/roadmap/dedup-cleanup/session-06-handoff.md": 1
   },
-  "anatomy_hits": 0,
+  "anatomy_hits": 5,
   "anatomy_misses": 0,
   "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
