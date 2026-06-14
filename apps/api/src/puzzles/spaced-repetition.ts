@@ -128,3 +128,29 @@ export function schedule(prev: CardState, grade: ReviewGrade): ScheduleResult {
   const next: CardState = { intervalDays, easeFactor, reps, lapses: prev.lapses };
   return { ...next, nextDueOffsetDays: next.intervalDays };
 }
+
+/** Milliseconds in one day — shared by both review services. */
+export const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * Map a stored review row (or absent row) to a schedulable {@link CardState}.
+ * An absent row (new card) gets the SM-2 default ease and zero counters.
+ */
+export function toCardState(
+  row: Pick<CardState, 'intervalDays' | 'easeFactor' | 'reps' | 'lapses'> | null,
+): CardState {
+  if (!row) {
+    return { intervalDays: 0, easeFactor: DEFAULT_EASE, reps: 0, lapses: 0 };
+  }
+  return {
+    intervalDays: row.intervalDays,
+    easeFactor: row.easeFactor,
+    reps: row.reps,
+    lapses: row.lapses,
+  };
+}
+
+/** A Date that is `days` days from now (whole-day offset). */
+export function offsetDays(days: number): Date {
+  return new Date(Date.now() + days * MS_PER_DAY);
+}

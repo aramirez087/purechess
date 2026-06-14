@@ -9,12 +9,7 @@ import type {
   RepertoireNodeDto,
 } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
-import {
-  DEFAULT_EASE,
-  schedule,
-  type CardState,
-  type ReviewGrade,
-} from '../puzzles/spaced-repetition';
+import { offsetDays, schedule, toCardState, type ReviewGrade } from '../puzzles/spaced-repetition';
 import { GRADUATION_INTERVAL_DAYS } from '../puzzles/puzzle-review.service';
 import { StreakService } from '../training/streak.service';
 
@@ -27,8 +22,6 @@ export const DRILL_SESSION_LIMIT = 8;
 
 /** Of a session, how many slots are reserved for brand-new (untrained) lines. */
 export const NEW_LINES_PER_SESSION = 3;
-
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /** Prisma `Repertoire` row (the subset this service reads). */
 interface RepertoireRow {
@@ -302,22 +295,3 @@ function stepOf(node: RepertoireNodeDto): DrillStepDto {
   return { san: node.san, uci: node.uci, fen: node.fen };
 }
 
-/** Map a stored review row (or absent row) to a schedulable card state. */
-function toCardState(
-  row: Pick<CardState, 'intervalDays' | 'easeFactor' | 'reps' | 'lapses'> | null,
-): CardState {
-  if (!row) {
-    return { intervalDays: 0, easeFactor: DEFAULT_EASE, reps: 0, lapses: 0 };
-  }
-  return {
-    intervalDays: row.intervalDays,
-    easeFactor: row.easeFactor,
-    reps: row.reps,
-    lapses: row.lapses,
-  };
-}
-
-/** A Date `days` from now (whole-day offset). */
-function offsetDays(days: number): Date {
-  return new Date(Date.now() + days * MS_PER_DAY);
-}

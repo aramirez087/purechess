@@ -31,6 +31,7 @@
 | 18:10 | Ran gates: vitest 662/662 green, lint clean, jscpd clone pair gone | — | all gates pass | ~200 tok |
 | 18:09 | S07: created time-control-picker.tsx with TimeControlPicker/StakesPicker/ColorPicker/StrengthModePicker/LEVEL_LABELS | apps/web/src/components/play/time-control-picker.tsx | done — 4 clone pairs eliminated, 83 vitest files green | ~3k |
 
+| 18:03 | S08 dedup: extracted toCardState/offsetDays/MS_PER_DAY into spaced-repetition.ts; removed private copies from puzzle-review+repertoire-review; 170 tests green | apps/api/src/puzzles/spaced-repetition.ts, puzzle-review.service.ts, repertoire/repertoire-review.service.ts | clone #4 eliminated | ~1200 tok |
 | 06:09 | PostHog dynamic import (posthog-provider.tsx, home-viewed-tracker.tsx) | apps/web/src/components/ | /: 348→285 kB (-63 kB) | ~500 tok |
 | 06:10 | Hero board post-mount animate-rise-4 guard | apps/web/src/components/home/hero-board.tsx | LCP unblocked for SSR | ~200 tok |
 | 06:11 | Sentry Replay lazy-load via lazyLoadIntegration | apps/web/sentry.client.config.ts | shared: 204→166 kB (-38 kB), computer-game hits target | ~300 tok |
@@ -3089,6 +3090,12 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 |------|--------|---------|---------|--------|
 | 18:01 | Created .session-06-plan.md | — | ~6066 |
 | 18:01 | Session end: 1 writes across 1 files (.session-06-plan.md) | 5 reads | ~14445 tok |
+## Session: 2026-06-13 17:58
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:00 | Created .session-08-plan.md | — | ~3038 |
+| 18:01 | Session end: 1 writes across 1 files (.session-08-plan.md) | 6 reads | ~17653 tok |
 
 ## Session: 2026-06-14 18:01
 
@@ -3137,3 +3144,16 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 18:08 | Edited apps/web/src/components/play/time-control-picker.tsx | 5→5 lines | ~40 |
 | 18:09 | Created docs/roadmap/dedup-cleanup/session-07-handoff.md | — | ~1131 |
 | 18:10 | Session end: 21 writes across 6 files (time-control-picker.tsx, invite-create.tsx, quick-match-setup.tsx, computer-game-setup.tsx, practice-from-fen-dialog.tsx) | 7 reads | ~15380 tok |
+| 18:01 | Edited apps/api/src/puzzles/spaced-repetition.ts | added 1 condition(s) | ~268 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | expanded (+8 lines) | ~42 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | 4→2 lines | ~14 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | removed 16 lines | ~19 |
+| 18:01 | Edited apps/api/src/puzzles/puzzle-review.service.ts | 6→1 lines | ~17 |
+| 18:02 | Edited apps/api/src/puzzles/puzzle-review.service.ts | reduced (-8 lines) | ~26 |
+| 18:02 | Edited apps/api/src/repertoire/repertoire-review.service.ts | 6→1 lines | ~29 |
+| 18:02 | Edited apps/api/src/repertoire/repertoire-review.service.ts | 3→1 lines | ~8 |
+| 18:02 | Edited apps/api/src/repertoire/repertoire-review.service.ts | — | ~0 |
+| 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | 9→12 lines | ~62 |
+| 18:02 | Edited apps/api/test/puzzles/spaced-repetition.spec.ts | expanded (+32 lines) | ~291 |
+| 18:03 | Created docs/roadmap/dedup-cleanup/session-08-handoff.md | — | ~1050 |
+| 18:04 | Session end: 12 writes across 5 files (spaced-repetition.ts, puzzle-review.service.ts, repertoire-review.service.ts, spaced-repetition.spec.ts, session-08-handoff.md) | 4 reads | ~10527 tok |

@@ -2,7 +2,7 @@ import { Injectable, Logger, Optional } from '@nestjs/common';
 import type { PuzzleDto, ReviewDueDto, ReviewGradeResultDto } from '@purechess/shared';
 import { PrismaService } from '../database/prisma.service';
 import { StreakService } from '../training/streak.service';
-import { DEFAULT_EASE, schedule, type CardState, type ReviewGrade } from './spaced-repetition';
+import { offsetDays, schedule, toCardState, type ReviewGrade } from './spaced-repetition';
 
 /** Default page size for the due queue. */
 const DEFAULT_DUE_LIMIT = 20;
@@ -17,8 +17,6 @@ export const GRADUATION_INTERVAL_DAYS = 30;
 
 /** A solve faster than this (ms) is graded `easy` rather than `good`. */
 const EASY_MS_THRESHOLD = 8000;
-
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /**
  * Owns the spaced-repetition review queue: the SM-2 {@link schedule} arithmetic
@@ -200,21 +198,6 @@ export class PuzzleReviewService {
   }
 }
 
-/** Map a stored review row (or absent row) to a schedulable card state. */
-function toCardState(
-  row: Pick<CardState, 'intervalDays' | 'easeFactor' | 'reps' | 'lapses'> | null,
-): CardState {
-  if (!row) {
-    return { intervalDays: 0, easeFactor: DEFAULT_EASE, reps: 0, lapses: 0 };
-  }
-  return {
-    intervalDays: row.intervalDays,
-    easeFactor: row.easeFactor,
-    reps: row.reps,
-    lapses: row.lapses,
-  };
-}
-
 /** Binary outcome → SM-2 grade. Fast solves are graded `easy`. */
 function resolveGrade(solved: boolean, msToSolve?: number): ReviewGrade {
   if (!solved) return 'again';
@@ -222,11 +205,6 @@ function resolveGrade(solved: boolean, msToSolve?: number): ReviewGrade {
     return 'easy';
   }
   return 'good';
-}
-
-/** A Date `days` from now (whole-day offset). */
-function offsetDays(days: number): Date {
-  return new Date(Date.now() + days * MS_PER_DAY);
 }
 
 /** Maps a Prisma Puzzle row to the public `PuzzleDto`. */
