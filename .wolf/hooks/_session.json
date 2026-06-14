@@ -1,21 +1,116 @@
 {
-  "session_id": "session-2026-06-13-1745",
-  "started": "2026-06-13T23:45:54.836Z",
-  "files_read": {},
+  "session_id": "session-2026-06-14-1808",
+  "started": "2026-06-14T00:08:55.941Z",
+  "files_read": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/src/lib/board/pgn-parser.ts": {
+      "count": 1,
+      "tokens": 2322,
+      "first_read": "2026-06-14T00:09:08.228Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/src/repertoire/repertoire-tree.ts": {
+      "count": 1,
+      "tokens": 3654,
+      "first_read": "2026-06-14T00:09:09.188Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/src/index.ts": {
+      "count": 1,
+      "tokens": 184,
+      "first_read": "2026-06-14T00:09:09.521Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/tsconfig.json": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-14T00:09:14.958Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/test/board/pgn-parser.test.ts": {
+      "count": 1,
+      "tokens": 1619,
+      "first_read": "2026-06-14T00:11:13.007Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/test/openings/repertoire-import.test.ts": {
+      "count": 1,
+      "tokens": 478,
+      "first_read": "2026-06-14T00:11:13.767Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/test/repertoire/repertoire.service.spec.ts": {
+      "count": 1,
+      "tokens": 3442,
+      "first_read": "2026-06-14T00:11:20.519Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/test/repertoire/repertoire-review.service.spec.ts": {
+      "count": 1,
+      "tokens": 3147,
+      "first_read": "2026-06-14T00:11:21.392Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/src/lib/board/analysis-tree.ts": {
+      "count": 1,
+      "tokens": 1040,
+      "first_read": "2026-06-14T00:11:48.993Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/src/dto/repertoire.dto.ts": {
+      "count": 1,
+      "tokens": 1793,
+      "first_read": "2026-06-14T00:11:49.495Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/src/repertoire/repertoire.service.ts": {
+      "count": 1,
+      "tokens": 2206,
+      "first_read": "2026-06-14T00:12:51.286Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/test/openings/openings.test.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-06-14T00:12:55.972Z"
+    }
+  },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s01-charter/docs/roadmap/dedup-cleanup/session-01-handoff.md",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/src/pgn/pgn-utils.ts",
       "action": "create",
-      "tokens": 4588,
-      "at": "2026-06-13T23:49:00.253Z"
+      "tokens": 1720,
+      "at": "2026-06-14T00:13:55.260Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/src/index.ts",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-06-14T00:13:59.397Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/src/lib/board/pgn-parser.ts",
+      "action": "create",
+      "tokens": 1436,
+      "at": "2026-06-14T00:14:31.860Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/src/repertoire/repertoire-tree.ts",
+      "action": "create",
+      "tokens": 3012,
+      "at": "2026-06-14T00:15:26.060Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/src/lib/board/pgn-parser.ts",
+      "action": "edit",
+      "tokens": 363,
+      "at": "2026-06-14T00:18:56.676Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/docs/roadmap/dedup-cleanup/session-09-handoff.md",
+      "action": "create",
+      "tokens": 1713,
+      "at": "2026-06-14T00:20:14.498Z"
     }
   ],
   "edit_counts": {
-    "docs/roadmap/dedup-cleanup/session-01-handoff.md": 1
+    "packages/shared/src/pgn/pgn-utils.ts": 1,
+    "packages/shared/src/index.ts": 1,
+    "apps/web/src/lib/board/pgn-parser.ts": 2,
+    "apps/api/src/repertoire/repertoire-tree.ts": 1,
+    "docs/roadmap/dedup-cleanup/session-09-handoff.md": 1
   },
-  "anatomy_hits": 0,
-  "anatomy_misses": 0,
+  "anatomy_hits": 10,
+  "anatomy_misses": 2,
   "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
-  "stop_count": 1
+  "stop_count": 0
 }

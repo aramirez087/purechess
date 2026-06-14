@@ -17,8 +17,14 @@
  */
 import { Chess } from 'chess.js';
 import type { RepertoireNodeDto, RepertoireShapeDto } from '@purechess/shared';
+import {
+  STARTING_FEN,
+  parseHeaders,
+  tokenizeMovetext,
+  walkMoveVariation,
+} from '@purechess/shared';
 
-export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+export { STARTING_FEN };
 
 /** Hard cap on tree size so a pasted megabase can't bloat a row. */
 export const MAX_TREE_NODES = 5000;
@@ -197,84 +203,15 @@ export function validateTree(input: unknown): ValidatedTree {
 // --- Raw-PGN → tree (server-side fallback when the client sends `pgn`) -------
 //
 // A compact port of the web parser's essentials: enough to turn a single line
-// or a variation-bearing PGN into the AnalysisNode tree. Move numbers/results
-// are skipped; comments, NAGs and shape directives are NOT parsed here (the
-// preferred client path keeps those — this is a convenience fallback).
+// or a variation-bearing PGN into the AnalysisNode tree. Uses the shared
+// tokenizer/header-parser/walker from @purechess/shared.
 
-const RESULT_TOKENS = new Set(['1-0', '0-1', '1/2-1/2', '*']);
 const SHAPE_COLORS: Record<string, RepertoireShapeDto['color']> = {
   G: 'green',
   R: 'red',
   Y: 'yellow',
   B: 'blue',
 };
-
-function isWordChar(c: string): boolean {
-  return /[A-Za-z0-9.=+#/-]/.test(c);
-}
-
-/** Splits movetext into `(`/`)`, `{...}`, `$N`, move words and result markers. */
-function tokenize(movetext: string): string[] {
-  const tokens: string[] = [];
-  let i = 0;
-  while (i < movetext.length) {
-    const c = movetext[i];
-    if (/\s/.test(c)) {
-      i += 1;
-    } else if (c === '{') {
-      let j = i + 1;
-      while (j < movetext.length && movetext[j] !== '}') j += 1;
-      tokens.push(movetext.slice(i, Math.min(j + 1, movetext.length)));
-      i = j + 1;
-    } else if (c === '(' || c === ')' || c === '*') {
-      tokens.push(c);
-      i += 1;
-    } else if (c === '$') {
-      let j = i + 1;
-      while (j < movetext.length && /\d/.test(movetext[j])) j += 1;
-      tokens.push(movetext.slice(i, j));
-      i = j;
-    } else if (isWordChar(c)) {
-      let j = i + 1;
-      while (j < movetext.length && isWordChar(movetext[j])) j += 1;
-      tokens.push(movetext.slice(i, j));
-      i = j;
-    } else {
-      i += 1;
-    }
-  }
-  return tokens;
-}
-
-function parseHeaders(pgn: string): { headers: Map<string, string>; movetext: string } {
-  const headers = new Map<string, string>();
-  const lines = pgn.split('\n');
-  let start = 0;
-  for (; start < lines.length; start++) {
-    const line = lines[start].trim();
-    if (line === '') continue;
-    const tag = /^\[(\w+)\s+"(.*)"\]$/.exec(line);
-    if (!tag) break;
-    headers.set(tag[1], tag[2]);
-  }
-  return { headers, movetext: lines.slice(start).join('\n') };
-}
-
-function tryMove(chess: Chess, tok: string): { san: string; from: string; to: string; promotion?: string } | null {
-  try {
-    const m = chess.move(tok);
-    return { san: m.san, from: m.from, to: m.to, promotion: m.promotion };
-  } catch {
-    const uci = /^([a-h][1-8])([a-h][1-8])([qrbnQRBN])?$/.exec(tok);
-    if (!uci) return null;
-    try {
-      const m = chess.move({ from: uci[1], to: uci[2], promotion: uci[3]?.toLowerCase() });
-      return { san: m.san, from: m.from, to: m.to, promotion: m.promotion };
-    } catch {
-      return null;
-    }
-  }
-}
 
 function parseShapes(raw: string): RepertoireShapeDto[] {
   const shapes: RepertoireShapeDto[] = [];
@@ -298,56 +235,57 @@ function parseShapes(raw: string): RepertoireShapeDto[] {
   return shapes;
 }
 
-const GLYPH_NAGS: Record<string, number> = { '!': 1, '?': 2, '!!': 3, '??': 4, '!?': 5, '?!': 6 };
+/** Plays `tok` on `chess`; null when the move is invalid. */
+function tryMoveOnBoard(
+  chess: Chess,
+  tok: string,
+): { san: string; from: string; to: string; promotion?: string } | null {
+  try {
+    const m = chess.move(tok);
+    return { san: m.san, from: m.from, to: m.to, promotion: m.promotion };
+  } catch {
+    const uci = /^([a-h][1-8])([a-h][1-8])([qrbnQRBN])?$/.exec(tok);
+    if (!uci) return null;
+    try {
+      const m = chess.move({ from: uci[1], to: uci[2], promotion: uci[3]?.toLowerCase() });
+      return { san: m.san, from: m.from, to: m.to, promotion: m.promotion };
+    } catch {
+      return null;
+    }
+  }
+}
 
 function parseVariation(
   tokens: string[],
   parentNode: RepertoireNodeDto,
   fen: string,
 ): void {
-  const chess = new Chess(fen);
-  let prev = parentNode;
-  let anchor = parentNode;
-  while (tokens.length > 0) {
-    const tok = tokens.shift() as string;
-    if (tok === ')') return;
-    if (tok === '(') {
-      parseVariation(tokens, anchor, anchor.fen);
-      continue;
-    }
-    if (tok.startsWith('{')) {
-      if (prev !== parentNode) {
-        const raw = tok.replace(/^\{/, '').replace(/\}$/, '').trim();
-        const shapes = parseShapes(raw);
-        if (shapes.length > 0) prev.shapes = prev.shapes ? [...prev.shapes, ...shapes] : shapes;
-        const text = raw.replace(/\[%c[as]l [^\]]*\]/g, '').trim();
-        if (text) prev.comment = prev.comment ? `${prev.comment} ${text}` : text;
-      }
-      continue;
-    }
-    if (tok.startsWith('$')) {
-      const n = Number.parseInt(tok.slice(1), 10);
-      if (prev !== parentNode && Number.isFinite(n) && prev.nag === undefined) prev.nag = n;
-      continue;
-    }
-    if (GLYPH_NAGS[tok] !== undefined) {
-      if (prev !== parentNode && prev.nag === undefined) prev.nag = GLYPH_NAGS[tok];
-      continue;
-    }
-    if (RESULT_TOKENS.has(tok)) return;
-    if (/^\d+\.*$/.test(tok) || /^\.+$/.test(tok)) continue;
-    const result = tryMove(chess, tok);
-    if (!result) continue;
-    const node: RepertoireNodeDto = {
-      fen: chess.fen(),
-      san: result.san,
-      uci: result.from + result.to + (result.promotion ?? ''),
-      children: [],
-    };
-    prev.children.push(node);
-    anchor = prev;
-    prev = node;
-  }
+  walkMoveVariation<RepertoireNodeDto>(
+    tokens,
+    parentNode,
+    (startFen) => {
+      const chess = new Chess(startFen);
+      return {
+        tryMove: (tok) => {
+          const r = tryMoveOnBoard(chess, tok);
+          if (!r) return null;
+          return { fen: chess.fen(), san: r.san, uci: r.from + r.to + (r.promotion ?? '') };
+        },
+        makeNode: (nodeFen, san, uci) => ({ fen: nodeFen, san, uci, children: [] }),
+        onComment: (node, raw) => {
+          const shapes = parseShapes(raw);
+          if (shapes.length > 0)
+            node.shapes = node.shapes ? [...node.shapes, ...shapes] : shapes;
+          const text = raw.replace(/\[%c[as]l [^\]]*\]/g, '').trim();
+          if (text) node.comment = node.comment ? `${node.comment} ${text}` : text;
+        },
+        onNag: (node, nag) => {
+          node.nag = nag;
+        },
+      };
+    },
+    fen,
+  );
 }
 
 /**
@@ -367,7 +305,7 @@ export function parsePgnToTree(pgn: string): RepertoireNodeDto {
     }
   }
   const root: RepertoireNodeDto = { fen: rootFen, san: '', uci: '', children: [] };
-  parseVariation(tokenize(movetext), root, root.fen);
+  parseVariation(tokenizeMovetext(movetext), root, root.fen);
   if (root.children.length === 0 && !fenHeader) {
     throw new RepertoireTreeError('No legal moves found in PGN.');
   }

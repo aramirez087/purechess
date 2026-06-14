@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 3346120,
-    "total_reads": 2207,
-    "total_writes": 2822,
-    "total_sessions": 73,
-    "anatomy_hits": 1431,
-    "anatomy_misses": 737,
+    "total_tokens_estimated": 3361824,
+    "total_reads": 2217,
+    "total_writes": 2823,
+    "total_sessions": 75,
+    "anatomy_hits": 1439,
+    "anatomy_misses": 739,
     "repeated_reads_blocked": 1508,
-    "estimated_savings_vs_bare_cli": 3521915
+    "estimated_savings_vs_bare_cli": 3523515
   },
   "sessions": [
     {
@@ -29234,6 +29234,88 @@
         "writes_count": 1,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-06-13-1759",
+      "started": "2026-06-13T23:59:49.993Z",
+      "ended": "2026-06-14T00:08:55.042Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/src/lib/board/pgn-parser.ts",
+          "tokens_estimated": 2322,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/src/repertoire/repertoire-tree.ts",
+          "tokens_estimated": 3654,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/src/index.ts",
+          "tokens_estimated": 184,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/src/dto/repertoire.dto.ts",
+          "tokens_estimated": 1793,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/tsconfig.json",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/packages/shared/package.json",
+          "tokens_estimated": 382,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/src/lib/board/analysis-tree.ts",
+          "tokens_estimated": 1040,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/test/openings/openings.test.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/web/test/openings/repertoire-import.test.ts",
+          "tokens_estimated": 478,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/apps/api/src/repertoire/repertoire.service.ts",
+          "tokens_estimated": 2206,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s09-pgn-parser/.session-09-plan.md",
+          "tokens_estimated": 3645,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 12059,
+        "output_tokens_estimated": 3645,
+        "reads_count": 10,
+        "writes_count": 1,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 8
       }
     }
   ],

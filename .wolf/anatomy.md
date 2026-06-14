@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-06-13T23:49:00.246Z
-> Files: 1204 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-06-14T00:20:14.492Z
+> Files: 1206 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../../../../tmp/
 
@@ -88,7 +88,7 @@
 - `.session-06-plan.md` — Session 06 — Implementation Plan: Surface A11y + Light Mode (~5817 tok)
 - `.session-07-plan.md` — Session 07 Plan — CI Gate / Integration / Go-No-Go (~3338 tok)
 - `.session-08-plan.md` — Session 08 Implementation Plan — Prod Deploy + WS Verify (~2412 tok)
-- `.session-09-plan.md` — Session 09 — Implementation Plan: a11y Polish (Keyboard + Screen Reader) (~2954 tok)
+- `.session-09-plan.md` — Session 09 — Implementation Plan: PGN Parser Dedup (~3189 tok)
 - `.session-10-plan.md` — Session 10 — Implementation Plan: CI Gate / Go–No-Go (~4733 tok)
 - `Cargo.toml` — Rust package manifest (~174 tok)
 - `CLAUDE.md` — CLAUDE.md (~2212 tok)
@@ -980,7 +980,7 @@
 
 - `repertoire-review.controller.ts` — Opening trainer endpoints — drill the user's repertoire lines and grade them (~470 tok)
 - `repertoire-review.service.ts` — How many lines to queue for one drill session. Due (most-overdue) lines lead; (~3225 tok)
-- `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3654 tok)
+- `repertoire-tree.ts` — Server-side helpers for the repertoire move tree. (~3012 tok)
 - `repertoire.controller.ts` — Opening-repertoire CRUD + import. Every route is auth-gated and scoped to the (~668 tok)
 - `repertoire.module.ts` — Opening repertoires (CRUD + import) plus the opening trainer (drill + grade). (~282 tok)
 - `repertoire.service.ts` — Prisma `Repertoire` row plus the latest-review timestamp for the summary. (~2206 tok)
@@ -1569,7 +1569,7 @@
 - `move-glyph.tsx` — On-board move-classification badge — the chess.com-style corner glyph that (~746 tok)
 - `pgn-export.ts` — Serialises an AnalysisNode tree back to PGN with variations, NAGs, (~1446 tok)
 - `pgn-export.ts` — Serialises an AnalysisNode tree back to PGN (variations + NAGs + comments + [%cal][%csl] shapes); round-trips through parsePgnToTree. (~900 tok)
-- `pgn-parser.ts` — Variation-preserving PGN parser for the /analyze board. chess.js's (~2322 tok)
+- `pgn-parser.ts` — Variation-preserving PGN parser for the /analyze board. chess.js's (~1443 tok)
 - `piece-sets.ts` — Registry of the available piece sets. Server-safe (no React, no stores) so (~392 tok)
 - `piece-svgs.tsx` — Pieces are served from the set the user picked in settings (`pieceSet`, (~845 tok)
 - `position.ts` — Compatibility barrel. The implementation split in two: (~197 tok)
@@ -1833,6 +1833,7 @@
 ## docs/roadmap/dedup-cleanup/
 
 - `session-01-handoff.md` — Session 01 Handoff — Charter + jscpd Baseline (~4014 tok)
+- `session-09-handoff.md` — Session 09 Handoff — PGN Parser Dedup (~1499 tok)
 
 ## docs/roadmap/purechess-category-best/
 
@@ -1906,9 +1907,13 @@
 
 ## packages/shared/src/
 
-- `index.ts` (~184 tok)
+- `index.ts` (~194 tok)
 - `users.ts` — positive = likely win, negative = likely loss, 0 = draw (~420 tok)
 - `ws-events.ts` — Color-neutral live game state pushed to the `game:{id}` room whenever the (~794 tok)
+
+## packages/shared/src/pgn/
+
+- `pgn-utils.ts` — Shared PGN utils: STARTING_FEN, tokenizeMovetext, parseHeaders, MoveVariationCallbacks<N>, walkMoveVariation<N>. Zero runtime deps. Consumed by apps/web pgn-parser.ts and apps/api repertoire-tree.ts. (~350 tok)
 
 ## packages/shared/src/dto/
 
@@ -1921,6 +1926,10 @@
 - `repertoire.dto.ts` — Opening-repertoire DTOs shared between web and api. (~1793 tok)
 - `rush.dto.ts` — Puzzle Rush mode: (~576 tok)
 - `training.dto.ts` — A single actionable item in the daily training plan. (~1508 tok)
+
+## packages/shared/src/pgn/
+
+- `pgn-utils.ts` — Shared PGN tokenizing / movetext-walking utilities. (~1720 tok)
 
 ## scripts/
 

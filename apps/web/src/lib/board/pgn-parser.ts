@@ -9,11 +9,18 @@
  * erased at build time.
  */
 import type { Square } from '@purechess/shared';
+import {
+  STARTING_FEN,
+  parseHeaders,
+  tokenizeMovetext,
+  walkMoveVariation,
+} from '@purechess/shared';
 import type { Chess } from 'chess.js';
 import type { AnalysisNode } from './analysis-tree';
 import type { AnnotationColor, BoardShape } from './annotations';
 
-export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+// Re-export shared utilities so existing callers keep their import paths.
+export { STARTING_FEN, parseHeaders, tokenizeMovetext };
 
 /** PGN shape color codes (lila/ChessBase/Scid) → our AnnotationColor. */
 const COLOR_MAP: Record<string, AnnotationColor> = {
@@ -65,108 +72,6 @@ export function parseShapesFromComment(text: string): {
   return { shapes, remaining: cleaned };
 }
 
-const RESULT_TOKENS = new Set(['1-0', '0-1', '1/2-1/2', '*']);
-
-/** Inline annotation glyphs → standard NAG numbers. */
-const GLYPH_NAGS: Record<string, number> = {
-  '!': 1,
-  '?': 2,
-  '!!': 3,
-  '??': 4,
-  '!?': 5,
-  '?!': 6,
-};
-
-/** Characters that can appear in a SAN / move-number / result word. */
-function isWordChar(c: string): boolean {
-  return /[A-Za-z0-9.=+#/-]/.test(c);
-}
-
-/**
- * Splits movetext into tokens: `(` `)`, whole `{...}` comments, `$N` NAGs,
- * inline glyphs (`!`, `??`, …), move numbers, SAN words, result markers.
- * `;` line comments and whitespace are skipped.
- */
-export function tokenizeMovetext(movetext: string): string[] {
-  const tokens: string[] = [];
-  let i = 0;
-  while (i < movetext.length) {
-    const c = movetext[i];
-    if (/\s/.test(c)) {
-      i += 1;
-    } else if (c === ';') {
-      while (i < movetext.length && movetext[i] !== '\n') i += 1;
-    } else if (c === '{') {
-      let j = i + 1;
-      while (j < movetext.length && movetext[j] !== '}') j += 1;
-      tokens.push(movetext.slice(i, Math.min(j + 1, movetext.length)));
-      i = j + 1;
-    } else if (c === '(' || c === ')' || c === '*') {
-      tokens.push(c);
-      i += 1;
-    } else if (c === '$') {
-      let j = i + 1;
-      while (j < movetext.length && /\d/.test(movetext[j])) j += 1;
-      tokens.push(movetext.slice(i, j));
-      i = j;
-    } else if (c === '!' || c === '?') {
-      const pair = movetext.slice(i, i + 2);
-      if (GLYPH_NAGS[pair] !== undefined) {
-        tokens.push(pair);
-        i += 2;
-      } else {
-        tokens.push(c);
-        i += 1;
-      }
-    } else if (isWordChar(c)) {
-      let j = i + 1;
-      while (j < movetext.length && isWordChar(movetext[j])) j += 1;
-      tokens.push(movetext.slice(i, j));
-      i = j;
-    } else {
-      i += 1; // stray character — skip
-    }
-  }
-  return tokens;
-}
-
-/**
- * Collects `[Key "Value"]` tag pairs until the first blank line or first
- * non-tag line; everything after is movetext.
- */
-export function parseHeaders(pgn: string): {
-  headers: Map<string, string>;
-  movetext: string;
-} {
-  const headers = new Map<string, string>();
-  const lines = pgn.split('\n');
-  let start = 0;
-  for (; start < lines.length; start++) {
-    const line = lines[start].trim();
-    if (line === '') continue;
-    const tag = /^\[(\w+)\s+"(.*)"\]$/.exec(line);
-    if (!tag) break;
-    headers.set(tag[1], tag[2]);
-  }
-  return { headers, movetext: lines.slice(start).join('\n') };
-}
-
-/** Plays `tok` on `chess`; null when the move is invalid. */
-function tryMove(chess: Chess, tok: string) {
-  try {
-    return chess.move(tok); // chess.js parses permissively (e8Q, e2e4, …)
-  } catch {
-    // Last resort: coordinate notation that even permissive parsing missed.
-    const uci = /^([a-h][1-8])([a-h][1-8])([qrbnQRBN])?$/.exec(tok);
-    if (!uci) return null;
-    try {
-      return chess.move({ from: uci[1], to: uci[2], promotion: uci[3]?.toLowerCase() });
-    } catch {
-      return null;
-    }
-  }
-}
-
 /**
  * Consumes `tokens` (mutating via shift) into children of `parentNode`.
  * `fen` is the position at `parentNode`. Variations branch off the position
@@ -178,59 +83,47 @@ export function parseVariation(
   fen: string,
   ChessClass: typeof Chess,
 ): void {
-  const chess = new ChessClass(fen);
-  let prev = parentNode; // last node played in this frame
-  let anchor = parentNode; // node the last move was played from
-
-  while (tokens.length > 0) {
-    const tok = tokens.shift()!;
-
-    if (tok === ')') return;
-
-    if (tok === '(') {
-      // Alternative to prev's move — extend prev's parent, not prev.
-      parseVariation(tokens, anchor, anchor.fen, ChessClass);
-      continue;
-    }
-
-    if (tok.startsWith('{')) {
-      if (prev !== parentNode) {
-        const raw = tok.replace(/^\{/, '').replace(/\}$/, '').trim();
-        const { shapes, remaining } = parseShapesFromComment(raw);
-        if (shapes.length > 0) prev.shapes = prev.shapes ? [...prev.shapes, ...shapes] : shapes;
-        if (remaining) prev.comment = prev.comment ? `${prev.comment} ${remaining}` : remaining;
-      }
-      continue;
-    }
-
-    if (tok.startsWith('$')) {
-      const n = Number.parseInt(tok.slice(1), 10);
-      if (prev !== parentNode && Number.isFinite(n) && prev.nag === undefined) prev.nag = n;
-      continue;
-    }
-
-    if (GLYPH_NAGS[tok] !== undefined) {
-      if (prev !== parentNode && prev.nag === undefined) prev.nag = GLYPH_NAGS[tok];
-      continue;
-    }
-
-    if (RESULT_TOKENS.has(tok)) return;
-
-    if (/^\d+\.*$/.test(tok) || /^\.+$/.test(tok)) continue; // move number marker
-
-    const result = tryMove(chess, tok);
-    if (!result) continue; // invalid move — skip, keep parsing
-
-    const node: AnalysisNode = {
-      fen: chess.fen(),
-      san: result.san,
-      uci: result.from + result.to + (result.promotion ?? ''),
-      children: [],
-    };
-    prev.children.push(node);
-    anchor = prev;
-    prev = node;
-  }
+  walkMoveVariation<AnalysisNode>(
+    tokens,
+    parentNode,
+    (startFen) => {
+      const chess = new ChessClass(startFen);
+      return {
+        tryMove: (tok) => {
+          // chess.js parses SAN permissively; fall back to coordinate notation.
+          try {
+            const m = chess.move(tok);
+            return { fen: chess.fen(), san: m.san, uci: m.from + m.to + (m.promotion ?? '') };
+          } catch {
+            const coord = /^([a-h][1-8])([a-h][1-8])([qrbnQRBN])?$/.exec(tok);
+            if (!coord) return null;
+            try {
+              const m = chess.move({
+                from: coord[1],
+                to: coord[2],
+                promotion: coord[3]?.toLowerCase(),
+              });
+              return { fen: chess.fen(), san: m.san, uci: m.from + m.to + (m.promotion ?? '') };
+            } catch {
+              return null;
+            }
+          }
+        },
+        makeNode: (nodeFen, san, uci) => ({ fen: nodeFen, san, uci, children: [] }),
+        onComment: (node, raw) => {
+          const { shapes, remaining } = parseShapesFromComment(raw);
+          if (shapes.length > 0)
+            node.shapes = node.shapes ? [...node.shapes, ...shapes] : shapes;
+          if (remaining)
+            node.comment = node.comment ? `${node.comment} ${remaining}` : remaining;
+        },
+        onNag: (node, nag) => {
+          node.nag = nag;
+        },
+      };
+    },
+    fen,
+  );
 }
 
 /**
