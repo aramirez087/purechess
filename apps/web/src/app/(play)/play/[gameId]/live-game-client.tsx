@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Ban, Flag, Handshake, Loader2, Plus, Repeat2 } from 'lucide-react';
-import type { PvpGameStateDto, Square, WsGameStatePayload } from '@purechess/shared';
+import type { PvpGameStateDto, WsGameStatePayload } from '@purechess/shared';
 import type { MoveIntent } from '@purechess/shared';
 import { Chessboard } from '@/components/board/chessboard';
 import { BoardSettingsProvider } from '@/components/board/board-context';
@@ -16,17 +16,16 @@ import {
   BoardControlBar,
   GameErrorState,
   MoveErrorNotice,
+  GameOverBanner,
+  GameRailBrandHeader,
   type PlayerStripProps,
 } from '@/components/game';
 import { GameLoadingSkeleton } from '@/components/game/game-loading-skeleton';
 import { ResultOverlay, type ResultTone } from '@/components/game/result-overlay';
-import { Logo } from '@/components/layout/Logo';
-import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { PgnIconActions } from '@/components/review/pgn-actions';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
 import { loadRules } from '@/lib/board/rules-lazy';
-import { soundEngine } from '@/lib/board/sound';
 import { useSettingsStore } from '@/stores/settings-store';
 import { cn } from '@/lib/utils';
 import {
@@ -42,8 +41,16 @@ import { useGameKeyboard } from '@/hooks/use-game-keyboard';
 import { useGameSocket } from '@/hooks/use-game-socket';
 import { useLiveClock, formatClock } from '@/hooks/use-live-clock';
 import { useReplaySan } from '@/hooks/use-replay-san';
-
-type Color = 'white' | 'black';
+import { useLowTimeTick } from '@/hooks/use-low-time-tick';
+import {
+  type Color,
+  REASON_LABELS,
+  getSideToMove,
+  parseLastMove,
+  parsePgnMoves,
+  getResultLabel,
+  resultChipFor,
+} from '@/lib/board/game-client-utils';
 
 type PageState =
   | { phase: 'loading' }
@@ -94,47 +101,6 @@ function mergeWsState(game: PvpGameStateDto, p: WsGameStatePayload): PvpGameStat
   };
 }
 
-const REASON_LABELS: Record<string, string> = {
-  checkmate: 'Checkmate',
-  resignation: 'Resignation',
-  timeout: 'Timeout',
-  stalemate: 'Stalemate',
-  insufficient_material: 'Insufficient material',
-  threefold_repetition: 'Threefold repetition',
-  fifty_move_rule: 'Fifty-move rule',
-  draw_agreement: 'Draw agreement',
-  abandonment: 'Abandonment',
-};
-
-function getSideToMove(fen: string): Color {
-  return fen.split(' ')[1] === 'b' ? 'black' : 'white';
-}
-
-function parseLastMove(uci: string | null): { from: Square; to: Square } | undefined {
-  if (!uci || uci.length < 4) return undefined;
-  return { from: uci.slice(0, 2) as Square, to: uci.slice(2, 4) as Square };
-}
-
-function parsePgnMoves(pgn: string): string[] {
-  if (!pgn.trim()) return [];
-  const clean = pgn
-    .replace(/\[[^\]]*\]/g, ' ')
-    .replace(/\{[^}]*\}/g, ' ')
-    .trim();
-  return clean
-    .split(/\s+/)
-    .filter((t) => t && !/^\d+\./.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
-}
-
-function getResultLabel(result: string | null, yourColor: Color): string {
-  if (!result) return '';
-  if (result === 'draw') return 'Draw';
-  const youWin =
-    (result === 'white_wins' && yourColor === 'white') ||
-    (result === 'black_wins' && yourColor === 'black');
-  return youWin ? 'You won' : 'You lost';
-}
-
 /**
  * Slim status zone docked inside the unified rail (not a floating card).
  * Owns the turn state + game settings line; the player strips stay quiet.
@@ -163,28 +129,8 @@ function StatusHero({
   /** SR-only presence transition text ('… disconnected' / '… reconnected'). */
   presenceNote?: string;
 }) {
-  if (isGameOver) {
-    const toneClasses: Record<ResultTone, string> = {
-      win: 'bg-gradient-to-b from-[#d6b563]/[0.14] to-transparent',
-      draw: 'bg-gradient-to-b from-[#1b201a] to-transparent',
-      loss: 'bg-gradient-to-b from-destructive/[0.12] to-transparent',
-    };
-    return (
-      <div className={cn('px-4 py-3.5 text-center', toneClasses[tone])}>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9da79c]">
-          Game over
-        </p>
-        <p className="font-display mt-1 text-[22px] italic leading-tight text-[#f8f1de]">
-          {resultLabel}
-        </p>
-        {reasonLabel && (
-          <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-[#b9b19d]">
-            by {reasonLabel}
-          </p>
-        )}
-      </div>
-    );
-  }
+  if (isGameOver)
+    return <GameOverBanner tone={tone} resultLabel={resultLabel} reasonLabel={reasonLabel} />;
   return (
     <div className="px-4 py-3">
       <div className="flex items-center justify-between gap-3">
@@ -223,13 +169,6 @@ function StatusHero({
       </span>
     </div>
   );
-}
-
-/** Score-sheet result chip for a finished game, from this side's perspective. */
-function resultChipFor(result: string | null, color: Color): string | undefined {
-  if (!result) return undefined;
-  if (result === 'draw') return '½';
-  return (result === 'white_wins') === (color === 'white') ? '1' : '0';
 }
 
 interface Props {
@@ -289,7 +228,7 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
   const pendingResyncRef = useRef(false);
 
   /** Guarded REST refetch — every merge goes through isStaleState. */
-  function refetchState() {
+  function refetchState(onError?: () => void) {
     getPvpGame(gameId)
       .then((next) => {
         if (disposedRef.current) return;
@@ -300,7 +239,7 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
         });
       })
       .catch(() => {
-        // transient — fallback polling covers it
+        onError?.();
       });
   }
 
@@ -418,21 +357,14 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
   // the side to move, so after a premove (opponent's clock draining) it
   // stays silent.
   const lowTimeSound = useSettingsStore((s) => s.lowTimeSound);
-  const lastTickSecondRef = useRef<number | null>(null);
-  useEffect(() => {
-    if (!_isPlaying || !liveClock || state.game.status !== 'active') return;
-    const yourTurn = getSideToMove(state.game.fen) === state.game.yourColor;
-    const ms = state.game.yourColor === 'white' ? liveClock.whiteMs : liveClock.blackMs;
-    if (!yourTurn || ms <= 0 || ms >= 10_000) {
-      lastTickSecondRef.current = null;
-      return;
-    }
-    const sec = Math.ceil(ms / 1000);
-    if (lastTickSecondRef.current !== sec) {
-      lastTickSecondRef.current = sec;
-      soundEngine.playTick(lowTimeSound);
-    }
-  }, [_isPlaying, liveClock, state, lowTimeSound]);
+  const _yourTurnMs: number | null =
+    state.phase === 'playing' && liveClock && state.game.status === 'active'
+      ? (() => {
+          if (getSideToMove(state.game.fen) !== state.game.yourColor) return null;
+          return state.game.yourColor === 'white' ? liveClock.whiteMs : liveClock.blackMs;
+        })()
+      : null;
+  useLowTimeTick(_yourTurnMs, lowTimeSound);
 
   // When the side to move flags locally, ask the server once: getState runs
   // detectResult, finalizes the timeout and pushes game:over to both players.
@@ -449,18 +381,9 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
     }
     if (flagClaimedRef.current) return;
     flagClaimedRef.current = true;
-    getPvpGame(gameId)
-      .then((next) => {
-        if (disposedRef.current) return;
-        setState((s) => {
-          if (s.phase !== 'playing' || s.submitting) return s;
-          if (isStaleState(s.game, next)) return s;
-          return { ...s, game: next };
-        });
-      })
-      .catch(() => {
-        flagClaimedRef.current = false;
-      });
+    refetchState(() => {
+      flagClaimedRef.current = false;
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flagPending, gameId]);
 
@@ -485,10 +408,10 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, loadToken]);
 
-  function handleRetry() {
+  const handleRetry = (): void => {
     setState({ phase: 'loading' });
     setLoadToken((t) => t + 1);
-  }
+  };
 
   // Fallback polling: fast when the socket is down (sole transport), slow
   // safety-net heartbeat when pushes are flowing. The board animates the diff.
@@ -768,16 +691,7 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
             bodyClassName="relative min-h-0 flex-1"
             header={
               <>
-                <div className="flex min-h-[3.25rem] items-center justify-between border-b border-[#2b332c] px-3">
-                  <Link
-                    href="/"
-                    aria-label="PureChess home"
-                    className="rounded-[6px] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                  >
-                    <Logo className="text-lg text-[#f1eee6]" />
-                  </Link>
-                  <SettingsDialog />
-                </div>
+                <GameRailBrandHeader />
                 <StatusHero
                   isGameOver={isGameOver}
                   tone={resultTone}

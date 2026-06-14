@@ -8,3 +8,5 @@ export { MovePanel, type MovePanelMove, type MovePanelProps } from './move-panel
 export { BoardControlBar, type BoardControlBarProps } from './board-control-bar';
 export { GameErrorState, type GameErrorStateProps } from './game-error-state';
 export { MoveErrorNotice, type MoveErrorNoticeProps } from './move-error-notice';
+export { GameOverBanner } from './game-over-banner';
+export { GameRailBrandHeader } from './game-rail-brand-header';

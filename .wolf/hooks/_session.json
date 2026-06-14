@@ -1,21 +1,116 @@
 {
-  "session_id": "session-2026-06-13-1745",
-  "started": "2026-06-13T23:45:54.836Z",
-  "files_read": {},
+  "session_id": "session-2026-06-14-1812",
+  "started": "2026-06-14T00:12:04.548Z",
+  "files_read": {
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": {
+      "count": 2,
+      "tokens": 9031,
+      "first_read": "2026-06-14T00:12:17.364Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx": {
+      "count": 2,
+      "tokens": 10279,
+      "first_read": "2026-06-14T00:12:17.687Z"
+    },
+    "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/components/game/index.ts": {
+      "count": 1,
+      "tokens": 211,
+      "first_read": "2026-06-14T00:12:55.534Z"
+    }
+  },
   "files_written": [
     {
-      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s01-charter/docs/roadmap/dedup-cleanup/session-01-handoff.md",
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/lib/board/game-client-utils.ts",
       "action": "create",
-      "tokens": 4588,
-      "at": "2026-06-13T23:49:00.253Z"
+      "tokens": 529,
+      "at": "2026-06-14T00:15:22.612Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/components/game/game-over-banner.tsx",
+      "action": "create",
+      "tokens": 304,
+      "at": "2026-06-14T00:15:29.002Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/components/game/game-rail-brand-header.tsx",
+      "action": "create",
+      "tokens": 200,
+      "at": "2026-06-14T00:15:31.936Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/hooks/use-low-time-tick.ts",
+      "action": "create",
+      "tokens": 208,
+      "at": "2026-06-14T00:15:35.938Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/components/game/index.ts",
+      "action": "edit",
+      "tokens": 80,
+      "at": "2026-06-14T00:15:40.317Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "action": "create",
+      "tokens": 9164,
+      "at": "2026-06-14T00:17:58.597Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "action": "edit",
+      "tokens": 43,
+      "at": "2026-06-14T00:18:41.284Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+      "action": "edit",
+      "tokens": 3,
+      "at": "2026-06-14T00:18:42.300Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "create",
+      "tokens": 10281,
+      "at": "2026-06-14T00:21:27.320Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+      "action": "edit",
+      "tokens": 22,
+      "at": "2026-06-14T00:21:55.531Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/hooks/use-low-time-tick.ts",
+      "action": "edit",
+      "tokens": 28,
+      "at": "2026-06-14T00:23:11.431Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/apps/web/src/hooks/use-low-time-tick.ts",
+      "action": "edit",
+      "tokens": 14,
+      "at": "2026-06-14T00:23:12.284Z"
+    },
+    {
+      "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s10-game-clients/docs/roadmap/dedup-cleanup/session-10-handoff.md",
+      "action": "create",
+      "tokens": 1475,
+      "at": "2026-06-14T00:25:49.368Z"
     }
   ],
   "edit_counts": {
-    "docs/roadmap/dedup-cleanup/session-01-handoff.md": 1
+    "apps/web/src/lib/board/game-client-utils.ts": 1,
+    "apps/web/src/components/game/game-over-banner.tsx": 1,
+    "apps/web/src/components/game/game-rail-brand-header.tsx": 1,
+    "apps/web/src/hooks/use-low-time-tick.ts": 3,
+    "apps/web/src/components/game/index.ts": 1,
+    "apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx": 3,
+    "apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx": 2,
+    "docs/roadmap/dedup-cleanup/session-10-handoff.md": 1
   },
-  "anatomy_hits": 0,
+  "anatomy_hits": 3,
   "anatomy_misses": 0,
-  "repeated_reads_warned": 0,
+  "repeated_reads_warned": 2,
   "cerebrum_warnings": 0,
-  "stop_count": 1
+  "stop_count": 0
 }
