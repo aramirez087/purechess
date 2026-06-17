@@ -3249,3 +3249,24 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 
 | 18:49 | S11 CI gate: tsconfig ignoreDeprecations fix, PuzzleBoardPane className/optional-ref, StrengthSection extraction, all gates green, jscpd 45→24 | multiple files | success | ~8500 |
 | 18:49 | Session end: 26 writes across 7 files (tsconfig.json, solve-session-shell.tsx, mistake-trainer.tsx, time-control-picker.tsx, computer-game-setup.tsx) | 10 reads | ~35570 tok |
+
+| 17:17 | Created docs/claude-sessions/dedup-cleanup/session-00-operator-rules.md | — | ~714 |
+| 17:17 | Created docs/claude-sessions/dedup-cleanup/session-01-charter.md | — | ~742 |
+| 17:17 | Created docs/claude-sessions/dedup-cleanup/session-02-sound.md | — | ~437 |
+| 17:18 | Created docs/claude-sessions/dedup-cleanup/session-03-rating-charts.md | — | ~611 |
+| 17:18 | Created docs/claude-sessions/dedup-cleanup/session-04-admin-tables.md | — | ~558 |
+| 17:18 | Created docs/claude-sessions/dedup-cleanup/session-05-training-shell.md | — | ~602 |
+| 17:18 | Created docs/claude-sessions/dedup-cleanup/session-06-puzzle-hooks.md | — | ~508 |
+| 17:18 | Created docs/claude-sessions/dedup-cleanup/session-07-setup-ui.md | — | ~658 |
+| 17:19 | Created docs/claude-sessions/dedup-cleanup/session-08-sr-scheduler.md | — | ~577 |
+| 17:19 | Created docs/claude-sessions/dedup-cleanup/session-09-pgn-parser.md | — | ~613 |
+| 17:19 | Created docs/claude-sessions/dedup-cleanup/session-10-game-clients.md | — | ~703 |
+| 17:20 | Created docs/claude-sessions/dedup-cleanup/session-11-ci-gate.md | — | ~631 |
+| 17:20 | Session end: 34 writes across 25 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~40662 tok |
+| 17:37 | Edited docs/claude-sessions/dedup-cleanup/session-01-charter.md | 3→3 lines | ~18 |
+| 17:38 | Edited docs/claude-sessions/dedup-cleanup/session-09-pgn-parser.md | 2→2 lines | ~12 |
+| 17:38 | Edited docs/claude-sessions/dedup-cleanup/session-10-game-clients.md | 2→2 lines | ~21 |
+| 17:38 | Edited docs/claude-sessions/dedup-cleanup/session-11-ci-gate.md | 3→3 lines | ~18 |
+| 17:43 | Session end: 38 writes across 25 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~40735 tok |
+| 18:55 | Session end: 38 writes across 25 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~40735 tok |
+| 19:20 | Session end: 26 writes across 7 files (tsconfig.json, solve-session-shell.tsx, mistake-trainer.tsx, time-control-picker.tsx, computer-game-setup.tsx) | 10 reads | ~35570 tok |

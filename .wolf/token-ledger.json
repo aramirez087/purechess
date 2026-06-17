@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-06-07T16:42:29.727Z",
   "lifetime": {
-    "total_tokens_estimated": 3396758,
-    "total_reads": 2220,
-    "total_writes": 2855,
+    "total_tokens_estimated": 3432328,
+    "total_reads": 2230,
+    "total_writes": 2881,
     "total_sessions": 77,
-    "anatomy_hits": 1443,
-    "anatomy_misses": 738,
-    "repeated_reads_blocked": 1531,
-    "estimated_savings_vs_bare_cli": 3628924
+    "anatomy_hits": 1452,
+    "anatomy_misses": 739,
+    "repeated_reads_blocked": 1554,
+    "estimated_savings_vs_bare_cli": 3735333
   },
   "sessions": [
     {
@@ -29343,6 +29343,213 @@
       "id": "session-2026-06-14-1829",
       "started": "2026-06-14T00:29:49.890Z",
       "ended": "2026-06-14T00:49:57.784Z",
+      "reads": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/shared/tsconfig.json",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/engine-native/tsconfig.json",
+          "tokens_estimated": 84,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/api/tsconfig.json",
+          "tokens_estimated": 128,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/app/computer-game/[gameId]/computer-game-client.tsx",
+          "tokens_estimated": 9031,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/puzzle/solve-session-shell.tsx",
+          "tokens_estimated": 672,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/review/mistake-trainer.tsx",
+          "tokens_estimated": 2537,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 2844,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/app/(play)/play/[gameId]/live-game-client.tsx",
+          "tokens_estimated": 10279,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/practice-from-fen-dialog.tsx",
+          "tokens_estimated": 1942,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/time-control-picker.tsx",
+          "tokens_estimated": 1996,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/shared/tsconfig.json",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/engine-native/tsconfig.json",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/api/tsconfig.json",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/shared/tsconfig.json",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/engine-native/tsconfig.json",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/api/tsconfig.json",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/puzzle/solve-session-shell.tsx",
+          "tokens_estimated": 172,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/review/mistake-trainer.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/review/mistake-trainer.tsx",
+          "tokens_estimated": 33,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/review/mistake-trainer.tsx",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/time-control-picker.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/time-control-picker.tsx",
+          "tokens_estimated": 540,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 54,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 876,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/practice-from-fen-dialog.tsx",
+          "tokens_estimated": 54,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/practice-from-fen-dialog.tsx",
+          "tokens_estimated": 539,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/time-control-picker.tsx",
+          "tokens_estimated": 618,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/time-control-picker.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 52,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/practice-from-fen-dialog.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/practice-from-fen-dialog.tsx",
+          "tokens_estimated": 66,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/computer-game-setup.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/apps/web/src/components/play/practice-from-fen-dialog.tsx",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/docs/roadmap/dedup-cleanup/session-11-handoff.md",
+          "tokens_estimated": 2770,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 29513,
+        "output_tokens_estimated": 6057,
+        "reads_count": 10,
+        "writes_count": 26,
+        "repeated_reads_blocked": 23,
+        "anatomy_lookups": 9
+      }
+    },
+    {
+      "id": "session-2026-06-14-1829",
+      "started": "2026-06-14T00:29:49.890Z",
+      "ended": "2026-06-14T01:20:35.721Z",
       "reads": [
         {
           "file": "/Users/aramirez/Code/.epic-worktrees/purechess/epic--dedup-cleanup--s11-ci-gate/packages/shared/tsconfig.json",
