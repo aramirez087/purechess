@@ -89,10 +89,10 @@ export class ComputerGamesService {
     engineState = { ...engineState, status: "active" };
 
     const engineConfig = engineConfigFromDto(dto);
-    const serialized = withPersistedEngineConfig(
-      this.engine.toSerializable(engineState),
-      engineConfig ? { computerEngine: engineConfig } : null,
-    );
+    const serializedBase = this.engine.toSerializable(engineState);
+    const serialized = engineConfig
+      ? { ...serializedBase, computerEngine: engineConfig }
+      : serializedBase;
 
     await this.prisma.game.update({
       where: { id: game.id },
