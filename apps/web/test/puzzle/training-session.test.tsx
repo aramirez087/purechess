@@ -17,10 +17,17 @@ vi.mock('@/components/board/board-context', () => ({
 // `currentMove` is updated by each test to the move the board should emit.
 let currentMove = '';
 vi.mock('@/components/board/chessboard', () => ({
-  Chessboard: ({ onMove }: { onMove?: (m: { from: string; to: string }) => void }) => (
+  Chessboard: ({
+    onMove,
+    readOnly,
+  }: {
+    onMove?: (m: { from: string; to: string }) => void;
+    readOnly?: boolean;
+  }) => (
     <button
       type="button"
       data-testid="solve-btn"
+      disabled={readOnly}
       onClick={() =>
         onMove?.({ from: currentMove.slice(0, 2), to: currentMove.slice(2, 4) })
       }
@@ -54,6 +61,25 @@ function statsAt(accuracy: number): PuzzleThemeStatDto[] {
   return [{ slug: 'fork', attempts: 10, solved: Math.round(accuracy * 10), accuracy }];
 }
 
+async function waitForPuzzleReady() {
+  await waitFor(() => {
+    expect(fetchNextPuzzle).toHaveBeenCalled();
+    expect(screen.getByText(/Find the best move for/i)).toBeInTheDocument();
+    expect(screen.getByTestId('solve-btn')).not.toBeDisabled();
+  });
+}
+
+async function clickSolve() {
+  await waitForPuzzleReady();
+  // Let fetchNextPuzzle + useLocalPuzzle effects settle before the click.
+  await act(async () => {
+    await Promise.resolve();
+  });
+  await act(async () => {
+    screen.getByTestId('solve-btn').click();
+  });
+}
+
 describe('TrainingSession', () => {
   beforeEach(() => {
     vi.useRealTimers();
@@ -78,14 +104,14 @@ describe('TrainingSession', () => {
 
     render(<TrainingSession theme="fork" source="theme" target={1} />);
 
-    const btn = await screen.findByTestId('solve-btn');
-    act(() => {
-      btn.click();
-    });
+    await clickSolve();
 
-    await waitFor(() => {
-      expect(recordAttempt).toHaveBeenCalledTimes(1);
-    });
+    await waitFor(
+      () => {
+        expect(recordAttempt).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
     const [puzzleId, body] = vi.mocked(recordAttempt).mock.calls[0];
     expect(puzzleId).toBe('pz-1');
     expect(body.solved).toBe(true);
@@ -97,12 +123,9 @@ describe('TrainingSession', () => {
     vi.mocked(fetchPuzzleStats).mockResolvedValue([]);
 
     render(<TrainingSession theme={null} source="rush" target={1} />);
-    const btn = await screen.findByTestId('solve-btn');
-    act(() => {
-      btn.click();
-    });
+    await clickSolve();
 
-    await waitFor(() => expect(recordAttempt).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(recordAttempt).toHaveBeenCalledTimes(1), { timeout: 3000 });
     expect(vi.mocked(recordAttempt).mock.calls[0][1].source).toBe('rush');
   });
 
@@ -111,14 +134,11 @@ describe('TrainingSession', () => {
 
     render(<TrainingSession theme="fork" source="theme" target={5} />);
 
-    const btn = await screen.findByTestId('solve-btn');
     // First puzzle fetched on mount.
     expect(fetchNextPuzzle).toHaveBeenCalledTimes(1);
 
-    act(() => {
-      btn.click();
-    });
-    await waitFor(() => expect(recordAttempt).toHaveBeenCalledTimes(1));
+    await clickSolve();
+    await waitFor(() => expect(recordAttempt).toHaveBeenCalledTimes(1), { timeout: 3000 });
 
     // After the ~1.2s auto-advance, the next puzzle is fetched (target not hit).
     await waitFor(() => expect(fetchNextPuzzle).toHaveBeenCalledTimes(2), {
@@ -134,10 +154,7 @@ describe('TrainingSession', () => {
 
     render(<TrainingSession theme="fork" source="theme" target={1} />);
 
-    const btn = await screen.findByTestId('solve-btn');
-    act(() => {
-      btn.click();
-    });
+    await clickSolve();
 
     // Summary appears once the target (1 solve) is hit and the after-stats land.
     const summary = await screen.findByTestId('session-summary', {}, { timeout: 3000 });

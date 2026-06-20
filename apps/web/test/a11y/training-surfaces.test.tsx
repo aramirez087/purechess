@@ -40,11 +40,18 @@ vi.mock('next/link', () => ({
 // Board → a button that emits the configured solving move when clicked.
 let currentMove = '';
 vi.mock('@/components/board/chessboard', () => ({
-  Chessboard: ({ onMove }: { onMove?: (m: { from: string; to: string }) => void }) => (
+  Chessboard: ({
+    onMove,
+    readOnly,
+  }: {
+    onMove?: (m: { from: string; to: string }) => void;
+    readOnly?: boolean;
+  }) => (
     <div role="grid" aria-label="Chess board" tabIndex={0}>
       <button
         type="button"
         data-testid="solve-btn"
+        disabled={readOnly}
         onClick={() => onMove?.({ from: currentMove.slice(0, 2), to: currentMove.slice(2, 4) })}
       >
         board
@@ -208,6 +215,24 @@ describe('StreakBanner calendar a11y', () => {
   });
 });
 
+async function waitForPuzzleReady() {
+  await waitFor(() => {
+    expect(fetchNextPuzzle).toHaveBeenCalled();
+    expect(screen.getByText(/Find the best move for/i)).toBeInTheDocument();
+    expect(screen.getByTestId('solve-btn')).not.toBeDisabled();
+  });
+}
+
+async function clickSolve() {
+  await waitForPuzzleReady();
+  await act(async () => {
+    await Promise.resolve();
+  });
+  await act(async () => {
+    screen.getByTestId('solve-btn').click();
+  });
+}
+
 describe('TrainingSession live-region announcement', () => {
   const SOLVE_MOVE = 'f3g5';
   const PUZZLE: PuzzleDto = {
@@ -242,29 +267,29 @@ describe('TrainingSession live-region announcement', () => {
     // Silent before any attempt.
     expect(region.textContent).toBe('');
 
-    const btn = await screen.findByTestId('solve-btn');
-    act(() => {
-      btn.click();
-    });
+    await clickSolve();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('training-announcer').textContent).toBe('Correct. Solved 1 of 3.');
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('training-announcer').textContent).toBe('Correct. Solved 1 of 3.');
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('announces "not the move" on a wrong attempt', async () => {
     currentMove = 'a2a3'; // legal but not the solution
     render(<TrainingSession theme="fork" source="theme" target={3} />);
 
-    const btn = await screen.findByTestId('solve-btn');
-    act(() => {
-      btn.click();
-    });
+    await clickSolve();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('training-announcer').textContent).toBe(
-        'Not the move — try again.',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('training-announcer').textContent).toBe(
+          'Not the move — try again.',
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 });

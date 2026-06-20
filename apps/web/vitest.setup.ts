@@ -1,9 +1,15 @@
 import '@testing-library/jest-dom';
-import { afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 
-// Some suites (e.g. stockfish-client timeout) opt into fake timers — always
-// restore real timers so async training-session flows don't flake in parallel.
+// Some suites opt into fake timers (stockfish timeout, hero-board replay, clocks).
+// Reset timer mode around every test so async TrainingSession flows never inherit
+// a stale fake-timer environment from a prior file in the same worker.
+beforeEach(() => {
+  vi.useRealTimers();
+});
+
 afterEach(() => {
+  vi.clearAllTimers();
   vi.useRealTimers();
 });
 
