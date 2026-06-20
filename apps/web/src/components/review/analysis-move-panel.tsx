@@ -105,11 +105,24 @@ export function AnalysisMovePanel({
   classifications,
   className,
 }: AnalysisMovePanelProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLButtonElement>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    activeRef.current?.scrollIntoView?.({ block: 'nearest' });
+    const container = scrollRef.current;
+    const active = activeRef.current;
+    if (!container || !active) return;
+
+    const padding = 8;
+    const containerRect = container.getBoundingClientRect();
+    const activeRect = active.getBoundingClientRect();
+
+    if (activeRect.top < containerRect.top + padding) {
+      container.scrollTop -= containerRect.top + padding - activeRect.top;
+    } else if (activeRect.bottom > containerRect.bottom - padding) {
+      container.scrollTop += activeRect.bottom - (containerRect.bottom - padding);
+    }
   }, [currentPath]);
 
   // Mainline = the children[0] chain from root.
@@ -177,7 +190,7 @@ export function AnalysisMovePanel({
     });
 
   return (
-    <div className={cn('h-full overflow-y-auto text-sm', className)}>
+    <div ref={scrollRef} className={cn('h-full overflow-y-auto text-sm', className)}>
       <div className="flex flex-col py-0.5">
         {rows.map((row) => {
           const whiteVars = row.white ? variationsAt(row.white.idx) : [];

@@ -294,7 +294,7 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
 
             <main className="flex min-h-0 min-w-0 flex-col gap-2 lg:h-full lg:min-h-[320px] lg:overflow-hidden">
               <div className="flex shrink-0 items-start justify-between gap-3">
-                <div className="min-h-[2.75rem] min-w-0 flex-1">
+                <div className="h-[3.25rem] min-w-0 flex-1 overflow-hidden">
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brass-text">
                     Position
                   </span>
