@@ -3276,3 +3276,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 08:57 | Restored "Analyze a game" hero CTA (removed in quick-play refactor) + /games header link — review/study cluster | — | hero.tsx, games/page.tsx, homepage.test.tsx |
 | 09:05 | Opening Lab at `/openings/lab` — browse/search 3.7k lichess opening names + explorer board; train hub tiles for Lab + Analyze | — | opening-book.ts, opening-lab.tsx, train-client.tsx |
 | 09:10 | Opening Lab v2: openings.json includes PGN movetext; save-to-repertoire dialog; family SM-2 drill via Redis (`/opening-lab/drill`) | — | build-openings.mjs, opening-lab-review.service.ts, save-to-repertoire-dialog.tsx |
+| 09:15 | Opening Lab in AppShell + mobile nav (after Train / beside Repertoire) | — | AppShell.tsx, MobileNav.tsx |

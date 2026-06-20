@@ -9,12 +9,23 @@ import { Logo } from './Logo';
 import { Menu, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+function isNavActive(pathname: string | null, href: string): boolean {
+  if (!pathname) return false;
+  if (pathname === href) return true;
+  // Repertoire (/openings) vs Opening Lab (/openings/lab) share a prefix.
+  if (href === '/openings') {
+    return pathname.startsWith('/openings/') && !pathname.startsWith('/openings/lab');
+  }
+  return pathname.startsWith(`${href}/`);
+}
+
 const navLinks = [
   { href: '/play', label: 'Play' },
   // Improve surface.
   { href: '/train', label: 'Train' },
   { href: '/puzzles', label: 'Puzzles' },
-  { href: '/openings', label: 'Openings' },
+  { href: '/openings', label: 'Repertoire' },
+  { href: '/openings/lab', label: 'Opening Lab' },
   { href: '/endgames', label: 'Endgames' },
   { href: '/games', label: 'Games' },
   { href: '/analyze', label: 'Analyze' },
@@ -54,7 +65,7 @@ export function MobileNav() {
             Play now
           </Link>
           {navLinks.map((link) => {
-            const active = pathname === link.href || pathname?.startsWith(`${link.href}/`);
+            const active = isNavActive(pathname, link.href);
             return (
               <Link
                 key={link.href}

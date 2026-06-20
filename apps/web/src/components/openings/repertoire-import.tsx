@@ -176,7 +176,7 @@ export function RepertoireImport({ onSaved, onCancel }: RepertoireImportProps) {
 
   if (mode === 'choose') {
     return (
-      <div className="space-y-6">
+      <div className="mx-auto w-full max-w-3xl space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-2xl italic text-foreground">New repertoire</h2>
           <Button variant="ghost" size="sm" onClick={onCancel}>
@@ -213,7 +213,7 @@ export function RepertoireImport({ onSaved, onCancel }: RepertoireImportProps) {
 
   if (mode === 'explorer') {
     return (
-      <div className="space-y-5">
+      <div className="flex min-h-0 flex-1 flex-col gap-5">
         <div className="flex items-center justify-between">
           <button
             type="button"
@@ -244,7 +244,7 @@ export function RepertoireImport({ onSaved, onCancel }: RepertoireImportProps) {
 
   // mode === 'pgn'
   return (
-    <div className="space-y-5">
+    <div className="mx-auto w-full max-w-3xl space-y-5">
       <div className="flex items-center justify-between">
         <button
           type="button"

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { Target, Zap } from 'lucide-react';
+import { FlaskConical, Target, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
@@ -10,8 +10,9 @@ import { Button } from '@/components/ui/button';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
-  // Improve surface — hub at /train; /puzzles /openings /endgames reachable from it.
+  // Improve surface — hub at /train; repertoire at /openings.
   { href: '/train', label: 'Train', icon: Target },
+  { href: '/openings/lab', label: 'Opening Lab', icon: FlaskConical },
   { href: '/puzzles', label: 'Puzzles' },
   { href: '/games', label: 'Games' },
   // Paste-a-game / FEN study — pairs with Games (your history) as the review cluster.

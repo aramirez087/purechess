@@ -1,8 +1,9 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Check, RotateCcw, Target } from 'lucide-react';
 import type {
+  DrillStepDto,
   DrillLinesDto,
   LabDrillLinesDto,
   MoveIntent,
@@ -35,6 +36,66 @@ export interface OpeningDrillProps {
   backLabel?: string;
 }
 
+function moveLabel(ply: number): string | null {
+  return ply % 2 === 1 ? `${Math.ceil(ply / 2)}.` : null;
+}
+
+/** Fixed-height move strip: the line can grow horizontally without moving the board. */
+function DrillLineStrip({
+  steps,
+  activePly,
+}: {
+  steps: DrillStepDto[];
+  activePly: number;
+}) {
+  const stripRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = stripRef.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, [activePly, steps]);
+
+  return (
+    <div
+      ref={stripRef}
+      className="flex h-10 min-w-0 shrink-0 items-center gap-2 overflow-x-auto rounded-[10px] border border-border/70 bg-surface/55 px-3 shadow-inner-hairline"
+      aria-live="polite"
+    >
+      <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brass-text">
+        Line
+      </span>
+      {steps.length > 0 ? (
+        <ol className="flex min-w-0 items-center gap-2 whitespace-nowrap font-mono text-xs text-muted-foreground">
+          {steps.map((step, idx) => {
+            const ply = idx + 1;
+            const label = moveLabel(ply);
+            const active = ply === activePly;
+            return (
+              <li key={`${step.uci}-${idx}`} className="inline-flex items-center gap-1">
+                {label && <span className="text-brass-text/80">{label}</span>}
+                <span
+                  className={cn(
+                    'rounded px-1 py-0.5 transition-colors',
+                    active
+                      ? 'bg-brass/15 font-semibold text-foreground ring-1 ring-brass/30'
+                      : 'text-muted-foreground',
+                  )}
+                >
+                  {step.san}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      ) : (
+        <p className="whitespace-nowrap font-mono text-xs text-muted-foreground">
+          The next line will appear here.
+        </p>
+      )}
+    </div>
+  );
+}
+
 /** Quiet "to move" label + line/move progress. */
 function DrillPrompt({
   toMove,
@@ -52,7 +113,7 @@ function DrillPrompt({
   lineLength: number;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 text-sm">
+    <div className="grid min-h-10 gap-1 rounded-[10px] border border-border/70 bg-background/45 px-3 py-2 text-sm shadow-inner-hairline sm:flex sm:items-center sm:justify-between sm:gap-3">
       <span
         className={cn(
           'inline-flex items-center gap-2 font-medium',
@@ -229,6 +290,7 @@ export function OpeningDrill({
   }, [state.bookMove]);
 
   const toMove: 'white' | 'black' = state.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const activeLine = drill.lines[state.lineNumber - 1];
 
   // --- Empty queue: nothing due, nothing new --------------------------------
   if (drill.lines.length === 0) {
@@ -254,7 +316,7 @@ export function OpeningDrill({
 
   return (
     <BoardSettingsProvider>
-      <div className="space-y-5">
+      <div className="flex min-h-0 flex-1 flex-col gap-5">
         <DrillHeader
           name={repertoireName}
           onBack={onBack}
@@ -285,8 +347,8 @@ export function OpeningDrill({
             backLabel={backLabel}
           />
         ) : (
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-            <div className="mx-auto w-full max-w-[460px] space-y-3">
+          <div className="grid min-h-0 gap-4 lg:h-[calc(100dvh-var(--top-bar)-10rem)] lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]">
+            <main className="flex min-h-0 min-w-0 flex-col gap-3">
               <DrillPrompt
                 toMove={toMove}
                 outOfBook={!!state.bookMove}
@@ -295,25 +357,52 @@ export function OpeningDrill({
                 moveNumber={state.moveNumber}
                 lineLength={state.lineLength}
               />
-              <Chessboard
-                position={state.fen}
-                orientation={drill.color}
-                onMove={handleMove}
-                lastMove={
-                  state.lastMove
-                    ? { from: state.lastMove[0] as never, to: state.lastMove[1] as never }
-                    : undefined
-                }
-                autoShapes={autoShapes}
-              />
-            </div>
-            <aside className="hidden lg:block">
-              <div className="rounded-[10px] border border-border bg-surface/60 p-4 text-sm">
+              <DrillLineStrip steps={activeLine?.steps ?? []} activePly={state.moveNumber} />
+              <div className="flex min-h-0 flex-1 items-center justify-center">
+                <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-var(--top-bar)-13.5rem))] lg:h-full lg:max-h-full lg:w-auto lg:max-w-full">
+                  <Chessboard
+                    position={state.fen}
+                    orientation={drill.color}
+                    onMove={handleMove}
+                    lastMove={
+                      state.lastMove
+                        ? { from: state.lastMove[0] as never, to: state.lastMove[1] as never }
+                        : undefined
+                    }
+                    autoShapes={autoShapes}
+                  />
+                </div>
+              </div>
+            </main>
+            <aside className="hidden min-h-0 min-w-0 flex-col gap-3 lg:flex">
+              <div className="rounded-[10px] border border-border bg-surface/60 p-4 text-sm shadow-inner-hairline">
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brass-text">
+                  Session
+                </p>
                 <p className="font-medium text-foreground">{repertoireName}</p>
                 <p className="mt-1 text-muted-foreground">
                   Drilling {drill.color}. {state.totalLines} line
                   {state.totalLines === 1 ? '' : 's'} this session.
                 </p>
+              </div>
+              <div className="min-h-0 flex-1 rounded-[10px] border border-border bg-surface/45 p-4 text-sm shadow-inner-hairline">
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brass-text">
+                  Current
+                </p>
+                <dl className="mt-3 grid grid-cols-2 gap-3">
+                  <div>
+                    <dt className="text-xs text-muted-foreground">Line</dt>
+                    <dd className="font-medium tabular-nums text-foreground">
+                      {state.lineNumber}/{state.totalLines}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-muted-foreground">Ply</dt>
+                    <dd className="font-medium tabular-nums text-foreground">
+                      {state.moveNumber}/{state.lineLength}
+                    </dd>
+                  </div>
+                </dl>
               </div>
             </aside>
           </div>

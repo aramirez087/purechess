@@ -39,7 +39,7 @@ export default async function OpeningLabDrillPage({ searchParams }: Props) {
 
   return (
     <AppShell>
-      <div className="px-4 py-8 sm:px-6 lg:px-8">
+      <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
         <Suspense>
           <OpeningLabDrillClient family={family} color={color} />
         </Suspense>

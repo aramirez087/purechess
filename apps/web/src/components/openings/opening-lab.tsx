@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Chess } from 'chess.js';
@@ -25,9 +25,8 @@ import { ReviewControls } from '@/components/review/review-controls';
 import { Button } from '@/components/ui/button';
 import { useAnalysisTree } from '@/hooks/use-analysis-tree';
 import { useOpeningName } from '@/hooks/use-opening-name';
-import { buildTree } from '@/lib/board/analysis-tree';
+import { buildTree, type AnalysisNode, type TreePath } from '@/lib/board/analysis-tree';
 import { parsePgnToTree, STARTING_FEN } from '@/lib/board/pgn-parser';
-import { formatOpeningPgn } from '@/lib/openings/format-pgn';
 import {
   getFamily,
   loadOpeningBook,
@@ -36,9 +35,24 @@ import {
   type OpeningEntry,
   type OpeningFamily,
 } from '@/lib/openings/opening-book';
+import { GameRail } from '@/components/game';
 import { cn } from '@/lib/utils';
 
-
+/** SAN text along `path` — used in the fixed-height line strip above the board. */
+function formatPathLine(root: AnalysisNode, path: TreePath): string {
+  const parts: string[] = [];
+  let node = root;
+  let ply = 1;
+  for (const idx of path) {
+    const child = node.children[idx];
+    if (!child) break;
+    if (ply % 2 === 1) parts.push(`${Math.ceil(ply / 2)}. ${child.san}`);
+    else parts.push(child.san);
+    node = child;
+    ply += 1;
+  }
+  return parts.join(' ');
+}
 
 export interface OpeningLabProps {
   initialQuery?: string;
@@ -60,6 +74,7 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
   const [practiceOpen, setPracticeOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [drillColor, setDrillColor] = useState<'white' | 'black'>('white');
+  const lineStripRef = useRef<HTMLDivElement>(null);
 
   const startFen = active?.pgn ? STARTING_FEN : (active?.fen ?? STARTING_FEN);
   const baseTree = useMemo(() => {
@@ -73,11 +88,20 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
     return buildTree(startFen, []);
   }, [active, startFen]);
   const tree = useAnalysisTree({ moves: [], startFen, tree: baseTree });
-  const lineText = active?.pgn ? formatOpeningPgn(active.pgn) : '';
+  const pathLine = useMemo(() => formatPathLine(tree.root, tree.path), [tree.root, tree.path]);
   const liveName = useOpeningName(tree.fen);
-  const displayName = liveName ?? active?.name ?? 'Starting position';
+  const [heldName, setHeldName] = useState<string | null>(null);
+  useEffect(() => {
+    if (liveName) setHeldName(liveName);
+  }, [liveName]);
+  const displayName = liveName ?? heldName ?? active?.name ?? 'Starting position';
 
   const orientation = flipped ? 'black' : 'white';
+
+  useEffect(() => {
+    const el = lineStripRef.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, [pathLine]);
 
   useEffect(() => {
     let disposed = false;
@@ -170,30 +194,30 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
 
   return (
     <BoardSettingsProvider>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:py-10">
-        <header className="flex flex-col gap-4 border-b border-border/60 pb-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
+      <div className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col px-4 py-6 sm:px-6 lg:min-h-0 lg:overflow-hidden lg:py-4">
+        <header className="flex shrink-0 flex-col gap-3 border-b border-border/60 pb-4 sm:flex-row sm:items-end sm:justify-between lg:pb-3">
+          <div className="min-w-0">
             <Link
               href="/openings"
-              className="mb-3 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="mb-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               Repertoire
             </Link>
             <div className="flex items-center gap-2">
-              <FlaskConical className="h-6 w-6 text-brass" aria-hidden="true" />
-              <h1 className="font-display text-3xl italic tracking-[-0.01em] text-foreground sm:text-4xl">
+              <FlaskConical className="h-5 w-5 text-brass" aria-hidden="true" />
+              <h1 className="font-display text-2xl italic tracking-[-0.01em] text-foreground sm:text-3xl">
                 Opening Lab
               </h1>
             </div>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Browse 3,700+ named lines — Italian, Fegatello, and everything in between. Pick a
-              variation, explore what masters play, and branch on the board.
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground lg:line-clamp-1">
+              Browse 3,700+ named lines — pick a variation, explore what masters play, and branch on
+              the board.
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             {selectedFamily ? (
-              <Button asChild variant="default">
+              <Button asChild variant="default" size="sm">
                 <Link
                   href={`/openings/lab/drill?family=${encodeURIComponent(selectedFamily)}&color=${drillColor}`}
                 >
@@ -202,7 +226,7 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
                 </Link>
               </Button>
             ) : null}
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" size="sm">
               <Link href="/openings">
                 <BookOpen className="h-4 w-4" aria-hidden="true" />
                 My repertoire
@@ -216,8 +240,8 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
             Could not load the opening book. Refresh and try again.
           </p>
         ) : (
-          <div className="grid min-h-0 gap-5 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,320px)] lg:items-start">
-            <aside className="flex max-h-[70vh] flex-col gap-3 overflow-hidden rounded-[12px] border border-border bg-surface/60 lg:sticky lg:top-[calc(var(--top-bar,3.5rem)+1rem)]">
+          <div className="mt-4 grid min-h-0 flex-1 gap-4 lg:mt-3 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)_minmax(300px,380px)] lg:gap-5 lg:overflow-hidden">
+            <aside className="flex min-w-0 max-h-[min(50vh,420px)] flex-col gap-3 overflow-hidden rounded-[12px] border border-border bg-surface/60 lg:h-full lg:max-h-none">
               <div className="border-b border-border/60 p-3">
                 <label className="sr-only" htmlFor="opening-lab-search">
                   Search openings
@@ -268,15 +292,17 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
               </div>
             </aside>
 
-            <main className="flex flex-col gap-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="min-w-0 text-sm font-medium text-foreground">
+            <main className="flex min-h-0 min-w-0 flex-col gap-2 lg:h-full lg:min-h-[320px] lg:overflow-hidden">
+              <div className="flex shrink-0 items-start justify-between gap-3">
+                <div className="min-h-[2.75rem] min-w-0 flex-1">
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brass-text">
                     Position
                   </span>
-                  <span className="mt-0.5 block truncate">{displayName}</span>
-                </p>
-                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                  <p className="line-clamp-2 text-sm font-medium leading-snug text-foreground">
+                    {displayName}
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-1.5">
                   {selectedFamily ? (
                     <div className="flex items-center gap-1 rounded-[8px] border border-border p-0.5">
                       {(['white', 'black'] as const).map((c) => (
@@ -322,29 +348,34 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
                 </div>
               </div>
 
-              {lineText ? (
-                <p className="rounded-[10px] border border-border/60 bg-surface/40 px-3 py-2 font-mono text-xs leading-relaxed text-muted-foreground">
-                  <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-brass-text">
-                    Line{' '}
-                  </span>
-                  {lineText}
+              <div
+                ref={lineStripRef}
+                className="flex h-9 min-w-0 shrink-0 items-center gap-2 overflow-x-auto rounded-[10px] border border-border/60 bg-surface/40 px-3"
+                aria-live="polite"
+              >
+                <span className="shrink-0 font-sans text-[10px] uppercase tracking-[0.14em] text-brass-text">
+                  Line
+                </span>
+                <p className="whitespace-nowrap font-mono text-xs text-muted-foreground">
+                  {pathLine || 'Play or pick a move to start exploring.'}
                 </p>
-              ) : null}
-
-              <div className="mx-auto w-full max-w-[min(100%,520px)]">
-                <Chessboard
-                  position={tree.fen}
-                  orientation={orientation}
-                  freePlay
-                  legalMoves={tree.legalMoves}
-                  onMove={handleMove}
-                  lastMove={tree.lastMove ?? undefined}
-                />
               </div>
 
-              <p className="text-center text-xs text-muted-foreground">
-                Play moves on the board or pick from the explorer — branches stay in this session.
-                Save lines permanently via{' '}
+              <div className="flex min-h-0 flex-1 items-center justify-center py-1 lg:py-0">
+                <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-14rem))] lg:h-full lg:max-h-full lg:w-auto lg:max-w-full">
+                  <Chessboard
+                    position={tree.fen}
+                    orientation={orientation}
+                    freePlay
+                    legalMoves={tree.legalMoves}
+                    onMove={handleMove}
+                    lastMove={tree.lastMove ?? undefined}
+                  />
+                </div>
+              </div>
+
+              <p className="hidden shrink-0 text-center text-xs text-muted-foreground lg:block">
+                Play on the board or pick from the explorer — save lines via{' '}
                 <Link href="/openings" className="text-brass-text underline-offset-2 hover:underline">
                   My repertoire
                 </Link>
@@ -352,23 +383,33 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
               </p>
             </main>
 
-            <aside className="flex min-h-0 flex-col gap-3 lg:sticky lg:top-[calc(var(--top-bar,3.5rem)+1rem)]">
-              <OpeningExplorer fen={tree.fen} onMove={handleExplorerMove} />
-              <div className="min-h-[180px] flex-1 overflow-hidden rounded-[10px] border border-border bg-surface/60">
-                <AnalysisMovePanel
-                  root={tree.root}
-                  currentPath={tree.path}
-                  onSelect={tree.goToPath}
-                />
-              </div>
-              <ReviewControls
-                onStart={tree.goStart}
-                onPrev={tree.goPrev}
-                onNext={tree.goNext}
-                onEnd={tree.goEnd}
-                atStart={!tree.canGoPrev}
-                atEnd={!tree.canGoNext}
-              />
+            <aside className="flex min-h-0 min-w-0 flex-col gap-3 lg:h-full lg:overflow-hidden">
+              <OpeningExplorer fen={tree.fen} onMove={handleExplorerMove} className="shrink-0" />
+              <GameRail
+                title="Moves"
+                className="min-h-0 flex-1"
+                bodyClassName="flex min-h-0 flex-1 flex-col"
+                footer={
+                  <div className="flex items-center justify-end p-2">
+                    <ReviewControls
+                      onStart={tree.goStart}
+                      onPrev={tree.goPrev}
+                      onNext={tree.goNext}
+                      onEnd={tree.goEnd}
+                      atStart={!tree.canGoPrev}
+                      atEnd={!tree.canGoNext}
+                    />
+                  </div>
+                }
+              >
+                <div className="min-h-[160px] flex-1 overflow-hidden lg:min-h-0">
+                  <AnalysisMovePanel
+                    root={tree.root}
+                    currentPath={tree.path}
+                    onSelect={tree.goToPath}
+                  />
+                </div>
+              </GameRail>
             </aside>
           </div>
         )}

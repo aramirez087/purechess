@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 import type { MoveIntent, PieceType, RepertoireColorDto, Square } from '@purechess/shared';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
+import { GameRail } from '@/components/game';
 import { OpeningExplorer } from '@/components/review/opening-explorer';
 import { AnalysisMovePanel } from '@/components/review/analysis-move-panel';
 import { ReviewControls } from '@/components/review/review-controls';
@@ -56,30 +57,46 @@ export function RepertoireExplorerBuilder({
 
   return (
     <BoardSettingsProvider>
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="mx-auto w-full max-w-[460px]">
-          <Chessboard
-            position={tree.fen}
-            orientation={orientation}
-            freePlay
-            legalMoves={tree.legalMoves}
-            onMove={handleMove}
-            lastMove={tree.lastMove ?? undefined}
-          />
-        </div>
-        <div className="flex min-h-0 flex-col gap-3">
-          <OpeningExplorer fen={tree.fen} onMove={handleExplorerMove} />
-          <div className="min-h-[160px] flex-1 overflow-hidden rounded-[10px] border border-border bg-surface/60">
-            <AnalysisMovePanel root={tree.root} currentPath={tree.path} onSelect={tree.goToPath} />
+      <div className="grid min-h-0 gap-4 lg:h-[calc(100dvh-var(--top-bar)-15rem)] lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)]">
+        <div className="flex min-h-0 min-w-0 items-center justify-center">
+          <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-var(--top-bar)-16.5rem))] lg:h-full lg:max-h-full lg:w-auto lg:max-w-full">
+            <Chessboard
+              position={tree.fen}
+              orientation={orientation}
+              freePlay
+              legalMoves={tree.legalMoves}
+              onMove={handleMove}
+              lastMove={tree.lastMove ?? undefined}
+            />
           </div>
-          <ReviewControls
-            onStart={tree.goStart}
-            onPrev={tree.goPrev}
-            onNext={tree.goNext}
-            onEnd={tree.goEnd}
-            atStart={!tree.canGoPrev}
-            atEnd={!tree.canGoNext}
-          />
+        </div>
+        <div className="flex min-h-0 min-w-0 flex-col gap-3">
+          <OpeningExplorer fen={tree.fen} onMove={handleExplorerMove} className="shrink-0" />
+          <GameRail
+            title="Moves"
+            className="min-h-[220px] min-w-0 flex-1 lg:min-h-0"
+            bodyClassName="flex min-h-0 flex-1 flex-col"
+            footer={
+              <div className="flex items-center justify-end p-2">
+                <ReviewControls
+                  onStart={tree.goStart}
+                  onPrev={tree.goPrev}
+                  onNext={tree.goNext}
+                  onEnd={tree.goEnd}
+                  atStart={!tree.canGoPrev}
+                  atEnd={!tree.canGoNext}
+                />
+              </div>
+            }
+          >
+            <div className="min-h-[160px] flex-1 overflow-hidden lg:min-h-0">
+              <AnalysisMovePanel
+                root={tree.root}
+                currentPath={tree.path}
+                onSelect={tree.goToPath}
+              />
+            </div>
+          </GameRail>
           <Button
             onClick={() => onSave(tree.root)}
             disabled={saving || tree.root.children.length === 0}
