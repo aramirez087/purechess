@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Hero } from '@/components/home/hero';
 
-// Hero contains HeroAuthLink (useQuery) — give it a client and a quiet getMe.
 vi.mock('@/lib/api/auth', () => ({
   getMe: vi.fn().mockResolvedValue({ user: null }),
 }));
@@ -19,11 +18,12 @@ function renderHero() {
   );
 }
 
-describe('Hero analyze CTA', () => {
-  it('links to /analyze and is no longer gated behind "Soon"', () => {
+describe('Hero primary CTAs', () => {
+  it('exposes quick play and improve-surface entry points', () => {
     renderHero();
-    const link = screen.getByRole('link', { name: /analyze a game/i });
-    expect(link).toHaveAttribute('href', '/analyze');
+    expect(screen.getByRole('link', { name: /play now/i })).toHaveAttribute('href', '/play/quick');
+    expect(screen.getByRole('link', { name: /daily puzzle/i })).toHaveAttribute('href', '/puzzles');
+    expect(screen.getByRole('link', { name: /^train$/i })).toHaveAttribute('href', '/train');
     expect(screen.queryByText(/soon/i)).toBeNull();
   });
 });

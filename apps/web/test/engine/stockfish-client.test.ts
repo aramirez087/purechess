@@ -366,12 +366,16 @@ describe('cancel', () => {
 describe('timeout', () => {
   it('rejects with EngineTimeoutError when no bestmove arrives', async () => {
     vi.useFakeTimers();
-    MockWorker.goScript = null;
-    const p = analyze('fen', {});
-    // resolve the worker handshake + go dispatch under fake timers
-    await vi.advanceTimersByTimeAsync(0);
-    const assertion = expect(p).rejects.toBeInstanceOf(EngineTimeoutError);
-    await vi.advanceTimersByTimeAsync(11_000);
-    await assertion;
+    try {
+      MockWorker.goScript = null;
+      const p = analyze('fen', {});
+      // resolve the worker handshake + go dispatch under fake timers
+      await vi.advanceTimersByTimeAsync(0);
+      const assertion = expect(p).rejects.toBeInstanceOf(EngineTimeoutError);
+      await vi.advanceTimersByTimeAsync(11_000);
+      await assertion;
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

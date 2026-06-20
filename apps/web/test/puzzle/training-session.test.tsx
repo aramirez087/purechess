@@ -56,6 +56,7 @@ function statsAt(accuracy: number): PuzzleThemeStatDto[] {
 
 describe('TrainingSession', () => {
   beforeEach(() => {
+    vi.useRealTimers();
     vi.clearAllMocks();
     currentMove = SOLVE_MOVE;
     vi.mocked(fetchNextPuzzle).mockResolvedValue(PUZZLE);

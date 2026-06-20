@@ -219,6 +219,7 @@ describe('TrainingSession live-region announcement', () => {
   };
 
   beforeEach(() => {
+    vi.useRealTimers();
     currentMove = SOLVE_MOVE;
     vi.mocked(fetchNextPuzzle).mockResolvedValue(PUZZLE);
     vi.mocked(fetchPuzzleStats).mockResolvedValue([] as PuzzleThemeStatDto[]);

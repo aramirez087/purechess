@@ -30,22 +30,22 @@ describe('Hero', () => {
     expect(screen.getByText(/single, quiet place to play chess online/i)).toBeInTheDocument();
   });
 
-  it('Play now links to /play?mode=casual', () => {
+  it('Play now links to one-click quick match', () => {
     renderWithClient(<Hero />);
     const link = screen.getByRole('link', { name: /play now/i });
-    expect(link).toHaveAttribute('href', '/play?mode=casual');
+    expect(link).toHaveAttribute('href', '/play/quick');
   });
 
-  it('Create account links to /register', () => {
+  it('Daily puzzle links to /puzzles', () => {
     renderWithClient(<Hero />);
-    const link = screen.getByRole('link', { name: /create account/i });
-    expect(link).toHaveAttribute('href', '/register');
+    const link = screen.getByRole('link', { name: /daily puzzle/i });
+    expect(link).toHaveAttribute('href', '/puzzles');
   });
 
-  it('Analyze a game links to /analyze', () => {
+  it('Train links to /train', () => {
     renderWithClient(<Hero />);
-    const link = screen.getByRole('link', { name: /analyze a game/i });
-    expect(link).toHaveAttribute('href', '/analyze');
+    const link = screen.getByRole('link', { name: /^train$/i });
+    expect(link).toHaveAttribute('href', '/train');
   });
 
   it('defaults to the signed-out Sign in link', () => {
