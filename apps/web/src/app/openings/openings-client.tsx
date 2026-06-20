@@ -183,7 +183,7 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
       return <p className="py-10 text-center text-sm text-muted-foreground">Loading drill…</p>;
     }
     return (
-      <div className="mx-auto flex w-full max-w-[1500px] flex-1 flex-col">
+      <div className="mx-auto flex min-h-0 w-full max-w-[1500px] flex-1 flex-col">
         <OpeningDrill
           repertoireId={view.id}
           repertoireName={view.name}

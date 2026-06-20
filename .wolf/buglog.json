@@ -13000,6 +13000,23 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-20T01:42:00.000Z"
+    },
+    {
+      "id": "bug-776",
+      "timestamp": "2026-06-20T12:15:00.000Z",
+      "error_message": "Opening drill board renders tiny after starting a session from /openings",
+      "file": "apps/web/src/components/openings/opening-drill.tsx",
+      "root_cause": "Board sizing used var(--top-bar) in calc() but --top-bar was never defined in globals.css, invalidating lg:h-[calc(...)] and height-driven lg:h-full board wrapper; flex-1 height chain on the drill grid was also missing",
+      "fix": "Defined --top-bar: 3.5rem in globals.css :root; opening-drill grid uses flex-1 min-h-0; board max reserve bumped to 16rem; drill page wrappers get min-h-0",
+      "tags": [
+        "css",
+        "layout",
+        "opening-drill",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-20T12:15:00.000Z"
     }
   ]
 }

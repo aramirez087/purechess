@@ -3277,3 +3277,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 09:05 | Opening Lab at `/openings/lab` — browse/search 3.7k lichess opening names + explorer board; train hub tiles for Lab + Analyze | — | opening-book.ts, opening-lab.tsx, train-client.tsx |
 | 09:10 | Opening Lab v2: openings.json includes PGN movetext; save-to-repertoire dialog; family SM-2 drill via Redis (`/opening-lab/drill`) | — | build-openings.mjs, opening-lab-review.service.ts, save-to-repertoire-dialog.tsx |
 | 09:15 | Opening Lab in AppShell + mobile nav (after Train / beside Repertoire) | — | AppShell.tsx, MobileNav.tsx |
+| 12:15 | Opening drill tiny board fix: defined --top-bar CSS var + flex-1 height chain on drill grid | — | globals.css, opening-drill.tsx, openings-client.tsx, opening-lab-drill-client.tsx |
