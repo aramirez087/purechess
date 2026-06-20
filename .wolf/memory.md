@@ -3270,3 +3270,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 17:43 | Session end: 38 writes across 25 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~40735 tok |
 | 18:55 | Session end: 38 writes across 25 files (training.spec.ts, training-session.tsx, puzzle-db-refresh.md, ADR-6-local-puzzle-bank-and-per-user-puzzle-glicko.md, ADR-7-insights-as-pure-detectors.md) | 12 reads | ~40735 tok |
 | 19:20 | Session end: 26 writes across 7 files (tsconfig.json, solve-session-shell.tsx, mistake-trainer.tsx, time-control-picker.tsx, computer-game-setup.tsx) | 10 reads | ~35570 tok |
+| 19:10 | Fixed computer difficulty: persist `engineState.computerEngine` (eloTarget/styleBlunderCp/thinkTimeMs), `getComputerMove(state)` in driveBot, widened LEVEL_PROFILES | bug-773 | — |

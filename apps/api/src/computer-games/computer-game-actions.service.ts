@@ -27,6 +27,7 @@ import {
   STARTING_FEN,
   buildStateDto,
   computeExtras,
+  readComputerEngineConfig,
   truncateToPly,
 } from "./computer-games.helpers";
 
@@ -154,6 +155,7 @@ export class ComputerGameActionsService {
       result: null,
       resultReason: null,
       extras: computeExtras(truncated, computerColor, "active"),
+      engineConfig: readComputerEngineConfig(truncated),
     });
   }
 
@@ -208,6 +210,7 @@ export class ComputerGameActionsService {
       result: null,
       resultReason: null,
       extras: computeExtras(serialized, computerColor, "aborted"),
+      engineConfig: readComputerEngineConfig(serialized),
     });
   }
 
@@ -328,6 +331,7 @@ export class ComputerGameActionsService {
       result: result as string,
       resultReason: reason as string,
       extras: computeExtras(updated, computerColor, "completed"),
+      engineConfig: readComputerEngineConfig(updated),
     });
   }
 
@@ -347,6 +351,7 @@ export class ComputerGameActionsService {
       result: game.result ?? null,
       resultReason: game.resultReason ?? null,
       extras: computeExtras(serialized, computerColor, game.status),
+      engineConfig: readComputerEngineConfig(serialized),
     });
   }
 
@@ -363,11 +368,19 @@ export class ComputerGameActionsService {
       computerColor === "white" ? "black" : "white";
     if (swapColors) humanColor = humanColor === "white" ? "black" : "white";
 
+    const engine = readComputerEngineConfig(
+      game.engineState as unknown as SerializableEngineState | null,
+    );
     const dto: CreateComputerGameDto = {
       level: (game.computerLevel ?? 1) as CreateComputerGameDto["level"],
       color: humanColor,
       timeControlSeconds: game.timeControlSeconds,
       incrementSeconds: game.incrementSeconds ?? 0,
+      ...(engine?.eloTarget !== undefined && { eloTarget: engine.eloTarget }),
+      ...(engine?.styleBlunderCp !== undefined && {
+        styleBlunderCp: engine.styleBlunderCp,
+      }),
+      ...(engine?.thinkTimeMs !== undefined && { thinkTimeMs: engine.thinkTimeMs }),
     };
     return this.computerGames.createGame(userId, dto);
   }

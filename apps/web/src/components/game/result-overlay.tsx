@@ -100,7 +100,7 @@ export function ResultOverlay({
       <div
         role="alert"
         className={cn(
-          'animate-rise w-full max-w-[340px] rounded-[14px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-6 pb-7 pt-8 text-center',
+          'animate-rise w-full max-w-[min(100%,26rem)] rounded-[14px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-6 pb-7 pt-8 text-center',
           toneRing[tone],
         )}
       >
@@ -127,38 +127,42 @@ export function ResultOverlay({
             by {reasonLabel}
           </p>
         )}
-        <div className="mt-5 flex items-center justify-center gap-2">
+        <div className="mt-5 grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={onDismiss}
-            className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+            className="inline-flex h-9 w-full items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
           >
             View board
           </button>
           {analyzeHref && (
             <Link
               href={analyzeHref}
-              className="inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+              className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
             >
-              <ChartLine className="h-4 w-4" aria-hidden="true" />
+              <ChartLine className="h-4 w-4 shrink-0" aria-hidden="true" />
               Analyze
             </Link>
           )}
-          {onRematch && (
+          {onRematch ? (
             <button
               type="button"
               onClick={onRematch}
-              className="inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/12 px-2.5 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+              className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/12 px-2.5 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
             >
-              <RotateCcw className="h-4 w-4" aria-hidden="true" />
+              <RotateCcw className="h-4 w-4 shrink-0" aria-hidden="true" />
               Rematch
             </button>
-          )}
+          ) : null}
           <Link
             href="/play"
-            className="inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+            className={cn(
+              'inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]',
+              // Odd count (e.g. View + Analyze + New) — give "New" the full bottom row.
+              !onRematch && analyzeHref && 'col-span-2',
+            )}
           >
-            <Plus className="h-4 w-4" aria-hidden="true" />
+            <Plus className="h-4 w-4 shrink-0" aria-hidden="true" />
             New
           </Link>
         </div>

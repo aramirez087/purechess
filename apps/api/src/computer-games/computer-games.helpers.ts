@@ -1,7 +1,9 @@
 import { TimeControlCategory } from "@prisma/client";
 import {
   ComputerClockDto,
+  ComputerEngineConfig,
   ComputerGameStateDto,
+  CreateComputerGameDto,
   SerializableEngineState,
 } from "@purechess/shared";
 
@@ -105,6 +107,40 @@ export interface BuildStateDtoArgs {
   result: string | null;
   resultReason: string | null;
   extras?: DtoExtras;
+  engineConfig?: ComputerEngineConfig;
+}
+
+/** Extract persisted engine knobs from serialized state (if any). */
+export function readComputerEngineConfig(
+  serialized: SerializableEngineState | null | undefined,
+): ComputerEngineConfig | undefined {
+  const cfg = serialized?.computerEngine;
+  if (!cfg) return undefined;
+  const out: ComputerEngineConfig = {};
+  if (cfg.eloTarget !== undefined) out.eloTarget = cfg.eloTarget;
+  if (cfg.styleBlunderCp !== undefined) out.styleBlunderCp = cfg.styleBlunderCp;
+  if (cfg.thinkTimeMs !== undefined) out.thinkTimeMs = cfg.thinkTimeMs;
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
+/** Re-attach `computerEngine` after `toSerializable` (it drops unknown keys). */
+export function withPersistedEngineConfig(
+  serialized: SerializableEngineState,
+  prior: SerializableEngineState | null | undefined,
+): SerializableEngineState {
+  const cfg = prior?.computerEngine;
+  return cfg ? { ...serialized, computerEngine: cfg } : serialized;
+}
+
+/** Build the JSON blob stored under `engineState.computerEngine`. */
+export function engineConfigFromDto(
+  dto: Pick<CreateComputerGameDto, "eloTarget" | "styleBlunderCp" | "thinkTimeMs">,
+): SerializableEngineState["computerEngine"] | undefined {
+  const cfg: NonNullable<SerializableEngineState["computerEngine"]> = {};
+  if (dto.eloTarget !== undefined) cfg.eloTarget = dto.eloTarget;
+  if (dto.styleBlunderCp !== undefined) cfg.styleBlunderCp = dto.styleBlunderCp;
+  if (dto.thinkTimeMs !== undefined) cfg.thinkTimeMs = dto.thinkTimeMs;
+  return Object.keys(cfg).length > 0 ? cfg : undefined;
 }
 
 export function buildStateDto(args: BuildStateDtoArgs): ComputerGameStateDto {
@@ -124,6 +160,15 @@ export function buildStateDto(args: BuildStateDtoArgs): ComputerGameStateDto {
     dto.drawOffered = args.extras.drawOffered;
     dto.drawOfferedBy = args.extras.drawOfferedBy;
     dto.abortable = args.extras.abortable;
+  }
+  if (args.engineConfig?.eloTarget !== undefined) {
+    dto.eloTarget = args.engineConfig.eloTarget;
+  }
+  if (args.engineConfig?.styleBlunderCp !== undefined) {
+    dto.styleBlunderCp = args.engineConfig.styleBlunderCp;
+  }
+  if (args.engineConfig?.thinkTimeMs !== undefined) {
+    dto.thinkTimeMs = args.engineConfig.thinkTimeMs;
   }
   return dto;
 }

@@ -303,13 +303,51 @@ describe('getBestMove (backward compatible)', () => {
     expect(moves.size).toBeGreaterThan(1);
   });
 
-  it('out-of-range level falls back to the last (hardest) profile', async () => {
+  it('out-of-range level clamps to the hardest profile', async () => {
     MockWorker.goScript = [
       'info depth 12 score cp 20 multipv 1 pv d2d4 d7d5',
       'bestmove d2d4',
     ];
     await getBestMove('fen', 99);
     expect(MockWorker.last.messages).toContain('setoption name Skill Level value 20');
+  });
+
+  it('level 4 uses ELO mode (wider spread than skill-only)', async () => {
+    MockWorker.goScript = [
+      'info depth 6 score cp 5 multipv 1 pv e2e4 c7c5',
+      'bestmove e2e4',
+    ];
+    await getBestMove('fen', 4);
+    const msgs = MockWorker.last.messages;
+    expect(msgs).toContain('setoption name UCI_LimitStrength value true');
+    expect(msgs).toContain('setoption name UCI_Elo value 1750');
+  });
+});
+
+describe('resolveComputerMoveOptions', () => {
+  it('uses eloTarget override instead of level profile strength', async () => {
+    const { resolveComputerMoveOptions } = await import(
+      '../../src/lib/engine/stockfish-client'
+    );
+    expect(
+      resolveComputerMoveOptions({
+        computerLevel: 4,
+        eloTarget: 900,
+      }),
+    ).toMatchObject({ eloTarget: 900 });
+  });
+
+  it('applies styleBlunderCp and thinkTimeMs from game state', async () => {
+    const { resolveComputerMoveOptions } = await import(
+      '../../src/lib/engine/stockfish-client'
+    );
+    expect(
+      resolveComputerMoveOptions({
+        computerLevel: 6,
+        styleBlunderCp: 50,
+        thinkTimeMs: 2500,
+      }),
+    ).toMatchObject({ skill: 10, movetimeMs: 2500, blunderCp: 50 });
   });
 });
 

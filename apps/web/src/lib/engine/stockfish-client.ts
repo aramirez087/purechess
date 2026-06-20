@@ -16,12 +16,10 @@
  */
 
 import type {
+  ComputerGameStateDto,
   EngineAnalysisOptions,
   EngineEval,
 } from '@purechess/shared';
-
-// Difficulty level (1-8) -> UCI "Skill Level" (0-20).
-const UCI_SKILL = [0, 3, 5, 8, 11, 14, 17, 20] as const;
 
 const DEFAULT_MOVETIME_MS = 1000;
 const BESTMOVE_TIMEOUT_MS = 10_000;
@@ -47,15 +45,27 @@ interface LevelProfile {
 }
 
 const LEVEL_PROFILES: readonly LevelProfile[] = [
-  { eloTarget: 1320, blunderCp: 300 },
-  { eloTarget: 1350, blunderCp: 200 },
-  { eloTarget: 1400, blunderCp: 120 },
-  { skill: 3, blunderCp: 80 },
-  { skill: 8, blunderCp: 40 },
-  { skill: 14, blunderCp: 0 },
-  { skill: 17, blunderCp: 0 },
+  { eloTarget: 1320, blunderCp: 400 },
+  { eloTarget: 1450, blunderCp: 250 },
+  { eloTarget: 1600, blunderCp: 120 },
+  { eloTarget: 1750, blunderCp: 60 },
+  { skill: 5, blunderCp: 40 },
+  { skill: 10, blunderCp: 20 },
+  { skill: 15, blunderCp: 0 },
   { skill: 20, blunderCp: 0 },
 ];
+
+/** Clamp UI/API level to the supported 1–8 band. */
+export function clampComputerLevel(level: number): 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 {
+  const n = Math.round(Number(level));
+  if (!Number.isFinite(n) || n < 1) return 1;
+  if (n > 8) return 8;
+  return n as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+}
+
+function profileForLevel(level: number): LevelProfile {
+  return LEVEL_PROFILES[clampComputerLevel(level) - 1]!;
+}
 
 /** Signed sentinel used so a mate score sorts/windows against centipawn lines. */
 const MATE_CP_SENTINEL = 100_000;
@@ -387,6 +397,51 @@ export async function getHumanMove(
 }
 
 /**
+ * Merge persisted game settings with the level profile. When `eloTarget` is set
+ * (ELO mode) it replaces the profile strength; `styleBlunderCp` overrides the
+ * profile blunder window when the human-like toggle was used at create time.
+ */
+export function resolveComputerMoveOptions(
+  state: Pick<
+    ComputerGameStateDto,
+    'computerLevel' | 'eloTarget' | 'styleBlunderCp' | 'thinkTimeMs'
+  >,
+): EngineAnalysisOptions {
+  const profile = profileForLevel(state.computerLevel);
+  const options: EngineAnalysisOptions = {
+    movetimeMs: state.thinkTimeMs ?? DEFAULT_MOVETIME_MS,
+  };
+
+  if (state.eloTarget !== undefined) {
+    options.eloTarget = state.eloTarget;
+  } else if (profile.eloTarget !== undefined) {
+    options.eloTarget = profile.eloTarget;
+  } else if (profile.skill !== undefined) {
+    options.skill = profile.skill;
+  }
+
+  const blunder =
+    state.styleBlunderCp !== undefined ? state.styleBlunderCp : profile.blunderCp;
+  if (blunder > 0) options.blunderCp = blunder;
+
+  return options;
+}
+
+/** Vs-computer move selection — honours level profile + persisted overrides. */
+export async function getComputerMove(
+  fen: string,
+  state: Pick<
+    ComputerGameStateDto,
+    'computerLevel' | 'eloTarget' | 'styleBlunderCp' | 'thinkTimeMs'
+  >,
+): Promise<string> {
+  return getHumanMove(fen, {
+    ...resolveComputerMoveOptions(state),
+    deterministicSeed: fullmoveSeed(fen),
+  });
+}
+
+/**
  * Ask Stockfish for the best move from `fen` at the given difficulty level.
  * Returns a UCI move (e.g. "e2e4", or "e7e8q" for a promotion).
  *
@@ -398,9 +453,7 @@ export async function getBestMove(
   level: number,
   movetimeMs = DEFAULT_MOVETIME_MS,
 ): Promise<string> {
-  const profile =
-    LEVEL_PROFILES[(level - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ??
-    LEVEL_PROFILES[LEVEL_PROFILES.length - 1]!;
+  const profile = profileForLevel(level);
   return getHumanMove(fen, { ...profile, movetimeMs, deterministicSeed: fullmoveSeed(fen) });
 }
 
@@ -416,10 +469,7 @@ function fullmoveSeed(fen: string): number {
  * level. A thin level-aware wrapper over `chooseMove`/`analyze`.
  */
 export async function getHint(fen: string, level: number): Promise<string> {
-  const profile =
-    LEVEL_PROFILES[(level - 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7] ??
-    LEVEL_PROFILES[LEVEL_PROFILES.length - 1]!;
-  return getHumanMove(fen, profile);
+  return getHumanMove(fen, profileForLevel(level));
 }
 
 /**

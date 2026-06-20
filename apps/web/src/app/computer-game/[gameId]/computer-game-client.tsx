@@ -306,10 +306,10 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
     if (botLockRef.current) return;
     botLockRef.current = true;
     try {
-      const { getBestMove } = await import('@/lib/engine/stockfish-client');
+      const { getComputerMove } = await import('@/lib/engine/stockfish-client');
       let current = startGame;
       while (isComputerTurn(current) && !disposedRef.current) {
-        const uci = await getBestMove(current.fen, current.computerLevel);
+        const uci = await getComputerMove(current.fen, current);
         current = await submitComputerMove(gameId, uci);
         if (disposedRef.current) return;
         setState({ phase: 'playing', game: current, submitting: false, moveError: null });

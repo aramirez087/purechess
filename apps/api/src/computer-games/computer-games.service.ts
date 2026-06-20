@@ -25,11 +25,14 @@ import {
   STARTING_FEN,
   buildStateDto,
   computeExtras,
+  engineConfigFromDto,
   engineTimeMs,
   fenPositionKey,
   getCategory,
   isUntimed,
+  readComputerEngineConfig,
   resolveColor,
+  withPersistedEngineConfig,
 } from "./computer-games.helpers";
 
 @Injectable()
@@ -85,7 +88,11 @@ export class ComputerGamesService {
     });
     engineState = { ...engineState, status: "active" };
 
-    const serialized = this.engine.toSerializable(engineState);
+    const engineConfig = engineConfigFromDto(dto);
+    const serialized = withPersistedEngineConfig(
+      this.engine.toSerializable(engineState),
+      engineConfig ? { computerEngine: engineConfig } : null,
+    );
 
     await this.prisma.game.update({
       where: { id: game.id },
@@ -117,6 +124,7 @@ export class ComputerGamesService {
       result: null,
       resultReason: null,
       extras: computeExtras(serialized, computerColor, "active"),
+      engineConfig: readComputerEngineConfig(serialized),
     });
   }
 
@@ -160,6 +168,7 @@ export class ComputerGamesService {
       },
     });
 
+    const engineConfig = engineConfigFromDto(dto);
     const serialized: SerializableEngineState = {
       gameId: game.id,
       whiteUserId,
@@ -172,6 +181,7 @@ export class ComputerGamesService {
       status: "active",
       result: null,
       resultReason: null,
+      ...(engineConfig ? { computerEngine: engineConfig } : {}),
     };
 
     await this.prisma.game.update({
@@ -202,6 +212,7 @@ export class ComputerGamesService {
       result: null,
       resultReason: null,
       extras: computeExtras(serialized, computerColor, "active"),
+      engineConfig: readComputerEngineConfig(serialized),
     });
   }
 
@@ -222,6 +233,8 @@ export class ComputerGamesService {
 
     const gameComputerColor = game.computerColor as "white" | "black";
     const computerLevel = game.computerLevel ?? 1;
+    const priorSerialized = game.engineState as unknown as SerializableEngineState | null;
+    const engineConfig = readComputerEngineConfig(priorSerialized);
     const humanIsWhite = gameComputerColor === "black";
 
     if (dto.move === "resign") {
@@ -260,11 +273,8 @@ export class ComputerGamesService {
         lastComputerMove: game.lastComputerMove ?? null,
         result,
         resultReason: reason,
-        extras: computeExtras(
-          game.engineState as unknown as SerializableEngineState | null,
-          gameComputerColor,
-          "completed",
-        ),
+        extras: computeExtras(priorSerialized, gameComputerColor, "completed"),
+        engineConfig,
       });
     }
 
@@ -309,7 +319,10 @@ export class ComputerGamesService {
     if (state.moves.length === engineState.moves.length) {
       const result = state.result as string | null;
       const reason = state.resultReason as string | null;
-      const serializedFlag = this.engine.toSerializable(state);
+      const serializedFlag = withPersistedEngineConfig(
+        this.engine.toSerializable(state),
+        priorSerialized,
+      );
 
       await this.prisma.game.update({
         where: { id: gameId },
@@ -334,13 +347,17 @@ export class ComputerGamesService {
         result,
         resultReason: reason,
         extras: computeExtras(serializedFlag, gameComputerColor, "completed"),
+        engineConfig,
       });
     }
 
     const engineMove = state.moves[state.moves.length - 1]!;
 
     const finalResult = await this.engine.detectResult(state, nowMs);
-    const serialized = this.engine.toSerializable(state);
+    const serialized = withPersistedEngineConfig(
+      this.engine.toSerializable(state),
+      priorSerialized,
+    );
     const finalFen = state.position.fen();
 
     const pgn = this.engine.buildPgn(state.moves, {
@@ -430,6 +447,7 @@ export class ComputerGamesService {
         gameComputerColor,
         finalResult ? "completed" : "active",
       ),
+      engineConfig,
     });
   }
 
@@ -446,6 +464,7 @@ export class ComputerGamesService {
     }
 
     const computerColor = game.computerColor as "white" | "black";
+    const serialized = game.engineState as unknown as SerializableEngineState | null;
     return buildStateDto({
       gameId: game.id,
       fen: game.finalFen ?? STARTING_FEN,
@@ -456,11 +475,8 @@ export class ComputerGamesService {
       lastComputerMove: game.lastComputerMove ?? null,
       result: game.result ?? null,
       resultReason: game.resultReason ?? null,
-      extras: computeExtras(
-        game.engineState as unknown as SerializableEngineState | null,
-        computerColor,
-        game.status,
-      ),
+      extras: computeExtras(serialized, computerColor, game.status),
+      engineConfig: readComputerEngineConfig(serialized),
     });
   }
 }

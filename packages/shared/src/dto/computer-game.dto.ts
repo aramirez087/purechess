@@ -49,6 +49,19 @@ export interface ComputerGameStateDto {
   drawOfferedBy?: 'white' | 'black' | null;
   /** True iff zero player moves made — game may still be aborted. */
   abortable?: boolean;
+  /** Custom UCI_Elo target (ELO mode); overrides level profile when set. */
+  eloTarget?: number;
+  /** ± centipawn blunder window for human-like play. */
+  styleBlunderCp?: number;
+  /** Engine movetime per move, in ms. */
+  thinkTimeMs?: number;
+}
+
+/** Client-side engine strength knobs persisted in `engineState` JSON. */
+export interface ComputerEngineConfig {
+  eloTarget?: number;
+  styleBlunderCp?: number;
+  thinkTimeMs?: number;
 }
 
 // ---- Request DTOs (plain interfaces, matching existing shared style) ----

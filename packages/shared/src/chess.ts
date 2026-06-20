@@ -76,6 +76,12 @@ export interface SerializableEngineState {
   status: 'pending' | 'active' | 'completed' | 'aborted';
   result: GameResult | null;
   resultReason: GameResultReason | null;
+  /** Vs-computer engine strength overrides (optional, backward-compatible). */
+  computerEngine?: {
+    eloTarget?: number;
+    styleBlunderCp?: number;
+    thinkTimeMs?: number;
+  };
 }
 
 export type WireMove = {

@@ -133,6 +133,36 @@ describe('ComputerGamesService', () => {
       // The server no longer plays the computer's move on creation.
       expect(mockEngine.applyMove).not.toHaveBeenCalled();
     });
+
+    it('persists engine strength overrides and returns them in the DTO', async () => {
+      mockEngine.toSerializable.mockReturnValue({ gameId: GAME_ID });
+
+      const result = await service.createGame(USER_ID, {
+        ...dto,
+        eloTarget: 1200,
+        styleBlunderCp: 50,
+        thinkTimeMs: 2500,
+      });
+
+      expect(mockPrisma.game.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            engineState: expect.objectContaining({
+              computerEngine: {
+                eloTarget: 1200,
+                styleBlunderCp: 50,
+                thinkTimeMs: 2500,
+              },
+            }),
+          }),
+        }),
+      );
+      expect(result).toMatchObject({
+        eloTarget: 1200,
+        styleBlunderCp: 50,
+        thinkTimeMs: 2500,
+      });
+    });
   });
 
   describe('submitMove — legal move', () => {
