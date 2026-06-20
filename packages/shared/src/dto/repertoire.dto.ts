@@ -170,3 +170,24 @@ export interface GradeDrillResultDto {
   /** The line's scheduling interval (days) after this grade. */
   intervalDays: number;
 }
+
+// --- Opening Lab family drill (Redis-backed SM-2, no schema migration) --------
+
+/** GET /opening-lab/drill — lines from the named opening family to train. */
+export interface LabDrillLinesDto {
+  family: string;
+  color: RepertoireColorDto;
+  lines: DrillLineDto[];
+  dueLineCount: number;
+  /** Total variations in this family (may exceed `lines.length` when capped). */
+  totalLinesInFamily: number;
+}
+
+/** Body for `POST /opening-lab/grade`. */
+export interface GradeLabDrillDto {
+  family: string;
+  /** Scheduling key — the line's EPD from the opening book. */
+  epd: string;
+  color: RepertoireColorDto;
+  correctFirstTry: boolean;
+}

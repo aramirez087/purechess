@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 /**
  * Opening-name lookup against the lichess chess-openings book, baked to
- * `/openings.json` ([["epd","name"], …]) by `scripts/build-openings.mjs`.
+ * `/openings.json` ([["epd","name","pgn"], …]) by `scripts/build-openings.mjs`.
  * Loaded lazily once per session and cached at module scope (~45 kB gzip).
  */
 
@@ -18,10 +18,10 @@ function loadOpenings(): Promise<OpeningsMap> {
   pending ??= fetch('/openings.json')
     .then((res) => {
       if (!res.ok) throw new Error(`openings.json ${res.status}`);
-      return res.json() as Promise<Array<[string, string]>>;
+      return res.json() as Promise<Array<[string, string] | [string, string, string]>>;
     })
     .then((entries) => {
-      cached = new Map(entries);
+      cached = new Map(entries.map(([epd, name]) => [epd, name]));
       return cached;
     })
     .catch((err) => {

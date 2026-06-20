@@ -2,12 +2,18 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Check, RotateCcw, Target } from 'lucide-react';
-import type { DrillLinesDto, MoveIntent } from '@purechess/shared';
+import type {
+  DrillLinesDto,
+  LabDrillLinesDto,
+  MoveIntent,
+  RepertoireColorDto,
+} from '@purechess/shared';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
 import { Button } from '@/components/ui/button';
 import { bestMoveArrow, type BoardShape } from '@/lib/board/annotations';
 import { gradeDrill } from '@/lib/api/repertoire';
+import { gradeLabDrill } from '@/lib/api/opening-lab';
 import { openingDrillCompleted } from '@/lib/analytics/training-events';
 import {
   useOpeningDrill,
@@ -17,12 +23,16 @@ import {
 import { cn } from '@/lib/utils';
 
 export interface OpeningDrillProps {
-  repertoireId: string;
   repertoireName: string;
-  drill: DrillLinesDto;
+  drill: DrillLinesDto | LabDrillLinesDto;
   onBack: () => void;
   /** Restart with a freshly fetched session. */
   onRestart?: () => void;
+  /** Repertoire drill — persists grades to Postgres. */
+  repertoireId?: string;
+  /** Opening Lab family drill — persists grades to Redis. */
+  labDrill?: { family: string; color: RepertoireColorDto };
+  backLabel?: string;
 }
 
 /** Quiet "to move" label + line/move progress. */
@@ -71,11 +81,13 @@ function DrillSummaryView({
   nextDueByPath,
   onBack,
   onRestart,
+  backLabel = 'Back',
 }: {
   summary: DrillSummary;
   nextDueByPath: Map<string, string>;
   onBack: () => void;
   onRestart?: () => void;
+  backLabel?: string;
 }) {
   const pct = Math.round(summary.firstTryRate * 100);
   return (
@@ -119,7 +131,7 @@ function DrillSummaryView({
 
       <div className="flex items-center justify-center gap-2">
         <Button variant="ghost" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to repertoire
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {backLabel ?? 'Back'}
         </Button>
         {onRestart && (
           <Button onClick={onRestart}>
@@ -157,6 +169,8 @@ export function OpeningDrill({
   drill,
   onBack,
   onRestart,
+  labDrill,
+  backLabel = 'Back to repertoire',
 }: OpeningDrillProps) {
   const [started, setStarted] = useState(false);
   // Per-line next-due, captured from each grade response, for the summary.
@@ -164,11 +178,21 @@ export function OpeningDrill({
 
   const handleGradeLine = useCallback(
     (result: DrillLineResult) => {
-      // Fire-and-forget: persist the grade, stash the next-due for the summary.
-      gradeDrill(repertoireId, {
-        nodePath: result.nodePath,
-        correctFirstTry: result.correctFirstTry,
-      })
+      const persist = labDrill
+        ? gradeLabDrill({
+            family: labDrill.family,
+            epd: result.nodePath,
+            color: labDrill.color,
+            correctFirstTry: result.correctFirstTry,
+          })
+        : repertoireId
+          ? gradeDrill(repertoireId, {
+              nodePath: result.nodePath,
+              correctFirstTry: result.correctFirstTry,
+            })
+          : null;
+      if (!persist) return;
+      persist
         .then((res) => {
           nextDueByPath.current.set(result.nodePath, res.nextDueAt);
         })
@@ -176,7 +200,7 @@ export function OpeningDrill({
           // A grade write failing never blocks the drill — the queue is best-effort.
         });
     },
-    [repertoireId],
+    [repertoireId, labDrill],
   );
 
   const { state, start, onMove } = useOpeningDrill({
@@ -210,7 +234,12 @@ export function OpeningDrill({
   if (drill.lines.length === 0) {
     return (
       <div className="space-y-5">
-        <DrillHeader name={repertoireName} onBack={onBack} dueLineCount={drill.dueLineCount} />
+        <DrillHeader
+          name={repertoireName}
+          onBack={onBack}
+          dueLineCount={drill.dueLineCount}
+          backLabel={backLabel}
+        />
         <div className="rounded-[12px] border border-dashed border-border bg-surface/40 p-10 text-center">
           <Check className="mx-auto mb-3 h-7 w-7 text-brass" aria-hidden="true" />
           <p className="font-medium text-foreground">Nothing to drill right now</p>
@@ -226,7 +255,12 @@ export function OpeningDrill({
   return (
     <BoardSettingsProvider>
       <div className="space-y-5">
-        <DrillHeader name={repertoireName} onBack={onBack} dueLineCount={drill.dueLineCount} />
+        <DrillHeader
+          name={repertoireName}
+          onBack={onBack}
+          dueLineCount={drill.dueLineCount}
+          backLabel={backLabel}
+        />
 
         {!started ? (
           <div className="rounded-[12px] border border-border bg-surface/60 p-8 text-center">
@@ -248,6 +282,7 @@ export function OpeningDrill({
             nextDueByPath={nextDueByPath.current}
             onBack={onBack}
             onRestart={onRestart}
+            backLabel={backLabel}
           />
         ) : (
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
@@ -292,10 +327,12 @@ function DrillHeader({
   name,
   onBack,
   dueLineCount,
+  backLabel = 'Back',
 }: {
   name: string;
   onBack: () => void;
   dueLineCount: number;
+  backLabel?: string;
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
@@ -304,7 +341,7 @@ function DrillHeader({
         onClick={onBack}
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back
+        <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {backLabel}
       </button>
       <div className="flex items-center gap-2">
         <h2 className="font-display text-xl italic text-foreground">Drill: {name}</h2>

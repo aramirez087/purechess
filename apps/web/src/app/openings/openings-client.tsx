@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { BookOpen, Plus, Target } from 'lucide-react';
+import { BookOpen, FlaskConical, Plus, Target } from 'lucide-react';
 import type { RepertoireDto, RepertoireSummaryDto } from '@purechess/shared';
 import {
   deleteRepertoire,
@@ -202,17 +202,25 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
   const repertoires = list.data ?? [];
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-3xl italic text-foreground">Openings</h1>
+          <h1 className="font-display text-3xl italic text-foreground">Repertoire</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Your repertoire — the lines you play, stored as a tree.
+            The lines you play, stored as a tree — import, drill, and review.
           </p>
         </div>
-        <Button onClick={() => setView({ kind: 'new' })}>
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          New repertoire
-        </Button>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <Button asChild variant="outline">
+            <Link href="/openings/lab">
+              <FlaskConical className="h-4 w-4" aria-hidden="true" />
+              Opening Lab
+            </Link>
+          </Button>
+          <Button onClick={() => setView({ kind: 'new' })}>
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            New repertoire
+          </Button>
+        </div>
       </div>
 
       {list.isLoading ? (

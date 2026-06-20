@@ -4,6 +4,15 @@ import { ECO_OPENINGS } from './eco';
 
 export type { EcoEntry };
 export { ECO_OPENINGS };
+export type { OpeningBook, OpeningEntry, OpeningFamily } from './opening-book.js';
+export {
+  buildOpeningBook,
+  epdToStudyFen,
+  getFamily,
+  loadOpeningBook,
+  parseOpeningEntry,
+  searchOpenings,
+} from './opening-book.js';
 
 const fenCache = new Map<string, string>();
 

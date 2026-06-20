@@ -1,7 +1,7 @@
 /**
- * Bakes the lichess opening book to apps/web/public/openings.json as a
- * compact [["epd","name"], …] array (~3.5k entries) for lazy lookup by
- * apps/web/src/hooks/use-opening-name.ts.
+ * Bakes the lichess opening book to openings.json as a compact
+ * [["epd","name","pgn"], …] array (~3.7k entries) for lazy lookup by
+ * apps/web/src/hooks/use-opening-name.ts and the Opening Lab.
  *
  * The upstream TSV is `eco\tname\tpgn` (the epd/uci columns were dropped
  * upstream), so the EPD is derived by replaying each PGN with chess.js —
@@ -12,7 +12,7 @@
  * required); commit the regenerated openings.json.
  */
 import { createRequire } from 'node:module';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -24,10 +24,11 @@ const { Chess } = require('chess.js');
 
 const FILES = ['a', 'b', 'c', 'd', 'e'];
 const BASE = 'https://raw.githubusercontent.com/lichess-org/chess-openings/master';
-const OUT = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '../apps/web/public/openings.json',
-);
+const ROOT = path.dirname(fileURLToPath(import.meta.url));
+const OUT_PATHS = [
+  path.join(ROOT, '../apps/web/public/openings.json'),
+  path.join(ROOT, '../apps/api/src/opening-lab/data/openings-book.json'),
+];
 
 function epdFromPgn(pgn) {
   const chess = new Chess();
@@ -35,6 +36,7 @@ function epdFromPgn(pgn) {
   return chess.fen().split(' ').slice(0, 4).join(' ');
 }
 
+/** @type {Map<string, { name: string, pgn: string }>} */
 const entries = new Map();
 let skipped = 0;
 
@@ -48,7 +50,7 @@ for (const file of FILES) {
     try {
       const epd = epdFromPgn(pgn);
       // Transpositions: keep the first (most general) name for a position.
-      if (!entries.has(epd)) entries.set(epd, name);
+      if (!entries.has(epd)) entries.set(epd, { name, pgn });
     } catch {
       skipped += 1;
     }
@@ -59,5 +61,9 @@ if (entries.size < 3000) {
   throw new Error(`only ${entries.size} openings parsed — upstream format change?`);
 }
 
-await writeFile(OUT, JSON.stringify([...entries]), 'utf8');
-console.log(`wrote ${entries.size} openings to ${path.relative(process.cwd(), OUT)} (${skipped} skipped)`);
+const payload = JSON.stringify([...entries.entries()].map(([epd, { name, pgn }]) => [epd, name, pgn]));
+for (const out of OUT_PATHS) {
+  await mkdir(path.dirname(out), { recursive: true });
+  await writeFile(out, payload, 'utf8');
+  console.log(`wrote ${entries.size} openings to ${path.relative(process.cwd(), out)} (${skipped} skipped)`);
+}
