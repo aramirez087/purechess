@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, Check, RotateCcw, Target } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, Lightbulb, RotateCcw, Target } from 'lucide-react';
 import type {
   DrillStepDto,
   DrillLinesDto,
@@ -213,6 +213,145 @@ function nextDueLabel(iso?: string): string {
   return `Next: ${days}d`;
 }
 
+const DRILL_TIPS = [
+  'Say the move in your head before you touch a piece — naming it locks the pattern.',
+  'If you miss a move, replay the whole line once before moving on.',
+  'Focus on the idea behind the move, not just the square.',
+  'Lines you nail today come back in a few days. Misses return tomorrow.',
+];
+
+/** Session progress across queued lines. */
+function SessionProgress({
+  lineNumber,
+  totalLines,
+  moveNumber,
+  lineLength,
+}: {
+  lineNumber: number;
+  totalLines: number;
+  moveNumber: number;
+  lineLength: number;
+}) {
+  const lineProgress = lineLength > 0 ? (moveNumber - 1) / lineLength : 0;
+  const overall =
+    totalLines > 0 ? ((lineNumber - 1) + lineProgress) / totalLines : 0;
+  const pct = Math.round(overall * 100);
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span>Session progress</span>
+        <span className="tabular-nums">{pct}%</span>
+      </div>
+      <div
+        className="h-1.5 overflow-hidden rounded-full bg-border/80"
+        role="progressbar"
+        aria-valuenow={pct}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div
+          className="h-full rounded-full bg-brass transition-[width] duration-300 ease-out"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Rotating didactic tip for the current line. */
+function DidacticTip({ lineNumber }: { lineNumber: number }) {
+  const tip = DRILL_TIPS[(lineNumber - 1) % DRILL_TIPS.length];
+  return (
+    <div className="rounded-[10px] border border-brass/25 bg-brass-soft/10 p-4 text-sm shadow-inner-hairline">
+      <p className="flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brass-text">
+        <Lightbulb className="h-3.5 w-3.5" aria-hidden="true" />
+        Learning tip
+      </p>
+      <p className="mt-2 leading-relaxed text-muted-foreground">{tip}</p>
+    </div>
+  );
+}
+
+/**
+ * Auto-plays each queued line so the user can watch before drilling.
+ * Advances one ply every 700ms; pauses 1.2s between lines.
+ */
+function LinePreview({
+  drill,
+  onDone,
+  onSkip,
+}: {
+  drill: DrillLinesDto | LabDrillLinesDto;
+  onDone: () => void;
+  onSkip: () => void;
+}) {
+  const [lineIdx, setLineIdx] = useState(0);
+  const [ply, setPly] = useState(0);
+  const line = drill.lines[lineIdx];
+  const fen =
+    ply === 0
+      ? (line?.rootFen ?? drill.lines[0]?.rootFen)
+      : (line?.steps[ply - 1]?.fen ?? line?.rootFen);
+  const lastStep = ply > 0 ? line?.steps[ply - 1] : null;
+  const done = lineIdx >= drill.lines.length;
+
+  useEffect(() => {
+    if (done || !line) return;
+    const atLineEnd = ply >= line.steps.length;
+    const delay = atLineEnd ? 1200 : 700;
+    const timer = window.setTimeout(() => {
+      if (atLineEnd) {
+        setLineIdx((i) => i + 1);
+        setPly(0);
+      } else {
+        setPly((p) => p + 1);
+      }
+    }, delay);
+    return () => window.clearTimeout(timer);
+  }, [done, line, ply]);
+
+  useEffect(() => {
+    if (done) onDone();
+  }, [done, onDone]);
+
+  if (!line) return null;
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="rounded-[12px] border border-border bg-surface/60 p-6 text-center">
+        <BookOpen className="mx-auto mb-3 h-7 w-7 text-brass" aria-hidden="true" />
+        <p className="font-medium text-foreground">
+          Learning line {lineIdx + 1} of {drill.lines.length}
+        </p>
+        <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
+          Watch each line play out — your moves are highlighted. When every line has played through,
+          you&apos;ll drill from memory.
+        </p>
+        <Button variant="ghost" size="sm" className="mt-4" onClick={onSkip}>
+          Skip to drill
+        </Button>
+      </div>
+
+      <DrillLineStrip steps={line.steps} activePly={ply} />
+      <div className="mx-auto aspect-square w-full max-w-[min(100%,calc(100dvh-var(--top-bar)-18rem))]">
+        <Chessboard
+          position={fen ?? line.rootFen}
+          orientation={drill.color}
+          lastMove={
+            lastStep
+              ? {
+                  from: lastStep.uci.slice(0, 2) as never,
+                  to: lastStep.uci.slice(2, 4) as never,
+                }
+              : undefined
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
 /**
  * The opening trainer surface. Walks the queued lines with the same Chessboard
  * the rest of the app uses: opponent replies auto-play, the user must produce
@@ -233,6 +372,7 @@ export function OpeningDrill({
   labDrill,
   backLabel = 'Back to repertoire',
 }: OpeningDrillProps) {
+  const [phase, setPhase] = useState<'choose' | 'preview' | 'drill'>('choose');
   const [started, setStarted] = useState(false);
   // Per-line next-due, captured from each grade response, for the summary.
   const nextDueByPath = useRef<Map<string, string>>(new Map());
@@ -275,10 +415,19 @@ export function OpeningDrill({
       }),
   });
 
-  const handleStart = useCallback(() => {
+  const handleStartDrill = useCallback(() => {
+    setPhase('drill');
     setStarted(true);
     start();
   }, [start]);
+
+  const handleStartPreview = useCallback(() => {
+    setPhase('preview');
+  }, []);
+
+  const handlePreviewDone = useCallback(() => {
+    handleStartDrill();
+  }, [handleStartDrill]);
 
   const handleMove = useCallback((intent: MoveIntent) => onMove(intent), [onMove]);
 
@@ -324,20 +473,29 @@ export function OpeningDrill({
           backLabel={backLabel}
         />
 
-        {!started ? (
-          <div className="rounded-[12px] border border-border bg-surface/60 p-8 text-center">
+        {phase === 'choose' ? (
+          <div className="mx-auto max-w-lg rounded-[12px] border border-border bg-surface/60 p-8 text-center">
             <Target className="mx-auto mb-3 h-7 w-7 text-brass" aria-hidden="true" />
             <p className="font-medium text-foreground">
               {drill.lines.length} line{drill.lines.length === 1 ? '' : 's'} ready
             </p>
             <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-              Play your booked moves — the opponent replies for you. Off-book moves are flagged
-              and the line comes back sooner.
+              Learn the lines first, then play your booked moves from memory. Off-book moves are
+              flagged and come back sooner in the review queue.
             </p>
-            <Button className="mt-5" onClick={handleStart} data-testid="drill-start">
-              Start drilling
-            </Button>
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <Button onClick={handleStartPreview} variant="outline" data-testid="drill-learn">
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
+                Learn lines first
+              </Button>
+              <Button onClick={handleStartDrill} data-testid="drill-start">
+                <Target className="h-4 w-4" aria-hidden="true" />
+                Drill now
+              </Button>
+            </div>
           </div>
+        ) : phase === 'preview' && !started ? (
+          <LinePreview drill={drill} onDone={handlePreviewDone} onSkip={handleStartDrill} />
         ) : state.phase === 'done' && state.summary ? (
           <DrillSummaryView
             summary={state.summary}
@@ -349,6 +507,12 @@ export function OpeningDrill({
         ) : (
           <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]">
             <main className="flex min-h-0 min-w-0 flex-col gap-3">
+              <SessionProgress
+                lineNumber={state.lineNumber}
+                totalLines={state.totalLines}
+                moveNumber={state.moveNumber}
+                lineLength={state.lineLength}
+              />
               <DrillPrompt
                 toMove={toMove}
                 outOfBook={!!state.bookMove}
@@ -374,7 +538,8 @@ export function OpeningDrill({
                 </div>
               </div>
             </main>
-            <aside className="hidden min-h-0 min-w-0 flex-col gap-3 lg:flex">
+            <aside className="flex min-h-0 min-w-0 flex-col gap-3">
+              <DidacticTip lineNumber={state.lineNumber} />
               <div className="rounded-[10px] border border-border bg-surface/60 p-4 text-sm shadow-inner-hairline">
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brass-text">
                   Session
@@ -385,7 +550,7 @@ export function OpeningDrill({
                   {state.totalLines === 1 ? '' : 's'} this session.
                 </p>
               </div>
-              <div className="min-h-0 flex-1 rounded-[10px] border border-border bg-surface/45 p-4 text-sm shadow-inner-hairline">
+              <div className="rounded-[10px] border border-border bg-surface/45 p-4 text-sm shadow-inner-hairline lg:flex-1">
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brass-text">
                   Current
                 </p>

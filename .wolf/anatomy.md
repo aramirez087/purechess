@@ -1463,7 +1463,9 @@
 
 ## apps/web/src/components/openings/
 
-- `opening-drill.tsx` — Restart with a freshly fetched session. (~3211 tok)
+- `chess-com-panel.tsx` — Link chess.com username, sync games, show opening mistakes from real games. (~2800 tok)
+- `openings-hub.tsx` — Didactic Study→Build→Drill hub; today's drill CTA + insights opening-leak banner. (~4200 tok)
+- `opening-drill.tsx` — Learn-then-drill preview + session progress + didactic tips. (~3800 tok)
 - `repertoire-explorer-builder.tsx` — Grows a repertoire tree from the start position. Reuses the analysis tree (~1026 tok)
 - `repertoire-import.tsx` — Total move nodes in the subtree (excluding the root). (~2888 tok)
 - `repertoire-view.tsx` — Read view for a saved repertoire: renders the stored tree with the SAME (~1079 tok)

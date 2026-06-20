@@ -3278,3 +3278,5 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 09:10 | Opening Lab v2: openings.json includes PGN movetext; save-to-repertoire dialog; family SM-2 drill via Redis (`/opening-lab/drill`) | — | build-openings.mjs, opening-lab-review.service.ts, save-to-repertoire-dialog.tsx |
 | 09:15 | Opening Lab in AppShell + mobile nav (after Train / beside Repertoire) | — | AppShell.tsx, MobileNav.tsx |
 | 12:15 | Opening drill tiny board fix: defined --top-bar CSS var + flex-1 height chain on drill grid | — | globals.css, opening-drill.tsx, openings-client.tsx, opening-lab-drill-client.tsx |
+| 14:14 | Openings hub redesign: Study→Build→Drill didactic hub (`openings-hub.tsx`), today's drill CTA, insights opening-leak banner, learn-then-drill preview in `opening-drill.tsx` | — | openings-hub.tsx, openings-client.tsx, opening-drill.tsx, repertoire-view.tsx |
+| 14:19 | chess.com import: link username, server fetches archives, client Stockfish analyzes opening phase, mistakes feed insights + openings hub (`ChessComPanel`) | — | apps/api/src/chess-com/, chess-com.dto.ts, opening-analyzer.ts, chess-com-panel.tsx |

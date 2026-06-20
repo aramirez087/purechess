@@ -6,12 +6,16 @@ import { PuzzleServingService } from '../puzzles/puzzle-serving.service';
 import { GameMistakeService } from '../puzzles/game-mistake.service';
 import { EndgamesService } from '../endgames/endgames.service';
 import { RepertoireReviewService } from '../repertoire/repertoire-review.service';
+import { ChessComService } from '../chess-com/chess-com.service';
 import {
+  chessComOpeningWeakness,
   endgameGap,
   openingLeak,
+  pickStrongerOpeningWeakness,
   recurringGameMistake,
   tacticalThemeWeakness,
   timeManagement,
+  type ChessComMistakeSummary,
   type EndgameCategoryStat,
   type MistakeCluster,
   type MoveTimeAgg,
@@ -60,6 +64,7 @@ export class InsightsService {
     private readonly mistakes: GameMistakeService,
     private readonly endgames: EndgamesService,
     private readonly repertoireReview: RepertoireReviewService,
+    private readonly chessCom: ChessComService,
     @Inject('REDIS_CLIENT') private readonly redis: Redis,
   ) {}
 
@@ -80,19 +85,25 @@ export class InsightsService {
 
   /** Compute (no cache) — gather aggregates, run detectors, rank, dedupe, cap. */
   async compute(userId: string): Promise<InsightDto> {
-    const [themeStats, clusters, openingOutcomes, endgameStats, moveAgg] =
+    const [themeStats, clusters, openingOutcomes, chessComMistakes, endgameStats, moveAgg] =
       await Promise.all([
         this.gatherThemeStats(userId),
         this.gatherMistakeClusters(userId),
         this.gatherOpeningOutcomes(userId),
+        this.gatherChessComMistakes(userId),
         this.gatherEndgameStats(userId),
         this.gatherMoveTimeAgg(userId),
       ]);
 
+    const openingWeakness = pickStrongerOpeningWeakness(
+      openingLeak(openingOutcomes),
+      chessComOpeningWeakness(chessComMistakes),
+    );
+
     const candidates: (WeaknessDto | null)[] = [
       tacticalThemeWeakness(themeStats),
       recurringGameMistake(clusters),
-      openingLeak(openingOutcomes),
+      openingWeakness,
       endgameGap(endgameStats),
       timeManagement(moveAgg),
     ];
@@ -147,6 +158,18 @@ export class InsightsService {
    * — no drill state is mutated. The line label is the repertoire name plus the
    * leaf path (the precise line resolution lives in the opening trainer).
    */
+  /** chess.com opening mistakes stored after client-side sync. */
+  private async gatherChessComMistakes(userId: string): Promise<ChessComMistakeSummary[]> {
+    const rows = await this.chessCom.getMistakesForInsights(userId);
+    return rows
+      .filter((m) => !m.reviewed)
+      .map((m) => ({
+        openingLabel: m.openingLabel,
+        cpLoss: m.cpLoss,
+        playedAt: m.playedAt,
+      }));
+  }
+
   private async gatherOpeningOutcomes(userId: string): Promise<RepertoireOutcome[]> {
     const reviews = await this.prisma.repertoireReview.findMany({
       where: { userId, lapses: { gt: 0 } },

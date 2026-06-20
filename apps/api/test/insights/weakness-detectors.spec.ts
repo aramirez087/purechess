@@ -1,6 +1,9 @@
 import {
   ENDGAME_GAP_MIN_UNSOLVED,
+  CHESSCOM_OPENING_MIN_MISTAKES,
   OPENING_LEAK_MIN_LAPSES,
+  chessComOpeningWeakness,
+  pickStrongerOpeningWeakness,
   RECURRING_MISTAKE_MIN,
   THEME_MIN_ATTEMPTS,
   THEME_WEAK_ACCURACY,
@@ -197,6 +200,48 @@ describe('openingLeak', () => {
       { label: 'B', repertoireId: 'b', lapses: 5, reps: 10 }, // rate .5 → wins on tie
     ];
     expect(openingLeak(outcomes)!.label).toBe('B');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// chessComOpeningWeakness
+// ---------------------------------------------------------------------------
+
+describe('chessComOpeningWeakness', () => {
+  it('fires when one opening has enough mistakes', () => {
+    const w = chessComOpeningWeakness([
+      { openingLabel: 'Italian Game', cpLoss: 120 },
+      { openingLabel: 'Italian Game', cpLoss: 90 },
+    ]);
+    expect(w).not.toBeNull();
+    expect(w!.label).toBe('Italian Game');
+    expect(w!.actionHref).toContain('/openings?chesscom=');
+    expect(w!.evidence).toContain('chess.com');
+  });
+
+  it('stays silent below the mistake floor', () => {
+    expect(
+      chessComOpeningWeakness([
+        { openingLabel: 'Italian Game', cpLoss: 120 },
+      ]),
+    ).toBeNull();
+    expect(chessComOpeningWeakness([])).toBeNull();
+  });
+});
+
+describe('pickStrongerOpeningWeakness', () => {
+  it('prefers the higher-severity opening signal', () => {
+    const repertoire = {
+      area: 'opening' as const,
+      label: 'Rep',
+      severity: 0.4,
+    };
+    const chessCom = {
+      area: 'opening' as const,
+      label: 'Italian',
+      severity: 0.8,
+    };
+    expect(pickStrongerOpeningWeakness(repertoire, chessCom)?.label).toBe('Italian');
   });
 });
 

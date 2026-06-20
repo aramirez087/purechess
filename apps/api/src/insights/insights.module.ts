@@ -3,6 +3,7 @@ import { AuthModule } from '../auth/auth.module';
 import { PuzzlesModule } from '../puzzles/puzzles.module';
 import { EndgamesModule } from '../endgames/endgames.module';
 import { RepertoireModule } from '../repertoire/repertoire.module';
+import { ChessComModule } from '../chess-com/chess-com.module';
 import { InsightsController } from './insights.controller';
 import { InsightsService } from './insights.service';
 
@@ -18,7 +19,7 @@ import { InsightsService } from './insights.service';
  * `InsightsService` is exported so the S13 hub can embed the top insight.
  */
 @Module({
-  imports: [AuthModule, PuzzlesModule, EndgamesModule, RepertoireModule],
+  imports: [AuthModule, PuzzlesModule, EndgamesModule, RepertoireModule, ChessComModule],
   controllers: [InsightsController],
   providers: [InsightsService],
   exports: [InsightsService],

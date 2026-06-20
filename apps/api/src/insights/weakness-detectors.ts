@@ -42,6 +42,9 @@ export const RECURRING_MISTAKE_MIN = 3;
 /** A repertoire line needs this many lapses before it's a flagged "opening leak". */
 export const OPENING_LEAK_MIN_LAPSES = 3;
 
+/** chess.com opening mistakes in one motif before it surfaces as a weakness. */
+export const CHESSCOM_OPENING_MIN_MISTAKES = 2;
+
 /** An endgame category needs this many attempted-but-unsolved drills to be a gap. */
 export const ENDGAME_GAP_MIN_UNSOLVED = 2;
 
@@ -79,6 +82,13 @@ export interface MistakeCluster {
   count: number;
   /** Total game-mistakes considered (the denominator for "how often"). */
   totalMistakes: number;
+}
+
+/** Minimal chess.com opening mistake shape for clustering (insights read model). */
+export interface ChessComMistakeSummary {
+  openingLabel: string;
+  cpLoss: number;
+  playedAt?: string;
 }
 
 /** A repertoire line the user keeps missing (an "opening leak"). */
@@ -286,6 +296,68 @@ export function recurringGameMistake(clusters: MistakeCluster[]): WeaknessDto | 
  * lapsed line (tie-break by lapse RATE, then label). Returns `null` when no line
  * has leaked enough.
  */
+/**
+ * Recurring opening mistakes mined from the user's chess.com games (client-side
+ * engine analysis of the opening phase). Fires when one opening motif has ≥
+ * {@link CHESSCOM_OPENING_MIN_MISTAKES} mistakes. Picks the cluster with the
+ * highest count (tie-break by average cp loss).
+ */
+export function chessComOpeningWeakness(
+  mistakes: ChessComMistakeSummary[],
+): WeaknessDto | null {
+  if (mistakes.length < CHESSCOM_OPENING_MIN_MISTAKES) return null;
+
+  const byLabel = new Map<string, ChessComMistakeSummary[]>();
+  for (const m of mistakes) {
+    const bucket = byLabel.get(m.openingLabel) ?? [];
+    bucket.push(m);
+    byLabel.set(m.openingLabel, bucket);
+  }
+
+  const clusters = [...byLabel.entries()]
+    .map(([openingLabel, items]) => ({
+      openingLabel,
+      count: items.length,
+      avgCp: items.reduce((s, m) => s + m.cpLoss, 0) / items.length,
+    }))
+    .filter((c) => c.count >= CHESSCOM_OPENING_MIN_MISTAKES)
+    .sort((a, b) => {
+      if (a.count !== b.count) return b.count - a.count;
+      return b.avgCp - a.avgCp;
+    });
+
+  if (clusters.length === 0) return null;
+
+  const top = clusters[0];
+  const severity = clamp01(top.count / 5 + top.avgCp / 400);
+  const slug = encodeURIComponent(top.openingLabel);
+
+  return {
+    area: 'opening',
+    kind: 'opening',
+    slug,
+    label: top.openingLabel,
+    title: `Opening mistakes in your ${top.openingLabel} games`,
+    evidence:
+      `${top.count} mistake${top.count === 1 ? '' : 's'} in the opening ` +
+      `from chess.com — avg ${Math.round(top.avgCp)}cp lost`,
+    severity,
+    actionHref: `/openings?chesscom=${slug}`,
+    sampleSize: top.count,
+    estimatedEloUpside: Math.round(15 + severity * 45),
+  };
+}
+
+/** Pick the stronger of two opening weaknesses (repertoire leak vs chess.com). */
+export function pickStrongerOpeningWeakness(
+  repertoire: WeaknessDto | null,
+  chessCom: WeaknessDto | null,
+): WeaknessDto | null {
+  if (!repertoire) return chessCom;
+  if (!chessCom) return repertoire;
+  return (repertoire.severity ?? 0) >= (chessCom.severity ?? 0) ? repertoire : chessCom;
+}
+
 export function openingLeak(outcomes: RepertoireOutcome[]): WeaknessDto | null {
   const eligible = outcomes.filter((o) => o.lapses >= OPENING_LEAK_MIN_LAPSES);
   if (eligible.length === 0) return null;
@@ -439,6 +511,7 @@ export const ALL_DETECTORS = {
   tacticalThemeWeakness,
   recurringGameMistake,
   openingLeak,
+  chessComOpeningWeakness,
   endgameGap,
   timeManagement,
 } as const;

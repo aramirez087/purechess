@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Target, Trash2 } from 'lucide-react';
 import type { MoveIntent, RepertoireDto } from '@purechess/shared';
 import { Chessboard } from '@/components/board';
 import { BoardSettingsProvider } from '@/components/board/board-context';
@@ -16,6 +16,7 @@ export interface RepertoireViewProps {
   repertoire: RepertoireDto;
   onBack: () => void;
   onDelete: (id: string) => void;
+  onDrill?: () => void;
   deleting?: boolean;
 }
 
@@ -26,7 +27,13 @@ export interface RepertoireViewProps {
  * `AnalysisNode`. Playing moves explores further (kept in the local tree, not
  * persisted from here).
  */
-export function RepertoireView({ repertoire, onBack, onDelete, deleting }: RepertoireViewProps) {
+export function RepertoireView({
+  repertoire,
+  onBack,
+  onDelete,
+  onDrill,
+  deleting,
+}: RepertoireViewProps) {
   const tree = useAnalysisTree({
     moves: [],
     startFen: repertoire.rootFen,
@@ -58,16 +65,24 @@ export function RepertoireView({ repertoire, onBack, onDelete, deleting }: Reper
               {repertoire.color}
             </span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onDelete(repertoire.id)}
-            disabled={deleting}
-            className="text-destructive hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" aria-hidden="true" />
-            Delete
-          </Button>
+          <div className="flex items-center gap-2">
+            {onDrill ? (
+              <Button size="sm" onClick={onDrill}>
+                <Target className="h-4 w-4" aria-hidden="true" />
+                Drill
+              </Button>
+            ) : null}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onDelete(repertoire.id)}
+              disabled={deleting}
+              className="text-destructive hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
+              Delete
+            </Button>
+          </div>
         </div>
 
         <div className="grid min-h-0 gap-4 lg:h-[calc(100dvh-var(--top-bar)-9.5rem)] lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)]">

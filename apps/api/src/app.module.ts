@@ -28,6 +28,7 @@ import { EndgamesModule } from './endgames/endgames.module';
 import { InsightsModule } from './insights/insights.module';
 import { TrainingModule } from './training/training.module';
 import { OpeningLabModule } from './opening-lab/opening-lab.module';
+import { ChessComModule } from './chess-com/chess-com.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { OpeningLabModule } from './opening-lab/opening-lab.module';
     InsightsModule,
     TrainingModule,
     OpeningLabModule,
+    ChessComModule,
     ...(process.env['NODE_ENV'] === 'test' ? [TestingModule] : []),
   ],
   controllers: [AppController],
