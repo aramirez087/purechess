@@ -66,8 +66,9 @@ describe('TrustStrip', () => {
 });
 
 describe('Footer', () => {
-  it('has About, Terms, Privacy links', () => {
+  it('has Analyze, About, Terms, and Privacy links', () => {
     render(<Footer />);
+    expect(screen.getByRole('link', { name: /analyze/i })).toHaveAttribute('href', '/analyze');
     expect(screen.getByRole('link', { name: /about/i })).toHaveAttribute('href', '/about');
     expect(screen.getByRole('link', { name: /terms/i })).toHaveAttribute('href', '/terms');
     expect(screen.getByRole('link', { name: /privacy/i })).toHaveAttribute('href', '/privacy');

@@ -17,6 +17,7 @@ const navLinks = [
   { href: '/openings', label: 'Openings' },
   { href: '/endgames', label: 'Endgames' },
   { href: '/games', label: 'Games' },
+  { href: '/analyze', label: 'Analyze' },
   { href: '/profile', label: 'Profile' },
   { href: '/settings', label: 'Settings' },
 ];

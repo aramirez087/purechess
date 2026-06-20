@@ -14,6 +14,8 @@ const navLinks = [
   { href: '/train', label: 'Train', icon: Target },
   { href: '/puzzles', label: 'Puzzles' },
   { href: '/games', label: 'Games' },
+  // Paste-a-game / FEN study — pairs with Games (your history) as the review cluster.
+  { href: '/analyze', label: 'Analyze' },
 ];
 
 type AppShellProps = {

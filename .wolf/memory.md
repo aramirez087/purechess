@@ -3272,3 +3272,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 19:20 | Session end: 26 writes across 7 files (tsconfig.json, solve-session-shell.tsx, mistake-trainer.tsx, time-control-picker.tsx, computer-game-setup.tsx) | 10 reads | ~35570 tok |
 | 19:10 | Fixed computer difficulty: persist `engineState.computerEngine` (eloTarget/styleBlunderCp/thinkTimeMs), `getComputerMove(state)` in driveBot, widened LEVEL_PROFILES | bug-773 | — |
 | 19:42 | Fixed CI flake in TrainingSession tests: wait for puzzle-ready prompt before click; mock Chessboard honors readOnly | bug-775 | training-session.test.tsx, training-surfaces.test.tsx, vitest.setup.ts |
+| 20:05 | Added /analyze to AppShell + MobileNav (after Games) and homepage footer — minimal shell has no header nav | — | AppShell.tsx, MobileNav.tsx, footer.tsx |
