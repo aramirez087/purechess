@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { Target } from 'lucide-react';
+import { Target, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
 import { UserMenu } from './UserMenu';
 import { SettingsDialog } from '@/components/settings/settings-dialog';
+import { Button } from '@/components/ui/button';
 
 const navLinks = [
   { href: '/play', label: 'Play' },
@@ -91,6 +92,16 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
           </nav>
 
           <div className="ml-auto flex items-center gap-1">
+            <Button
+              asChild
+              size="sm"
+              className="hidden h-8 gap-1.5 bg-foreground px-3.5 text-background hover:bg-foreground/90 sm:inline-flex"
+            >
+              <Link href="/play/quick">
+                <Zap className="h-3.5 w-3.5" aria-hidden="true" />
+                Play
+              </Link>
+            </Button>
             <SettingsDialog />
             <UserMenu />
             <MobileNav />

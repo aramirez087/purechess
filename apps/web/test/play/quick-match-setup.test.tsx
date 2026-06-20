@@ -68,5 +68,9 @@ describe('QuickMatchSetup', () => {
 
     const link = screen.getByRole('link', { name: 'Sign in' });
     expect(link.getAttribute('href')).toBe('/login?return=%2Fplay');
+    expect(screen.getByRole('link', { name: /Play vs computer/i })).toHaveAttribute(
+      'href',
+      '/play?mode=computer',
+    );
   });
 });

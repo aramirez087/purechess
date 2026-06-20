@@ -4,6 +4,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { BoardThemeId } from '@/lib/board/themes';
 import { DEFAULT_PIECE_SET, PIECE_SETS, type PieceSetId } from '@/lib/board/piece-sets';
+import {
+  clampTimeControlIndex,
+  DEFAULT_PLAY_PREFERENCES,
+  type PlayPreferences,
+} from '@/lib/play-preferences';
 
 export interface Settings {
   appTheme: 'light' | 'dark' | 'system';
@@ -17,6 +22,8 @@ export interface Settings {
   showEvalBar: boolean;
   /** Hide the post-solve coach explanation panel in training modes. */
   hideExplanations: boolean;
+  /** Last quick-match time control + stakes — powers 1-click play. */
+  playPreferences: PlayPreferences;
 }
 
 interface SettingsStore extends Settings {
@@ -34,6 +41,7 @@ const DEFAULTS: Settings = {
   pieceSet: DEFAULT_PIECE_SET,
   showEvalBar: true,
   hideExplanations: false,
+  playPreferences: DEFAULT_PLAY_PREFERENCES,
 };
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -55,6 +63,11 @@ export const useSettingsStore = create<SettingsStore>()(
         if (!PIECE_SETS.some((s) => s.id === merged.pieceSet)) {
           merged.pieceSet = DEFAULT_PIECE_SET;
         }
+        const prefs = merged.playPreferences ?? DEFAULT_PLAY_PREFERENCES;
+        merged.playPreferences = {
+          timeControlIndex: clampTimeControlIndex(prefs.timeControlIndex),
+          rated: prefs.rated !== false,
+        };
         return merged;
       },
     }

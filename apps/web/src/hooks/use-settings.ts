@@ -13,6 +13,7 @@ export function useSettings(): Settings {
     pieceSet: s.pieceSet,
     showEvalBar: s.showEvalBar,
     hideExplanations: s.hideExplanations,
+    playPreferences: s.playPreferences,
   }));
 }
 

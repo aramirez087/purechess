@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { AppShell } from '@/components/layout/AppShell';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
 import type { RushPersonalBestsDto, SafeUser } from '@purechess/shared';
@@ -30,9 +29,5 @@ export default async function PuzzleRushPage() {
       EMPTY_BESTS)
     : EMPTY_BESTS;
 
-  return (
-    <AppShell>
-      <RushClient signedIn={signedIn} initialBests={bests} />
-    </AppShell>
-  );
+  return <RushClient signedIn={signedIn} initialBests={bests} />;
 }

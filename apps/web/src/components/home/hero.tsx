@@ -8,12 +8,16 @@ import { HeroHeading } from './hero-heading';
 
 const FEATURES = [
   {
-    title: 'Rated matches',
-    body: 'Glicko-2 ratings across bullet, blitz, and rapid.',
+    title: 'One-click play',
+    body: 'Jump straight into a rated quick match — no menus, no friction.',
   },
   {
-    title: 'Practice offline',
-    body: 'Play against eight levels of computer, untimed.',
+    title: 'Tactics training',
+    body: 'Daily puzzles, theme drills, rush, and spaced-repetition review.',
+  },
+  {
+    title: 'Rated matches',
+    body: 'Glicko-2 ratings across bullet, blitz, and rapid.',
   },
   {
     title: 'Invite a friend',
@@ -49,23 +53,23 @@ export function Hero() {
             paint and pushes LCP out to ~5s in Lighthouse. Static = LCP at FCP.
             (S07 — Lighthouse gate; same reason HeroHeading is static.) */}
         <p className="mt-6 max-w-xl text-balance text-base sm:text-lg text-muted-foreground">
-          Purechess is a single, quiet place to play chess online. No lessons, no streams —
-          just you, the clock, and a board that respects your time.
+          Purechess is a single, quiet place to play chess online — and get sharper when
+          you&apos;re between games. One click to play, one board that respects your time.
         </p>
 
         <div className="animate-rise-4 mt-10 flex w-full max-w-sm flex-col items-center gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:justify-center">
-          <CtaButton variant="primary" href="/play?mode=casual">
+          <CtaButton variant="primary" href="/play/quick">
             Play now
             <ArrowRight
               className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5"
               aria-hidden
             />
           </CtaButton>
-          <CtaButton variant="secondary" href="/register">
-            Create account
+          <CtaButton variant="secondary" href="/puzzles">
+            Daily puzzle
           </CtaButton>
-          <CtaButton variant="tertiary" href="/analyze">
-            Analyze a game
+          <CtaButton variant="tertiary" href="/train">
+            Train
           </CtaButton>
         </div>
 
@@ -78,7 +82,7 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="relative mx-auto grid max-w-6xl gap-x-10 gap-y-8 px-6 pb-24 sm:grid-cols-3">
+      <div className="relative mx-auto grid max-w-6xl gap-x-10 gap-y-8 px-6 pb-24 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map(({ title, body }, i) => (
           <article
             key={title}

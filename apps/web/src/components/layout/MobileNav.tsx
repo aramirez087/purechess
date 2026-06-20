@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
-import { Menu } from 'lucide-react';
+import { Menu, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
@@ -44,6 +44,14 @@ export function MobileNav() {
           </SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-0.5 p-3" aria-label="Mobile">
+          <Link
+            href="/play/quick"
+            onClick={() => setOpen(false)}
+            className="mb-2 flex items-center justify-center gap-2 rounded-md bg-foreground px-3 py-2.5 text-sm font-semibold text-background"
+          >
+            <Zap className="h-4 w-4" aria-hidden="true" />
+            Play now
+          </Link>
           {navLinks.map((link) => {
             const active = pathname === link.href || pathname?.startsWith(`${link.href}/`);
             return (

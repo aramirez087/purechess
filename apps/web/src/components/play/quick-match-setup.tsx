@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Loader2, Zap } from 'lucide-react';
+import { Cpu, Loader2, Zap } from 'lucide-react';
 import { MATCHMAKING_TIME_CONTROLS } from '@purechess/shared';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TimeControlPicker, StakesPicker } from '@/components/play/time-control-picker';
 import { useMatchmaking } from '@/hooks/use-matchmaking';
+import { useSettingsStore } from '@/stores/settings-store';
+import { clampTimeControlIndex } from '@/lib/play-preferences';
 
 function formatElapsed(totalSeconds: number): string {
   const m = Math.floor(totalSeconds / 60);
@@ -16,11 +18,46 @@ function formatElapsed(totalSeconds: number): string {
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-export function QuickMatchSetup() {
+type QuickMatchSetupProps = {
+  /** Join the queue immediately on mount — the 1-click play path. */
+  autoStart?: boolean;
+  /** Login return URL when matchmaking needs auth. */
+  loginReturn?: string;
+};
+
+export function QuickMatchSetup({ autoStart = false, loginReturn = '/play' }: QuickMatchSetupProps) {
   const router = useRouter();
-  const [selectedTimeControl, setSelectedTimeControl] = useState(2);
-  const [rated, setRated] = useState(true);
+  const playPreferences = useSettingsStore((s) => s.playPreferences);
+  const updateSettings = useSettingsStore((s) => s.update);
+  const [selectedTimeControl, setSelectedTimeControl] = useState(() =>
+    clampTimeControlIndex(playPreferences.timeControlIndex),
+  );
+  const [rated, setRated] = useState(playPreferences.rated);
   const { state, join, cancel } = useMatchmaking();
+  const autoStartedRef = useRef(false);
+
+  const persistPreferences = useCallback(
+    (index: number, nextRated: boolean) => {
+      updateSettings({
+        playPreferences: {
+          timeControlIndex: clampTimeControlIndex(index),
+          rated: nextRated,
+        },
+      });
+    },
+    [updateSettings],
+  );
+
+  const startSearch = useCallback(async () => {
+    const tc = MATCHMAKING_TIME_CONTROLS[selectedTimeControl]!;
+    persistPreferences(selectedTimeControl, rated);
+    await join({
+      timeControlSeconds: tc.seconds,
+      incrementSeconds: tc.increment,
+      category: tc.category,
+      rated,
+    });
+  }, [join, persistPreferences, rated, selectedTimeControl]);
 
   // Navigate as soon as the pairing lands (push or poll).
   useEffect(() => {
@@ -29,18 +66,18 @@ export function QuickMatchSetup() {
     }
   }, [state, router]);
 
-  async function handleFind() {
-    const tc = MATCHMAKING_TIME_CONTROLS[selectedTimeControl]!;
-    await join({
-      timeControlSeconds: tc.seconds,
-      incrementSeconds: tc.increment,
-      category: tc.category,
-      rated,
-    });
-  }
+  // 1-click path: queue as soon as the component mounts.
+  useEffect(() => {
+    if (!autoStart || autoStartedRef.current) return;
+    autoStartedRef.current = true;
+    void startSearch();
+  }, [autoStart, startSearch]);
 
   async function handleCancel() {
     await cancel();
+    if (autoStart) {
+      router.push('/play');
+    }
   }
 
   if (state.phase === 'searching' || state.phase === 'matched') {
@@ -97,6 +134,8 @@ export function QuickMatchSetup() {
     );
   }
 
+  const loginHref = `/login?return=${encodeURIComponent(loginReturn)}`;
+
   return (
     <Card className="border-border/70 bg-surface/80 shadow-elevated backdrop-blur-sm">
       <CardHeader className="border-b border-border/60 pb-5">
@@ -116,14 +155,23 @@ export function QuickMatchSetup() {
         <TimeControlPicker
           options={MATCHMAKING_TIME_CONTROLS}
           value={selectedTimeControl}
-          onChange={setSelectedTimeControl}
+          onChange={(index) => {
+            setSelectedTimeControl(index);
+            persistPreferences(index, rated);
+          }}
         />
 
-        <StakesPicker rated={rated} onChange={(r) => setRated(r)} />
+        <StakesPicker
+          rated={rated}
+          onChange={(nextRated) => {
+            setRated(nextRated);
+            persistPreferences(selectedTimeControl, nextRated);
+          }}
+        />
 
         <div className="pt-2">
           <Button
-            onClick={handleFind}
+            onClick={() => void startSearch()}
             className="h-11 w-full bg-foreground text-background hover:bg-foreground/90 shadow-elevated"
           >
             Find opponent
@@ -131,21 +179,26 @@ export function QuickMatchSetup() {
         </div>
 
         {state.phase === 'error' && (
-          <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+          <div className="space-y-3 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-3 text-sm text-destructive">
             {state.unauthenticated ? (
               <>
-                You need an account to play rated strangers.{' '}
-                <Link
-                  href="/login?return=%2Fplay"
-                  className="font-medium underline underline-offset-2"
-                >
-                  Sign in
-                </Link>
+                <p>You need an account to play strangers online.</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button asChild size="sm" className="h-8 bg-foreground text-background hover:bg-foreground/90">
+                    <Link href={loginHref}>Sign in</Link>
+                  </Button>
+                  <Button asChild size="sm" variant="outline" className="h-8 border-border/80">
+                    <Link href="/play?mode=computer">
+                      <Cpu className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                      Play vs computer
+                    </Link>
+                  </Button>
+                </div>
               </>
             ) : (
-              state.message
+              <p>{state.message}</p>
             )}
-          </p>
+          </div>
         )}
       </CardContent>
     </Card>

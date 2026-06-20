@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   description: 'Start a game on Purechess.',
 };
 
-export default function PlayPage() {
-  return <PlayPageClient />;
+type Props = {
+  searchParams: Promise<{ mode?: string }>;
+};
+
+export default async function PlayPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const mode = typeof sp.mode === 'string' ? sp.mode : undefined;
+  return <PlayPageClient initialMode={mode} />;
 }

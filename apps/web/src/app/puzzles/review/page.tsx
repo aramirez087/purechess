@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { AppShell } from '@/components/layout/AppShell';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
 import type { ReviewDueDto, SafeUser } from '@purechess/shared';
@@ -29,9 +28,5 @@ export default async function PuzzleReviewPage() {
       EMPTY_DUE)
     : EMPTY_DUE;
 
-  return (
-    <AppShell>
-      <ReviewClient signedIn={signedIn} initialDue={due} />
-    </AppShell>
-  );
+  return <ReviewClient signedIn={signedIn} initialDue={due} />;
 }

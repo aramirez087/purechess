@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { AppShell } from '@/components/layout/AppShell';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
 import type {
@@ -41,13 +40,11 @@ export default async function PuzzleTrainPage({ searchParams }: Props) {
     : [];
 
   return (
-    <AppShell>
-      <TrainClient
-        themes={themes}
-        stats={stats}
-        signedIn={signedIn}
-        initialTheme={initialTheme}
-      />
-    </AppShell>
+    <TrainClient
+      themes={themes}
+      stats={stats}
+      signedIn={signedIn}
+      initialTheme={initialTheme}
+    />
   );
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { AppShell } from '@/components/layout/AppShell';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
 import type { PuzzleHistoryDto, PuzzleThemeStatDto, SafeUser } from '@purechess/shared';
@@ -28,12 +27,6 @@ export default async function PuzzleStatsPage() {
     : [null, null];
 
   return (
-    <AppShell>
-      <PuzzleStatsClient
-        signedIn={signedIn}
-        history={history}
-        stats={stats ?? []}
-      />
-    </AppShell>
+    <PuzzleStatsClient signedIn={signedIn} history={history} stats={stats ?? []} />
   );
 }
