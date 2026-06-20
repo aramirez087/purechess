@@ -57,20 +57,27 @@ export function Hero() {
           you&apos;re between games. One click to play, one board that respects your time.
         </p>
 
-        <div className="animate-rise-4 mt-10 flex w-full max-w-sm flex-col items-center gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:justify-center">
-          <CtaButton variant="primary" href="/play/quick">
-            Play now
-            <ArrowRight
-              className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5"
-              aria-hidden
-            />
-          </CtaButton>
-          <CtaButton variant="secondary" href="/puzzles">
-            Daily puzzle
-          </CtaButton>
-          <CtaButton variant="tertiary" href="/train">
-            Train
-          </CtaButton>
+        <div className="animate-rise-4 mt-10 flex w-full max-w-sm flex-col items-center gap-3 sm:max-w-none">
+          <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:justify-center">
+            <CtaButton variant="primary" href="/play/quick">
+              Play now
+              <ArrowRight
+                className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                aria-hidden
+              />
+            </CtaButton>
+            <CtaButton variant="secondary" href="/puzzles">
+              Daily puzzle
+            </CtaButton>
+          </div>
+          <div className="flex w-full flex-col items-center gap-1 sm:w-auto sm:flex-row sm:justify-center sm:gap-4">
+            <CtaButton variant="tertiary" href="/train">
+              Train
+            </CtaButton>
+            <CtaButton variant="tertiary" href="/analyze">
+              Analyze a game
+            </CtaButton>
+          </div>
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground/80">

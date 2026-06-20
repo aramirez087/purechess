@@ -48,6 +48,12 @@ describe('Hero', () => {
     expect(link).toHaveAttribute('href', '/train');
   });
 
+  it('Analyze a game links to /analyze', () => {
+    renderWithClient(<Hero />);
+    const link = screen.getByRole('link', { name: /analyze a game/i });
+    expect(link).toHaveAttribute('href', '/analyze');
+  });
+
   it('defaults to the signed-out Sign in link', () => {
     renderWithClient(<Hero />);
     const link = screen.getByRole('link', { name: /sign in/i });
