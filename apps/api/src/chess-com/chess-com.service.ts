@@ -11,7 +11,6 @@ import type {
   ChessComGamesDto,
   ChessComLinkDto,
   ChessComOpeningClusterDto,
-  ChessComOpeningMistakeCandidateDto,
   ChessComOpeningMistakeDto,
   ChessComOpeningMistakesDto,
   SaveChessComMistakesDto,

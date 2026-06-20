@@ -1,6 +1,5 @@
 import {
   ENDGAME_GAP_MIN_UNSOLVED,
-  CHESSCOM_OPENING_MIN_MISTAKES,
   OPENING_LEAK_MIN_LAPSES,
   chessComOpeningWeakness,
   pickStrongerOpeningWeakness,
