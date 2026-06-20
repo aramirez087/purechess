@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { InviteCreate } from '@/components/play/invite-create';
 import { ComputerGameSetup } from '@/components/play/computer-game-setup';
+import { InstantComputerButton } from '@/components/play/instant-computer-button';
 import { QuickMatchSetup } from '@/components/play/quick-match-setup';
 import { HeroBoard } from '@/components/home/hero-board';
 import { Button } from '@/components/ui/button';
@@ -60,7 +61,7 @@ function resolveInitialMode(mode?: string): PlayMode {
 }
 
 const ALT_MODES: Array<{
-  id: Exclude<PlayMode, 'home' | 'quick'>;
+  id: Exclude<PlayMode, 'home' | 'quick' | 'computer'>;
   title: string;
   description: string;
   meta: string;
@@ -72,13 +73,6 @@ const ALT_MODES: Array<{
     description: 'Generate a link, share it, choose your time control.',
     meta: 'Bullet · Blitz · Rapid',
     icon: Users,
-  },
-  {
-    id: 'computer',
-    title: 'Play vs Computer',
-    description: 'Untimed games against eight levels of Stockfish.',
-    meta: 'Untimed · 8 levels',
-    icon: Cpu,
   },
 ];
 
@@ -179,8 +173,8 @@ export function PlayPageClient({ initialMode }: PlayPageClientProps) {
         </p>
       </div>
 
-      {/* Primary 1-click path */}
-      <div className="mx-auto mt-10 w-full max-w-md">
+      {/* Primary 1-click paths */}
+      <div className="mx-auto mt-10 grid w-full max-w-2xl gap-4 sm:grid-cols-2">
         <div
           className={cn(
             'relative overflow-hidden rounded-2xl border border-brass/40 bg-gradient-to-br from-surface via-surface to-brass/[0.06]',
@@ -196,10 +190,10 @@ export function PlayPageClient({ initialMode }: PlayPageClientProps) {
               <p className="mt-1 text-sm text-muted-foreground">{prefsLabel}</p>
             </div>
           </div>
-          <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-2.5">
             <Button
               asChild
-              className="h-12 flex-1 bg-foreground text-[15px] font-medium text-background shadow-elevated hover:bg-foreground/90"
+              className="h-12 w-full bg-foreground text-[15px] font-medium text-background shadow-elevated hover:bg-foreground/90"
             >
               <Link
                 href="/play/quick"
@@ -210,10 +204,46 @@ export function PlayPageClient({ initialMode }: PlayPageClientProps) {
             </Button>
             <Button
               variant="outline"
-              className="h-12 border-border/80 px-5"
+              className="h-10 border-border/80 px-5"
               onClick={() => {
                 posthog.capture('play_clicked', { mode: 'quick', instant: false });
                 setMode('quick');
+              }}
+            >
+              <Settings2 className="mr-2 h-4 w-4" aria-hidden="true" />
+              Change time
+            </Button>
+          </div>
+        </div>
+
+        <div
+          className={cn(
+            'relative overflow-hidden rounded-2xl border border-border/70 bg-surface/80',
+            'p-7 shadow-elevated backdrop-blur-sm',
+          )}
+        >
+          <div className="flex items-start gap-4">
+            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-raised text-brass ring-1 ring-inset ring-border">
+              <Cpu className="h-6 w-6" />
+            </span>
+            <div className="min-w-0 text-left">
+              <h2 className="text-xl font-semibold tracking-tight">Computer</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Untimed · Level 4 · Random side</p>
+            </div>
+          </div>
+          <div className="mt-6 flex flex-col gap-2.5">
+            <InstantComputerButton
+              analyticsSource="play_hub"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 text-[15px] font-medium text-background shadow-elevated transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none"
+            >
+              Start computer
+            </InstantComputerButton>
+            <Button
+              variant="outline"
+              className="h-10 border-border/80 px-5"
+              onClick={() => {
+                posthog.capture('play_clicked', { mode: 'computer', instant: false });
+                setMode('computer');
               }}
             >
               <Settings2 className="mr-2 h-4 w-4" aria-hidden="true" />

@@ -71,15 +71,27 @@ export function RepertoireView({ repertoire, onBack, onDelete, deleting }: Reper
         </div>
 
         <div className="grid min-h-0 gap-4 lg:h-[calc(100dvh-var(--top-bar)-9.5rem)] lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)]">
-          <div className="flex min-h-0 min-w-0 items-center justify-center">
-            <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-var(--top-bar)-11rem))] lg:h-full lg:max-h-full lg:w-auto lg:max-w-full">
-              <Chessboard
-                position={tree.fen}
-                orientation={orientation}
-                freePlay
-                legalMoves={tree.legalMoves}
-                onMove={handleMove}
-                lastMove={tree.lastMove ?? undefined}
+          <div className="flex min-h-0 min-w-0 flex-col gap-3">
+            <div className="flex min-h-0 flex-1 items-center justify-center">
+              <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-var(--top-bar)-14.5rem))] lg:h-full lg:max-h-full lg:w-auto lg:max-w-full">
+                <Chessboard
+                  position={tree.fen}
+                  orientation={orientation}
+                  freePlay
+                  legalMoves={tree.legalMoves}
+                  onMove={handleMove}
+                  lastMove={tree.lastMove ?? undefined}
+                />
+              </div>
+            </div>
+            <div className="flex shrink-0 justify-center rounded-[10px] border border-[#2b332c] bg-[#121511] p-1.5 shadow-inner-hairline">
+              <ReviewControls
+                onStart={tree.goStart}
+                onPrev={tree.goPrev}
+                onNext={tree.goNext}
+                onEnd={tree.goEnd}
+                atStart={!tree.canGoPrev}
+                atEnd={!tree.canGoNext}
               />
             </div>
           </div>
@@ -87,18 +99,6 @@ export function RepertoireView({ repertoire, onBack, onDelete, deleting }: Reper
             title="Moves"
             className="min-h-[280px] min-w-0 lg:min-h-0"
             bodyClassName="flex min-h-0 flex-1 flex-col"
-            footer={
-              <div className="flex items-center justify-end p-2">
-                <ReviewControls
-                  onStart={tree.goStart}
-                  onPrev={tree.goPrev}
-                  onNext={tree.goNext}
-                  onEnd={tree.goEnd}
-                  atStart={!tree.canGoPrev}
-                  atEnd={!tree.canGoNext}
-                />
-              </div>
-            }
           >
             <div className="min-h-[200px] flex-1 overflow-hidden lg:min-h-0">
               <AnalysisMovePanel

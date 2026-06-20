@@ -13,6 +13,7 @@ import {
   Search,
   Swords,
   Target,
+  X,
 } from 'lucide-react';
 import type { MoveIntent, PieceType, Square } from '@purechess/shared';
 import { Chessboard } from '@/components/board';
@@ -73,6 +74,7 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
   const [flipped, setFlipped] = useState(false);
   const [practiceOpen, setPracticeOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [catalogOpen, setCatalogOpen] = useState(false);
   const [drillColor, setDrillColor] = useState<'white' | 'black'>('white');
   const lineStripRef = useRef<HTMLDivElement>(null);
 
@@ -130,6 +132,7 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
         params.delete('q');
       }
       router.replace(`/openings/lab?${params.toString()}`, { scroll: false });
+      setCatalogOpen(false);
     },
     [router, searchParams],
   );
@@ -190,11 +193,65 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
     router.replace(`/openings/lab?${params.toString()}`, { scroll: false });
     const fam = book ? getFamily(book, name) : undefined;
     if (fam?.entries[0]) setActive(fam.entries[0]);
+    setCatalogOpen(false);
   }
+
+  const renderCatalog = (searchId: string) => (
+    <>
+      <div className="border-b border-border/60 p-3">
+        <label className="sr-only" htmlFor={searchId}>
+          Search openings
+        </label>
+        <div className="relative">
+          <Search
+            className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
+          />
+          <input
+            id={searchId}
+            type="search"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedFamily(null);
+            }}
+            placeholder="e.g. Fegatello, Italian…"
+            className="h-9 w-full rounded-[8px] border border-border bg-background pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brass/50"
+          />
+        </div>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto p-2">
+        {!book ? (
+          <p className="px-2 py-6 text-center text-sm text-muted-foreground">Loading…</p>
+        ) : query.trim() ? (
+          <VariationList
+            entries={searchResults}
+            activeEpd={active?.epd}
+            onSelect={selectEntry}
+            emptyLabel="No lines match that search."
+          />
+        ) : selectedFamily && family ? (
+          <VariationList
+            entries={family.entries}
+            activeEpd={active?.epd}
+            onSelect={selectEntry}
+            heading={family.name}
+          />
+        ) : (
+          <FamilyList
+            families={book.families}
+            activeFamily={selectedFamily}
+            onSelect={handleFamilyClick}
+          />
+        )}
+      </div>
+    </>
+  );
 
   return (
     <BoardSettingsProvider>
-      <div className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col px-4 py-6 sm:px-6 lg:min-h-0 lg:overflow-hidden lg:py-4">
+      <div className="opening-lab-shell mx-auto flex w-full max-w-[1600px] flex-1 flex-col px-4 py-6 sm:px-6 lg:flex-none lg:min-h-0 lg:overflow-hidden lg:py-4">
         <header className="flex shrink-0 flex-col gap-3 border-b border-border/60 pb-4 sm:flex-row sm:items-end sm:justify-between lg:pb-3">
           <div className="min-w-0">
             <Link
@@ -241,58 +298,27 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
           </p>
         ) : (
           <div className="mt-4 grid min-h-0 flex-1 gap-4 lg:mt-3 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)_minmax(300px,380px)] lg:gap-5 lg:overflow-hidden">
-            <aside className="flex min-w-0 max-h-[min(50vh,420px)] flex-col gap-3 overflow-hidden rounded-[12px] border border-border bg-surface/60 lg:h-full lg:max-h-none">
-              <div className="border-b border-border/60 p-3">
-                <label className="sr-only" htmlFor="opening-lab-search">
-                  Search openings
-                </label>
-                <div className="relative">
-                  <Search
-                    className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  <input
-                    id="opening-lab-search"
-                    type="search"
-                    value={query}
-                    onChange={(e) => {
-                      setQuery(e.target.value);
-                      setSelectedFamily(null);
-                    }}
-                    placeholder="e.g. Fegatello, Italian…"
-                    className="h-9 w-full rounded-[8px] border border-border bg-background pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brass/50"
-                  />
-                </div>
-              </div>
-
-              <div className="min-h-0 flex-1 overflow-y-auto p-2">
-                {!book ? (
-                  <p className="px-2 py-6 text-center text-sm text-muted-foreground">Loading…</p>
-                ) : query.trim() ? (
-                  <VariationList
-                    entries={searchResults}
-                    activeEpd={active?.epd}
-                    onSelect={selectEntry}
-                    emptyLabel="No lines match that search."
-                  />
-                ) : selectedFamily && family ? (
-                  <VariationList
-                    entries={family.entries}
-                    activeEpd={active?.epd}
-                    onSelect={selectEntry}
-                    heading={family.name}
-                  />
-                ) : (
-                  <FamilyList
-                    families={book.families}
-                    activeFamily={selectedFamily}
-                    onSelect={handleFamilyClick}
-                  />
-                )}
-              </div>
+            <aside className="hidden min-w-0 flex-col overflow-hidden rounded-[12px] border border-border bg-surface/60 lg:flex lg:h-full">
+              {renderCatalog('opening-lab-search')}
             </aside>
 
-            <main className="flex min-h-0 min-w-0 flex-col gap-2 lg:h-full lg:min-h-[320px] lg:overflow-hidden">
+            <main className="order-1 flex min-h-0 min-w-0 flex-col gap-2 lg:order-none lg:h-full lg:min-h-[320px] lg:overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setCatalogOpen(true)}
+                className="flex min-h-12 shrink-0 items-center justify-between gap-3 rounded-[10px] border border-border bg-surface/60 px-3 py-2 text-left shadow-inner-hairline transition-colors hover:border-brass/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/50 lg:hidden"
+              >
+                <span className="min-w-0">
+                  <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-brass-text">
+                    Opening browser
+                  </span>
+                  <span className="block truncate text-sm font-medium text-foreground">
+                    {selectedFamily ?? active?.name ?? 'Search named lines'}
+                  </span>
+                </span>
+                <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+              </button>
+
               <div className="flex shrink-0 items-start justify-between gap-3">
                 <div className="h-[3.25rem] min-w-0 flex-1 overflow-hidden">
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brass-text">
@@ -348,21 +374,33 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
                 </div>
               </div>
 
-              <div
-                ref={lineStripRef}
-                className="flex h-9 min-w-0 shrink-0 items-center gap-2 overflow-x-auto rounded-[10px] border border-border/60 bg-surface/40 px-3"
-                aria-live="polite"
-              >
-                <span className="shrink-0 font-sans text-[10px] uppercase tracking-[0.14em] text-brass-text">
-                  Line
-                </span>
-                <p className="whitespace-nowrap font-mono text-xs text-muted-foreground">
-                  {pathLine || 'Play or pick a move to start exploring.'}
-                </p>
+              <div className="grid shrink-0 gap-2 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center">
+                <div
+                  ref={lineStripRef}
+                  className="flex h-9 min-w-0 items-center gap-2 overflow-x-auto rounded-[10px] border border-border/60 bg-surface/40 px-3"
+                  aria-live="polite"
+                >
+                  <span className="shrink-0 font-sans text-[10px] uppercase tracking-[0.14em] text-brass-text">
+                    Line
+                  </span>
+                  <p className="whitespace-nowrap font-mono text-xs text-muted-foreground">
+                    {pathLine || 'Play or pick a move to start exploring.'}
+                  </p>
+                </div>
+                <div className="flex justify-center rounded-[10px] border border-[#2b332c] bg-[#121511] p-1.5 shadow-inner-hairline xl:justify-end">
+                  <ReviewControls
+                    onStart={tree.goStart}
+                    onPrev={tree.goPrev}
+                    onNext={tree.goNext}
+                    onEnd={tree.goEnd}
+                    atStart={!tree.canGoPrev}
+                    atEnd={!tree.canGoNext}
+                  />
+                </div>
               </div>
 
               <div className="flex min-h-0 flex-1 items-center justify-center py-1 lg:py-0">
-                <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-14rem))] lg:h-full lg:max-h-full lg:w-auto lg:max-w-full">
+                <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-20rem))]">
                   <Chessboard
                     position={tree.fen}
                     orientation={orientation}
@@ -383,24 +421,12 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
               </p>
             </main>
 
-            <aside className="flex min-h-0 min-w-0 flex-col gap-3 lg:h-full lg:overflow-hidden">
+            <aside className="order-3 flex min-h-0 min-w-0 flex-col gap-3 lg:order-none lg:h-full lg:overflow-hidden">
               <OpeningExplorer fen={tree.fen} onMove={handleExplorerMove} className="shrink-0" />
               <GameRail
                 title="Moves"
                 className="min-h-0 flex-1"
                 bodyClassName="flex min-h-0 flex-1 flex-col"
-                footer={
-                  <div className="flex items-center justify-end p-2">
-                    <ReviewControls
-                      onStart={tree.goStart}
-                      onPrev={tree.goPrev}
-                      onNext={tree.goNext}
-                      onEnd={tree.goEnd}
-                      atStart={!tree.canGoPrev}
-                      atEnd={!tree.canGoNext}
-                    />
-                  </div>
-                }
               >
                 <div className="min-h-[160px] flex-1 overflow-hidden lg:min-h-0">
                   <AnalysisMovePanel
@@ -416,6 +442,39 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
       </div>
 
       <PracticeFromFenDialog fen={tree.fen} open={practiceOpen} onClose={() => setPracticeOpen(false)} />
+      {catalogOpen ? (
+        <div className="fixed inset-0 z-50 bg-background/70 p-3 backdrop-blur-sm lg:hidden">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="opening-catalog-title"
+            className="mx-auto flex h-[min(760px,calc(100dvh-1.5rem))] max-w-md flex-col overflow-hidden rounded-[12px] border border-border bg-surface shadow-elevated"
+          >
+            <div className="flex shrink-0 items-center justify-between border-b border-border/60 px-3 py-2.5">
+              <div className="min-w-0">
+                <h2
+                  id="opening-catalog-title"
+                  className="font-display text-lg italic text-foreground"
+                >
+                  Browse openings
+                </h2>
+                <p className="truncate text-xs text-muted-foreground">
+                  Search by name, ECO family, or variation.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCatalogOpen(false)}
+                aria-label="Close opening browser"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] text-muted-foreground transition-colors hover:bg-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/50"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+            {renderCatalog('opening-lab-mobile-search')}
+          </div>
+        </div>
+      ) : null}
       <SaveToRepertoireDialog
         open={saveOpen}
         onClose={() => setSaveOpen(false)}
