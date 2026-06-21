@@ -186,7 +186,13 @@ export function ChessComPanel() {
       ) : null}
 
       {syncState.error ? (
-        <p className="text-sm text-destructive">{syncState.error}</p>
+        <p role="alert" className="text-sm text-destructive">
+          {syncState.error}
+        </p>
+      ) : null}
+
+      {syncState.notice && !syncState.running ? (
+        <p className="text-sm text-muted-foreground">{syncState.notice}</p>
       ) : null}
 
       {linked && topMistakes.length > 0 ? (

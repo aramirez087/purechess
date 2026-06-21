@@ -16,6 +16,8 @@ export interface ChessComSyncState {
   gamesScanned: number;
   mistakesFound: number;
   error: string | null;
+  /** Set when sync finishes without throwing (e.g. zero games fetched). */
+  notice: string | null;
 }
 
 /**
@@ -29,11 +31,14 @@ export function useChessComSync() {
     gamesScanned: 0,
     mistakesFound: 0,
     error: null,
+    notice: null,
   });
   const cancelRef = useRef(false);
+  const runningRef = useRef(false);
 
   const sync = useCallback(async () => {
-    if (state.running) return;
+    if (runningRef.current) return;
+    runningRef.current = true;
     cancelRef.current = false;
     setState({
       running: true,
@@ -41,10 +46,25 @@ export function useChessComSync() {
       gamesScanned: 0,
       mistakesFound: 0,
       error: null,
+      notice: null,
     });
 
     try {
       const { games } = await fetchChessComGames();
+      if (games.length === 0) {
+        await completeChessComSync(0);
+        setState({
+          running: false,
+          progress: 1,
+          gamesScanned: 0,
+          mistakesFound: 0,
+          error: null,
+          notice:
+            'No recent games found on chess.com for this username. Play a few rated games there, then sync again.',
+        });
+        return;
+      }
+
       const allMistakes: ChessComOpeningMistakeCandidateDto[] = [];
 
       for (let i = 0; i < games.length; i++) {
@@ -55,7 +75,7 @@ export function useChessComSync() {
         allMistakes.push(...gameMistakes);
         setState((s) => ({
           ...s,
-          progress: (i + 1) / Math.max(games.length, 1),
+          progress: (i + 1) / games.length,
           gamesScanned: i + 1,
           mistakesFound: allMistakes.length,
         }));
@@ -66,24 +86,31 @@ export function useChessComSync() {
       }
       await completeChessComSync(games.length);
 
-      setState((s) => ({
-        ...s,
+      setState({
         running: false,
         progress: 1,
         gamesScanned: games.length,
         mistakesFound: allMistakes.length,
-      }));
+        error: null,
+        notice:
+          allMistakes.length === 0
+            ? `Analyzed ${games.length} game${games.length === 1 ? '' : 's'} — no opening mistakes met the threshold.`
+            : null,
+      });
     } catch (err) {
       setState((s) => ({
         ...s,
         running: false,
         error: err instanceof Error ? err.message : 'Sync failed',
       }));
+    } finally {
+      runningRef.current = false;
     }
-  }, [state.running]);
+  }, []);
 
   const cancel = useCallback(() => {
     cancelRef.current = true;
+    runningRef.current = false;
     setState((s) => ({ ...s, running: false }));
   }, []);
 

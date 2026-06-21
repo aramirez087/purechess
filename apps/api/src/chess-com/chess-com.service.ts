@@ -56,9 +56,10 @@ function normalizeUsername(raw: string): string {
   return raw.trim().toLowerCase();
 }
 
-/** YYYY/M from a Date (chess.com archive path uses unpadded month). */
+/** YYYY/MM from a Date — chess.com archives require zero-padded months. */
 function archivePath(d: Date): string {
-  return `${d.getUTCFullYear()}/${d.getUTCMonth() + 1}`;
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  return `${d.getUTCFullYear()}/${month}`;
 }
 
 /**
@@ -135,9 +136,15 @@ export class ChessComService {
     }
 
     collected.sort((a, b) => b.endTime - a.endTime);
+    const games = collected.slice(0, MAX_GAMES);
+    if (games.length === 0) {
+      this.logger.warn(
+        `chess.com sync for ${username}: no games in last ${months.length} months (${months.join(', ')})`,
+      );
+    }
     return {
       username,
-      games: collected.slice(0, MAX_GAMES),
+      games,
       monthsFetched: months.length,
     };
   }

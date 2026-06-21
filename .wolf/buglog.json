@@ -13017,6 +13017,23 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-20T12:15:00.000Z"
+    },
+    {
+      "id": "bug-777",
+      "timestamp": "2026-06-20T18:54:00.000Z",
+      "error_message": "chess.com Sync recent games completes with 0 games and no error",
+      "file": "apps/api/src/chess-com/chess-com.service.ts",
+      "root_cause": "archivePath() built YYYY/M (unpadded month) but chess.com API requires YYYY/MM; every archive fetch 404'd and returned an empty games array silently",
+      "fix": "Zero-pad month in archivePath(); log when zero games; client sync hook shows notice on empty fetch and uses runningRef guard",
+      "tags": [
+        "chess-com",
+        "sync",
+        "api",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-20T18:54:00.000Z"
     }
   ]
 }

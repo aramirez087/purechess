@@ -35,6 +35,42 @@ describe('ChessComService', () => {
     expect(store.get('chesscom:link:u1')).toBe('hikaru');
   });
 
+  it('fetches archives with zero-padded month paths', async () => {
+    const store = new Map<string, string>([['chesscom:link:u1', 'hikaru']]);
+    const redis = mockRedis(store);
+    const service = new ChessComService(redis as never);
+    const fetchedUrls: string[] = [];
+
+    global.fetch = jest.fn(async (url: string) => {
+      fetchedUrls.push(url);
+      if (url.includes('/games/')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            games: [
+              {
+                url: 'https://www.chess.com/game/live/1',
+                pgn: '[Event "Live Chess"]\n\n1. e4 e5 2. Nf3 Nc6 *',
+                end_time: 1_717_200_000,
+                time_control: '600',
+                white: { username: 'hikaru', rating: 3000 },
+                black: { username: 'guest', rating: 1500 },
+              },
+            ],
+          }),
+        } as Response;
+      }
+      return { ok: true, status: 200 } as Response;
+    }) as typeof fetch;
+
+    const result = await service.fetchGames('u1');
+    expect(result.games.length).toBeGreaterThan(0);
+    expect(fetchedUrls.filter((u) => u.includes('/games/')).length).toBe(3);
+    expect(fetchedUrls.every((u) => !/\/games\/\d{4}\/\d{1}$/.test(u))).toBe(true);
+    expect(fetchedUrls.some((u) => /\/games\/\d{4}\/\d{2}$/.test(u))).toBe(true);
+  });
+
   it('merges and caps persisted mistakes', async () => {
     const store = new Map<string, string>([['chesscom:link:u1', 'hikaru']]);
     const redis = mockRedis(store);
