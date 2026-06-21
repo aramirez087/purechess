@@ -13034,6 +13034,24 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-20T18:54:00.000Z"
+    },
+    {
+      "id": "bug-778",
+      "timestamp": "2026-06-21T08:06:00.000Z",
+      "error_message": "CI unit tests failed: analyze-client (invariant expected app router to be mounted) + eval-panel (text-[#10140f]/text-[#e9e4d4] assertions stale)",
+      "file": "apps/web/test/analyze/analyze-client.test.tsx",
+      "root_cause": "AnalyzeClient now renders AppShell→UserMenu (useRouter/usePathname/useQueryClient) without test mocks; EvalBar score cap migrated to semantic tokens (text-background/text-board-light) but tests still asserted hardcoded hex classes",
+      "fix": "analyze-client.test: mock next/navigation + auth getMe, wrap in QueryClientProvider; eval-panel.test: assert text-background and text-board-light",
+      "tags": [
+        "vitest",
+        "ci",
+        "analyze",
+        "eval-panel",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-21T08:06:00.000Z"
     }
   ]
 }

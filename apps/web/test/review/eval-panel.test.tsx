@@ -63,7 +63,7 @@ describe('EvalBar score cap', () => {
     expect(cap.className).toContain('bottom-1');
     expect(cap.className).not.toContain('top-1');
     // ink over the bone fill
-    expect(cap.className).toContain('text-[#10140f]');
+    expect(cap.className).toContain('text-background');
   });
 
   it('pins the cap to the top (Black edge) when Black is winning, white orientation', () => {
@@ -72,7 +72,7 @@ describe('EvalBar score cap', () => {
     expect(cap.className).toContain('top-1');
     expect(cap.className).not.toContain('bottom-1');
     // bone over the dark well
-    expect(cap.className).toContain('text-[#e9e4d4]');
+    expect(cap.className).toContain('text-board-light');
   });
 
   it('flips the winning edge with board orientation', () => {
@@ -85,7 +85,7 @@ describe('EvalBar score cap', () => {
     render(<EvalBar evaluation={evalOf({ mate: -3 })} orientation="white" />);
     const cap = screen.getByText('#3');
     expect(cap.className).toContain('top-1');
-    expect(cap.className).toContain('text-[#e9e4d4]');
+    expect(cap.className).toContain('text-board-light');
   });
 
   it('cap is decorative — score lives in the aria-label', () => {
