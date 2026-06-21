@@ -8,30 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
 import { Menu, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-function isNavActive(pathname: string | null, href: string): boolean {
-  if (!pathname) return false;
-  if (pathname === href) return true;
-  // Repertoire (/openings) vs Opening Lab (/openings/lab) share a prefix.
-  if (href === '/openings') {
-    return pathname.startsWith('/openings/') && !pathname.startsWith('/openings/lab');
-  }
-  return pathname.startsWith(`${href}/`);
-}
-
-const navLinks = [
-  { href: '/play', label: 'Play' },
-  // Improve surface.
-  { href: '/train', label: 'Train' },
-  { href: '/puzzles', label: 'Puzzles' },
-  { href: '/openings', label: 'Repertoire' },
-  { href: '/openings/lab', label: 'Opening Lab' },
-  { href: '/endgames', label: 'Endgames' },
-  { href: '/games', label: 'Games' },
-  { href: '/analyze', label: 'Analyze' },
-  { href: '/profile', label: 'Profile' },
-  { href: '/settings', label: 'Settings' },
-];
+import {
+  isNavActive,
+  MOBILE_EXTRA_NAV_LINKS,
+  PRIMARY_NAV_LINKS,
+} from './nav-links';
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -52,7 +33,14 @@ export function MobileNav() {
       <SheetContent side="left" className="w-72 p-0">
         <SheetHeader className="border-b border-border/60 px-5 py-4">
           <SheetTitle asChild>
-            <Logo size="sm" />
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              aria-label="PureChess home"
+              className="inline-flex rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Logo size="sm" />
+            </Link>
           </SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-0.5 p-3" aria-label="Mobile">
@@ -64,7 +52,27 @@ export function MobileNav() {
             <Zap className="h-4 w-4" aria-hidden="true" />
             Play now
           </Link>
-          {navLinks.map((link) => {
+          {PRIMARY_NAV_LINKS.map((link) => {
+            const active = isNavActive(pathname, link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  'flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium',
+                  'transition-colors',
+                  active
+                    ? 'bg-raised text-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-raised',
+                )}
+              >
+                {link.label}
+                {active && <span className="h-1.5 w-1.5 rounded-full bg-brass" />}
+              </Link>
+            );
+          })}
+          {MOBILE_EXTRA_NAV_LINKS.map((link) => {
             const active = isNavActive(pathname, link.href);
             return (
               <Link

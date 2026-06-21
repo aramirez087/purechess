@@ -6,6 +6,7 @@ import { ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { AppShell } from '@/components/layout/AppShell';
 import { Logo } from '@/components/layout/Logo';
 import { AnalyzeBoard } from '@/app/analyze/analyze-board';
 import { buildReviewFromFen, buildReviewFromPgn } from '@/services/game-review.service';
@@ -79,14 +80,14 @@ export function AnalyzeClient({ initialInput = '' }: { initialInput?: string }) 
   }
 
   return (
-    <main
-      id="main-content"
-      className="grain relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 py-10"
-      style={{
-        background:
-          'radial-gradient(70% 50% at 50% -5%, hsl(var(--brass) / 0.14), transparent 62%), radial-gradient(120% 120% at 50% 120%, hsl(var(--shadow-rgb, 0 0 0) / 0.45), transparent 55%), hsl(var(--background))',
-      }}
-    >
+    <AppShell>
+      <div
+        className="grain relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden px-4 py-10"
+        style={{
+          background:
+            'radial-gradient(70% 50% at 50% -5%, hsl(var(--brass) / 0.14), transparent 62%), radial-gradient(120% 120% at 50% 120%, hsl(var(--shadow-rgb, 0 0 0) / 45%), transparent 55%), hsl(var(--background))',
+        }}
+      >
       <div className="relative z-10 w-full max-w-[600px]">
         <div className="mb-7 flex flex-col items-center gap-4 text-center">
           <Link
@@ -159,6 +160,7 @@ export function AnalyzeClient({ initialInput = '' }: { initialInput?: string }) 
           Nothing leaves your browser — Stockfish runs locally.
         </p>
       </div>
-    </main>
+      </div>
+    </AppShell>
   );
 }

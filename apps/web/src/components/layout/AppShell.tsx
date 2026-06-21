@@ -1,23 +1,13 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { FlaskConical, Target, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
+import { PrimaryNavLinks } from './primary-nav-links';
 import { UserMenu } from './UserMenu';
 import { SettingsDialog } from '@/components/settings/settings-dialog';
 import { Button } from '@/components/ui/button';
-
-const navLinks = [
-  { href: '/play', label: 'Play' },
-  // Improve surface — hub at /train; repertoire at /openings.
-  { href: '/train', label: 'Train', icon: Target },
-  { href: '/openings/lab', label: 'Opening Lab', icon: FlaskConical },
-  { href: '/puzzles', label: 'Puzzles' },
-  { href: '/games', label: 'Games' },
-  // Paste-a-game / FEN study — pairs with Games (your history) as the review cluster.
-  { href: '/analyze', label: 'Analyze' },
-];
 
 type AppShellProps = {
   variant?: 'default' | 'minimal';
@@ -75,23 +65,7 @@ export function AppShell({ variant = 'default', children, contextBadge }: AppShe
           ) : null}
 
           <nav className="hidden md:flex items-center gap-1 ml-2" aria-label="Primary">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium',
-                    'text-muted-foreground hover:text-foreground hover:bg-raised',
-                    'transition-colors',
-                  )}
-                >
-                  {Icon ? <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" /> : null}
-                  {link.label}
-                </Link>
-              );
-            })}
+            <PrimaryNavLinks />
           </nav>
 
           <div className="ml-auto flex items-center gap-1">

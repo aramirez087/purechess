@@ -2,10 +2,11 @@ import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 
 const FOOTER_LINKS = [
+  { href: '/play', label: 'Play' },
+  { href: '/train', label: 'Train' },
+  { href: '/openings', label: 'Openings' },
+  { href: '/puzzles', label: 'Puzzles' },
   { href: '/analyze', label: 'Analyze' },
-  { href: '/about', label: 'About' },
-  { href: '/terms', label: 'Terms' },
-  { href: '/privacy', label: 'Privacy' },
 ];
 
 export function Footer() {
@@ -13,7 +14,9 @@ export function Footer() {
     <footer className="mt-auto border-t border-border/60">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 py-10 sm:flex-row sm:justify-between">
         <div className="flex flex-col items-center gap-2 sm:items-start">
-          <Logo size="sm" />
+          <Link href="/" aria-label="PureChess home">
+            <Logo size="sm" />
+          </Link>
           <p className="text-xs text-muted-foreground">
             Pure chess. Nothing else.
           </p>

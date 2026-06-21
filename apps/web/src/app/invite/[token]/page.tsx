@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { AppShell } from '@/components/layout/AppShell';
 import { InviteAccept } from './invite-accept';
 
 interface InvitePageProps {
@@ -15,5 +16,11 @@ export async function generateMetadata({ params }: InvitePageProps): Promise<Met
 
 export default async function InvitePage({ params }: InvitePageProps) {
   const { token } = await params;
-  return <InviteAccept token={token} />;
+  return (
+    <AppShell>
+      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6">
+        <InviteAccept token={token} />
+      </div>
+    </AppShell>
+  );
 }

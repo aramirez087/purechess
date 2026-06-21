@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { AppShell } from '@/components/layout/AppShell';
 import { OpeningLab } from '@/components/openings/opening-lab';
 import { buildMetadata } from '@/lib/seo';
 
@@ -18,10 +17,8 @@ type Props = {
 export default async function OpeningLabPage({ searchParams }: Props) {
   const sp = await searchParams;
   return (
-    <AppShell>
-      <Suspense>
-        <OpeningLab initialQuery={sp.q ?? ''} initialFamily={sp.family ?? ''} />
-      </Suspense>
-    </AppShell>
+    <Suspense>
+      <OpeningLab initialQuery={sp.q ?? ''} initialFamily={sp.family ?? ''} />
+    </Suspense>
   );
 }

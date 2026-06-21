@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import type { SafeUser } from '@purechess/shared';
-import { AppShell } from '@/components/layout/AppShell';
 import { OpeningsClient } from './openings-client';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
@@ -21,10 +20,8 @@ export default async function OpeningsPage() {
   const signedOut = !result?.user;
 
   return (
-    <AppShell>
-      <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <OpeningsClient signedOut={signedOut} />
-      </div>
-    </AppShell>
+    <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <OpeningsClient signedOut={signedOut} />
+    </div>
   );
 }

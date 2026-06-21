@@ -79,12 +79,13 @@ describe('TrustStrip', () => {
 });
 
 describe('Footer', () => {
-  it('has Analyze, About, Terms, and Privacy links', () => {
+  it('has primary destination links', () => {
     render(<Footer />);
+    expect(screen.getByRole('link', { name: /play/i })).toHaveAttribute('href', '/play');
+    expect(screen.getByRole('link', { name: /train/i })).toHaveAttribute('href', '/train');
+    expect(screen.getByRole('link', { name: /openings/i })).toHaveAttribute('href', '/openings');
+    expect(screen.getByRole('link', { name: /puzzles/i })).toHaveAttribute('href', '/puzzles');
     expect(screen.getByRole('link', { name: /analyze/i })).toHaveAttribute('href', '/analyze');
-    expect(screen.getByRole('link', { name: /about/i })).toHaveAttribute('href', '/about');
-    expect(screen.getByRole('link', { name: /terms/i })).toHaveAttribute('href', '/terms');
-    expect(screen.getByRole('link', { name: /privacy/i })).toHaveAttribute('href', '/privacy');
   });
 
   it('shows Purechess wordmark in footer', () => {

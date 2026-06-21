@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import type { RepertoireColorDto, SafeUser } from '@purechess/shared';
-import { AppShell } from '@/components/layout/AppShell';
 import { OpeningLabDrillClient } from './opening-lab-drill-client';
 import { serverFetch } from '@/lib/api';
 import { buildMetadata } from '@/lib/seo';
@@ -38,12 +37,10 @@ export default async function OpeningLabDrillPage({ searchParams }: Props) {
   const color: RepertoireColorDto = sp.color === 'black' ? 'black' : 'white';
 
   return (
-    <AppShell>
-      <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
-        <Suspense>
-          <OpeningLabDrillClient family={family} color={color} />
-        </Suspense>
-      </div>
-    </AppShell>
+    <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
+      <Suspense>
+        <OpeningLabDrillClient family={family} color={color} />
+      </Suspense>
+    </div>
   );
 }
