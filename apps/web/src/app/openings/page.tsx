@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import type { SafeUser } from '@purechess/shared';
 import { OpeningsClient } from './openings-client';
 import { serverFetch } from '@/lib/api';
@@ -21,7 +22,9 @@ export default async function OpeningsPage() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-      <OpeningsClient signedOut={signedOut} />
+      <Suspense>
+        <OpeningsClient signedOut={signedOut} />
+      </Suspense>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { RepertoireDto } from '@purechess/shared';
+import type { RepertoireDto, RepertoireSummaryDto } from '@purechess/shared';
 import {
   deleteRepertoire,
   fetchDrillLines,
@@ -13,6 +14,11 @@ import { RepertoireImport } from '@/components/openings/repertoire-import';
 import { RepertoireView } from '@/components/openings/repertoire-view';
 import { OpeningDrill } from '@/components/openings/opening-drill';
 import { OpeningsHub, OpeningsSignedOut } from '@/components/openings/openings-hub';
+import {
+  parseOpeningActionHref,
+  resolveOpeningDeepLink,
+  type OpeningDeepLinkAction,
+} from '@/lib/openings/opening-deep-link';
 
 type View =
   | { kind: 'list' }
@@ -26,8 +32,11 @@ type View =
  * `/repertoire` API.
  */
 export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [view, setView] = useState<View>({ kind: 'list' });
+  const handledDeepLink = useRef<string | null>(null);
 
   const list = useQuery({
     queryKey: ['repertoires'],
@@ -61,6 +70,60 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
     queryClient.invalidateQueries({ queryKey: ['repertoires'] });
     setView({ kind: 'read', id: created.id });
   }
+
+  const applyOpeningAction = useCallback(
+    (action: OpeningDeepLinkAction) => {
+      if (action.kind === 'drill') {
+        setView({ kind: 'drill', id: action.repertoireId, name: action.name });
+        return;
+      }
+      if (action.kind === 'read') {
+        setView({ kind: 'read', id: action.repertoireId });
+        return;
+      }
+      router.push(`/openings/lab?q=${encodeURIComponent(action.query)}`);
+    },
+    [router],
+  );
+
+  const followOpeningActionHref = useCallback(
+    (href: string, repertoires: RepertoireSummaryDto[]) => {
+      const action = resolveOpeningDeepLink(parseOpeningActionHref(href), repertoires);
+      if (!action) return;
+      applyOpeningAction(action);
+    },
+    [applyOpeningAction],
+  );
+
+  useEffect(() => {
+    if (signedOut || list.isLoading || view.kind !== 'list') return;
+
+    const repertoire = searchParams.get('repertoire');
+    const chesscom = searchParams.get('chesscom');
+    if (!repertoire && !chesscom) {
+      handledDeepLink.current = null;
+      return;
+    }
+
+    const key = searchParams.toString();
+    if (handledDeepLink.current === key) return;
+    handledDeepLink.current = key;
+
+    const href = repertoire
+      ? `/openings?repertoire=${encodeURIComponent(repertoire)}`
+      : `/openings?chesscom=${encodeURIComponent(chesscom!)}`;
+    const action = resolveOpeningDeepLink(parseOpeningActionHref(href), list.data ?? []);
+    router.replace('/openings', { scroll: false });
+    if (action) applyOpeningAction(action);
+  }, [
+    applyOpeningAction,
+    list.data,
+    list.isLoading,
+    router,
+    searchParams,
+    signedOut,
+    view.kind,
+  ]);
 
   if (signedOut) {
     return <OpeningsSignedOut />;
@@ -120,6 +183,7 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
       onNew={() => setView({ kind: 'new' })}
       onOpen={(id) => setView({ kind: 'read', id })}
       onDrill={(id, name) => setView({ kind: 'drill', id, name })}
+      onOpeningLeakAction={(href) => followOpeningActionHref(href, list.data ?? [])}
     />
   );
 }

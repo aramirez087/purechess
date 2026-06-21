@@ -19,6 +19,7 @@ import {
 import type { InsightDto, RepertoireSummaryDto, WeaknessDto } from '@purechess/shared';
 import { Button } from '@/components/ui/button';
 import { fetchInsights } from '@/lib/api/training';
+import { insightActionClicked } from '@/lib/analytics/training-events';
 import { ChessComPanel } from '@/components/openings/chess-com-panel';
 import { cn } from '@/lib/utils';
 
@@ -28,6 +29,7 @@ export interface OpeningsHubProps {
   onNew: () => void;
   onOpen: (id: string) => void;
   onDrill: (id: string, name: string) => void;
+  onOpeningLeakAction: (href: string) => void;
 }
 
 const LEARN_STEPS: Array<{
@@ -110,6 +112,7 @@ export function OpeningsHub({
   onNew,
   onOpen,
   onDrill,
+  onOpeningLeakAction,
 }: OpeningsHubProps) {
   const insights = useQuery({
     queryKey: ['insights'],
@@ -159,10 +162,14 @@ export function OpeningsHub({
       </header>
 
       {openingLeak ? (
-        <Link
-          href={openingLeak.actionHref ?? '/openings'}
+        <button
+          type="button"
           data-testid="opening-weakness-banner"
-          className="group flex items-center justify-between gap-4 rounded-[12px] border border-brass/40 bg-brass-soft/15 px-4 py-3.5 transition-colors hover:bg-brass-soft/25"
+          onClick={() => {
+            insightActionClicked('opening');
+            onOpeningLeakAction(openingLeak.actionHref ?? '/openings');
+          }}
+          className="group flex w-full items-center justify-between gap-4 rounded-[12px] border border-brass/40 bg-brass-soft/15 px-4 py-3.5 text-left transition-colors hover:bg-brass-soft/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/50"
         >
           <div className="min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brass-text">
@@ -182,7 +189,7 @@ export function OpeningsHub({
               aria-hidden="true"
             />
           </span>
-        </Link>
+        </button>
       ) : null}
 
       <ChessComPanel />

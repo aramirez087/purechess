@@ -183,6 +183,42 @@ export function PlayPageClient({ initialMode }: PlayPageClientProps) {
         >
           <div className="flex items-start gap-4">
             <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-brass/10 text-brass ring-1 ring-inset ring-brass/30">
+              <Cpu className="h-6 w-6" />
+            </span>
+            <div className="min-w-0 text-left">
+              <h2 className="text-xl font-semibold tracking-tight">Computer</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Untimed · Level 4 · Random side</p>
+            </div>
+          </div>
+          <div className="mt-6 flex flex-col gap-2.5">
+            <InstantComputerButton
+              analyticsSource="play_hub"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 text-[15px] font-medium text-background shadow-elevated transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none"
+            >
+              Start computer
+            </InstantComputerButton>
+            <Button
+              variant="outline"
+              className="h-10 border-border/80 px-5"
+              onClick={() => {
+                posthog.capture('play_clicked', { mode: 'computer', instant: false });
+                setMode('computer');
+              }}
+            >
+              <Settings2 className="mr-2 h-4 w-4" aria-hidden="true" />
+              Customize
+            </Button>
+          </div>
+        </div>
+
+        <div
+          className={cn(
+            'relative overflow-hidden rounded-2xl border border-border/70 bg-surface/80',
+            'p-7 shadow-elevated backdrop-blur-sm',
+          )}
+        >
+          <div className="flex items-start gap-4">
+            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-raised text-brass ring-1 ring-inset ring-border">
               <Zap className="h-6 w-6" />
             </span>
             <div className="min-w-0 text-left">
@@ -212,42 +248,6 @@ export function PlayPageClient({ initialMode }: PlayPageClientProps) {
             >
               <Settings2 className="mr-2 h-4 w-4" aria-hidden="true" />
               Change time
-            </Button>
-          </div>
-        </div>
-
-        <div
-          className={cn(
-            'relative overflow-hidden rounded-2xl border border-border/70 bg-surface/80',
-            'p-7 shadow-elevated backdrop-blur-sm',
-          )}
-        >
-          <div className="flex items-start gap-4">
-            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-raised text-brass ring-1 ring-inset ring-border">
-              <Cpu className="h-6 w-6" />
-            </span>
-            <div className="min-w-0 text-left">
-              <h2 className="text-xl font-semibold tracking-tight">Computer</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Untimed · Level 4 · Random side</p>
-            </div>
-          </div>
-          <div className="mt-6 flex flex-col gap-2.5">
-            <InstantComputerButton
-              analyticsSource="play_hub"
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 text-[15px] font-medium text-background shadow-elevated transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none"
-            >
-              Start computer
-            </InstantComputerButton>
-            <Button
-              variant="outline"
-              className="h-10 border-border/80 px-5"
-              onClick={() => {
-                posthog.capture('play_clicked', { mode: 'computer', instant: false });
-                setMode('computer');
-              }}
-            >
-              <Settings2 className="mr-2 h-4 w-4" aria-hidden="true" />
-              Customize
             </Button>
           </div>
         </div>

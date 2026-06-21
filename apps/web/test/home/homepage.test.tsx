@@ -38,10 +38,10 @@ describe('Hero', () => {
     expect(screen.getByText(/single, quiet place to play chess online/i)).toBeInTheDocument();
   });
 
-  it('Play online links to one-click quick match', () => {
+  it('Analyze links to /analyze', () => {
     renderWithClient(<Hero />);
-    const link = screen.getByRole('link', { name: /play online/i });
-    expect(link).toHaveAttribute('href', '/play/quick');
+    const link = screen.getByRole('link', { name: /analyze/i });
+    expect(link).toHaveAttribute('href', '/analyze');
   });
 
   it('Play computer starts from the hero', () => {

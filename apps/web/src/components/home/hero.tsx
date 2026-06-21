@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Cpu, Puzzle, Target, Zap } from 'lucide-react';
+import { Cpu, Microscope, Puzzle, Target } from 'lucide-react';
 import { Logo } from '@/components/layout/Logo';
 import { InstantComputerButton } from '@/components/play/instant-computer-button';
 import { HeroAuthLink } from './hero-auth-link';
@@ -9,7 +9,7 @@ import { HeroHeading } from './hero-heading';
 const FEATURES = [
   {
     title: 'One-click play',
-    body: 'Jump straight into a rated quick match — no menus, no friction.',
+    body: 'Start a computer game immediately, then customize only when you need to.',
   },
   {
     title: 'Tactics training',
@@ -64,21 +64,15 @@ export function Hero() {
         </p>
 
         <div className="animate-rise-4 mt-10 grid w-full max-w-3xl gap-3 text-left sm:grid-cols-2">
-          <ActionLink
-            href="/play/quick"
-            icon={Zap}
-            title="Play online"
-            body="Find a rated match now"
-            className={PRIMARY_ACTION_CLASS}
-          />
           <InstantComputerButton
             analyticsSource="home_hero"
-            className={`${ACTION_CLASS} text-foreground`}
+            className={`${ACTION_CLASS} ${PRIMARY_ACTION_CLASS} text-foreground`}
           >
             <ActionContent icon={Cpu} title="Play computer" body="Default Stockfish game" />
           </InstantComputerButton>
           <ActionLink href="/puzzles" icon={Puzzle} title="Daily puzzle" body="Start solving" />
           <ActionLink href="/train" icon={Target} title="Train" body="Puzzles, openings, endgames" />
+          <ActionLink href="/analyze" icon={Microscope} title="Analyze" body="Paste PGN or FEN" />
         </div>
 
         <p className="mt-5 text-xs text-muted-foreground/80">

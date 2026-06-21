@@ -13052,6 +13052,24 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-21T08:06:00.000Z"
+    },
+    {
+      "id": "bug-779",
+      "timestamp": "2026-06-21T08:26:00.000Z",
+      "error_message": "Openings hub 'Train the line' banner does nothing after chess.com sync",
+      "file": "apps/web/src/app/openings/openings-client.tsx",
+      "root_cause": "Opening weakness actionHref points to /openings?chesscom= or /openings?repertoire= but OpeningsClient never read URL params; banner was a same-page Link so navigation produced no visible change",
+      "fix": "Added opening-deep-link resolver; OpeningsClient handles ?chesscom/?repertoire (drill matching repertoire, else Opening Lab); banner is now a button calling the resolver directly",
+      "tags": [
+        "openings",
+        "chess-com",
+        "insights",
+        "deep-link",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-06-21T08:26:00.000Z"
     }
   ]
 }
