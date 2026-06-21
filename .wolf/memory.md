@@ -3285,3 +3285,4 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 09:03 | Opening Lab deep link: findOpeningForLabel + fen param; chess.com weakness actionHref → /openings/lab?q=&fen= | bug-780 | opening-book.ts, opening-lab.tsx, weakness-detectors.ts |
 | 10:15 | Opening mistake coach (/openings/mistake): 2-step learn+practice, red/green arrows, Fix with coach CTA, marks reviewed | bug-782 | opening-mistake-coach.tsx, mistake-coach.ts, chess-com-panel.tsx |
 | 10:46 | Landing page stripped to functional shell: new logo assets (`logo-mark.svg`/`logo-full.svg`), removed Silent Tournament badge, tagline, features grid, TrustStrip | — | Logo.tsx, hero.tsx, hero-heading.tsx, page.tsx |
+| 11:20 | Opening mistake coach layout: board-dominant 2-zone shell (1fr board + 380px coach rail), viewport-height board sizing, dropped 420px cap | — | opening-mistake-coach.tsx, globals.css |

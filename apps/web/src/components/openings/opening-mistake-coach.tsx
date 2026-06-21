@@ -120,18 +120,18 @@ function OpeningMistakeCoachBody({
   const labHref = openingLabHref(openingName, mistake.fen);
 
   return (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="opening-mistake-shell [--board-reserve:16rem] mx-auto flex w-full max-w-[1760px] flex-1 flex-col px-4 pb-6 sm:px-6 lg:min-h-0 lg:overflow-hidden lg:py-4">
+      <header className="flex shrink-0 flex-col gap-2 border-b border-border/60 pb-4 sm:flex-row sm:items-center sm:justify-between lg:pb-3">
         <div className="flex items-center gap-3">
           <GameRailButton size="sm" onClick={onBack}>
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             Your mistakes
           </GameRailButton>
-          <div>
+          <div className="min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-brass-text">
               Opening coach · {step === 'learn' ? '1' : step === 'practice' ? '2' : '✓'} of 2
             </span>
-            <h1 className="font-display text-2xl italic text-foreground sm:text-3xl">
+            <h1 className="truncate font-display text-2xl italic text-foreground sm:text-3xl">
               {openingName}
             </h1>
           </div>
@@ -140,7 +140,7 @@ function OpeningMistakeCoachBody({
           href={mistake.gameUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="inline-flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           View game on chess.com
           <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -172,6 +172,25 @@ function OpeningMistakeCoachBody({
   );
 }
 
+function CoachBoardColumn({
+  children,
+  footer,
+}: {
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+}) {
+  return (
+    <div className="order-1 flex min-h-0 min-w-0 flex-col gap-3 lg:order-none lg:h-full">
+      <div className="flex min-h-0 flex-1 items-center justify-center py-1 lg:py-0">
+        <div className="aspect-square w-full max-w-[min(100%,calc(100dvh-var(--board-reserve,16rem)))]">
+          {children}
+        </div>
+      </div>
+      {footer}
+    </div>
+  );
+}
+
 function LearnStep({
   mistake,
   openingName,
@@ -191,8 +210,28 @@ function LearnStep({
   const autoShapes = [playedArrow, bestArrow].filter((s): s is NonNullable<typeof s> => !!s);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:items-start">
-      <section className="flex flex-col gap-4 rounded-[12px] border border-brass/35 bg-brass-soft/10 p-5 shadow-elevated">
+    <div className="mt-4 grid min-h-0 flex-1 gap-4 lg:mt-3 lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)] lg:items-center lg:gap-6 lg:overflow-hidden">
+      <BoardSettingsProvider>
+        <CoachBoardColumn
+          footer={
+            <>
+              <ArrowLegend playedSan={mistake.playedSan} bestSan={mistake.bestSan} />
+              <p className="shrink-0 text-center text-xs text-muted-foreground">
+                {moveLabel(mistake.ply, mistake.playedSan)} in your game
+              </p>
+            </>
+          }
+        >
+          <Chessboard
+            position={mistake.fen}
+            orientation={orientation}
+            readOnly
+            autoShapes={autoShapes}
+          />
+        </CoachBoardColumn>
+      </BoardSettingsProvider>
+
+      <section className="order-2 flex min-h-0 flex-col gap-4 rounded-[12px] border border-brass/35 bg-brass-soft/10 p-5 shadow-elevated lg:max-h-full lg:overflow-y-auto">
         <div className="flex items-start gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-brass/15 text-brass-text">
             <Lightbulb className="h-5 w-5" aria-hidden="true" />
@@ -204,13 +243,13 @@ function LearnStep({
             </p>
             <p className="text-sm text-muted-foreground">
               On move {moveNumber}, you were playing as{' '}
-              <span className="font-medium text-foreground">{sideLabel}</span>. The board below is
-              the exact position <span className="italic">before</span> you moved.
+              <span className="font-medium text-foreground">{sideLabel}</span>. The board is the
+              exact position <span className="italic">before</span> you moved.
             </p>
           </div>
         </div>
 
-        <dl className="grid gap-3 sm:grid-cols-2">
+        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
           <CoachFact
             tone="bad"
             label="You played"
@@ -237,23 +276,6 @@ function LearnStep({
           </Button>
         </div>
       </section>
-
-      <BoardSettingsProvider>
-        <div className="flex flex-col gap-3">
-          <div className="mx-auto w-full max-w-[min(100%,420px)]">
-            <Chessboard
-              position={mistake.fen}
-              orientation={orientation}
-              readOnly
-              autoShapes={autoShapes}
-            />
-          </div>
-          <ArrowLegend playedSan={mistake.playedSan} bestSan={mistake.bestSan} />
-          <p className="text-center text-xs text-muted-foreground">
-            {moveLabel(mistake.ply, mistake.playedSan)} in your game
-          </p>
-        </div>
-      </BoardSettingsProvider>
     </div>
   );
 }
@@ -287,9 +309,61 @@ function PracticeStep({
 
   const { moveNumber, color } = plyMeta(mistake.ply);
 
+  const boardFooter =
+    outcome === 'failed' && bestArrow ? (
+      <p className="shrink-0 text-center text-xs text-muted-foreground">
+        Hint: the green arrow shows {mistake.bestSan ?? 'the engine move'} after you reveal.
+      </p>
+    ) : (
+      <p className="min-h-[1.25rem] shrink-0 text-center text-sm text-muted-foreground">
+        {state.phase === 'player' && !outcome ? (
+          <>
+            Drag a piece or tap a square — it&apos;s{' '}
+            <span className="font-medium text-foreground">
+              {state.solvingColor === 'w' ? 'White' : 'Black'}
+            </span>
+            &apos;s turn.
+          </>
+        ) : (
+          ' '
+        )}
+      </p>
+    );
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:items-start">
-      <section className="flex flex-col gap-4 rounded-[12px] border border-border/70 bg-surface/60 p-5">
+    <div className="mt-4 grid min-h-0 flex-1 gap-4 lg:mt-3 lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)] lg:items-center lg:gap-6 lg:overflow-hidden">
+      <BoardSettingsProvider>
+        <CoachBoardColumn footer={boardFooter}>
+          <PuzzleBoardPane
+            state={state}
+            onMove={onMove}
+            autoShapes={hintShapes}
+            className="mx-0 h-full max-w-none"
+          >
+            {outcome === 'solved' ? (
+              <Overlay tone="success">
+                <CheckCircle2 className="h-8 w-8 text-brass" aria-hidden="true" />
+                <p className="text-base font-semibold text-foreground">That&apos;s the one!</p>
+                <p className="max-w-xs text-sm text-muted-foreground">
+                  You found {mistake.bestSan ?? 'the better move'} — the same move you missed in your
+                  game.
+                </p>
+              </Overlay>
+            ) : null}
+            {outcome === 'failed' && !showAnswer ? (
+              <Overlay tone="error">
+                <XCircle className="h-8 w-8 text-destructive" aria-hidden="true" />
+                <p className="text-base font-semibold text-foreground">Not quite</p>
+                <p className="max-w-xs text-sm text-muted-foreground">
+                  Tap &ldquo;Show the correct move&rdquo; to see the green arrow, then try again.
+                </p>
+              </Overlay>
+            ) : null}
+          </PuzzleBoardPane>
+        </CoachBoardColumn>
+      </BoardSettingsProvider>
+
+      <section className="order-2 flex min-h-0 flex-col gap-4 rounded-[12px] border border-border/70 bg-surface/60 p-5 lg:max-h-full lg:overflow-y-auto">
         <div className="flex items-center gap-2">
           <GameRailButton size="sm" onClick={onBack}>
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
@@ -323,56 +397,6 @@ function PracticeStep({
           </Button>
         ) : null}
       </section>
-
-      <div className="flex flex-col gap-3">
-        <BoardSettingsProvider>
-          <PuzzleBoardPane
-            state={state}
-            onMove={onMove}
-            autoShapes={hintShapes}
-            className="max-w-[420px]"
-          >
-            {outcome === 'solved' ? (
-              <Overlay tone="success">
-                <CheckCircle2 className="h-8 w-8 text-brass" aria-hidden="true" />
-                <p className="text-base font-semibold text-foreground">That&apos;s the one!</p>
-                <p className="max-w-xs text-sm text-muted-foreground">
-                  You found {mistake.bestSan ?? 'the better move'} — the same move you missed in
-                  your game.
-                </p>
-              </Overlay>
-            ) : null}
-            {outcome === 'failed' && !showAnswer ? (
-              <Overlay tone="error">
-                <XCircle className="h-8 w-8 text-destructive" aria-hidden="true" />
-                <p className="text-base font-semibold text-foreground">Not quite</p>
-                <p className="max-w-xs text-sm text-muted-foreground">
-                  Tap &ldquo;Show the correct move&rdquo; to see the green arrow, then try again.
-                </p>
-              </Overlay>
-            ) : null}
-          </PuzzleBoardPane>
-        </BoardSettingsProvider>
-        {outcome === 'failed' && bestArrow ? (
-          <p className="text-center text-xs text-muted-foreground">
-            Hint: the green arrow shows {mistake.bestSan ?? 'the engine move'} after you reveal.
-          </p>
-        ) : (
-          <p className="min-h-[1.25rem] text-center text-sm text-muted-foreground">
-            {state.phase === 'player' && !outcome ? (
-              <>
-                Drag a piece or tap a square — it&apos;s{' '}
-                <span className="font-medium text-foreground">
-                  {state.solvingColor === 'w' ? 'White' : 'Black'}
-                </span>
-                &apos;s turn.
-              </>
-            ) : (
-              ' '
-            )}
-          </p>
-        )}
-      </div>
     </div>
   );
 }
@@ -389,7 +413,7 @@ function DoneStep({
   onBack: () => void;
 }) {
   return (
-    <section className="mx-auto flex w-full max-w-lg flex-col items-center gap-5 rounded-[12px] border border-brass/40 bg-brass-soft/12 p-8 text-center shadow-elevated">
+    <section className="mx-auto mt-4 flex w-full max-w-lg flex-1 flex-col items-center justify-center gap-5 rounded-[12px] border border-brass/40 bg-brass-soft/12 p-8 text-center shadow-elevated lg:mt-3">
       <CheckCircle2 className="h-10 w-10 text-brass" aria-hidden="true" />
       <div className="space-y-2">
         <h2 className="font-display text-2xl italic text-foreground">Well done</h2>
