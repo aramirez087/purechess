@@ -336,20 +336,19 @@ export function chessComOpeningWeakness(
 
   const top = clusters[0];
   const severity = clamp01(top.count / 5 + top.avgCp / 400);
-  const params = new URLSearchParams({ q: top.openingLabel });
-  if (top.fen) params.set('fen', top.fen);
+  const slug = encodeURIComponent(top.openingLabel);
 
   return {
     area: 'opening',
     kind: 'opening',
-    slug: encodeURIComponent(top.openingLabel),
+    slug,
     label: top.openingLabel,
     title: `Opening mistakes in your ${top.openingLabel} games`,
     evidence:
       `${top.count} mistake${top.count === 1 ? '' : 's'} in the opening ` +
       `from chess.com — avg ${Math.round(top.avgCp)}cp lost`,
     severity,
-    actionHref: `/openings/lab?${params.toString()}`,
+    actionHref: `/openings?chesscom=${slug}`,
     sampleSize: top.count,
     estimatedEloUpside: Math.round(15 + severity * 45),
   };

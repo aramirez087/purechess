@@ -7,6 +7,7 @@ import { analyze } from '@/lib/engine/stockfish-client';
 import { cpToWinPercent } from '@/lib/board/accuracy';
 import { classify, normalizeEval } from '@/hooks/use-move-classifier';
 import { lookupByFen } from '@/lib/openings';
+import { normalizeOpeningLabel } from '@/lib/chess-com/opening-label';
 
 /** Only analyze this many plies per game (opening phase). */
 export const MAX_OPENING_PLY = 22;
@@ -19,10 +20,10 @@ function openingLabelFromPgn(pgn: string, fenAtMistake: string): string {
   if (eco?.name) return eco.name;
 
   const openingTag = pgn.match(/\[Opening\s+"([^"]+)"\]/i)?.[1];
-  if (openingTag) return openingTag;
+  if (openingTag) return normalizeOpeningLabel(openingTag);
 
   const ecoTag = pgn.match(/\[ECO\s+"([^"]+)"\]/i)?.[1];
-  if (ecoTag) return ecoTag;
+  if (ecoTag) return normalizeOpeningLabel(ecoTag);
 
   try {
     const chess = new Chess();

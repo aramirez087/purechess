@@ -21,13 +21,18 @@ import {
   setChessComLink,
 } from '@/lib/api/chess-com';
 import { useChessComSync } from '@/hooks/use-chess-com-sync';
+import {
+  displayOpeningLabel,
+  openingLabelsMatch,
+} from '@/lib/chess-com/opening-label';
+import { openingLabHref } from '@/lib/openings/opening-deep-link';
 import { cn } from '@/lib/utils';
 
 /**
  * Link a chess.com username, sync recent games, and surface opening mistakes
  * mined from the user's real games (Aimchess-style Opening Improver).
  */
-export function ChessComPanel() {
+export function ChessComPanel({ highlightLabel }: { highlightLabel?: string | null }) {
   const queryClient = useQueryClient();
   const [usernameInput, setUsernameInput] = useState('');
   const { state: syncState, sync } = useChessComSync();
@@ -77,7 +82,15 @@ export function ChessComPanel() {
   }
 
   const linked = link.data?.username;
-  const topMistakes = (mistakes.data?.mistakes ?? []).filter((m) => !m.reviewed).slice(0, 5);
+  const unreviewed = (mistakes.data?.mistakes ?? []).filter((m) => !m.reviewed);
+  const filteredMistakes = highlightLabel
+    ? unreviewed.filter((m) => openingLabelsMatch(m.openingLabel, highlightLabel))
+    : unreviewed;
+  const visibleMistakes = (filteredMistakes.length > 0 ? filteredMistakes : unreviewed).slice(
+    0,
+    5,
+  );
+  const highlightName = highlightLabel ? displayOpeningLabel(highlightLabel) : null;
 
   return (
     <section
@@ -93,8 +106,10 @@ export function ChessComPanel() {
             Learn from your real games
           </h2>
           <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-            Link your chess.com username — we fetch your recent games, analyze the opening phase,
-            and show where you left theory or lost material.
+            Link your chess.com username — we fetch recent games and run Stockfish on the opening
+            phase (first ~11 moves). Each row is a real position where your move lost significant
+            eval; use <span className="font-medium text-foreground">Study position</span> to explore
+            the correction, or browse main lines in Opening Lab.
           </p>
         </div>
         {linked ? (
@@ -195,19 +210,41 @@ export function ChessComPanel() {
         <p className="text-sm text-muted-foreground">{syncState.notice}</p>
       ) : null}
 
-      {linked && topMistakes.length > 0 ? (
-        <div className="space-y-2">
+      {linked && visibleMistakes.length > 0 ? (
+        <div id="chess-com-mistakes" className="space-y-2 scroll-mt-24">
+          {highlightName ? (
+            <div className="rounded-[10px] border border-brass/40 bg-brass-soft/12 px-3 py-2.5">
+              <p className="text-sm text-foreground">
+                <span className="font-medium">Your {highlightName} mistakes</span>
+                <span className="text-muted-foreground">
+                  {' '}
+                  — from synced chess.com games. Pick a row to study the position where you went
+                  wrong.
+                </span>
+              </p>
+            </div>
+          ) : null}
           <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             Opening mistakes to fix
           </h3>
           <ul className="space-y-2">
-            {topMistakes.map((m) => (
-              <MistakeRow key={`${m.gameId}-${m.ply}`} mistake={m} />
+            {visibleMistakes.map((m) => (
+              <MistakeRow
+                key={`${m.gameId}-${m.ply}`}
+                mistake={m}
+                highlighted={
+                  !!highlightLabel && openingLabelsMatch(m.openingLabel, highlightLabel)
+                }
+              />
             ))}
           </ul>
-          {(mistakes.data?.mistakes.length ?? 0) > 5 ? (
+          {(filteredMistakes.length > 5 || (!highlightLabel && unreviewed.length > 5)) ? (
             <p className="text-xs text-muted-foreground">
-              +{(mistakes.data?.mistakes.length ?? 0) - 5} more stored from past syncs
+              +
+              {highlightLabel
+                ? filteredMistakes.length - 5
+                : unreviewed.length - 5}{' '}
+              more stored from past syncs
             </p>
           ) : null}
         </div>
@@ -220,13 +257,28 @@ export function ChessComPanel() {
   );
 }
 
-function MistakeRow({ mistake }: { mistake: ChessComOpeningMistakeDto }) {
+function MistakeRow({
+  mistake,
+  highlighted = false,
+}: {
+  mistake: ChessComOpeningMistakeDto;
+  highlighted?: boolean;
+}) {
   const analyzeHref = `/analyze?fen=${encodeURIComponent(mistake.fen)}`;
+  const openingName = displayOpeningLabel(mistake.openingLabel);
+  const labHref = openingLabHref(openingName, mistake.fen);
 
   return (
-    <li className="flex flex-col gap-2 rounded-[10px] border border-border bg-background/40 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+    <li
+      className={cn(
+        'flex flex-col gap-2 rounded-[10px] border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between',
+        highlighted
+          ? 'border-brass/50 bg-brass-soft/15'
+          : 'border-border bg-background/40',
+      )}
+    >
       <div className="min-w-0">
-        <p className="font-medium text-foreground">{mistake.openingLabel}</p>
+        <p className="font-medium text-foreground">{openingName}</p>
         <p className="text-sm text-muted-foreground">
           You played <span className="font-mono text-foreground">{mistake.playedSan}</span>
           {mistake.bestSan ? (
@@ -239,12 +291,15 @@ function MistakeRow({ mistake }: { mistake: ChessComOpeningMistakeDto }) {
           <span className="text-muted-foreground"> ({mistake.cpLoss}cp)</span>
         </p>
       </div>
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
         <Button asChild variant="outline" size="sm">
           <Link href={analyzeHref}>
             Study position
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
+        </Button>
+        <Button asChild variant="ghost" size="sm">
+          <Link href={labHref}>Browse in Lab</Link>
         </Button>
         <a
           href={mistake.gameUrl}

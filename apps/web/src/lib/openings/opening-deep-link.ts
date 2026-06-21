@@ -1,9 +1,11 @@
 import type { RepertoireSummaryDto } from '@purechess/shared';
+import { displayOpeningLabel } from '@/lib/chess-com/opening-label';
 
 export type OpeningDeepLinkAction =
   | { kind: 'drill'; repertoireId: string; name: string }
   | { kind: 'read'; repertoireId: string }
-  | { kind: 'lab'; query: string; fen?: string };
+  | { kind: 'lab'; query: string; fen?: string }
+  | { kind: 'review-mistakes'; label: string };
 
 export type ParsedOpeningHref =
   | { kind: 'repertoire'; id: string }
@@ -42,7 +44,7 @@ export function parseOpeningActionHref(href: string): ParsedOpeningHref {
 
 function repertoireMatchesOpeningLabel(rep: RepertoireSummaryDto, label: string): boolean {
   const repName = rep.name.trim().toLowerCase();
-  const opening = label.trim().toLowerCase();
+  const opening = displayOpeningLabel(label).trim().toLowerCase();
   if (!repName || !opening) return false;
   return repName.includes(opening) || opening.includes(repName);
 }
@@ -53,7 +55,8 @@ export function resolveOpeningDeepLink(
   repertoires: RepertoireSummaryDto[],
 ): OpeningDeepLinkAction | null {
   if (parsed.kind === 'lab') {
-    return { kind: 'lab', query: parsed.query, fen: parsed.fen };
+    // Legacy insights links pointed at Opening Lab — treat as chess.com mistake review.
+    return { kind: 'review-mistakes', label: parsed.query };
   }
 
   if (parsed.kind === 'repertoire') {
@@ -72,16 +75,17 @@ export function resolveOpeningDeepLink(
     if (match) {
       return { kind: 'drill', repertoireId: match.id, name: match.name };
     }
-    return { kind: 'lab', query: parsed.label };
+    return { kind: 'review-mistakes', label: parsed.label };
   }
 
   return null;
 }
 
-/** Build the Opening Lab URL for a deep-linked study session. */
+/** Build the Opening Lab URL for browsing named lines. */
 export function openingLabHref(query: string, fen?: string): string {
   const params = new URLSearchParams();
-  if (query.trim()) params.set('q', query.trim());
+  const label = displayOpeningLabel(query);
+  if (label.trim()) params.set('q', label.trim());
   if (fen) params.set('fen', fen);
   const qs = params.toString();
   return qs ? `/openings/lab?${qs}` : '/openings/lab';

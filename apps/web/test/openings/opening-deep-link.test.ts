@@ -35,13 +35,13 @@ describe('parseOpeningActionHref', () => {
     });
   });
 
-  it('reads Opening Lab deep links with fen', () => {
+  it('reads legacy Opening Lab deep links', () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
     expect(
-      parseOpeningActionHref(`/openings/lab?q=Italian%20Game&fen=${encodeURIComponent(fen)}`),
+      parseOpeningActionHref(`/openings/lab?q=C20&fen=${encodeURIComponent(fen)}`),
     ).toEqual({
       kind: 'lab',
-      query: 'Italian Game',
+      query: 'C20',
       fen,
     });
   });
@@ -52,10 +52,10 @@ describe('parseOpeningActionHref', () => {
 });
 
 describe('openingLabHref', () => {
-  it('includes q and fen when provided', () => {
-    const href = openingLabHref('Italian Game', 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
-    expect(href).toContain('q=Italian+Game');
-    expect(href).toContain('fen=');
+  it('resolves ECO codes in the query param', () => {
+    const href = openingLabHref('C20');
+    expect(href).toContain("q=King");
+    expect(href).toContain("Pawn+Game");
   });
 });
 
@@ -94,23 +94,21 @@ describe('resolveOpeningDeepLink', () => {
     });
   });
 
-  it('sends users to Opening Lab when no repertoire matches', () => {
+  it('routes chess.com mistakes to in-page review instead of Opening Lab', () => {
     expect(
-      resolveOpeningDeepLink({ kind: 'chesscom', label: 'Sicilian Najdorf' }, repertoires),
+      resolveOpeningDeepLink({ kind: 'chesscom', label: 'C20' }, repertoires),
     ).toEqual({
-      kind: 'lab',
-      query: 'Sicilian Najdorf',
+      kind: 'review-mistakes',
+      label: 'C20',
     });
   });
 
-  it('passes through lab deep links with fen', () => {
-    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('treats legacy lab links as mistake review', () => {
     expect(
-      resolveOpeningDeepLink({ kind: 'lab', query: 'Italian Game', fen }, repertoires),
+      resolveOpeningDeepLink({ kind: 'lab', query: 'C20' }, repertoires),
     ).toEqual({
-      kind: 'lab',
-      query: 'Italian Game',
-      fen,
+      kind: 'review-mistakes',
+      label: 'C20',
     });
   });
 });

@@ -1,5 +1,7 @@
 import { ECO_OPENINGS } from './eco';
 
+const ECO_CODE_RE = /^[A-E]\d{2}[a-z]?$/i;
+
 /**
  * Opening Lab index over the lichess chess-openings book (`/openings.json`).
  * Each entry is [epd, name] — the EPD is replayed to a study FEN by appending
@@ -115,9 +117,14 @@ export function openingLabelSearchQueries(label: string): string[] {
   const comma = raw.indexOf(', ');
   if (comma >= 0) queries.add(raw.slice(0, comma));
 
+  if (ECO_CODE_RE.test(raw)) {
+    const byCode = ECO_OPENINGS.find((e) => e.code.toUpperCase() === raw.toUpperCase());
+    if (byCode) queries.add(byCode.name);
+  }
+
   const q = raw.toLowerCase();
   const eco = ECO_OPENINGS.find(
-    (e) => e.name.toLowerCase().includes(q) || e.code.toLowerCase().startsWith(q),
+    (e) => e.name.toLowerCase().includes(q) || e.code.toLowerCase() === q,
   );
   if (eco) queries.add(eco.name);
 

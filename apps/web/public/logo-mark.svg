@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top-left: Bone / Board Light -->
+  <rect x="26" y="26" width="220" height="220" rx="14" fill="#e1d8bc" />
+  <!-- Top-right: Mineral Green / Board Dark -->
+  <rect x="266" y="26" width="220" height="220" rx="14" fill="#4f6855" />
+  <!-- Bottom-left: Mineral Green / Board Dark -->
+  <rect x="26" y="266" width="220" height="220" rx="14" fill="#4f6855" />
+  <!-- Bottom-right: Brass Accent -->
+  <rect x="266" y="266" width="220" height="220" rx="14" fill="#d6b563" />
+</svg>

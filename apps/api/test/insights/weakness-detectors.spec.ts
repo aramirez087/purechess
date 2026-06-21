@@ -215,9 +215,8 @@ describe('chessComOpeningWeakness', () => {
     ]);
     expect(w).not.toBeNull();
     expect(w!.label).toBe('Italian Game');
-    expect(w!.actionHref).toContain('/openings/lab?');
-    expect(w!.actionHref).toContain('q=Italian+Game');
-    expect(w!.actionHref).toContain('fen=');
+    expect(w!.actionHref).toContain('/openings?chesscom=');
+    expect(w!.actionHref).toContain('Italian');
     expect(w!.evidence).toContain('chess.com');
   });
 

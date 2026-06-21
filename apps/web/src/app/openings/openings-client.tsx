@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { RepertoireDto, RepertoireSummaryDto } from '@purechess/shared';
-import { fetchChessComMistakes } from '@/lib/api/chess-com';
 import {
   deleteRepertoire,
   fetchDrillLines,
@@ -16,11 +15,9 @@ import { RepertoireView } from '@/components/openings/repertoire-view';
 import { OpeningDrill } from '@/components/openings/opening-drill';
 import { OpeningsHub, OpeningsSignedOut } from '@/components/openings/openings-hub';
 import {
-  openingLabHref,
   parseOpeningActionHref,
   resolveOpeningDeepLink,
   type OpeningDeepLinkAction,
-  type ParsedOpeningHref,
 } from '@/lib/openings/opening-deep-link';
 
 type View =
@@ -39,6 +36,7 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [view, setView] = useState<View>({ kind: 'list' });
+  const [highlightMistakesLabel, setHighlightMistakesLabel] = useState<string | null>(null);
   const handledDeepLink = useRef<string | null>(null);
 
   const list = useQuery({
@@ -74,41 +72,40 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
     setView({ kind: 'read', id: created.id });
   }
 
+  const scrollToMistakes = useCallback(() => {
+    requestAnimationFrame(() => {
+      document.getElementById('chess-com-mistakes')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+  }, []);
+
   const applyOpeningAction = useCallback(
     (action: OpeningDeepLinkAction) => {
       if (action.kind === 'drill') {
+        setHighlightMistakesLabel(null);
         setView({ kind: 'drill', id: action.repertoireId, name: action.name });
         return;
       }
       if (action.kind === 'read') {
+        setHighlightMistakesLabel(null);
         setView({ kind: 'read', id: action.repertoireId });
         return;
       }
-      router.push(openingLabHref(action.query, action.fen));
+      if (action.kind === 'review-mistakes') {
+        setView({ kind: 'list' });
+        setHighlightMistakesLabel(action.label);
+        scrollToMistakes();
+        return;
+      }
     },
-    [router],
+    [scrollToMistakes],
   );
 
   const followOpeningActionHref = useCallback(
-    async (href: string, repertoires: RepertoireSummaryDto[]) => {
-      let parsed: ParsedOpeningHref = parseOpeningActionHref(href);
-
-      if (parsed.kind === 'chesscom') {
-        const openingLabel = parsed.label;
-        try {
-          const data = await fetchChessComMistakes();
-          const mistake = data.mistakes
-            .filter((m) => !m.reviewed && m.openingLabel === openingLabel)
-            .sort((a, b) => b.cpLoss - a.cpLoss)[0];
-          if (mistake?.fen) {
-            parsed = { kind: 'lab', query: openingLabel, fen: mistake.fen };
-          }
-        } catch {
-          // proceed without a position pin
-        }
-      }
-
-      const action = resolveOpeningDeepLink(parsed, repertoires);
+    (href: string, repertoires: RepertoireSummaryDto[]) => {
+      const action = resolveOpeningDeepLink(parseOpeningActionHref(href), repertoires);
       if (!action) return;
       applyOpeningAction(action);
     },
@@ -200,6 +197,7 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
     <OpeningsHub
       repertoires={list.data ?? []}
       loading={list.isLoading}
+      highlightMistakesLabel={highlightMistakesLabel}
       onNew={() => setView({ kind: 'new' })}
       onOpen={(id) => setView({ kind: 'read', id })}
       onDrill={(id, name) => setView({ kind: 'drill', id, name })}

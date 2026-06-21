@@ -20,12 +20,14 @@ import type { InsightDto, RepertoireSummaryDto, WeaknessDto } from '@purechess/s
 import { Button } from '@/components/ui/button';
 import { fetchInsights } from '@/lib/api/training';
 import { insightActionClicked } from '@/lib/analytics/training-events';
+import { displayOpeningLabel } from '@/lib/chess-com/opening-label';
 import { ChessComPanel } from '@/components/openings/chess-com-panel';
 import { cn } from '@/lib/utils';
 
 export interface OpeningsHubProps {
   repertoires: RepertoireSummaryDto[];
   loading?: boolean;
+  highlightMistakesLabel?: string | null;
   onNew: () => void;
   onOpen: (id: string) => void;
   onDrill: (id: string, name: string) => void;
@@ -80,6 +82,23 @@ function openingWeakness(insight: InsightDto | undefined): WeaknessDto | null {
   return insight.weaknesses.find((w) => w.kind === 'opening') ?? null;
 }
 
+function isChessComOpeningWeakness(leak: WeaknessDto): boolean {
+  const href = leak.actionHref ?? '';
+  return (
+    href.includes('chesscom=') ||
+    href.includes('/openings/lab') ||
+    leak.evidence?.includes('chess.com') === true
+  );
+}
+
+function openingWeaknessHeadline(leak: WeaknessDto): string {
+  const name = displayOpeningLabel(leak.label ?? '');
+  if (isChessComOpeningWeakness(leak)) {
+    return `Opening mistakes in your ${name} games`;
+  }
+  return leak.title ?? leak.label ?? 'Opening leak';
+}
+
 function trainingStatus(rep: RepertoireSummaryDto): {
   label: string;
   tone: 'due' | 'fresh' | 'new' | 'empty';
@@ -109,6 +128,7 @@ function lastTrainedLabel(iso?: string): string {
 export function OpeningsHub({
   repertoires,
   loading,
+  highlightMistakesLabel,
   onNew,
   onOpen,
   onDrill,
@@ -176,14 +196,20 @@ export function OpeningsHub({
               From your games
             </span>
             <p className="text-sm text-foreground">
-              <span className="font-medium">{openingLeak.title ?? openingLeak.label}</span>
+              <span className="font-medium">{openingWeaknessHeadline(openingLeak)}</span>
               {openingLeak.evidence ? (
                 <span className="text-muted-foreground"> — {openingLeak.evidence}</span>
               ) : null}
             </p>
+            {isChessComOpeningWeakness(openingLeak) ? (
+              <p className="mt-1 text-xs text-muted-foreground">
+                We analyzed your synced chess.com games with Stockfish. Review each mistake below
+                — what you played vs what the engine recommends.
+              </p>
+            ) : null}
           </div>
           <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-brass-text">
-            Train the line
+            {isChessComOpeningWeakness(openingLeak) ? 'Review mistakes' : 'Train the line'}
             <ArrowRight
               className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
               aria-hidden="true"
@@ -192,7 +218,7 @@ export function OpeningsHub({
         </button>
       ) : null}
 
-      <ChessComPanel />
+      <ChessComPanel highlightLabel={highlightMistakesLabel} />
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <TodayDrillCard

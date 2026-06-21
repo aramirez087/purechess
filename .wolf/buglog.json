@@ -13088,6 +13088,23 @@
       "related_bugs": ["bug-779"],
       "occurrences": 1,
       "last_seen": "2026-06-21T09:03:00.000Z"
+    },
+    {
+      "id": "bug-781",
+      "timestamp": "2026-06-21T09:43:00.000Z",
+      "error_message": "chess.com sync banner showed C20 and sent users to Opening Lab with only e4 — no visible mistake analysis",
+      "file": "apps/web/src/components/openings/chess-com-panel.tsx",
+      "root_cause": "PGN ECO tags stored as raw codes (C20); chess.com weakness actionHref pointed at Opening Lab (repertoire browser) instead of the mistake list; Lab cannot show per-game engine analysis",
+      "fix": "displayOpeningLabel resolves ECO codes; Train/Fix routes to highlighted chess-com-mistakes panel; Study position + Browse in Lab per row; clearer copy explaining Stockfish sync analysis",
+      "tags": [
+        "openings",
+        "chess-com",
+        "ux",
+        "tsx"
+      ],
+      "related_bugs": ["bug-779", "bug-780"],
+      "occurrences": 1,
+      "last_seen": "2026-06-21T09:43:00.000Z"
     }
   ]
 }
