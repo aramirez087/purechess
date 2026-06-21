@@ -208,13 +208,16 @@ describe('openingLeak', () => {
 
 describe('chessComOpeningWeakness', () => {
   it('fires when one opening has enough mistakes', () => {
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
     const w = chessComOpeningWeakness([
-      { openingLabel: 'Italian Game', cpLoss: 120 },
-      { openingLabel: 'Italian Game', cpLoss: 90 },
+      { openingLabel: 'Italian Game', cpLoss: 120, fen },
+      { openingLabel: 'Italian Game', cpLoss: 90, fen },
     ]);
     expect(w).not.toBeNull();
     expect(w!.label).toBe('Italian Game');
-    expect(w!.actionHref).toContain('/openings?chesscom=');
+    expect(w!.actionHref).toContain('/openings/lab?');
+    expect(w!.actionHref).toContain('q=Italian+Game');
+    expect(w!.actionHref).toContain('fen=');
     expect(w!.evidence).toContain('chess.com');
   });
 

@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest';
 import {
   buildOpeningBook,
   epdToStudyFen,
+  findOpeningForLabel,
   getFamily,
+  openingLabelSearchQueries,
   parseOpeningEntry,
   searchOpenings,
 } from '@/lib/openings/opening-book';
@@ -56,5 +58,28 @@ describe('opening-book', () => {
     const hits = searchOpenings(book, 'italian');
     expect(hits.length).toBeGreaterThanOrEqual(2);
     expect(hits.every((h) => h.family === 'Italian Game')).toBe(true);
+  });
+
+  it('openingLabelSearchQueries normalizes ECO comma labels', () => {
+    const queries = openingLabelSearchQueries('Italian Game, Giuoco Piano');
+    expect(queries).toContain('Italian Game, Giuoco Piano');
+    expect(queries).toContain('Italian Game: Giuoco Piano');
+    expect(queries).toContain('Italian Game');
+  });
+
+  it('findOpeningForLabel resolves comma-style ECO names against the lichess book', () => {
+    const book = buildOpeningBook(SAMPLE);
+    const hit = findOpeningForLabel(book, 'Italian Game, Giuoco Piano');
+    expect(hit?.name).toBe('Italian Game: Giuoco Piano');
+  });
+
+  it('findOpeningForLabel can pin by mistake FEN', () => {
+    const book = buildOpeningBook(SAMPLE);
+    const hit = findOpeningForLabel(
+      book,
+      'unknown label',
+      'r1bq1b1r/ppn3pp/2p1k3/3np3/2BPQ3/P1N5/1PP2PPP/R1B1K2R w KQ - 0 1',
+    );
+    expect(hit?.name).toContain('Fegatello');
   });
 });

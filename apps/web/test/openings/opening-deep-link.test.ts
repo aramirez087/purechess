@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { RepertoireSummaryDto } from '@purechess/shared';
 import {
+  openingLabHref,
   parseOpeningActionHref,
   resolveOpeningDeepLink,
 } from '@/lib/openings/opening-deep-link';
@@ -34,8 +35,27 @@ describe('parseOpeningActionHref', () => {
     });
   });
 
+  it('reads Opening Lab deep links with fen', () => {
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
+    expect(
+      parseOpeningActionHref(`/openings/lab?q=Italian%20Game&fen=${encodeURIComponent(fen)}`),
+    ).toEqual({
+      kind: 'lab',
+      query: 'Italian Game',
+      fen,
+    });
+  });
+
   it('falls back to hub for bare /openings', () => {
     expect(parseOpeningActionHref('/openings')).toEqual({ kind: 'hub' });
+  });
+});
+
+describe('openingLabHref', () => {
+  it('includes q and fen when provided', () => {
+    const href = openingLabHref('Italian Game', 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    expect(href).toContain('q=Italian+Game');
+    expect(href).toContain('fen=');
   });
 });
 
@@ -80,6 +100,17 @@ describe('resolveOpeningDeepLink', () => {
     ).toEqual({
       kind: 'lab',
       query: 'Sicilian Najdorf',
+    });
+  });
+
+  it('passes through lab deep links with fen', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(
+      resolveOpeningDeepLink({ kind: 'lab', query: 'Italian Game', fen }, repertoires),
+    ).toEqual({
+      kind: 'lab',
+      query: 'Italian Game',
+      fen,
     });
   });
 });

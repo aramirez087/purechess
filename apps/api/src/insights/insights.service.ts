@@ -167,6 +167,7 @@ export class InsightsService {
         openingLabel: m.openingLabel,
         cpLoss: m.cpLoss,
         playedAt: m.playedAt,
+        fen: m.fen,
       }));
   }
 

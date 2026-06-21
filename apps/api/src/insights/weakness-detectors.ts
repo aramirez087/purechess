@@ -89,6 +89,8 @@ export interface ChessComMistakeSummary {
   openingLabel: string;
   cpLoss: number;
   playedAt?: string;
+  /** Position at the mistake — used to deep-link Opening Lab to the right line. */
+  fen?: string;
 }
 
 /** A repertoire line the user keeps missing (an "opening leak"). */
@@ -315,11 +317,15 @@ export function chessComOpeningWeakness(
   }
 
   const clusters = [...byLabel.entries()]
-    .map(([openingLabel, items]) => ({
-      openingLabel,
-      count: items.length,
-      avgCp: items.reduce((s, m) => s + m.cpLoss, 0) / items.length,
-    }))
+    .map(([openingLabel, items]) => {
+      const worst = [...items].sort((a, b) => b.cpLoss - a.cpLoss)[0]!;
+      return {
+        openingLabel,
+        count: items.length,
+        avgCp: items.reduce((s, m) => s + m.cpLoss, 0) / items.length,
+        fen: worst.fen,
+      };
+    })
     .filter((c) => c.count >= CHESSCOM_OPENING_MIN_MISTAKES)
     .sort((a, b) => {
       if (a.count !== b.count) return b.count - a.count;
@@ -330,19 +336,20 @@ export function chessComOpeningWeakness(
 
   const top = clusters[0];
   const severity = clamp01(top.count / 5 + top.avgCp / 400);
-  const slug = encodeURIComponent(top.openingLabel);
+  const params = new URLSearchParams({ q: top.openingLabel });
+  if (top.fen) params.set('fen', top.fen);
 
   return {
     area: 'opening',
     kind: 'opening',
-    slug,
+    slug: encodeURIComponent(top.openingLabel),
     label: top.openingLabel,
     title: `Opening mistakes in your ${top.openingLabel} games`,
     evidence:
       `${top.count} mistake${top.count === 1 ? '' : 's'} in the opening ` +
       `from chess.com — avg ${Math.round(top.avgCp)}cp lost`,
     severity,
-    actionHref: `/openings?chesscom=${slug}`,
+    actionHref: `/openings/lab?${params.toString()}`,
     sampleSize: top.count,
     estimatedEloUpside: Math.round(15 + severity * 45),
   };

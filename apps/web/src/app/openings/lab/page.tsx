@@ -11,14 +11,18 @@ export const metadata: Metadata = buildMetadata({
 });
 
 type Props = {
-  searchParams: Promise<{ q?: string; family?: string }>;
+  searchParams: Promise<{ q?: string; family?: string; fen?: string }>;
 };
 
 export default async function OpeningLabPage({ searchParams }: Props) {
   const sp = await searchParams;
   return (
     <Suspense>
-      <OpeningLab initialQuery={sp.q ?? ''} initialFamily={sp.family ?? ''} />
+      <OpeningLab
+        initialQuery={sp.q ?? ''}
+        initialFamily={sp.family ?? ''}
+        initialFen={sp.fen ?? ''}
+      />
     </Suspense>
   );
 }

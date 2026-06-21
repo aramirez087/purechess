@@ -1,3 +1,5 @@
+import { ECO_OPENINGS } from './eco';
+
 /**
  * Opening Lab index over the lichess chess-openings book (`/openings.json`).
  * Each entry is [epd, name] — the EPD is replayed to a study FEN by appending
@@ -85,6 +87,61 @@ export function searchOpenings(book: OpeningBook, query: string, limit = 40): Op
     .filter((e) => e.name.toLowerCase().includes(q) || e.family.toLowerCase().includes(q))
     .sort((a, b) => searchScore(a, q) - searchScore(b, q) || a.name.localeCompare(b.name))
     .slice(0, limit);
+}
+
+/** FEN/EPD position key — first four fields, matching the lichess book index. */
+export function fenToEpd(fen: string): string {
+  return fen.trim().split(/\s+/).slice(0, 4).join(' ');
+}
+
+/**
+ * Candidate search strings for chess.com / ECO labels that may not match lichess
+ * naming (commas vs colons, family-only tags, etc.).
+ */
+export function openingLabelSearchQueries(label: string): string[] {
+  const raw = label.trim();
+  if (!raw) return [];
+
+  const queries = new Set<string>([raw]);
+
+  if (raw.includes(', ')) {
+    queries.add(raw.replace(/, /g, ': '));
+    queries.add(raw.split(', ')[0]!);
+  }
+
+  const colon = raw.indexOf(': ');
+  if (colon >= 0) queries.add(raw.slice(0, colon));
+
+  const comma = raw.indexOf(', ');
+  if (comma >= 0) queries.add(raw.slice(0, comma));
+
+  const q = raw.toLowerCase();
+  const eco = ECO_OPENINGS.find(
+    (e) => e.name.toLowerCase().includes(q) || e.code.toLowerCase().startsWith(q),
+  );
+  if (eco) queries.add(eco.name);
+
+  return [...queries].filter((s) => s.trim().length > 0);
+}
+
+/** Best opening-book hit for a human label, optionally pinned by mistake FEN. */
+export function findOpeningForLabel(
+  book: OpeningBook,
+  label: string,
+  fen?: string,
+): OpeningEntry | null {
+  if (fen) {
+    const epd = fenToEpd(fen);
+    const byPosition = book.byEpd.get(epd);
+    if (byPosition) return byPosition;
+  }
+
+  for (const query of openingLabelSearchQueries(label)) {
+    const hit = searchOpenings(book, query, 1)[0];
+    if (hit) return hit;
+  }
+
+  return null;
 }
 
 export function getFamily(book: OpeningBook, familyName: string): OpeningFamily | undefined {

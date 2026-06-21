@@ -8,8 +8,11 @@ export type { OpeningBook, OpeningEntry, OpeningFamily } from './opening-book';
 export {
   buildOpeningBook,
   epdToStudyFen,
+  fenToEpd,
+  findOpeningForLabel,
   getFamily,
   loadOpeningBook,
+  openingLabelSearchQueries,
   parseOpeningEntry,
   searchOpenings,
 } from './opening-book';

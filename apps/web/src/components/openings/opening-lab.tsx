@@ -29,6 +29,7 @@ import { useOpeningName } from '@/hooks/use-opening-name';
 import { buildTree, type AnalysisNode, type TreePath } from '@/lib/board/analysis-tree';
 import { parsePgnToTree, STARTING_FEN } from '@/lib/board/pgn-parser';
 import {
+  findOpeningForLabel,
   getFamily,
   loadOpeningBook,
   searchOpenings,
@@ -58,11 +59,19 @@ function formatPathLine(root: AnalysisNode, path: TreePath): string {
 export interface OpeningLabProps {
   initialQuery?: string;
   initialFamily?: string;
+  initialFen?: string;
 }
 
-export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLabProps) {
+export function OpeningLab({
+  initialQuery = '',
+  initialFamily = '',
+  initialFen = '',
+}: OpeningLabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const urlQuery = searchParams.get('q') ?? initialQuery;
+  const urlFamily = searchParams.get('family') ?? initialFamily;
+  const urlFen = searchParams.get('fen') ?? initialFen;
 
   const [book, setBook] = useState<OpeningBook | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -137,27 +146,50 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
     [router, searchParams],
   );
 
-  // Deep-link: ?q= or ?family= on first load once the book is ready.
+  const handledDeepLink = useRef<string | null>(null);
+
+  // Deep-link: ?q= / ?fen= / ?family= — apply once per URL, after the book loads.
   useEffect(() => {
-    if (!book || active) return;
-    const q = initialQuery.trim();
-    const fam = initialFamily.trim();
-    if (q) {
-      const hit = searchOpenings(book, q, 1)[0];
+    if (!book) return;
+
+    const q = urlQuery.trim();
+    const fam = urlFamily.trim();
+    const fen = urlFen.trim() || undefined;
+    const hasDeepLink = !!(q || fen || fam);
+    if (!hasDeepLink) {
+      handledDeepLink.current = null;
+      return;
+    }
+
+    const key = `${q}|${fen ?? ''}|${fam}`;
+    if (handledDeepLink.current === key) return;
+    handledDeepLink.current = key;
+
+    if (q || fen) {
+      const hit = findOpeningForLabel(book, q, fen);
       if (hit) {
         setActive(hit);
         setSelectedFamily(hit.family);
+        setQuery(hit.family);
+        return;
+      }
+      if (q) {
+        setQuery(q);
+        setSelectedFamily(null);
+        setActive(null);
         return;
       }
     }
+
     if (fam) {
       const family = getFamily(book, fam);
       if (family) {
         setSelectedFamily(family.name);
+        setQuery('');
         if (family.entries[0]) setActive(family.entries[0]);
       }
     }
-  }, [book, initialQuery, initialFamily, active]);
+  }, [book, urlQuery, urlFamily, urlFen]);
 
   const searchResults = useMemo(
     () => (book && query.trim() ? searchOpenings(book, query) : []),

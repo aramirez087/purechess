@@ -13070,6 +13070,24 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-06-21T08:26:00.000Z"
+    },
+    {
+      "id": "bug-780",
+      "timestamp": "2026-06-21T09:03:00.000Z",
+      "error_message": "Train the line opens Opening Lab as a clean slate — no opening loaded",
+      "file": "apps/web/src/components/openings/opening-lab.tsx",
+      "root_cause": "chess.com/ECO labels use comma separators that do not match lichess colon names; deep link only passed ?q= with no mistake FEN; Opening Lab did not resolve labels robustly or sync URL params on client navigation",
+      "fix": "findOpeningForLabel() normalizes labels + matches by FEN epd; actionHref now /openings/lab?q=&fen=; client enriches chesscom links with stored mistake FEN; Opening Lab applies deep link once per URL",
+      "tags": [
+        "openings",
+        "opening-lab",
+        "chess-com",
+        "deep-link",
+        "tsx"
+      ],
+      "related_bugs": ["bug-779"],
+      "occurrences": 1,
+      "last_seen": "2026-06-21T09:03:00.000Z"
     }
   ]
 }

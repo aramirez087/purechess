@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { RepertoireDto, RepertoireSummaryDto } from '@purechess/shared';
+import { fetchChessComMistakes } from '@/lib/api/chess-com';
 import {
   deleteRepertoire,
   fetchDrillLines,
@@ -15,9 +16,11 @@ import { RepertoireView } from '@/components/openings/repertoire-view';
 import { OpeningDrill } from '@/components/openings/opening-drill';
 import { OpeningsHub, OpeningsSignedOut } from '@/components/openings/openings-hub';
 import {
+  openingLabHref,
   parseOpeningActionHref,
   resolveOpeningDeepLink,
   type OpeningDeepLinkAction,
+  type ParsedOpeningHref,
 } from '@/lib/openings/opening-deep-link';
 
 type View =
@@ -81,14 +84,30 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
         setView({ kind: 'read', id: action.repertoireId });
         return;
       }
-      router.push(`/openings/lab?q=${encodeURIComponent(action.query)}`);
+      router.push(openingLabHref(action.query, action.fen));
     },
     [router],
   );
 
   const followOpeningActionHref = useCallback(
-    (href: string, repertoires: RepertoireSummaryDto[]) => {
-      const action = resolveOpeningDeepLink(parseOpeningActionHref(href), repertoires);
+    async (href: string, repertoires: RepertoireSummaryDto[]) => {
+      let parsed: ParsedOpeningHref = parseOpeningActionHref(href);
+
+      if (parsed.kind === 'chesscom') {
+        try {
+          const data = await fetchChessComMistakes();
+          const mistake = data.mistakes
+            .filter((m) => !m.reviewed && m.openingLabel === parsed.label)
+            .sort((a, b) => b.cpLoss - a.cpLoss)[0];
+          if (mistake?.fen) {
+            parsed = { kind: 'lab', query: parsed.label, fen: mistake.fen };
+          }
+        } catch {
+          // proceed without a position pin
+        }
+      }
+
+      const action = resolveOpeningDeepLink(parsed, repertoires);
       if (!action) return;
       applyOpeningAction(action);
     },

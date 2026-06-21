@@ -3,17 +3,31 @@ import type { RepertoireSummaryDto } from '@purechess/shared';
 export type OpeningDeepLinkAction =
   | { kind: 'drill'; repertoireId: string; name: string }
   | { kind: 'read'; repertoireId: string }
-  | { kind: 'lab'; query: string };
+  | { kind: 'lab'; query: string; fen?: string };
 
-type ParsedOpeningHref =
+export type ParsedOpeningHref =
   | { kind: 'repertoire'; id: string }
   | { kind: 'chesscom'; label: string }
+  | { kind: 'lab'; query: string; fen?: string }
   | { kind: 'hub' };
 
 /** Parse `actionHref` values emitted by opening weakness detectors. */
 export function parseOpeningActionHref(href: string): ParsedOpeningHref {
   try {
     const url = new URL(href, 'https://purechess.local');
+
+    if (url.pathname.includes('/openings/lab')) {
+      const query = url.searchParams.get('q');
+      const fen = url.searchParams.get('fen');
+      if (query || fen) {
+        return {
+          kind: 'lab',
+          query: query ? decodeURIComponent(query) : '',
+          fen: fen ?? undefined,
+        };
+      }
+    }
+
     const repertoire = url.searchParams.get('repertoire');
     if (repertoire) return { kind: 'repertoire', id: repertoire };
 
@@ -38,6 +52,10 @@ export function resolveOpeningDeepLink(
   parsed: ParsedOpeningHref,
   repertoires: RepertoireSummaryDto[],
 ): OpeningDeepLinkAction | null {
+  if (parsed.kind === 'lab') {
+    return { kind: 'lab', query: parsed.query, fen: parsed.fen };
+  }
+
   if (parsed.kind === 'repertoire') {
     const rep = repertoires.find((r) => r.id === parsed.id);
     if (!rep) return null;
@@ -58,4 +76,13 @@ export function resolveOpeningDeepLink(
   }
 
   return null;
+}
+
+/** Build the Opening Lab URL for a deep-linked study session. */
+export function openingLabHref(query: string, fen?: string): string {
+  const params = new URLSearchParams();
+  if (query.trim()) params.set('q', query.trim());
+  if (fen) params.set('fen', fen);
+  const qs = params.toString();
+  return qs ? `/openings/lab?${qs}` : '/openings/lab';
 }
