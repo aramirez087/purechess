@@ -94,13 +94,14 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
       let parsed: ParsedOpeningHref = parseOpeningActionHref(href);
 
       if (parsed.kind === 'chesscom') {
+        const openingLabel = parsed.label;
         try {
           const data = await fetchChessComMistakes();
           const mistake = data.mistakes
-            .filter((m) => !m.reviewed && m.openingLabel === parsed.label)
+            .filter((m) => !m.reviewed && m.openingLabel === openingLabel)
             .sort((a, b) => b.cpLoss - a.cpLoss)[0];
           if (mistake?.fen) {
-            parsed = { kind: 'lab', query: parsed.label, fen: mistake.fen };
+            parsed = { kind: 'lab', query: openingLabel, fen: mistake.fen };
           }
         } catch {
           // proceed without a position pin
