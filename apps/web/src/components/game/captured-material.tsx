@@ -54,7 +54,7 @@ export function CapturedMaterial({ pieces, advantage, color, className }: Captur
         </div>
       )}
       {advantage > 0 && (
-        <span className="font-mono text-[13px] tabular-nums text-[#d6b563]">+{advantage}</span>
+        <span className="font-mono text-[13px] tabular-nums text-brass">+{advantage}</span>
       )}
     </div>
   );

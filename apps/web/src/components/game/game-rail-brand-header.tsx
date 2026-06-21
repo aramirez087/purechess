@@ -4,13 +4,13 @@ import { SettingsDialog } from '@/components/settings/settings-dialog';
 
 export function GameRailBrandHeader() {
   return (
-    <div className="flex min-h-[3.25rem] items-center justify-between border-b border-[#2b332c] px-3">
+    <div className="flex min-h-[3.25rem] items-center justify-between border-b border-border px-3">
       <Link
         href="/"
         aria-label="PureChess home"
-        className="rounded-[6px] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+        className="rounded-[6px] text-foreground transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        <Logo className="text-lg text-[#f1eee6]" />
+        <Logo className="text-lg" />
       </Link>
       <SettingsDialog />
     </div>

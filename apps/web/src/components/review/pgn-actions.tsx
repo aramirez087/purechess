@@ -92,7 +92,7 @@ export function PgnIconActions(props: PgnActionsProps) {
 
   // 44px touch target on mobile (WCAG 2.5.5), compact 28px on desktop pointers.
   const buttonClass =
-    'inline-flex h-11 w-11 sm:h-7 sm:w-7 items-center justify-center rounded-[5px] text-[#8a948a] transition-colors hover:bg-white/5 hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]';
+    'inline-flex h-11 w-11 sm:h-7 sm:w-7 items-center justify-center rounded-[5px] text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brass';
 
   return (
     <div className="flex items-center gap-0.5">

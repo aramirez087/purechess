@@ -89,7 +89,7 @@ function MoveInputPanel({
       onPointerDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="overflow-hidden rounded-[10px] border border-[#2b332c]/90 bg-gradient-to-b from-[#121511] to-[#0b0d0b] shadow-[0_24px_70px_-18px_rgba(0,0,0,0.8),0_0_60px_-24px_rgba(214,181,99,0.35)]">
+      <div className="chrome-panel overflow-hidden shadow-[0_24px_70px_-18px_hsl(var(--shadow-rgb)/0.8),0_0_60px_-24px_hsl(var(--brass)/0.35)]">
         <input
           ref={inputRef}
           role="combobox"
@@ -104,7 +104,7 @@ function MoveInputPanel({
           autoCorrect="off"
           autoComplete="off"
           spellCheck={false}
-          className="w-full border-b border-[#2b332c]/70 bg-transparent px-3 py-2 font-mono text-sm text-[#e9e4d4] placeholder:text-[#8a958a] focus:outline-none"
+          className="w-full border-b border-border/70 bg-transparent px-3 py-2 font-mono text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
         <ul
           id={listId}
@@ -113,7 +113,7 @@ function MoveInputPanel({
           className="max-h-48 overflow-y-auto py-1"
         >
           {matches.length === 0 && (
-            <li className="px-3 py-1.5 font-mono text-xs text-[#8a958a]" role="presentation">
+            <li className="px-3 py-1.5 font-mono text-xs text-muted-foreground" role="presentation">
               No legal move
             </li>
           )}
@@ -126,13 +126,13 @@ function MoveInputPanel({
               aria-selected={i === selectedIdx}
               className={cn(
                 'flex cursor-pointer items-baseline justify-between px-3 py-1.5 font-mono text-sm',
-                i === selectedIdx ? 'bg-[#d6b563]/15 text-[#e9e4d4]' : 'text-[#9da79c]',
+                i === selectedIdx ? 'bg-brass/15 text-foreground' : 'text-muted-foreground',
               )}
               onMouseEnter={() => setSelectedIdx(i)}
               onClick={() => confirm(m)}
             >
               <span>{m.san}</span>
-              <span className="text-xs text-[#8a958a]">→ {m.to}</span>
+              <span className="text-xs text-muted-foreground">→ {m.to}</span>
             </li>
           ))}
         </ul>

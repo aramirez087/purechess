@@ -10,22 +10,22 @@ interface GameOverBannerProps {
 }
 
 const TONE_CLASSES: Record<ResultTone, string> = {
-  win: 'bg-gradient-to-b from-[#d6b563]/[0.14] to-transparent',
-  draw: 'bg-gradient-to-b from-[#1b201a] to-transparent',
+  win: 'bg-gradient-to-b from-brass/[0.14] to-transparent',
+  draw: 'bg-gradient-to-b from-raised to-transparent',
   loss: 'bg-gradient-to-b from-destructive/[0.12] to-transparent',
 };
 
 export function GameOverBanner({ tone, resultLabel, reasonLabel }: GameOverBannerProps) {
   return (
     <div className={cn('px-4 py-3.5 text-center', TONE_CLASSES[tone])}>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9da79c]">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
         Game over
       </p>
-      <p className="font-display mt-1 text-[22px] italic leading-tight text-[#f8f1de]">
+      <p className="font-display mt-1 text-[22px] italic leading-tight text-[hsl(var(--move-active-text))]">
         {resultLabel}
       </p>
       {reasonLabel && (
-        <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-[#b9b19d]">
+        <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-[hsl(var(--result-reason))]">
           by {reasonLabel}
         </p>
       )}

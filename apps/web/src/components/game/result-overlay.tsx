@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { ChartLine, Plus, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GameRailButton } from '@/components/game/game-rail-button';
 
 export type ResultTone = 'win' | 'loss' | 'draw';
 
@@ -54,42 +54,45 @@ export function ResultOverlay({
   analyzeHref?: string;
 }) {
   const toneRing: Record<ResultTone, string> = {
-    win: 'shadow-[0_28px_90px_-20px_rgba(214,181,99,0.5)]',
-    draw: 'shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
-    loss: 'shadow-[0_28px_80px_-26px_rgba(0,0,0,0.7)]',
+    win: 'shadow-[0_28px_90px_-20px_hsl(var(--brass)/0.5)]',
+    draw: 'shadow-[0_28px_80px_-26px_hsl(var(--shadow-rgb)/0.7)]',
+    loss: 'shadow-[0_28px_80px_-26px_hsl(var(--shadow-rgb)/0.7)]',
   };
   const toneWord: Record<ResultTone, string> = {
-    win: 'text-[#f3e7c4]',
-    draw: 'text-[#e8e4d8]',
-    loss: 'text-[#e8e4d8]',
+    win: 'text-[hsl(var(--result-word-win))]',
+    draw: 'text-[hsl(var(--result-word-neutral))]',
+    loss: 'text-[hsl(var(--result-word-neutral))]',
   };
   const toneRule: Record<ResultTone, string> = {
-    win: 'via-[#d6b563]/80',
-    draw: 'via-[#9da79c]/60',
+    win: 'via-brass/80',
+    draw: 'via-muted-foreground/60',
     loss: 'via-destructive/60',
   };
   return (
-    <div data-testid="game-result" className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden rounded-[10px] bg-[#0b0d0b]/70 p-4 backdrop-blur-[4px]">
+    <div
+      data-testid="game-result"
+      className="result-scrim absolute inset-0 z-20 flex items-center justify-center overflow-hidden rounded-[10px] p-4 backdrop-blur-[4px]"
+    >
       {tone === 'win' && (
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div
             className="absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
               background:
-                'radial-gradient(circle, rgba(214,181,99,0.26) 0%, rgba(214,181,99,0.07) 45%, transparent 70%)',
+                'radial-gradient(circle, hsl(var(--brass) / 0.26) 0%, hsl(var(--brass) / 0.07) 45%, transparent 70%)',
               animation: 'victory-halo 2.8s ease-out infinite',
             }}
           />
           {SPARKS.map((s, i) => (
             <span
               key={i}
-              className="absolute rounded-full bg-[#e8cd8a]"
+              className="absolute rounded-full bg-brass/80"
               style={{
                 left: s.left,
                 top: s.top,
                 width: s.size,
                 height: s.size,
-                boxShadow: '0 0 8px 2px rgba(214,181,99,0.55)',
+                boxShadow: '0 0 8px 2px hsl(var(--brass) / 0.55)',
                 animation: `victory-spark 3s ease-in-out ${s.delay} infinite`,
                 opacity: 0,
               }}
@@ -100,11 +103,11 @@ export function ResultOverlay({
       <div
         role="alert"
         className={cn(
-          'animate-rise w-full max-w-[min(100%,26rem)] rounded-[14px] border border-[#2b332c]/90 bg-gradient-to-b from-[#171b13] to-[#0d100b] px-6 pb-7 pt-8 text-center',
+          'result-card animate-rise w-full max-w-[min(100%,26rem)] rounded-[14px] border border-border/90 px-6 pb-7 pt-8 text-center',
           toneRing[tone],
         )}
       >
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#9da79c]">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
           {resultLabel}
         </p>
         <p
@@ -123,48 +126,38 @@ export function ResultOverlay({
           )}
         />
         {reasonLabel && (
-          <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[#b9b19d]">
+          <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--result-reason))]">
             by {reasonLabel}
           </p>
         )}
         <div className="mt-5 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={onDismiss}
-            className="inline-flex h-9 w-full items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-          >
+          <GameRailButton size="md" fullWidth onClick={onDismiss}>
             View board
-          </button>
+          </GameRailButton>
           {analyzeHref && (
-            <Link
-              href={analyzeHref}
-              className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-            >
+            <GameRailButton size="md" fullWidth href={analyzeHref}>
               <ChartLine className="h-4 w-4 shrink-0" aria-hidden="true" />
               Analyze
-            </Link>
+            </GameRailButton>
           )}
           {onRematch ? (
-            <button
-              type="button"
-              onClick={onRematch}
-              className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/12 px-2.5 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-            >
+            <GameRailButton size="md" variant="brass" fullWidth onClick={onRematch}>
               <RotateCcw className="h-4 w-4 shrink-0" aria-hidden="true" />
               Rematch
-            </button>
+            </GameRailButton>
           ) : null}
-          <Link
+          <GameRailButton
+            size="md"
+            fullWidth
             href="/play"
             className={cn(
-              'inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2.5 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]',
               // Odd count (e.g. View + Analyze + New) — give "New" the full bottom row.
               !onRematch && analyzeHref && 'col-span-2',
             )}
           >
             <Plus className="h-4 w-4 shrink-0" aria-hidden="true" />
             New
-          </Link>
+          </GameRailButton>
         </div>
       </div>
     </div>

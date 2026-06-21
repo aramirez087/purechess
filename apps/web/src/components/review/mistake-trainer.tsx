@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2, ChevronLeft, Target, XCircle } from 'lucide-react';
 import type { PuzzleDto } from '@purechess/shared';
 import { PuzzleBoardPane } from '@/components/puzzle/solve-session-shell';
+import { GameRailButton } from '@/components/game/game-rail-button';
 import { useLocalPuzzle } from '@/hooks/use-local-puzzle';
 import { fetchMistakes, markMistakeReviewed } from '@/lib/api/puzzles';
 import { cn } from '@/lib/utils';
@@ -101,14 +102,14 @@ export function MistakeTrainer({ gameId, mistakes }: MistakeTrainerProps) {
     <section
       aria-label="Train your mistakes"
       data-testid="mistake-trainer"
-      className="rounded-[10px] border border-[#2b332c] bg-[#0b0d0b]/40"
+      className="rounded-[10px] border border-border bg-background/40"
     >
-      <header className="flex items-center gap-2 border-b border-[#2b332c] px-3 py-2">
-        <Target className="h-3.5 w-3.5 text-[#d6b563]" aria-hidden="true" />
-        <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#c7cfc4]">
+      <header className="flex items-center gap-2 border-b border-border px-3 py-2">
+        <Target className="h-3.5 w-3.5 text-brass" aria-hidden="true" />
+        <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           Train your mistakes
         </h3>
-        <span className="ml-auto font-mono text-[11px] tabular-nums text-[#8a948a]">
+        <span className="ml-auto font-mono text-[11px] tabular-nums text-muted-foreground">
           {solved.size}/{mistakes.length}
         </span>
       </header>
@@ -135,20 +136,20 @@ export function MistakeTrainer({ gameId, mistakes }: MistakeTrainerProps) {
               <button
                 type="button"
                 onClick={() => setActivePly(m.ply)}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-inset"
+                className="flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-background/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-inset"
               >
                 {solved.has(m.ply) ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#d6b563]" aria-hidden="true" />
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-brass" aria-hidden="true" />
                 ) : (
                   <span
                     aria-hidden="true"
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#c2563f]"
+                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-destructive"
                   />
                 )}
-                <span className="min-w-0 truncate text-[13px] text-[#e7e3d6]">
+                <span className="min-w-0 truncate text-[13px] text-foreground">
                   Move {m.moveNumber}.{m.color === 'b' ? '..' : ''} {m.san}
                 </span>
-                <span className="ml-auto shrink-0 font-mono text-xs tabular-nums text-[#c2563f]">
+                <span className="ml-auto shrink-0 font-mono text-xs tabular-nums text-destructive">
                   {formatLoss(m.cpLoss)}
                 </span>
               </button>
@@ -192,34 +193,30 @@ function MistakeSolve({
   return (
     <div className="flex flex-col gap-2 p-3">
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="inline-flex h-7 items-center gap-1 rounded-[6px] border border-[#2b332c] bg-[#0b0d0b]/40 px-2 text-xs font-medium text-[#c7cfc4] transition-colors hover:border-[#3a443b] hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563]"
-        >
+        <GameRailButton size="sm" onClick={onBack}>
           <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
           Mistakes
-        </button>
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#8a948a]">
+        </GameRailButton>
+        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
           Move {mistake.moveNumber}.{mistake.color === 'b' ? '..' : ''} {mistake.san}
         </span>
       </div>
 
       <PuzzleBoardPane state={state} onMove={onMove} className="max-w-[300px]">
         {outcome === 'solved' && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-1.5 rounded-[4px] bg-[#0b0d0b]/75 text-center backdrop-blur-sm">
-            <CheckCircle2 className="h-7 w-7 text-[#d6b563]" aria-hidden="true" />
-            <p className="text-sm font-semibold text-[#f1eee6]">You found it</p>
+          <div className="result-scrim absolute inset-0 z-30 flex flex-col items-center justify-center gap-1.5 rounded-[4px] text-center backdrop-blur-sm">
+            <CheckCircle2 className="h-7 w-7 text-brass" aria-hidden="true" />
+            <p className="text-sm font-semibold text-foreground">You found it</p>
           </div>
         )}
         {outcome === 'failed' && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-1.5 rounded-[4px] bg-[#0b0d0b]/75 text-center backdrop-blur-sm">
-            <XCircle className="h-7 w-7 text-[#c2563f]" aria-hidden="true" />
-            <p className="text-sm font-semibold text-[#f1eee6]">Not the move — try again</p>
+          <div className="result-scrim absolute inset-0 z-30 flex flex-col items-center justify-center gap-1.5 rounded-[4px] text-center backdrop-blur-sm">
+            <XCircle className="h-7 w-7 text-destructive" aria-hidden="true" />
+            <p className="text-sm font-semibold text-foreground">Not the move — try again</p>
             <button
               type="button"
               onClick={onBack}
-              className="mt-1 text-xs text-[#c7cfc4] underline-offset-2 hover:underline"
+              className="mt-1 text-xs text-muted-foreground underline-offset-2 hover:underline"
             >
               Back to list
             </button>
@@ -229,7 +226,7 @@ function MistakeSolve({
 
       <p
         className={cn(
-          'min-h-[1.1rem] text-center text-[13px] text-[#9da79c]',
+          'min-h-[1.1rem] text-center text-[13px] text-muted-foreground',
           outcome && 'opacity-0',
         )}
       >

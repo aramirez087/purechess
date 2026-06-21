@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { lazyCaptureException } from '@/lib/sentry-lazy';
+import '@/app/globals.css';
 
 export default function GlobalError({
   error,
@@ -29,97 +30,26 @@ export default function GlobalError({
 
   return (
     <html>
-      <body
-        style={{
-          display: 'flex',
-          minHeight: '100vh',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          gap: '1rem',
-          fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-          background: '#0b0d0b',
-          color: '#f1eee6',
-          padding: '1.5rem',
-          textAlign: 'center',
-        }}
-      >
-        {/* global-error renders without the root layout, so interactive states
-            must be self-contained here. */}
-        <style>{`
-          .ge-btn { transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease; }
-          .ge-btn:focus-visible { outline: 2px solid #d6b563; outline-offset: 2px; }
-          .ge-btn-ghost:hover { background-color: #181c17; border-color: #3a443b; }
-          .ge-btn-solid:hover { opacity: 0.9; }
-        `}</style>
-        <p
-          style={{
-            color: '#9da79c',
-            fontSize: '0.75rem',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-          }}
-        >
-          Purechess
-        </p>
-        <h2
-          style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontStyle: 'italic',
-            fontSize: '1.75rem',
-            fontWeight: 500,
-            letterSpacing: '-0.01em',
-            margin: 0,
-          }}
-        >
+      <body className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-6 py-6 text-center font-sans text-foreground">
+        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Purechess</p>
+        <h2 className="font-display m-0 text-[1.75rem] font-medium italic tracking-[-0.01em]">
           Something broke.
         </h2>
-        <div
-          aria-hidden="true"
-          style={{ height: 1, width: 40, background: 'rgba(214,181,99,0.6)' }}
-        />
-        <p style={{ color: '#9da79c', fontSize: '0.875rem', margin: 0 }}>Refresh to try again.</p>
+        <div aria-hidden="true" className="h-px w-10 bg-brass/60" />
+        <p className="m-0 text-sm text-muted-foreground">Refresh to try again.</p>
         {eventId && (
-          <p
-            style={{
-              color: '#9da79c',
-              fontSize: '0.75rem',
-              fontFamily: 'ui-monospace, monospace',
-              margin: 0,
-            }}
-          >
-            {eventId}
-          </p>
+          <p className="m-0 font-mono text-xs text-muted-foreground">{eventId}</p>
         )}
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="flex gap-2">
           <button
             onClick={handleCopy}
-            className="ge-btn ge-btn-ghost"
-            style={{
-              padding: '0.5rem 1rem',
-              border: '1px solid #2b332c',
-              borderRadius: '0.375rem',
-              background: 'transparent',
-              color: '#f1eee6',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-            }}
+            className="chrome-btn rounded-md border px-4 py-2 text-sm"
           >
             Copy error details
           </button>
           <button
             onClick={reset}
-            className="ge-btn ge-btn-solid"
-            style={{
-              padding: '0.5rem 1rem',
-              borderRadius: '0.375rem',
-              background: '#f1eee6',
-              color: '#0b0d0b',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-            }}
+            className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
           >
             Refresh
           </button>

@@ -124,7 +124,7 @@ function DrillPrompt({
           aria-hidden="true"
           className={cn(
             'h-2.5 w-2.5 rounded-full ring-1 ring-border',
-            toMove === 'white' ? 'bg-[#f0ede5]' : 'bg-[#1a1e19]',
+            toMove === 'white' ? 'bg-board-light' : 'bg-board-dark',
           )}
         />
         {outOfBook ? 'Out of book — the booked move is shown' : `${toMove} to move`}

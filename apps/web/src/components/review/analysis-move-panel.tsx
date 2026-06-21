@@ -57,7 +57,7 @@ function CommentIcon({ comment }: { comment: string }) {
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className="ml-1 inline-flex shrink-0 align-middle text-[#8a958a]">
+          <span className="ml-1 inline-flex shrink-0 align-middle text-muted-foreground">
             <MessageSquare className="h-3 w-3" aria-hidden="true" />
             <span className="sr-only">Comment: {text}</span>
           </span>
@@ -144,7 +144,7 @@ export function AnalysisMovePanel({
   if (mainline.length === 0) {
     return (
       <div className={cn('h-full overflow-y-auto text-sm', className)}>
-        <p className="font-display px-4 py-5 text-[15px] italic text-[#7f897f]">
+        <p className="font-display px-4 py-5 text-[15px] italic text-muted-foreground">
           No moves yet — play a move on the board.
         </p>
       </div>
@@ -198,7 +198,7 @@ export function AnalysisMovePanel({
           return (
             <div key={row.no}>
               <div className="flex items-stretch">
-                <span className="flex w-9 shrink-0 items-center justify-end border-b border-transparent py-1 pl-2 pr-2.5 font-mono text-[11px] tabular-nums text-[#8a958a]">
+                <span className="flex w-9 shrink-0 items-center justify-end border-b border-transparent py-1 pl-2 pr-2.5 font-mono text-[11px] tabular-nums text-muted-foreground">
                   {row.no}.
                 </span>
                 <MainlineCell token={row.white} currentPath={currentPath} onSelect={onSelect} activeRef={activeRef} classifications={classifications} />
@@ -246,11 +246,11 @@ function MainlineCell({
       onClick={() => onSelect(token.path)}
       aria-current={active ? 'true' : undefined}
       className={cn(
-        'block w-1/2 px-2.5 py-1 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[#181c17]',
-        'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]',
+        'block w-1/2 px-2.5 py-1 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[hsl(var(--move-hover-bg))]',
+        'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brass',
         active
-          ? 'bg-[#d6b563]/[0.12] text-[#f8f1de] shadow-[inset_2px_0_0_0_#d6b563]'
-          : 'text-[#c9c3b2]',
+          ? 'bg-brass/[0.12] text-[hsl(var(--move-active-text))] shadow-[inset_2px_0_0_0_hsl(var(--brass))]'
+          : 'text-[hsl(var(--move-text))]',
       )}
     >
       {token.node.san}
@@ -319,12 +319,12 @@ function VariationLine({
               onClick={() => onSelect(token.path)}
               aria-current={active ? 'true' : undefined}
               className={cn(
-                'rounded-[3px] px-1 py-0.5 font-mono text-[12px] tabular-nums transition-colors hover:bg-[#181c17] hover:text-[#e7e3d6]',
-                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]',
-                active ? 'bg-[#d6b563]/[0.14] text-[#f8f1de]' : 'text-[#8a948a]',
+                'rounded-[3px] px-1 py-0.5 font-mono text-[12px] tabular-nums transition-colors hover:bg-[hsl(var(--move-hover-bg))] hover:text-foreground',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brass',
+                active ? 'bg-brass/[0.14] text-[hsl(var(--move-active-text))]' : 'text-muted-foreground',
               )}
             >
-              {prefix && <span className="mr-0.5 text-[10px] text-[#6f7a70]">{prefix}</span>}
+              {prefix && <span className="mr-0.5 text-[10px] text-muted-foreground/70">{prefix}</span>}
               {token.node.san}
               {token.node.nag !== undefined && <NagBadge nag={token.node.nag} />}
               {token.node.comment && <CommentIcon comment={token.node.comment} />}
@@ -336,7 +336,7 @@ function VariationLine({
             type="button"
             onClick={() => onToggle(key)}
             aria-expanded={isExpanded}
-            className="rounded-[3px] px-1 py-0.5 font-mono text-[11px] text-[#6f7a70] transition-colors hover:bg-[#181c17] hover:text-[#c9c3b2] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]"
+            className="rounded-[3px] px-1 py-0.5 font-mono text-[11px] text-muted-foreground/70 transition-colors hover:bg-[hsl(var(--move-hover-bg))] hover:text-[hsl(var(--move-text))] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brass"
           >
             {isExpanded ? '− hide' : `… ${hiddenMoves} ${hiddenMoves === 1 ? 'move' : 'moves'}`}
           </button>

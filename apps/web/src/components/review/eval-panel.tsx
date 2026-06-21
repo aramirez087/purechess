@@ -64,24 +64,24 @@ export function EvalBar({
       aria-label={`Evaluation ${formatScore(evaluation?.cp, evaluation?.mate)}`}
       className={cn('relative w-3 shrink-0 self-stretch', className)}
     >
-      <div className="absolute inset-0 overflow-hidden rounded-full border border-[#2b332c] bg-[#10140f]">
+      <div className="absolute inset-0 overflow-hidden rounded-full border border-border bg-background">
         <div
           className={cn(
-            'absolute inset-x-0 bg-gradient-to-b from-[#f6f2e6] to-[#e9e4d4] transition-[height] duration-500 ease-out',
+            'absolute inset-x-0 bg-gradient-to-b from-board-light to-board-light/80 transition-[height] duration-500 ease-out',
             orientation === 'white' ? 'bottom-0' : 'top-0',
           )}
           style={{ height: `${share}%` }}
         />
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#d6b563]/70"
+          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-brass/70"
         />
         {/* Search heartbeat: unmounts (no exit transition) the instant the
             search completes, so the final score snap stays crisp. */}
         {thinking && (
           <div
             aria-hidden="true"
-            className="eval-scan pointer-events-none absolute inset-x-0 h-[14%] bg-gradient-to-b from-transparent via-[#f6f2e6]/25 to-transparent"
+            className="eval-scan pointer-events-none absolute inset-x-0 h-[14%] bg-gradient-to-b from-transparent via-board-light/25 to-transparent"
           />
         )}
       </div>
@@ -97,8 +97,8 @@ export function EvalBar({
             'pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded-[3px] px-0.5 py-px font-mono text-[9px] font-semibold leading-none tabular-nums',
             capAtBottom ? 'bottom-1' : 'top-1',
             whiteWinning
-              ? 'bg-[#e9e4d4] text-[#10140f]'
-              : 'bg-[#10140f] text-[#e9e4d4] ring-1 ring-inset ring-[#2b332c]',
+              ? 'bg-board-light text-background'
+              : 'bg-background text-board-light ring-1 ring-inset ring-border',
           )}
         >
           {formatScore(evaluation?.cp, evaluation?.mate)}
@@ -136,16 +136,16 @@ function LineRow({
       <span
         className={cn(
           'w-9 shrink-0 text-right font-mono text-[13px] font-semibold tabular-nums',
-          primary ? 'text-[#d6b563]' : 'text-[#8a948a]',
+          primary ? 'text-brass' : 'text-muted-foreground',
           thinking && 'animate-pulse opacity-60',
         )}
       >
         {formatScore(cp, mate)}
       </span>
-      <span className="w-7 shrink-0 font-mono text-[10px] tabular-nums text-[#8a948a]">
+      <span className="w-7 shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">
         {primary && depth !== undefined ? `d${depth}` : ''}
       </span>
-      <span className="min-w-0 truncate font-mono text-[11px] text-[#9da79c]">
+      <span className="min-w-0 truncate font-mono text-[11px] text-muted-foreground">
         {san.join(' ')}
         {pv.length > PV_MAX_MOVES && ' …'}
       </span>

@@ -43,9 +43,10 @@ export interface PlayerStripProps {
 /** Urgency styling applied to the clock chip only — the strip keeps its own
  * gold active treatment. `clock-pulse` keyframes live in globals.css. */
 const CLOCK_TIER_STYLES: Record<Exclude<ClockTier, 'normal'>, string> = {
-  caution: 'border-[#c47f2a]/50 bg-[#0b0d0b]/70 text-[#e8a84a]',
+  caution:
+    'border-[hsl(var(--clock-caution-border)/0.5)] bg-[hsl(var(--clock-caution-bg))] text-[hsl(var(--clock-caution-text))]',
   critical:
-    'border-red-700/60 bg-[#0b0d0b]/80 text-red-400 animate-[clock-pulse_1s_ease-in-out_infinite]',
+    'border-red-700/60 bg-[hsl(var(--clock-chip-bg))] text-red-400 animate-[clock-pulse_1s_ease-in-out_infinite]',
   dying:
     'border-red-600/80 bg-red-950/40 font-bold text-red-300 animate-[clock-pulse_0.4s_ease-in-out_infinite]',
   out: 'border-red-500 bg-red-950/60 text-red-200',
@@ -69,8 +70,6 @@ export function PlayerStrip({
   const showCaptured = !!captured && captured.pieces.length > 0 && !!capturedColor;
   const tier = clockTier(timeMs);
 
-  // Increment flash: remaining time jumping UP on a running clock means the
-  // increment landed. Skipped above 30s where a bonus second isn't news.
   const prevTimeMsRef = useRef<number | undefined>(undefined);
   const [bonusFlash, setBonusFlash] = useState(false);
   useEffect(() => {
@@ -89,10 +88,10 @@ export function PlayerStrip({
       className={cn(
         'flex min-h-[3.25rem] items-center gap-3 rounded-[10px] border px-3 py-2 transition-all duration-300',
         active && !subtle
-          ? 'border-[#d6b563]/50 bg-gradient-to-r from-[#d6b563]/[0.16] to-[#d6b563]/[0.03] text-[#f8f1de] shadow-[0_0_0_1px_rgba(214,181,99,0.16),0_0_34px_-12px_rgba(214,181,99,0.55)]'
+          ? 'chrome-strip-active'
           : active && subtle
-            ? 'border-[#d6b563]/40 bg-gradient-to-b from-[#14180f] to-[#101410] text-[#f8f1de] shadow-[inset_2px_0_0_0_#d6b563]'
-            : 'border-[#2b332c] bg-gradient-to-b from-[#14180f] to-[#101410] text-[#f1eee6]',
+            ? 'chrome-strip-subtle'
+            : 'chrome-strip',
       )}
     >
       <div className="flex min-w-0 items-center gap-3">
@@ -102,8 +101,8 @@ export function PlayerStrip({
             className={cn(
               'grid h-10 w-10 shrink-0 place-items-center rounded-full border transition-colors',
               active && !subtle
-                ? 'border-[#d6b563]/60 bg-[#d6b563]/15 text-[#f3e7c4]'
-                : 'border-[#2b332c] bg-gradient-to-b from-[#181c17] to-[#0d100c] text-[#c7cfc4] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]',
+                ? 'border-brass/60 bg-brass/15 text-[hsl(var(--move-active-text))]'
+                : 'border-border bg-gradient-to-b from-[hsl(var(--avatar-from))] to-[hsl(var(--avatar-to))] text-muted-foreground shadow-inner-hairline',
             )}
           >
             {avatar}
@@ -117,20 +116,18 @@ export function PlayerStrip({
                 aria-label={side === 'white' ? 'Plays white' : 'Plays black'}
                 className={cn(
                   'h-2.5 w-2.5 shrink-0 rounded-[2px] ring-1 ring-inset',
-                  side === 'white' ? 'bg-[#e9e4d4] ring-black/30' : 'bg-[#3d4a40] ring-[#2b332c]',
+                  side === 'white' ? 'bg-board-light ring-black/30' : 'bg-board-dark ring-border',
                 )}
               />
             )}
             <p className="truncate text-sm font-semibold leading-tight">{name}</p>
           </div>
           {detail && (
-            <p className="mt-0.5 truncate text-xs leading-tight text-[#9da79c]">{detail}</p>
+            <p className="mt-0.5 truncate text-xs leading-tight text-muted-foreground">{detail}</p>
           )}
         </div>
       </div>
 
-      {/* Right cluster: captured material reads outward from the name gap,
-          status/result/clock anchor the strip's right edge. */}
       <div className="ml-auto flex shrink-0 items-center gap-3">
         {showCaptured && (
           <CapturedMaterial
@@ -142,20 +139,22 @@ export function PlayerStrip({
         {status && (
           <span
             aria-live="polite"
-            className="flex shrink-0 items-center gap-1.5 rounded-full border border-[#2b332c] bg-[#0b0d0b]/70 px-2 py-0.5 text-[10px] font-medium text-[#d8d2c3]"
+            className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-[hsl(var(--status-pill-bg))] px-2 py-0.5 text-[10px] font-medium text-[hsl(var(--status-pill-text))]"
           >
             <span
               aria-hidden="true"
               className={cn(
                 'h-1.5 w-1.5 rounded-full',
-                active ? 'bg-[#d6b563] shadow-[0_0_8px_1px_rgba(214,181,99,0.7)]' : 'bg-[#4b554b]',
+                active
+                  ? 'bg-brass shadow-[0_0_8px_1px_hsl(var(--brass)/0.7)]'
+                  : 'bg-[hsl(var(--status-dot-idle))]',
               )}
             />
             {status}
           </span>
         )}
         {resultChip && (
-          <span className="font-mono text-sm font-semibold tabular-nums text-[#d6b563]">
+          <span className="font-mono text-sm font-semibold tabular-nums text-brass">
             <span aria-hidden="true">{resultChip}</span>
             <span className="sr-only">
               {resultChip === '1' ? 'Won' : resultChip === '0' ? 'Lost' : 'Draw'}
@@ -169,13 +168,11 @@ export function PlayerStrip({
               'transition-[color,border-color,background-color,box-shadow] duration-300',
               tier === 'normal'
                 ? active
-                  ? 'border-[#d6b563]/45 bg-[#0b0d0b] text-[#f8f1de]'
-                  : 'border-[#2b332c] bg-[#0b0d0b]/60 text-[#c7cfc4]'
+                  ? 'border-brass/45 bg-[hsl(var(--clock-chip-active-bg))] text-[hsl(var(--move-active-text))]'
+                  : 'border-border bg-[hsl(var(--clock-chip-bg))] text-muted-foreground'
                 : CLOCK_TIER_STYLES[tier],
-              bonusFlash && 'shadow-[0_0_0_2px_rgba(214,181,99,0.7)]',
+              bonusFlash && 'shadow-[0_0_0_2px_hsl(var(--brass)/0.7)]',
             )}
-            // SSR'd pages render the server-time clock; the client recomputes
-            // from Date.now() on hydration, so the text can differ by a tick.
             suppressHydrationWarning
           >
             {clock}

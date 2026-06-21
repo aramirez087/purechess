@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ReviewControlsProps {
   onStart: () => void;
@@ -24,8 +25,12 @@ interface ReviewControlsProps {
 // Boundary states use aria-disabled (not disabled) so keyboard focus is
 // retained when the focused button reaches the start/end of the game; the
 // aria-disabled:* variants out-specify the hover/active affordances.
-const seekButtonClass =
-  'inline-flex h-10 w-10 items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] aria-disabled:cursor-not-allowed aria-disabled:opacity-40 aria-disabled:hover:border-[#2b332c] aria-disabled:hover:text-[#c7cfc4] aria-disabled:active:translate-y-0 aria-disabled:active:bg-[#0b0d0b]/40';
+const seekButtonClass = cn(
+  'chrome-btn inline-flex h-10 w-10 items-center justify-center rounded-[7px] active:translate-y-px',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-40',
+  'aria-disabled:hover:border-border aria-disabled:hover:text-muted-foreground',
+  'aria-disabled:active:translate-y-0 aria-disabled:active:bg-background/40',
+);
 
 export function ReviewControls({
   onStart,

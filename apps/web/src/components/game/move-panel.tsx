@@ -59,15 +59,17 @@ export function MovePanel({ moves, currentPly, onSeek, className }: MovePanelPro
             borders so the gradient is the single source of rules. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: `repeating-linear-gradient(to bottom, transparent 0, transparent ${ROW_CONTENT_HEIGHT}, rgba(35,42,36,0.55) ${ROW_CONTENT_HEIGHT}, rgba(35,42,36,0.55) calc(${ROW_CONTENT_HEIGHT} + 1px))`,
-            WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 48px), transparent)',
-            maskImage: 'linear-gradient(to bottom, black calc(100% - 48px), transparent)',
-          }}
+          className="move-panel-rule pointer-events-none absolute inset-0"
+          style={
+            {
+              '--move-row-height': ROW_CONTENT_HEIGHT,
+              WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 48px), transparent)',
+              maskImage: 'linear-gradient(to bottom, black calc(100% - 48px), transparent)',
+            } as React.CSSProperties
+          }
         />
         {pairs.length === 0 ? (
-          <p className="font-display relative px-4 py-5 text-[15px] italic text-[#7f897f]">
+          <p className="font-display relative px-4 py-5 text-[15px] italic text-muted-foreground">
             No moves yet.
           </p>
         ) : (
@@ -77,7 +79,7 @@ export function MovePanel({ moves, currentPly, onSeek, className }: MovePanelPro
                 const rowActive = currentPly === p.white?.ply || currentPly === p.black?.ply;
                 return (
                   <tr key={p.no} ref={rowActive ? activeRef : undefined} data-move-number={p.no}>
-                    <td className="w-9 border-b border-transparent py-1 pl-2 pr-2.5 text-right font-mono text-[11px] tabular-nums text-[#8a958a]">
+                    <td className="w-9 border-b border-transparent py-1 pl-2 pr-2.5 text-right font-mono text-[11px] tabular-nums text-muted-foreground">
                       {p.no}.
                     </td>
                     <MoveCell move={p.white} currentPly={currentPly} onSeek={onSeek} />
@@ -116,11 +118,11 @@ function MoveCell({
           onClick={() => onSeek(move.ply)}
           aria-current={active ? 'true' : undefined}
           className={cn(
-            'block w-full px-2.5 py-1 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[#181c17]',
-            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d6b563]',
+            'block w-full px-2.5 py-1 text-left font-mono text-[13px] tabular-nums transition-colors hover:bg-[hsl(var(--move-hover-bg))]',
+            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brass',
             active
-              ? 'bg-[#d6b563]/[0.12] text-[#f8f1de] shadow-[inset_2px_0_0_0_#d6b563]'
-              : 'text-[#c9c3b2]',
+              ? 'bg-brass/[0.12] text-[hsl(var(--move-active-text))] shadow-[inset_2px_0_0_0_hsl(var(--brass))]'
+              : 'text-[hsl(var(--move-text))]',
           )}
         >
           {move.san}
@@ -136,8 +138,8 @@ function MoveCell({
         cellBase,
         'px-2.5 py-1 font-mono text-[13px] tabular-nums',
         active
-          ? 'bg-[#d6b563]/[0.08] text-[#f1eee6] shadow-[inset_2px_0_0_0_#d6b563]'
-          : 'text-[#c9c3b2]',
+          ? 'bg-brass/[0.08] text-[hsl(var(--move-active-text))] shadow-[inset_2px_0_0_0_hsl(var(--brass))]'
+          : 'text-[hsl(var(--move-text))]',
       )}
     >
       {move.san}

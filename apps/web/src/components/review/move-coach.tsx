@@ -31,7 +31,7 @@ export function MoveCoach({
   const showBest = SUBOPTIMAL.has(move.class) && bestSan && bestSan !== move.san;
   return (
     <div
-      className="flex items-center gap-2 rounded-[6px] border-l-2 bg-[#0b0d0b]/40 px-2.5 py-1.5"
+      className="flex items-center gap-2 rounded-[6px] border-l-2 bg-background/40 px-2.5 py-1.5"
       style={{ borderColor: verdict.tone }}
       aria-live="polite"
     >
@@ -50,10 +50,10 @@ export function MoveCoach({
         <span className="font-semibold" style={{ color: verdict.tone }}>
           {move.san}
         </span>
-        <span className="text-[#9da79c]"> — {verdict.headline}</span>
+        <span className="text-muted-foreground"> — {verdict.headline}</span>
         {showBest && (
-          <span className="text-[#9da79c]">
-            . Best was <span className="font-medium text-[#d8d2c3]">{bestSan}</span>
+          <span className="text-muted-foreground">
+            . Best was <span className="font-medium text-foreground">{bestSan}</span>
           </span>
         )}
       </span>

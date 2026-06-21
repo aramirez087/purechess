@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlipVertical2, Swords, User } from 'lucide-react';
+import { GameRailButton } from '@/components/game/game-rail-button';
 import { Chess } from 'chess.js';
 import { Chessboard } from '@/components/board';
 import { PracticeFromFenDialog } from '@/components/play/practice-from-fen-dialog';
@@ -228,7 +229,7 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
 
   const matchupLine = (
     <>
-      {game.white.username} <span className="text-[#8a958a]">vs</span> {game.black.username} ·
+      {game.white.username} <span className="text-muted-foreground">vs</span> {game.black.username} ·
       Analysis
     </>
   );
@@ -241,7 +242,7 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
             center={
               // Opening name ↔ matchup crossfade as the position moves in
               // and out of book; both occupy the same grid cell.
-              <span className="grid font-mono text-[11px] uppercase tracking-[0.18em] text-[#9da79c]">
+              <span className="grid font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                 <span
                   className={cn(
                     'col-start-1 row-start-1 text-center transition-opacity duration-300',
@@ -253,7 +254,7 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
                 </span>
                 <span
                   className={cn(
-                    'col-start-1 row-start-1 text-center text-[#d8d2c3] transition-opacity duration-300',
+                    'col-start-1 row-start-1 text-center text-foreground transition-opacity duration-300',
                     opening ? 'opacity-100' : 'opacity-0',
                   )}
                   aria-hidden={!opening}
@@ -268,37 +269,37 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
           <div className="flex flex-col gap-4">
             <GameRail>
               <div className="px-4 pb-4 pt-5">
-                <p className="font-display text-[26px] italic leading-[1.1] text-[#f1eee6]">
+                <p className="font-display text-[26px] italic leading-[1.1] text-foreground">
                   {verdict}
                 </p>
                 {resultLabel && (
-                  <p className="mt-1.5 font-mono text-lg font-semibold tabular-nums text-[#d6b563]">
+                  <p className="mt-1.5 font-mono text-lg font-semibold tabular-nums text-brass">
                     {resultLabel}
                   </p>
                 )}
-                <p className="mt-1.5 text-sm text-[#9da79c]">
+                <p className="mt-1.5 text-sm text-muted-foreground">
                   Play moves on the board to explore — lines branch off the game.
                 </p>
               </div>
               <div
                 aria-hidden="true"
-                className="mx-4 h-px bg-gradient-to-r from-[#d6b563]/40 to-transparent"
+                className="mx-4 h-px bg-gradient-to-r from-brass/40 to-transparent"
               />
-              <dl className="divide-y divide-[#232a24]/70 py-1 text-sm">
+              <dl className="divide-y divide-border/70 py-1 text-sm">
                 <div className="flex items-center justify-between px-4 py-2">
-                  <dt className="text-xs text-[#9da79c]">Time</dt>
-                  <dd className="font-mono text-[13px] font-medium tabular-nums text-[#e7e3d6]">
+                  <dt className="text-xs text-muted-foreground">Time</dt>
+                  <dd className="font-mono text-[13px] font-medium tabular-nums text-foreground">
                     {game.timeControl.label}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between px-4 py-2">
-                  <dt className="text-xs text-[#9da79c]">Type</dt>
-                  <dd className="font-mono text-[13px] font-medium tabular-nums text-[#e7e3d6]">
+                  <dt className="text-xs text-muted-foreground">Type</dt>
+                  <dd className="font-mono text-[13px] font-medium tabular-nums text-foreground">
                     Analysis
                   </dd>
                 </div>
               </dl>
-              <div className="border-t border-[#2b332c] p-2.5">
+              <div className="border-t border-border p-2.5">
                 <PgnActions
                   pgn={game.pgn}
                   tree={tree.root}
@@ -351,25 +352,21 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
               bodyClassName="flex min-h-0 flex-1 flex-col"
             >
               {mainlineMoves.length > 0 && (
-                <div className="shrink-0 border-b border-[#2b332c] px-2.5 py-2">
+                <div className="shrink-0 border-b border-border px-2.5 py-2">
                   {!classification && !classifying && (
-                    <button
-                      type="button"
-                      onClick={runClassifier}
-                      className="inline-flex h-8 w-full items-center justify-center whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-[13px] font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                    >
+                    <GameRailButton size="sm" fullWidth onClick={runClassifier}>
                       Analyze game
-                    </button>
+                    </GameRailButton>
                   )}
                   {classifying && (
                     <div aria-live="polite">
-                      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-[#9da79c]">
+                      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                         <span>Analyzing…</span>
                         <span className="tabular-nums">{Math.round(progress * 100)}%</span>
                       </div>
-                      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-[#2b332c]">
+                      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-border">
                         <div
-                          className="h-full rounded-full bg-[#d6b563] transition-[width] duration-300"
+                          className="h-full rounded-full bg-brass transition-[width] duration-300"
                           style={{ width: `${Math.round(progress * 100)}%` }}
                         />
                       </div>
@@ -392,27 +389,23 @@ export function AnalyzeBoard({ game, exitAction }: AnalyzeBoardProps) {
                   classifications={classification?.moves}
                 />
               </div>
-              <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[#2b332c] p-2">
+              <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border p-2">
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
+                  <GameRailButton
                     onClick={() => setFlipped((f) => !f)}
                     aria-label="Flip board"
-                    className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
                   >
                     <FlipVertical2 className="h-4 w-4" aria-hidden="true" />
                     Flip
-                  </button>
-                  <button
-                    type="button"
+                  </GameRailButton>
+                  <GameRailButton
                     onClick={() => setPracticeOpen(true)}
                     title="Practice from this position"
                     aria-label="Practice from this position"
-                    className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
                   >
                     <Swords className="h-4 w-4" aria-hidden="true" />
                     Practice
-                  </button>
+                  </GameRailButton>
                 </div>
                 <ReviewControls
                   onStart={tree.goStart}

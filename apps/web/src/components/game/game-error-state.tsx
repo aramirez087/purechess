@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { GameRailButton } from '@/components/game/game-rail-button';
 
 export interface GameErrorStateProps {
   /** Raw error message from the API — echoed verbatim in the small print. */
@@ -47,38 +48,34 @@ export function GameErrorState({
   return (
     <main
       id="main-content"
-      className="flex min-h-screen items-center justify-center bg-[#0b0d0b] px-4 text-[#f1eee6]"
+      className="flex min-h-screen items-center justify-center bg-background px-4 text-foreground"
     >
       <div className="animate-rise w-full max-w-md text-center">
-        <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-[#9da79c]">
+        <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-muted-foreground">
           Purechess
         </p>
-        <h1 className="font-display mt-4 text-[clamp(2rem,5vw,2.75rem)] italic leading-tight text-[#f1eee6]">
+        <h1 className="font-display mt-4 text-[clamp(2rem,5vw,2.75rem)] italic leading-tight text-foreground">
           {verdict}
         </h1>
         <div
           aria-hidden="true"
-          className="mx-auto mt-5 h-px w-24 bg-gradient-to-r from-transparent via-[#d6b563]/80 to-transparent"
+          className="mx-auto mt-5 h-px w-24 bg-gradient-to-r from-transparent via-brass/80 to-transparent"
         />
-        <p className="mt-4 text-sm leading-relaxed text-[#9da79c]">{explanation}</p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{explanation}</p>
         <div className="mt-7 flex items-center justify-center gap-2">
           <Link
             href={backHref}
-            className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[7px] bg-[#f1eee6] px-4 text-sm font-semibold text-[#11140f] transition-[color,background-color,border-color,transform] duration-150 hover:bg-[#fbf8ee] active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
+            className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[7px] bg-foreground px-4 text-sm font-semibold text-background transition-[color,background-color,border-color,transform] duration-150 hover:bg-foreground/90 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {backLabel}
           </Link>
           {onRetry && (
-            <button
-              type="button"
-              onClick={onRetry}
-              className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[7px] border border-transparent px-4 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:bg-[#181c17] hover:text-[#f1eee6] active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-            >
+            <GameRailButton onClick={onRetry} className="border-transparent hover:bg-raised">
               Try again
-            </button>
+            </GameRailButton>
           )}
         </div>
-        <p className="mt-8 font-mono text-xs text-[#8a958a]">{message}</p>
+        <p className="mt-8 font-mono text-xs text-muted-foreground">{message}</p>
       </div>
     </main>
   );

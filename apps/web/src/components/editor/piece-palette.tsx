@@ -17,7 +17,7 @@ interface PiecePaletteProps {
 const ORDER: PieceType[] = ['k', 'q', 'r', 'b', 'n', 'p'];
 const COLORS: Color[] = ['w', 'b'];
 
-const RING_ACTIVE = 'ring-1 ring-[#d6b563]';
+const RING_ACTIVE = 'ring-1 ring-brass';
 
 function isSamePiece(a: PaletteSelection | null, type: PieceType, color: Color): boolean {
   return a !== null && a !== 'trash' && a.type === type && a.color === color;

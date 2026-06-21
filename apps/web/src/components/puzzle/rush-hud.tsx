@@ -59,7 +59,7 @@ export function RushHud({ mode, timeMs, strikes, score, combo }: RushHudProps) {
           className={cn(
             'flex items-center gap-2 rounded-[7px] border px-3 py-1.5 transition-colors motion-reduce:transition-none',
             lowTime
-              ? 'border-red-700/60 bg-[#0b0d0b]/80 text-red-400'
+              ? 'border-red-700/60 bg-background/80 text-red-400'
               : 'border-border bg-raised text-foreground',
             // The pulse is the accelerate cue — kept unless animations are off
             // (settings switch) or the OS prefers reduced motion (globals.css).

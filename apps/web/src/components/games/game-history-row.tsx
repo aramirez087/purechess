@@ -99,7 +99,7 @@ export const GameHistoryRow = forwardRef<HTMLTableRowElement, GameHistoryRowProp
             className={cn(
               'inline-block h-3 w-3 rounded-[3px] align-middle ring-1 ring-inset ring-border',
               // Fixed neutral side colors, independent of the board-theme picker.
-              game.playedAs === 'white' ? 'bg-[#f1eee6]' : 'bg-[#26292b]',
+              game.playedAs === 'white' ? 'bg-board-light' : 'bg-board-dark',
             )}
           />
         </td>

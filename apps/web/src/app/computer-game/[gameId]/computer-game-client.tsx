@@ -22,6 +22,7 @@ import {
   type PlayerStripProps,
 } from '@/components/game';
 import { GameLoadingSkeleton } from '@/components/game/game-loading-skeleton';
+import { GameRailButton } from '@/components/game/game-rail-button';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
 import { computeMaterial } from '@/lib/board/material';
 import { loadRules } from '@/lib/board/rules-lazy';
@@ -106,24 +107,24 @@ function StatusHero({
           <span
             aria-hidden="true"
             className={cn(
-              'h-2 w-2 shrink-0 rounded-full bg-[#d6b563]',
+              'h-2 w-2 shrink-0 rounded-full bg-brass',
               computerActive
-                ? 'animate-pulse shadow-[0_0_10px_2px_rgba(214,181,99,0.6)]'
-                : 'shadow-[0_0_8px_1px_rgba(214,181,99,0.45)]',
+                ? 'animate-pulse shadow-[0_0_10px_2px_hsl(var(--brass)/0.6)]'
+                : 'shadow-[0_0_8px_1px_hsl(var(--brass)/0.45)]',
             )}
           />
           <p
             aria-live="polite"
-            className="truncate text-sm font-semibold tracking-tight text-[#f4efe2]"
+            className="truncate text-sm font-semibold tracking-tight text-foreground"
           >
             {computerActive ? 'Computer is thinking' : 'Your move'}
           </p>
         </div>
         {computerActive && (
-          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[#d6b563]" aria-hidden="true" />
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-brass" aria-hidden="true" />
         )}
       </div>
-      <p className="mt-1 text-xs text-[#9da79c]">
+      <p className="mt-1 text-xs text-muted-foreground">
         Level {level} · {timed ? 'Timed' : 'Untimed'}
       </p>
     </div>
@@ -534,15 +535,15 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
   // Shared between the abort-window and mid-game control bars — hints are
   // available from move one.
   const hintButton = (
-    <button
+    <GameRailButton
       onClick={handleHint}
       disabled={hintsLeft <= 0 || !humanActive || hintPending || hintShape.length > 0}
       title="Show the engine's best move"
-      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-40"
+      fullWidth
     >
-      <Lightbulb className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+      <Lightbulb className="h-4 w-4 text-brass/80" aria-hidden="true" />
       {hintsLeft <= 0 ? 'No hints left' : hintsUsed > 0 ? `Hint (${hintsLeft} left)` : 'Hint'}
-    </button>
+    </GameRailButton>
   );
 
   function stripFor(color: Color): PlayerStripProps {
@@ -653,68 +654,64 @@ export function ComputerGameClient({ gameId, initialGame = null }: Props) {
               <BoardControlBar onFlip={() => setFlipped((f) => !f)} className="p-2">
                 {isGameOver ? (
                   <>
-                    <button
-                      onClick={handleRematch}
-                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                    >
+                    <GameRailButton variant="brass" fullWidth onClick={handleRematch}>
                       <RotateCcw className="h-4 w-4" aria-hidden="true" />
                       Rematch
-                    </button>
-                    <Link
-                      href="/play"
-                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                    >
+                    </GameRailButton>
+                    <GameRailButton fullWidth href="/play">
                       <Plus className="h-4 w-4" aria-hidden="true" />
                       New game
-                    </Link>
+                    </GameRailButton>
                   </>
                 ) : canAbort ? (
                   <>
                     {hintButton}
-                    <button
+                    <GameRailButton
+                      variant="danger"
+                      fullWidth
                       onClick={handleAbort}
                       disabled={submitting}
-                      className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Ban
                         className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
                         aria-hidden="true"
                       />
                       Abort
-                    </button>
+                    </GameRailButton>
                   </>
                 ) : (
                   <>
                     {hintButton}
-                    <button
+                    <GameRailButton
+                      fullWidth
                       onClick={handleTakeback}
                       disabled={submitting || !humanActive || sanMoves.length < 2}
                       title="Take back your last move"
-                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] active:translate-y-px active:bg-[#0b0d0b]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <RotateCcw className="h-4 w-4" aria-hidden="true" />
                       Takeback
-                    </button>
-                    <button
+                    </GameRailButton>
+                    <GameRailButton
+                      fullWidth
                       onClick={handleClaimDraw}
                       disabled={submitting}
                       title="Claim a draw (threefold repetition or fifty-move rule)"
-                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                      <Handshake className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+                      <Handshake className="h-4 w-4 text-brass/80" aria-hidden="true" />
                       Draw
-                    </button>
-                    <button
+                    </GameRailButton>
+                    <GameRailButton
+                      variant="danger"
+                      fullWidth
                       onClick={handleResign}
                       disabled={submitting}
-                      className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Flag
                         className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
                         aria-hidden="true"
                       />
                       Resign
-                    </button>
+                    </GameRailButton>
                   </>
                 )}
               </BoardControlBar>

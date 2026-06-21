@@ -94,7 +94,7 @@ export function MoveInput({ color, onSelect, onCancel }: MoveInputProps) {
   return (
     <div
       ref={dialogRef}
-      className="absolute inset-0 z-50 flex items-center justify-center bg-[#0b0d0b]/60 backdrop-blur-[3px]"
+      className="result-scrim absolute inset-0 z-50 flex items-center justify-center backdrop-blur-[3px]"
       onClick={onCancel}
       onKeyDown={handleDialogKeyDown}
       role="dialog"
@@ -103,10 +103,10 @@ export function MoveInput({ color, onSelect, onCancel }: MoveInputProps) {
       tabIndex={-1}
     >
       <div
-        className="flex flex-col items-center gap-2.5 rounded-[14px] border border-[#2b332c]/90 bg-gradient-to-b from-[#121511] to-[#0b0d0b] px-4 pb-4 pt-3 shadow-[0_24px_70px_-18px_rgba(0,0,0,0.8),0_0_60px_-24px_rgba(214,181,99,0.35)]"
+        className="result-card flex flex-col items-center gap-2.5 rounded-[14px] border border-border/90 px-4 pb-4 pt-3 shadow-[0_24px_70px_-18px_hsl(var(--shadow-rgb)/0.8),0_0_60px_-24px_hsl(var(--brass)/0.35)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9da79c]">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
           Promote to
         </p>
         <div className="flex gap-1.5">
@@ -116,11 +116,11 @@ export function MoveInput({ color, onSelect, onCancel }: MoveInputProps) {
               <button
                 key={type}
                 autoFocus={type === 'q'}
-                className="h-16 w-16 rounded-[10px] border border-transparent bg-[#0b0d0b]/45 p-1.5 transition-all hover:-translate-y-0.5 hover:border-[#d6b563]/55 hover:bg-[#d6b563]/10 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563]"
+                className="h-16 w-16 rounded-[10px] border border-transparent bg-background/45 p-1.5 transition-all hover:-translate-y-0.5 hover:border-brass/55 hover:bg-brass/10 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
                 onClick={() => onSelect(type)}
                 aria-label={`Promote to ${PIECE_NAMES[type]}`}
               >
-                <SvgComponent className="h-full w-full drop-shadow-[0_3px_4px_rgba(0,0,0,0.4)]" />
+                <SvgComponent className="h-full w-full drop-shadow-[0_3px_4px_hsl(var(--shadow-rgb)/0.4)]" />
               </button>
             );
           })}

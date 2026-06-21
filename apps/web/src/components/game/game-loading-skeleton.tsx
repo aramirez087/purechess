@@ -21,13 +21,13 @@ export function GameLoadingSkeleton({ className }: GameLoadingSkeletonProps) {
     <div
       role="status"
       aria-label="Loading game"
-      className={cn('flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-[#0b0d0b]', className)}
+      className={cn('flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-background', className)}
     >
       <div className="mx-auto grid h-full min-h-0 w-full max-w-[1760px] grid-cols-1 gap-4 overflow-y-auto px-3 py-3 lg:justify-center lg:grid-cols-[auto_minmax(340px,400px)] lg:gap-6 lg:overflow-hidden lg:px-6 lg:py-5">
         <div className="flex w-full flex-col items-center lg:h-full lg:min-h-0 lg:w-[min(calc(100dvh-10.5rem),calc(100vw-27rem))] lg:justify-center">
           <div className="flex w-full flex-col gap-2 sm:gap-3 lg:max-w-[min(100%,calc(100dvh-10.5rem))]">
-            <div className="skeleton-shimmer h-[3.25rem] w-full rounded-[10px] border border-[#2b332c]/60 bg-[#121511]" />
-            <div className="skeleton-shimmer aspect-square w-full overflow-hidden rounded-[14px] border border-[#2b332c] bg-[#181c17]">
+            <div className="skeleton-shimmer h-[3.25rem] w-full rounded-[10px] border border-border/60 bg-surface" />
+            <div className="skeleton-shimmer aspect-square w-full overflow-hidden rounded-[14px] border border-border bg-raised">
               {/* Faint 8×8 board silhouette. This is a real painted element
                   (SVG), so the browser fires First/Largest Contentful Paint the
                   moment the skeleton lands — the rest of the skeleton is pure
@@ -37,12 +37,12 @@ export function GameLoadingSkeleton({ className }: GameLoadingSkeletonProps) {
                   the loading state shows a board. (S07) */}
               <BoardSilhouette />
             </div>
-            <div className="skeleton-shimmer h-[3.25rem] w-full rounded-[10px] border border-[#2b332c]/60 bg-[#121511]" />
+            <div className="skeleton-shimmer h-[3.25rem] w-full rounded-[10px] border border-border/60 bg-surface" />
           </div>
         </div>
         <div className="hidden min-h-0 flex-col lg:flex">
-          <div className="skeleton-shimmer flex min-h-0 flex-1 flex-col overflow-hidden rounded-[10px] border border-[#2b332c]/60 bg-[#121511]">
-            <div className="h-[3.25rem] shrink-0 border-b border-[#2b332c]/60" />
+          <div className="skeleton-shimmer flex min-h-0 flex-1 flex-col overflow-hidden rounded-[10px] border border-border/60 bg-surface">
+            <div className="h-[3.25rem] shrink-0 border-b border-border/60" />
             <div className="min-h-0 flex-1" />
           </div>
         </div>
@@ -73,9 +73,9 @@ function BoardSilhouette() {
       className="h-full w-full"
       shapeRendering="crispEdges"
     >
-      <rect x="0" y="0" width="8" height="8" fill="#1b201a" />
+      <rect x="0" y="0" width="8" height="8" fill="hsl(var(--skeleton-board-light))" />
       {darkCells.map(({ x, y }) => (
-        <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="#10130f" />
+        <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="hsl(var(--skeleton-board-dark))" />
       ))}
     </svg>
   );

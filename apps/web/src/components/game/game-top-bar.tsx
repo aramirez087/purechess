@@ -17,8 +17,8 @@ export interface GameTopBarProps {
 
 export function GameTopBar({ rating, ratingLabel, center, right }: GameTopBarProps) {
   return (
-    <header className="relative flex h-12 shrink-0 items-center justify-between border-b border-[#2b332c] bg-[#0b0d0b]/95 px-4 backdrop-blur">
-      <Link href="/" className="text-[#f1eee6] transition-opacity hover:opacity-80">
+    <header className="relative flex h-12 shrink-0 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur">
+      <Link href="/" className="text-foreground transition-opacity hover:opacity-80">
         <Logo />
       </Link>
       {center && (
@@ -26,11 +26,11 @@ export function GameTopBar({ rating, ratingLabel, center, right }: GameTopBarPro
           {center}
         </div>
       )}
-      <div className="flex items-center gap-2 text-[#c7cfc4]">
+      <div className="flex items-center gap-2 text-muted-foreground">
         {right ?? (
           <>
             {typeof rating === 'number' && (
-              <span className="rounded-full border border-[#2b332c] bg-[#121511] px-2.5 py-1 text-xs font-medium tabular-nums text-[#d8d2c3]">
+              <span className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium tabular-nums text-[hsl(var(--status-pill-text))]">
                 {ratingLabel ? `${ratingLabel} ` : ''}
                 {rating}
               </span>

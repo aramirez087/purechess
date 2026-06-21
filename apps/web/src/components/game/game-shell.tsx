@@ -34,13 +34,9 @@ export function GameShell({ topBar, leftRail, board, rightRail, className }: Gam
   return (
     <div
       className={cn(
-        'relative flex h-[100dvh] min-h-0 flex-col overflow-hidden text-[#f1eee6]',
+        'shell-ambient relative flex h-[100dvh] min-h-0 flex-col overflow-hidden',
         className,
       )}
-      style={{
-        background:
-          'radial-gradient(135% 85% at 50% -15%, rgba(214,181,99,0.07), transparent 55%), radial-gradient(120% 120% at 50% 120%, rgba(0,0,0,0.5), transparent 55%), #0b0d0b',
-      }}
     >
       {topBar === undefined ? <GameTopBar /> : topBar}
       {/* tabIndex=-1 lets client-side view swaps (e.g. /analyze input → shell)

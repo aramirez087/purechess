@@ -21,6 +21,7 @@ import {
   type PlayerStripProps,
 } from '@/components/game';
 import { GameLoadingSkeleton } from '@/components/game/game-loading-skeleton';
+import { GameRailButton } from '@/components/game/game-rail-button';
 import { ResultOverlay, type ResultTone } from '@/components/game/result-overlay';
 import { PgnIconActions } from '@/components/review/pgn-actions';
 import { getPieceSvg } from '@/lib/board/piece-svgs';
@@ -138,28 +139,28 @@ function StatusHero({
           <span
             aria-hidden="true"
             className={cn(
-              'h-2 w-2 shrink-0 rounded-full bg-[#d6b563]',
+              'h-2 w-2 shrink-0 rounded-full bg-brass',
               yourTurn
-                ? 'shadow-[0_0_8px_1px_rgba(214,181,99,0.45)]'
-                : 'animate-pulse shadow-[0_0_10px_2px_rgba(214,181,99,0.6)]',
+                ? 'shadow-[0_0_8px_1px_hsl(var(--brass)/0.45)]'
+                : 'animate-pulse shadow-[0_0_10px_2px_hsl(var(--brass)/0.6)]',
             )}
           />
           <p
             aria-live="polite"
-            className="truncate text-sm font-semibold tracking-tight text-[#f4efe2]"
+            className="truncate text-sm font-semibold tracking-tight text-foreground"
           >
             {yourTurn ? 'Your move' : `Waiting for ${opponentName}`}
           </p>
         </div>
         {!yourTurn && (
-          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[#d6b563]" aria-hidden="true" />
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-brass" aria-hidden="true" />
         )}
       </div>
-      <p className="mt-1 text-xs text-[#9da79c]">
+      <p className="mt-1 text-xs text-muted-foreground">
         Live game · {timed ? 'Timed' : 'Untimed'}
         {rated ? ' · Rated' : ''}
         {opponentOffline && (
-          <span className="text-[#b9b19d]"> · {opponentName} disconnected</span>
+          <span className="text-[hsl(var(--result-reason))]"> · {opponentName} disconnected</span>
         )}
       </p>
       {/* The visible note sits in static text (presence flapping must not
@@ -710,26 +711,29 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
                   {actionNote}
                 </span>
                 {incomingDrawOffer && (
-                  <div className="border-t border-[#2b332c] bg-[#d6b563]/[0.07] px-4 py-3">
-                    <p className="flex items-center gap-2 text-sm font-medium text-[#f4efe2]">
-                      <Handshake className="h-4 w-4 text-[#d6b563]" aria-hidden="true" />
+                  <div className="border-t border-border bg-brass/[0.07] px-4 py-3">
+                    <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Handshake className="h-4 w-4 text-brass" aria-hidden="true" />
                       {opponentName} offers a draw
                     </p>
                     <div className="mt-2.5 flex gap-2">
-                      <button
+                      <GameRailButton
+                        size="sm"
+                        variant="brass"
+                        fullWidth
                         onClick={() => handleDraw('accept')}
                         disabled={submitting}
-                        className="inline-flex h-8 flex-1 items-center justify-center rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-xs font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Accept draw
-                      </button>
-                      <button
+                      </GameRailButton>
+                      <GameRailButton
+                        size="sm"
+                        fullWidth
                         onClick={() => handleDraw('decline')}
                         disabled={submitting}
-                        className="inline-flex h-8 flex-1 items-center justify-center rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-xs font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Decline
-                      </button>
+                      </GameRailButton>
                     </div>
                   </div>
                 )}
@@ -740,7 +744,7 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
                 {/* Move-history browser — go back to review earlier moves while
                     waiting for the opponent. Arrow/Home/End keys are owned by
                     useGameKeyboard, so this group skips its own key binding. */}
-                <div className="flex items-center justify-center border-b border-[#2b332c] px-2 py-2">
+                <div className="flex items-center justify-center border-b border-border px-2 py-2">
                   <ReviewControls
                     bindKeys={false}
                     onStart={() => setCurrentPly(0)}
@@ -755,70 +759,77 @@ export function LiveGameClient({ gameId, initialGame = null }: Props) {
                 {isGameOver ? (
                   <>
                     <button
+                      type="button"
                       onClick={() => {
                         if (rematchMinePending || submitting) return;
                         handleRematch();
                       }}
                       aria-disabled={rematchMinePending || submitting}
-                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+                      className={cn(
+                        'chrome-btn inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] px-3 text-sm font-medium active:translate-y-px',
+                        'aria-disabled:cursor-not-allowed aria-disabled:opacity-40',
+                        'aria-disabled:hover:border-border aria-disabled:hover:text-muted-foreground',
+                        'aria-disabled:active:translate-y-0 aria-disabled:active:bg-background/40',
+                      )}
                     >
-                      <Repeat2 className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+                      <Repeat2 className="h-4 w-4 text-brass/80" aria-hidden="true" />
                       {rematchLabel}
                     </button>
                     {rematchIncoming ? (
-                      <button
-                        onClick={handleRematchDecline}
-                        disabled={submitting}
-                        className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] disabled:cursor-not-allowed disabled:opacity-50"
-                      >
+                      <GameRailButton fullWidth onClick={handleRematchDecline} disabled={submitting}>
                         Decline
-                      </button>
+                      </GameRailButton>
                     ) : (
-                      <Link
-                        href="/play"
-                        className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#d6b563]/45 bg-[#d6b563]/10 px-3 text-sm font-semibold text-[#f3e7c4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#d6b563]/70 hover:bg-[#d6b563]/20 active:translate-y-px active:bg-[#d6b563]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b]"
-                      >
+                      <GameRailButton variant="brass" fullWidth href="/play">
                         <Plus className="h-4 w-4" aria-hidden="true" />
                         New game
-                      </Link>
+                      </GameRailButton>
                     )}
                   </>
                 ) : _canAbort ? (
-                  <button
+                  <GameRailButton
+                    variant="danger"
+                    fullWidth
                     onClick={handleAbort}
                     disabled={submitting}
-                    className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <Ban
                       className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
                       aria-hidden="true"
                     />
                     Abort
-                  </button>
+                  </GameRailButton>
                 ) : (
                   <>
                     <button
+                      type="button"
                       onClick={() => {
                         if (yourDrawOfferPending || submitting) return;
                         handleDrawPrimary();
                       }}
                       aria-disabled={yourDrawOfferPending || submitting}
-                      className="inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:bg-[#0b0d0b]/60 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+                      className={cn(
+                        'chrome-btn inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] px-3 text-sm font-medium active:translate-y-px',
+                        'aria-disabled:cursor-not-allowed aria-disabled:opacity-40',
+                        'aria-disabled:hover:border-border aria-disabled:hover:text-muted-foreground',
+                        'aria-disabled:active:translate-y-0 aria-disabled:active:bg-background/40',
+                      )}
                     >
-                      <Handshake className="h-4 w-4 text-[#d6b563]/80" aria-hidden="true" />
+                      <Handshake className="h-4 w-4 text-brass/80" aria-hidden="true" />
                       {yourDrawOfferPending ? 'Draw offered' : 'Draw'}
                     </button>
-                    <button
+                    <GameRailButton
+                      variant="danger"
+                      fullWidth
                       onClick={handleResign}
                       disabled={submitting}
-                      className="group inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] focus-visible:border-destructive/60 focus-visible:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Flag
                         className="h-4 w-4 text-destructive/70 transition-colors group-hover:text-destructive group-focus-visible:text-destructive"
                         aria-hidden="true"
                       />
                       Resign
-                    </button>
+                    </GameRailButton>
                   </>
                 )}
                 </BoardControlBar>

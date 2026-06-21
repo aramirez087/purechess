@@ -33,7 +33,7 @@ function SideColumn({
     <div className="flex flex-col items-center gap-1.5">
       <span className={cn('font-mono text-2xl font-semibold tabular-nums', accuracyBarColor(accuracy))}>
         {Math.round(accuracy)}
-        <span className="text-sm text-[#8a948a]">%</span>
+        <span className="text-sm text-muted-foreground">%</span>
       </span>
       <div className="flex items-center gap-2">
         {TALLY_ORDER.map(({ key, label }) => {
@@ -45,7 +45,7 @@ function SideColumn({
               key={key}
               title={label}
               className="inline-flex items-center gap-1 font-mono text-[11px] tabular-nums"
-              style={{ color: style?.bg ?? '#9da79c' }}
+              style={{ color: style?.bg }}
             >
               <span className="font-bold">{style?.symbol}</span>
               {n}
@@ -64,14 +64,14 @@ function SideColumn({
 export function AccuracySummary({ result }: { result: ClassificationResult }) {
   return (
     <div className="grid grid-cols-2 gap-2">
-      <div className="flex flex-col items-center gap-0.5 rounded-[6px] bg-[#0b0d0b]/40 py-2">
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8a948a]">
+      <div className="flex flex-col items-center gap-0.5 rounded-[6px] bg-background/40 py-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
           White
         </span>
         <SideColumn result={result} side="w" accuracy={result.whiteAccuracy} />
       </div>
-      <div className="flex flex-col items-center gap-0.5 rounded-[6px] bg-[#0b0d0b]/40 py-2">
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8a948a]">
+      <div className="flex flex-col items-center gap-0.5 rounded-[6px] bg-background/40 py-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
           Black
         </span>
         <SideColumn result={result} side="b" accuracy={result.blackAccuracy} />

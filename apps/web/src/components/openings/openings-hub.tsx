@@ -526,7 +526,7 @@ function ColorChip({ color }: { color: 'white' | 'black' }) {
         aria-hidden="true"
         className={cn(
           'h-1.5 w-1.5 rounded-full ring-1 ring-border',
-          color === 'white' ? 'bg-[#f0ede5]' : 'bg-[#1a1e19]',
+          color === 'white' ? 'bg-board-light' : 'bg-board-dark',
         )}
       />
       {color}

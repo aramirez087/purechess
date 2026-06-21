@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { AppShell } from '@/components/layout/AppShell';
 import { Logo } from '@/components/layout/Logo';
 import { AnalyzeBoard } from '@/app/analyze/analyze-board';
+import { GameRailButton } from '@/components/game/game-rail-button';
 import { buildReviewFromFen, buildReviewFromPgn } from '@/services/game-review.service';
 import type { AnalysisReview } from '@/types/game-review';
 
@@ -66,14 +67,10 @@ export function AnalyzeClient({ initialInput = '' }: { initialInput?: string }) 
       <AnalyzeBoard
         game={review}
         exitAction={
-          <button
-            type="button"
-            onClick={() => setReview(null)}
-            className="inline-flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap rounded-[7px] border border-[#2b332c] bg-[#0b0d0b]/40 px-3 text-sm font-medium text-[#c7cfc4] transition-[color,background-color,border-color,transform] duration-150 hover:border-[#3a443b] hover:text-[#f1eee6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d6b563] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d0b] active:translate-y-px active:bg-[#0b0d0b]/60"
-          >
+          <GameRailButton fullWidth onClick={() => setReview(null)}>
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
             New analysis
-          </button>
+          </GameRailButton>
         }
       />
     );

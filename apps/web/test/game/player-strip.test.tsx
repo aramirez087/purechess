@@ -19,21 +19,21 @@ describe('PlayerStrip clock urgency tiers', () => {
   it('keeps the neutral chip style without timeMs', () => {
     const { container } = render(<PlayerStrip name="You" clock="10:00" />);
     const chip = clockChip(container, '10:00');
-    expect(chip.className).toContain('text-[#c7cfc4]');
+    expect(chip.className).toContain('text-muted-foreground');
     expect(chip.className).not.toContain('clock-pulse');
   });
 
   it('keeps the neutral chip style at 30s+', () => {
     const { container } = render(<PlayerStrip name="You" clock="1:00" timeMs={60_000} />);
     const chip = clockChip(container, '1:00');
-    expect(chip.className).toContain('text-[#c7cfc4]');
+    expect(chip.className).toContain('text-muted-foreground');
     expect(chip.className).not.toContain('clock-pulse');
   });
 
   it('turns amber in the caution band', () => {
     const { container } = render(<PlayerStrip name="You" clock="0:15" timeMs={15_000} />);
     const chip = clockChip(container, '0:15');
-    expect(chip.className).toContain('text-[#e8a84a]');
+    expect(chip.className).toContain('text-[hsl(var(--clock-caution-text))]');
     expect(chip.className).not.toContain('clock-pulse');
   });
 
@@ -67,13 +67,13 @@ describe('PlayerStrip increment flash', () => {
     );
     rerender(<PlayerStrip name="You" clock="8.0" timeMs={8_000} />);
     expect(clockChip(container, '8.0').className).toContain(
-      'shadow-[0_0_0_2px_rgba(214,181,99,0.7)]',
+      'shadow-[0_0_0_2px_hsl(var(--brass)/0.7)]',
     );
     act(() => {
       vi.advanceTimersByTime(400);
     });
     expect(clockChip(container, '8.0').className).not.toContain(
-      'shadow-[0_0_0_2px_rgba(214,181,99,0.7)]',
+      'shadow-[0_0_0_2px_hsl(var(--brass)/0.7)]',
     );
   });
 
@@ -83,7 +83,7 @@ describe('PlayerStrip increment flash', () => {
     );
     rerender(<PlayerStrip name="You" clock="1:05" timeMs={65_000} />);
     expect(clockChip(container, '1:05').className).not.toContain(
-      'shadow-[0_0_0_2px_rgba(214,181,99,0.7)]',
+      'shadow-[0_0_0_2px_hsl(var(--brass)/0.7)]',
     );
   });
 
@@ -93,7 +93,7 @@ describe('PlayerStrip increment flash', () => {
     );
     rerender(<PlayerStrip name="You" clock="7.8" timeMs={7_800} />);
     expect(clockChip(container, '7.8').className).not.toContain(
-      'shadow-[0_0_0_2px_rgba(214,181,99,0.7)]',
+      'shadow-[0_0_0_2px_hsl(var(--brass)/0.7)]',
     );
   });
 });

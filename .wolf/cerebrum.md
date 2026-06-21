@@ -743,5 +743,13 @@
 - Browser-driving the board: cells are `[data-square="e4"]` with aria-label "e4, white queen"; tap-to-move = click source then dest. The FIRST interactive click after a dev-server route compile/hydration is often SWALLOWED — always retry the move 2-3x (the Playwright specs do the same with toPass()).
 - Web client API base + CSP connect-src both derive from NEXT_PUBLIC_API_URL (next.config.mjs). `/api/*` is also same-origin-proxied via rewrites().
 
+## Key Learnings (added 2026-06-20 — light theme / game chrome tokens)
+
+- **Light theme is first-class via CSS vars, not a bolt-on.** `globals.css` `:root` = warm parchment light; `[data-theme='dark']` + `prefers-color-scheme: dark` = Silent Tournament dark. Game chrome vars (`--chrome-from/to`, `--move-text`, `--shell-ambient`, `--board-frame-*`, `--result-word-*`, etc.) flip in both dark selectors. Explicit `[data-theme='light']` block pins light when user forces it on a dark OS.
+- **Game chrome utilities** (globals.css `@layer utilities`): `.shell-ambient`, `.chrome-panel`, `.chrome-strip` / `-active` / `-subtle`, `.chrome-btn` / `.chrome-btn-brass` / `.chrome-btn-danger`, `.board-frame`, `.result-scrim`, `.result-card`, `.move-panel-rule`. Use these — do NOT hardcode `#0b0d0b`/`#2b332c`/`#d6b563` in game surfaces.
+- **`GameRailButton`** (`components/game/game-rail-button.tsx`) is the DRY rail control: variants `default|brass|danger`, sizes `sm|md|lg|icon`, `fullWidth` prop. Replaces the 200-char inline `rounded-[7px] border border-[#2b332c]…` strings across game/review/analyze clients.
+- **Theme flash guard:** blocking inline script in `layout.tsx` body reads `purechess-settings` → `state.appTheme` and sets `data-theme` before paint (pairs with `next-themes` + `ThemeSync` in providers).
+- **Board square palette stays theme-independent** — `--board-sq-*` vars unchanged; only UI chrome adapts. Training/admin surfaces already used semantic tokens and needed no game-chrome pass.
+
 ## Do-Not-Repeat (added 2026-06-13 — stale .next env)
 - Changing NEXT_PUBLIC_* (e.g. API port 4000↔4100) requires `rm -rf apps/web/.next` + a full web dev restart. NEXT_PUBLIC_* is inlined into client chunks at compile; a half-restarted `next dev` serves STALE cached chunks (old port) while the CSP header (computed fresh at startup) uses the new port → "Failed to fetch" + CSP connect-src violation. Symptom seen: client POSTed to :4100 while CSP allowed only :4000.

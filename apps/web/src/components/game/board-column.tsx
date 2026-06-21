@@ -54,8 +54,8 @@ export function BoardColumn({
         <div className="flex items-stretch gap-2">
           {evalBar}
           {/* Concentric bezel: outer 14px radius − 7px padding = inner 7px radius. */}
-          <div className="relative mx-auto aspect-square w-full min-w-0 rounded-[14px] border border-[#2b332c] bg-gradient-to-b from-[#1b2017] to-[#0e110c] p-[7px] shadow-[0_30px_80px_-24px_rgba(0,0,0,0.8),0_0_70px_-18px_rgba(214,181,99,0.22),inset_0_1px_0_rgba(255,255,255,0.07)]">
-            <div className="relative h-full w-full overflow-hidden rounded-[7px] shadow-[0_0_0_1px_rgba(0,0,0,0.55)] [&>*]:h-full">
+          <div className="board-frame relative mx-auto aspect-square w-full min-w-0 rounded-[14px] border p-[7px]">
+            <div className="board-frame-inner relative h-full w-full overflow-hidden rounded-[7px] [&>*]:h-full">
               {children}
             </div>
             {overlay}

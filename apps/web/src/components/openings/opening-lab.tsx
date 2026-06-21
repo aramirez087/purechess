@@ -387,7 +387,7 @@ export function OpeningLab({ initialQuery = '', initialFamily = '' }: OpeningLab
                     {pathLine || 'Play or pick a move to start exploring.'}
                   </p>
                 </div>
-                <div className="flex justify-center rounded-[10px] border border-[#2b332c] bg-[#121511] p-1.5 shadow-inner-hairline xl:justify-end">
+                <div className="flex justify-center rounded-[10px] border border-border bg-surface p-1.5 shadow-inner-hairline xl:justify-end">
                   <ReviewControls
                     onStart={tree.goStart}
                     onPrev={tree.goPrev}

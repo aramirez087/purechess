@@ -62,7 +62,7 @@ export function EditorBoard({ state, onChange, flipped, onSquareClick }: EditorB
                   'relative flex h-full w-full items-center justify-center',
                   light ? 'bg-[hsl(var(--board-sq-light))]' : 'bg-[hsl(var(--board-sq-dark))]',
                   piece ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer',
-                  dragOver === square && 'ring-2 ring-inset ring-[#d6b563]',
+                  dragOver === square && 'ring-2 ring-inset ring-brass',
                 )}
                 onClick={() => onSquareClick?.(square)}
                 onContextMenu={(e) => {
