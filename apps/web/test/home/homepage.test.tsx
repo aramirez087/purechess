@@ -3,7 +3,6 @@ import type { ReactElement } from 'react';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Hero } from '@/components/home/hero';
-import { TrustStrip } from '@/components/home/trust-strip';
 import { Footer } from '@/components/home/footer';
 
 // Hero contains the session-aware HeroAuthLink — keep /api/auth/me off the
@@ -20,6 +19,19 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
+vi.mock('next/image', () => ({
+  default: ({
+    src,
+    alt,
+    priority: _priority,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    priority?: boolean;
+  }) => <img src={src} alt={alt} {...props} />,
+}));
+
 function renderWithClient(ui: ReactElement) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -28,14 +40,16 @@ function renderWithClient(ui: ReactElement) {
 }
 
 describe('Hero', () => {
-  it('renders wordmark as h1', () => {
+  it('renders the logo as h1', () => {
     renderWithClient(<Hero />);
-    expect(screen.getByRole('heading', { level: 1, name: /the board is/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /purechess/i })).toBeInTheDocument();
   });
 
-  it('renders tagline', () => {
+  it('does not render marketing copy', () => {
     renderWithClient(<Hero />);
-    expect(screen.getByText(/single, quiet place to play chess online/i)).toBeInTheDocument();
+    expect(screen.queryByText(/silent tournament/i)).toBeNull();
+    expect(screen.queryByText(/single, quiet place to play chess online/i)).toBeNull();
+    expect(screen.queryByText(/one-click play/i)).toBeNull();
   });
 
   it('Analyze links to /analyze', () => {
@@ -68,16 +82,6 @@ describe('Hero', () => {
   });
 });
 
-describe('TrustStrip', () => {
-  it('renders all four trust statements', () => {
-    render(<TrustStrip />);
-    expect(screen.getByText('Fast matchmaking')).toBeInTheDocument();
-    expect(screen.getByText('Clean board')).toBeInTheDocument();
-    expect(screen.getByText('No ads, ever')).toBeInTheDocument();
-    expect(screen.getByText('No distractions')).toBeInTheDocument();
-  });
-});
-
 describe('Footer', () => {
   it('has primary destination links', () => {
     render(<Footer />);
@@ -99,7 +103,6 @@ describe('No analytics in dev', () => {
   it('does not call fetch during static render', () => {
     const fetchSpy = vi.spyOn(global, 'fetch');
     renderWithClient(<Hero />);
-    render(<TrustStrip />);
     render(<Footer />);
     expect(fetchSpy).not.toHaveBeenCalled();
     fetchSpy.mockRestore();

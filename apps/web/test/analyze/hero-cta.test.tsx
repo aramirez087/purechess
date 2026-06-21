@@ -15,6 +15,19 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
+vi.mock('next/image', () => ({
+  default: ({
+    src,
+    alt,
+    priority: _priority,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    priority?: boolean;
+  }) => <img src={src} alt={alt} {...props} />,
+}));
+
 function renderHero() {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false } },

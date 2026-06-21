@@ -203,8 +203,9 @@ export function OpeningsHub({
             </p>
             {isChessComOpeningWeakness(openingLeak) ? (
               <p className="mt-1 text-xs text-muted-foreground">
-                We analyzed your synced chess.com games with Stockfish. Review each mistake below
-                — what you played vs what the engine recommends.
+                We analyzed your synced chess.com games with Stockfish. Tap{' '}
+                <span className="font-medium text-foreground">Fix with coach</span> on any row for a
+                step-by-step walkthrough — your move vs the better move, then you try it yourself.
               </p>
             ) : null}
           </div>

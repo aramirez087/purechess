@@ -3,6 +3,7 @@
 import type { RefObject } from 'react';
 import type { Square } from '@purechess/shared';
 import { Chessboard } from '@/components/board/chessboard';
+import type { BoardShape } from '@/lib/board/annotations';
 import { cn } from '@/lib/utils';
 
 export type SolveState = {
@@ -16,13 +17,22 @@ export interface PuzzleBoardPaneProps {
   state: SolveState;
   boardWrapRef?: RefObject<HTMLDivElement>;
   onMove: (uci: string) => void;
+  /** Engine / coach arrows drawn under user shapes. */
+  autoShapes?: BoardShape[];
   /** Overlay(s) to render inside the board frame (loading, error, outcome). */
   children?: React.ReactNode;
   /** Override the outer wrapper max-width class (defaults to max-w-[560px]). */
   className?: string;
 }
 
-export function PuzzleBoardPane({ state, boardWrapRef, onMove, children, className }: PuzzleBoardPaneProps) {
+export function PuzzleBoardPane({
+  state,
+  boardWrapRef,
+  onMove,
+  autoShapes,
+  children,
+  className,
+}: PuzzleBoardPaneProps) {
   return (
     <div className={cn('mx-auto w-full max-w-[560px]', className)}>
       <div className="relative w-full" ref={boardWrapRef}>
@@ -30,6 +40,7 @@ export function PuzzleBoardPane({ state, boardWrapRef, onMove, children, classNa
           position={state.fen}
           orientation={state.solvingColor === 'w' ? 'white' : 'black'}
           readOnly={state.phase !== 'player'}
+          autoShapes={autoShapes}
           lastMove={
             state.lastMove
               ? { from: state.lastMove[0] as Square, to: state.lastMove[1] as Square }

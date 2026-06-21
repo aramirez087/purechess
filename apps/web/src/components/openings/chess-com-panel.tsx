@@ -25,6 +25,7 @@ import {
   displayOpeningLabel,
   openingLabelsMatch,
 } from '@/lib/chess-com/opening-label';
+import { mistakeCoachHref } from '@/lib/chess-com/mistake-coach';
 import { openingLabHref } from '@/lib/openings/opening-deep-link';
 import { cn } from '@/lib/utils';
 
@@ -107,9 +108,9 @@ export function ChessComPanel({ highlightLabel }: { highlightLabel?: string | nu
           </h2>
           <p className="mt-1 max-w-xl text-sm text-muted-foreground">
             Link your chess.com username — we fetch recent games and run Stockfish on the opening
-            phase (first ~11 moves). Each row is a real position where your move lost significant
-            eval; use <span className="font-medium text-foreground">Study position</span> to explore
-            the correction, or browse main lines in Opening Lab.
+            phase (first ~11 moves). Each row is a real mistake from your games — tap{' '}
+            <span className="font-medium text-foreground">Fix with coach</span> for a guided
+            walkthrough, or browse main lines in Opening Lab.
           </p>
         </div>
         {linked ? (
@@ -264,7 +265,7 @@ function MistakeRow({
   mistake: ChessComOpeningMistakeDto;
   highlighted?: boolean;
 }) {
-  const analyzeHref = `/analyze?fen=${encodeURIComponent(mistake.fen)}`;
+  const coachHref = mistakeCoachHref(mistake);
   const openingName = displayOpeningLabel(mistake.openingLabel);
   const labHref = openingLabHref(openingName, mistake.fen);
 
@@ -284,17 +285,17 @@ function MistakeRow({
           {mistake.bestSan ? (
             <>
               {' '}
-              — book says{' '}
+              — engine wanted{' '}
               <span className="font-mono text-brass-text">{mistake.bestSan}</span>
             </>
           ) : null}
-          <span className="text-muted-foreground"> ({mistake.cpLoss}cp)</span>
+          <span className="text-muted-foreground"> · lost {mistake.cpLoss}cp</span>
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-2">
-        <Button asChild variant="outline" size="sm">
-          <Link href={analyzeHref}>
-            Study position
+        <Button asChild size="sm">
+          <Link href={coachHref}>
+            Fix with coach
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </Button>

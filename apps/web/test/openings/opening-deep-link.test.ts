@@ -94,7 +94,7 @@ describe('resolveOpeningDeepLink', () => {
     });
   });
 
-  it('routes chess.com mistakes to in-page review instead of Opening Lab', () => {
+  it('routes chess.com mistakes to coach review instead of Opening Lab', () => {
     expect(
       resolveOpeningDeepLink({ kind: 'chesscom', label: 'C20' }, repertoires),
     ).toEqual({

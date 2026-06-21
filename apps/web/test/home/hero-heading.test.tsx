@@ -1,7 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import { render, act } from '@testing-library/react';
 import { HeroHeading } from '@/components/home/hero-heading';
+
+vi.mock('next/image', () => ({
+  default: ({
+    src,
+    alt,
+    priority: _priority,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    priority?: boolean;
+  }) => <img src={src} alt={alt} {...props} />,
+}));
 
 /**
  * LCP fix (S04 §5.1 / S07): the hero h1 is the page's LCP element (verified via
@@ -16,9 +29,9 @@ describe('HeroHeading', () => {
     const html = renderToString(<HeroHeading />);
     expect(html).not.toMatch(/animate-rise/);
     expect(html).not.toMatch(/animate-fade/);
-    // still the real heading — id + text preserved for aria-labelledby
     expect(html).toContain('id="hero-wordmark"');
-    expect(html).toContain('the product.');
+    expect(html).toContain('alt="Purechess"');
+    expect(html).toContain('/logo-full.svg');
   });
 
   it('still carries no animation class after mount/hydration', () => {

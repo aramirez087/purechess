@@ -14,6 +14,9 @@ import { RepertoireImport } from '@/components/openings/repertoire-import';
 import { RepertoireView } from '@/components/openings/repertoire-view';
 import { OpeningDrill } from '@/components/openings/opening-drill';
 import { OpeningsHub, OpeningsSignedOut } from '@/components/openings/openings-hub';
+import { fetchChessComMistakes } from '@/lib/api/chess-com';
+import { openingLabelsMatch } from '@/lib/chess-com/opening-label';
+import { mistakeCoachHref } from '@/lib/chess-com/mistake-coach';
 import {
   parseOpeningActionHref,
   resolveOpeningDeepLink,
@@ -104,12 +107,28 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
   );
 
   const followOpeningActionHref = useCallback(
-    (href: string, repertoires: RepertoireSummaryDto[]) => {
+    async (href: string, repertoires: RepertoireSummaryDto[]) => {
       const action = resolveOpeningDeepLink(parseOpeningActionHref(href), repertoires);
       if (!action) return;
+
+      if (action.kind === 'review-mistakes') {
+        try {
+          const data = await fetchChessComMistakes();
+          const top = data.mistakes
+            .filter((m) => !m.reviewed && openingLabelsMatch(m.openingLabel, action.label))
+            .sort((a, b) => b.cpLoss - a.cpLoss)[0];
+          if (top) {
+            router.push(mistakeCoachHref(top));
+            return;
+          }
+        } catch {
+          // fall back to highlighting the list
+        }
+      }
+
       applyOpeningAction(action);
     },
-    [applyOpeningAction],
+    [applyOpeningAction, router],
   );
 
   useEffect(() => {
@@ -129,11 +148,10 @@ export function OpeningsClient({ signedOut }: { signedOut: boolean }) {
     const href = repertoire
       ? `/openings?repertoire=${encodeURIComponent(repertoire)}`
       : `/openings?chesscom=${encodeURIComponent(chesscom!)}`;
-    const action = resolveOpeningDeepLink(parseOpeningActionHref(href), list.data ?? []);
     router.replace('/openings', { scroll: false });
-    if (action) applyOpeningAction(action);
+    void followOpeningActionHref(href, list.data ?? []);
   }, [
-    applyOpeningAction,
+    followOpeningActionHref,
     list.data,
     list.isLoading,
     router,
