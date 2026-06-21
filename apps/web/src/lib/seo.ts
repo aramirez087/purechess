@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://purechess.com';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://purechesss.com';
 
 type BuildMetadataInput = {
   title: string;

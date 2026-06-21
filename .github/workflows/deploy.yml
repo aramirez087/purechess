@@ -74,7 +74,7 @@ jobs:
       - name: Health check Web
         run: |
           for i in $(seq 1 10); do
-            if curl -sf --max-time 15 -o /dev/null https://purechess.com/api/health; then
+            if curl -sf --max-time 15 -o /dev/null https://purechesss.com/api/health; then
               echo "Web healthy on attempt $i"
               exit 0
             fi

@@ -46,13 +46,13 @@ export const ENV_SCHEMA: Record<string, EnvVarDef> = {
     type: 'url',
     required: false,
     description: 'Public URL of the web app — added to CORS allowed origins.',
-    example: 'https://purechess.com',
+    example: 'https://purechesss.com',
   },
   NEXT_PUBLIC_APP_URL: {
     type: 'url',
     required: false,
     description: 'Public web URL exposed to client-side Next.js code.',
-    example: 'https://purechess.com',
+    example: 'https://purechesss.com',
   },
   NEXT_PUBLIC_API_URL: {
     type: 'url',

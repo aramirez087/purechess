@@ -256,7 +256,7 @@ export function ReviewClient({
   if (isCorrupt) {
     return (
       <GameErrorState
-        message="The game record appears to be corrupt. If this problem persists, please contact support@purechess.com."
+        message="The game record appears to be corrupt. If this problem persists, please contact support@purechesss.com."
         backHref="/games"
         backLabel="Back to games"
       />
