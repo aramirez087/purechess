@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 
+const GITHUB_REPO_URL = 'https://github.com/aramirez087/purechess';
+
 const FOOTER_LINKS = [
   { href: '/play', label: 'Play' },
   { href: '/train', label: 'Train' },
@@ -20,6 +22,14 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             Pure chess. Nothing else.
           </p>
+          <a
+            href={GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground/80 transition-colors hover:text-foreground"
+          >
+            Open source on GitHub
+          </a>
         </div>
         <nav aria-label="Footer" className="flex items-center gap-1">
           {FOOTER_LINKS.map((link) => (
