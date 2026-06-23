@@ -3,6 +3,7 @@ export interface SafeUser {
   username: string;
   avatarUrl: string | null;
   isAdmin: boolean;
+  emailVerified: boolean;
   createdAt: Date;
 }
 

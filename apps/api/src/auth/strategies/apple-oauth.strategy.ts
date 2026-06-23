@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-apple';
+import { oauthCallbackUrl } from '../oauth-urls';
 
 export interface AppleOAuthProfile {
   provider: 'apple';
@@ -20,7 +21,7 @@ export class AppleOAuthStrategy extends PassportStrategy(Strategy, 'apple') {
       teamID: config.get<string>('OAUTH_APPLE_TEAM_ID') || 'dev-placeholder',
       keyID: config.get<string>('OAUTH_APPLE_KEY_ID') || 'dev-placeholder',
       privateKeyString: config.get<string>('OAUTH_APPLE_PRIVATE_KEY') || 'dev-placeholder',
-      callbackURL: config.get<string>('OAUTH_APPLE_CALLBACK_URL'),
+      callbackURL: oauthCallbackUrl(config, 'apple'),
       passReqToCallback: false,
     });
 

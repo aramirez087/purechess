@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
+import { oauthCallbackUrl } from '../oauth-urls';
 
 export interface GoogleOAuthProfile {
   provider: 'google';
@@ -18,7 +19,7 @@ export class GoogleOAuthStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID,
       clientSecret,
-      callbackURL: config.get<string>('OAUTH_GOOGLE_CALLBACK_URL'),
+      callbackURL: oauthCallbackUrl(config, 'google'),
       scope: ['email', 'profile'],
     });
   }

@@ -16,27 +16,9 @@ import type {
 } from "@purechess/shared";
 import { PrismaService } from "../database/prisma.service";
 import { PosthogService } from "../analytics/posthog.service";
+import { isReservedUsername } from "../auth/reserved-usernames";
 import { UpdateMeDto } from "./dto/user-profile.dto";
 import { GameHistoryQueryDto } from "./dto/game-history.dto";
-
-const RESERVED_USERNAMES = new Set([
-  "admin",
-  "purechess",
-  "system",
-  "root",
-  "support",
-  "help",
-  "api",
-  "www",
-  "mail",
-  "info",
-  "moderator",
-  "mod",
-  "staff",
-  "bot",
-  "null",
-  "undefined",
-]);
 
 @Injectable()
 export class UsersService {
@@ -148,7 +130,7 @@ export class UsersService {
 
   async updateMe(userId: string, dto: UpdateMeDto): Promise<User> {
     if (dto.username) {
-      if (RESERVED_USERNAMES.has(dto.username.toLowerCase())) {
+      if (isReservedUsername(dto.username)) {
         throw new BadRequestException("Username is reserved");
       }
       const existing = await this.prisma.user.findFirst({

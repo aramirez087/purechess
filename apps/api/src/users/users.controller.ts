@@ -9,22 +9,13 @@ import {
 } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import type { GameHistoryResponseDto, ProfileDto, SafeUser } from '@purechess/shared';
+import { toSafeUser } from '../auth/safe-user';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { OptionalSessionAuthGuard } from '../auth/guards/optional-session-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from './users.service';
 import { UpdateMeDto } from './dto/user-profile.dto';
 import { GameHistoryQueryDto } from './dto/game-history.dto';
-
-function toSafeUser(user: User): SafeUser {
-  return {
-    id: user.id,
-    username: user.username,
-    avatarUrl: user.avatarUrl,
-    isAdmin: user.isAdmin,
-    createdAt: user.createdAt,
-  };
-}
 
 @Controller('users')
 export class UsersController {

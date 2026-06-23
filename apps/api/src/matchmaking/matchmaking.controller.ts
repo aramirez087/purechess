@@ -2,13 +2,14 @@ import { Body, Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common
 import type { User } from '@prisma/client';
 import { MatchmakingJoinResponseDto, MatchmakingStatusDto } from '@purechess/shared';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
+import { EmailVerifiedGuard } from '../auth/guards/email-verified.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { MatchmakingService } from './matchmaking.service';
 import { JoinMatchmakingDto } from './dto/join-matchmaking.dto';
 
 /** Quick-match queue — auth required for both rated and casual pools. */
 @Controller('matchmaking')
-@UseGuards(SessionAuthGuard)
+@UseGuards(SessionAuthGuard, EmailVerifiedGuard)
 export class MatchmakingController {
   constructor(private readonly matchmakingService: MatchmakingService) {}
 

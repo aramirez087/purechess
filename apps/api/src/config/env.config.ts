@@ -21,6 +21,8 @@ export interface EnvConfig {
   POSTHOG_API_KEY: string;
   POSTHOG_HOST: string;
   WEB_URL: string;
+  RESEND_API_KEY: string;
+  EMAIL_FROM: string;
 }
 
 export const envValidationSchema = Joi.object<EnvConfig>({
@@ -33,15 +35,17 @@ export const envValidationSchema = Joi.object<EnvConfig>({
   NEXT_PUBLIC_API_URL: Joi.string().uri().default('http://localhost:4000'),
   OAUTH_GOOGLE_CLIENT_ID: Joi.string().allow('').default(''),
   OAUTH_GOOGLE_CLIENT_SECRET: Joi.string().allow('').default(''),
-  OAUTH_GOOGLE_CALLBACK_URL: Joi.string().uri().default('http://localhost:4000/api/auth/oauth/google/callback'),
+  OAUTH_GOOGLE_CALLBACK_URL: Joi.string().uri().default('http://localhost:3000/api/auth/oauth/google/callback'),
   OAUTH_APPLE_CLIENT_ID: Joi.string().allow('').default(''),
   OAUTH_APPLE_TEAM_ID: Joi.string().allow('').default(''),
   OAUTH_APPLE_KEY_ID: Joi.string().allow('').default(''),
   OAUTH_APPLE_PRIVATE_KEY: Joi.string().allow('').default(''),
-  OAUTH_APPLE_CALLBACK_URL: Joi.string().uri().default('http://localhost:4000/api/auth/oauth/apple/callback'),
+  OAUTH_APPLE_CALLBACK_URL: Joi.string().uri().default('http://localhost:3000/api/auth/oauth/apple/callback'),
   SENTRY_DSN: Joi.string().uri().optional().allow('').default(''),
   SENTRY_ENV: Joi.string().optional().default('development'),
   POSTHOG_API_KEY: Joi.string().optional().allow('').default(''),
   POSTHOG_HOST: Joi.string().uri().optional().default('https://eu.posthog.com'),
   WEB_URL: Joi.string().uri().default('http://localhost:3000'),
+  RESEND_API_KEY: Joi.string().optional().allow('').default(''),
+  EMAIL_FROM: Joi.string().optional().default('PureChess <noreply@purechesss.com>'),
 });

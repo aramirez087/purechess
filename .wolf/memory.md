@@ -3286,3 +3286,25 @@ WP4 (EngineAdapter / TS adapter) complete. EngineAdapter interface introduced, T
 | 10:15 | Opening mistake coach (/openings/mistake): 2-step learn+practice, red/green arrows, Fix with coach CTA, marks reviewed | bug-782 | opening-mistake-coach.tsx, mistake-coach.ts, chess-com-panel.tsx |
 | 10:46 | Landing page stripped to functional shell: new logo assets (`logo-mark.svg`/`logo-full.svg`), removed Silent Tournament badge, tagline, features grid, TrustStrip | — | Logo.tsx, hero.tsx, hero-heading.tsx, page.tsx |
 | 11:20 | Opening mistake coach layout: board-dominant 2-zone shell (1fr board + 380px coach rail), viewport-height board sizing, dropped 420px cap | — | opening-mistake-coach.tsx, globals.css |
+
+## Session: 2026-06-21 16:31
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-06-21 — prod auth checklist
+
+| Time | Action | File(s) | Outcome |
+|------|--------|---------|---------|
+| — | Password reset prod path | `apps/api/src/email/`, `auth.service.ts`, `/forgot-password`, `/reset-password` | Resend when `RESEND_API_KEY` set; dev logs link. Sessions revoked on reset. |
+| — | Auth hardening | `auth.service.ts`, DTOs, `reserved-usernames.ts`, `password-rules.ts` | P2002→409, lastLoginAt on login/register, confirm throttled, email normalize |
+| — | Tests | `test/auth/*`, `test/email/*`, `e2e/tests/auth-register.spec.ts` | 30 unit + 1 e2e smoke pass |
+
+## Session: 2026-06-21 — email verification + OAuth prod fix
+
+| Time | Action | Outcome |
+|------|--------|---------|
+| — | `User.emailVerifiedAt` + `EmailVerificationToken` migration | Register sends verify email; OAuth auto-verifies; existing users grandfathered |
+| — | `EmailVerifiedGuard` on matchmaking | Rated Quick Match requires verified email |
+| — | OAuth | Callbacks default to `WEB_URL/api/auth/oauth/.../callback`; links existing email accounts; buttons on login/register |
+| — | Web | `/verify-email`, `VerifyEmailBanner` on `/play`, `OAuthButtons` |

@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AuthShell } from '@/components/auth/auth-shell';
+import { OAuthButtons } from '@/components/auth/oauth-buttons';
 import { register } from '@/lib/api/auth';
 
 const USERNAME_PATTERN = /^[a-zA-Z0-9][a-zA-Z0-9_-]{1,18}[a-zA-Z0-9]$/;
@@ -149,6 +150,7 @@ export function RegisterForm() {
               )}
               {pending ? 'Creating account…' : 'Create account'}
             </Button>
+            <OAuthButtons />
           </form>
         </CardContent>
       </Card>

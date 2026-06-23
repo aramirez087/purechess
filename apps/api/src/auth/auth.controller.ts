@@ -8,6 +8,7 @@ import {
   Res,
   UseGuards,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { AuthGuard } from "@nestjs/passport";
 import { Throttle, ThrottlerGuard } from "@nestjs/throttler";
 import type { Request, Response } from "express";
@@ -19,8 +20,12 @@ import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 import { PasswordResetRequestDto } from "./dto/password-reset-request.dto";
 import { PasswordResetConfirmDto } from "./dto/password-reset-confirm.dto";
+import { EmailVerificationConfirmDto } from "./dto/email-verification-confirm.dto";
 import { OptionalSessionAuthGuard } from "./guards/optional-session-auth.guard";
+import { SessionAuthGuard } from "./guards/session-auth.guard";
 import { CurrentUser } from "./decorators/current-user.decorator";
+import { toSafeUser } from "./safe-user";
+import { appOrigin } from "./oauth-urls";
 import type { GoogleOAuthProfile } from "./strategies/google-oauth.strategy";
 import type { AppleOAuthProfile } from "./strategies/apple-oauth.strategy";
 
@@ -32,7 +37,13 @@ export class AuthController {
   constructor(
     private readonly auth: AuthService,
     private readonly posthog: PosthogService,
+    private readonly config: ConfigService,
   ) {}
+
+  @Get("oauth/providers")
+  oauthProviders(): { google: boolean; apple: boolean } {
+    return this.auth.oauthProviders();
+  }
 
   @Post("register")
   @HttpCode(201)
@@ -109,10 +120,28 @@ export class AuthController {
 
   @Post("password-reset/confirm")
   @HttpCode(200)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   async confirmPasswordReset(
     @Body() dto: PasswordResetConfirmDto,
   ): Promise<void> {
     await this.auth.confirmPasswordReset(dto.token, dto.newPassword);
+  }
+
+  @Post("email-verification/resend")
+  @HttpCode(200)
+  @UseGuards(SessionAuthGuard)
+  @Throttle({ default: { limit: 1, ttl: 300000 } })
+  async resendVerification(@CurrentUser() user: User): Promise<void> {
+    await this.auth.resendVerificationEmail(user.id);
+  }
+
+  @Post("email-verification/confirm")
+  @HttpCode(200)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  async confirmEmailVerification(
+    @Body() dto: EmailVerificationConfirmDto,
+  ): Promise<void> {
+    await this.auth.confirmEmailVerification(dto.token);
   }
 
   @Get("oauth/google")
@@ -125,18 +154,7 @@ export class AuthController {
     @Req() req: Request & { user: GoogleOAuthProfile },
     @Res() res: Response,
   ): Promise<void> {
-    const profile = req.user;
-    const result = await this.auth.handleOAuth(
-      "google",
-      profile.providerUserId,
-      profile.email,
-      req.ip,
-      req.headers["user-agent"],
-    );
-    this.auth.setCookie(res, result.sessionToken, result.sessionExpiresAt);
-    const appUrl =
-      process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000";
-    res.redirect(appUrl);
+    await this.finishOAuth(req, res, "google");
   }
 
   @Get("oauth/apple")
@@ -145,31 +163,41 @@ export class AuthController {
 
   @Get("oauth/apple/callback")
   @UseGuards(AuthGuard("apple"))
-  async appleCallback(
+  async appleCallbackGet(
     @Req() req: Request & { user: AppleOAuthProfile },
     @Res() res: Response,
   ): Promise<void> {
-    const profile = req.user;
-    const result = await this.auth.handleOAuth(
-      "apple",
-      profile.providerUserId,
-      profile.email,
-      req.ip,
-      req.headers["user-agent"],
-    );
-    this.auth.setCookie(res, result.sessionToken, result.sessionExpiresAt);
-    const appUrl =
-      process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000";
-    res.redirect(appUrl);
+    await this.finishOAuth(req, res, "apple");
   }
-}
 
-function toSafeUser(user: User) {
-  return {
-    id: user.id,
-    username: user.username,
-    avatarUrl: user.avatarUrl,
-    isAdmin: user.isAdmin,
-    createdAt: user.createdAt,
-  };
+  @Post("oauth/apple/callback")
+  @UseGuards(AuthGuard("apple"))
+  async appleCallbackPost(
+    @Req() req: Request & { user: AppleOAuthProfile },
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.finishOAuth(req, res, "apple");
+  }
+
+  private async finishOAuth(
+    req: Request & { user: GoogleOAuthProfile | AppleOAuthProfile },
+    res: Response,
+    provider: "google" | "apple",
+  ): Promise<void> {
+    const origin = appOrigin(this.config);
+    try {
+      const profile = req.user;
+      const result = await this.auth.handleOAuth(
+        provider,
+        profile.providerUserId,
+        profile.email,
+        req.ip,
+        req.headers["user-agent"],
+      );
+      this.auth.setCookie(res, result.sessionToken, result.sessionExpiresAt);
+      res.redirect(`${origin}/play`);
+    } catch {
+      res.redirect(`${origin}/login?error=oauth_failed`);
+    }
+  }
 }

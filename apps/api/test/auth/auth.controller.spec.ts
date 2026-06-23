@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { AuthController } from '../../src/auth/auth.controller';
@@ -18,6 +19,7 @@ const safeUser = {
   username: 'testuser',
   avatarUrl: null,
   isAdmin: false,
+  emailVerified: true,
   createdAt: new Date(),
 };
 
@@ -28,7 +30,15 @@ const mockUser = {
   avatarUrl: null,
   isAdmin: false,
   isDisabled: false,
+  emailVerifiedAt: new Date(),
   createdAt: new Date(),
+};
+
+const mockConfig = {
+  get: jest.fn((key: string) => {
+    if (key === 'NEXT_PUBLIC_APP_URL' || key === 'WEB_URL') return 'http://localhost:3000';
+    return 'development';
+  }),
 };
 
 const mockAuthService = {
@@ -66,6 +76,7 @@ describe('AuthController', () => {
         { provide: AuthService, useValue: mockAuthService },
         { provide: SessionsService, useValue: mockSessionsService },
         { provide: PosthogService, useValue: { captureEvent: jest.fn(), captureException: jest.fn(), identify: jest.fn() } },
+        { provide: ConfigService, useValue: mockConfig },
         SessionAuthGuard,
         OptionalSessionAuthGuard,
         AdminGuard,
@@ -158,6 +169,13 @@ describe('AuthController', () => {
         .post('/api/auth/password-reset/confirm')
         .send({ token: 'sometoken', newPassword: 'NewPass1!' })
         .expect(200);
+    });
+
+    it('400 for weak password', async () => {
+      await request(app.getHttpServer())
+        .post('/api/auth/password-reset/confirm')
+        .send({ token: 'sometoken', newPassword: 'weakpass' })
+        .expect(400);
     });
   });
 });

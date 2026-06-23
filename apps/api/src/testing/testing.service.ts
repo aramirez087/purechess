@@ -97,6 +97,7 @@ export class TestingService {
       this.prisma.game.deleteMany(),
       this.prisma.session.deleteMany(),
       this.prisma.passwordResetToken.deleteMany(),
+      this.prisma.emailVerificationToken.deleteMany(),
       this.prisma.oAuthAccount.deleteMany(),
       this.prisma.user.deleteMany(),
     ]);

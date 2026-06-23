@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AuthShell } from '@/components/auth/auth-shell';
+import { OAuthButtons } from '@/components/auth/oauth-buttons';
 import { login } from '@/lib/api/auth';
 
 export function LoginForm() {
@@ -20,6 +21,9 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const oauthError = searchParams.get('error') === 'oauth_failed'
+    ? 'Sign in with Google or Apple failed. Try again or use email.'
+    : null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -75,12 +79,20 @@ export function LoginForm() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label
-                htmlFor="password"
-                className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
-              >
-                Password
-              </Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label
+                  htmlFor="password"
+                  className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground"
+                >
+                  Password
+                </Label>
+                <Link
+                  href="/forgot-password"
+                  className="text-[11px] text-muted-foreground underline decoration-muted-foreground/30 underline-offset-4 transition-colors hover:text-foreground"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <Input
                 id="password"
                 type="password"
@@ -91,12 +103,12 @@ export function LoginForm() {
               />
             </div>
 
-            {error && (
+            {(oauthError || error) && (
               <p
                 role="alert"
                 className="animate-error-in rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive dark:text-[hsl(0_72%_70%)]"
               >
-                {error}
+                {oauthError ?? error}
               </p>
             )}
 
@@ -112,6 +124,7 @@ export function LoginForm() {
               )}
               {pending ? 'Signing in…' : 'Sign in'}
             </Button>
+            <OAuthButtons />
           </form>
         </CardContent>
       </Card>

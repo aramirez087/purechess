@@ -8,13 +8,19 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { createHash, randomBytes } from "crypto";
 import type { Response } from "express";
+import { Prisma } from "@prisma/client";
 import { TimeControlCategory } from "@prisma/client";
 import type { User } from "@prisma/client";
 import type { SafeUser } from "@purechess/shared";
 import { PrismaService } from "../database/prisma.service";
+import { EmailService } from "../email/email.service";
 import { PasswordService } from "./password.service";
 import { SessionsService } from "./sessions.service";
 import { PosthogService } from "../analytics/posthog.service";
+import { isReservedUsername } from "./reserved-usernames";
+import { pickAvailableUsername } from "./username-utils";
+import { appOrigin } from "./oauth-urls";
+import { toSafeUser } from "./safe-user";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 
@@ -26,25 +32,7 @@ export interface AuthResult {
 
 const COOKIE_NAME = "purechess_session";
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
-
-const RESERVED_USERNAMES = new Set([
-  "admin",
-  "purechess",
-  "system",
-  "root",
-  "support",
-  "help",
-  "api",
-  "www",
-  "mail",
-  "info",
-  "moderator",
-  "mod",
-  "staff",
-  "bot",
-  "null",
-  "undefined",
-]);
+const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class AuthService {
@@ -56,26 +44,14 @@ export class AuthService {
     private readonly sessions: SessionsService,
     private readonly config: ConfigService,
     private readonly posthog: PosthogService,
+    private readonly email: EmailService,
   ) {}
-
-  private toSafeUser(user: User): SafeUser {
-    return {
-      id: user.id,
-      username: user.username,
-      avatarUrl: user.avatarUrl,
-      isAdmin: user.isAdmin,
-      createdAt: user.createdAt,
-    };
-  }
 
   setCookie(res: Response, token: string, expiresAt: Date): void {
     const isProduction = this.config.get<string>("NODE_ENV") === "production";
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
       secure: isProduction,
-      // Web and API are served from different registrable sites in production
-      // (*.fly.dev is on the Public Suffix List), so Lax cookies are never
-      // sent on cross-site XHR — auth silently fails. None requires Secure.
       sameSite: isProduction ? "none" : "lax",
       expires: expiresAt,
     });
@@ -88,6 +64,13 @@ export class AuthService {
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
     });
+  }
+
+  oauthProviders(): { google: boolean; apple: boolean } {
+    return {
+      google: Boolean(this.config.get<string>("OAUTH_GOOGLE_CLIENT_ID")),
+      apple: Boolean(this.config.get<string>("OAUTH_APPLE_TEAM_ID")),
+    };
   }
 
   async register(
@@ -107,24 +90,38 @@ export class AuthService {
     if (existingByUsername)
       throw new ConflictException("Username already taken");
 
-    if (RESERVED_USERNAMES.has(dto.username.toLowerCase())) {
+    if (isReservedUsername(dto.username)) {
       throw new BadRequestException("Username is reserved");
     }
 
     const passwordHash = await this.passwords.hashPassword(dto.password);
 
-    const user = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        username: dto.username,
-        passwordHash,
-        ratings: {
-          create: Object.values(TimeControlCategory).map((category) => ({
-            category,
-          })),
+    let user: User;
+    try {
+      user = await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          username: dto.username,
+          passwordHash,
+          lastLoginAt: new Date(),
+          ratings: {
+            create: Object.values(TimeControlCategory).map((category) => ({
+              category,
+            })),
+          },
         },
-      },
-    });
+      });
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2002"
+      ) {
+        throw new ConflictException("Email or username already taken");
+      }
+      throw err;
+    }
+
+    await this.sendVerificationEmail(user);
 
     const { token, expiresAt } = await this.sessions.createSession(
       user.id,
@@ -141,7 +138,7 @@ export class AuthService {
     });
 
     return {
-      user: this.toSafeUser(user),
+      user: toSafeUser(user),
       sessionToken: token,
       sessionExpiresAt: expiresAt,
     };
@@ -170,6 +167,11 @@ export class AuthService {
     );
     if (!valid) throw new UnauthorizedException("Invalid credentials");
 
+    const updated = await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastLoginAt: new Date() },
+    });
+
     const { token, expiresAt } = await this.sessions.createSession(
       user.id,
       ipAddress,
@@ -182,7 +184,7 @@ export class AuthService {
     });
 
     return {
-      user: this.toSafeUser(user),
+      user: toSafeUser(updated),
       sessionToken: token,
       sessionExpiresAt: expiresAt,
     };
@@ -200,17 +202,31 @@ export class AuthService {
     const tokenHash = createHash("sha256").update(rawToken).digest("hex");
     const expiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
 
-    await this.prisma.passwordResetToken.create({
-      data: { userId: user.id, tokenHash, expiresAt },
-    });
+    await this.prisma.$transaction([
+      this.prisma.passwordResetToken.updateMany({
+        where: { userId: user.id, usedAt: null },
+        data: { usedAt: new Date() },
+      }),
+      this.prisma.passwordResetToken.create({
+        data: { userId: user.id, tokenHash, expiresAt },
+      }),
+    ]);
 
     this.posthog.captureEvent(user.id, "password_reset_requested");
 
-    const appUrl =
-      this.config.get<string>("NEXT_PUBLIC_APP_URL") ?? "http://localhost:3000";
-    this.logger.log(
-      `[DEV] Password reset link: ${appUrl}/reset-password?token=${rawToken}`,
-    );
+    const resetUrl = `${appOrigin(this.config)}/reset-password?token=${rawToken}`;
+
+    try {
+      await this.email.send({
+        to: user.email,
+        subject: "Reset your PureChess password",
+        text: `Reset your password: ${resetUrl}\n\nThis link expires in one hour. If you did not request this, you can ignore this email.`,
+        html: `<p>Reset your PureChess password:</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>This link expires in one hour. If you did not request this, you can ignore this email.</p>`,
+      });
+    } catch (err) {
+      this.logger.error({ err, userId: user.id }, "Password reset email failed");
+      this.logger.log(`[fallback] Password reset link: ${resetUrl}`);
+    }
   }
 
   async confirmPasswordReset(
@@ -232,15 +248,47 @@ export class AuthService {
     await this.prisma.$transaction([
       this.prisma.user.update({
         where: { id: resetToken.userId },
-        data: { passwordHash },
+        data: { passwordHash, lastLoginAt: now },
       }),
       this.prisma.passwordResetToken.update({
         where: { id: resetToken.id },
         data: { usedAt: now },
       }),
+      this.prisma.session.deleteMany({ where: { userId: resetToken.userId } }),
     ]);
 
     this.posthog.captureEvent(resetToken.userId, "password_reset_completed");
+  }
+
+  async resendVerificationEmail(userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || user.emailVerifiedAt) return;
+    await this.sendVerificationEmail(user);
+  }
+
+  async confirmEmailVerification(token: string): Promise<void> {
+    const tokenHash = createHash("sha256").update(token).digest("hex");
+    const now = new Date();
+
+    const verifyToken = await this.prisma.emailVerificationToken.findFirst({
+      where: { tokenHash, usedAt: null, expiresAt: { gt: now } },
+    });
+
+    if (!verifyToken)
+      throw new UnauthorizedException("Invalid or expired verification token");
+
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: verifyToken.userId },
+        data: { emailVerifiedAt: now },
+      }),
+      this.prisma.emailVerificationToken.update({
+        where: { id: verifyToken.id },
+        data: { usedAt: now },
+      }),
+    ]);
+
+    this.posthog.captureEvent(verifyToken.userId, "email_verified");
   }
 
   async handleOAuth(
@@ -250,41 +298,72 @@ export class AuthService {
     ipAddress?: string,
     userAgent?: string,
   ): Promise<AuthResult> {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      throw new BadRequestException("OAuth provider did not return an email");
+    }
+
     const oauthAccount = await this.prisma.oAuthAccount.findUnique({
       where: { provider_providerUserId: { provider, providerUserId } },
       include: { user: true },
     });
 
     let user: User;
+    const now = new Date();
 
     if (oauthAccount) {
-      user = oauthAccount.user;
-    } else {
-      const baseUsername =
-        (email.split("@")[0] ?? "user")
-          .replace(/[^a-zA-Z0-9_-]/g, "")
-          .slice(0, 16) || "user";
-
-      let username = baseUsername;
-      let suffix = 1;
-      while (await this.prisma.user.findUnique({ where: { username } })) {
-        username = `${baseUsername}${suffix++}`;
-      }
-
-      user = await this.prisma.user.create({
+      user = await this.prisma.user.update({
+        where: { id: oauthAccount.user.id },
         data: {
-          email,
-          username,
-          ratings: {
-            create: Object.values(TimeControlCategory).map((category) => ({
-              category,
-            })),
-          },
-          oauthAccounts: {
-            create: { provider, providerUserId },
-          },
+          lastLoginAt: now,
+          ...(oauthAccount.user.emailVerifiedAt
+            ? {}
+            : { emailVerifiedAt: now }),
         },
       });
+    } else {
+      const existingByEmail = await this.prisma.user.findUnique({
+        where: { email: normalizedEmail },
+      });
+
+      if (existingByEmail) {
+        user = await this.prisma.user.update({
+          where: { id: existingByEmail.id },
+          data: {
+            lastLoginAt: now,
+            ...(existingByEmail.emailVerifiedAt
+              ? {}
+              : { emailVerifiedAt: now }),
+            oauthAccounts: {
+              create: { provider, providerUserId },
+            },
+          },
+        });
+      } else {
+        const username = await pickAvailableUsername(
+          async (candidate) =>
+            (await this.prisma.user.findUnique({ where: { username: candidate } })) !=
+            null,
+          normalizedEmail,
+        );
+
+        user = await this.prisma.user.create({
+          data: {
+            email: normalizedEmail,
+            username,
+            emailVerifiedAt: now,
+            lastLoginAt: now,
+            ratings: {
+              create: Object.values(TimeControlCategory).map((category) => ({
+                category,
+              })),
+            },
+            oauthAccounts: {
+              create: { provider, providerUserId },
+            },
+          },
+        });
+      }
     }
 
     const isNewUser = !oauthAccount;
@@ -301,9 +380,41 @@ export class AuthService {
     });
 
     return {
-      user: this.toSafeUser(user),
+      user: toSafeUser(user),
       sessionToken: token,
       sessionExpiresAt: expiresAt,
     };
+  }
+
+  private async sendVerificationEmail(user: User): Promise<void> {
+    if (user.emailVerifiedAt) return;
+
+    const rawToken = randomBytes(32).toString("hex");
+    const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+    const expiresAt = new Date(Date.now() + VERIFY_TOKEN_TTL_MS);
+
+    await this.prisma.$transaction([
+      this.prisma.emailVerificationToken.updateMany({
+        where: { userId: user.id, usedAt: null },
+        data: { usedAt: new Date() },
+      }),
+      this.prisma.emailVerificationToken.create({
+        data: { userId: user.id, tokenHash, expiresAt },
+      }),
+    ]);
+
+    const verifyUrl = `${appOrigin(this.config)}/verify-email?token=${rawToken}`;
+
+    try {
+      await this.email.send({
+        to: user.email,
+        subject: "Verify your PureChess email",
+        text: `Welcome to PureChess. Verify your email: ${verifyUrl}\n\nThis link expires in 24 hours.`,
+        html: `<p>Welcome to PureChess.</p><p><a href="${verifyUrl}">Verify your email</a></p><p>This link expires in 24 hours.</p>`,
+      });
+    } catch (err) {
+      this.logger.error({ err, userId: user.id }, "Verification email failed");
+      this.logger.log(`[fallback] Email verification link: ${verifyUrl}`);
+    }
   }
 }

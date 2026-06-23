@@ -18,6 +18,7 @@ import { ComputerGameSetup } from '@/components/play/computer-game-setup';
 import { InstantComputerButton } from '@/components/play/instant-computer-button';
 import { QuickMatchSetup } from '@/components/play/quick-match-setup';
 import { HeroBoard } from '@/components/home/hero-board';
+import { VerifyEmailBanner } from '@/components/auth/verify-email-banner';
 import { Button } from '@/components/ui/button';
 import { posthog } from '@/lib/posthog';
 import { formatPlayPrefsLabel } from '@/lib/play-preferences';
@@ -171,6 +172,9 @@ export function PlayPageClient({ initialMode }: PlayPageClientProps) {
         <p className="mt-3 text-sm sm:text-base text-muted-foreground">
           One click to find an opponent. Customize time control only when you want to.
         </p>
+        <div className="mt-6 w-full text-left">
+          <VerifyEmailBanner />
+        </div>
       </div>
 
       {/* Primary 1-click paths */}

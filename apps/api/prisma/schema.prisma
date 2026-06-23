@@ -105,13 +105,15 @@ model User {
   avatarUrl     String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
-  isDisabled    Boolean   @default(false)
-  isAdmin       Boolean   @default(false)
+  lastLoginAt      DateTime?
+  emailVerifiedAt  DateTime?
+  isDisabled       Boolean   @default(false)
+  isAdmin          Boolean   @default(false)
 
-  oauthAccounts      OAuthAccount[]
-  sessions           Session[]
-  passwordResetTokens PasswordResetToken[]
+  oauthAccounts             OAuthAccount[]
+  sessions                  Session[]
+  passwordResetTokens       PasswordResetToken[]
+  emailVerificationTokens   EmailVerificationToken[]
   ratings            Rating[]
   ratingHistory      RatingHistory[]
   gamesAsWhite       Game[]            @relation("WhitePlayer")
@@ -162,6 +164,17 @@ model Session {
 }
 
 model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EmailVerificationToken {
   id        String    @id @default(cuid())
   userId    String
   tokenHash String
